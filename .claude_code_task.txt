@@ -1,0 +1,10 @@
+﻿Fix Russian PDF entity extraction - currently returning 0 entities.
+
+Diagnostic approach (SIMPLEST FIRST):
+1. Read extraction/extractor.py completely
+2. Add ONE debug print: print("GEMINI_RAW_RESPONSE:", response.text)
+3. Test with Russian PDF
+4. Analyze actual response data
+5. Apply targeted fix based on facts
+
+Goal: Working entity extraction from Russian medical PDF.

@@ -1,0 +1,30 @@
+specialty: urology
+display_name: Urology
+description: BPH, prostate cancer, kidney stones, bladder conditions, urinary function
+status: stub  # activate in Phase 2
+
+external_apis:
+  primary: dxgpt
+  secondary: doctronic
+  drug_check: patientnotes_ddi
+
+keywords:
+  - urology
+  - bladder
+  - prostate
+  - kidney
+  - renal
+  - urinary
+  - bph
+  - psa
+  - hematuria
+  - nephrolithiasis
+  - stone
+
+curated_sources:
+  - name: AUA Guidelines
+    url: https://www.auanet.org/guidelines
+    trust_level: 2
+  - name: EAU Guidelines
+    url: https://uroweb.org/guidelines
+    trust_level: 2

@@ -1,0 +1,60 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Unknown </title></head><body>
+<h1 id="medai-v11-gemini-api-setup-guide">MedAI v1.1 - Gemini API Setup Guide</h1>
+<h2 id="step-1-get-gemini-api-key-5-minutes">Step 1: Get Gemini API Key (5 minutes)</h2>
+<ol>
+<li>Go to: https://ai.google.dev/</li>
+<li>Click "Get API key in Google AI Studio"</li>
+<li>Sign in with your Google account</li>
+<li>Click "Create API key"</li>
+<li>Copy the key (starts with <code>AIza...</code>)</li>
+</ol>
+<p><strong>Free Tier:</strong>
+- 1,500 requests/day
+- No credit card required
+- Never expires</p>
+<h2 id="step-2-configure-medai">Step 2: Configure MedAI</h2>
+<p>Open <code>.env</code> file in medai folder and update:</p>
+<p><code>GEMINI_API_KEY=AIzaSy...your_actual_key_here...
+DB_ENCRYPTION_KEY=choose_a_strong_passphrase_here</code></p>
+<p>Save the file.</p>
+<h2 id="step-3-install-dependencies">Step 3: Install Dependencies</h2>
+<p><code>cmd
+cd "G:\MEDICAL\Med AI\medai_v1.1_validated\medai"
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m spacy download en_core_web_trf</code></p>
+<h2 id="step-4-initialize-databases">Step 4: Initialize Databases</h2>
+<p><code>cmd
+python scripts\init_db.py
+python scripts\init_chroma.py</code></p>
+<h2 id="step-5-launch-medai">Step 5: Launch MedAI</h2>
+<p><code>cmd
+streamlit run app\main.py</code></p>
+<p>Opens: http://localhost:8501</p>
+<h2 id="whats-changed">What's Changed</h2>
+<ul>
+<li><strong>AI Engine:</strong> Gemini 2.5 Flash instead of Claude</li>
+<li><strong>Cost:</strong> Free (1,500 requests/day)</li>
+<li><strong>Quality:</strong> ~85% of Claude Sonnet for medical text extraction</li>
+<li><strong>Fallback:</strong> spaCy rules-based extraction if API unavailable</li>
+</ul>
+<h2 id="testing">Testing</h2>
+<p>Upload a medical PDF to test:
+- PDF text extraction (docling)
+- PII stripping (Presidio)
+- Entity extraction (Gemini API)
+- Knowledge base storage (SQLite + ChromaDB)</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><strong>"No module named google.generativeai"</strong>
+→ Run: <code>pip install google-generativeai</code></p>
+<p><strong>"Invalid API key"</strong>
+→ Check <code>.env</code> file, ensure GEMINI_API_KEY is correct</p>
+<p><strong>"Rate limit exceeded"</strong>
+→ Free tier: 1,500 req/day. Wait or upgrade to paid tier.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>After successful test:
+1. Run golden tests: <code>pytest tests\golden\ -v</code>
+2. Upload real medical PDFs
+3. Review extracted entities in UI
+4. Monitor API usage in Google AI Studio dashboard</p>
+</body></html>
