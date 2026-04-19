@@ -69,7 +69,7 @@ GEMINI_API_KEY        = os.getenv("GEMINI_API_KEY", "")
 CLAUDE_MODEL          = "claude-sonnet-4-20250514"
 GEMINI_MODEL          = "gemini-2.5-flash"
 CLAUDE_MAX_TOKENS     = 2000
-GEMINI_MAX_TOKENS     = 2048
+GEMINI_MAX_TOKENS     = 8192
 
 # Embedding model (runs locally, no external calls)
 EMBEDDING_MODEL       = "all-MiniLM-L6-v2"
