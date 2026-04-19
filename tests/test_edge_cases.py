@@ -412,3 +412,164 @@ def test_temporal_extraction():
     event_date, conf, _ = extractor.extract_temporal_info("hospitalized 2 weeks ago", doc_date)
     assert event_date == date(2024, 3, 18)
     assert conf > 0.7
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# PHASE 1-2 — SCHEMA v2 + MIGRATION
+# ══════════════════════════════════════════════════════════════════════════
+
+def test_migration_applies_to_fresh_db(tmp_path):
+    from mkb.migrate_to_v2 import migrate
+    db = tmp_path / "mkb.db"
+    summary = migrate(db_path=db, dry_run=False)
+    assert summary["schema_applied"] is True
+    assert summary["first_run"] is True
+
+    import sqlite3
+    with sqlite3.connect(str(db)) as conn:
+        tables = {r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'"
+        )}
+    required = {"facts", "timeline", "conflicts", "family_history",
+                "provenance", "audit_log", "terminology_aliases", "documents"}
+    assert required.issubset(tables)
+
+
+def test_migration_is_idempotent(tmp_path):
+    from mkb.migrate_to_v2 import migrate
+    db = tmp_path / "mkb.db"
+    migrate(db_path=db, dry_run=False)
+    summary = migrate(db_path=db, dry_run=False)
+    assert summary["first_run"] is False
+    assert summary["schema_applied"] is True
+
+
+def test_migration_dry_run_does_not_modify(tmp_path):
+    from mkb.migrate_to_v2 import migrate
+    import sqlite3
+    db = tmp_path / "mkb.db"
+    summary = migrate(db_path=db, dry_run=True)
+    assert summary["dry_run"] is True
+    # Dry run touched the DB file (connected) but did not create schema tables.
+    with sqlite3.connect(str(db)) as conn:
+        tables = {r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'"
+        )}
+    assert "facts" not in tables
+
+
+def test_migration_backfills_v1_records(tmp_path):
+    """Existing v1 'records' rows should be copied into 'facts'."""
+    from datetime import datetime as dt
+    import sqlite3
+    from mkb.migrate_to_v2 import migrate
+
+    db = tmp_path / "mkb.db"
+    with sqlite3.connect(str(db)) as conn:
+        conn.executescript("""
+            CREATE TABLE records (
+                id TEXT PRIMARY KEY, fact_type TEXT, content TEXT,
+                structured_json TEXT DEFAULT '{}', specialty TEXT DEFAULT 'general',
+                source_type TEXT, source_name TEXT DEFAULT '', source_url TEXT,
+                trust_level INTEGER DEFAULT 3, confidence REAL DEFAULT 0.5,
+                status TEXT DEFAULT 'active', tier TEXT DEFAULT 'active',
+                ddi_checked INTEGER DEFAULT 0, ddi_status TEXT,
+                ddi_findings_json TEXT DEFAULT '[]', extraction_method TEXT DEFAULT 'claude',
+                resolution_id TEXT, requires_review INTEGER DEFAULT 0,
+                first_recorded TEXT NOT NULL, last_confirmed TEXT NOT NULL,
+                linked_ids_json TEXT DEFAULT '[]', chunk_ids_json TEXT DEFAULT '[]',
+                tags_json TEXT DEFAULT '[]', session_id TEXT DEFAULT '',
+                promotion_history TEXT DEFAULT '[]'
+            );
+        """)
+        now = dt.utcnow().isoformat()
+        conn.execute(
+            "INSERT INTO records (id, fact_type, content, source_type, "
+            "first_recorded, last_confirmed) VALUES (?, ?, ?, ?, ?, ?)",
+            ("rec-1", "diagnosis", "hypertension", "document", now, now),
+        )
+        conn.commit()
+
+    summary = migrate(db_path=db)
+    assert summary["records_migrated"] == 1
+
+    with sqlite3.connect(str(db)) as conn:
+        rows = conn.execute("SELECT id, entity_name FROM facts").fetchall()
+    assert len(rows) == 1
+    assert rows[0][0] == "rec-1"
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# PHASE 5 — DOCUMENT CLASSIFIER
+# ══════════════════════════════════════════════════════════════════════════
+
+from ingestion.document_classifier import DocumentClassifier
+
+
+@pytest.fixture
+def classifier() -> DocumentClassifier:
+    return DocumentClassifier()
+
+
+def test_classifier_clinical_note_active_tier(classifier):
+    text = (
+        "CHIEF COMPLAINT: chest pain\n"
+        "HISTORY OF PRESENT ILLNESS: 55 yo male presents with...\n"
+        "ASSESSMENT AND PLAN: rule out MI\n"
+        "Attending physician: Dr. Smith"
+    )
+    result = classifier.classify(text, source_path="discharge_summary.pdf")
+    assert result.document_type == "clinical_note"
+    assert result.trust_level == 1
+    assert result.default_tier == "active"
+
+
+def test_classifier_lab_report(classifier):
+    text = (
+        "LABORATORY REPORT\n"
+        "Specimen: blood\n"
+        "HbA1c 7.2%  Reference range: 4.0-5.6%\n"
+        "WBC: 8.2, HGB: 14.1\n"
+        "Collection date: 2024-03-15"
+    )
+    result = classifier.classify(text, source_path="labs_2024.pdf")
+    assert result.document_type == "lab_report"
+    assert result.default_tier == "active"
+
+
+def test_classifier_food_guide_hypothesis_tier(classifier):
+    text = "FODMAP food guide — IBS score chart. Safety category: Safe / Caution."
+    result = classifier.classify(text, source_path="fodmap_ibs.pdf")
+    assert result.document_type == "food_guide"
+    assert result.default_tier == "hypothesis"
+
+
+def test_classifier_ai_response_forces_hypothesis(classifier):
+    text = "Patient has diabetes. Prescribed metformin 500mg daily."
+    result = classifier.classify(text, source_type="ai_response")
+    assert result.default_tier == "hypothesis"
+    assert any("ai_response" in r for r in result.reasons)
+
+
+def test_classifier_generic_fallback(classifier):
+    result = classifier.classify("Some arbitrary text without clinical markers.")
+    assert result.document_type == "generic"
+    assert result.default_tier == "hypothesis"
+
+
+def test_classifier_ocr_below_threshold_quarantines():
+    from extraction.ocr_validator import OCRValidator
+    clf = DocumentClassifier(ocr_validator=OCRValidator(), ocr_min_confidence=0.75)
+    # Intentionally garbled OCR output:
+    text = "Patient weight 50Omg prescribed metf0rmin l00mg S0 daily"
+    result = clf.classify(text, source_path="scan.pdf")
+    assert result.ocr_confidence is not None
+    assert result.ocr_confidence < 0.75
+    assert result.default_tier == "quarantined"
+
+
+def test_classifier_explicit_trust_override(classifier):
+    text = "Generic note without clear markers."
+    result = classifier.classify(text, explicit_trust=1)
+    assert result.trust_level == 1
+    assert result.default_tier == "active"
