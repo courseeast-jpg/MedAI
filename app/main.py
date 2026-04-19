@@ -8,9 +8,65 @@ Thin safety layer: 5 required surfaces only.
 5. Medication warning indicator (DDI gate)
 """
 import asyncio
+import re
 import streamlit as st
 from pathlib import Path
 from datetime import datetime
+
+# Matches any Presidio-style placeholder written into content during ingestion.
+# Used to detect records whose content was over-redacted (e.g. food names
+# mis-labelled as PERSON/LOCATION by Presidio's NER).
+_PLACEHOLDER_RE = re.compile(
+    r'\[(?:PERSON|LOCATION|DATE|CONTACT_REMOVED|ID_REMOVED|URL_REMOVED|PHYSICIAN)\]'
+)
+
+
+def _display_content(record) -> tuple[str, bool]:
+    """
+    Return (text_to_display, is_stale).
+
+    If record.content contains PII placeholders the record was corrupted during
+    ingestion (Presidio NER false-positive on food/reference data).  We try to
+    rebuild a readable string from record.structured instead — that field holds
+    the raw values Gemini extracted BEFORE the content string was assembled, so
+    it often has the real food name even when content only shows [PERSON].
+
+    Returns is_stale=True when placeholders are detected so the caller can add
+    a visual warning.  The UI must NEVER call pii.strip() on stored records.
+    """
+    if not _PLACEHOLDER_RE.search(record.content):
+        return record.content, False
+
+    s = record.structured or {}
+
+    # ── Food guide entry ──────────────────────────────────────────────────────
+    food_name = s.get("food_name", "")
+    if food_name and not _PLACEHOLDER_RE.search(food_name):
+        parts = [f"Food: {food_name}"]
+        if s.get("food_name_ru"):
+            parts.append(f"(ru: {s['food_name_ru']})")
+        scores = []
+        for key, label in (
+            ("ibs_score", "IBS"),
+            ("diverticulitis_score", "Diverticulitis"),
+            ("oxalates_score", "Oxalates"),
+            ("crystalluria_score", "Crystalluria"),
+        ):
+            if s.get(key) is not None:
+                scores.append(f"{label}={s[key]}")
+        if scores:
+            parts.append("| " + ", ".join(scores))
+        if s.get("safety_category"):
+            parts.append(f"| Safety: {s['safety_category']}")
+        return " ".join(parts), True
+
+    # ── Generic structured record (diagnosis, medication, etc.) ───────────────
+    name = s.get("name") or s.get("test_name") or s.get("description") or ""
+    if name and not _PLACEHOLDER_RE.search(name):
+        return f"{record.fact_type.replace('_', ' ').title()}: {name}", True
+
+    # Can't reconstruct — return original with stale flag
+    return record.content, True
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -96,9 +152,21 @@ def render_mkb_record(record: MKBRecord, show_hypothesis_warning: bool = True):
         "quarantined": "🔴", "superseded": "⚫"
     }.get(record.tier, "⚪")
     trust_label = {1: "Clinical", 2: "Peer-review", 3: "AI", 4: "Web", 5: "Unverified"}
+
+    # Never apply pii.strip() here — display the raw DB value.
+    # If content was corrupted by over-redaction at ingestion time, fall back
+    # to structured data and flag the record as stale.
+    display_text, is_stale = _display_content(record)
+
     col1, col2 = st.columns([3, 1])
     with col1:
-        st.markdown(f"{tier_color} **{record.content}**")
+        st.markdown(f"{tier_color} **{display_text}**")
+        if is_stale:
+            st.caption(
+                "⚠ Content was over-redacted during ingestion (Presidio NER false positive "
+                "on food/reference data). Showing structured-field fallback. "
+                "Re-upload the source document to regenerate this record."
+            )
         if record.tier == "hypothesis" and show_hypothesis_warning:
             st.caption("⚠ HYPOTHESIS — not clinically verified. Not used in synthesis without promotion.")
     with col2:
@@ -155,7 +223,13 @@ def render_conflicts(sys_components: dict):
         return
     with st.expander(f"⚠ {len(conflicts)} record(s) require review", expanded=False):
         for record in conflicts:
-            st.markdown(f"**{record.fact_type.upper()}**: {record.content}")
+            display_text, is_stale = _display_content(record)
+            st.markdown(f"**{record.fact_type.upper()}**: {display_text}")
+            if is_stale:
+                st.caption(
+                    "⚠ Content over-redacted at ingestion — showing structured fallback. "
+                    "Re-upload source document to fix."
+                )
             st.caption(f"Status: {record.status} | Source: {record.source_name}")
             col1, col2, col3 = st.columns(3)
             if col1.button("Accept", key=f"accept_{record.id}"):
