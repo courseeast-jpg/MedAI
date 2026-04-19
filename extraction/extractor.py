@@ -3,8 +3,18 @@ MedAI v1.1 — Entity Extractor (Track B)
 Google Gemini API primary with instructor for schema enforcement.
 spaCy rules-based fallback when Gemini unavailable.
 """
+import io
+import os
+import sys
+import warnings
 from typing import Optional
 from loguru import logger
+
+# Suppress PyTorch / HuggingFace stderr noise before any heavy imports
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+warnings.filterwarnings("ignore", category=UserWarning, module="torch")
+warnings.filterwarnings("ignore", category=FutureWarning, module="transformers")
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
 try:
     import google.generativeai as genai
@@ -87,73 +97,92 @@ class Extractor:
             try:
                 return self._extract_gemini(text, specialty)
             except Exception as e:
-                logger.warning(f"Gemini extraction failed: {e}. Falling back to rules.")
+                logger.warning(f"Gemini extraction failed (API error): {e}. Falling back to rules.")
                 self._gemini_available = False
 
         return self._extract_rules(text)
 
     def _extract_gemini(self, text: str, specialty: str) -> ExtractionOutput:
-        prompt = EXTRACTION_PROMPT.format(text=text[:8000])  # context limit guard
-        
-        # DEBUG: Log input text length
-        logger.info(f"[DEBUG] Gemini input: {len(text)} chars, truncated to {len(text[:8000])}")
-        logger.debug(f"[DEBUG] First 500 chars: {text[:500]}")
-        
-        # Use Gemini's native JSON mode - guarantees valid JSON output
         import json
-        
-        response = self.client.generate_content(
-            prompt,
-            generation_config=genai.GenerationConfig(
-                max_output_tokens=GEMINI_MAX_TOKENS,
-                temperature=0.1,
-                response_mime_type="application/json",
-                response_schema={
-                    "type": "object",
-                    "properties": {
-                        "diagnoses": {"type": "array", "items": {"type": "string"}},
-                        "medications": {"type": "array", "items": {"type": "string"}},
-                        "test_results": {"type": "array", "items": {"type": "string"}},
-                        "symptoms": {"type": "array", "items": {"type": "string"}},
-                        "notes": {"type": "array", "items": {"type": "string"}},
-                        "recommendations": {"type": "array", "items": {"type": "string"}}
+
+        prompt = EXTRACTION_PROMPT.format(text=text[:8000])  # context limit guard
+
+        logger.info(f"[DIAG] Gemini input: {len(text)} chars, truncated to {len(text[:8000])}")
+        logger.debug(f"[DIAG] First 500 chars: {text[:500]}")
+
+        # Capture stderr during the API call to detect PyTorch/transformers pollution
+        _stderr_buf = io.StringIO()
+        _orig_stderr = sys.stderr
+        sys.stderr = _stderr_buf
+        try:
+            response = self.client.generate_content(
+                prompt,
+                generation_config=genai.GenerationConfig(
+                    max_output_tokens=GEMINI_MAX_TOKENS,
+                    temperature=0.1,
+                    response_mime_type="application/json",
+                    response_schema={
+                        "type": "object",
+                        "properties": {
+                            "diagnoses": {"type": "array", "items": {"type": "string"}},
+                            "medications": {"type": "array", "items": {"type": "string"}},
+                            "test_results": {"type": "array", "items": {"type": "string"}},
+                            "symptoms": {"type": "array", "items": {"type": "string"}},
+                            "notes": {"type": "array", "items": {"type": "string"}},
+                            "recommendations": {"type": "array", "items": {"type": "string"}}
+                        }
                     }
-                }
+                )
             )
-        )
-        
+        finally:
+            sys.stderr = _orig_stderr
+            _captured = _stderr_buf.getvalue()
+            if _captured.strip():
+                logger.warning(f"[DIAG] Stderr captured during Gemini call ({len(_captured)} chars): {_captured[:500]}")
+
         raw = response.text.strip()
-        
-        # DEBUG: Log Gemini response
-        logger.info(f"[DEBUG] Gemini raw response length: {len(raw)} chars")
-        logger.debug(f"[DEBUG] Gemini response: {raw}")
-        
-        # Native JSON mode guarantees valid JSON - no cleanup needed
-        data = json.loads(raw)
-        
-        # Convert simple arrays to structured format
+
+        logger.info(f"[DIAG] Gemini raw response: {len(raw)} chars")
+        logger.debug(f"[DIAG] Gemini response body: {raw}")
+
+        # Parse JSON — catch errors here so a bad response doesn't permanently
+        # disable Gemini for the rest of the session (only API errors should do that)
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            logger.error(f"[DIAG] JSON parse failed: {exc}")
+            logger.error(f"[DIAG] Full raw response ({len(raw)} chars): {raw}")
+            if raw and not raw.rstrip().endswith('}'):
+                logger.error(
+                    f"[DIAG] Response appears truncated — token limit may have been hit. "
+                    f"GEMINI_MAX_TOKENS={GEMINI_MAX_TOKENS}"
+                )
+            else:
+                logger.error("[DIAG] Response is not truncated — possible stderr pollution or schema mismatch")
+            return ExtractionOutput()
+
         result = ExtractionOutput()
-        
-        # Convert diagnosis strings to structured objects
+
         for d in data.get('diagnoses', []):
             result.diagnoses.append(ExtractedDiagnosis(name=str(d), date=None))
-        
-        # Convert medication strings to structured objects  
+
         for m in data.get('medications', []):
             result.medications.append(ExtractedMedication(name=str(m), dose=None, frequency=None))
-        
-        # Convert test result strings to structured objects
+
         for t in data.get('test_results', []):
             result.test_results.append(ExtractedTestResult(test_name=str(t), value=None, date=None))
-        
-        # Direct copy for string arrays
+
         result.symptoms = [str(s) for s in data.get('symptoms', [])]
         result.notes = [str(n) for n in data.get('notes', [])]
         result.recommendations = [str(r) for r in data.get('recommendations', [])]
-        
-        # DEBUG: Log parsed entity counts
-        logger.info(f"[DEBUG] Parsed entities - diagnoses:{len(result.diagnoses)}, meds:{len(result.medications)}, tests:{len(result.test_results)}, symptoms:{len(result.symptoms)}, notes:{len(result.notes)}, recs:{len(result.recommendations)}")
-        
+
+        logger.info(
+            f"[DIAG] Entities — diagnoses:{len(result.diagnoses)}, "
+            f"meds:{len(result.medications)}, tests:{len(result.test_results)}, "
+            f"symptoms:{len(result.symptoms)}, notes:{len(result.notes)}, "
+            f"recs:{len(result.recommendations)}"
+        )
+
         result.extraction_method = "gemini"
         result.confidence = 0.80
         return result
