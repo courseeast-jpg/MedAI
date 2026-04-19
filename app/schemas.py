@@ -150,6 +150,29 @@ class ExtractionOutput(BaseModel):
     confidence:         float                       = 0.5
 
 
+# ── Food Guide Extraction ─────────────────────────────────────────────────────
+
+class FoodEntry(BaseModel):
+    food_name:              str
+    food_name_ru:           Optional[str]   = None
+    ibs_score:              Optional[float] = None
+    diverticulitis_score:   Optional[float] = None
+    oxalates_score:         Optional[float] = None
+    crystalluria_score:     Optional[float] = None
+    safety_category:        Optional[str]   = None   # Safe|Suitable|Caution|Undesirable|Exclude
+    notes:                  Optional[str]   = None
+
+
+class FoodGuideOutput(BaseModel):
+    document_type:      str           = "food_guide"
+    title:              Optional[str] = None
+    conditions_covered: List[str]     = Field(default_factory=list)
+    foods:              List[FoodEntry] = Field(default_factory=list)
+    general_notes:      List[str]     = Field(default_factory=list)
+    extraction_method:  str           = "gemini"
+    confidence:         float         = 0.80
+
+
 # ── Decision Engine Query ─────────────────────────────────────────────────────
 
 class ClassifiedQuery(BaseModel):

@@ -38,7 +38,10 @@ except ImportError:
     logger.warning("spaCy not available — rules-based fallback disabled")
 
 from app.config import GEMINI_API_KEY, GEMINI_MODEL, GEMINI_MAX_TOKENS
-from app.schemas import ExtractionOutput, ExtractedDiagnosis, ExtractedMedication, ExtractedTestResult
+from app.schemas import (
+    ExtractionOutput, ExtractedDiagnosis, ExtractedMedication, ExtractedTestResult,
+    FoodEntry, FoodGuideOutput,
+)
 
 
 EXTRACTION_PROMPT = """You are a medical entity extractor. Read the following medical or dietary text and extract all clinically relevant facts.
@@ -56,23 +59,85 @@ Extract these entity types:
 - notes: important clinical observations, specialist recommendations, dietary restrictions, food guidelines
 - recommendations: suggested treatments, follow-up actions, referrals, dietary recommendations, food plans
 
-For dietary/nutrition content, extract:
-- Food items and their properties (high/low in specific nutrients)
-- Dietary restrictions or conditions (IBS, diverticulitis, kidney stones, etc.)
-- Food categories and classifications
-- Nutritional guidelines and recommendations
-- Medical conditions related to diet (translate Russian medical terms to English equivalents)
-
 Rules:
 - If a field is unknown, use null
 - Do not invent information not in the text
 - Extract only what is explicitly stated
 - For medications, include dose and frequency if mentioned
-- For foods, include relevant properties and conditions they address
 - ALL extracted values must be in ENGLISH (translate from source language if needed)
 
 Text to extract from:
 {text}"""
+
+
+FOOD_GUIDE_PROMPT = """You are extracting structured data from a Russian food reference guide or dietary scoring table.
+
+The document lists foods with numeric scores and safety ratings for medical conditions.
+Common conditions in these guides: IBS (irritable bowel syndrome), Diverticulitis, Oxalates/kidney stones, Crystalluria.
+
+For each food item extract:
+- food_name: English name of the food (translate from Russian)
+- food_name_ru: original Russian food name (keep as-is)
+- ibs_score: numeric score for IBS (0-10, higher = more restricted; null if absent)
+- diverticulitis_score: numeric score for Diverticulitis (0-10; null if absent)
+- oxalates_score: numeric score for Oxalates/kidney stones (0-10; null if absent)
+- crystalluria_score: numeric score for Crystalluria (0-10; null if absent)
+- safety_category: one of exactly: Safe, Suitable, Caution, Undesirable, Exclude
+  Russian translations — Безопасно/Разрешено=Safe, Подходит/Можно=Suitable,
+  Осторожно/С осторожностью=Caution, Нежелательно=Undesirable, Исключить/Запрещено=Exclude
+- notes: any food-specific notes (null if none)
+
+Also extract:
+- title: document title if present (null otherwise)
+- conditions_covered: list of medical conditions this page/section addresses
+- general_notes: any guidelines not tied to a specific food
+
+Rules:
+- Translate ALL Russian food names to English
+- Keep original Russian name in food_name_ru
+- Extract every food row you can see — do not skip rows
+- Do not invent scores not present in the text
+
+Text to extract from:
+{text}"""
+
+
+_FOOD_GUIDE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "title": {"type": "string"},
+        "conditions_covered": {"type": "array", "items": {"type": "string"}},
+        "foods": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "food_name":            {"type": "string"},
+                    "food_name_ru":         {"type": "string"},
+                    "ibs_score":            {"type": "number"},
+                    "diverticulitis_score": {"type": "number"},
+                    "oxalates_score":       {"type": "number"},
+                    "crystalluria_score":   {"type": "number"},
+                    "safety_category":      {"type": "string"},
+                    "notes":                {"type": "string"},
+                },
+            },
+        },
+        "general_notes": {"type": "array", "items": {"type": "string"}},
+    },
+}
+
+_CLINICAL_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "diagnoses":     {"type": "array", "items": {"type": "string"}},
+        "medications":   {"type": "array", "items": {"type": "string"}},
+        "test_results":  {"type": "array", "items": {"type": "string"}},
+        "symptoms":      {"type": "array", "items": {"type": "string"}},
+        "notes":         {"type": "array", "items": {"type": "string"}},
+        "recommendations": {"type": "array", "items": {"type": "string"}},
+    },
+}
 
 
 class Extractor:
@@ -88,8 +153,10 @@ class Extractor:
             self.client = None
             logger.warning("Extractor: no API key — rules-based only")
 
+    # ── Public API ─────────────────────────────────────────────────────────────
+
     def extract(self, text: str, specialty: str = "general") -> ExtractionOutput:
-        """Extract medical entities from text. Returns ExtractionOutput."""
+        """Extract clinical entities from text."""
         if not text or len(text.strip()) < 20:
             return ExtractionOutput()
 
@@ -102,15 +169,112 @@ class Extractor:
 
         return self._extract_rules(text)
 
+    def extract_food_guide(self, text: str, specialty: str = "general") -> FoodGuideOutput:
+        """Extract structured food/scoring table data from a food reference guide."""
+        if not text or len(text.strip()) < 20:
+            return FoodGuideOutput()
+
+        if self.client and self._gemini_available:
+            try:
+                return self._extract_food_guide_gemini(text, specialty)
+            except Exception as e:
+                logger.warning(f"Gemini food guide extraction failed (API error): {e}")
+        return FoodGuideOutput()
+
+    # ── Clinical extractor ─────────────────────────────────────────────────────
+
     def _extract_gemini(self, text: str, specialty: str) -> ExtractionOutput:
         import json
 
-        prompt = EXTRACTION_PROMPT.format(text=text[:8000])  # context limit guard
+        prompt = EXTRACTION_PROMPT.format(text=text[:8000])
 
-        logger.info(f"[DIAG] Gemini input: {len(text)} chars, truncated to {len(text[:8000])}")
+        logger.info(f"[DIAG] Gemini clinical input: {len(text)} chars, truncated to {len(text[:8000])}")
         logger.debug(f"[DIAG] First 500 chars: {text[:500]}")
 
-        # Capture stderr during the API call to detect PyTorch/transformers pollution
+        raw = self._call_gemini(prompt, _CLINICAL_SCHEMA)
+
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            logger.error(f"[DIAG] JSON parse failed: {exc}")
+            logger.error(f"[DIAG] Full raw response ({len(raw)} chars): {raw}")
+            if raw and not raw.rstrip().endswith('}'):
+                logger.error(
+                    f"[DIAG] Response appears truncated — GEMINI_MAX_TOKENS={GEMINI_MAX_TOKENS}"
+                )
+            else:
+                logger.error("[DIAG] Response not truncated — possible stderr pollution or schema mismatch")
+            return ExtractionOutput()
+
+        result = ExtractionOutput()
+        for d in data.get('diagnoses', []):
+            result.diagnoses.append(ExtractedDiagnosis(name=str(d), date=None))
+        for m in data.get('medications', []):
+            result.medications.append(ExtractedMedication(name=str(m), dose=None, frequency=None))
+        for t in data.get('test_results', []):
+            result.test_results.append(ExtractedTestResult(test_name=str(t), value=None, date=None))
+        result.symptoms = [str(s) for s in data.get('symptoms', [])]
+        result.notes = [str(n) for n in data.get('notes', [])]
+        result.recommendations = [str(r) for r in data.get('recommendations', [])]
+
+        logger.info(
+            f"[DIAG] Clinical entities — diagnoses:{len(result.diagnoses)}, "
+            f"meds:{len(result.medications)}, tests:{len(result.test_results)}, "
+            f"symptoms:{len(result.symptoms)}, notes:{len(result.notes)}, "
+            f"recs:{len(result.recommendations)}"
+        )
+        result.extraction_method = "gemini"
+        result.confidence = 0.80
+        return result
+
+    # ── Food guide extractor ───────────────────────────────────────────────────
+
+    def _extract_food_guide_gemini(self, text: str, specialty: str) -> FoodGuideOutput:
+        import json
+
+        # Food tables are dense; allow more input than clinical text
+        prompt = FOOD_GUIDE_PROMPT.format(text=text[:12000])
+
+        logger.info(f"[DIAG] Gemini food guide input: {len(text)} chars, truncated to {len(text[:12000])}")
+
+        raw = self._call_gemini(prompt, _FOOD_GUIDE_SCHEMA)
+
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            logger.error(f"[DIAG] Food guide JSON parse failed: {exc}")
+            logger.error(f"[DIAG] Full raw response ({len(raw)} chars): {raw}")
+            return FoodGuideOutput()
+
+        foods = []
+        for f in data.get('foods', []):
+            try:
+                foods.append(FoodEntry(
+                    food_name=str(f.get('food_name', '')),
+                    food_name_ru=f.get('food_name_ru') or None,
+                    ibs_score=_to_float(f.get('ibs_score')),
+                    diverticulitis_score=_to_float(f.get('diverticulitis_score')),
+                    oxalates_score=_to_float(f.get('oxalates_score')),
+                    crystalluria_score=_to_float(f.get('crystalluria_score')),
+                    safety_category=f.get('safety_category') or None,
+                    notes=f.get('notes') or None,
+                ))
+            except Exception as exc:
+                logger.warning(f"[DIAG] Skipping malformed food entry {f}: {exc}")
+
+        result = FoodGuideOutput(
+            title=data.get('title') or None,
+            conditions_covered=data.get('conditions_covered', []),
+            foods=foods,
+            general_notes=data.get('general_notes', []),
+        )
+        logger.info(f"[DIAG] Food guide chunk: {len(foods)} foods, {len(result.general_notes)} notes")
+        return result
+
+    # ── Shared Gemini call with stderr capture ─────────────────────────────────
+
+    def _call_gemini(self, prompt: str, schema: dict) -> str:
+        """Call Gemini with JSON mode and capture stderr for pollution diagnostics."""
         _stderr_buf = io.StringIO()
         _orig_stderr = sys.stderr
         sys.stderr = _stderr_buf
@@ -121,74 +285,23 @@ class Extractor:
                     max_output_tokens=GEMINI_MAX_TOKENS,
                     temperature=0.1,
                     response_mime_type="application/json",
-                    response_schema={
-                        "type": "object",
-                        "properties": {
-                            "diagnoses": {"type": "array", "items": {"type": "string"}},
-                            "medications": {"type": "array", "items": {"type": "string"}},
-                            "test_results": {"type": "array", "items": {"type": "string"}},
-                            "symptoms": {"type": "array", "items": {"type": "string"}},
-                            "notes": {"type": "array", "items": {"type": "string"}},
-                            "recommendations": {"type": "array", "items": {"type": "string"}}
-                        }
-                    }
-                )
+                    response_schema=schema,
+                ),
             )
         finally:
             sys.stderr = _orig_stderr
-            _captured = _stderr_buf.getvalue()
-            if _captured.strip():
-                logger.warning(f"[DIAG] Stderr captured during Gemini call ({len(_captured)} chars): {_captured[:500]}")
+            captured = _stderr_buf.getvalue()
+            if captured.strip():
+                logger.warning(f"[DIAG] Stderr during Gemini call ({len(captured)} chars): {captured[:500]}")
 
         raw = response.text.strip()
-
-        logger.info(f"[DIAG] Gemini raw response: {len(raw)} chars")
+        logger.info(f"[DIAG] Gemini response: {len(raw)} chars")
         logger.debug(f"[DIAG] Gemini response body: {raw}")
+        return raw
 
-        # Parse JSON — catch errors here so a bad response doesn't permanently
-        # disable Gemini for the rest of the session (only API errors should do that)
-        try:
-            data = json.loads(raw)
-        except json.JSONDecodeError as exc:
-            logger.error(f"[DIAG] JSON parse failed: {exc}")
-            logger.error(f"[DIAG] Full raw response ({len(raw)} chars): {raw}")
-            if raw and not raw.rstrip().endswith('}'):
-                logger.error(
-                    f"[DIAG] Response appears truncated — token limit may have been hit. "
-                    f"GEMINI_MAX_TOKENS={GEMINI_MAX_TOKENS}"
-                )
-            else:
-                logger.error("[DIAG] Response is not truncated — possible stderr pollution or schema mismatch")
-            return ExtractionOutput()
-
-        result = ExtractionOutput()
-
-        for d in data.get('diagnoses', []):
-            result.diagnoses.append(ExtractedDiagnosis(name=str(d), date=None))
-
-        for m in data.get('medications', []):
-            result.medications.append(ExtractedMedication(name=str(m), dose=None, frequency=None))
-
-        for t in data.get('test_results', []):
-            result.test_results.append(ExtractedTestResult(test_name=str(t), value=None, date=None))
-
-        result.symptoms = [str(s) for s in data.get('symptoms', [])]
-        result.notes = [str(n) for n in data.get('notes', [])]
-        result.recommendations = [str(r) for r in data.get('recommendations', [])]
-
-        logger.info(
-            f"[DIAG] Entities — diagnoses:{len(result.diagnoses)}, "
-            f"meds:{len(result.medications)}, tests:{len(result.test_results)}, "
-            f"symptoms:{len(result.symptoms)}, notes:{len(result.notes)}, "
-            f"recs:{len(result.recommendations)}"
-        )
-
-        result.extraction_method = "gemini"
-        result.confidence = 0.80
-        return result
+    # ── Rules-based fallback ───────────────────────────────────────────────────
 
     def _extract_rules(self, text: str) -> ExtractionOutput:
-        """spaCy + regex rules-based extraction fallback."""
         result = ExtractionOutput(extraction_method="rules_based", confidence=0.45)
 
         if SPACY_AVAILABLE:
@@ -209,9 +322,7 @@ class Extractor:
                 elif ent.label_ in ("DRUG", "CHEMICAL"):
                     result.medications.append(ExtractedMedication(name=ent.text))
 
-        # Simple regex for common patterns
         import re
-        # Medication doses: drug name + number + unit
         med_pattern = re.findall(r'([A-Za-z]{4,})\s+(\d+(?:\.\d+)?)\s*(mg|mcg|ml|g|units?)', text, re.IGNORECASE)
         for name, dose, unit in med_pattern:
             if not any(m.name.lower() == name.lower() for m in result.medications):
@@ -219,15 +330,24 @@ class Extractor:
 
         return result
 
+    # ── Legacy compatibility ───────────────────────────────────────────────────
+
     @property
     def claude_available(self) -> bool:
-        """Legacy property name for compatibility"""
         return self._gemini_available
 
     def mark_claude_unavailable(self):
-        """Legacy method name for compatibility"""
         self._gemini_available = False
 
     def mark_claude_available(self):
-        """Legacy method name for compatibility"""
         self._gemini_available = True
+
+
+def _to_float(value) -> Optional[float]:
+    """Safely coerce a Gemini score field to float."""
+    if value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
