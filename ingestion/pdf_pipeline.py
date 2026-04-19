@@ -154,7 +154,9 @@ class PDFPipeline:
         seen_foods: set[str] = set()  # deduplicate across chunks by English name
 
         for i, chunk in enumerate(chunks):
-            stripped_text, _ = self.pii_stripper.strip(chunk)
+            # doc_type="food_guide" → regex-only PII path; avoids Presidio NER
+            # misidentifying food names ("Chicken", "Olive oil") as PERSON/LOCATION
+            stripped_text, _ = self.pii_stripper.strip(chunk, doc_type="food_guide")
             food_output = self.extractor.extract_food_guide(stripped_text, specialty)
 
             records = self._food_guide_to_records(
