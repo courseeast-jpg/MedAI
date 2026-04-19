@@ -275,7 +275,9 @@ def main():
         st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
 
     # Tabs
-    tab_query, tab_upload, tab_mkb = st.tabs(["Query", "Upload Document", "MKB Explorer"])
+    tab_query, tab_upload, tab_mkb, tab_conflicts = st.tabs(
+        ["Query", "Upload Document", "MKB Explorer", "Conflict Review"]
+    )
 
     # ── Query Tab ─────────────────────────────────────────────────────────
     with tab_query:
@@ -422,6 +424,16 @@ def main():
         st.caption(f"{len(records)} records shown")
         for r in records:
             render_mkb_record(r)
+
+    # ── Conflict Review Tab ──────────────────────────────────────────────
+    with tab_conflicts:
+        try:
+            from mkb.conflict_resolver import ConflictResolver
+            from app.conflict_review import render_conflict_review
+            resolver = ConflictResolver(DB_PATH, sql_store=sys_components["sql"])
+            render_conflict_review(resolver)
+        except Exception as e:
+            st.error(f"Conflict review unavailable: {e}")
 
     st.divider()
     st.caption(

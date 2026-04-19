@@ -57,9 +57,11 @@ make test-golden    # Golden test set only (8 critical cases)
 ## Architecture
 
 ```
-Ingestion (docling PDF + Presidio PII strip + Claude extraction)
+Ingestion (docling PDF + OCR validation + Presidio PII strip + Claude extraction)
     ↓
-Quality Gate (dedup + conflict detection)
+Deduplication Engine (exact / semantic / time-series / conflict / implausibility)
+    ↓
+Conflict Resolver (quarantines irreconcilable facts for user review)
     ↓
 Truth Resolution Engine (7 priority rules)
     ↓
@@ -73,8 +75,29 @@ Response Scoring (4-dimension formula)
     ↓
 Controlled Enrichment (hypothesis tier only)
     ↓
-UI (5 safety surfaces: confidence, conflicts, trust, degraded mode, DDI warnings)
+UI (5 safety surfaces + Conflict Review tab)
 ```
+
+### Deduplication Strategies
+
+| Strategy          | When it fires                                        | Action           |
+|-------------------|------------------------------------------------------|------------------|
+| Exact             | same entity + value + date within 7 days             | merge + provenance |
+| Semantic          | alias (HTN=hypertension) or embedding similarity     | link canonical term |
+| Time-series       | same entity, different date                          | append timeline  |
+| Conflict          | value / type / drug / temporal / implausible change  | quarantine both  |
+
+See `mkb/deduplication_engine.py` for the full rule set and
+`ARCHITECTURE.md` for all 18 edge cases.
+
+### Conflict Review Workflow
+
+1. Deduplication engine detects conflict → `ConflictResolver.quarantine_conflict(...)`.
+2. Both facts move to `tier='quarantined'`, a conflict row is inserted.
+3. User opens **Conflict Review** tab in the Streamlit UI.
+4. User chooses `fact1 / fact2 / both / merge / neither` and leaves reasoning.
+5. `resolve_conflict(...)` flips record tiers, writes an audit log entry, and
+   optionally creates a merged record.
 
 ## Feature Flags (config.py)
 
