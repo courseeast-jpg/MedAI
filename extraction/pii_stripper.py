@@ -61,18 +61,28 @@ class PIIStripper:
             self.analyzer = None
             self.anonymizer = None
 
-    def strip(self, text: str) -> Tuple[str, str]:
+    def strip(self, text: str, doc_type: str = "clinical") -> Tuple[str, str]:
         """
-        Returns (stripped_text, method_used)
-        method_used: 'presidio' | 'regex'
+        Returns (stripped_text, method_used).
+
+        doc_type controls how aggressively PII is detected:
+        - "clinical"  : full Presidio NER (PERSON, LOCATION, dates, IDs …)
+        - anything else: regex-only path, which catches structural patterns
+          (SSN, phone, email, medical licence) but does NOT run NER.
+          Use for reference documents (food guides, literature) where Presidio's
+          NER produces false positives — food names like "Chicken" or "Olive oil"
+          are misidentified as PERSON / LOCATION entities.
         """
         if not text:
             return text, "none"
 
+        if doc_type != "clinical":
+            # Reference document: structural patterns only, no NER false-positives
+            return self._strip_regex(text), "regex"
+
         if PRESIDIO_AVAILABLE:
             return self._strip_presidio(text), "presidio"
-        else:
-            return self._strip_regex(text), "regex"
+        return self._strip_regex(text), "regex"
 
     def _strip_presidio(self, text: str) -> str:
         try:
