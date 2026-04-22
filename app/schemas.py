@@ -169,7 +169,7 @@ class FoodGuideOutput(BaseModel):
     conditions_covered: List[str]     = Field(default_factory=list)
     foods:              List[FoodEntry] = Field(default_factory=list)
     general_notes:      List[str]     = Field(default_factory=list)
-    extraction_method:  str           = "gemini"
+    extraction_method:  str           = "ollama"
     confidence:         float         = 0.80
 
 

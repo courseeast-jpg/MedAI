@@ -3,7 +3,6 @@ Test script for Russian PDF extraction.
 Validates extractor fix for stderr pollution issue.
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -11,22 +10,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from dotenv import load_dotenv
+from extraction.extractor import Extractor
+from extraction.pii_stripper import PIIStripper
 from ingestion.pdf_pipeline import PDFPipeline
 
 def main():
     """Run extraction test on Russian dietary PDF."""
-    
-    # Load environment
+
     load_dotenv()
-    api_key = os.getenv("GEMINI_API_KEY")
-    
-    if not api_key:
-        print("ERROR: GEMINI_API_KEY not found in .env file")
-        sys.exit(1)
-    
-    # Initialize pipeline
-    print("Initializing PDF pipeline...")
-    pipeline = PDFPipeline(api_key=api_key)
+
+    print("Initializing PDF pipeline (Ollama backend)...")
+    pipeline = PDFPipeline(extractor=Extractor(), pii_stripper=PIIStripper())
     
     # Test file path
     test_pdf = Path("data/uploads/Диета при заболеваниях жкт.pdf")
@@ -46,23 +40,18 @@ def main():
     
     # Process PDF
     try:
-        records = pipeline.process_chunked(str(test_pdf))
-        
+        records = pipeline.process(test_pdf)
+
         print("-" * 60)
         print(f"\n✓ EXTRACTION COMPLETE")
         print(f"  Records extracted: {len(records)}")
-        
+
         if records:
             print("\nSample entities:")
             for i, record in enumerate(records[:5], 1):
-                entity_type = record.get('label', 'UNKNOWN')
-                text = record.get('text', '')
-                translation = record.get('translation', '')
-                
-                if translation:
-                    print(f"  {i}. [{entity_type}] {text} → {translation}")
-                else:
-                    print(f"  {i}. [{entity_type}] {text}")
+                fact_type = getattr(record, "fact_type", "UNKNOWN")
+                content = getattr(record, "content", "") or getattr(record, "text", "")
+                print(f"  {i}. [{fact_type}] {content}")
         else:
             print("\n⚠ WARNING: No records extracted")
             print("Check logs above for errors")

@@ -30,8 +30,10 @@ sqlcipher3>=0.5.0; sys_platform != "win32"
 anthropic>=0.30.0
 instructor>=1.3.0
 
-# Google Gemini API
-google-generativeai>=0.3.0
+# Local LLM: Ollama is invoked via the `ollama` CLI (subprocess), so no
+# Python package dependency is needed. Install separately:
+#   curl -fsSL https://ollama.com/install.sh | sh
+#   ollama pull llama3.2
 
 # Web fetching
 requests>=2.31.0

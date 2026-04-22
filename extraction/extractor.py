@@ -1,34 +1,20 @@
 """
 MedAI v1.1 — Entity Extractor (Track B)
-Google Gemini API primary with instructor for schema enforcement.
-spaCy rules-based fallback when Gemini unavailable.
+Local Ollama LLM (e.g. llama3.2) invoked via subprocess for schema-constrained
+JSON extraction. spaCy rules-based fallback when Ollama is unavailable.
 """
-import io
+import json
 import os
-import sys
+import re
+import subprocess
 import warnings
 from typing import Optional
 from loguru import logger
 
-# Suppress PyTorch / HuggingFace stderr noise before any heavy imports
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 warnings.filterwarnings("ignore", category=UserWarning, module="torch")
 warnings.filterwarnings("ignore", category=FutureWarning, module="transformers")
 warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
-
-try:
-    import google.generativeai as genai
-    GENAI_AVAILABLE = True
-except ImportError:
-    GENAI_AVAILABLE = False
-    logger.warning("google-generativeai not available")
-
-try:
-    import instructor
-    INSTRUCTOR_AVAILABLE = True
-except ImportError:
-    INSTRUCTOR_AVAILABLE = False
-    logger.warning("instructor not available — using raw Gemini with JSON parsing")
 
 try:
     import spacy
@@ -37,7 +23,7 @@ except ImportError:
     SPACY_AVAILABLE = False
     logger.warning("spaCy not available — rules-based fallback disabled")
 
-from app.config import GEMINI_API_KEY, GEMINI_MODEL, GEMINI_MAX_TOKENS
+from app.config import OLLAMA_MODEL, OLLAMA_TIMEOUT_SEC
 from app.schemas import (
     ExtractionOutput, ExtractedDiagnosis, ExtractedMedication, ExtractedTestResult,
     FoodEntry, FoodGuideOutput,
@@ -65,6 +51,10 @@ Rules:
 - Extract only what is explicitly stated
 - For medications, include dose and frequency if mentioned
 - ALL extracted values must be in ENGLISH (translate from source language if needed)
+
+Output format: Respond with a SINGLE JSON object only. No prose, no markdown fences, no commentary.
+The JSON object must have exactly these keys, each holding an array of strings:
+{{"diagnoses": [], "medications": [], "test_results": [], "symptoms": [], "notes": [], "recommendations": []}}
 
 Text to extract from:
 {text}"""
@@ -98,60 +88,25 @@ Rules:
 - Extract every food row you can see — do not skip rows
 - Do not invent scores not present in the text
 
+Output format: Respond with a SINGLE JSON object only. No prose, no markdown fences, no commentary.
+Shape:
+{{"title": null, "conditions_covered": [], "foods": [{{"food_name": "", "food_name_ru": "", "ibs_score": null, "diverticulitis_score": null, "oxalates_score": null, "crystalluria_score": null, "safety_category": null, "notes": null}}], "general_notes": []}}
+
 Text to extract from:
 {text}"""
 
 
-_FOOD_GUIDE_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "title": {"type": "string"},
-        "conditions_covered": {"type": "array", "items": {"type": "string"}},
-        "foods": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "food_name":            {"type": "string"},
-                    "food_name_ru":         {"type": "string"},
-                    "ibs_score":            {"type": "number"},
-                    "diverticulitis_score": {"type": "number"},
-                    "oxalates_score":       {"type": "number"},
-                    "crystalluria_score":   {"type": "number"},
-                    "safety_category":      {"type": "string"},
-                    "notes":                {"type": "string"},
-                },
-            },
-        },
-        "general_notes": {"type": "array", "items": {"type": "string"}},
-    },
-}
-
-_CLINICAL_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "diagnoses":     {"type": "array", "items": {"type": "string"}},
-        "medications":   {"type": "array", "items": {"type": "string"}},
-        "test_results":  {"type": "array", "items": {"type": "string"}},
-        "symptoms":      {"type": "array", "items": {"type": "string"}},
-        "notes":         {"type": "array", "items": {"type": "string"}},
-        "recommendations": {"type": "array", "items": {"type": "string"}},
-    },
-}
-
-
 class Extractor:
-    def __init__(self):
-        self._gemini_available = bool(GEMINI_API_KEY and GENAI_AVAILABLE)
+    def __init__(self, model: str = OLLAMA_MODEL, timeout_sec: int = OLLAMA_TIMEOUT_SEC):
+        self.model = model
+        self.timeout_sec = timeout_sec
+        self._ollama_available = self._check_ollama()
         self._spacy_nlp = None
 
-        if self._gemini_available:
-            genai.configure(api_key=GEMINI_API_KEY)
-            self.client = genai.GenerativeModel(GEMINI_MODEL)
-            logger.info("Extractor: Gemini mode")
+        if self._ollama_available:
+            logger.info(f"Extractor: Ollama mode (model={self.model})")
         else:
-            self.client = None
-            logger.warning("Extractor: no API key — rules-based only")
+            logger.warning("Extractor: Ollama not available — rules-based only")
 
     # ── Public API ─────────────────────────────────────────────────────────────
 
@@ -160,12 +115,12 @@ class Extractor:
         if not text or len(text.strip()) < 20:
             return ExtractionOutput()
 
-        if self.client and self._gemini_available:
+        if self._ollama_available:
             try:
-                return self._extract_gemini(text, specialty)
+                return self._extract_ollama(text, specialty)
             except Exception as e:
-                logger.warning(f"Gemini extraction failed (API error): {e}. Falling back to rules.")
-                self._gemini_available = False
+                logger.warning(f"Ollama extraction failed: {e}. Falling back to rules.")
+                self._ollama_available = False
 
         return self._extract_rules(text)
 
@@ -174,48 +129,35 @@ class Extractor:
         if not text or len(text.strip()) < 20:
             return FoodGuideOutput()
 
-        if self.client and self._gemini_available:
+        if self._ollama_available:
             try:
-                return self._extract_food_guide_gemini(text, specialty)
+                return self._extract_food_guide_ollama(text, specialty)
             except Exception as e:
-                logger.warning(f"Gemini food guide extraction failed (API error): {e}")
+                logger.warning(f"Ollama food guide extraction failed: {e}")
         return FoodGuideOutput()
 
     # ── Clinical extractor ─────────────────────────────────────────────────────
 
-    def _extract_gemini(self, text: str, specialty: str) -> ExtractionOutput:
-        import json
-
+    def _extract_ollama(self, text: str, specialty: str) -> ExtractionOutput:
         prompt = EXTRACTION_PROMPT.format(text=text[:8000])
-
-        logger.info(f"[DIAG] Gemini clinical input: {len(text)} chars, truncated to {len(text[:8000])}")
+        logger.info(f"[DIAG] Ollama clinical input: {len(text)} chars, truncated to {len(text[:8000])}")
         logger.debug(f"[DIAG] First 500 chars: {text[:500]}")
 
-        raw = self._call_gemini(prompt, _CLINICAL_SCHEMA)
-
-        try:
-            data = json.loads(raw)
-        except json.JSONDecodeError as exc:
-            logger.error(f"[DIAG] JSON parse failed: {exc}")
-            logger.error(f"[DIAG] Full raw response ({len(raw)} chars): {raw}")
-            if raw and not raw.rstrip().endswith('}'):
-                logger.error(
-                    f"[DIAG] Response appears truncated — GEMINI_MAX_TOKENS={GEMINI_MAX_TOKENS}"
-                )
-            else:
-                logger.error("[DIAG] Response not truncated — possible stderr pollution or schema mismatch")
+        raw = self._call_ollama(prompt)
+        data = self._parse_json(raw)
+        if data is None:
             return ExtractionOutput()
 
         result = ExtractionOutput()
-        for d in data.get('diagnoses', []):
+        for d in data.get('diagnoses', []) or []:
             result.diagnoses.append(ExtractedDiagnosis(name=str(d), date=None))
-        for m in data.get('medications', []):
+        for m in data.get('medications', []) or []:
             result.medications.append(ExtractedMedication(name=str(m), dose=None, frequency=None))
-        for t in data.get('test_results', []):
+        for t in data.get('test_results', []) or []:
             result.test_results.append(ExtractedTestResult(test_name=str(t), value=None, date=None))
-        result.symptoms = [str(s) for s in data.get('symptoms', [])]
-        result.notes = [str(n) for n in data.get('notes', [])]
-        result.recommendations = [str(r) for r in data.get('recommendations', [])]
+        result.symptoms = [str(s) for s in (data.get('symptoms') or [])]
+        result.notes = [str(n) for n in (data.get('notes') or [])]
+        result.recommendations = [str(r) for r in (data.get('recommendations') or [])]
 
         logger.info(
             f"[DIAG] Clinical entities — diagnoses:{len(result.diagnoses)}, "
@@ -223,31 +165,23 @@ class Extractor:
             f"symptoms:{len(result.symptoms)}, notes:{len(result.notes)}, "
             f"recs:{len(result.recommendations)}"
         )
-        result.extraction_method = "gemini"
-        result.confidence = 0.80
+        result.extraction_method = "ollama"
+        result.confidence = 0.75
         return result
 
     # ── Food guide extractor ───────────────────────────────────────────────────
 
-    def _extract_food_guide_gemini(self, text: str, specialty: str) -> FoodGuideOutput:
-        import json
-
-        # Food tables are dense; allow more input than clinical text
+    def _extract_food_guide_ollama(self, text: str, specialty: str) -> FoodGuideOutput:
         prompt = FOOD_GUIDE_PROMPT.format(text=text[:12000])
+        logger.info(f"[DIAG] Ollama food guide input: {len(text)} chars, truncated to {len(text[:12000])}")
 
-        logger.info(f"[DIAG] Gemini food guide input: {len(text)} chars, truncated to {len(text[:12000])}")
-
-        raw = self._call_gemini(prompt, _FOOD_GUIDE_SCHEMA)
-
-        try:
-            data = json.loads(raw)
-        except json.JSONDecodeError as exc:
-            logger.error(f"[DIAG] Food guide JSON parse failed: {exc}")
-            logger.error(f"[DIAG] Full raw response ({len(raw)} chars): {raw}")
+        raw = self._call_ollama(prompt)
+        data = self._parse_json(raw)
+        if data is None:
             return FoodGuideOutput()
 
         foods = []
-        for f in data.get('foods', []):
+        for f in data.get('foods', []) or []:
             try:
                 foods.append(FoodEntry(
                     food_name=str(f.get('food_name', '')),
@@ -264,40 +198,102 @@ class Extractor:
 
         result = FoodGuideOutput(
             title=data.get('title') or None,
-            conditions_covered=data.get('conditions_covered', []),
+            conditions_covered=data.get('conditions_covered') or [],
             foods=foods,
-            general_notes=data.get('general_notes', []),
+            general_notes=data.get('general_notes') or [],
+            extraction_method="ollama",
         )
         logger.info(f"[DIAG] Food guide chunk: {len(foods)} foods, {len(result.general_notes)} notes")
         return result
 
-    # ── Shared Gemini call with stderr capture ─────────────────────────────────
+    # ── Ollama subprocess call ─────────────────────────────────────────────────
 
-    def _call_gemini(self, prompt: str, schema: dict) -> str:
-        """Call Gemini with JSON mode and capture stderr for pollution diagnostics."""
-        _stderr_buf = io.StringIO()
-        _orig_stderr = sys.stderr
-        sys.stderr = _stderr_buf
+    def _check_ollama(self) -> bool:
+        """Verify that the `ollama` binary exists and the target model is listed."""
         try:
-            response = self.client.generate_content(
-                prompt,
-                generation_config=genai.GenerationConfig(
-                    max_output_tokens=GEMINI_MAX_TOKENS,
-                    temperature=0.1,
-                    response_mime_type="application/json",
-                    response_schema=schema,
-                ),
+            proc = subprocess.run(
+                ["ollama", "list"],
+                capture_output=True, text=True, timeout=10,
             )
-        finally:
-            sys.stderr = _orig_stderr
-            captured = _stderr_buf.getvalue()
-            if captured.strip():
-                logger.warning(f"[DIAG] Stderr during Gemini call ({len(captured)} chars): {captured[:500]}")
+        except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
+            logger.warning(f"Ollama check failed: {exc}")
+            return False
 
-        raw = response.text.strip()
-        logger.info(f"[DIAG] Gemini response: {len(raw)} chars")
-        logger.debug(f"[DIAG] Gemini response body: {raw}")
+        if proc.returncode != 0:
+            logger.warning(f"`ollama list` returned {proc.returncode}: {proc.stderr[:200]}")
+            return False
+
+        model_root = self.model.split(":")[0]
+        if model_root not in proc.stdout:
+            logger.warning(f"Ollama model '{self.model}' not found in `ollama list`")
+            return False
+        return True
+
+    def _call_ollama(self, prompt: str) -> str:
+        """Call `ollama run <model>` piping the prompt to stdin and returning stdout."""
+        try:
+            proc = subprocess.run(
+                ["ollama", "run", self.model],
+                input=prompt,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout_sec,
+                encoding="utf-8",
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError(f"Ollama timed out after {self.timeout_sec}s") from exc
+        except FileNotFoundError as exc:
+            raise RuntimeError("`ollama` binary not found on PATH") from exc
+
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"ollama run exited {proc.returncode}: {proc.stderr.strip()[:500]}"
+            )
+
+        if proc.stderr and proc.stderr.strip():
+            logger.debug(f"[DIAG] Ollama stderr: {proc.stderr.strip()[:300]}")
+
+        raw = (proc.stdout or "").strip()
+        logger.info(f"[DIAG] Ollama response: {len(raw)} chars")
+        logger.debug(f"[DIAG] Ollama response body: {raw}")
         return raw
+
+    @staticmethod
+    def _parse_json(raw: str) -> Optional[dict]:
+        """Extract the first JSON object from an LLM response.
+
+        Local models frequently wrap JSON in ```json fences or add preamble.
+        Try strict parsing first, then strip fences, then grab the outermost
+        {...} block.
+        """
+        if not raw:
+            logger.error("[DIAG] Empty Ollama response")
+            return None
+
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            pass
+
+        fence = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", raw, re.DOTALL)
+        if fence:
+            try:
+                return json.loads(fence.group(1))
+            except json.JSONDecodeError:
+                pass
+
+        start = raw.find("{")
+        end = raw.rfind("}")
+        if start != -1 and end > start:
+            candidate = raw[start:end + 1]
+            try:
+                return json.loads(candidate)
+            except json.JSONDecodeError as exc:
+                logger.error(f"[DIAG] JSON parse failed on extracted block: {exc}")
+
+        logger.error(f"[DIAG] Could not parse JSON from Ollama output ({len(raw)} chars)")
+        logger.error(f"[DIAG] Raw: {raw[:1000]}")
+        return None
 
     # ── Rules-based fallback ───────────────────────────────────────────────────
 
@@ -322,7 +318,6 @@ class Extractor:
                 elif ent.label_ in ("DRUG", "CHEMICAL"):
                     result.medications.append(ExtractedMedication(name=ent.text))
 
-        import re
         med_pattern = re.findall(r'([A-Za-z]{4,})\s+(\d+(?:\.\d+)?)\s*(mg|mcg|ml|g|units?)', text, re.IGNORECASE)
         for name, dose, unit in med_pattern:
             if not any(m.name.lower() == name.lower() for m in result.medications):
@@ -334,17 +329,17 @@ class Extractor:
 
     @property
     def claude_available(self) -> bool:
-        return self._gemini_available
+        return self._ollama_available
 
     def mark_claude_unavailable(self):
-        self._gemini_available = False
+        self._ollama_available = False
 
     def mark_claude_available(self):
-        self._gemini_available = True
+        self._ollama_available = True
 
 
 def _to_float(value) -> Optional[float]:
-    """Safely coerce a Gemini score field to float."""
+    """Safely coerce an LLM score field to float."""
     if value is None:
         return None
     try:
