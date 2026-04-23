@@ -343,6 +343,14 @@ class Extractor:
         self._gemini_available = True
 
 
+MedicalExtractor = Extractor
+
+
+def create_extractor() -> Extractor:
+    """Legacy factory retained for golden-test and older caller compatibility."""
+    return Extractor()
+
+
 def _to_float(value) -> Optional[float]:
     """Safely coerce a Gemini score field to float."""
     if value is None:
