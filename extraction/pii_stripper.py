@@ -92,7 +92,7 @@ class PIIStripper:
                 analyzer_results=results,
                 operators=OPERATORS
             )
-            return anonymized.text
+            return self._strip_regex(anonymized.text)
         except Exception as e:
             logger.warning(f"Presidio failed: {e}. Falling back to regex.")
             return self._strip_regex(text)

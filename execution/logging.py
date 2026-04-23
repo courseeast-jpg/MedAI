@@ -11,7 +11,7 @@ from loguru import logger
 
 
 class AuditLogger:
-    """Append-only JSONL audit log with the required Phase 1 fields."""
+    """Append-only JSONL audit log with Phase 1 required fields."""
 
     def __init__(self, path: Path | str = "data/audit/execution.jsonl"):
         self.path = Path(path)
@@ -24,11 +24,12 @@ class AuditLogger:
             "entity_count": int(entity_count),
             "confidence": float(confidence),
             "outcome": outcome,
+            "final_status": outcome,
         }
         with self.path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(event, sort_keys=True) + "\n")
         logger.info(
-            "execution audit extractor={} entities={} confidence={:.2f} outcome={}",
+            "execution audit extractor={} entity_count={} confidence={:.2f} final_status={}",
             extractor,
             entity_count,
             confidence,

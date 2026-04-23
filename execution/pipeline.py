@@ -17,6 +17,7 @@ from extractors.spacy_extractor import SpacyExtractor
 
 
 OCR_ARTIFACT_RE = re.compile(r"(\ufffd|[|]{3,}|_{4,}|\b(?:l|I){8,}\b)")
+EXTRACTOR_SCHEMA_KEYS = {"extractor", "entities", "confidence", "latency_ms", "raw_text", "notes"}
 
 
 class ExecutionPipeline:
@@ -53,6 +54,7 @@ class ExecutionPipeline:
         stripped_text, pii_method = self._strip_pii(source_text)
         extractor = self._select_extractor(stripped_text, job.specialty)
         extracted = extractor.extract(stripped_text)
+        self._validate_extractor_output(extracted)
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
 
         candidates = self._entities_to_records(
@@ -144,6 +146,23 @@ class ExecutionPipeline:
             return False
         non_alnum = sum(1 for char in text if not char.isalnum() and not char.isspace())
         return (non_alnum / max(len(text), 1)) > 0.18
+
+    def _validate_extractor_output(self, extracted: dict) -> None:
+        missing = EXTRACTOR_SCHEMA_KEYS - set(extracted)
+        if missing:
+            raise ValueError(f"Extractor output missing keys: {sorted(missing)}")
+        if not isinstance(extracted["extractor"], str):
+            raise TypeError("Extractor output 'extractor' must be a string")
+        if not isinstance(extracted["entities"], list):
+            raise TypeError("Extractor output 'entities' must be a list")
+        if not isinstance(extracted["confidence"], (int, float)):
+            raise TypeError("Extractor output 'confidence' must be numeric")
+        if not isinstance(extracted["latency_ms"], int):
+            raise TypeError("Extractor output 'latency_ms' must be an int")
+        if not isinstance(extracted["raw_text"], str):
+            raise TypeError("Extractor output 'raw_text' must be a string")
+        if not isinstance(extracted["notes"], list):
+            raise TypeError("Extractor output 'notes' must be a list")
 
     def _entities_to_records(
         self,
