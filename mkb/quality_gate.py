@@ -75,6 +75,8 @@ class QualityGate:
         # Check 2 — Conflict detection (same fact_type + specialty, different content)
         existing_records = self.sql.get_by_specialty(candidate.specialty)
         for existing in existing_records:
+            if existing.content.strip().lower() == candidate.content.strip().lower():
+                continue
             if (existing.fact_type == candidate.fact_type
                     and existing.status == "active"
                     and existing.id != candidate.id

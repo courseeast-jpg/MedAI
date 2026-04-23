@@ -18,6 +18,7 @@ from extractors.spacy_extractor import SpacyExtractor
 
 OCR_ARTIFACT_RE = re.compile(r"(\ufffd|[|]{3,}|_{4,}|\b(?:l|I){8,}\b)")
 EXTRACTOR_SCHEMA_KEYS = {"extractor", "entities", "confidence", "latency_ms", "raw_text", "notes"}
+SPACY_FAST_PATH_CHAR_LIMIT = 3000
 
 
 class ExecutionPipeline:
@@ -128,7 +129,7 @@ class ExecutionPipeline:
         return pdf_pipeline._extract_text(pdf_path)
 
     def _select_extractor(self, text: str, specialty: str):
-        if len(text) < 1500 and not self._has_ocr_artifacts(text):
+        if len(text) < SPACY_FAST_PATH_CHAR_LIMIT and not self._has_ocr_artifacts(text):
             return self.spacy_extractor
         if self.gemini_extractor is None or self.gemini_extractor.specialty != specialty:
             self.gemini_extractor = GeminiExtractor(specialty=specialty)

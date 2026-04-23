@@ -27,11 +27,14 @@ class MKBWriter:
         for record in records:
             approved = True
             final = record
+            reason = "approved"
 
             if self.quality_gate is not None:
-                approved, _reason, final = self.quality_gate.check(record, session_id=session_id)
+                approved, reason, final = self.quality_gate.check(record, session_id=session_id)
 
             if not approved or final is None:
+                if reason.startswith("Duplicate of ") or reason.startswith("Existing record retained:"):
+                    continue
                 queued.append(record)
                 continue
 

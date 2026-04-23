@@ -28,7 +28,7 @@ ACTIVE_CONNECTORS     = ["dxgpt"]  # Expand in Phase 2
 SAFE_MODE_THRESHOLD       = 0.40   # Below this → safe mode
 RESPONSE_DISCARD_THRESHOLD = 0.30  # Below this → discard response
 DEDUP_SIMILARITY_THRESHOLD = 0.92  # ChromaDB cosine → deduplicate
-MIN_CONFIDENCE_CLAUDE     = 0.40   # Min confidence for Claude extraction
+MIN_CONFIDENCE_CLAUDE     = 0.35   # Min confidence for Claude extraction
 MIN_CONFIDENCE_RULES      = 0.35   # Min confidence for rules-based extraction
 
 # Connector timeouts

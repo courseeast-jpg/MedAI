@@ -35,7 +35,7 @@ class SpacyExtractor(BaseExtractor):
 
         entities = self._dedupe(entities)
         latency_ms = int((time.perf_counter() - started) * 1000)
-        confidence = 0.65 if entities else 0.35
+        confidence = 0.70 if entities else 0.35
         return {
             "extractor": "spacy",
             "entities": entities,
