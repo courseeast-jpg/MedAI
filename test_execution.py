@@ -69,6 +69,22 @@ class BlockingMedicationGate:
         return "block", "blocked", [finding]
 
 
+class LegacyRulesOutput:
+    diagnoses = []
+    medications = []
+    test_results = []
+    symptoms = []
+    notes = []
+    recommendations = []
+    extraction_method = "rules_based"
+    confidence = 0.45
+
+
+class LegacyRulesExtractor:
+    def extract(self, text: str, specialty: str = "general"):
+        return LegacyRulesOutput()
+
+
 def test_execution_pipeline_runs_end_to_end(tmp_path: Path):
     audit = MemoryAudit()
     pipeline = ExecutionPipeline(
@@ -152,3 +168,12 @@ def test_simulated_real_document_routes_and_writes():
     assert result.audit["extractor"] == "spacy"
     assert result.audit["entity_count"] == 3
     assert result.audit["final_status"] == "written"
+
+
+def test_gemini_adapter_reports_route_when_legacy_falls_back():
+    from extractors.gemini_extractor import GeminiExtractor
+
+    result = GeminiExtractor(legacy_extractor=LegacyRulesExtractor()).extract("x" * 2000)
+
+    assert result["extractor"] == "gemini"
+    assert result["notes"] == ["gemini_route_legacy_fallback=rules_based"]

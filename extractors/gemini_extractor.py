@@ -60,11 +60,14 @@ class GeminiExtractor(BaseExtractor):
 
         latency_ms = int((time.perf_counter() - started) * 1000)
         method = output.extraction_method or "gemini"
+        notes = []
+        if method != "gemini":
+            notes.append(f"gemini_route_legacy_fallback={method}")
         return {
-            "extractor": "gemini" if method == "gemini" else method,
+            "extractor": "gemini",
             "entities": entities,
             "confidence": float(output.confidence),
             "latency_ms": latency_ms,
             "raw_text": text,
-            "notes": [],
+            "notes": notes,
         }
