@@ -11,6 +11,7 @@ from uuid import uuid4
 from app.config import REVIEW_QUEUE_PATH, TIER_ACTIVE, TIER_QUARANTINED, TRUST_CLINICAL
 from app.schemas import MKBRecord
 from execution.consensus import consensus_merge
+from execution.enrichment import ControlledEnrichment
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
 from execution.mkb_writer import MKBWriter
@@ -42,6 +43,7 @@ class ExecutionPipeline:
         gemini_extractor: GeminiExtractor | None = None,
         existing_records_provider=None,
         active_medications_provider=None,
+        enrichment_engine: ControlledEnrichment | None = None,
         review_queue_path: Path | str = REVIEW_QUEUE_PATH,
     ):
         self.pii_stripper = pii_stripper or self._build_pii_stripper()
@@ -55,9 +57,9 @@ class ExecutionPipeline:
             medication_gate,
             active_medications_provider or self._build_active_medications_provider(sql_store),
         )
-        self.truth_resolver = TruthResolutionResolver(
-            existing_records_provider or self._build_existing_records_provider(sql_store)
-        )
+        self.existing_records_provider = existing_records_provider or self._build_existing_records_provider(sql_store)
+        self.truth_resolver = TruthResolutionResolver(self.existing_records_provider)
+        self.enrichment = enrichment_engine
 
     def run(self, job: ExecutionJob) -> ExecutionResult:
         source_text = job.text
@@ -184,8 +186,26 @@ class ExecutionPipeline:
                 notes=extracted.get("notes", []),
             )
 
-        written, queued = self.writer.write(candidates, session_id=session_id)
-        combined_queued = resolution.quarantined_records + queued
+        enrichment_records: list[MKBRecord] = []
+        if self.enrichment is not None:
+            enrichment_records = self.enrichment.enrich(candidates)
+        enrichment_blocked, enrichment_queued, _ = self._apply_safety(enrichment_records, session_id)
+        enrichment_review_records = enrichment_blocked + enrichment_queued
+        if enrichment_review_records:
+            self._persist_review_queue(enrichment_review_records, session_id)
+            self._append_medication_review_queue_items(
+                records=[record for record in enrichment_review_records if record.fact_type == "medication"],
+                source_name=source_name,
+                specialty=job.specialty,
+                session_id=session_id,
+                extractor_route=extractor_route,
+                extracted=extracted,
+            )
+
+        enrichment_review_ids = {record.id for record in enrichment_review_records}
+        writable_records = candidates + [record for record in enrichment_records if record.id not in enrichment_review_ids]
+        written, queued = self.writer.write(writable_records, session_id=session_id)
+        combined_queued = resolution.quarantined_records + enrichment_review_records + queued
         outcome = "queued_for_review" if combined_queued else "written"
         audit = self._audit(extracted, outcome, extractor_route, validation)
 
@@ -303,7 +323,7 @@ class ExecutionPipeline:
                 content=self._content_for_entity(fact_type, text, structured),
                 structured={"name": text, **structured} if fact_type in {"diagnosis", "medication"} else {"text": text, **structured},
                 specialty=specialty,
-                source_type="document",
+                source_type="extraction",
                 source_name=source_name,
                 trust_level=TRUST_CLINICAL,
                 confidence=confidence,

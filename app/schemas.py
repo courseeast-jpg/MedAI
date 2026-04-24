@@ -32,6 +32,7 @@ class MKBRecord(BaseModel):
     resolution_id:      Optional[str] = None
     resolution_action:  Optional[str] = None
     resolution_confidence: Optional[float] = None
+    enrichment_confidence: Optional[float] = None
     requires_review:    bool          = False
     first_recorded:     datetime      = Field(default_factory=datetime.utcnow)
     last_confirmed:     datetime      = Field(default_factory=datetime.utcnow)
