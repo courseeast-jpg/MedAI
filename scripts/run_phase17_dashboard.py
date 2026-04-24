@@ -14,6 +14,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from monitoring.metrics_collector import DEFAULT_AGGREGATE_PATH, DEFAULT_SUMMARY_PATH, load_run_history
+from monitoring.run_comparator import compare_last_runs
 
 
 def load_latest_record(history_path: Path) -> dict | None:
@@ -124,6 +125,32 @@ def render_history_summary(history: list[dict], limit: int) -> str:
     return "\n".join(["Phase 17 Run History", "", render_table(rows)])
 
 
+def render_compare_summary(history_path: Path, limit: int) -> str:
+    comparison_bundle = compare_last_runs(history_path=history_path, limit=limit)
+    lines = [
+        f"Phase 19 Stability Compare ({limit} runs)",
+        "",
+        f"status: {comparison_bundle['status']}",
+        f"tolerances: {comparison_bundle['tolerances']}",
+        "",
+    ]
+    for item in comparison_bundle["history"]:
+        lines.append(
+            f"- {item['run_id']} processed={item['processed']} written={item['written']} queued={item['attempted'] - item['written'] - item['external_quota_blocked'] - item['hard_failures']} quota={item['external_quota_blocked']} avg_conf={float(item['avg_confidence']):.3f}"
+        )
+    if comparison_bundle["comparisons"]:
+        latest = comparison_bundle["comparisons"][-1]
+        lines.extend([
+            "",
+            f"current vs previous: {latest['current_run_id']} vs {latest['previous_run_id']}",
+            f"delta: {latest['deltas']}",
+            f"status: {latest['status']}",
+        ])
+    else:
+        lines.extend(["", "current vs previous: insufficient history"])
+    return "\n".join(lines)
+
+
 def export_latest_markdown(latest: dict, previous: dict | None, export_path: Path) -> Path:
     export_path.parent.mkdir(parents=True, exist_ok=True)
     delta = compute_delta(latest, previous)
@@ -164,6 +191,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--latest", action="store_true")
     parser.add_argument("--history", type=int, default=0)
+    parser.add_argument("--compare", type=int, default=0)
     parser.add_argument("--export", action="store_true")
     parser.add_argument("--history-path", default=str(DEFAULT_HISTORY_PATH))
     args = parser.parse_args()
@@ -176,7 +204,9 @@ def main() -> int:
     latest = history[-1]
     previous = history[-2] if len(history) > 1 else None
 
-    if args.history:
+    if args.compare:
+        print(render_compare_summary(history_path, args.compare))
+    elif args.history:
         print(render_history_summary(history, args.history))
     else:
         print(render_latest_summary(latest, previous))

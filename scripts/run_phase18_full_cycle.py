@@ -10,6 +10,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from monitoring.run_comparator import write_stability_report
+
 PHASE18_REPORT_DIR = ROOT / "reports" / "phase18"
 PHASE11_AUDIT_PATH = ROOT / "artifacts" / "phase11_integration" / "phase11_integration_audit.json"
 PHASE12_SUMMARY_PATH = ROOT / "artifacts" / "phase12_real_world_validation" / "phase12_real_world_validation_summary.json"
@@ -120,6 +125,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
             "avg_confidence": float(phase12.get("aggregate", {}).get("avg_confidence", 0.0)),
         },
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
+        "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
 
 
@@ -148,6 +154,7 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Validation hard_failures: `{validation['hard_failures']}`",
         f"- Validation avg_confidence: `{validation['avg_confidence']}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
+        f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",
         "",
         "## Steps",
@@ -184,6 +191,7 @@ def main() -> int:
     ended_at = datetime.now(UTC)
     summary = build_summary(commands=results, started_at=started_at, ended_at=ended_at)
     write_summary_reports(summary)
+    write_stability_report()
     print(json.dumps(summary, indent=2))
     return 0 if summary["success"] else 1
 

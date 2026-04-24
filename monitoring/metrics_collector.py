@@ -25,6 +25,15 @@ def build_run_record(
     outcomes = summary.get("aggregate", {}).get("outcomes", {})
     review_reasons = summary.get("aggregate", {}).get("review_reasons", {})
     documents = summary.get("documents", [])
+    determinism = summary.get("determinism", {})
+    quota_reasons: dict[str, int] = {}
+    external_attempts = 0
+    for item in documents:
+        retry_visibility = item.get("retry_visibility", {})
+        if retry_visibility.get("retry_reason") == "external_quota":
+            external_attempts += 1
+            reason_key = "external_quota"
+            quota_reasons[reason_key] = quota_reasons.get(reason_key, 0) + 1
     generated_at = str(summary.get("generated_at", ""))
     dataset_value = dataset or str(aggregate.get("dataset_dir") or summary.get("dataset_dir") or "")
     dataset_slug = Path(dataset_value).name or "dataset"
@@ -57,6 +66,15 @@ def build_run_record(
             "quarantined": int(review_reasons.get("quarantined", 0)),
         },
         duration_sec=duration_sec,
+        determinism={
+            "mode": str(determinism.get("mode", "deterministic_path")),
+            "seed": determinism.get("seed"),
+        },
+        quota_behavior={
+            "external_attempts": external_attempts,
+            "skipped_external_quota": int(summary.get("external_quota_blocked", 0)),
+            "reasons": quota_reasons,
+        },
     )
 
 

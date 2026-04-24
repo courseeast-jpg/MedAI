@@ -55,6 +55,7 @@ def test_report_writer_works(tmp_path: Path):
             "avg_confidence": 0.7,
         },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
+        "stability_report_path": "reports/phase19/stability_report.md",
     }
 
     json_path, md_path = write_summary_reports(summary, report_dir=tmp_path)
@@ -112,6 +113,7 @@ def test_no_pipeline_configuration_is_mutated(tmp_path: Path):
             "avg_confidence": 0.7,
         },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
+        "stability_report_path": "reports/phase19/stability_report.md",
     }
 
     write_summary_reports(summary, report_dir=tmp_path)

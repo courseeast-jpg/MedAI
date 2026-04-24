@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -241,6 +242,7 @@ def build_phase12_summary(
     if not recommendations:
         recommendations.append("Run a second Phase 12 batch from a different document mix to confirm stability beyond this initial sample.")
 
+    fixed_seed = os.environ.get("PHASE19_FIXED_SEED")
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "phase": "Phase 12 Real-World Validation",
@@ -270,6 +272,11 @@ def build_phase12_summary(
         },
         "mkb_counts": runtime_counts,
         "documents": documents,
+        "determinism": {
+            "mode": "deterministic_path",
+            "seed": int(fixed_seed) if fixed_seed not in {None, ""} else None,
+            "ordering": "sorted_pdf_listing",
+        },
         "recommendations": recommendations,
     }
 
@@ -586,6 +593,12 @@ def main() -> int:
 
     if not dataset_dir.exists():
         raise SystemExit(f"Dataset directory not found: {dataset_dir}")
+
+    fixed_seed = os.environ.get("PHASE19_FIXED_SEED")
+    if fixed_seed:
+        logger.info("phase19 deterministic path fixed_seed={} ordering=sorted_pdf_listing", fixed_seed)
+    else:
+        logger.info("phase19 deterministic path seed=none ordering=sorted_pdf_listing")
 
     pdfs = list_pdf_documents(dataset_dir, args.limit)
     pipeline, sql_store, component_state = build_validation_pipeline(runtime_dir)

@@ -19,6 +19,8 @@ class RunRecord:
     route_distribution_actual: dict[str, int]
     review_counts: dict[str, int]
     duration_sec: float
+    determinism: dict
+    quota_behavior: dict
 
     def to_dict(self) -> dict:
         return asdict(self)

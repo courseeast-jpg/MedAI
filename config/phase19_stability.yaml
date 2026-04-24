@@ -1,0 +1,4 @@
+processed_delta_max: 2
+written_delta_max: 2
+queued_delta_max: 2
+confidence_delta_max: 0.05
