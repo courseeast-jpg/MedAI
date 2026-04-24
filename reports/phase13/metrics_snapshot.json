@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24T20:31:21.776677+00:00",
+  "generated_at": "2026-04-24T20:36:27.223157+00:00",
   "documents_processed": 6,
   "written": 6,
   "queued_for_review": 0,
@@ -15,15 +15,15 @@
     "unknown": 4
   },
   "timing": {
-    "total_pipeline_time_ms": 19136.072,
-    "avg_document_time_ms": 1913.607,
-    "max_document_time_ms": 10523.536,
-    "min_document_time_ms": 161.969,
+    "total_pipeline_time_ms": 14307.62,
+    "avg_document_time_ms": 1430.762,
+    "max_document_time_ms": 7161.012,
+    "min_document_time_ms": 170.258,
     "per_extractor": {
       "spacy": {
         "documents": 6,
-        "total_time_ms": 16928.126,
-        "avg_time_ms": 2821.354
+        "total_time_ms": 11982.455,
+        "avg_time_ms": 1997.076
       }
     },
     "per_document": [
@@ -31,61 +31,61 @@
         "document": "long_noisy_01.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 3630.864
+        "processing_time_ms": 3877.282
       },
       {
         "document": "long_noisy_02.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 10523.536
+        "processing_time_ms": 7161.012
       },
       {
         "document": "long_noisy_03.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 2255.291
+        "processing_time_ms": 378.019
       },
       {
         "document": "long_noisy_04.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 533.384
+        "processing_time_ms": 510.908
       },
       {
         "document": "long_noisy_05.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 161.969
+        "processing_time_ms": 183.055
       },
       {
         "document": "long_noisy_06.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 617.681
+        "processing_time_ms": 496.941
       },
       {
         "document": "long_noisy_07.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 190.183
+        "processing_time_ms": 170.258
       },
       {
         "document": "long_noisy_08.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 595.374
+        "processing_time_ms": 734.764
       },
       {
         "document": "long_noisy_09.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 166.283
+        "processing_time_ms": 212.829
       },
       {
         "document": "long_noisy_10.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 461.507
+        "processing_time_ms": 582.552
       }
     ]
   },
@@ -97,35 +97,35 @@
       "long_noisy_08.pdf",
       "long_noisy_10.pdf"
     ],
-    "total_suggested_backoff_seconds": 208.51,
+    "total_suggested_backoff_seconds": 166.372,
     "retry_events": [
       {
         "document": "long_noisy_04.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 52.127445676,
+        "retry_delay_seconds": 41.593118662,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 52.127445676s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 52\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 41.593118662s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 41\n}\n]"
       },
       {
         "document": "long_noisy_06.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 52.127445676,
+        "retry_delay_seconds": 41.593118662,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 52.127445676s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 52\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 41.593118662s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 41\n}\n]"
       },
       {
         "document": "long_noisy_08.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 52.127445676,
+        "retry_delay_seconds": 41.593118662,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 52.127445676s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 52\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 41.593118662s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 41\n}\n]"
       },
       {
         "document": "long_noisy_10.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 52.127445676,
+        "retry_delay_seconds": 41.593118662,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 52.127445676s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 52\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 41.593118662s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 41\n}\n]"
       }
     ]
   }
