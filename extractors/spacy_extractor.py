@@ -94,14 +94,24 @@ class SpacyExtractor(BaseExtractor):
             r"\b([A-Z][A-Za-z ]{2,40})\s*:?\s+(\d+(?:\.\d+)?)\s*(mg/dL|mmol/L|%|bpm|mmHg)?\b"
         )
         for match in test_pattern.finditer(text):
+            test_name = match.group(1).strip()
+            test_value = match.group(2)
+            if self._is_noise_test_result(test_name, test_value):
+                continue
             entities.append({
                 "type": "test_result",
-                "text": match.group(1).strip(),
-                "value": match.group(2),
+                "text": test_name,
+                "value": test_value,
                 "unit": match.group(3),
             })
 
         return entities
+
+    def _is_noise_test_result(self, test_name: str, test_value: str) -> bool:
+        normalized_name = test_name.strip().lower()
+        if normalized_name in {"page", "pg"} and test_value.isdigit():
+            return True
+        return False
 
     def _map_label(self, label: str) -> str | None:
         normalized = label.upper()
