@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATASET_DIR = ROOT / "test_data" / "final_batch_50"
 DEFAULT_OUTPUT_DIR = ROOT / "artifacts" / "phase12_real_world_validation"
 DEFAULT_PHASE13_REPORT_DIR = ROOT / "reports" / "phase13"
+DEFAULT_PHASE15_REPORT_DIR = ROOT / "reports" / "phase15"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -406,6 +407,103 @@ def write_phase13_reports(report_dir: Path, summary: dict[str, Any]) -> dict[str
     return metrics
 
 
+def build_phase15_aggregate(summary: dict[str, Any]) -> dict[str, Any]:
+    documents = summary["documents"]
+    processed = [item for item in documents if item["status"] == "processed"]
+    external_quota_blocked = [item for item in documents if item["status"] == "external_quota_blocked"]
+    hard_failures = [item for item in documents if item["status"] == "error"]
+    rejection_patterns = Counter()
+    for item in processed:
+        for reason in item.get("review_reasons", []):
+            rejection_patterns[reason] += 1
+
+    return {
+        "generated_at": summary["generated_at"],
+        "phase": "Phase 15 Expanded Validation",
+        "dataset_dir": summary["dataset_dir"],
+        "documents_attempted": summary["documents_selected"],
+        "documents_processed": len(processed),
+        "documents_quota_blocked": len(external_quota_blocked),
+        "written": summary["written"],
+        "queued_for_review": summary["queued_for_review"],
+        "hard_failures": len(hard_failures),
+        "avg_confidence_processed_only": summary["aggregate"]["avg_confidence"],
+        "route_distribution_actual": dict(sorted(summary["aggregate"]["extractors"].items())),
+        "route_distribution_requested": dict(
+            sorted(
+                Counter(item.get("requested_route") or "unknown" for item in documents).items()
+            )
+        ),
+        "top_rejection_patterns": [
+            {"pattern": pattern, "count": count}
+            for pattern, count in rejection_patterns.most_common(3)
+        ],
+        "counters": {
+            "attempted_equals_processed_plus_quota_blocked_plus_hard_failures": (
+                summary["documents_selected"] == len(processed) + len(external_quota_blocked) + len(hard_failures)
+            ),
+            "processed_equals_written_plus_queued_for_review_plus_other_processed_outcomes": (
+                len(processed)
+                == summary["written"]
+                + summary["queued_for_review"]
+                + sum(
+                    1
+                    for item in processed
+                    if item["outcome"] not in {"written", "queued_for_review"}
+                )
+            ),
+        },
+    }
+
+
+def build_phase15_validation_summary(summary: dict[str, Any], aggregate: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 15 Validation Summary",
+        "",
+        f"- Generated at: {aggregate['generated_at']}",
+        f"- Dataset: `{aggregate['dataset_dir']}`",
+        f"- Total documents attempted: {aggregate['documents_attempted']}",
+        f"- Processed: {aggregate['documents_processed']}",
+        f"- External quota blocked: {aggregate['documents_quota_blocked']}",
+        f"- Written: {aggregate['written']}",
+        f"- Queued for review: {aggregate['queued_for_review']}",
+        f"- Hard failures: {aggregate['hard_failures']}",
+        f"- Average confidence (processed only): {aggregate['avg_confidence_processed_only']}",
+        "",
+        "## Route Distribution",
+        "",
+        f"- Actual routes: {aggregate['route_distribution_actual']}",
+        f"- Requested routes: {aggregate['route_distribution_requested']}",
+        "",
+        "## Rejection Patterns",
+        "",
+    ]
+    if aggregate["top_rejection_patterns"]:
+        for item in aggregate["top_rejection_patterns"]:
+            lines.append(f"- `{item['pattern']}`: {item['count']}")
+    else:
+        lines.append("- No recurring rejection patterns observed in processed documents.")
+
+    lines.extend([
+        "",
+        "## Validation Integrity",
+        "",
+        f"- Attempted counter check passed: {aggregate['counters']['attempted_equals_processed_plus_quota_blocked_plus_hard_failures']}",
+        f"- Processed counter check passed: {aggregate['counters']['processed_equals_written_plus_queued_for_review_plus_other_processed_outcomes']}",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def write_phase15_reports(report_dir: Path, summary: dict[str, Any]) -> dict[str, Any]:
+    report_dir.mkdir(parents=True, exist_ok=True)
+    aggregate = build_phase15_aggregate(summary)
+    aggregate_path = report_dir / "validation_aggregate.json"
+    summary_path = report_dir / "validation_summary.md"
+    aggregate_path.write_text(json.dumps(aggregate, indent=2), encoding="utf-8")
+    summary_path.write_text(build_phase15_validation_summary(summary, aggregate), encoding="utf-8")
+    return aggregate
+
+
 def write_outputs(output_dir: Path, summary: dict[str, Any]) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -474,7 +572,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset-dir", default=str(DEFAULT_DATASET_DIR))
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
-    parser.add_argument("--limit", type=int, default=10)
+    parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--specialty", default="general")
     parser.add_argument("--quota-safe", action="store_true")
     args = parser.parse_args()
@@ -521,6 +619,7 @@ def main() -> int:
     )
     write_outputs(output_dir, summary)
     write_phase13_reports(DEFAULT_PHASE13_REPORT_DIR, summary)
+    write_phase15_reports(DEFAULT_PHASE15_REPORT_DIR, summary)
 
     print(json.dumps(summary, indent=2))
     return 0 if summary["run_passed"] else 1

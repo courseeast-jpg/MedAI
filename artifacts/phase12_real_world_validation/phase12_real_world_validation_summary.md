@@ -1,29 +1,29 @@
 # Phase 12 Real-World Validation Summary
 
-- Generated at: 2026-04-24T20:44:05.834058+00:00
+- Generated at: 2026-04-24T20:53:15.968515+00:00
 - Dataset: `test_data\final_batch_50`
-- Documents processed: 6/10
-- Written: 6
-- Queued for review: 0
+- Documents processed: 46/50
+- Written: 33
+- Queued for review: 13
 - External quota blocked: 4
 - Hard failures: 0
-- Target window met (10-20 docs): True
+- Target window met (10-20 docs): False
 - Run passed: True
 
 ## Aggregate
 
-- Outcomes: {'written': 6}
-- Validation statuses: {'accepted': 6}
-- Extractors: {'spacy': 6}
+- Outcomes: {'queued_for_review': 13, 'written': 33}
+- Validation statuses: {'accepted': 46}
+- Extractors: {'spacy': 46}
 - Average confidence: 0.7
-- Total entities: 24
-- Total written: 24
-- Total queued: 0
+- Total entities: 115
+- Total written: 102
+- Total queued: 26
 - Total blocked: 0
 
 ## Runtime MKB
 
-- Counts: {'total': 17, 'active': 5, 'hypothesis': 0, 'quarantined': 12}
+- Counts: {'total': 52, 'active': 14, 'hypothesis': 0, 'quarantined': 38}
 
 ## Component State
 
@@ -40,6 +40,7 @@
 ## Recommendations
 
 - Some documents were skipped due to external API quota exhaustion; rerun later to complete the sample without changing pipeline behavior.
+- Inspect review-queued documents and classify whether queues are expected governance behavior or extraction misses.
 
 ## Documents
 
@@ -53,3 +54,43 @@
 - `long_noisy_08.pdf` -> status=external_quota_blocked outcome=external_quota_blocked validation=skipped_external_quota confidence=0.0
 - `long_noisy_09.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
 - `long_noisy_10.pdf` -> status=external_quota_blocked outcome=external_quota_blocked validation=skipped_external_quota confidence=0.0
+- `short_01.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_02.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_03.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_04.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_05.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_06.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_07.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_08.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_09.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_10.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_11.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_12.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_13.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_14.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_15.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_16.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_17.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_18.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_19.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_20.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_21.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_22.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_23.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_24.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_25.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_26.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_27.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_28.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_29.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_30.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_31.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_32.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_33.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_34.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_35.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_36.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_37.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_38.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7
+- `short_39.pdf` -> status=processed outcome=written validation=accepted confidence=0.7
+- `short_40.pdf` -> status=processed outcome=queued_for_review validation=accepted confidence=0.7

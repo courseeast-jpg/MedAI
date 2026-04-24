@@ -1,0 +1,34 @@
+{
+  "generated_at": "2026-04-24T20:53:15.968515+00:00",
+  "phase": "Phase 15 Expanded Validation",
+  "dataset_dir": "test_data\\final_batch_50",
+  "documents_attempted": 50,
+  "documents_processed": 46,
+  "documents_quota_blocked": 4,
+  "written": 33,
+  "queued_for_review": 13,
+  "hard_failures": 0,
+  "avg_confidence_processed_only": 0.7,
+  "route_distribution_actual": {
+    "spacy": 46
+  },
+  "route_distribution_requested": {
+    "gemini": 1,
+    "spacy": 45,
+    "unknown": 4
+  },
+  "top_rejection_patterns": [
+    {
+      "pattern": "clear",
+      "count": 13
+    },
+    {
+      "pattern": "quarantined",
+      "count": 13
+    }
+  ],
+  "counters": {
+    "attempted_equals_processed_plus_quota_blocked_plus_hard_failures": true,
+    "processed_equals_written_plus_queued_for_review_plus_other_processed_outcomes": true
+  }
+}
