@@ -9,6 +9,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from app.config import (
+    ENABLE_HYPOTHESIS_TIER,
     EXTRACTION_ACCEPT_THRESHOLD,
     EXTRACTION_REVIEW_THRESHOLD,
     REVIEW_QUEUE_PATH,
@@ -34,6 +35,8 @@ from execution.truth_resolution import ResolutionBatch, TruthResolutionResolver
 from execution.validation import ValidationDecision, validate_extraction_result
 from extractors.gemini_extractor import GeminiExtractor
 from extractors.spacy_extractor import SpacyExtractor
+from governance.hypothesis_tier import GovernanceHypothesisTier
+from governance.truth_resolution import GovernanceTruthResolutionAdapter
 
 
 OCR_ARTIFACT_RE = re.compile(r"(\ufffd|[|]{3,}|_{4,}|\b(?:l|I){8,}\b)")
@@ -80,7 +83,8 @@ class ExecutionPipeline:
             active_medications_provider or self._build_active_medications_provider(sql_store),
         )
         self.existing_records_provider = existing_records_provider or self._build_existing_records_provider(sql_store)
-        self.truth_resolver = TruthResolutionResolver(self.existing_records_provider)
+        self.truth_resolver = GovernanceTruthResolutionAdapter(self.existing_records_provider)
+        self.governance_hypothesis = GovernanceHypothesisTier(enabled=ENABLE_HYPOTHESIS_TIER)
         self.enrichment = enrichment_engine
         self.promoter = promotion_engine or HypothesisPromotion(self.existing_records_provider)
         self.router = router or self._build_router()
@@ -591,7 +595,7 @@ class ExecutionPipeline:
             structured.pop("type", None)
             structured.pop("text", None)
 
-            records.append(MKBRecord(
+            record = MKBRecord(
                 fact_type=fact_type,
                 content=self._content_for_entity(fact_type, text, structured),
                 structured={"name": text, **structured} if fact_type in {"diagnosis", "medication"} else {"text": text, **structured},
@@ -605,7 +609,8 @@ class ExecutionPipeline:
                 ddi_checked=False,
                 session_id=session_id,
                 tags=[fact_type],
-            ))
+            )
+            records.append(self.governance_hypothesis.classify_record(record))
         return records
 
     def _apply_safety(

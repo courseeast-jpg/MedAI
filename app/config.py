@@ -18,6 +18,9 @@ ENRICH_PROMOTE        = False   # Auto-promote hypothesis→active (Phase 2)
 ENABLE_EPUB           = False   # ePub ingestion (Phase 2)
 ENABLE_YOUTUBE        = False   # YouTube transcripts (Phase 2)
 ENABLE_WEB_INGESTION  = True    # HTML + PDF web fetch (MVP)
+ENABLE_TRUTH_RESOLUTION = False # Phase 11 governance truth resolution overlay
+ENABLE_HYPOTHESIS_TIER  = False # Phase 11 governance hypothesis-tier enforcement
+ENABLE_DECISION_SCORING = False # Phase 11 governance decision-scoring wrapper
 ENABLE_ENRICHMENT     = True    # Enrichment engine — hypothesis tier only
 
 # Active connectors — only listed connectors make real API calls
