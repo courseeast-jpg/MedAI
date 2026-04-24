@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-04-24T21:50:00.137777+00:00",
+  "started_at": "2026-04-24T21:45:17.870738+00:00",
+  "ended_at": "2026-04-24T21:50:00.137777+00:00",
+  "duration_seconds": 282.267,
+  "commit_hash": "5062b52841c9528ef8ab4edc34ad7eeff32ba1bc",
+  "git_status": "dirty",
+  "steps": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "phase11_audit",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase11_integration_audit.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "validation",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase12_real_world_validation.py",
+        "--dataset-dir",
+        "test_data\\final_batch_50",
+        "--quota-safe"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "dashboard_latest",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase17_dashboard.py",
+        "--latest"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "dashboard_export",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase17_dashboard.py",
+        "--export"
+      ],
+      "returncode": 0
+    }
+  ],
+  "success": true,
+  "failed_step": null,
+  "test_result": "154 passed",
+  "phase11_audit_result": "passed",
+  "validation_result": {
+    "attempted": 50,
+    "processed": 47,
+    "written": 46,
+    "queued_for_review": 1,
+    "external_quota_blocked": 3,
+    "hard_failures": 0,
+    "avg_confidence": 0.7
+  },
+  "dashboard_export_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase17\\dashboard_latest.md"
+}
