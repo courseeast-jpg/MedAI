@@ -108,4 +108,24 @@ def test_audit_records_and_metrics_cover_all_stages(tmp_path: Path):
         "failure_count": 0,
         "avg_confidence": 0.9,
         "avg_agreement_score": 1.0,
+        "avg_latency_per_connector": {
+            "spacy": 1.0,
+            "gemini": 120.0,
+            "phi3": 25.0,
+        },
+        "avg_confidence_per_connector": {
+            "spacy": 0.9,
+            "gemini": 0.9,
+            "phi3": 0.76,
+        },
+        "cost_estimate_per_connector": {
+            "spacy": 0.0,
+            "gemini": 0.02,
+            "phi3": 0.005,
+        },
+        "success_rate_per_connector": {
+            "spacy": 1.0,
+            "gemini": 0.9,
+            "phi3": 0.95,
+        },
     }

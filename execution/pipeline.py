@@ -111,6 +111,8 @@ class ExecutionPipeline:
                 "extractor_actual": routed.extractor_actual,
                 "fallback_used": routed.fallback_used,
                 "failure_count": routed.failure_count,
+                "routing_decision_reason": routed.decision_reason,
+                "route_score": routed.route_score,
                 "routing_events": routed.events,
             },
         )
@@ -119,20 +121,33 @@ class ExecutionPipeline:
         extracted["fallback_used"] = routed.fallback_used
         extracted["routing_failure_count"] = routed.failure_count
         extracted["routing_events"] = routed.events
+        extracted["routing_decision_reason"] = routed.decision_reason
+        extracted["routing_route_score"] = routed.route_score
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
+        extracted["notes"].append(f"routing_decision={routed.decision_reason}")
         self.metrics.record_routing(
             extractor_actual=str(extracted.get("actual_extractor", "")),
             fallback_used=routed.fallback_used,
             failure_count=routed.failure_count,
         )
+        for extraction_result in extraction_results:
+            self.metrics.record_connector_result(
+                connector=str(extraction_result.get("actual_extractor", extraction_result.get("extractor", "unknown"))),
+                latency_ms=float(extraction_result.get("latency_ms", 0.0)),
+                confidence=float(extraction_result.get("confidence", 0.0)),
+                success=True,
+            )
         self._stage_log(
             record_id=session_id,
             stage="consensus",
             action="consensus_result",
             confidence=float(extracted.get("confidence", 0.0)),
-            decision_reason=f"agreement_score={float(extracted.get('agreement_score', 1.0))}",
+            decision_reason=(
+                f"agreement_score={float(extracted.get('agreement_score', 1.0))} "
+                f"routing={routed.decision_reason}"
+            ),
         )
         validation = validate_extraction_result(extracted, extractor_route=extractor_route)
         extracted["validation_status"] = validation.status
@@ -487,6 +502,7 @@ class ExecutionPipeline:
             spacy_connector=SpacyConnector(self.spacy_extractor),
             gemini_connector_factory=self._get_gemini_connector,
             phi3_connector=Phi3Connector(self.phi3_extractor),
+            metrics=self.metrics,
             spacy_fast_path_char_limit=SPACY_FAST_PATH_CHAR_LIMIT,
         )
 
