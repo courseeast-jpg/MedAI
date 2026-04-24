@@ -32,12 +32,15 @@ def validate_extraction_result(extracted: dict[str, Any], *, extractor_route: st
     actual_extractor = str(extracted.get("actual_extractor", extracted.get("extractor", "")))
     agreement_score = float(extracted.get("agreement_score", 1.0))
     disagreement_flag = bool(extracted.get("disagreement_flag", False))
+    fallback_used = bool(extracted.get("fallback_used", False))
 
     if actual_extractor != extractor_route:
         errors.append(_issue(
             code="route_actual_mismatch",
-            severity="fatal",
-            message="Extractor route does not match the actual extractor used.",
+            severity="warning" if fallback_used else "fatal",
+            message="Extractor route does not match the actual extractor used."
+            if not fallback_used
+            else "Extractor route fell back to a different connector before validation.",
             field="actual_extractor",
             expected=extractor_route,
             actual=actual_extractor,

@@ -21,10 +21,13 @@ class MemoryAudit:
         event = {**kwargs, "final_status": kwargs["outcome"]}
         self.metrics.record(
             extractor_route=kwargs["extractor_route"],
+            extractor_actual=kwargs["extractor_actual"],
             confidence=kwargs["confidence"],
             outcome=kwargs["outcome"],
             validation_status=kwargs.get("validation_status", "accepted"),
             validation_error_count=kwargs.get("validation_error_count", 0),
+            fallback_used=kwargs.get("fallback_used", False),
+            failure_count=kwargs.get("failure_count", 0),
         )
         self.events.append(event)
         return event
@@ -185,6 +188,8 @@ def test_simulated_real_document_routes_and_writes():
         "total_jobs": 1,
         "spacy_count": 1,
         "gemini_count": 0,
+        "fallback_count": 0,
+        "failure_count": 0,
         "avg_confidence": 0.9,
         "review_rate": 0.0,
         "accepted_count": 1,
@@ -230,6 +235,8 @@ def test_audit_logger_exposes_metrics_snapshot(tmp_path: Path):
         confidence=0.7,
         validation_status="accepted",
         validation_error_count=0,
+        fallback_used=False,
+        failure_count=0,
         outcome="written",
     )
     audit.log(
@@ -240,6 +247,8 @@ def test_audit_logger_exposes_metrics_snapshot(tmp_path: Path):
         confidence=0.8,
         validation_status="needs_review",
         validation_error_count=1,
+        fallback_used=False,
+        failure_count=0,
         outcome="queued_for_review",
     )
 
@@ -247,6 +256,8 @@ def test_audit_logger_exposes_metrics_snapshot(tmp_path: Path):
         "total_jobs": 2,
         "spacy_count": 1,
         "gemini_count": 1,
+        "fallback_count": 0,
+        "failure_count": 0,
         "avg_confidence": 0.75,
         "review_rate": 0.5,
         "accepted_count": 1,

@@ -102,6 +102,10 @@ def test_audit_records_and_metrics_cover_all_stages(tmp_path: Path):
         "review_count": 0,
         "rejected_count": 0,
         "promoted_count": 1,
+        "spacy_count": 1,
+        "gemini_count": 0,
+        "fallback_count": 0,
+        "failure_count": 0,
         "avg_confidence": 0.9,
         "avg_agreement_score": 1.0,
     }

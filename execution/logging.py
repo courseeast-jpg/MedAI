@@ -17,6 +17,8 @@ class ExecutionMetrics:
         self.total_jobs = 0
         self.spacy_count = 0
         self.gemini_count = 0
+        self.fallback_count = 0
+        self.failure_count = 0
         self._confidence_total = 0.0
         self._review_count = 0
         self.accepted_count = 0
@@ -33,16 +35,22 @@ class ExecutionMetrics:
         self,
         *,
         extractor_route: str,
+        extractor_actual: str,
         confidence: float,
         outcome: str,
         validation_status: str = "accepted",
         validation_error_count: int = 0,
+        fallback_used: bool = False,
+        failure_count: int = 0,
     ) -> None:
         self.total_jobs += 1
-        if extractor_route == "spacy":
+        if extractor_actual == "spacy":
             self.spacy_count += 1
-        elif extractor_route == "gemini":
+        elif extractor_actual == "gemini":
             self.gemini_count += 1
+        if fallback_used:
+            self.fallback_count += 1
+        self.failure_count += int(failure_count)
         confidence_value = float(confidence)
         self._confidence_total += confidence_value
         if outcome == "queued_for_review":
@@ -73,6 +81,8 @@ class ExecutionMetrics:
             "total_jobs": total,
             "spacy_count": self.spacy_count,
             "gemini_count": self.gemini_count,
+            "fallback_count": self.fallback_count,
+            "failure_count": self.failure_count,
             "avg_confidence": avg_confidence,
             "review_rate": review_rate,
             "accepted_count": self.accepted_count,
@@ -102,13 +112,18 @@ class AuditLogger:
         outcome: str,
         validation_status: str = "accepted",
         validation_error_count: int = 0,
+        fallback_used: bool = False,
+        failure_count: int = 0,
     ) -> dict[str, Any]:
         self.metrics.record(
             extractor_route=extractor_route,
+            extractor_actual=extractor_actual,
             confidence=confidence,
             outcome=outcome,
             validation_status=validation_status,
             validation_error_count=validation_error_count,
+            fallback_used=fallback_used,
+            failure_count=failure_count,
         )
         event = {
             "timestamp": datetime.utcnow().isoformat(),
@@ -119,6 +134,8 @@ class AuditLogger:
             "confidence": float(confidence),
             "validation_status": validation_status,
             "validation_error_count": int(validation_error_count),
+            "fallback_used": fallback_used,
+            "failure_count": int(failure_count),
             "outcome": outcome,
             "final_status": outcome,
         }

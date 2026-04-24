@@ -12,12 +12,16 @@ from app.config import REVIEW_QUEUE_PATH, TIER_ACTIVE, TIER_QUARANTINED, TRUST_C
 from app.schemas import MKBRecord
 from execution.audit import StageAuditLogger
 from execution.consensus import consensus_merge
+from execution.connectors.gemini_connector import GeminiConnector
+from execution.connectors.phi3_connector import Phi3Connector
+from execution.connectors.spacy_connector import SpacyConnector
 from execution.enrichment import ControlledEnrichment
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
 from execution.metrics import PipelineMetrics
 from execution.mkb_writer import MKBWriter
 from execution.promotion import HypothesisPromotion
+from execution.router import ExecutionRouter
 from execution.safety import ExecutionSafety
 from execution.truth_resolution import ResolutionBatch, TruthResolutionResolver
 from execution.validation import ValidationDecision, validate_extraction_result
@@ -44,6 +48,7 @@ class ExecutionPipeline:
         audit_logger: AuditLogger | None = None,
         spacy_extractor: SpacyExtractor | None = None,
         gemini_extractor: GeminiExtractor | None = None,
+        phi3_extractor=None,
         existing_records_provider=None,
         active_medications_provider=None,
         enrichment_engine: ControlledEnrichment | None = None,
@@ -51,6 +56,7 @@ class ExecutionPipeline:
         stage_audit_logger: StageAuditLogger | None = None,
         pipeline_metrics: PipelineMetrics | None = None,
         review_queue_path: Path | str = REVIEW_QUEUE_PATH,
+        router: ExecutionRouter | None = None,
     ):
         self.pii_stripper = pii_stripper or self._build_pii_stripper()
         self.audit_logger = audit_logger or AuditLogger()
@@ -58,6 +64,7 @@ class ExecutionPipeline:
         self.metrics = pipeline_metrics or PipelineMetrics()
         self.spacy_extractor = spacy_extractor or SpacyExtractor()
         self.gemini_extractor = gemini_extractor
+        self.phi3_extractor = phi3_extractor
         self.review_queue_path = Path(review_queue_path)
         self.review_queue_path.parent.mkdir(parents=True, exist_ok=True)
         self.writer = MKBWriter(sql_store, vector_store, quality_gate)
@@ -69,6 +76,7 @@ class ExecutionPipeline:
         self.truth_resolver = TruthResolutionResolver(self.existing_records_provider)
         self.enrichment = enrichment_engine
         self.promoter = promotion_engine or HypothesisPromotion(self.existing_records_provider)
+        self.router = router or self._build_router()
 
     def run(self, job: ExecutionJob) -> ExecutionResult:
         source_text = job.text
@@ -87,19 +95,38 @@ class ExecutionPipeline:
             decision_reason=f"source={source_name}",
         )
         stripped_text, pii_method = self._strip_pii(source_text)
-        extractor_route = self._select_extractor_route(stripped_text)
-        extraction_results = self._collect_extraction_results(stripped_text, job.specialty, extractor_route)
+        routed = self.router.execute(stripped_text, specialty=job.specialty)
+        extractor_route = routed.extractor_route
+        extraction_results = routed.results
+        for extraction_result in extraction_results:
+            self._validate_extractor_output(extraction_result)
         self._stage_log(
             record_id=session_id,
             stage="extraction",
             action="extraction_completed",
             confidence=max(float(item.get("confidence", 0.0)) for item in extraction_results) if extraction_results else 0.0,
             decision_reason=f"collectors={','.join(str(item.get('extractor', 'unknown')) for item in extraction_results)}",
+            extra={
+                "extractor_route": extractor_route,
+                "extractor_actual": routed.extractor_actual,
+                "fallback_used": routed.fallback_used,
+                "failure_count": routed.failure_count,
+                "routing_events": routed.events,
+            },
         )
         extracted = consensus_merge(extraction_results, extractor_route=extractor_route)
+        extracted["actual_extractor"] = routed.extractor_actual
+        extracted["fallback_used"] = routed.fallback_used
+        extracted["routing_failure_count"] = routed.failure_count
+        extracted["routing_events"] = routed.events
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
+        self.metrics.record_routing(
+            extractor_actual=str(extracted.get("actual_extractor", "")),
+            fallback_used=routed.fallback_used,
+            failure_count=routed.failure_count,
+        )
         self._stage_log(
             record_id=session_id,
             stage="consensus",
@@ -439,32 +466,29 @@ class ExecutionPipeline:
         return pdf_pipeline._extract_text(pdf_path)
 
     def _select_extractor_route(self, text: str) -> str:
-        if len(text) < SPACY_FAST_PATH_CHAR_LIMIT and not self._has_ocr_artifacts(text):
-            return "spacy"
-        return "gemini"
+        return self.router.select_route(text)
 
     def _collect_extraction_results(self, text: str, specialty: str, extractor_route: str) -> list[dict]:
-        results: list[dict] = []
-        spacy_result = self.spacy_extractor.extract(text)
-        self._validate_extractor_output(spacy_result)
-        spacy_result.setdefault("actual_extractor", spacy_result.get("extractor", "unknown"))
-        include_spacy = extractor_route == "spacy" or bool(spacy_result.get("entities"))
-        if include_spacy:
-            results.append(spacy_result)
-
-        if extractor_route == "gemini":
-            gemini_extractor = self._get_gemini_extractor(specialty)
-            gemini_result = gemini_extractor.extract(text)
-            self._validate_extractor_output(gemini_result)
-            gemini_result.setdefault("actual_extractor", gemini_result.get("extractor", "unknown"))
-            results.append(gemini_result)
-
-        return results
+        routed = self.router.execute(text, specialty=specialty)
+        if routed.extractor_route != extractor_route:
+            raise ValueError(f"Router route mismatch: expected {extractor_route}, got {routed.extractor_route}")
+        return routed.results
 
     def _get_gemini_extractor(self, specialty: str):
         if self.gemini_extractor is None or self.gemini_extractor.specialty != specialty:
             self.gemini_extractor = GeminiExtractor(specialty=specialty)
         return self.gemini_extractor
+
+    def _get_gemini_connector(self, specialty: str) -> GeminiConnector:
+        return GeminiConnector(self._get_gemini_extractor(specialty))
+
+    def _build_router(self) -> ExecutionRouter:
+        return ExecutionRouter(
+            spacy_connector=SpacyConnector(self.spacy_extractor),
+            gemini_connector_factory=self._get_gemini_connector,
+            phi3_connector=Phi3Connector(self.phi3_extractor),
+            spacy_fast_path_char_limit=SPACY_FAST_PATH_CHAR_LIMIT,
+        )
 
     def _strip_pii(self, text: str) -> tuple[str, str]:
         if not text:
@@ -724,6 +748,8 @@ class ExecutionPipeline:
             confidence=float(extracted.get("confidence", 0.0)),
             validation_status=validation.status,
             validation_error_count=validation.error_count,
+            fallback_used=bool(extracted.get("fallback_used", False)),
+            failure_count=int(extracted.get("routing_failure_count", 0)),
             outcome=outcome,
         )
 

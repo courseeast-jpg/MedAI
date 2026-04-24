@@ -242,6 +242,8 @@ def test_review_queue_and_metrics_capture_phase2_statuses(tmp_path: Path):
         "total_jobs": 3,
         "spacy_count": 3,
         "gemini_count": 0,
+        "fallback_count": 0,
+        "failure_count": 0,
         "avg_confidence": 0.8,
         "review_rate": 0.667,
         "accepted_count": 1,
