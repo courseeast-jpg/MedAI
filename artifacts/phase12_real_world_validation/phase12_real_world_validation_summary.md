@@ -1,6 +1,6 @@
 # Phase 12 Real-World Validation Summary
 
-- Generated at: 2026-04-24T20:53:15.968515+00:00
+- Generated at: 2026-04-24T20:59:40.405025+00:00
 - Dataset: `test_data\final_batch_50`
 - Documents processed: 46/50
 - Written: 33
@@ -23,7 +23,7 @@
 
 ## Runtime MKB
 
-- Counts: {'total': 52, 'active': 14, 'hypothesis': 0, 'quarantined': 38}
+- Counts: {'total': 78, 'active': 14, 'hypothesis': 0, 'quarantined': 64}
 
 ## Component State
 
