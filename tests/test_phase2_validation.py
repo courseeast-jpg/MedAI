@@ -83,11 +83,15 @@ def test_valid_gemini_extraction_is_accepted(tmp_path: Path):
 
     result = pipeline.process_text("x" * 4000, specialty="epilepsy")
 
-    assert result.outcome == "written"
+    assert result.outcome == "queued_for_review"
     assert result.validation_status == "accepted"
     assert result.audit["extractor_route"] == "gemini"
     assert result.audit["extractor_actual"] == "gemini"
-    assert result.written_count == 1
+    assert result.written_count == 0
+    assert result.queued_count == 1
+    assert result.queued_records[0].tier == "hypothesis"
+    assert result.queued_records[0].status == "hypothesis"
+    assert result.queued_records[0].requires_review is True
 
 
 def test_missing_required_fields_are_rejected(tmp_path: Path):

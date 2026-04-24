@@ -23,6 +23,23 @@ class GovernanceTruthResolutionEngine:
     """Phase 11 governance ruleset. Default disabled through adapter."""
 
     def resolve(self, candidate: MKBRecord, existing: MKBRecord) -> GovernanceResolution:
+        if self._is_materially_identical(candidate, existing):
+            merged = existing.model_copy(update={
+                "content": candidate.content or existing.content,
+                "structured": {**existing.structured, **candidate.structured},
+                "confidence": max(existing.confidence, candidate.confidence),
+                "resolution_action": "merge",
+                "resolution_confidence": 0.95,
+                "requires_review": False,
+            })
+            return GovernanceResolution(
+                action="merge",
+                confidence=0.95,
+                winner=merged,
+                existing_id=existing.id,
+                reason="materially_identical_records_merge",
+            )
+
         if existing.trust_level == 1 and candidate.trust_level > 1:
             return GovernanceResolution(
                 action="keep_existing",
@@ -155,6 +172,30 @@ class GovernanceTruthResolutionEngine:
             return float(value)
         except (TypeError, ValueError):
             return None
+
+    def _is_materially_identical(self, candidate: MKBRecord, existing: MKBRecord) -> bool:
+        if self._entity_key(candidate) != self._entity_key(existing):
+            return False
+        if candidate.fact_type != existing.fact_type:
+            return False
+        if candidate.trust_level != existing.trust_level:
+            return False
+        if candidate.source_count != existing.source_count:
+            return False
+        if abs((candidate.first_recorded - existing.first_recorded).days) > 90:
+            return False
+        if self._normalize_structured(candidate.structured) != self._normalize_structured(existing.structured):
+            return False
+        if self._numeric_value(candidate) is not None or self._numeric_value(existing) is not None:
+            return self._numeric_value(candidate) == self._numeric_value(existing)
+        return True
+
+    def _normalize_structured(self, structured: dict) -> dict:
+        return {
+            str(key): value
+            for key, value in structured.items()
+            if key not in {"merged_from", "range_min", "range_max"}
+        }
 
     def _entity_key(self, record: MKBRecord) -> tuple[str, str]:
         label = record.structured.get("name") or record.structured.get("text") or record.content

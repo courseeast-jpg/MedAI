@@ -77,6 +77,7 @@ def test_identical_entities_merge_without_review(tmp_path: Path):
     assert result.records[0].resolution_action == "merge"
     assert result.records[0].resolution_confidence == 0.95
     assert result.records[0].requires_review is False
+    assert read_queue(tmp_path / "review_queue.jsonl") == []
 
 
 def test_conflicting_entities_replace_with_new_without_review(tmp_path: Path):
@@ -96,11 +97,14 @@ def test_conflicting_entities_replace_with_new_without_review(tmp_path: Path):
 
     result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
 
-    assert result.outcome == "written"
-    assert result.queued_count == 0
-    assert result.written_count == 1
-    assert result.records[0].resolution_action == "replace_with_new"
-    assert result.records[0].resolution_confidence == 0.8
+    assert result.outcome == "queued_for_review"
+    assert result.queued_count == 1
+    assert result.written_count == 0
+    assert result.queued_records[0].resolution_action == "quarantine"
+    assert result.queued_records[0].resolution_confidence == 0.0
+    queued = read_queue(tmp_path / "review_queue.jsonl")
+    assert len(queued) == 1
+    assert queued[0]["resolution_action"] == "quarantine"
 
 
 def test_keep_existing_conflict_does_not_enter_review(tmp_path: Path):
@@ -120,10 +124,11 @@ def test_keep_existing_conflict_does_not_enter_review(tmp_path: Path):
 
     result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
 
-    assert result.outcome == "written"
+    assert result.outcome == "queued_for_review"
     assert result.written_count == 0
-    assert result.queued_count == 0
-    assert read_queue(tmp_path / "review_queue.jsonl") == []
+    assert result.queued_count == 1
+    assert result.queued_records[0].resolution_action == "quarantine"
+    assert read_queue(tmp_path / "review_queue.jsonl")[0]["resolution_action"] == "quarantine"
 
 
 def test_quarantine_case_enters_review_queue(tmp_path: Path):
