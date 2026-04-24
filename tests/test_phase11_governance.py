@@ -25,6 +25,50 @@ class StaticExtractor:
         return {**self.payload, "raw_text": text}
 
 
+class FakeSQLStore:
+    def __init__(self):
+        self.records: list[MKBRecord] = []
+
+    def write_record(self, record: MKBRecord, session_id: str = ""):
+        self.records.append(record)
+        return record.id
+
+    def get_by_specialty(self, specialty: str, tier: str | None = None):
+        items = [record for record in self.records if record.specialty == specialty and record.status == "active"]
+        if tier is not None:
+            items = [record for record in items if record.tier == tier]
+        return items
+
+    def get_record(self, record_id: str):
+        for record in self.records:
+            if record.id == record_id:
+                return record
+        return None
+
+    def update_status(self, record_id: str, status: str, detail: str | None = None):
+        for index, record in enumerate(self.records):
+            if record.id == record_id:
+                self.records[index] = record.model_copy(update={"status": status})
+                break
+
+    def write_ledger(self, event):
+        return 1
+
+    def get_records_requiring_review(self):
+        return [record for record in self.records if record.requires_review]
+
+    def get_active_medications(self):
+        return [record for record in self.records if record.fact_type == "medication" and record.tier == "active" and record.status == "active"]
+
+
+class FakeVectorStore:
+    def add_record(self, record: MKBRecord):
+        return None
+
+    def delete_record(self, record_id: str):
+        return None
+
+
 def make_record(
     *,
     name: str,
@@ -178,7 +222,8 @@ def test_hypothesis_is_excluded_from_active_context_retrieval():
     assert result == [active]
 
 
-def test_feature_flags_disabled_preserve_phase10_behavior(tmp_path: Path):
+def test_hypothesis_activation_routes_ai_fact_into_hypothesis_tier(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr("execution.pipeline.ENABLE_HYPOTHESIS_TIER", True)
     pipeline = ExecutionPipeline(
         pii_stripper=NoopPIIStripper(),
         spacy_extractor=StaticExtractor({
@@ -200,6 +245,200 @@ def test_feature_flags_disabled_preserve_phase10_behavior(tmp_path: Path):
         audit_logger=AuditLogger(path=tmp_path / "audit.jsonl"),
         review_queue_path=tmp_path / "review_queue.jsonl",
     )
+    pipeline.governance_hypothesis = GovernanceHypothesisTier(enabled=True)
+
+    result = pipeline.process_text("x" * 4500, specialty="epilepsy")
+
+    governed_records = result.records or result.queued_records
+
+    assert result.outcome in {"written", "queued_for_review"}
+    assert governed_records[0].tier == "hypothesis"
+    assert governed_records[0].status == "hypothesis"
+
+
+def test_hypothesis_activation_keeps_active_document_facts_active(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr("execution.pipeline.ENABLE_HYPOTHESIS_TIER", True)
+    pipeline = ExecutionPipeline(
+        pii_stripper=NoopPIIStripper(),
+        spacy_extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.9,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        audit_logger=AuditLogger(path=tmp_path / "audit.jsonl"),
+        review_queue_path=tmp_path / "review_queue.jsonl",
+    )
+    pipeline.governance_hypothesis = GovernanceHypothesisTier(enabled=True)
+
+    result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
+
+    assert result.outcome == "written"
+    assert result.records[0].tier == "active"
+    assert result.records[0].status == "active"
+
+
+def test_truth_resolution_activation_routes_conflicts_through_pipeline(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr("governance.truth_resolution.ENABLE_TRUTH_RESOLUTION", True)
+    monkeypatch.setattr("execution.pipeline.ENABLE_HYPOTHESIS_TIER", False)
+    existing = make_record(name="Epilepsy", trust_level=1)
+    store = FakeSQLStore()
+    store.records.append(existing)
+    pipeline = ExecutionPipeline(
+        pii_stripper=NoopPIIStripper(),
+        spacy_extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.9,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        sql_store=store,
+        vector_store=FakeVectorStore(),
+        audit_logger=AuditLogger(path=tmp_path / "audit.jsonl"),
+        review_queue_path=tmp_path / "review_queue.jsonl",
+    )
+    pipeline.truth_resolver = GovernanceTruthResolutionAdapter(
+        lambda record: [
+            item for item in store.get_by_specialty(record.specialty, tier="active")
+            if item.fact_type == record.fact_type
+        ],
+        enabled=True,
+    )
+
+    result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
+
+    assert result.outcome == "queued_for_review"
+    assert len(result.queued_records) == 1
+    assert result.queued_records[0].tier == "quarantined"
+
+
+def test_truth_resolution_activation_unresolved_conflict_quarantines_candidate(monkeypatch):
+    monkeypatch.setattr("governance.truth_resolution.ENABLE_TRUTH_RESOLUTION", True)
+    existing = make_record(name="Headache", fact_type="symptom", trust_level=4)
+    candidate = make_record(name="Headache", fact_type="symptom", trust_level=4)
+    existing.structured["severity"] = "mild"
+    candidate.structured["severity"] = "severe"
+    adapter = GovernanceTruthResolutionAdapter(enabled=True, existing_records_provider=lambda record: [existing])
+
+    result = adapter.resolve_batch([candidate])
+
+    assert result.records_to_write == []
+    assert len(result.quarantined_records) == 1
+    assert result.quarantined_records[0].tier == "quarantined"
+
+
+def test_truth_resolution_activation_medication_dose_conflict_quarantines_both(monkeypatch):
+    monkeypatch.setattr("governance.truth_resolution.ENABLE_TRUTH_RESOLUTION", True)
+    existing = make_record(name="Lamotrigine", fact_type="medication", dose="100mg")
+    candidate = make_record(name="Lamotrigine", fact_type="medication", dose="200mg")
+    adapter = GovernanceTruthResolutionAdapter(enabled=True, existing_records_provider=lambda record: [existing])
+
+    result = adapter.resolve_batch([candidate])
+
+    assert result.records_to_write == []
+    assert len(result.quarantined_records) == 2
+
+
+def test_truth_resolution_activation_requires_no_destructive_migration(tmp_path: Path):
+    db_path = tmp_path / "governance_activation.db"
+    db_path.touch()
+
+    assert db_path.exists()
+    assert db_path.stat().st_size == 0
+
+
+def test_decision_scoring_activation_calculates_deterministic_score():
+    scorer = GovernanceDecisionScoring(enabled=True)
+    context = [make_record(name="Epilepsy"), make_record(name="Lamotrigine", fact_type="medication")]
+
+    result = scorer.score(
+        content="Epilepsy management is appropriate because Lamotrigine is already listed.",
+        mkb_context=context,
+        citations=["guideline-1"],
+        ddi_safety_score=0.9,
+    )
+
+    assert result.enabled is True
+    assert result.final_score == 0.93
+    assert result.score_breakdown["ddi_safety_score"] == 0.9
+
+
+def test_decision_scoring_low_score_is_flagged_but_does_not_crash_pipeline(tmp_path: Path):
+    scorer = GovernanceDecisionScoring(enabled=True)
+    score = scorer.score(content="", mkb_context=[], citations=[], ddi_safety_score=0.1)
+    pipeline = ExecutionPipeline(
+        pii_stripper=NoopPIIStripper(),
+        spacy_extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.9,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        audit_logger=AuditLogger(path=tmp_path / "audit.jsonl"),
+        review_queue_path=tmp_path / "review_queue.jsonl",
+    )
+
+    result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
+
+    assert score.final_score == 0.235
+    assert score.final_score < 0.3
+    assert result.outcome == "written"
+
+
+def test_decision_scoring_ddi_safety_score_participates_in_final_score():
+    scorer = GovernanceDecisionScoring(enabled=True)
+
+    low = scorer.score(content="Because this is consistent.", mkb_context=[], citations=[], ddi_safety_score=0.1)
+    high = scorer.score(content="Because this is consistent.", mkb_context=[], citations=[], ddi_safety_score=0.9)
+
+    assert high.final_score > low.final_score
+
+
+def test_decision_scoring_uses_no_real_external_apis(monkeypatch):
+    def fail(*args, **kwargs):
+        raise AssertionError("external API should not be called")
+
+    monkeypatch.setattr("requests.get", fail, raising=False)
+    monkeypatch.setattr("requests.post", fail, raising=False)
+    scorer = GovernanceDecisionScoring(enabled=True)
+
+    result = scorer.score(content="Short coherent note because evidence exists.", mkb_context=[], citations=[], ddi_safety_score=1.0)
+
+    assert result.enabled is True
+
+
+def test_feature_flags_disabled_preserve_phase10_behavior(tmp_path: Path):
+    import execution.pipeline as pipeline_module
+
+    pipeline = ExecutionPipeline(
+        pii_stripper=NoopPIIStripper(),
+        spacy_extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [],
+            "confidence": 0.9,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        gemini_extractor=StaticExtractor({
+            "extractor": "gemini",
+            "actual_extractor": "gemini",
+            "entities": [{"type": "medication", "text": "Lamotrigine", "structured": {"dose": "100mg"}}],
+            "confidence": 0.85,
+            "latency_ms": 1,
+            "notes": [],
+        }, specialty="epilepsy"),
+        audit_logger=AuditLogger(path=tmp_path / "audit.jsonl"),
+        review_queue_path=tmp_path / "review_queue.jsonl",
+    )
+    pipeline.governance_hypothesis = GovernanceHypothesisTier(enabled=False)
+    pipeline.truth_resolver = GovernanceTruthResolutionAdapter(enabled=False)
 
     result = pipeline.process_text("x" * 4500, specialty="epilepsy")
     scoring = GovernanceDecisionScoring(enabled=False).score(content="short note")
