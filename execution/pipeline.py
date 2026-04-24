@@ -15,6 +15,7 @@ from execution.enrichment import ControlledEnrichment
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
 from execution.mkb_writer import MKBWriter
+from execution.promotion import HypothesisPromotion
 from execution.safety import ExecutionSafety
 from execution.truth_resolution import ResolutionBatch, TruthResolutionResolver
 from execution.validation import ValidationDecision, validate_extraction_result
@@ -44,6 +45,7 @@ class ExecutionPipeline:
         existing_records_provider=None,
         active_medications_provider=None,
         enrichment_engine: ControlledEnrichment | None = None,
+        promotion_engine: HypothesisPromotion | None = None,
         review_queue_path: Path | str = REVIEW_QUEUE_PATH,
     ):
         self.pii_stripper = pii_stripper or self._build_pii_stripper()
@@ -60,6 +62,7 @@ class ExecutionPipeline:
         self.existing_records_provider = existing_records_provider or self._build_existing_records_provider(sql_store)
         self.truth_resolver = TruthResolutionResolver(self.existing_records_provider)
         self.enrichment = enrichment_engine
+        self.promoter = promotion_engine or HypothesisPromotion(self.existing_records_provider)
 
     def run(self, job: ExecutionJob) -> ExecutionResult:
         source_text = job.text
@@ -203,9 +206,45 @@ class ExecutionPipeline:
             )
 
         enrichment_review_ids = {record.id for record in enrichment_review_records}
-        writable_records = candidates + [record for record in enrichment_records if record.id not in enrichment_review_ids]
+        safe_enrichment = [record for record in enrichment_records if record.id not in enrichment_review_ids]
+
+        promotion_batch = self.promoter.promote(safe_enrichment, corroborating_records=candidates)
+        promotion_resolver = TruthResolutionResolver(
+            lambda record: list(self.existing_records_provider(record)) + candidates
+        )
+        promoted_resolution = promotion_resolver.resolve_batch(promotion_batch.promoted_records)
+        if promoted_resolution.quarantined_records:
+            self._append_resolution_review_queue_items(
+                resolution=promoted_resolution,
+                source_name=source_name,
+                specialty=job.specialty,
+                session_id=session_id,
+                extractor_route=extractor_route,
+                extracted=extracted,
+            )
+
+        promoted_blocked, promoted_queued, promoted_findings = self._apply_safety(
+            promoted_resolution.records_to_write,
+            session_id,
+        )
+        ddi_findings.extend(promoted_findings)
+        promoted_review_records = promoted_resolution.quarantined_records + promoted_blocked + promoted_queued
+        if promoted_review_records:
+            self._persist_review_queue(promoted_review_records, session_id)
+            self._append_medication_review_queue_items(
+                records=[record for record in promoted_review_records if record.fact_type == "medication"],
+                source_name=source_name,
+                specialty=job.specialty,
+                session_id=session_id,
+                extractor_route=extractor_route,
+                extracted=extracted,
+            )
+
+        promoted_review_ids = {record.id for record in promoted_review_records}
+        safe_promoted = [record for record in promoted_resolution.records_to_write if record.id not in promoted_review_ids]
+        writable_records = self._dedupe_records_by_id(candidates + safe_promoted + promotion_batch.remaining_hypotheses)
         written, queued = self.writer.write(writable_records, session_id=session_id)
-        combined_queued = resolution.quarantined_records + enrichment_review_records + queued
+        combined_queued = resolution.quarantined_records + enrichment_review_records + promoted_review_records + queued
         outcome = "queued_for_review" if combined_queued else "written"
         audit = self._audit(extracted, outcome, extractor_route, validation)
 
@@ -569,3 +608,9 @@ class ExecutionPipeline:
         if sql_store is None or not hasattr(sql_store, "get_active_medications"):
             return lambda: []
         return lambda: list(sql_store.get_active_medications())
+
+    def _dedupe_records_by_id(self, records: list[MKBRecord]) -> list[MKBRecord]:
+        deduped: dict[str, MKBRecord] = {}
+        for record in records:
+            deduped[record.id] = record
+        return list(deduped.values())

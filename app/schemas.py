@@ -22,6 +22,7 @@ class MKBRecord(BaseModel):
     source_url:         Optional[str] = None
     trust_level:        int           = 3  # 1–5
     confidence:         float         = 0.5
+    source_count:       int           = 1
     status:             str           = "active"
     tier:               str           = "active"   # active|hypothesis|quarantined|superseded
     ddi_checked:        bool          = False

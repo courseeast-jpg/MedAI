@@ -154,8 +154,12 @@ class TruthResolutionResolver:
         return self._annotate(existing.model_copy(update={
             "content": candidate.content if len(candidate.content) >= len(existing.content) else existing.content,
             "structured": merged_structured,
+            "trust_level": min(existing.trust_level, candidate.trust_level),
             "confidence": max(existing.confidence, candidate.confidence),
+            "source_count": max(existing.source_count, candidate.source_count),
+            "enrichment_confidence": candidate.enrichment_confidence or existing.enrichment_confidence,
             "linked_to": merged_linked,
+            "promotion_history": [*existing.promotion_history, *candidate.promotion_history],
         }), "merge", 0.95)
 
     def _annotate(
