@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from app.schemas import DDIFinding
+from execution.logging import AuditLogger, ExecutionMetrics
 from execution.pipeline import ExecutionPipeline
 
 
@@ -14,9 +15,15 @@ class NoopPIIStripper:
 class MemoryAudit:
     def __init__(self):
         self.events = []
+        self.metrics = ExecutionMetrics()
 
     def log(self, **kwargs):
         event = {**kwargs, "final_status": kwargs["outcome"]}
+        self.metrics.record(
+            extractor_route=kwargs["extractor_route"],
+            confidence=kwargs["confidence"],
+            outcome=kwargs["outcome"],
+        )
         self.events.append(event)
         return event
 
@@ -107,6 +114,8 @@ def test_execution_pipeline_runs_end_to_end(tmp_path: Path):
     assert result.audit["outcome"] == "written"
     assert result.audit["final_status"] == "written"
     assert audit.events[-1]["entity_count"] == 2
+    assert audit.events[-1]["extractor_route"] == "spacy"
+    assert audit.events[-1]["extractor_actual"] == "spacy"
 
 
 def test_ddi_gate_runs_before_write():
@@ -166,14 +175,63 @@ def test_simulated_real_document_routes_and_writes():
     assert result.outcome == "written"
     assert result.written_count == 3
     assert result.audit["extractor"] == "spacy"
+    assert result.audit["extractor_route"] == "spacy"
+    assert result.audit["extractor_actual"] == "spacy"
     assert result.audit["entity_count"] == 3
     assert result.audit["final_status"] == "written"
+    assert audit.metrics.snapshot() == {
+        "total_jobs": 1,
+        "spacy_count": 1,
+        "gemini_count": 0,
+        "avg_confidence": 0.9,
+        "review_rate": 0.0,
+    }
 
 
 def test_gemini_adapter_reports_route_when_legacy_falls_back():
     from extractors.gemini_extractor import GeminiExtractor
 
+    pytest.MonkeyPatch().setattr("extractors.gemini_extractor.GEMINI_API_KEY", "")
     result = GeminiExtractor(legacy_extractor=LegacyRulesExtractor()).extract("x" * 2000)
 
     assert result["extractor"] == "gemini"
-    assert result["notes"] == ["gemini_route_legacy_fallback=rules_based"]
+    assert result["actual_extractor"] == "rules_based"
+    assert "gemini_route_legacy_fallback=rules_based" in result["notes"]
+
+
+def test_gemini_route_fallback_raises_when_key_present(monkeypatch: pytest.MonkeyPatch):
+    from extractors.gemini_extractor import GeminiExtractor
+
+    monkeypatch.setattr("extractors.gemini_extractor.GEMINI_API_KEY", "configured-key")
+
+    with pytest.raises(RuntimeError, match="configured key"):
+        GeminiExtractor(legacy_extractor=LegacyRulesExtractor()).extract("x" * 4000)
+
+
+def test_audit_logger_exposes_metrics_snapshot(tmp_path: Path):
+    audit = AuditLogger(path=tmp_path / "execution.jsonl")
+
+    audit.log(
+        extractor="spacy",
+        extractor_route="spacy",
+        extractor_actual="spacy",
+        entity_count=2,
+        confidence=0.7,
+        outcome="written",
+    )
+    audit.log(
+        extractor="gemini",
+        extractor_route="gemini",
+        extractor_actual="gemini",
+        entity_count=3,
+        confidence=0.8,
+        outcome="queued_for_review",
+    )
+
+    assert audit.metrics.snapshot() == {
+        "total_jobs": 2,
+        "spacy_count": 1,
+        "gemini_count": 1,
+        "avg_confidence": 0.75,
+        "review_rate": 0.5,
+    }

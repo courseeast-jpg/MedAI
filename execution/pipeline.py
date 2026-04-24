@@ -53,10 +53,11 @@ class ExecutionPipeline:
             source_name = job.source_name or job.pdf_path.name
 
         stripped_text, pii_method = self._strip_pii(source_text)
-        extractor = self._select_extractor(stripped_text, job.specialty)
+        extractor_route, extractor = self._select_extractor(stripped_text, job.specialty)
         extracted = extractor.extract(stripped_text)
         self._validate_extractor_output(extracted)
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
+        extracted.setdefault("actual_extractor", extracted.get("extractor", "unknown"))
 
         candidates = self._entities_to_records(
             extracted.get("entities", []),
@@ -69,7 +70,7 @@ class ExecutionPipeline:
 
         blocked_records, queued_records, ddi_findings = self._apply_safety(candidates, session_id)
         if blocked_records:
-            audit = self._audit(extracted, "blocked_ddi")
+            audit = self._audit(extracted, "blocked_ddi", extractor_route)
             return ExecutionResult(
                 outcome="blocked_ddi",
                 blocked_records=blocked_records,
@@ -84,7 +85,7 @@ class ExecutionPipeline:
             queued_ids = {record.id for record in queued_records}
             safe_candidates = [record for record in candidates if record.id not in queued_ids]
             written, quality_queued = self.writer.write(safe_candidates, session_id=session_id)
-            audit = self._audit(extracted, "queued_for_review")
+            audit = self._audit(extracted, "queued_for_review", extractor_route)
             return ExecutionResult(
                 outcome="queued_for_review",
                 records=written,
@@ -97,7 +98,7 @@ class ExecutionPipeline:
 
         written, queued = self.writer.write(candidates, session_id=session_id)
         outcome = "queued_for_review" if queued else "written"
-        audit = self._audit(extracted, outcome)
+        audit = self._audit(extracted, outcome, extractor_route)
 
         return ExecutionResult(
             outcome=outcome,
@@ -130,10 +131,10 @@ class ExecutionPipeline:
 
     def _select_extractor(self, text: str, specialty: str):
         if len(text) < SPACY_FAST_PATH_CHAR_LIMIT and not self._has_ocr_artifacts(text):
-            return self.spacy_extractor
+            return "spacy", self.spacy_extractor
         if self.gemini_extractor is None or self.gemini_extractor.specialty != specialty:
             self.gemini_extractor = GeminiExtractor(specialty=specialty)
-        return self.gemini_extractor
+        return "gemini", self.gemini_extractor
 
     def _strip_pii(self, text: str) -> tuple[str, str]:
         if not text:
@@ -236,9 +237,11 @@ class ExecutionPipeline:
         for record in records:
             self.writer.sql_store.write_record(record, session_id=session_id)
 
-    def _audit(self, extracted: dict, outcome: str) -> dict:
+    def _audit(self, extracted: dict, outcome: str, extractor_route: str) -> dict:
         return self.audit_logger.log(
             extractor=extracted.get("extractor", ""),
+            extractor_route=extractor_route,
+            extractor_actual=str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
             entity_count=len(extracted.get("entities", [])),
             confidence=float(extracted.get("confidence", 0.0)),
             outcome=outcome,
