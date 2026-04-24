@@ -25,6 +25,8 @@ class ExecutionResult:
     """Pipeline outcome. Outcome is intentionally constrained."""
 
     outcome: str
+    validation_status: str = "accepted"
+    validation_errors: list[dict] = field(default_factory=list)
     records: list[MKBRecord] = field(default_factory=list)
     queued_records: list[MKBRecord] = field(default_factory=list)
     blocked_records: list[MKBRecord] = field(default_factory=list)

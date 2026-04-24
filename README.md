@@ -52,6 +52,31 @@ Validated Phase 1.1 Gemini activation:
 - outcome: `written`
 - notes: `pii_method=presidio`
 
+### Phase 2 Extraction Validation
+
+Every execution job now performs deterministic extraction validation after routing and before MKB write:
+
+- Required entity fields are checked (`type`, `text`)
+- Confidence thresholds are enforced
+- Entity schema shape is validated
+- `extractor_route` and `extractor_actual` must match
+- Each extraction is classified as `accepted`, `needs_review`, or `rejected`
+
+Phase 2 thresholds:
+
+- `accepted`: confidence `>= 0.70` and no validation errors
+- `needs_review`: confidence `>= 0.50` and `< 0.70` with no fatal schema errors
+- `rejected`: confidence `< 0.50` or any fatal validation error
+
+Phase 2 outputs:
+
+- `ExecutionResult.validation_status`
+- `ExecutionResult.validation_errors` as machine-readable error objects
+- Durable review artifact at `data/review/review_queue.jsonl`
+- Extended metrics snapshot with validation counters and `avg_confidence_by_status`
+
+`review_queue.jsonl` contains only `needs_review` and `rejected` extraction items, each with structured reasons.
+
 ---
 
 ## Run
@@ -116,6 +141,20 @@ See `mkb/deduplication_engine.py` for the full rule set and
 4. User chooses `fact1 / fact2 / both / merge / neither` and leaves reasoning.
 5. `resolve_conflict(...)` flips record tiers, writes an audit log entry, and
    optionally creates a merged record.
+
+### Phase 2 Acceptance Criteria
+
+The Phase 2 implementation is considered valid when all of the following hold:
+
+1. Existing Phase 1 tests still pass.
+2. Phase 2 validation tests pass for:
+   valid spaCy extraction, valid Gemini extraction, missing required fields,
+   low confidence, Gemini fallback violation, and malformed payloads.
+3. Pipeline runs return extraction output plus validation status.
+4. `data/review/review_queue.jsonl` contains only `needs_review` or `rejected` items with reasons.
+5. Metrics snapshots include:
+   `accepted_count`, `review_count`, `rejected_count`,
+   `validation_error_count`, and `avg_confidence_by_status`.
 
 ## Feature Flags (config.py)
 

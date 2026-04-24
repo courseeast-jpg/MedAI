@@ -23,6 +23,8 @@ class MemoryAudit:
             extractor_route=kwargs["extractor_route"],
             confidence=kwargs["confidence"],
             outcome=kwargs["outcome"],
+            validation_status=kwargs.get("validation_status", "accepted"),
+            validation_error_count=kwargs.get("validation_error_count", 0),
         )
         self.events.append(event)
         return event
@@ -185,6 +187,15 @@ def test_simulated_real_document_routes_and_writes():
         "gemini_count": 0,
         "avg_confidence": 0.9,
         "review_rate": 0.0,
+        "accepted_count": 1,
+        "review_count": 0,
+        "rejected_count": 0,
+        "validation_error_count": 0,
+        "avg_confidence_by_status": {
+            "accepted": 0.9,
+            "needs_review": 0.0,
+            "rejected": 0.0,
+        },
     }
 
 
@@ -217,6 +228,8 @@ def test_audit_logger_exposes_metrics_snapshot(tmp_path: Path):
         extractor_actual="spacy",
         entity_count=2,
         confidence=0.7,
+        validation_status="accepted",
+        validation_error_count=0,
         outcome="written",
     )
     audit.log(
@@ -225,6 +238,8 @@ def test_audit_logger_exposes_metrics_snapshot(tmp_path: Path):
         extractor_actual="gemini",
         entity_count=3,
         confidence=0.8,
+        validation_status="needs_review",
+        validation_error_count=1,
         outcome="queued_for_review",
     )
 
@@ -234,4 +249,13 @@ def test_audit_logger_exposes_metrics_snapshot(tmp_path: Path):
         "gemini_count": 1,
         "avg_confidence": 0.75,
         "review_rate": 0.5,
+        "accepted_count": 1,
+        "review_count": 1,
+        "rejected_count": 0,
+        "validation_error_count": 1,
+        "avg_confidence_by_status": {
+            "accepted": 0.7,
+            "needs_review": 0.8,
+            "rejected": 0.0,
+        },
     }

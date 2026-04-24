@@ -231,8 +231,11 @@ def render_upload_tab(sys_components: dict) -> None:
         st.caption(
             f"Extractor: {result.audit.get('extractor', result.extractor_result.get('extractor', 'unknown'))} | "
             f"Entities: {result.audit.get('entity_count', 0)} | "
-            f"Confidence: {result.audit.get('confidence', 0):.2f}"
+            f"Confidence: {result.audit.get('confidence', 0):.2f} | "
+            f"Validation: {result.validation_status}"
         )
+        if result.validation_errors:
+            st.caption(f"Validation issues: {', '.join(error['code'] for error in result.validation_errors)}")
 
         if result.outcome == "written":
             st.success(f"Added {result.written_count} records to MKB from {uploaded.name}.")

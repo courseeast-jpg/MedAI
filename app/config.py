@@ -30,6 +30,8 @@ RESPONSE_DISCARD_THRESHOLD = 0.30  # Below this → discard response
 DEDUP_SIMILARITY_THRESHOLD = 0.92  # ChromaDB cosine → deduplicate
 MIN_CONFIDENCE_CLAUDE     = 0.35   # Min confidence for Claude extraction
 MIN_CONFIDENCE_RULES      = 0.35   # Min confidence for rules-based extraction
+EXTRACTION_ACCEPT_THRESHOLD = 0.70 # Phase 2: accepted extraction threshold
+EXTRACTION_REVIEW_THRESHOLD = 0.50 # Phase 2: needs_review threshold; below this reject
 
 # Connector timeouts
 CONNECTOR_TIMEOUT_SEC = 12
@@ -61,6 +63,7 @@ DB_PATH               = Path(os.getenv("DB_PATH", "data/mkb.db"))
 CHROMA_PATH           = Path(os.getenv("CHROMA_PATH", "data/chroma"))
 PDF_STORAGE_PATH      = Path(os.getenv("PDF_STORAGE_PATH", "data/pdfs"))
 PENDING_QUEUE_PATH    = Path(os.getenv("PENDING_QUEUE_PATH", "data/pending/enrichment_queue.jsonl"))
+REVIEW_QUEUE_PATH     = Path(os.getenv("REVIEW_QUEUE_PATH", "data/review/review_queue.jsonl"))
 SPECIALTIES_DIR       = BASE_DIR / "specialties"
 
 # API

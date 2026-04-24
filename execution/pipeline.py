@@ -2,16 +2,19 @@
 
 from __future__ import annotations
 
+import json
 import re
+from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
-from app.config import TIER_ACTIVE, TIER_QUARANTINED, TRUST_CLINICAL
+from app.config import REVIEW_QUEUE_PATH, TIER_ACTIVE, TIER_QUARANTINED, TRUST_CLINICAL
 from app.schemas import MKBRecord
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
 from execution.mkb_writer import MKBWriter
 from execution.safety import ExecutionSafety
+from execution.validation import ValidationDecision, validate_extraction_result
 from extractors.gemini_extractor import GeminiExtractor
 from extractors.spacy_extractor import SpacyExtractor
 
@@ -35,11 +38,14 @@ class ExecutionPipeline:
         audit_logger: AuditLogger | None = None,
         spacy_extractor: SpacyExtractor | None = None,
         gemini_extractor: GeminiExtractor | None = None,
+        review_queue_path: Path | str = REVIEW_QUEUE_PATH,
     ):
         self.pii_stripper = pii_stripper or self._build_pii_stripper()
         self.audit_logger = audit_logger or AuditLogger()
         self.spacy_extractor = spacy_extractor or SpacyExtractor()
         self.gemini_extractor = gemini_extractor
+        self.review_queue_path = Path(review_queue_path)
+        self.review_queue_path.parent.mkdir(parents=True, exist_ok=True)
         self.writer = MKBWriter(sql_store, vector_store, quality_gate)
         self.safety = ExecutionSafety(medication_gate)
 
@@ -56,8 +62,46 @@ class ExecutionPipeline:
         extractor_route, extractor = self._select_extractor(stripped_text, job.specialty)
         extracted = extractor.extract(stripped_text)
         self._validate_extractor_output(extracted)
-        extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
         extracted.setdefault("actual_extractor", extracted.get("extractor", "unknown"))
+        extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
+        validation = validate_extraction_result(extracted, extractor_route=extractor_route)
+        extracted["validation_status"] = validation.status
+        extracted["validation_errors"] = validation.errors
+
+        if validation.status != "accepted":
+            self._append_review_queue_item(
+                source_name=source_name,
+                specialty=job.specialty,
+                session_id=session_id,
+                extractor_route=extractor_route,
+                extracted=extracted,
+                validation=validation,
+            )
+            queued_records: list[MKBRecord] = []
+            if validation.status == "needs_review":
+                queued_records = self._mark_records_for_validation_review(
+                    self._entities_to_records(
+                        extracted.get("entities", []),
+                        source_name=source_name,
+                        specialty=job.specialty,
+                        session_id=session_id,
+                        confidence=float(extracted.get("confidence", 0.0)),
+                        extraction_method=str(extracted.get("extractor", "")),
+                    ),
+                    validation,
+                )
+                self._persist_review_queue(queued_records, session_id)
+
+            audit = self._audit(extracted, "queued_for_review", extractor_route, validation)
+            return ExecutionResult(
+                outcome="queued_for_review",
+                validation_status=validation.status,
+                validation_errors=validation.errors,
+                queued_records=queued_records,
+                extractor_result=extracted,
+                audit=audit,
+                notes=extracted.get("notes", []),
+            )
 
         candidates = self._entities_to_records(
             extracted.get("entities", []),
@@ -70,9 +114,11 @@ class ExecutionPipeline:
 
         blocked_records, queued_records, ddi_findings = self._apply_safety(candidates, session_id)
         if blocked_records:
-            audit = self._audit(extracted, "blocked_ddi", extractor_route)
+            audit = self._audit(extracted, "blocked_ddi", extractor_route, validation)
             return ExecutionResult(
                 outcome="blocked_ddi",
+                validation_status=validation.status,
+                validation_errors=validation.errors,
                 blocked_records=blocked_records,
                 ddi_findings=ddi_findings,
                 extractor_result=extracted,
@@ -85,9 +131,11 @@ class ExecutionPipeline:
             queued_ids = {record.id for record in queued_records}
             safe_candidates = [record for record in candidates if record.id not in queued_ids]
             written, quality_queued = self.writer.write(safe_candidates, session_id=session_id)
-            audit = self._audit(extracted, "queued_for_review", extractor_route)
+            audit = self._audit(extracted, "queued_for_review", extractor_route, validation)
             return ExecutionResult(
                 outcome="queued_for_review",
+                validation_status=validation.status,
+                validation_errors=validation.errors,
                 records=written,
                 queued_records=queued_records + quality_queued,
                 ddi_findings=ddi_findings,
@@ -98,10 +146,12 @@ class ExecutionPipeline:
 
         written, queued = self.writer.write(candidates, session_id=session_id)
         outcome = "queued_for_review" if queued else "written"
-        audit = self._audit(extracted, outcome, extractor_route)
+        audit = self._audit(extracted, outcome, extractor_route, validation)
 
         return ExecutionResult(
             outcome=outcome,
+            validation_status=validation.status,
+            validation_errors=validation.errors,
             records=written,
             queued_records=queued,
             extractor_result=extracted,
@@ -237,13 +287,65 @@ class ExecutionPipeline:
         for record in records:
             self.writer.sql_store.write_record(record, session_id=session_id)
 
-    def _audit(self, extracted: dict, outcome: str, extractor_route: str) -> dict:
+    def _append_review_queue_item(
+        self,
+        *,
+        source_name: str,
+        specialty: str,
+        session_id: str,
+        extractor_route: str,
+        extracted: dict,
+        validation: ValidationDecision,
+    ) -> None:
+        item = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "source_name": source_name,
+            "specialty": specialty,
+            "session_id": session_id,
+            "extractor_route": extractor_route,
+            "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+            "extractor": str(extracted.get("extractor", "")),
+            "validation_status": validation.status,
+            "validation_errors": validation.errors,
+            "reasons": [error["code"] for error in validation.errors],
+            "confidence": float(extracted.get("confidence", 0.0)),
+            "entity_count": len(extracted.get("entities", [])),
+            "notes": list(extracted.get("notes", [])),
+            "raw_text": str(extracted.get("raw_text", "")),
+        }
+        with self.review_queue_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(item, sort_keys=True) + "\n")
+
+    def _mark_records_for_validation_review(
+        self,
+        records: list[MKBRecord],
+        validation: ValidationDecision,
+    ) -> list[MKBRecord]:
+        review_codes = [error["code"] for error in validation.errors]
+        return [
+            record.model_copy(update={
+                "tier": TIER_QUARANTINED,
+                "status": "pending_validation_review",
+                "requires_review": True,
+                "structured": {
+                    **record.structured,
+                    "validation_status": validation.status,
+                    "validation_errors": validation.errors,
+                    "review_reasons": review_codes,
+                },
+            })
+            for record in records
+        ]
+
+    def _audit(self, extracted: dict, outcome: str, extractor_route: str, validation: ValidationDecision) -> dict:
         return self.audit_logger.log(
             extractor=extracted.get("extractor", ""),
             extractor_route=extractor_route,
             extractor_actual=str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
             entity_count=len(extracted.get("entities", [])),
             confidence=float(extracted.get("confidence", 0.0)),
+            validation_status=validation.status,
+            validation_error_count=validation.error_count,
             outcome=outcome,
         )
 
