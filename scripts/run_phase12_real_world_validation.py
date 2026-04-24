@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
+import time
 from collections import Counter
 from datetime import UTC, datetime
+from loguru import logger
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +15,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATASET_DIR = ROOT / "test_data" / "final_batch_50"
 DEFAULT_OUTPUT_DIR = ROOT / "artifacts" / "phase12_real_world_validation"
+DEFAULT_PHASE13_REPORT_DIR = ROOT / "reports" / "phase13"
+ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
+RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -72,14 +78,42 @@ def build_validation_pipeline(runtime_dir: Path) -> tuple[ExecutionPipeline, SQL
     return pipeline, sql_store, component_state
 
 
+def parse_requested_route(notes: list[str], fallback: str | None = None) -> str | None:
+    for note in notes:
+        match = ROUTING_DECISION_RE.search(note)
+        if match:
+            return match.group(1)
+    return fallback
+
+
+def extract_retry_visibility(message: str) -> dict[str, Any]:
+    match = RETRY_DELAY_RE.search(message)
+    retry_delay_seconds = float(match.group(1)) if match else None
+    retry_detected = retry_delay_seconds is not None or "retry" in message.lower()
+    return {
+        "retry_detected": retry_detected,
+        "retry_delay_seconds": retry_delay_seconds,
+        "retry_reason": "external_quota" if retry_detected and is_external_quota_error(message) else None,
+    }
+
+
 def summarize_document(
     pdf_path: Path,
     result,
     error: Exception | None = None,
     *,
     quota_safe: bool = False,
+    processing_time_ms: float = 0.0,
 ) -> dict[str, Any]:
     if error is not None:
+        retry_visibility = extract_retry_visibility(str(error))
+        if retry_visibility["retry_detected"]:
+            logger.info(
+                "phase13 retry visibility document={} retry_detected=true retry_delay_seconds={} reason={}",
+                pdf_path.name,
+                retry_visibility["retry_delay_seconds"],
+                retry_visibility["retry_reason"] or "unknown",
+            )
         if quota_safe and is_external_quota_error(error):
             return {
                 "document": pdf_path.name,
@@ -96,6 +130,9 @@ def summarize_document(
                 "blocked_count": 0,
                 "review_reasons": [],
                 "notes": [],
+                "processing_time_ms": round(processing_time_ms, 3),
+                "requested_route": None,
+                "retry_visibility": retry_visibility,
             }
         return {
             "document": pdf_path.name,
@@ -112,6 +149,9 @@ def summarize_document(
             "blocked_count": 0,
             "review_reasons": [],
             "notes": [],
+            "processing_time_ms": round(processing_time_ms, 3),
+            "requested_route": None,
+            "retry_visibility": retry_visibility,
         }
 
     review_reasons: list[str] = []
@@ -124,6 +164,12 @@ def summarize_document(
             review_reasons.append(str(record.status))
         if record.ddi_status:
             review_reasons.append(str(record.ddi_status))
+    notes = list(result.notes)
+    requested_route = (
+        result.audit.get("requested_extractor_route")
+        or result.extractor_result.get("requested_extractor_route")
+        or parse_requested_route(notes)
+    )
 
     return {
         "document": pdf_path.name,
@@ -139,7 +185,10 @@ def summarize_document(
         "queued_count": result.queued_count,
         "blocked_count": len(result.blocked_records),
         "review_reasons": sorted(set(review_reasons)),
-        "notes": list(result.notes),
+        "notes": notes,
+        "processing_time_ms": round(processing_time_ms, 3),
+        "requested_route": requested_route,
+        "retry_visibility": {"retry_detected": False, "retry_delay_seconds": None, "retry_reason": None},
     }
 
 
@@ -219,6 +268,142 @@ def build_phase12_summary(
         "documents": documents,
         "recommendations": recommendations,
     }
+
+
+def build_phase13_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    documents = summary["documents"]
+    processed = [item for item in documents if item["status"] == "processed"]
+    all_with_timing = [item for item in documents if float(item.get("processing_time_ms", 0.0)) > 0.0]
+
+    route_distribution = Counter(
+        item.get("extractor_actual") or item.get("extractor") or "unknown"
+        for item in processed
+    )
+    requested_route_distribution = Counter(
+        item.get("requested_route") or "unknown"
+        for item in documents
+    )
+
+    per_extractor = {}
+    extractor_timings: dict[str, list[float]] = {}
+    for item in processed:
+        extractor = item.get("extractor_actual") or item.get("extractor") or "unknown"
+        extractor_timings.setdefault(str(extractor), []).append(float(item.get("processing_time_ms", 0.0)))
+    for extractor, timings in sorted(extractor_timings.items()):
+        per_extractor[extractor] = {
+            "documents": len(timings),
+            "total_time_ms": round(sum(timings), 3),
+            "avg_time_ms": round(sum(timings) / len(timings), 3) if timings else 0.0,
+        }
+
+    retry_events = []
+    for item in documents:
+        retry_visibility = item.get("retry_visibility", {})
+        if retry_visibility.get("retry_detected"):
+            retry_events.append({
+                "document": item["document"],
+                "status": item["status"],
+                "retry_delay_seconds": retry_visibility.get("retry_delay_seconds"),
+                "retry_reason": retry_visibility.get("retry_reason"),
+                "error": item.get("error"),
+            })
+
+    total_pipeline_time_ms = round(sum(float(item.get("processing_time_ms", 0.0)) for item in all_with_timing), 3)
+    document_times = [float(item.get("processing_time_ms", 0.0)) for item in all_with_timing]
+
+    return {
+        "generated_at": summary["generated_at"],
+        "documents_processed": summary["documents_processed"],
+        "written": summary["written"],
+        "queued_for_review": summary["queued_for_review"],
+        "external_quota_blocked": summary["external_quota_blocked"],
+        "hard_failures": summary["hard_failures"],
+        "avg_confidence": summary["aggregate"]["avg_confidence"],
+        "route_distribution": dict(sorted(route_distribution.items())),
+        "requested_route_distribution": dict(sorted(requested_route_distribution.items())),
+        "timing": {
+            "total_pipeline_time_ms": total_pipeline_time_ms,
+            "avg_document_time_ms": round(sum(document_times) / len(document_times), 3) if document_times else 0.0,
+            "max_document_time_ms": round(max(document_times), 3) if document_times else 0.0,
+            "min_document_time_ms": round(min(document_times), 3) if document_times else 0.0,
+            "per_extractor": per_extractor,
+            "per_document": [
+                {
+                    "document": item["document"],
+                    "status": item["status"],
+                    "extractor_actual": item.get("extractor_actual") or item.get("extractor") or "unknown",
+                    "processing_time_ms": round(float(item.get("processing_time_ms", 0.0)), 3),
+                }
+                for item in documents
+            ],
+        },
+        "retries": {
+            "retry_event_count": len(retry_events),
+            "documents_with_retries": [item["document"] for item in retry_events],
+            "total_suggested_backoff_seconds": round(
+                sum(float(item["retry_delay_seconds"] or 0.0) for item in retry_events),
+                3,
+            ),
+            "retry_events": retry_events,
+        },
+    }
+
+
+def build_phase13_performance_summary(summary: dict[str, Any], metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 13 Performance Summary",
+        "",
+        f"- Generated at: {metrics['generated_at']}",
+        f"- Documents processed: {summary['documents_processed']}/{summary['documents_selected']}",
+        f"- Written: {summary['written']}",
+        f"- Queued for review: {summary['queued_for_review']}",
+        f"- External quota blocked: {summary['external_quota_blocked']}",
+        f"- Hard failures: {summary['hard_failures']}",
+        f"- Average confidence: {summary['aggregate']['avg_confidence']}",
+        f"- Total pipeline time (ms): {metrics['timing']['total_pipeline_time_ms']}",
+        f"- Average document time (ms): {metrics['timing']['avg_document_time_ms']}",
+        "",
+        "## Route Distribution",
+        "",
+        f"- Actual routes: {metrics['route_distribution']}",
+        f"- Requested routes: {metrics['requested_route_distribution']}",
+        "",
+        "## Extractor Timing",
+        "",
+    ]
+    if metrics["timing"]["per_extractor"]:
+        for extractor, timing in metrics["timing"]["per_extractor"].items():
+            lines.append(
+                f"- `{extractor}` -> documents={timing['documents']} total_ms={timing['total_time_ms']} avg_ms={timing['avg_time_ms']}"
+            )
+    else:
+        lines.append("- No processed extractor timing available.")
+
+    lines.extend([
+        "",
+        "## Retry Visibility",
+        "",
+        f"- Retry events observed: {metrics['retries']['retry_event_count']}",
+        f"- Total suggested backoff seconds: {metrics['retries']['total_suggested_backoff_seconds']}",
+    ])
+    if metrics["retries"]["retry_events"]:
+        for event in metrics["retries"]["retry_events"]:
+            lines.append(
+                f"- `{event['document']}` -> status={event['status']} retry_delay_seconds={event['retry_delay_seconds']} reason={event['retry_reason']}"
+            )
+    else:
+        lines.append("- No retry/backoff signals observed.")
+    return "\n".join(lines) + "\n"
+
+
+def write_phase13_reports(report_dir: Path, summary: dict[str, Any]) -> dict[str, Any]:
+    report_dir.mkdir(parents=True, exist_ok=True)
+    metrics = build_phase13_metrics(summary)
+    metrics_path = report_dir / "metrics_snapshot.json"
+    performance_path = report_dir / "performance_summary.md"
+    metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    performance_path.write_text(build_phase13_performance_summary(summary, metrics), encoding="utf-8")
+    return metrics
 
 
 def write_outputs(output_dir: Path, summary: dict[str, Any]) -> None:
@@ -306,15 +491,26 @@ def main() -> int:
 
     documents: list[dict[str, Any]] = []
     for pdf_path in pdfs:
+        started = time.perf_counter()
         try:
             result = pipeline.process_pdf(
                 pdf_path,
                 specialty=args.specialty,
                 session_id=f"phase12-{pdf_path.stem}",
             )
-            documents.append(summarize_document(pdf_path, result))
+            elapsed_ms = (time.perf_counter() - started) * 1000
+            documents.append(summarize_document(pdf_path, result, processing_time_ms=elapsed_ms))
         except Exception as exc:  # pragma: no cover - defensive path for live validation
-            documents.append(summarize_document(pdf_path, None, error=exc, quota_safe=args.quota_safe))
+            elapsed_ms = (time.perf_counter() - started) * 1000
+            documents.append(
+                summarize_document(
+                    pdf_path,
+                    None,
+                    error=exc,
+                    quota_safe=args.quota_safe,
+                    processing_time_ms=elapsed_ms,
+                )
+            )
 
     summary = build_phase12_summary(
         dataset_dir=dataset_dir,
@@ -324,6 +520,7 @@ def main() -> int:
         component_state=component_state,
     )
     write_outputs(output_dir, summary)
+    write_phase13_reports(DEFAULT_PHASE13_REPORT_DIR, summary)
 
     print(json.dumps(summary, indent=2))
     return 0 if summary["run_passed"] else 1
