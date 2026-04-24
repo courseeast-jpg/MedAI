@@ -114,6 +114,12 @@ class AuditLogger:
         validation_error_count: int = 0,
         fallback_used: bool = False,
         failure_count: int = 0,
+        run_id: str | None = None,
+        document_id: str | None = None,
+        fallback_reason: str | None = None,
+        confidence_band: str | None = None,
+        quality_gate_decision: str | None = None,
+        error_category: str | None = None,
     ) -> dict[str, Any]:
         self.metrics.record(
             extractor_route=extractor_route,
@@ -127,11 +133,16 @@ class AuditLogger:
         )
         event = {
             "timestamp": datetime.utcnow().isoformat(),
+            "run_id": run_id,
+            "document_id": document_id,
             "extractor": extractor,
             "extractor_route": extractor_route,
             "extractor_actual": extractor_actual,
             "entity_count": int(entity_count),
             "confidence": float(confidence),
+            "confidence_band": confidence_band,
+            "fallback_reason": fallback_reason,
+            "quality_gate_decision": quality_gate_decision or outcome,
             "validation_status": validation_status,
             "validation_error_count": int(validation_error_count),
             "fallback_used": fallback_used,
@@ -139,6 +150,8 @@ class AuditLogger:
             "outcome": outcome,
             "final_status": outcome,
         }
+        if error_category is not None:
+            event["error_category"] = error_category
         with self.path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(event, sort_keys=True) + "\n")
         logger.info(

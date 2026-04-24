@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-04-24T12:58:16.371852+00:00",
+  "phase": "Phase 10 Hardening Protocol",
+  "overall_passed": true,
+  "pytest_passed": true,
+  "audit_report_passed": true,
+  "commands": [
+    {
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "-m",
+        "pytest",
+        "tests",
+        "--junitxml=artifacts\\phase10\\phase10_pytest_junit.xml"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\scripts\\generate_phase10_audit_report.py",
+        "--output-dir",
+        "artifacts\\phase10"
+      ],
+      "returncode": 0
+    }
+  ],
+  "artifacts": {
+    "pytest_junit_xml": "artifacts\\phase10\\phase10_pytest_junit.xml",
+    "pytest_stdout": "artifacts\\phase10\\phase10_pytest_stdout.txt",
+    "pytest_stderr": "artifacts\\phase10\\phase10_pytest_stderr.txt",
+    "audit_report_json": "artifacts\\phase10\\phase10_audit_report.json",
+    "audit_report_md": "artifacts\\phase10\\phase10_audit_report.md"
+  }
+}

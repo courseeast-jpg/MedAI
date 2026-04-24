@@ -1,0 +1,321 @@
+{
+  "generated_at": "2026-04-24T12:58:15.125333+00:00",
+  "phase": "Phase 10 Hardening Protocol",
+  "overall_passed": true,
+  "validation_matrix": [
+    {
+      "scenario": "gemini_unavailable",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-gemini-unavailable",
+      "document_id": "gemini_unavailable.txt",
+      "extractor_route": "gemini",
+      "extractor_actual": "phi3",
+      "fallback_reason": "gemini unavailable",
+      "confidence": 0.78,
+      "confidence_band": "auto_accept",
+      "quality_gate_decision": "review",
+      "timestamp": "2026-04-24T12:58:15.100328",
+      "error_category": "route_actual_mismatch",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review",
+      "fallback_used": true,
+      "api_call_count": 3,
+      "extraction_time_ms": 2.701,
+      "tier": "quarantined",
+      "notes": [
+        "router_fallback=gemini:connector_error",
+        "gemini_configured_fallback=true",
+        "pii_method=noop",
+        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+      ]
+    },
+    {
+      "scenario": "claude_unavailable",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-claude-unavailable",
+      "document_id": "legacy-claude-compatibility",
+      "extractor_route": "claude",
+      "extractor_actual": "rules_based",
+      "fallback_reason": "claude_marked_unavailable",
+      "confidence": 0.45,
+      "confidence_band": "reject",
+      "quality_gate_decision": "rejected",
+      "timestamp": "2026-04-24T12:58:15.100328+00:00",
+      "error_category": "claude_unavailable",
+      "outcome": "fallback_to_rules",
+      "validation_status": "rejected",
+      "fallback_used": true,
+      "api_call_count": 0,
+      "extraction_time_ms": 0.012,
+      "tier": "quarantined",
+      "notes": [
+        "legacy claude compatibility flag exercised"
+      ]
+    },
+    {
+      "scenario": "all_external_apis_unavailable",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-all-external-apis-unavailable",
+      "document_id": "all_external_apis_unavailable.txt",
+      "extractor_route": "gemini",
+      "extractor_actual": "spacy",
+      "fallback_reason": "gemini unavailable",
+      "confidence": 0.72,
+      "confidence_band": "auto_accept",
+      "quality_gate_decision": "review",
+      "timestamp": "2026-04-24T12:58:15.103329",
+      "error_category": "route_actual_mismatch",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review",
+      "fallback_used": true,
+      "api_call_count": 3,
+      "extraction_time_ms": 2.039,
+      "tier": "quarantined",
+      "notes": [
+        "router_fallback=phi3:connector_error",
+        "pii_method=noop",
+        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+      ]
+    },
+    {
+      "scenario": "ocr_failure",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-ocr-failure",
+      "document_id": "ocr-failure-sample",
+      "extractor_route": "ocr_validator",
+      "extractor_actual": "ocr_validator",
+      "fallback_reason": "ocr_quality_failure",
+      "confidence": 0.73,
+      "confidence_band": "auto_accept",
+      "quality_gate_decision": "rejected",
+      "timestamp": "2026-04-24T12:58:15.104329+00:00",
+      "error_category": "ocr_failure",
+      "outcome": "rejected",
+      "validation_status": "rejected",
+      "fallback_used": false,
+      "api_call_count": 0,
+      "extraction_time_ms": 0.614,
+      "tier": "quarantined",
+      "notes": [
+        "50Omg (O\u21920 confusion)",
+        "metf0rmin (digit inside word (likely OCR))"
+      ]
+    },
+    {
+      "scenario": "corrupt_pdf",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-corrupt-pdf",
+      "document_id": "corrupt.pdf",
+      "extractor_route": "pdf_pipeline",
+      "extractor_actual": "pdf_pipeline",
+      "fallback_reason": "corrupt_pdf",
+      "confidence": 0.0,
+      "confidence_band": "reject",
+      "quality_gate_decision": "rejected",
+      "timestamp": "2026-04-24T12:58:15.104329+00:00",
+      "error_category": "corrupt_pdf",
+      "outcome": "rejected",
+      "validation_status": "rejected",
+      "fallback_used": false,
+      "api_call_count": 0,
+      "extraction_time_ms": 0.149,
+      "tier": "quarantined",
+      "notes": [
+        "insufficient text extracted from corrupt PDF"
+      ]
+    },
+    {
+      "scenario": "empty_extraction",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-empty-extraction",
+      "document_id": "empty_extraction.txt",
+      "extractor_route": "spacy",
+      "extractor_actual": "spacy",
+      "fallback_reason": null,
+      "confidence": 0.95,
+      "confidence_band": "auto_accept",
+      "quality_gate_decision": "rejected",
+      "timestamp": "2026-04-24T12:58:15.107330",
+      "error_category": "empty_extraction",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "fallback_used": false,
+      "api_call_count": 1,
+      "extraction_time_ms": 1.919,
+      "tier": "active",
+      "notes": [
+        "pii_method=noop",
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "scenario": "low_confidence_extraction",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-low-confidence",
+      "document_id": "low_confidence_extraction.txt",
+      "extractor_route": "spacy",
+      "extractor_actual": "spacy",
+      "fallback_reason": null,
+      "confidence": 0.45,
+      "confidence_band": "reject",
+      "quality_gate_decision": "rejected",
+      "timestamp": "2026-04-24T12:58:15.109330",
+      "error_category": "confidence_below_reject_threshold",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "fallback_used": false,
+      "api_call_count": 1,
+      "extraction_time_ms": 1.61,
+      "tier": "active",
+      "notes": [
+        "pii_method=noop",
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "scenario": "confidence_below_reject_threshold",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-reject-threshold",
+      "document_id": "confidence_below_reject_threshold.txt",
+      "extractor_route": "spacy",
+      "extractor_actual": "spacy",
+      "fallback_reason": null,
+      "confidence": 0.3,
+      "confidence_band": "reject",
+      "quality_gate_decision": "rejected",
+      "timestamp": "2026-04-24T12:58:15.112332",
+      "error_category": "confidence_below_reject_threshold",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "fallback_used": false,
+      "api_call_count": 1,
+      "extraction_time_ms": 2.621,
+      "tier": "active",
+      "notes": [
+        "pii_method=noop",
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "scenario": "confidence_in_review_band",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-review-band",
+      "document_id": "confidence_in_review_band.txt",
+      "extractor_route": "spacy",
+      "extractor_actual": "spacy",
+      "fallback_reason": null,
+      "confidence": 0.6,
+      "confidence_band": "review",
+      "quality_gate_decision": "review",
+      "timestamp": "2026-04-24T12:58:15.116332",
+      "error_category": "confidence_below_accept_threshold",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review",
+      "fallback_used": false,
+      "api_call_count": 1,
+      "extraction_time_ms": 2.766,
+      "tier": "quarantined",
+      "notes": [
+        "pii_method=noop",
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "scenario": "confidence_above_auto_accept_threshold",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-auto-accept",
+      "document_id": "confidence_above_auto_accept_threshold.txt",
+      "extractor_route": "spacy",
+      "extractor_actual": "spacy",
+      "fallback_reason": null,
+      "confidence": 0.9,
+      "confidence_band": "auto_accept",
+      "quality_gate_decision": "accepted",
+      "timestamp": "2026-04-24T12:58:15.119333",
+      "error_category": null,
+      "outcome": "written",
+      "validation_status": "accepted",
+      "fallback_used": false,
+      "api_call_count": 1,
+      "extraction_time_ms": 2.25,
+      "tier": "active",
+      "notes": [
+        "pii_method=noop",
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "scenario": "model_route_vs_actual_extractor_mismatch",
+      "passed": true,
+      "classification": "certified",
+      "run_id": "phase10-route-mismatch",
+      "document_id": "model_route_vs_actual_extractor_mismatch.txt",
+      "extractor_route": "gemini",
+      "extractor_actual": "rules_based",
+      "fallback_reason": null,
+      "confidence": 0.85,
+      "confidence_band": "auto_accept",
+      "quality_gate_decision": "rejected",
+      "timestamp": "2026-04-24T12:58:15.122333",
+      "error_category": "route_actual_mismatch",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "fallback_used": false,
+      "api_call_count": 1,
+      "extraction_time_ms": 1.923,
+      "tier": "active",
+      "notes": [
+        "gemini_route_legacy_fallback=rules_based",
+        "pii_method=noop",
+        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+      ]
+    }
+  ],
+  "audit_completeness": {
+    "all_required_fields_present": true,
+    "failed_rows_include_error_category": true
+  },
+  "quality_gate": {
+    "reject_threshold": 0.5,
+    "auto_accept_threshold": 0.7,
+    "reject_cases": [
+      "claude_unavailable",
+      "corrupt_pdf",
+      "low_confidence_extraction",
+      "confidence_below_reject_threshold"
+    ],
+    "review_cases": [
+      "confidence_in_review_band"
+    ],
+    "auto_accept_cases": [
+      "gemini_unavailable",
+      "all_external_apis_unavailable",
+      "ocr_failure",
+      "empty_extraction",
+      "confidence_above_auto_accept_threshold",
+      "model_route_vs_actual_extractor_mismatch"
+    ]
+  },
+  "performance": {
+    "average_extraction_time_ms": 1.691,
+    "p95_extraction_time_ms": 2.701,
+    "sample_size": 11,
+    "tier_distribution": {
+      "active": 5,
+      "quarantined": 6
+    },
+    "api_call_count": 12,
+    "failed_jobs": 7,
+    "fallback_count": 3
+  }
+}

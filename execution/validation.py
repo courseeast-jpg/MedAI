@@ -107,6 +107,17 @@ def _validate_consensus(agreement_score: float, disagreement_flag: bool, errors:
 
 
 def _validate_entities(entities: list[Any], errors: list[dict[str, Any]]) -> None:
+    if not entities:
+        errors.append(_issue(
+            code="empty_extraction",
+            severity="fatal",
+            message="Extraction produced no entities.",
+            field="entities",
+            expected="non-empty list",
+            actual=entities,
+        ))
+        return
+
     for index, entity in enumerate(entities):
         entity_path = f"entities[{index}]"
         if not isinstance(entity, dict):

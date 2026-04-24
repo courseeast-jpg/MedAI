@@ -8,7 +8,14 @@ from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
-from app.config import REVIEW_QUEUE_PATH, TIER_ACTIVE, TIER_QUARANTINED, TRUST_CLINICAL
+from app.config import (
+    EXTRACTION_ACCEPT_THRESHOLD,
+    EXTRACTION_REVIEW_THRESHOLD,
+    REVIEW_QUEUE_PATH,
+    TIER_ACTIVE,
+    TIER_QUARANTINED,
+    TRUST_CLINICAL,
+)
 from app.schemas import MKBRecord
 from execution.audit import StageAuditLogger
 from execution.consensus import consensus_merge
@@ -198,7 +205,14 @@ class ExecutionPipeline:
                         decision_reason="validation_needs_review",
                     )
 
-            audit = self._audit(extracted, "queued_for_review", extractor_route, validation)
+            audit = self._audit(
+                extracted,
+                "queued_for_review",
+                extractor_route,
+                validation,
+                run_id=session_id,
+                document_id=source_name,
+            )
             return ExecutionResult(
                 outcome="queued_for_review",
                 validation_status=validation.status,
@@ -264,7 +278,14 @@ class ExecutionPipeline:
                     confidence=float(record.confidence),
                     decision_reason="medication_high_block",
                 )
-            audit = self._audit(extracted, "blocked_ddi", extractor_route, validation)
+            audit = self._audit(
+                extracted,
+                "blocked_ddi",
+                extractor_route,
+                validation,
+                run_id=session_id,
+                document_id=source_name,
+            )
             return ExecutionResult(
                 outcome="blocked_ddi",
                 validation_status=validation.status,
@@ -307,7 +328,14 @@ class ExecutionPipeline:
                     confidence=float(record.confidence),
                     decision_reason=record.resolution_action or "written",
                 )
-            audit = self._audit(extracted, "queued_for_review", extractor_route, validation)
+            audit = self._audit(
+                extracted,
+                "queued_for_review",
+                extractor_route,
+                validation,
+                run_id=session_id,
+                document_id=source_name,
+            )
             return ExecutionResult(
                 outcome="queued_for_review",
                 validation_status=validation.status,
@@ -447,7 +475,14 @@ class ExecutionPipeline:
                 decision_reason=record.resolution_action or record.source_type,
             )
         outcome = "queued_for_review" if combined_queued else "written"
-        audit = self._audit(extracted, outcome, extractor_route, validation)
+        audit = self._audit(
+            extracted,
+            outcome,
+            extractor_route,
+            validation,
+            run_id=session_id,
+            document_id=source_name,
+        )
 
         return ExecutionResult(
             outcome=outcome,
@@ -755,7 +790,16 @@ class ExecutionPipeline:
             for record in records
         ]
 
-    def _audit(self, extracted: dict, outcome: str, extractor_route: str, validation: ValidationDecision) -> dict:
+    def _audit(
+        self,
+        extracted: dict,
+        outcome: str,
+        extractor_route: str,
+        validation: ValidationDecision,
+        *,
+        run_id: str,
+        document_id: str,
+    ) -> dict:
         return self.audit_logger.log(
             extractor=extracted.get("extractor", ""),
             extractor_route=extractor_route,
@@ -767,7 +811,46 @@ class ExecutionPipeline:
             fallback_used=bool(extracted.get("fallback_used", False)),
             failure_count=int(extracted.get("routing_failure_count", 0)),
             outcome=outcome,
+            run_id=run_id,
+            document_id=document_id,
+            fallback_reason=self._fallback_reason(extracted),
+            confidence_band=self._confidence_band(float(extracted.get("confidence", 0.0))),
+            quality_gate_decision=self._quality_gate_decision(outcome, validation),
+            error_category=self._error_category(outcome, validation, extracted),
         )
+
+    def _fallback_reason(self, extracted: dict) -> str | None:
+        for event in extracted.get("routing_events", []):
+            if event.get("action") == "fallback_invoked":
+                return str(event.get("reason", "fallback_invoked"))
+        return None
+
+    def _confidence_band(self, confidence: float) -> str:
+        if confidence < EXTRACTION_REVIEW_THRESHOLD:
+            return "reject"
+        if confidence < EXTRACTION_ACCEPT_THRESHOLD:
+            return "review"
+        return "auto_accept"
+
+    def _quality_gate_decision(self, outcome: str, validation: ValidationDecision) -> str:
+        if outcome == "written":
+            return "accepted"
+        if outcome == "blocked_ddi":
+            return "blocked"
+        if validation.status == "needs_review":
+            return "review"
+        if validation.status == "rejected":
+            return "rejected"
+        return outcome
+
+    def _error_category(self, outcome: str, validation: ValidationDecision, extracted: dict) -> str | None:
+        if validation.errors:
+            return str(validation.errors[0].get("code", "validation_error"))
+        if outcome == "blocked_ddi":
+            return "safety_gate_block"
+        if int(extracted.get("routing_failure_count", 0)) > 0:
+            return "connector_failure"
+        return None
 
     def _finding_to_dict(self, finding) -> dict:
         if hasattr(finding, "model_dump"):
