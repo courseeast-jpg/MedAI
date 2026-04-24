@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24T21:24:02.521094+00:00",
+  "generated_at": "2026-04-24T21:37:10.559168+00:00",
   "phase": "Phase 12 Real-World Validation",
   "dataset_dir": "test_data\\final_batch_50",
   "requested_limit": 0,
@@ -46,10 +46,10 @@
     }
   },
   "mkb_counts": {
-    "total": 104,
+    "total": 130,
     "active": 14,
     "hypothesis": 0,
-    "quarantined": 90
+    "quarantined": 116
   },
   "documents": [
     {
@@ -71,7 +71,7 @@
         "pii_method=presidio",
         "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 3542.075,
+      "processing_time_ms": 3829.129,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -98,7 +98,7 @@
         "pii_method=presidio",
         "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
       ],
-      "processing_time_ms": 2973.243,
+      "processing_time_ms": 2809.71,
       "requested_route": "gemini",
       "retry_visibility": {
         "retry_detected": false,
@@ -123,9 +123,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=37.500 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=36.500 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 151.476,
+      "processing_time_ms": 138.118,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -136,7 +136,7 @@
     {
       "document": "long_noisy_04.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 2.705857133s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 2\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 54.243581052s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 54\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -148,11 +148,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 399.666,
+      "processing_time_ms": 380.824,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 2.705857133,
+        "retry_delay_seconds": 54.243581052,
         "retry_reason": "external_quota"
       }
     },
@@ -173,9 +173,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=42.333 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=40.333 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 139.758,
+      "processing_time_ms": 130.555,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -186,7 +186,7 @@
     {
       "document": "long_noisy_06.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 2.705857133s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 2\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 54.243581052s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 54\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -198,11 +198,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 392.504,
+      "processing_time_ms": 371.079,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 2.705857133,
+        "retry_delay_seconds": 54.243581052,
         "retry_reason": "external_quota"
       }
     },
@@ -223,9 +223,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=43.750 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=42.750 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 138.123,
+      "processing_time_ms": 148.244,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -236,7 +236,7 @@
     {
       "document": "long_noisy_08.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 2.705857133s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 2\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 54.243581052s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 54\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -248,11 +248,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 409.064,
+      "processing_time_ms": 373.358,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 2.705857133,
+        "retry_delay_seconds": 54.243581052,
         "retry_reason": "external_quota"
       }
     },
@@ -273,9 +273,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=44.000 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=43.600 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 147.512,
+      "processing_time_ms": 126.558,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -286,7 +286,7 @@
     {
       "document": "long_noisy_10.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 2.705857133s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 2\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 54.243581052s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 54\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -298,11 +298,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 399.052,
+      "processing_time_ms": 380.239,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 2.705857133,
+        "retry_delay_seconds": 54.243581052,
         "retry_reason": "external_quota"
       }
     },
@@ -326,9 +326,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.861 cost=0.00000 confidence=0.700 latency_ms=45.167 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=43.833 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 65.324,
+      "processing_time_ms": 54.18,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -353,9 +353,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=40.143 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=38.571 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 34.375,
+      "processing_time_ms": 26.637,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -380,9 +380,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=36.250 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.866 cost=0.00000 confidence=0.700 latency_ms=34.500 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 41.878,
+      "processing_time_ms": 36.308,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -407,9 +407,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.866 cost=0.00000 confidence=0.700 latency_ms=33.222 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.867 cost=0.00000 confidence=0.700 latency_ms=31.444 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 51.998,
+      "processing_time_ms": 44.806,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -434,9 +434,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.867 cost=0.00000 confidence=0.700 latency_ms=30.900 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=29.200 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.698,
+      "processing_time_ms": 41.168,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -461,9 +461,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=28.636 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=27.091 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.449,
+      "processing_time_ms": 34.451,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -488,9 +488,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=26.833 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=25.417 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 28.873,
+      "processing_time_ms": 25.733,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -518,9 +518,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=25.231 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=23.923 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 41.681,
+      "processing_time_ms": 51.096,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -548,9 +548,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=23.929 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=22.857 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 47.937,
+      "processing_time_ms": 49.374,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -578,9 +578,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=22.733 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.733 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 50.229,
+      "processing_time_ms": 46.584,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -605,9 +605,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.688 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=20.750 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 37.634,
+      "processing_time_ms": 35.362,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -632,9 +632,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=20.824 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.941 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 28.407,
+      "processing_time_ms": 35.588,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -659,9 +659,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=20.056 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.167 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 37.826,
+      "processing_time_ms": 34.383,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -686,9 +686,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.368 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.474 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.234,
+      "processing_time_ms": 41.913,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -713,9 +713,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.750 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.850 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 61.198,
+      "processing_time_ms": 39.999,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -740,9 +740,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.429 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.286 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 46.052,
+      "processing_time_ms": 42.955,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -767,9 +767,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.909 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.773 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 50.415,
+      "processing_time_ms": 42.247,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -797,9 +797,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.435 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.304 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 42.695,
+      "processing_time_ms": 37.86,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -824,9 +824,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.042 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=15.875 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 38.615,
+      "processing_time_ms": 33.338,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -854,9 +854,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.640 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.480 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 57.23,
+      "processing_time_ms": 57.015,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -881,9 +881,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.269 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.115 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 38.573,
+      "processing_time_ms": 33.729,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -908,9 +908,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=15.926 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.778 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 28.786,
+      "processing_time_ms": 25.256,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -935,9 +935,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.571 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.429 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.338,
+      "processing_time_ms": 32.694,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -965,9 +965,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.241 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.138 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 52.36,
+      "processing_time_ms": 45.627,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -992,9 +992,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.933 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.867 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.775,
+      "processing_time_ms": 40.029,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1019,9 +1019,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.645 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.613 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.392,
+      "processing_time_ms": 50.3,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1046,9 +1046,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.375 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.375 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 27.512,
+      "processing_time_ms": 25.295,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1076,9 +1076,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.121 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=13.152 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 41.761,
+      "processing_time_ms": 38.435,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1103,9 +1103,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.882 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.941 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.737,
+      "processing_time_ms": 40.244,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1133,9 +1133,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.657 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.743 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 49.502,
+      "processing_time_ms": 45.046,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1160,9 +1160,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.444 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.528 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 37.087,
+      "processing_time_ms": 34.742,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1187,9 +1187,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.297 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.378 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 27.414,
+      "processing_time_ms": 28.555,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1214,9 +1214,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=13.105 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.184 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 44.827,
+      "processing_time_ms": 34.372,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1244,9 +1244,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.923 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.026 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 53.891,
+      "processing_time_ms": 45.991,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1271,9 +1271,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.750 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.875 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 41.52,
+      "processing_time_ms": 40.898,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1301,9 +1301,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.585 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.732 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 50.615,
+      "processing_time_ms": 49.035,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1328,9 +1328,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.429 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.595 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 29.0,
+      "processing_time_ms": 27.054,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1358,9 +1358,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.279 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.465 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 47.93,
+      "processing_time_ms": 40.181,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1385,9 +1385,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.136 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.341 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.801,
+      "processing_time_ms": 43.413,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1415,9 +1415,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.000 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.244 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 50.421,
+      "processing_time_ms": 51.131,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,

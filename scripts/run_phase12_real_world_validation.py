@@ -27,6 +27,7 @@ from execution.audit import StageAuditLogger
 from execution.logging import AuditLogger
 from execution.pipeline import ExecutionPipeline
 from mkb.sqlite_store import SQLiteStore
+from monitoring.metrics_collector import collect_latest_run_metrics
 
 
 def is_external_quota_error(error: Exception | str) -> bool:
@@ -622,6 +623,7 @@ def main() -> int:
     write_outputs(output_dir, summary)
     write_phase13_reports(DEFAULT_PHASE13_REPORT_DIR, summary)
     write_phase15_reports(DEFAULT_PHASE15_REPORT_DIR, summary)
+    collect_latest_run_metrics()
 
     print(json.dumps(summary, indent=2))
     return 0 if summary["run_passed"] else 1

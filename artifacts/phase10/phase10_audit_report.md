@@ -1,6 +1,6 @@
 # Phase 10 Audit Report
 
-- Generated at: 2026-04-24T21:22:49.798115+00:00
+- Generated at: 2026-04-24T21:35:57.125718+00:00
 - Overall passed: True
 
 ## Validation Matrix
@@ -26,8 +26,8 @@
 
 ## Performance
 
-- Average extraction time (ms): 2.019
-- p95 extraction time (ms): 2.988
+- Average extraction time (ms): 1.617
+- p95 extraction time (ms): 2.535
 - API call count: 11
 - Failed jobs: 6
 - Fallback count: 3
