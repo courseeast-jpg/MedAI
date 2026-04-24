@@ -503,3 +503,63 @@ def test_phase15_aggregate_does_not_regress_phase12_counts():
     assert aggregate["hard_failures"] == summary["hard_failures"]
     assert aggregate["documents_attempted"] == summary["documents_selected"]
     assert aggregate["counters"]["attempted_equals_processed_plus_quota_blocked_plus_hard_failures"] is True
+
+
+def test_written_with_review_counts_as_written_not_queue():
+    documents = [
+        {
+            "document": "short_01.pdf",
+            "status": "processed",
+            "error": None,
+            "outcome": "written_with_review",
+            "validation_status": "accepted",
+            "extractor": "spacy",
+            "extractor_actual": "spacy",
+            "confidence": 0.7,
+            "entity_count": 3,
+            "written_count": 2,
+            "queued_count": 2,
+            "blocked_count": 0,
+            "review_reasons": ["clear", "quarantined"],
+            "notes": [],
+            "processing_time_ms": 10.0,
+            "requested_route": "spacy",
+            "retry_visibility": {"retry_detected": False, "retry_delay_seconds": None, "retry_reason": None},
+        },
+        {
+            "document": "short_02.pdf",
+            "status": "processed",
+            "error": None,
+            "outcome": "queued_for_review",
+            "validation_status": "needs_review",
+            "extractor": "spacy",
+            "extractor_actual": "spacy",
+            "confidence": 0.6,
+            "entity_count": 1,
+            "written_count": 0,
+            "queued_count": 1,
+            "blocked_count": 0,
+            "review_reasons": ["pending_validation_review"],
+            "notes": [],
+            "processing_time_ms": 11.0,
+            "requested_route": "spacy",
+            "retry_visibility": {"retry_detected": False, "retry_delay_seconds": None, "retry_reason": None},
+        },
+    ]
+
+    summary = build_phase12_summary(
+        dataset_dir=Path("test_data/final_batch_50"),
+        requested_limit=0,
+        documents=documents,
+        runtime_counts={"total": 3, "active": 2, "hypothesis": 0, "quarantined": 1},
+        component_state={"governance_active": True},
+    )
+    aggregate = build_phase15_aggregate(summary)
+
+    assert summary["written"] == 1
+    assert summary["queued_for_review"] == 1
+    assert summary["aggregate"]["outcomes"] == {"queued_for_review": 1, "written_with_review": 1}
+    assert summary["aggregate"]["total_queued"] == 3
+    assert aggregate["written"] == 1
+    assert aggregate["queued_for_review"] == 1
+    assert aggregate["counters"]["processed_equals_written_plus_queued_for_review_plus_other_processed_outcomes"] is True

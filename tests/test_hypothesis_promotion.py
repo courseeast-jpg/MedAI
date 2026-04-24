@@ -136,7 +136,7 @@ def test_no_promotion_when_single_source(tmp_path: Path):
 
     result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
 
-    assert result.outcome == "queued_for_review"
+    assert result.outcome == "written_with_review"
     assert any(record.source_type == "enrichment" and record.tier == "hypothesis" for record in result.queued_records)
     assert all(not record.promotion_history for record in result.queued_records if record.source_type == "enrichment")
 

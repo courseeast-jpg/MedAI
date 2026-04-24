@@ -76,7 +76,7 @@ def test_enrichment_creates_new_records(tmp_path: Path):
 
     result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
 
-    assert result.outcome == "queued_for_review"
+    assert result.outcome == "written_with_review"
     assert result.written_count == 1
     assert any(record.source_type == "enrichment" for record in result.queued_records)
 

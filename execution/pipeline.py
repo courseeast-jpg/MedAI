@@ -341,9 +341,10 @@ class ExecutionPipeline:
                     confidence=float(record.confidence),
                     decision_reason=record.resolution_action or "written",
                 )
+            outcome = self._document_outcome(written=written, queued_records=combined_review_records + quality_queued)
             audit = self._audit(
                 extracted,
-                "queued_for_review",
+                outcome,
                 extractor_route,
                 requested_route,
                 validation,
@@ -351,7 +352,7 @@ class ExecutionPipeline:
                 document_id=source_name,
             )
             return ExecutionResult(
-                outcome="queued_for_review",
+                outcome=outcome,
                 validation_status=validation.status,
                 validation_errors=validation.errors,
                 records=written,
@@ -491,7 +492,7 @@ class ExecutionPipeline:
                 confidence=float(record.confidence),
                 decision_reason=record.resolution_action or record.source_type,
             )
-        outcome = "queued_for_review" if combined_queued else "written"
+        outcome = self._document_outcome(written=written, queued_records=combined_queued)
         audit = self._audit(
             extracted,
             outcome,
@@ -860,7 +861,7 @@ class ExecutionPipeline:
         return "auto_accept"
 
     def _quality_gate_decision(self, outcome: str, validation: ValidationDecision) -> str:
-        if outcome == "written":
+        if outcome in {"written", "written_with_review"}:
             return "accepted"
         if outcome == "blocked_ddi":
             return "blocked"
@@ -878,6 +879,13 @@ class ExecutionPipeline:
         if int(extracted.get("routing_failure_count", 0)) > 0:
             return "connector_failure"
         return None
+
+    def _document_outcome(self, *, written: list[MKBRecord], queued_records: list[MKBRecord]) -> str:
+        if queued_records and written:
+            return "written_with_review"
+        if queued_records:
+            return "queued_for_review"
+        return "written"
 
     def _finding_to_dict(self, finding) -> dict:
         if hasattr(finding, "model_dump"):

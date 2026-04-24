@@ -1,12 +1,12 @@
 # Phase 15 Validation Summary
 
-- Generated at: 2026-04-24T20:59:40.405025+00:00
+- Generated at: 2026-04-24T21:24:02.521094+00:00
 - Dataset: `test_data\final_batch_50`
 - Total documents attempted: 50
 - Processed: 46
 - External quota blocked: 4
-- Written: 33
-- Queued for review: 13
+- Written: 46
+- Queued for review: 0
 - Hard failures: 0
 - Average confidence (processed only): 0.7
 

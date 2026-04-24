@@ -222,6 +222,8 @@ def build_phase12_summary(
         for reason in item["review_reasons"]:
             review_reasons[reason] += 1
 
+    written_document_count = outcome_counts.get("written", 0) + outcome_counts.get("written_with_review", 0)
+
     recommendations: list[str] = []
     if coverage_count < 10:
         recommendations.append("Expand the Phase 12 run to at least 10 documents to match the baseline target window.")
@@ -229,7 +231,7 @@ def build_phase12_summary(
         recommendations.append("Investigate per-document processing errors before treating this run as representative.")
     if external_quota_blocked:
         recommendations.append("Some documents were skipped due to external API quota exhaustion; rerun later to complete the sample without changing pipeline behavior.")
-    if outcome_counts.get("queued_for_review", 0) > 0:
+    if sum(int(item["queued_count"]) for item in processed) > 0:
         recommendations.append("Inspect review-queued documents and classify whether queues are expected governance behavior or extraction misses.")
     if outcome_counts.get("blocked_ddi", 0) > 0:
         recommendations.append("Review medication safety blocks manually and confirm whether DDI blocks are clinically appropriate.")
@@ -245,7 +247,7 @@ def build_phase12_summary(
         "requested_limit": requested_limit,
         "documents_selected": len(documents),
         "documents_processed": len(processed),
-        "written": outcome_counts.get("written", 0),
+        "written": written_document_count,
         "queued_for_review": outcome_counts.get("queued_for_review", 0),
         "external_quota_blocked": len(external_quota_blocked),
         "hard_failures": len(errors),
@@ -449,7 +451,7 @@ def build_phase15_aggregate(summary: dict[str, Any]) -> dict[str, Any]:
                 + sum(
                     1
                     for item in processed
-                    if item["outcome"] not in {"written", "queued_for_review"}
+                    if item["outcome"] not in {"written", "written_with_review", "queued_for_review"}
                 )
             ),
         },

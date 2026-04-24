@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-04-24T20:59:40.405025+00:00",
+  "generated_at": "2026-04-24T21:24:02.521094+00:00",
   "phase": "Phase 15 Expanded Validation",
   "dataset_dir": "test_data\\final_batch_50",
   "documents_attempted": 50,
   "documents_processed": 46,
   "documents_quota_blocked": 4,
-  "written": 33,
-  "queued_for_review": 13,
+  "written": 46,
+  "queued_for_review": 0,
   "hard_failures": 0,
   "avg_confidence_processed_only": 0.7,
   "route_distribution_actual": {
