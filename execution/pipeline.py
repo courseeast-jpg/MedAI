@@ -10,10 +10,12 @@ from uuid import uuid4
 
 from app.config import REVIEW_QUEUE_PATH, TIER_ACTIVE, TIER_QUARANTINED, TRUST_CLINICAL
 from app.schemas import MKBRecord
+from execution.audit import StageAuditLogger
 from execution.consensus import consensus_merge
 from execution.enrichment import ControlledEnrichment
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
+from execution.metrics import PipelineMetrics
 from execution.mkb_writer import MKBWriter
 from execution.promotion import HypothesisPromotion
 from execution.safety import ExecutionSafety
@@ -46,10 +48,14 @@ class ExecutionPipeline:
         active_medications_provider=None,
         enrichment_engine: ControlledEnrichment | None = None,
         promotion_engine: HypothesisPromotion | None = None,
+        stage_audit_logger: StageAuditLogger | None = None,
+        pipeline_metrics: PipelineMetrics | None = None,
         review_queue_path: Path | str = REVIEW_QUEUE_PATH,
     ):
         self.pii_stripper = pii_stripper or self._build_pii_stripper()
         self.audit_logger = audit_logger or AuditLogger()
+        self.stage_audit = stage_audit_logger or StageAuditLogger()
+        self.metrics = pipeline_metrics or PipelineMetrics()
         self.spacy_extractor = spacy_extractor or SpacyExtractor()
         self.gemini_extractor = gemini_extractor
         self.review_queue_path = Path(review_queue_path)
@@ -73,16 +79,50 @@ class ExecutionPipeline:
             source_text = self.extract_pdf_text(job.pdf_path)
             source_name = job.source_name or job.pdf_path.name
 
+        self._stage_log(
+            record_id=session_id,
+            stage="extraction",
+            action="extraction_started",
+            confidence=0.0,
+            decision_reason=f"source={source_name}",
+        )
         stripped_text, pii_method = self._strip_pii(source_text)
         extractor_route = self._select_extractor_route(stripped_text)
         extraction_results = self._collect_extraction_results(stripped_text, job.specialty, extractor_route)
+        self._stage_log(
+            record_id=session_id,
+            stage="extraction",
+            action="extraction_completed",
+            confidence=max(float(item.get("confidence", 0.0)) for item in extraction_results) if extraction_results else 0.0,
+            decision_reason=f"collectors={','.join(str(item.get('extractor', 'unknown')) for item in extraction_results)}",
+        )
         extracted = consensus_merge(extraction_results, extractor_route=extractor_route)
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
+        self._stage_log(
+            record_id=session_id,
+            stage="consensus",
+            action="consensus_result",
+            confidence=float(extracted.get("confidence", 0.0)),
+            decision_reason=f"agreement_score={float(extracted.get('agreement_score', 1.0))}",
+        )
         validation = validate_extraction_result(extracted, extractor_route=extractor_route)
         extracted["validation_status"] = validation.status
         extracted["validation_errors"] = validation.errors
+        self.metrics.record_validation(
+            record_count=len(extracted.get("entities", [])),
+            validation_status=validation.status,
+            confidence=float(extracted.get("confidence", 0.0)),
+            agreement_score=float(extracted.get("agreement_score", 1.0)),
+        )
+        self._stage_log(
+            record_id=session_id,
+            stage="validation",
+            action="validation_result",
+            confidence=float(extracted.get("confidence", 0.0)),
+            decision_reason=validation.status if not validation.errors else ",".join(error["code"] for error in validation.errors),
+        )
 
         if validation.status != "accepted":
             self._append_review_queue_item(
@@ -107,6 +147,14 @@ class ExecutionPipeline:
                     validation,
                 )
                 self._persist_review_queue(queued_records, session_id)
+                for record in queued_records:
+                    self._stage_log(
+                        record_id=record.id,
+                        stage="final_write",
+                        action="review_queue_write",
+                        confidence=float(record.confidence),
+                        decision_reason="validation_needs_review",
+                    )
 
             audit = self._audit(extracted, "queued_for_review", extractor_route, validation)
             return ExecutionResult(
@@ -128,6 +176,14 @@ class ExecutionPipeline:
             extraction_method=str(extracted.get("extractor", "")),
         )
         resolution = self.truth_resolver.resolve_batch(candidates)
+        for decision in resolution.decisions:
+            self._stage_log(
+                record_id=decision.record.id if decision.record is not None else session_id,
+                stage="truth_resolution",
+                action="truth_resolution_action",
+                confidence=float(decision.confidence),
+                decision_reason=decision.reason or decision.action,
+            )
         if resolution.quarantined_records:
             self._persist_review_queue(resolution.quarantined_records, session_id)
             self._append_resolution_review_queue_items(
@@ -138,9 +194,17 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 extracted=extracted,
             )
+            for record in resolution.quarantined_records:
+                self._stage_log(
+                    record_id=record.id,
+                    stage="final_write",
+                    action="review_queue_write",
+                    confidence=float(record.confidence),
+                    decision_reason="truth_resolution_quarantine",
+                )
         candidates = resolution.records_to_write
 
-        blocked_records, queued_records, ddi_findings = self._apply_safety(candidates, session_id)
+        blocked_records, queued_records, ddi_findings = self._apply_safety(candidates, session_id, audit_context=extracted)
         if blocked_records:
             self._append_medication_review_queue_items(
                 records=blocked_records,
@@ -150,6 +214,14 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 extracted=extracted,
             )
+            for record in blocked_records:
+                self._stage_log(
+                    record_id=record.id,
+                    stage="final_write",
+                    action="review_queue_write",
+                    confidence=float(record.confidence),
+                    decision_reason="medication_high_block",
+                )
             audit = self._audit(extracted, "blocked_ddi", extractor_route, validation)
             return ExecutionResult(
                 outcome="blocked_ddi",
@@ -172,10 +244,27 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 extracted=extracted,
             )
+            self.metrics.record_review(review_count=len(queued_records))
             combined_review_records = resolution.quarantined_records + queued_records
             queued_ids = {record.id for record in combined_review_records}
             safe_candidates = [record for record in candidates if record.id not in queued_ids]
             written, quality_queued = self.writer.write(safe_candidates, session_id=session_id)
+            for record in queued_records + quality_queued:
+                self._stage_log(
+                    record_id=record.id,
+                    stage="final_write",
+                    action="review_queue_write",
+                    confidence=float(record.confidence),
+                    decision_reason=record.status or "review_required",
+                )
+            for record in written:
+                self._stage_log(
+                    record_id=record.id,
+                    stage="final_write",
+                    action="final_write",
+                    confidence=float(record.confidence),
+                    decision_reason=record.resolution_action or "written",
+                )
             audit = self._audit(extracted, "queued_for_review", extractor_route, validation)
             return ExecutionResult(
                 outcome="queued_for_review",
@@ -192,7 +281,15 @@ class ExecutionPipeline:
         enrichment_records: list[MKBRecord] = []
         if self.enrichment is not None:
             enrichment_records = self.enrichment.enrich(candidates)
-        enrichment_blocked, enrichment_queued, _ = self._apply_safety(enrichment_records, session_id)
+        for record in enrichment_records:
+            self._stage_log(
+                record_id=record.id,
+                stage="enrichment",
+                action="enrichment_write",
+                confidence=float(record.enrichment_confidence or record.confidence),
+                decision_reason=record.content,
+            )
+        enrichment_blocked, enrichment_queued, _ = self._apply_safety(enrichment_records, session_id, audit_context=extracted)
         enrichment_review_records = enrichment_blocked + enrichment_queued
         if enrichment_review_records:
             self._persist_review_queue(enrichment_review_records, session_id)
@@ -204,15 +301,41 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 extracted=extracted,
             )
+            self.metrics.record_review(review_count=len(enrichment_review_records))
+            for record in enrichment_review_records:
+                self._stage_log(
+                    record_id=record.id,
+                    stage="final_write",
+                    action="review_queue_write",
+                    confidence=float(record.confidence),
+                    decision_reason=record.ddi_status or "enrichment_review",
+                )
 
         enrichment_review_ids = {record.id for record in enrichment_review_records}
         safe_enrichment = [record for record in enrichment_records if record.id not in enrichment_review_ids]
 
         promotion_batch = self.promoter.promote(safe_enrichment, corroborating_records=candidates)
+        self.metrics.record_promotion(promoted_count=len(promotion_batch.promoted_records))
+        for record in promotion_batch.promoted_records:
+            self._stage_log(
+                record_id=record.id,
+                stage="promotion",
+                action="promotion_event",
+                confidence=float(record.confidence),
+                decision_reason="promoted_to_active",
+            )
         promotion_resolver = TruthResolutionResolver(
             lambda record: list(self.existing_records_provider(record)) + candidates
         )
         promoted_resolution = promotion_resolver.resolve_batch(promotion_batch.promoted_records)
+        for decision in promoted_resolution.decisions:
+            self._stage_log(
+                record_id=decision.record.id if decision.record is not None else session_id,
+                stage="truth_resolution",
+                action="truth_resolution_action",
+                confidence=float(decision.confidence),
+                decision_reason=decision.reason or decision.action,
+            )
         if promoted_resolution.quarantined_records:
             self._append_resolution_review_queue_items(
                 resolution=promoted_resolution,
@@ -222,10 +345,20 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 extracted=extracted,
             )
+            self.metrics.record_review(review_count=len(promoted_resolution.quarantined_records))
+            for record in promoted_resolution.quarantined_records:
+                self._stage_log(
+                    record_id=record.id,
+                    stage="final_write",
+                    action="review_queue_write",
+                    confidence=float(record.confidence),
+                    decision_reason="promotion_conflict",
+                )
 
         promoted_blocked, promoted_queued, promoted_findings = self._apply_safety(
             promoted_resolution.records_to_write,
             session_id,
+            audit_context=extracted,
         )
         ddi_findings.extend(promoted_findings)
         promoted_review_records = promoted_resolution.quarantined_records + promoted_blocked + promoted_queued
@@ -239,12 +372,38 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 extracted=extracted,
             )
+            self.metrics.record_review(review_count=len(promoted_review_records))
+            for record in promoted_review_records:
+                self._stage_log(
+                    record_id=record.id,
+                    stage="final_write",
+                    action="review_queue_write",
+                    confidence=float(record.confidence),
+                    decision_reason=record.ddi_status or "promotion_review",
+                )
 
         promoted_review_ids = {record.id for record in promoted_review_records}
         safe_promoted = [record for record in promoted_resolution.records_to_write if record.id not in promoted_review_ids]
         writable_records = self._dedupe_records_by_id(candidates + safe_promoted + promotion_batch.remaining_hypotheses)
         written, queued = self.writer.write(writable_records, session_id=session_id)
         combined_queued = resolution.quarantined_records + enrichment_review_records + promoted_review_records + queued
+        self.metrics.record_review(review_count=len(queued))
+        for record in queued:
+            self._stage_log(
+                record_id=record.id,
+                stage="final_write",
+                action="review_queue_write",
+                confidence=float(record.confidence),
+                decision_reason=record.status or "writer_queue",
+            )
+        for record in written:
+            self._stage_log(
+                record_id=record.id,
+                stage="final_write",
+                action="final_write",
+                confidence=float(record.confidence),
+                decision_reason=record.resolution_action or record.source_type,
+            )
         outcome = "queued_for_review" if combined_queued else "written"
         audit = self._audit(extracted, outcome, extractor_route, validation)
 
@@ -374,7 +533,13 @@ class ExecutionPipeline:
             ))
         return records
 
-    def _apply_safety(self, records: list[MKBRecord], session_id: str) -> tuple[list[MKBRecord], list[MKBRecord], list[dict]]:
+    def _apply_safety(
+        self,
+        records: list[MKBRecord],
+        session_id: str,
+        *,
+        audit_context: dict | None = None,
+    ) -> tuple[list[MKBRecord], list[MKBRecord], list[dict]]:
         blocked: list[MKBRecord] = []
         queued: list[MKBRecord] = []
         findings: list[dict] = []
@@ -383,6 +548,19 @@ class ExecutionPipeline:
             decision, message, record_findings = self.safety.check_medication(record, session_id=session_id)
             finding_dicts = [self._finding_to_dict(item) for item in record_findings or []]
             findings.extend(finding_dicts)
+            self._stage_log(
+                record_id=record.id,
+                stage="safety_gate",
+                action="safety_gate_action",
+                confidence=float(record.confidence),
+                decision_reason=message or decision,
+                extra={
+                    "ddi_status": record.ddi_status,
+                    "safety_action": record.safety_action,
+                    "fact_type": record.fact_type,
+                    "extractor": str((audit_context or {}).get("extractor", "")),
+                },
+            )
 
             if decision == "block":
                 record.ddi_status = "high_blocked"
@@ -614,3 +792,22 @@ class ExecutionPipeline:
         for record in records:
             deduped[record.id] = record
         return list(deduped.values())
+
+    def _stage_log(
+        self,
+        *,
+        record_id: str,
+        stage: str,
+        action: str,
+        confidence: float,
+        decision_reason: str,
+        extra: dict | None = None,
+    ) -> None:
+        self.stage_audit.log(
+            record_id=record_id,
+            stage=stage,
+            action=action,
+            confidence=confidence,
+            decision_reason=decision_reason,
+            extra=extra,
+        )
