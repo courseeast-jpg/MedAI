@@ -29,6 +29,8 @@ class MKBRecord(BaseModel):
     ddi_findings:       List[dict]    = Field(default_factory=list)
     extraction_method:  str           = "claude"   # claude|rules_based|manual
     resolution_id:      Optional[str] = None
+    resolution_action:  Optional[str] = None
+    resolution_confidence: Optional[float] = None
     requires_review:    bool          = False
     first_recorded:     datetime      = Field(default_factory=datetime.utcnow)
     last_confirmed:     datetime      = Field(default_factory=datetime.utcnow)

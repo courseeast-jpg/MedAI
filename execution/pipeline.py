@@ -15,6 +15,7 @@ from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
 from execution.mkb_writer import MKBWriter
 from execution.safety import ExecutionSafety
+from execution.truth_resolution import ResolutionBatch, TruthResolutionResolver
 from execution.validation import ValidationDecision, validate_extraction_result
 from extractors.gemini_extractor import GeminiExtractor
 from extractors.spacy_extractor import SpacyExtractor
@@ -39,6 +40,7 @@ class ExecutionPipeline:
         audit_logger: AuditLogger | None = None,
         spacy_extractor: SpacyExtractor | None = None,
         gemini_extractor: GeminiExtractor | None = None,
+        existing_records_provider=None,
         review_queue_path: Path | str = REVIEW_QUEUE_PATH,
     ):
         self.pii_stripper = pii_stripper or self._build_pii_stripper()
@@ -49,6 +51,9 @@ class ExecutionPipeline:
         self.review_queue_path.parent.mkdir(parents=True, exist_ok=True)
         self.writer = MKBWriter(sql_store, vector_store, quality_gate)
         self.safety = ExecutionSafety(medication_gate)
+        self.truth_resolver = TruthResolutionResolver(
+            existing_records_provider or self._build_existing_records_provider(sql_store)
+        )
 
     def run(self, job: ExecutionJob) -> ExecutionResult:
         source_text = job.text
@@ -113,6 +118,18 @@ class ExecutionPipeline:
             confidence=float(extracted.get("confidence", 0.0)),
             extraction_method=str(extracted.get("extractor", "")),
         )
+        resolution = self.truth_resolver.resolve_batch(candidates)
+        if resolution.quarantined_records:
+            self._persist_review_queue(resolution.quarantined_records, session_id)
+            self._append_resolution_review_queue_items(
+                resolution=resolution,
+                source_name=source_name,
+                specialty=job.specialty,
+                session_id=session_id,
+                extractor_route=extractor_route,
+                extracted=extracted,
+            )
+        candidates = resolution.records_to_write
 
         blocked_records, queued_records, ddi_findings = self._apply_safety(candidates, session_id)
         if blocked_records:
@@ -130,7 +147,8 @@ class ExecutionPipeline:
 
         if queued_records:
             self._persist_review_queue(queued_records, session_id)
-            queued_ids = {record.id for record in queued_records}
+            combined_review_records = resolution.quarantined_records + queued_records
+            queued_ids = {record.id for record in combined_review_records}
             safe_candidates = [record for record in candidates if record.id not in queued_ids]
             written, quality_queued = self.writer.write(safe_candidates, session_id=session_id)
             audit = self._audit(extracted, "queued_for_review", extractor_route, validation)
@@ -139,7 +157,7 @@ class ExecutionPipeline:
                 validation_status=validation.status,
                 validation_errors=validation.errors,
                 records=written,
-                queued_records=queued_records + quality_queued,
+                queued_records=combined_review_records + quality_queued,
                 ddi_findings=ddi_findings,
                 extractor_result=extracted,
                 audit=audit,
@@ -147,7 +165,8 @@ class ExecutionPipeline:
             )
 
         written, queued = self.writer.write(candidates, session_id=session_id)
-        outcome = "queued_for_review" if queued else "written"
+        combined_queued = resolution.quarantined_records + queued
+        outcome = "queued_for_review" if combined_queued else "written"
         audit = self._audit(extracted, outcome, extractor_route, validation)
 
         return ExecutionResult(
@@ -155,7 +174,7 @@ class ExecutionPipeline:
             validation_status=validation.status,
             validation_errors=validation.errors,
             records=written,
-            queued_records=queued,
+            queued_records=combined_queued,
             extractor_result=extracted,
             audit=audit,
             notes=extracted.get("notes", []),
@@ -339,6 +358,40 @@ class ExecutionPipeline:
         with self.review_queue_path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(item, sort_keys=True) + "\n")
 
+    def _append_resolution_review_queue_items(
+        self,
+        *,
+        resolution: ResolutionBatch,
+        source_name: str,
+        specialty: str,
+        session_id: str,
+        extractor_route: str,
+        extracted: dict,
+    ) -> None:
+        for decision in resolution.decisions:
+            if not decision.requires_review or decision.record is None:
+                continue
+            item = {
+                "timestamp": datetime.utcnow().isoformat(),
+                "source_name": source_name,
+                "specialty": specialty,
+                "session_id": session_id,
+                "extractor_route": extractor_route,
+                "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+                "extractor": str(extracted.get("extractor", "")),
+                "validation_status": extracted.get("validation_status", "accepted"),
+                "resolution_action": decision.action,
+                "resolution_confidence": decision.confidence,
+                "requires_review": True,
+                "reasons": [decision.reason],
+                "record_id": decision.record.id,
+                "fact_type": decision.record.fact_type,
+                "content": decision.record.content,
+                "confidence": float(decision.record.confidence),
+            }
+            with self.review_queue_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(item, sort_keys=True) + "\n")
+
     def _mark_records_for_validation_review(
         self,
         records: list[MKBRecord],
@@ -411,3 +464,18 @@ class ExecutionPipeline:
             from extraction.pii_stripper import PIIStripper
 
             return PIIStripper()
+
+    def _build_existing_records_provider(self, sql_store):
+        if sql_store is None:
+            return lambda record: []
+
+        def provider(record: MKBRecord) -> list[MKBRecord]:
+            if hasattr(sql_store, "get_by_specialty"):
+                return [
+                    item
+                    for item in sql_store.get_by_specialty(record.specialty, tier="active")
+                    if item.fact_type == record.fact_type
+                ]
+            return []
+
+        return provider
