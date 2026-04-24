@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from app.config import REVIEW_QUEUE_PATH, TIER_ACTIVE, TIER_QUARANTINED, TRUST_CLINICAL
 from app.schemas import MKBRecord
+from execution.consensus import consensus_merge
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
 from execution.mkb_writer import MKBWriter
@@ -59,10 +60,11 @@ class ExecutionPipeline:
             source_name = job.source_name or job.pdf_path.name
 
         stripped_text, pii_method = self._strip_pii(source_text)
-        extractor_route, extractor = self._select_extractor(stripped_text, job.specialty)
-        extracted = extractor.extract(stripped_text)
+        extractor_route = self._select_extractor_route(stripped_text)
+        extraction_results = self._collect_extraction_results(stripped_text, job.specialty, extractor_route)
+        extracted = consensus_merge(extraction_results, extractor_route=extractor_route)
         self._validate_extractor_output(extracted)
-        extracted.setdefault("actual_extractor", extracted.get("extractor", "unknown"))
+        extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
         validation = validate_extraction_result(extracted, extractor_route=extractor_route)
         extracted["validation_status"] = validation.status
@@ -179,12 +181,33 @@ class ExecutionPipeline:
         pdf_pipeline = PDFPipeline(Extractor(), self.pii_stripper)
         return pdf_pipeline._extract_text(pdf_path)
 
-    def _select_extractor(self, text: str, specialty: str):
+    def _select_extractor_route(self, text: str) -> str:
         if len(text) < SPACY_FAST_PATH_CHAR_LIMIT and not self._has_ocr_artifacts(text):
-            return "spacy", self.spacy_extractor
+            return "spacy"
+        return "gemini"
+
+    def _collect_extraction_results(self, text: str, specialty: str, extractor_route: str) -> list[dict]:
+        results: list[dict] = []
+        spacy_result = self.spacy_extractor.extract(text)
+        self._validate_extractor_output(spacy_result)
+        spacy_result.setdefault("actual_extractor", spacy_result.get("extractor", "unknown"))
+        include_spacy = extractor_route == "spacy" or bool(spacy_result.get("entities"))
+        if include_spacy:
+            results.append(spacy_result)
+
+        if extractor_route == "gemini":
+            gemini_extractor = self._get_gemini_extractor(specialty)
+            gemini_result = gemini_extractor.extract(text)
+            self._validate_extractor_output(gemini_result)
+            gemini_result.setdefault("actual_extractor", gemini_result.get("extractor", "unknown"))
+            results.append(gemini_result)
+
+        return results
+
+    def _get_gemini_extractor(self, specialty: str):
         if self.gemini_extractor is None or self.gemini_extractor.specialty != specialty:
             self.gemini_extractor = GeminiExtractor(specialty=specialty)
-        return "gemini", self.gemini_extractor
+        return self.gemini_extractor
 
     def _strip_pii(self, text: str) -> tuple[str, str]:
         if not text:

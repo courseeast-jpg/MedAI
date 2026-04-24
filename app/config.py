@@ -32,6 +32,8 @@ MIN_CONFIDENCE_CLAUDE     = 0.35   # Min confidence for Claude extraction
 MIN_CONFIDENCE_RULES      = 0.35   # Min confidence for rules-based extraction
 EXTRACTION_ACCEPT_THRESHOLD = 0.70 # Phase 2: accepted extraction threshold
 EXTRACTION_REVIEW_THRESHOLD = 0.50 # Phase 2: needs_review threshold; below this reject
+CONSENSUS_ACCEPT_THRESHOLD = 0.60  # Phase 2.1: accepted agreement threshold
+CONSENSUS_REVIEW_THRESHOLD = 0.25  # Phase 2.1: review agreement threshold; below this reject
 
 # Connector timeouts
 CONNECTOR_TIMEOUT_SEC = 12

@@ -7,6 +7,8 @@ from typing import Any
 
 from app.config import (
     ALLOWED_FACT_TYPES,
+    CONSENSUS_ACCEPT_THRESHOLD,
+    CONSENSUS_REVIEW_THRESHOLD,
     EXTRACTION_ACCEPT_THRESHOLD,
     EXTRACTION_REVIEW_THRESHOLD,
 )
@@ -28,6 +30,8 @@ def validate_extraction_result(extracted: dict[str, Any], *, extractor_route: st
     errors: list[dict[str, Any]] = []
     confidence = float(extracted.get("confidence", 0.0))
     actual_extractor = str(extracted.get("actual_extractor", extracted.get("extractor", "")))
+    agreement_score = float(extracted.get("agreement_score", 1.0))
+    disagreement_flag = bool(extracted.get("disagreement_flag", False))
 
     if actual_extractor != extractor_route:
         errors.append(_issue(
@@ -40,6 +44,7 @@ def validate_extraction_result(extracted: dict[str, Any], *, extractor_route: st
         ))
 
     _validate_entities(extracted.get("entities", []), errors)
+    _validate_consensus(agreement_score, disagreement_flag, errors)
 
     if confidence < EXTRACTION_REVIEW_THRESHOLD:
         errors.append(_issue(
@@ -65,6 +70,37 @@ def validate_extraction_result(extracted: dict[str, Any], *, extractor_route: st
     if errors:
         return ValidationDecision(status="needs_review", errors=errors)
     return ValidationDecision(status="accepted", errors=[])
+
+
+def _validate_consensus(agreement_score: float, disagreement_flag: bool, errors: list[dict[str, Any]]) -> None:
+    if agreement_score < CONSENSUS_REVIEW_THRESHOLD:
+        errors.append(_issue(
+            code="agreement_below_reject_threshold",
+            severity="fatal",
+            message="Consensus agreement is below the rejection threshold.",
+            field="agreement_score",
+            expected=f">={CONSENSUS_REVIEW_THRESHOLD}",
+            actual=agreement_score,
+        ))
+    elif agreement_score < CONSENSUS_ACCEPT_THRESHOLD:
+        errors.append(_issue(
+            code="agreement_below_accept_threshold",
+            severity="warning",
+            message="Consensus agreement is below the accepted threshold and requires review.",
+            field="agreement_score",
+            expected=f">={CONSENSUS_ACCEPT_THRESHOLD}",
+            actual=agreement_score,
+        ))
+
+    if disagreement_flag:
+        errors.append(_issue(
+            code="consensus_disagreement_flag",
+            severity="warning",
+            message="Consensus merge detected disagreement across extractor outputs.",
+            field="disagreement_flag",
+            expected=False,
+            actual=True,
+        ))
 
 
 def _validate_entities(entities: list[Any], errors: list[dict[str, Any]]) -> None:
