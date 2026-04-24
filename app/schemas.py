@@ -27,6 +27,7 @@ class MKBRecord(BaseModel):
     ddi_checked:        bool          = False
     ddi_status:         Optional[str] = None       # clear|low|medium|high_blocked|pending
     ddi_findings:       List[dict]    = Field(default_factory=list)
+    safety_action:      Optional[str] = None
     extraction_method:  str           = "claude"   # claude|rules_based|manual
     resolution_id:      Optional[str] = None
     resolution_action:  Optional[str] = None

@@ -41,6 +41,7 @@ class ExecutionPipeline:
         spacy_extractor: SpacyExtractor | None = None,
         gemini_extractor: GeminiExtractor | None = None,
         existing_records_provider=None,
+        active_medications_provider=None,
         review_queue_path: Path | str = REVIEW_QUEUE_PATH,
     ):
         self.pii_stripper = pii_stripper or self._build_pii_stripper()
@@ -50,7 +51,10 @@ class ExecutionPipeline:
         self.review_queue_path = Path(review_queue_path)
         self.review_queue_path.parent.mkdir(parents=True, exist_ok=True)
         self.writer = MKBWriter(sql_store, vector_store, quality_gate)
-        self.safety = ExecutionSafety(medication_gate)
+        self.safety = ExecutionSafety(
+            medication_gate,
+            active_medications_provider or self._build_active_medications_provider(sql_store),
+        )
         self.truth_resolver = TruthResolutionResolver(
             existing_records_provider or self._build_existing_records_provider(sql_store)
         )
@@ -133,6 +137,14 @@ class ExecutionPipeline:
 
         blocked_records, queued_records, ddi_findings = self._apply_safety(candidates, session_id)
         if blocked_records:
+            self._append_medication_review_queue_items(
+                records=blocked_records,
+                source_name=source_name,
+                specialty=job.specialty,
+                session_id=session_id,
+                extractor_route=extractor_route,
+                extracted=extracted,
+            )
             audit = self._audit(extracted, "blocked_ddi", extractor_route, validation)
             return ExecutionResult(
                 outcome="blocked_ddi",
@@ -147,6 +159,14 @@ class ExecutionPipeline:
 
         if queued_records:
             self._persist_review_queue(queued_records, session_id)
+            self._append_medication_review_queue_items(
+                records=[record for record in queued_records if record.fact_type == "medication"],
+                source_name=source_name,
+                specialty=job.specialty,
+                session_id=session_id,
+                extractor_route=extractor_route,
+                extracted=extracted,
+            )
             combined_review_records = resolution.quarantined_records + queued_records
             queued_ids = {record.id for record in combined_review_records}
             safe_candidates = [record for record in candidates if record.id not in queued_ids]
@@ -310,12 +330,17 @@ class ExecutionPipeline:
                 record.ddi_findings = finding_dicts
                 record.structured["ddi_message"] = message
                 blocked.append(record)
-            elif decision == "queue":
+            elif decision in {"queue", "review", "pending"}:
+                status = "pending_ddi"
+                if decision == "review":
+                    status = "pending_medication_review"
+                elif decision == "pending":
+                    status = "pending_ddi_check"
                 queued_record = record.model_copy(update={
                     "tier": TIER_QUARANTINED,
-                    "status": "pending_ddi",
+                    "status": status,
                     "requires_review": True,
-                    "ddi_status": "pending",
+                    "ddi_status": record.ddi_status or ("pending_ddi_check" if decision == "pending" else "medium"),
                     "ddi_findings": finding_dicts,
                     "structured": {**record.structured, "ddi_message": message},
                 })
@@ -388,6 +413,46 @@ class ExecutionPipeline:
                 "fact_type": decision.record.fact_type,
                 "content": decision.record.content,
                 "confidence": float(decision.record.confidence),
+            }
+            with self.review_queue_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(item, sort_keys=True) + "\n")
+
+    def _append_medication_review_queue_items(
+        self,
+        *,
+        records: list[MKBRecord],
+        source_name: str,
+        specialty: str,
+        session_id: str,
+        extractor_route: str,
+        extracted: dict,
+    ) -> None:
+        for record in records:
+            if record.fact_type != "medication":
+                continue
+            reasons = []
+            ddi_note = record.structured.get("ddi_note") or record.structured.get("ddi_message")
+            if ddi_note:
+                reasons.append(str(ddi_note))
+            if not reasons:
+                reasons.append(record.ddi_status or "medication_review")
+            item = {
+                "timestamp": datetime.utcnow().isoformat(),
+                "source_name": source_name,
+                "specialty": specialty,
+                "session_id": session_id,
+                "extractor_route": extractor_route,
+                "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+                "extractor": str(extracted.get("extractor", "")),
+                "validation_status": extracted.get("validation_status", "accepted"),
+                "record_id": record.id,
+                "fact_type": record.fact_type,
+                "content": record.content,
+                "ddi_status": record.ddi_status,
+                "ddi_findings": record.ddi_findings,
+                "safety_action": record.safety_action,
+                "requires_review": record.requires_review,
+                "reasons": reasons,
             }
             with self.review_queue_path.open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(item, sort_keys=True) + "\n")
@@ -479,3 +544,8 @@ class ExecutionPipeline:
             return []
 
         return provider
+
+    def _build_active_medications_provider(self, sql_store):
+        if sql_store is None or not hasattr(sql_store, "get_active_medications"):
+            return lambda: []
+        return lambda: list(sql_store.get_active_medications())
