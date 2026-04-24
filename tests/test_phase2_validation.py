@@ -141,7 +141,7 @@ def test_low_confidence_routes_to_needs_review(tmp_path: Path):
     assert queued[0]["reasons"] == ["confidence_below_accept_threshold"]
 
 
-def test_gemini_fallback_violation_is_rejected(tmp_path: Path):
+def test_gemini_fallback_uses_terminal_connector_for_validation_and_audit(tmp_path: Path):
     gemini_extractor = StaticExtractor({
         "extractor": "gemini",
         "actual_extractor": "rules_based",
@@ -166,8 +166,13 @@ def test_gemini_fallback_violation_is_rejected(tmp_path: Path):
     result = pipeline.process_text("x" * 4000, specialty="epilepsy")
 
     assert result.outcome == "queued_for_review"
-    assert result.validation_status == "rejected"
-    assert any(error["code"] == "route_actual_mismatch" for error in result.validation_errors)
+    assert result.validation_status == "needs_review"
+    assert result.audit["extractor_route"] == "rules_based"
+    assert result.audit["extractor_actual"] == "rules_based"
+    assert result.audit["requested_extractor_route"] == "gemini"
+    assert result.queued_count == 1
+    assert result.queued_records[0].status == "pending_validation_review"
+    assert not any(error["code"] == "route_actual_mismatch" for error in result.validation_errors)
 
 
 def test_malformed_extraction_payload_is_rejected(tmp_path: Path):

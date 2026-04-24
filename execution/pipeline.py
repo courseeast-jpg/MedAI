@@ -108,6 +108,7 @@ class ExecutionPipeline:
         stripped_text, pii_method = self._strip_pii(source_text)
         routed = self.router.execute(stripped_text, specialty=job.specialty)
         extractor_route = routed.extractor_route
+        requested_route = routed.requested_route
         extraction_results = routed.results
         for extraction_result in extraction_results:
             self._validate_extractor_output(extraction_result)
@@ -119,6 +120,7 @@ class ExecutionPipeline:
             decision_reason=f"collectors={','.join(str(item.get('extractor', 'unknown')) for item in extraction_results)}",
             extra={
                 "extractor_route": extractor_route,
+                "requested_extractor_route": requested_route,
                 "extractor_actual": routed.extractor_actual,
                 "fallback_used": routed.fallback_used,
                 "failure_count": routed.failure_count,
@@ -129,6 +131,7 @@ class ExecutionPipeline:
         )
         extracted = consensus_merge(extraction_results, extractor_route=extractor_route)
         extracted["actual_extractor"] = routed.extractor_actual
+        extracted["requested_extractor_route"] = requested_route
         extracted["fallback_used"] = routed.fallback_used
         extracted["routing_failure_count"] = routed.failure_count
         extracted["routing_events"] = routed.events
@@ -183,6 +186,7 @@ class ExecutionPipeline:
                 specialty=job.specialty,
                 session_id=session_id,
                 extractor_route=extractor_route,
+                requested_extractor_route=requested_route,
                 extracted=extracted,
                 validation=validation,
             )
@@ -213,6 +217,7 @@ class ExecutionPipeline:
                 extracted,
                 "queued_for_review",
                 extractor_route,
+                requested_route,
                 validation,
                 run_id=session_id,
                 document_id=source_name,
@@ -252,6 +257,7 @@ class ExecutionPipeline:
                 specialty=job.specialty,
                 session_id=session_id,
                 extractor_route=extractor_route,
+                requested_extractor_route=requested_route,
                 extracted=extracted,
             )
             for record in resolution.quarantined_records:
@@ -272,6 +278,7 @@ class ExecutionPipeline:
                 specialty=job.specialty,
                 session_id=session_id,
                 extractor_route=extractor_route,
+                requested_extractor_route=requested_route,
                 extracted=extracted,
             )
             for record in blocked_records:
@@ -286,6 +293,7 @@ class ExecutionPipeline:
                 extracted,
                 "blocked_ddi",
                 extractor_route,
+                requested_route,
                 validation,
                 run_id=session_id,
                 document_id=source_name,
@@ -309,6 +317,7 @@ class ExecutionPipeline:
                 specialty=job.specialty,
                 session_id=session_id,
                 extractor_route=extractor_route,
+                requested_extractor_route=requested_route,
                 extracted=extracted,
             )
             self.metrics.record_review(review_count=len(queued_records))
@@ -336,6 +345,7 @@ class ExecutionPipeline:
                 extracted,
                 "queued_for_review",
                 extractor_route,
+                requested_route,
                 validation,
                 run_id=session_id,
                 document_id=source_name,
@@ -373,6 +383,7 @@ class ExecutionPipeline:
                 specialty=job.specialty,
                 session_id=session_id,
                 extractor_route=extractor_route,
+                requested_extractor_route=requested_route,
                 extracted=extracted,
             )
             self.metrics.record_review(review_count=len(enrichment_review_records))
@@ -417,6 +428,7 @@ class ExecutionPipeline:
                 specialty=job.specialty,
                 session_id=session_id,
                 extractor_route=extractor_route,
+                requested_extractor_route=requested_route,
                 extracted=extracted,
             )
             self.metrics.record_review(review_count=len(promoted_resolution.quarantined_records))
@@ -444,6 +456,7 @@ class ExecutionPipeline:
                 specialty=job.specialty,
                 session_id=session_id,
                 extractor_route=extractor_route,
+                requested_extractor_route=requested_route,
                 extracted=extracted,
             )
             self.metrics.record_review(review_count=len(promoted_review_records))
@@ -483,6 +496,7 @@ class ExecutionPipeline:
             extracted,
             outcome,
             extractor_route,
+            requested_route,
             validation,
             run_id=session_id,
             document_id=source_name,
@@ -678,6 +692,7 @@ class ExecutionPipeline:
         specialty: str,
         session_id: str,
         extractor_route: str,
+        requested_extractor_route: str,
         extracted: dict,
         validation: ValidationDecision,
     ) -> None:
@@ -687,6 +702,7 @@ class ExecutionPipeline:
             "specialty": specialty,
             "session_id": session_id,
             "extractor_route": extractor_route,
+            "requested_extractor_route": requested_extractor_route,
             "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
             "extractor": str(extracted.get("extractor", "")),
             "validation_status": validation.status,
@@ -708,6 +724,7 @@ class ExecutionPipeline:
         specialty: str,
         session_id: str,
         extractor_route: str,
+        requested_extractor_route: str,
         extracted: dict,
     ) -> None:
         for decision in resolution.decisions:
@@ -719,6 +736,7 @@ class ExecutionPipeline:
                 "specialty": specialty,
                 "session_id": session_id,
                 "extractor_route": extractor_route,
+                "requested_extractor_route": requested_extractor_route,
                 "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
                 "extractor": str(extracted.get("extractor", "")),
                 "validation_status": extracted.get("validation_status", "accepted"),
@@ -742,6 +760,7 @@ class ExecutionPipeline:
         specialty: str,
         session_id: str,
         extractor_route: str,
+        requested_extractor_route: str,
         extracted: dict,
     ) -> None:
         for record in records:
@@ -759,6 +778,7 @@ class ExecutionPipeline:
                 "specialty": specialty,
                 "session_id": session_id,
                 "extractor_route": extractor_route,
+                "requested_extractor_route": requested_extractor_route,
                 "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
                 "extractor": str(extracted.get("extractor", "")),
                 "validation_status": extracted.get("validation_status", "accepted"),
@@ -800,6 +820,7 @@ class ExecutionPipeline:
         extracted: dict,
         outcome: str,
         extractor_route: str,
+        requested_extractor_route: str,
         validation: ValidationDecision,
         *,
         run_id: str,
@@ -809,6 +830,7 @@ class ExecutionPipeline:
             extractor=extracted.get("extractor", ""),
             extractor_route=extractor_route,
             extractor_actual=str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+            requested_extractor_route=requested_extractor_route,
             entity_count=len(extracted.get("entities", [])),
             confidence=float(extracted.get("confidence", 0.0)),
             validation_status=validation.status,

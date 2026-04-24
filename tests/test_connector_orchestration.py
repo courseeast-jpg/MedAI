@@ -139,15 +139,20 @@ def test_gemini_failure_falls_back_to_phi3(tmp_path: Path):
     result = pipeline.process_text("x" * 4000, specialty="epilepsy")
 
     assert result.outcome == "queued_for_review"
-    assert result.validation_status == "needs_review"
-    assert result.audit["extractor_route"] == "gemini"
+    assert result.validation_status == "accepted"
+    assert result.audit["extractor_route"] == "phi3"
     assert result.audit["extractor_actual"] == "phi3"
+    assert result.audit["requested_extractor_route"] == "gemini"
     assert result.audit["fallback_used"] is True
+    assert result.extractor_result["agreement_score"] == 1.0
+    assert result.extractor_result["confidence"] == 0.82
+    assert result.extractor_result["consensus_sources"] == ["phi3"]
     assert metrics.snapshot()["fallback_count"] == 1
     assert metrics.snapshot()["failure_count"] == 1
     extraction_events = [event for event in read_jsonl(audit_path) if event["stage"] == "extraction"]
-    assert extraction_events[-1]["extractor_route"] == "gemini"
+    assert extraction_events[-1]["extractor_route"] == "phi3"
     assert extraction_events[-1]["extractor_actual"] == "phi3"
+    assert extraction_events[-1]["requested_extractor_route"] == "gemini"
 
 
 def test_timeout_handling_uses_fallback(tmp_path: Path):
@@ -181,6 +186,7 @@ def test_timeout_handling_uses_fallback(tmp_path: Path):
 
     assert result.outcome == "queued_for_review"
     assert result.extractor_result["fallback_used"] is True
+    assert result.extractor_result["consensus_sources"] == ["phi3"]
     assert any("router_fallback=gemini:timeout" in note for note in result.notes)
     assert metrics.snapshot()["failure_count"] == 1
 
@@ -208,10 +214,11 @@ def test_route_vs_actual_mismatch_is_audited(tmp_path: Path):
 
     result = pipeline.process_text("x" * 4000, specialty="epilepsy")
 
-    assert result.outcome == "queued_for_review"
-    assert result.validation_status == "rejected"
-    assert result.audit["extractor_route"] == "gemini"
+    assert result.outcome == "written"
+    assert result.validation_status == "accepted"
+    assert result.audit["extractor_route"] == "rules_based"
     assert result.audit["extractor_actual"] == "rules_based"
+    assert result.audit["requested_extractor_route"] == "gemini"
     extraction_events = [event for event in read_jsonl(audit_path) if event["stage"] == "extraction"]
     assert any("route_actual_mismatch" in json.dumps(event) for event in extraction_events)
 
@@ -325,10 +332,11 @@ def test_latency_based_fallback_moves_off_slow_connector(tmp_path: Path):
 
     result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
 
-    assert result.audit["extractor_route"] == "spacy"
+    assert result.audit["extractor_route"] == "phi3"
     assert result.audit["extractor_actual"] == "phi3"
+    assert result.audit["requested_extractor_route"] == "spacy"
     assert result.audit["fallback_used"] is True
-    assert any("router_degraded=latency_too_high" in note for note in result.extractor_result["notes"])
+    assert result.extractor_result["consensus_sources"] == ["phi3"]
 
 
 def test_reliability_based_avoidance_skips_unreliable_gemini(tmp_path: Path):

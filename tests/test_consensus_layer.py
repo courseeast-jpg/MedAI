@@ -121,3 +121,37 @@ def test_consensus_conflicting_outputs_are_rejected(tmp_path: Path):
     assert result.audit["confidence"] == 0.0
     assert result.extractor_result["agreement_score"] == 0.0
     assert any(error["code"] == "agreement_below_reject_threshold" for error in result.validation_errors)
+
+
+def test_fallback_consensus_uses_terminal_connector_only(tmp_path: Path):
+    pipeline = ExecutionPipeline(
+        pii_stripper=NoopPIIStripper(),
+        spacy_extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.85,
+            "latency_ms": 250,
+            "notes": [],
+        }),
+        phi3_extractor=StaticExtractor({
+            "extractor": "phi3",
+            "actual_extractor": "phi3",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.84,
+            "latency_ms": 20,
+            "notes": [],
+        }),
+        audit_logger=AuditLogger(path=tmp_path / "audit.jsonl"),
+        review_queue_path=tmp_path / "review_queue.jsonl",
+    )
+
+    result = pipeline.process_text("Diagnosis: Epilepsy.", specialty="epilepsy")
+
+    assert result.outcome == "queued_for_review"
+    assert result.validation_status == "accepted"
+    assert result.audit["extractor_route"] == "phi3"
+    assert result.audit["requested_extractor_route"] == "spacy"
+    assert result.extractor_result["consensus_sources"] == ["phi3"]
+    assert result.extractor_result["agreement_score"] == 1.0
+    assert result.extractor_result["confidence"] == 0.84

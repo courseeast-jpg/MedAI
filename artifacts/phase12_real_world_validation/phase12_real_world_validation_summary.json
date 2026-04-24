@@ -1,0 +1,239 @@
+{
+  "generated_at": "2026-04-24T19:42:46.327796+00:00",
+  "phase": "Phase 12 Real-World Validation",
+  "dataset_dir": "test_data\\final_batch_50",
+  "requested_limit": 10,
+  "documents_selected": 10,
+  "documents_processed": 6,
+  "written": 6,
+  "queued_for_review": 0,
+  "external_quota_blocked": 4,
+  "hard_failures": 0,
+  "documents_failed": 0,
+  "target_window_met": true,
+  "phase12_started": true,
+  "run_passed": true,
+  "component_state": {
+    "sql_store": true,
+    "vector_store": false,
+    "quality_gate": false,
+    "medication_gate": false,
+    "governance_active": true,
+    "review_queue_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl",
+    "audit_log_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\execution_audit.jsonl",
+    "stage_audit_log_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\pipeline_stages.jsonl",
+    "runtime_db_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\mkb.db"
+  },
+  "aggregate": {
+    "outcomes": {
+      "written": 6
+    },
+    "validation_statuses": {
+      "accepted": 6
+    },
+    "extractors": {
+      "spacy": 6
+    },
+    "avg_confidence": 0.7,
+    "total_entities": 30,
+    "total_written": 30,
+    "total_queued": 0,
+    "total_blocked": 0,
+    "review_reasons": {}
+  },
+  "mkb_counts": {
+    "total": 17,
+    "active": 5,
+    "hypothesis": 0,
+    "quarantined": 12
+  },
+  "documents": [
+    {
+      "document": "long_noisy_01.pdf",
+      "status": "processed",
+      "error": null,
+      "outcome": "written",
+      "validation_status": "accepted",
+      "extractor": "spacy",
+      "extractor_actual": "spacy",
+      "confidence": 0.7,
+      "entity_count": 5,
+      "written_count": 5,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [
+        "loaded en_core_sci_md",
+        "pii_method=presidio",
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "document": "long_noisy_02.pdf",
+      "status": "processed",
+      "error": null,
+      "outcome": "written",
+      "validation_status": "accepted",
+      "extractor": "spacy",
+      "extractor_actual": "spacy",
+      "confidence": 0.7,
+      "entity_count": 5,
+      "written_count": 5,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [
+        "loaded en_core_sci_md",
+        "pii_method=presidio",
+        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+      ]
+    },
+    {
+      "document": "long_noisy_03.pdf",
+      "status": "processed",
+      "error": null,
+      "outcome": "written",
+      "validation_status": "accepted",
+      "extractor": "spacy",
+      "extractor_actual": "spacy",
+      "confidence": 0.7,
+      "entity_count": 5,
+      "written_count": 5,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [
+        "loaded en_core_sci_md",
+        "pii_method=presidio",
+        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=36.500 success_rate=1.000 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "document": "long_noisy_04.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 18.827411308s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 18\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": []
+    },
+    {
+      "document": "long_noisy_05.pdf",
+      "status": "processed",
+      "error": null,
+      "outcome": "written",
+      "validation_status": "accepted",
+      "extractor": "spacy",
+      "extractor_actual": "spacy",
+      "confidence": 0.7,
+      "entity_count": 5,
+      "written_count": 5,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [
+        "loaded en_core_sci_md",
+        "pii_method=presidio",
+        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=40.000 success_rate=1.000 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "document": "long_noisy_06.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 18.827411308s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 18\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": []
+    },
+    {
+      "document": "long_noisy_07.pdf",
+      "status": "processed",
+      "error": null,
+      "outcome": "written",
+      "validation_status": "accepted",
+      "extractor": "spacy",
+      "extractor_actual": "spacy",
+      "confidence": 0.7,
+      "entity_count": 5,
+      "written_count": 5,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [
+        "loaded en_core_sci_md",
+        "pii_method=presidio",
+        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=41.250 success_rate=1.000 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "document": "long_noisy_08.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 18.827411308s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 18\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": []
+    },
+    {
+      "document": "long_noisy_09.pdf",
+      "status": "processed",
+      "error": null,
+      "outcome": "written",
+      "validation_status": "accepted",
+      "extractor": "spacy",
+      "extractor_actual": "spacy",
+      "confidence": 0.7,
+      "entity_count": 5,
+      "written_count": 5,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [
+        "loaded en_core_sci_md",
+        "pii_method=presidio",
+        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=40.800 success_rate=1.000 candidates=spacy,phi3,gemini"
+      ]
+    },
+    {
+      "document": "long_noisy_10.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 18.827411308s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 18\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": []
+    }
+  ],
+  "recommendations": [
+    "Some documents were skipped due to external API quota exhaustion; rerun later to complete the sample without changing pipeline behavior."
+  ]
+}

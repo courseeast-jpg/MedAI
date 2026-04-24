@@ -144,6 +144,7 @@ class Extractor:
     def __init__(self):
         self._gemini_available = bool(GEMINI_API_KEY and GENAI_AVAILABLE)
         self._spacy_nlp = None
+        self.last_gemini_error_message: str | None = None
 
         if self._gemini_available:
             genai.configure(api_key=GEMINI_API_KEY)
@@ -162,8 +163,10 @@ class Extractor:
 
         if self.client and self._gemini_available:
             try:
+                self.last_gemini_error_message = None
                 return self._extract_gemini(text, specialty)
             except Exception as e:
+                self.last_gemini_error_message = str(e)
                 logger.warning(f"Gemini extraction failed (API error): {e}. Falling back to rules.")
                 self._gemini_available = False
 

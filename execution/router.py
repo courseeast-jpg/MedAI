@@ -20,6 +20,7 @@ CONNECTOR_ORDER = ("spacy", "phi3", "gemini")
 class RoutedExtraction:
     extractor_route: str
     extractor_actual: str
+    requested_route: str
     results: list[dict[str, Any]]
     fallback_used: bool = False
     failure_count: int = 0
@@ -110,10 +111,16 @@ class ExecutionRouter:
                         "action": "route_actual_mismatch",
                         "reason": f"intended={current_connector} actual={actual_extractor}",
                     })
+                    terminal_result = self._prepare_terminal_result(
+                        result,
+                        requested_route=intended_route,
+                        effective_route=actual_extractor,
+                    )
                     return RoutedExtraction(
-                        extractor_route=intended_route,
+                        extractor_route=actual_extractor,
                         extractor_actual=actual_extractor,
-                        results=results,
+                        requested_route=intended_route,
+                        results=[terminal_result],
                         fallback_used=len(attempted) > 1,
                         failure_count=failure_count,
                         events=events,
@@ -128,13 +135,21 @@ class ExecutionRouter:
                     and degradation_reason.startswith("confidence_too_low")
                 ):
                     degradation_reason = None
+                fallback_used = len(attempted) > 1
                 if degradation_reason is None:
                     self._append_result(results, result)
+                    terminal_result = self._prepare_terminal_result(
+                        result,
+                        requested_route=intended_route,
+                        effective_route=actual_extractor,
+                    )
+                    final_results = [terminal_result] if fallback_used else results
                     return RoutedExtraction(
-                        extractor_route=intended_route,
+                        extractor_route=actual_extractor,
                         extractor_actual=actual_extractor,
-                        results=results,
-                        fallback_used=len(attempted) > 1,
+                        requested_route=intended_route,
+                        results=final_results,
+                        fallback_used=fallback_used,
                         failure_count=failure_count,
                         events=events,
                         decision_reason=decision_reason,
@@ -142,11 +157,17 @@ class ExecutionRouter:
                     )
                 next_connector = self._next_fallback(current_connector, attempted, route_scores)
                 if next_connector is None:
+                    terminal_result = self._prepare_terminal_result(
+                        result,
+                        requested_route=intended_route,
+                        effective_route=actual_extractor,
+                    )
                     self._append_result(results, result)
                     return RoutedExtraction(
-                        extractor_route=intended_route,
+                        extractor_route=actual_extractor,
                         extractor_actual=actual_extractor,
-                        results=results,
+                        requested_route=intended_route,
+                        results=[terminal_result],
                         fallback_used=len(attempted) > 1,
                         failure_count=failure_count,
                         events=events + [{
@@ -329,3 +350,15 @@ class ExecutionRouter:
         if "timeout" in str(exc).lower():
             return "timeout"
         return "connector_error"
+    def _prepare_terminal_result(
+        self,
+        result: dict[str, Any],
+        *,
+        requested_route: str,
+        effective_route: str,
+    ) -> dict[str, Any]:
+        terminal = dict(result)
+        terminal["extractor"] = effective_route
+        terminal["actual_extractor"] = effective_route
+        terminal["requested_extractor_route"] = requested_route
+        return terminal

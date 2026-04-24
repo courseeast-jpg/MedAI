@@ -73,6 +73,11 @@ class GeminiExtractor(BaseExtractor):
             logger.warning("Gemini route did not execute real Gemini; actual extractor={}", method)
             if self.gemini_available:
                 logger.error("Gemini route fallback occurred despite configured GEMINI_API_KEY")
+                root_cause = getattr(self.legacy_extractor, "last_gemini_error_message", None)
+                if root_cause:
+                    raise RuntimeError(
+                        f"Gemini route fallback occurred despite configured key: {method}; root_cause={root_cause}"
+                    )
                 raise RuntimeError(f"Gemini route fallback occurred despite configured key: {method}")
             notes.append(f"gemini_route_legacy_fallback={method}")
         return {

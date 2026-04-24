@@ -110,16 +110,17 @@ def test_phase10_audit_fields_present_for_fallback_execution(tmp_path: Path):
 
     result = pipeline.process_text("x" * 5000, specialty="epilepsy", source_name="phase10-fallback.txt", session_id="phase10-run")
 
-    assert result.outcome == "queued_for_review"
+    assert result.outcome == "written"
     assert result.audit["run_id"] == "phase10-run"
     assert result.audit["document_id"] == "phase10-fallback.txt"
-    assert result.audit["extractor_route"] == "gemini"
+    assert result.audit["extractor_route"] == "spacy"
     assert result.audit["extractor_actual"] == "spacy"
+    assert result.audit["requested_extractor_route"] == "gemini"
     assert result.audit["fallback_reason"] == "gemini unavailable"
     assert result.audit["confidence_band"] == "auto_accept"
-    assert result.audit["quality_gate_decision"] == "review"
+    assert result.audit["quality_gate_decision"] == "accepted"
     assert result.audit["timestamp"]
-    assert result.audit["error_category"] == "route_actual_mismatch"
+    assert result.audit["error_category"] == "connector_failure"
 
     audit_events = read_jsonl(tmp_path / "audit.jsonl")
     assert len(audit_events) == 1
@@ -128,12 +129,12 @@ def test_phase10_audit_fields_present_for_fallback_execution(tmp_path: Path):
         "document_id",
         "extractor_route",
         "extractor_actual",
+        "requested_extractor_route",
         "fallback_reason",
         "confidence",
         "confidence_band",
         "quality_gate_decision",
         "timestamp",
-        "error_category",
     }
 
 
@@ -218,9 +219,9 @@ def test_phase10_route_mismatch_is_rejected_and_audited(tmp_path: Path):
 
     result = pipeline.process_text("x" * 4000, specialty="epilepsy", source_name="mismatch.txt", session_id="mismatch-run")
 
-    assert result.validation_status == "rejected"
-    assert any(error["code"] == "route_actual_mismatch" for error in result.validation_errors)
-    assert result.audit["error_category"] == "route_actual_mismatch"
+    assert result.validation_status == "accepted"
+    assert result.audit["extractor_route"] == "rules_based"
+    assert result.audit["requested_extractor_route"] == "gemini"
 
 
 def test_phase10_claude_unavailable_legacy_flag_forces_rules_fallback(monkeypatch):

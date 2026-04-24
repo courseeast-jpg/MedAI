@@ -121,6 +121,7 @@ def test_execution_pipeline_runs_end_to_end(tmp_path: Path):
     assert audit.events[-1]["entity_count"] == 2
     assert audit.events[-1]["extractor_route"] == "spacy"
     assert audit.events[-1]["extractor_actual"] == "spacy"
+    assert audit.events[-1]["requested_extractor_route"] == "spacy"
 
 
 def test_ddi_gate_runs_before_write():
@@ -182,6 +183,7 @@ def test_simulated_real_document_routes_and_writes():
     assert result.audit["extractor"] == "spacy"
     assert result.audit["extractor_route"] == "spacy"
     assert result.audit["extractor_actual"] == "spacy"
+    assert result.audit["requested_extractor_route"] == "spacy"
     assert result.audit["entity_count"] == 3
     assert result.audit["final_status"] == "written"
     assert audit.metrics.snapshot() == {
