@@ -1,6 +1,6 @@
 # MedAI Platform v1.1
 
-Personal multi-specialty medical AI — local-first, self-enriching, privacy-preserving.
+Personal multi-specialty medical AI - local-first, self-enriching, privacy-preserving.
 
 > Decision support only. Not a medical device. All outputs require clinical verification.
 
@@ -26,13 +26,31 @@ git clone https://github.com/[user]/medai && cd medai
 
 # 2. Add API key
 cp .env.example .env
-# Edit .env — set ANTHROPIC_API_KEY and DB_ENCRYPTION_KEY
+# Edit .env - set ANTHROPIC_API_KEY, GEMINI_API_KEY, and DB_ENCRYPTION_KEY
 
 # 3. Bootstrap
 make install
 ```
 
 `make install` handles: pip deps, spaCy model, SQLite init, ChromaDB init, embedding model download.
+
+`.env` is local-only and must not be committed.
+
+### Phase 1.1 Gemini Activation
+
+- `GEMINI_API_KEY` must be stored in the local repo `.env`.
+- `.env` must not be committed.
+- Real Gemini validation succeeds only when:
+  - extractor used = `gemini`
+  - no `gemini_route_legacy_fallback=rules_based` note is present
+
+Validated Phase 1.1 Gemini activation:
+
+- extractor: `gemini`
+- entity count: `9`
+- confidence: `0.8`
+- outcome: `written`
+- notes: `pii_method=presidio`
 
 ---
 
@@ -58,41 +76,41 @@ make test-golden    # Golden test set only (8 critical cases)
 
 ```
 Ingestion (docling PDF + OCR validation + Presidio PII strip + Claude extraction)
-    ↓
+    ->
 Deduplication Engine (exact / semantic / time-series / conflict / implausibility)
-    ↓
+    ->
 Conflict Resolver (quarantines irreconcilable facts for user review)
-    ↓
+    ->
 Truth Resolution Engine (7 priority rules)
-    ↓
+    ->
 Medication Safety Gate Layer 2 (DDI hard block)
-    ↓
+    ->
 MKB Write (SQLite + ChromaDB, encrypted, local only)
-    ↓
-Decision Engine (classify → retrieve → execute → score → consensus)
-    ↓  DDI Layer 1 fires here (evidence modifier)
+    ->
+Decision Engine (classify -> retrieve -> execute -> score -> consensus)
+    ->  DDI Layer 1 fires here (evidence modifier)
 Response Scoring (4-dimension formula)
-    ↓
+    ->
 Controlled Enrichment (hypothesis tier only)
-    ↓
+    ->
 UI (5 safety surfaces + Conflict Review tab)
 ```
 
 ### Deduplication Strategies
 
-| Strategy          | When it fires                                        | Action           |
+| Strategy | When it fires | Action |
 |-------------------|------------------------------------------------------|------------------|
-| Exact             | same entity + value + date within 7 days             | merge + provenance |
-| Semantic          | alias (HTN=hypertension) or embedding similarity     | link canonical term |
-| Time-series       | same entity, different date                          | append timeline  |
-| Conflict          | value / type / drug / temporal / implausible change  | quarantine both  |
+| Exact | same entity + value + date within 7 days | merge + provenance |
+| Semantic | alias (HTN=hypertension) or embedding similarity | link canonical term |
+| Time-series | same entity, different date | append timeline |
+| Conflict | value / type / drug / temporal / implausible change | quarantine both |
 
 See `mkb/deduplication_engine.py` for the full rule set and
 `ARCHITECTURE.md` for all 18 edge cases.
 
 ### Conflict Review Workflow
 
-1. Deduplication engine detects conflict → `ConflictResolver.quarantine_conflict(...)`.
+1. Deduplication engine detects conflict -> `ConflictResolver.quarantine_conflict(...)`.
 2. Both facts move to `tier='quarantined'`, a conflict row is inserted.
 3. User opens **Conflict Review** tab in the Streamlit UI.
 4. User chooses `fact1 / fact2 / both / merge / neither` and leaves reasoning.
@@ -104,7 +122,7 @@ See `mkb/deduplication_engine.py` for the full rule set and
 | Flag | Default | Purpose |
 |------|---------|---------|
 | `ENABLE_GRAPH` | False | Knowledge graph (Phase 3) |
-| `ENRICH_PROMOTE` | False | Auto-promote hypothesis→active (Phase 2) |
+| `ENRICH_PROMOTE` | False | Auto-promote hypothesis->active (Phase 2) |
 | `ACTIVE_CONNECTORS` | `["dxgpt"]` | Expand in Phase 2 |
 | `ENABLE_ENRICHMENT` | True | AI response enrichment |
 | `ENABLE_WEB_INGESTION` | True | Web fetch pipeline |
@@ -113,12 +131,12 @@ See `mkb/deduplication_engine.py` for the full rule set and
 
 All 8 golden test cases must pass before running against real medical data:
 
-1. Real PDF → structured SQLite records within 60s
+1. Real PDF -> structured SQLite records within 60s
 2. PII strip verified: no names/dates/facilities in outbound payload
-3. Conflict: two contradicting facts → single resolved record + ledger entry
-4. DDI HIGH block: incompatible drugs → blocked + user confirmation UI
-5. Claude offline → safe mode banner + MKB-only response
-6. Low score response → discarded + ledger entry
+3. Conflict: two contradicting facts -> single resolved record + ledger entry
+4. DDI HIGH block: incompatible drugs -> blocked + user confirmation UI
+5. Claude offline -> safe mode banner + MKB-only response
+6. Low score response -> discarded + ledger entry
 7. PII strip: patient name/DOB/facility not present in extracted text
 8. Trust hierarchy: clinical doc beats AI fact, confidence=0.95
 
@@ -134,7 +152,7 @@ make test-golden
 | Specialty | Status | Primary connector |
 |-----------|--------|-------------------|
 | Neurology | Active | DxGPT |
-| Epilepsy | Active | SAGE (stub→activate Phase 2) |
+| Epilepsy | Active | SAGE (stub->activate Phase 2) |
 | Gastroenterology | Stub | DxGPT (Phase 2) |
 | Urology | Stub | DxGPT (Phase 2) |
 
