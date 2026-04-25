@@ -13,6 +13,8 @@ from execution.review_queue import read_review_queue
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PHASE21_ARTIFACT_PATH = ROOT / "artifacts" / "phase21" / "observability_metrics.json"
 DEFAULT_PHASE21_REPORT_PATH = ROOT / "reports" / "phase21" / "observability_report.md"
+DEFAULT_PHASE22_ARTIFACT_PATH = ROOT / "artifacts" / "phase22" / "confidence_calibration.json"
+DEFAULT_PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
 
 
 def _load_jsonl(path: Path | str | None) -> list[dict[str, Any]]:
@@ -78,12 +80,15 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         route_value = str(item.get("extractor_route") or "unknown")
         actual_value = str(item.get("extractor_actual") or item.get("extractor") or "unknown")
         requested_value = str(item.get("requested_route") or "unknown")
+        confidence_band = str(item.get("confidence_band") or "")
 
         extractor_route_counts[route_value] += 1
         extractor_actual_counts[actual_value] += 1
-        if requested_value != "unknown" and requested_value != actual_value:
+        if bool(item.get("route_mismatch_flag", False)) or (
+            requested_value != "unknown" and requested_value != actual_value
+        ):
             route_mismatch_count += 1
-        if float(item.get("confidence", 0.0)) < EXTRACTION_ACCEPT_THRESHOLD:
+        if confidence_band in {"review", "reject"} or float(item.get("confidence", 0.0)) < EXTRACTION_ACCEPT_THRESHOLD:
             low_confidence_count += 1
 
     review_queue_categories = Counter(
@@ -183,4 +188,135 @@ def write_phase21_outputs(
     report_path.parent.mkdir(parents=True, exist_ok=True)
     artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     report_path.write_text(build_phase21_report(metrics), encoding="utf-8")
+    return metrics
+
+
+def build_phase22_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    documents = summary.get("documents", [])
+    processed = [item for item in documents if item.get("status") == "processed"]
+
+    confidence_band_counts = Counter()
+    calibration_reason_counts = Counter()
+    review_recommendation_counts = Counter()
+    extractor_route_counts = Counter()
+    extractor_actual_counts = Counter()
+    route_mismatch_count = 0
+
+    calibration_documents: list[dict[str, Any]] = []
+    for item in processed:
+        route_value = str(item.get("extractor_route") or "unknown")
+        actual_value = str(item.get("extractor_actual") or item.get("extractor") or "unknown")
+        confidence_band = str(item.get("confidence_band") or "unknown")
+        calibration_reason = str(item.get("calibration_reason") or "unknown")
+        review_recommendation = str(item.get("review_recommendation") or "unknown")
+        route_mismatch_flag = bool(item.get("route_mismatch_flag", False))
+
+        confidence_band_counts[confidence_band] += 1
+        calibration_reason_counts[calibration_reason] += 1
+        review_recommendation_counts[review_recommendation] += 1
+        extractor_route_counts[route_value] += 1
+        extractor_actual_counts[actual_value] += 1
+        if route_mismatch_flag:
+            route_mismatch_count += 1
+
+        calibration_documents.append({
+            "document": item.get("document"),
+            "outcome": item.get("outcome"),
+            "validation_status": item.get("validation_status"),
+            "raw_confidence": float(item.get("raw_confidence", item.get("confidence", 0.0))),
+            "calibrated_confidence": float(item.get("calibrated_confidence", item.get("confidence", 0.0))),
+            "confidence_band": confidence_band,
+            "calibration_reason": calibration_reason,
+            "extractor_route": route_value,
+            "extractor_actual": actual_value,
+            "route_mismatch_flag": route_mismatch_flag,
+            "review_recommendation": review_recommendation,
+        })
+
+    raw_confidences = [float(item["raw_confidence"]) for item in calibration_documents]
+    calibrated_confidences = [float(item["calibrated_confidence"]) for item in calibration_documents]
+
+    return {
+        "generated_at": summary.get("generated_at"),
+        "phase": "Phase 22 Accuracy Improvement / Confidence Calibration",
+        "dataset_dir": summary.get("dataset_dir"),
+        "determinism": summary.get("determinism", {}),
+        "attempted_documents": int(summary.get("documents_selected", 0)),
+        "processed_documents": int(summary.get("documents_processed", 0)),
+        "written_documents": int(summary.get("written", 0)),
+        "queued_for_review_documents": int(summary.get("queued_for_review", 0)),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", 0)),
+        "hard_failures": int(summary.get("hard_failures", 0)),
+        "average_raw_confidence": round(sum(raw_confidences) / len(raw_confidences), 3) if raw_confidences else 0.0,
+        "average_calibrated_confidence": (
+            round(sum(calibrated_confidences) / len(calibrated_confidences), 3) if calibrated_confidences else 0.0
+        ),
+        "confidence_band_counts": dict(sorted(confidence_band_counts.items())),
+        "calibration_reason_counts": dict(sorted(calibration_reason_counts.items())),
+        "review_recommendation_counts": dict(sorted(review_recommendation_counts.items())),
+        "extractor_route_counts": dict(sorted(extractor_route_counts.items())),
+        "extractor_actual_counts": dict(sorted(extractor_actual_counts.items())),
+        "route_mismatch_count": route_mismatch_count,
+        "documents": calibration_documents,
+    }
+
+
+def build_phase22_report(metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 22 Accuracy Calibration Report",
+        "",
+        f"- Generated at: `{metrics['generated_at']}`",
+        f"- Dataset: `{metrics['dataset_dir']}`",
+        f"- Attempted documents: `{metrics['attempted_documents']}`",
+        f"- Processed documents: `{metrics['processed_documents']}`",
+        f"- Written documents: `{metrics['written_documents']}`",
+        f"- Queued for review documents: `{metrics['queued_for_review_documents']}`",
+        f"- External quota blocked: `{metrics['external_quota_blocked']}`",
+        f"- Hard failures: `{metrics['hard_failures']}`",
+        f"- Average raw confidence: `{metrics['average_raw_confidence']}`",
+        f"- Average calibrated confidence: `{metrics['average_calibrated_confidence']}`",
+        f"- Route mismatch count: `{metrics['route_mismatch_count']}`",
+        "",
+        "## Calibration Summary",
+        "",
+        f"- Confidence band counts: `{metrics['confidence_band_counts']}`",
+        f"- Calibration reason counts: `{metrics['calibration_reason_counts']}`",
+        f"- Review recommendation counts: `{metrics['review_recommendation_counts']}`",
+        f"- Extractor route counts: `{metrics['extractor_route_counts']}`",
+        f"- Extractor actual counts: `{metrics['extractor_actual_counts']}`",
+        "",
+        "## Document Audit",
+        "",
+    ]
+    if metrics["documents"]:
+        for item in metrics["documents"]:
+            lines.append(
+                f"- `{item['document']}` -> band={item['confidence_band']} raw={item['raw_confidence']} "
+                f"calibrated={item['calibrated_confidence']} recommendation={item['review_recommendation']} "
+                f"route_mismatch={item['route_mismatch_flag']}"
+            )
+    else:
+        lines.append("- No processed documents available for calibration audit.")
+    lines.extend([
+        "",
+        "## Stability Guardrails",
+        "",
+        f"- Determinism: `{metrics['determinism']}`",
+        "- Review-band confidence remains observable through the review queue and audit fields.",
+        "- Reject-band confidence is not written as accepted output.",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def write_phase22_outputs(
+    summary: dict[str, Any],
+    *,
+    artifact_path: Path = DEFAULT_PHASE22_ARTIFACT_PATH,
+    report_path: Path = DEFAULT_PHASE22_REPORT_PATH,
+) -> dict[str, Any]:
+    metrics = build_phase22_metrics(summary)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    report_path.write_text(build_phase22_report(metrics), encoding="utf-8")
     return metrics

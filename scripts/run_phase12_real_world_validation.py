@@ -21,6 +21,8 @@ DEFAULT_PHASE13_REPORT_DIR = ROOT / "reports" / "phase13"
 DEFAULT_PHASE15_REPORT_DIR = ROOT / "reports" / "phase15"
 DEFAULT_PHASE21_ARTIFACT_PATH = ROOT / "artifacts" / "phase21" / "observability_metrics.json"
 DEFAULT_PHASE21_REPORT_PATH = ROOT / "reports" / "phase21" / "observability_report.md"
+DEFAULT_PHASE22_ARTIFACT_PATH = ROOT / "artifacts" / "phase22" / "confidence_calibration.json"
+DEFAULT_PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -33,7 +35,7 @@ from execution.pipeline import ExecutionPipeline
 from execution.review_queue import ReviewQueueWriter, read_review_queue
 from mkb.sqlite_store import SQLiteStore
 from monitoring.metrics_collector import collect_latest_run_metrics
-from monitoring.observability import write_phase21_outputs
+from monitoring.observability import write_phase21_outputs, write_phase22_outputs
 
 
 def is_external_quota_error(error: Exception | str) -> bool:
@@ -141,6 +143,12 @@ def summarize_document(
                 "processing_time_ms": round(processing_time_ms, 3),
                 "requested_route": None,
                 "retry_visibility": retry_visibility,
+                "raw_confidence": None,
+                "calibrated_confidence": None,
+                "confidence_band": None,
+                "calibration_reason": None,
+                "route_mismatch_flag": False,
+                "review_recommendation": "operator_retry_after_quota_reset",
             }
         return {
             "document": pdf_path.name,
@@ -160,6 +168,12 @@ def summarize_document(
             "processing_time_ms": round(processing_time_ms, 3),
             "requested_route": None,
             "retry_visibility": retry_visibility,
+            "raw_confidence": None,
+            "calibrated_confidence": None,
+            "confidence_band": None,
+            "calibration_reason": None,
+            "route_mismatch_flag": False,
+            "review_recommendation": None,
         }
 
     review_reasons: list[str] = []
@@ -198,6 +212,23 @@ def summarize_document(
         "processing_time_ms": round(processing_time_ms, 3),
         "requested_route": requested_route,
         "retry_visibility": {"retry_detected": False, "retry_delay_seconds": None, "retry_reason": None},
+        "raw_confidence": result.audit.get("raw_confidence", result.extractor_result.get("raw_confidence")),
+        "calibrated_confidence": result.audit.get(
+            "calibrated_confidence",
+            result.extractor_result.get("calibrated_confidence"),
+        ),
+        "confidence_band": result.audit.get("confidence_band", result.extractor_result.get("confidence_band")),
+        "calibration_reason": result.audit.get(
+            "calibration_reason",
+            result.extractor_result.get("calibration_reason"),
+        ),
+        "route_mismatch_flag": bool(
+            result.audit.get("route_mismatch_flag", result.extractor_result.get("route_mismatch_flag", False))
+        ),
+        "review_recommendation": result.audit.get(
+            "review_recommendation",
+            result.extractor_result.get("review_recommendation"),
+        ),
     }
 
 
@@ -668,6 +699,11 @@ def main() -> int:
         summary,
         artifact_path=DEFAULT_PHASE21_ARTIFACT_PATH,
         report_path=DEFAULT_PHASE21_REPORT_PATH,
+    )
+    write_phase22_outputs(
+        summary,
+        artifact_path=DEFAULT_PHASE22_ARTIFACT_PATH,
+        report_path=DEFAULT_PHASE22_REPORT_PATH,
     )
     collect_latest_run_metrics()
 

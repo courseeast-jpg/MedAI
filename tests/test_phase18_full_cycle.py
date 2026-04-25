@@ -66,6 +66,15 @@ def test_report_writer_works(tmp_path: Path):
             "extractor_actual_counts": {"spacy": 46},
             "per_stage_duration_ms": {"extraction": {"avg_duration_ms": 25.0}},
         },
+        "calibration_result": {
+            "metrics_path": "artifacts/phase22/confidence_calibration.json",
+            "report_path": "reports/phase22/accuracy_calibration_report.md",
+            "average_raw_confidence": 0.7,
+            "average_calibrated_confidence": 0.7,
+            "confidence_band_counts": {"acceptable": 46},
+            "review_recommendation_counts": {"accept": 46},
+            "route_mismatch_count": 1,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -136,6 +145,15 @@ def test_no_pipeline_configuration_is_mutated(tmp_path: Path):
             "extractor_actual_counts": {"spacy": 46},
             "per_stage_duration_ms": {"extraction": {"avg_duration_ms": 25.0}},
         },
+        "calibration_result": {
+            "metrics_path": "artifacts/phase22/confidence_calibration.json",
+            "report_path": "reports/phase22/accuracy_calibration_report.md",
+            "average_raw_confidence": 0.7,
+            "average_calibrated_confidence": 0.7,
+            "confidence_band_counts": {"acceptable": 46},
+            "review_recommendation_counts": {"accept": 46},
+            "route_mismatch_count": 1,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -159,6 +177,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     phase11_path = tmp_path / "phase11.json"
     phase12_path = tmp_path / "phase12.json"
     phase21_path = tmp_path / "phase21.json"
+    phase22_path = tmp_path / "phase22.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         """{
@@ -184,9 +203,20 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
 }""",
         encoding="utf-8",
     )
+    phase22_path.write_text(
+        """{
+  "average_raw_confidence": 0.7,
+  "average_calibrated_confidence": 0.7,
+  "confidence_band_counts": {"acceptable": 46},
+  "review_recommendation_counts": {"accept": 46},
+  "route_mismatch_count": 1
+}""",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
+    monkeypatch.setattr(phase18, "PHASE22_METRICS_PATH", phase22_path)
 
     summary = build_summary(
         commands=[{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 159 passed ===", "stderr": ""}],
@@ -197,3 +227,4 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     assert summary["success"] is True
     assert summary["validation_result"]["hard_failures"] == 0
     assert summary["observability_result"]["quota_safe_block_count"] == 4
+    assert summary["calibration_result"]["confidence_band_counts"] == {"acceptable": 46}

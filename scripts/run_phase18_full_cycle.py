@@ -20,6 +20,8 @@ PHASE11_AUDIT_PATH = ROOT / "artifacts" / "phase11_integration" / "phase11_integ
 PHASE12_SUMMARY_PATH = ROOT / "artifacts" / "phase12_real_world_validation" / "phase12_real_world_validation_summary.json"
 PHASE21_METRICS_PATH = ROOT / "artifacts" / "phase21" / "observability_metrics.json"
 PHASE21_REPORT_PATH = ROOT / "reports" / "phase21" / "observability_report.md"
+PHASE22_METRICS_PATH = ROOT / "artifacts" / "phase22" / "confidence_calibration.json"
+PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
 PHASE17_DASHBOARD_PATH = ROOT / "reports" / "phase17" / "dashboard_latest.md"
 
 PHASE18_STEPS: list[tuple[str, list[str]]] = [
@@ -96,6 +98,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
     phase11 = load_json(PHASE11_AUDIT_PATH) if PHASE11_AUDIT_PATH.exists() else {}
     phase12 = load_json(PHASE12_SUMMARY_PATH) if PHASE12_SUMMARY_PATH.exists() else {}
     phase21 = load_json(PHASE21_METRICS_PATH) if PHASE21_METRICS_PATH.exists() else {}
+    phase22 = load_json(PHASE22_METRICS_PATH) if PHASE22_METRICS_PATH.exists() else {}
     pytest_step = next((item for item in commands if item["name"] == "tests"), None)
     failed_step = next((item["name"] for item in commands if item["returncode"] != 0), None)
 
@@ -139,6 +142,15 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
             "extractor_actual_counts": phase21.get("extractor_actual_counts", {}),
             "per_stage_duration_ms": phase21.get("per_stage_duration_ms", {}),
         },
+        "calibration_result": {
+            "metrics_path": str(PHASE22_METRICS_PATH),
+            "report_path": str(PHASE22_REPORT_PATH),
+            "average_raw_confidence": float(phase22.get("average_raw_confidence", 0.0)),
+            "average_calibrated_confidence": float(phase22.get("average_calibrated_confidence", 0.0)),
+            "confidence_band_counts": phase22.get("confidence_band_counts", {}),
+            "review_recommendation_counts": phase22.get("review_recommendation_counts", {}),
+            "route_mismatch_count": int(phase22.get("route_mismatch_count", 0)),
+        },
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
         "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
@@ -152,6 +164,7 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
 
     validation = summary["validation_result"]
     observability = summary["observability_result"]
+    calibration = summary["calibration_result"]
     lines = [
         "# Phase 18 Full Cycle Summary",
         "",
@@ -176,6 +189,13 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Observability quota_safe_block_count: `{observability['quota_safe_block_count']}`",
         f"- Observability metrics_path: `{observability['metrics_path']}`",
         f"- Observability report_path: `{observability['report_path']}`",
+        f"- Calibration average_raw_confidence: `{calibration['average_raw_confidence']}`",
+        f"- Calibration average_calibrated_confidence: `{calibration['average_calibrated_confidence']}`",
+        f"- Calibration confidence_band_counts: `{calibration['confidence_band_counts']}`",
+        f"- Calibration review_recommendation_counts: `{calibration['review_recommendation_counts']}`",
+        f"- Calibration route_mismatch_count: `{calibration['route_mismatch_count']}`",
+        f"- Calibration metrics_path: `{calibration['metrics_path']}`",
+        f"- Calibration report_path: `{calibration['report_path']}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
         f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",

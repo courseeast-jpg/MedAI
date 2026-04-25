@@ -18,6 +18,7 @@ from app.config import (
 )
 from app.schemas import MKBRecord
 from execution.audit import StageAuditLogger
+from execution.confidence_calibration import calibrate_confidence, classify_confidence_band
 from execution.consensus import consensus_merge
 from execution.connectors.gemini_connector import GeminiConnector
 from execution.connectors.phi3_connector import Phi3Connector
@@ -166,6 +167,14 @@ class ExecutionPipeline:
         validation = validate_extraction_result(extracted, extractor_route=extractor_route)
         extracted["validation_status"] = validation.status
         extracted["validation_errors"] = validation.errors
+        calibration = calibrate_confidence(
+            raw_confidence=float(extracted.get("confidence", 0.0)),
+            extractor_route=extractor_route,
+            extractor_actual=str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+            requested_extractor_route=requested_route,
+            fallback_used=bool(extracted.get("fallback_used", False)),
+        )
+        extracted.update(calibration.to_dict())
         self.metrics.record_validation(
             record_count=len(extracted.get("entities", [])),
             validation_status=validation.status,
@@ -178,6 +187,14 @@ class ExecutionPipeline:
             action="validation_result",
             confidence=float(extracted.get("confidence", 0.0)),
             decision_reason=validation.status if not validation.errors else ",".join(error["code"] for error in validation.errors),
+            extra={
+                "confidence_band": extracted.get("confidence_band"),
+                "raw_confidence": extracted.get("raw_confidence"),
+                "calibrated_confidence": extracted.get("calibrated_confidence"),
+                "calibration_reason": extracted.get("calibration_reason"),
+                "route_mismatch_flag": extracted.get("route_mismatch_flag"),
+                "review_recommendation": extracted.get("review_recommendation"),
+            },
         )
 
         if validation.status != "accepted":
@@ -720,6 +737,12 @@ class ExecutionPipeline:
             validation_errors=validation.errors,
             entity_count=len(extracted.get("entities", [])),
             notes=list(extracted.get("notes", [])),
+            raw_confidence=float(extracted.get("raw_confidence", extracted.get("confidence", 0.0))),
+            calibrated_confidence=float(extracted.get("calibrated_confidence", extracted.get("confidence", 0.0))),
+            confidence_band=str(extracted.get("confidence_band", "")) or None,
+            calibration_reason=str(extracted.get("calibration_reason", "")) or None,
+            route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
+            review_recommendation=str(extracted.get("review_recommendation", "")) or None,
         )
 
     def _append_resolution_review_queue_items(
@@ -754,6 +777,12 @@ class ExecutionPipeline:
                 record_id=decision.record.id,
                 fact_type=decision.record.fact_type,
                 content=decision.record.content,
+                raw_confidence=float(extracted.get("raw_confidence", extracted.get("confidence", 0.0))),
+                calibrated_confidence=float(extracted.get("calibrated_confidence", extracted.get("confidence", 0.0))),
+                confidence_band=str(extracted.get("confidence_band", "")) or None,
+                calibration_reason=str(extracted.get("calibration_reason", "")) or None,
+                route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
+                review_recommendation=str(extracted.get("review_recommendation", "")) or None,
             )
 
     def _append_medication_review_queue_items(
@@ -796,6 +825,12 @@ class ExecutionPipeline:
                 ddi_findings=record.ddi_findings,
                 safety_action=record.safety_action,
                 requires_review=record.requires_review,
+                raw_confidence=float(extracted.get("raw_confidence", extracted.get("confidence", 0.0))),
+                calibrated_confidence=float(extracted.get("calibrated_confidence", extracted.get("confidence", 0.0))),
+                confidence_band=str(extracted.get("confidence_band", "")) or None,
+                calibration_reason=str(extracted.get("calibration_reason", "")) or None,
+                route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
+                review_recommendation=str(extracted.get("review_recommendation", "")) or None,
             )
 
     def _mark_records_for_validation_review(
@@ -845,7 +880,12 @@ class ExecutionPipeline:
             run_id=run_id,
             document_id=document_id,
             fallback_reason=self._fallback_reason(extracted),
-            confidence_band=self._confidence_band(float(extracted.get("confidence", 0.0))),
+            confidence_band=str(extracted.get("confidence_band", self._confidence_band(float(extracted.get("confidence", 0.0))))),
+            raw_confidence=float(extracted.get("raw_confidence", extracted.get("confidence", 0.0))),
+            calibrated_confidence=float(extracted.get("calibrated_confidence", extracted.get("confidence", 0.0))),
+            calibration_reason=str(extracted.get("calibration_reason", "")) or None,
+            route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
+            review_recommendation=str(extracted.get("review_recommendation", "")) or None,
             quality_gate_decision=self._quality_gate_decision(outcome, validation),
             error_category=self._error_category(outcome, validation, extracted),
         )
@@ -857,11 +897,7 @@ class ExecutionPipeline:
         return None
 
     def _confidence_band(self, confidence: float) -> str:
-        if confidence < EXTRACTION_REVIEW_THRESHOLD:
-            return "reject"
-        if confidence < EXTRACTION_ACCEPT_THRESHOLD:
-            return "review"
-        return "auto_accept"
+        return classify_confidence_band(confidence)
 
     def _quality_gate_decision(self, outcome: str, validation: ValidationDecision) -> str:
         if outcome in {"written", "written_with_review"}:

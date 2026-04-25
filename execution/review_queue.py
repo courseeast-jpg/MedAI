@@ -44,6 +44,12 @@ class ReviewQueueWriter:
         validation_errors: list[dict[str, Any]],
         entity_count: int,
         notes: list[str],
+        raw_confidence: float | None = None,
+        calibrated_confidence: float | None = None,
+        confidence_band: str | None = None,
+        calibration_reason: str | None = None,
+        route_mismatch_flag: bool | None = None,
+        review_recommendation: str | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "validation_review",
@@ -62,6 +68,14 @@ class ReviewQueueWriter:
             "validation_errors": validation_errors,
             "entity_count": int(entity_count),
             "notes": notes,
+            "raw_confidence": float(confidence if raw_confidence is None else raw_confidence),
+            "calibrated_confidence": (
+                float(confidence if calibrated_confidence is None else calibrated_confidence)
+            ),
+            "confidence_band": confidence_band,
+            "calibration_reason": calibration_reason,
+            "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
+            "review_recommendation": review_recommendation,
         })
 
     def append_external_quota_block(
@@ -75,6 +89,12 @@ class ReviewQueueWriter:
         raw_evidence_path: str | None,
         error: str,
         retry_visibility: dict[str, Any],
+        raw_confidence: float | None = None,
+        calibrated_confidence: float | None = None,
+        confidence_band: str | None = None,
+        calibration_reason: str | None = None,
+        route_mismatch_flag: bool | None = None,
+        review_recommendation: str | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "external_quota_block",
@@ -90,6 +110,12 @@ class ReviewQueueWriter:
             "validation_status": "skipped_external_quota",
             "error": error,
             "retry_visibility": retry_visibility,
+            "raw_confidence": raw_confidence,
+            "calibrated_confidence": calibrated_confidence,
+            "confidence_band": confidence_band,
+            "calibration_reason": calibration_reason,
+            "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
+            "review_recommendation": review_recommendation,
         })
 
     def append_resolution_review(
@@ -111,6 +137,12 @@ class ReviewQueueWriter:
         record_id: str,
         fact_type: str,
         content: str,
+        raw_confidence: float | None = None,
+        calibrated_confidence: float | None = None,
+        confidence_band: str | None = None,
+        calibration_reason: str | None = None,
+        route_mismatch_flag: bool | None = None,
+        review_recommendation: str | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "truth_resolution_review",
@@ -130,6 +162,14 @@ class ReviewQueueWriter:
             "record_id": record_id,
             "fact_type": fact_type,
             "content": content,
+            "raw_confidence": float(confidence if raw_confidence is None else raw_confidence),
+            "calibrated_confidence": (
+                float(confidence if calibrated_confidence is None else calibrated_confidence)
+            ),
+            "confidence_band": confidence_band,
+            "calibration_reason": calibration_reason,
+            "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
+            "review_recommendation": review_recommendation,
         })
 
     def append_medication_review(
@@ -153,6 +193,12 @@ class ReviewQueueWriter:
         ddi_findings: list[dict[str, Any]],
         safety_action: str | None,
         requires_review: bool,
+        raw_confidence: float | None = None,
+        calibrated_confidence: float | None = None,
+        confidence_band: str | None = None,
+        calibration_reason: str | None = None,
+        route_mismatch_flag: bool | None = None,
+        review_recommendation: str | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "medication_review",
@@ -174,6 +220,14 @@ class ReviewQueueWriter:
             "ddi_findings": ddi_findings,
             "safety_action": safety_action,
             "requires_review": requires_review,
+            "raw_confidence": float(confidence if raw_confidence is None else raw_confidence),
+            "calibrated_confidence": (
+                float(confidence if calibrated_confidence is None else calibrated_confidence)
+            ),
+            "confidence_band": confidence_band,
+            "calibration_reason": calibration_reason,
+            "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
+            "review_recommendation": review_recommendation,
         })
 
 

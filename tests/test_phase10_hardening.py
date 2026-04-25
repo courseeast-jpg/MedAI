@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from app.schemas import ExtractionOutput, MKBRecord
+from execution.confidence_calibration import classify_confidence_band
 from execution.logging import AuditLogger
 from execution.pipeline import ExecutionPipeline
 from execution.validation import validate_extraction_result
@@ -117,7 +118,7 @@ def test_phase10_audit_fields_present_for_fallback_execution(tmp_path: Path):
     assert result.audit["extractor_actual"] == "spacy"
     assert result.audit["requested_extractor_route"] == "gemini"
     assert result.audit["fallback_reason"] == "gemini unavailable"
-    assert result.audit["confidence_band"] == "auto_accept"
+    assert result.audit["confidence_band"] == "acceptable"
     assert result.audit["quality_gate_decision"] == "accepted"
     assert result.audit["timestamp"]
     assert result.audit["error_category"] == "connector_failure"
@@ -160,7 +161,7 @@ def test_phase10_empty_extraction_is_rejected(tmp_path: Path):
     assert result.audit["error_category"] == "empty_extraction"
 
 
-def test_phase10_confidence_bands_cover_reject_review_and_auto_accept():
+def test_phase10_confidence_bands_cover_reject_review_acceptable_and_high():
     rejected = validate_extraction_result({
         "extractor": "spacy",
         "actual_extractor": "spacy",
@@ -194,6 +195,10 @@ def test_phase10_confidence_bands_cover_reject_review_and_auto_accept():
     assert review.status == "needs_review"
     assert any(error["code"] == "confidence_below_accept_threshold" for error in review.errors)
     assert accepted.status == "accepted"
+    assert classify_confidence_band(0.4) == "reject"
+    assert classify_confidence_band(0.6) == "review"
+    assert classify_confidence_band(0.7) == "acceptable"
+    assert classify_confidence_band(0.9) == "high"
 
 
 def test_phase10_route_mismatch_is_rejected_and_audited(tmp_path: Path):
