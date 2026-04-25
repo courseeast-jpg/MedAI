@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T13:18:33.660436+00:00",
+  "generated_at": "2026-04-25T14:07:19.051260+00:00",
   "phase": "Phase 21 Observability & Metrics Tightening",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -8,78 +8,79 @@
     "ordering": "sorted_pdf_listing"
   },
   "attempted_documents": 50,
-  "processed_documents": 50,
+  "processed_documents": 46,
   "written_documents": 45,
-  "queued_for_review_documents": 5,
-  "review_queue_items": 29,
-  "external_quota_blocked": 0,
+  "queued_for_review_documents": 1,
+  "review_queue_items": 31,
+  "external_quota_blocked": 4,
   "hard_failures": 0,
-  "average_confidence": 0.698,
+  "average_confidence": 0.692,
   "extractor_route_counts": {
-    "phi3": 5,
+    "phi3": 1,
     "spacy": 45
   },
   "extractor_actual_counts": {
-    "phi3": 5,
+    "phi3": 1,
     "spacy": 45
   },
-  "route_mismatch_count": 10,
-  "low_confidence_count": 5,
-  "quota_safe_block_count": 0,
-  "enrichment_applied_count": 50,
+  "route_mismatch_count": 1,
+  "low_confidence_count": 1,
+  "quota_safe_block_count": 4,
+  "enrichment_applied_count": 45,
   "negation_detected_count": 0,
   "temporal_detected_count": 0,
   "relationships_detected_count": 0,
   "review_queue_category_counts": {
-    "truth_resolution_review": 24,
-    "validation_review": 5
+    "external_quota_block": 4,
+    "truth_resolution_review": 26,
+    "validation_review": 1
   },
   "per_stage_duration_ms": {
     "consensus": {
-      "records": 50,
-      "events": 50,
+      "records": 46,
+      "events": 46,
       "total_duration_ms": 0.0,
       "avg_duration_ms": 0.0,
       "max_duration_ms": 0.0
     },
     "extraction": {
       "records": 50,
-      "events": 100,
-      "total_duration_ms": 44165.982,
-      "avg_duration_ms": 883.32,
-      "max_duration_ms": 7415.505
+      "events": 96,
+      "total_duration_ms": 3807.811,
+      "avg_duration_ms": 76.156,
+      "max_duration_ms": 2657.54
     },
     "final_write": {
-      "records": 48,
-      "events": 134,
-      "total_duration_ms": 182827.805,
-      "avg_duration_ms": 3808.913,
-      "max_duration_ms": 44355.948
+      "records": 39,
+      "events": 124,
+      "total_duration_ms": 31331.741,
+      "avg_duration_ms": 803.378,
+      "max_duration_ms": 4715.003
     },
     "safety_gate": {
       "records": 26,
-      "events": 100,
-      "total_duration_ms": 177468.566,
-      "avg_duration_ms": 6825.714,
-      "max_duration_ms": 41427.605
+      "events": 98,
+      "total_duration_ms": 27948.037,
+      "avg_duration_ms": 1074.925,
+      "max_duration_ms": 4315.916
     },
     "semantic_enrichment": {
-      "records": 50,
-      "events": 50,
+      "records": 46,
+      "events": 46,
       "total_duration_ms": 0.0,
       "avg_duration_ms": 0.0,
       "max_duration_ms": 0.0
     },
     "truth_resolution": {
-      "records": 38,
+      "records": 39,
       "events": 124,
-      "total_duration_ms": 183066.499,
-      "avg_duration_ms": 4817.539,
-      "max_duration_ms": 44367.731
+      "total_duration_ms": 31372.17,
+      "avg_duration_ms": 804.415,
+      "max_duration_ms": 4727.006
     },
     "validation": {
-      "records": 50,
-      "events": 50,
+      "records": 46,
+      "events": 46,
       "total_duration_ms": 0.0,
       "avg_duration_ms": 0.0,
       "max_duration_ms": 0.0

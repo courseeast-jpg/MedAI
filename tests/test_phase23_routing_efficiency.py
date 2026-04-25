@@ -315,6 +315,56 @@ def test_long_noisy_03_preserves_phi3_review_path_after_gemini_fallback(tmp_path
     assert queued[0]["review_recommendation"] == "operator_review"
 
 
+def test_long_noisy_03_stays_on_phi3_review_path_even_if_gemini_is_available(tmp_path: Path):
+    metrics = PipelineMetrics()
+    seed_connector_profile(metrics, connector="spacy", confidence=0.9, latency_ms=5, success_rate=0.99)
+    seed_connector_profile(metrics, connector="phi3", confidence=0.8, latency_ms=20, success_rate=0.98)
+    seed_connector_profile(metrics, connector="gemini", confidence=0.9, latency_ms=110, success_rate=0.95)
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.7,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        gemini_extractor=StaticExtractor({
+            "extractor": "gemini",
+            "actual_extractor": "gemini",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.9,
+            "latency_ms": 1,
+            "notes": [],
+        }, specialty="epilepsy"),
+        phi3_extractor=StaticExtractor({
+            "extractor": "phi3",
+            "actual_extractor": "phi3",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.68,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+        metrics=metrics,
+    )
+
+    repeated_sentence = (
+        "Hospital medication review. Diagnosis: seizure disorder. Levetiracetam 1000mg twice daily. "
+        "Valproate 500mg nightly. EEG showed abnormal temporal sharp waves. Sodium 139 mmol/L. "
+        "Recommendation: continue neurology follow up and monitor fatigue. "
+    )
+    result = pipeline.process_text(repeated_sentence * 7, specialty="epilepsy", source_name="long_noisy_03.pdf")
+    queued = read_review_queue(tmp_path / "review_queue.jsonl")
+
+    assert result.audit["intended_route"] == "gemini"
+    assert result.audit["actual_route"] == "phi3"
+    assert result.audit["confidence_band"] == "review"
+    assert result.outcome == "queued_for_review"
+    assert any("router_fallback=gemini:preserve_review_route" in note for note in result.notes)
+    assert queued[0]["review_recommendation"] == "operator_review"
+
+
 def test_phase23_outputs_are_written(tmp_path: Path):
     artifact_path = tmp_path / "artifacts" / "phase23" / "routing_efficiency.json"
     report_path = tmp_path / "reports" / "phase23" / "routing_efficiency_report.md"

@@ -1,42 +1,42 @@
 # Phase 18 Full Cycle Summary
 
-- Generated at: `2026-04-25T13:18:35.884778+00:00`
-- Commit hash: `6f90715b8582748c4b2ab6860ae2d3a3b0384ab7`
+- Generated at: `2026-04-25T14:07:21.234796+00:00`
+- Commit hash: `6876f5c759eb47bf3967943c6f789aa080ead769`
 - Git status: `dirty`
 - Success: `True`
 - Failed step: `None`
-- Test result: `188 passed`
+- Test result: `189 passed`
 - Phase 11 audit result: `passed`
 - Validation attempted: `50`
-- Validation processed: `50`
+- Validation processed: `46`
 - Validation written: `45`
-- Validation queued_for_review: `5`
-- Validation external_quota_blocked: `0`
+- Validation queued_for_review: `1`
+- Validation external_quota_blocked: `4`
 - Validation hard_failures: `0`
-- Validation avg_confidence: `0.698`
-- Validation review_queue_items: `29`
+- Validation avg_confidence: `0.692`
+- Validation review_queue_items: `31`
 - Validation review_queue_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase12_real_world_validation\runtime\review_queue.jsonl`
-- Observability route_mismatch_count: `10`
-- Observability low_confidence_count: `5`
-- Observability quota_safe_block_count: `0`
+- Observability route_mismatch_count: `1`
+- Observability low_confidence_count: `1`
+- Observability quota_safe_block_count: `4`
 - Observability metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase21\observability_metrics.json`
 - Observability report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase21\observability_report.md`
-- Calibration average_raw_confidence: `0.698`
-- Calibration average_calibrated_confidence: `0.698`
-- Calibration confidence_band_counts: `{'acceptable': 45, 'review': 5}`
-- Calibration review_recommendation_counts: `{'accept': 40, 'accept_with_route_audit': 5, 'operator_review': 5}`
-- Calibration route_mismatch_count: `10`
+- Calibration average_raw_confidence: `0.692`
+- Calibration average_calibrated_confidence: `0.692`
+- Calibration confidence_band_counts: `{'acceptable': 45, 'reject': 1}`
+- Calibration review_recommendation_counts: `{'accept': 44, 'accept_with_route_audit': 1, 'reject_do_not_write': 1}`
+- Calibration route_mismatch_count: `1`
 - Calibration metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase22\confidence_calibration.json`
 - Calibration report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase22\accuracy_calibration_report.md`
-- Routing efficiency intended_route_counts: `{'gemini': 10, 'spacy': 40}`
-- Routing efficiency actual_route_counts: `{'phi3': 5, 'spacy': 45}`
-- Routing efficiency route_mismatch_count: `10`
-- Routing efficiency quota_block_avoided_count: `0`
-- Routing efficiency total_estimated_cost_units: `0.025`
-- Routing efficiency total_saved_cost_units: `0.175`
+- Routing efficiency intended_route_counts: `{'gemini': 1, 'phi3': 1, 'spacy': 44}`
+- Routing efficiency actual_route_counts: `{'phi3': 1, 'spacy': 45}`
+- Routing efficiency route_mismatch_count: `1`
+- Routing efficiency quota_block_avoided_count: `1`
+- Routing efficiency total_estimated_cost_units: `0.005`
+- Routing efficiency total_saved_cost_units: `0.02`
 - Routing efficiency metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase23\routing_efficiency.json`
 - Routing efficiency report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase23\routing_efficiency_report.md`
-- Semantic enrichment applied_count: `50`
+- Semantic enrichment applied_count: `45`
 - Semantic enrichment negation_detected_count: `0`
 - Semantic enrichment temporal_detected_count: `0`
 - Semantic enrichment relationships_detected_count: `0`
@@ -44,7 +44,7 @@
 - Semantic enrichment report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase24\semantic_enrichment_report.md`
 - Dashboard export path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase17\dashboard_latest.md`
 - Stability report path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase19\stability_report.md`
-- Duration seconds: `334.245`
+- Duration seconds: `269.899`
 
 ## Steps
 

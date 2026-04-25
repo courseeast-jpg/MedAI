@@ -85,7 +85,7 @@ class ExecutionRouter:
         candidate_routes = (
             ["spacy", "phi3", "gemini"] if force_spacy_route
             else
-            ["gemini", "phi3", "spacy"] if preserve_review_route and not self.gemini_quota_blocked
+            ["gemini", "phi3", "spacy"] if preserve_review_route
             else self._select_candidate_routes(text, quota_aware=True)
         )
         route_scores = {
@@ -124,6 +124,22 @@ class ExecutionRouter:
         attempted = {intended_route}
         current_connector = intended_route
         pending_fallback_notes: list[str] = []
+        if preserve_review_route and intended_route == "gemini":
+            events.append({
+                "action": "fallback_invoked",
+                "reason": "preserve_review_route:phi3_safety_baseline",
+                "from": "gemini",
+                "to": "phi3",
+                "error_code": "preserve_review_route",
+                "configured_gemini_fallback": gemini_connector.is_configured,
+            })
+            pending_fallback_notes = [
+                "router_fallback=gemini:preserve_review_route",
+            ]
+            if gemini_connector.is_configured:
+                pending_fallback_notes.append("gemini_configured_fallback=true")
+            attempted.add("phi3")
+            current_connector = "phi3"
 
         while True:
             try:

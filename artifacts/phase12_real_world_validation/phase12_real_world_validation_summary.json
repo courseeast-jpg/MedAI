@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-04-25T13:18:33.660436+00:00",
+  "generated_at": "2026-04-25T14:07:19.051260+00:00",
   "phase": "Phase 12 Real-World Validation",
   "dataset_dir": "test_data\\final_batch_50",
   "requested_limit": 0,
   "documents_selected": 50,
-  "documents_processed": 50,
+  "documents_processed": 46,
   "written": 45,
-  "queued_for_review": 5,
-  "external_quota_blocked": 0,
+  "queued_for_review": 1,
+  "external_quota_blocked": 4,
   "hard_failures": 0,
   "documents_failed": 0,
   "target_window_met": false,
@@ -26,43 +26,44 @@
   },
   "review_queue": {
     "path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl",
-    "items": 29
+    "items": 31
   },
   "aggregate": {
     "outcomes": {
-      "queued_for_review": 5,
-      "written": 33,
-      "written_with_review": 12
+      "queued_for_review": 1,
+      "written": 32,
+      "written_with_review": 13
     },
     "validation_statuses": {
       "accepted": 45,
-      "needs_review": 5
+      "rejected": 1
     },
     "extractors": {
-      "phi3": 5,
+      "phi3": 1,
       "spacy": 45
     },
-    "avg_confidence": 0.698,
-    "total_entities": 122,
-    "total_written": 100,
-    "total_queued": 34,
+    "avg_confidence": 0.692,
+    "total_entities": 115,
+    "total_written": 98,
+    "total_queued": 26,
     "total_blocked": 0,
     "review_reasons": {
-      "clear": 12,
-      "confidence_below_accept_threshold": 5,
-      "pending_validation_review": 5,
-      "quarantined": 12
+      "agreement_below_accept_threshold": 1,
+      "clear": 13,
+      "confidence_below_reject_threshold": 1,
+      "consensus_disagreement_flag": 1,
+      "quarantined": 13
     },
-    "enrichment_applied_count": 50,
+    "enrichment_applied_count": 45,
     "negation_detected_count": 0,
     "temporal_detected_count": 0,
     "relationships_detected_count": 0
   },
   "mkb_counts": {
-    "total": 48,
-    "active": 14,
+    "total": 39,
+    "active": 13,
     "hypothesis": 0,
-    "quarantined": 34
+    "quarantined": 26
   },
   "documents": [
     {
@@ -85,7 +86,7 @@
         "pii_method=presidio",
         "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 3322.831,
+      "processing_time_ms": 3151.614,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -179,7 +180,7 @@
         "pii_method=presidio",
         "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
       ],
-      "processing_time_ms": 5235.019,
+      "processing_time_ms": 2692.27,
       "requested_route": "gemini",
       "retry_visibility": {
         "retry_detected": false,
@@ -194,7 +195,7 @@
       "review_recommendation": "accept_with_route_audit",
       "intended_route": "gemini",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:5131.000",
+      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
       "estimated_cost_units": 0.0,
       "saved_cost_units": 0.02,
       "quota_block_avoided": false,
@@ -258,80 +259,93 @@
       "status": "processed",
       "error": null,
       "outcome": "queued_for_review",
-      "validation_status": "needs_review",
+      "validation_status": "rejected",
       "extractor_route": "phi3",
       "extractor": "phi3",
       "extractor_actual": "phi3",
-      "confidence": 0.68,
-      "entity_count": 2,
+      "confidence": 0.345,
+      "entity_count": 4,
       "written_count": 0,
-      "queued_count": 2,
+      "queued_count": 0,
       "blocked_count": 0,
       "review_reasons": [
-        "confidence_below_accept_threshold",
-        "pending_validation_review"
+        "agreement_below_accept_threshold",
+        "confidence_below_reject_threshold",
+        "consensus_disagreement_flag"
       ],
       "notes": [
+        "loaded en_core_sci_md",
         "phi3_stub_local_fallback",
         "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=phi3 score=0.806 cost=0.00500 confidence=0.760 latency_ms=25.000 success_rate=0.950 candidates=gemini,phi3,spacy"
       ],
-      "processing_time_ms": 4138.387,
-      "requested_route": "gemini",
+      "processing_time_ms": 89.73,
+      "requested_route": "phi3",
       "retry_visibility": {
         "retry_detected": false,
         "retry_delay_seconds": null,
         "retry_reason": null
       },
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review",
-      "intended_route": "gemini",
+      "raw_confidence": 0.345,
+      "calibrated_confidence": 0.345,
+      "confidence_band": "reject",
+      "calibration_reason": "raw_confidence_retained",
+      "route_mismatch_flag": false,
+      "review_recommendation": "reject_do_not_write",
+      "intended_route": "phi3",
       "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:4035.000",
+      "fallback_reason": "None",
       "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      },
-      "enrichment_applied": true,
+      "saved_cost_units": 0.0,
+      "quota_block_avoided": true,
+      "semantic_enrichment": null,
+      "enrichment_applied": false,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
       "relationships_detected_count": 0
     },
     {
       "document": "long_noisy_04.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [],
+      "processing_time_ms": 378.066,
+      "requested_route": null,
+      "retry_visibility": {
+        "retry_detected": true,
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota"
+      },
+      "raw_confidence": null,
+      "calibrated_confidence": null,
+      "confidence_band": null,
+      "calibration_reason": null,
+      "route_mismatch_flag": false,
+      "review_recommendation": "operator_retry_after_quota_reset",
+      "intended_route": null,
+      "actual_route": null,
+      "fallback_reason": null,
+      "estimated_cost_units": 0.0,
+      "saved_cost_units": 0.0,
+      "quota_block_avoided": false,
+      "semantic_enrichment": null,
+      "enrichment_applied": false,
+      "negation_detected_count": 0,
+      "temporal_detected_count": 0,
+      "relationships_detected_count": 0
+    },
+    {
+      "document": "long_noisy_05.pdf",
       "status": "processed",
       "error": null,
       "outcome": "written",
@@ -348,10 +362,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=37.000 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 4821.304,
-      "requested_route": "gemini",
+      "processing_time_ms": 129.607,
+      "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
         "retry_delay_seconds": null,
@@ -360,14 +374,14 @@
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
       "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit",
-      "intended_route": "gemini",
+      "calibration_reason": "raw_confidence_retained",
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept",
+      "intended_route": "spacy",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:4721.000",
+      "fallback_reason": "None",
       "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
       "semantic_enrichment": {
         "applied": true,
@@ -415,83 +429,6 @@
           }
         ],
         "enriched_entity_count": 4,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      },
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0
-    },
-    {
-      "document": "long_noisy_05.pdf",
-      "status": "processed",
-      "error": null,
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "extractor_route": "phi3",
-      "extractor": "phi3",
-      "extractor_actual": "phi3",
-      "confidence": 0.68,
-      "entity_count": 2,
-      "written_count": 0,
-      "queued_count": 2,
-      "blocked_count": 0,
-      "review_reasons": [
-        "confidence_below_accept_threshold",
-        "pending_validation_review"
-      ],
-      "notes": [
-        "phi3_stub_local_fallback",
-        "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.735 cost=0.02000 confidence=0.900 latency_ms=120.000 success_rate=0.900 candidates=spacy,phi3,gemini"
-      ],
-      "processing_time_ms": 5376.969,
-      "requested_route": "gemini",
-      "retry_visibility": {
-        "retry_detected": false,
-        "retry_delay_seconds": null,
-        "retry_reason": null
-      },
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:5274.000",
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
         "negation_detected_count": 0,
         "temporal_detected_count": 0,
         "relationships_detected_count": 0
@@ -503,6 +440,46 @@
     },
     {
       "document": "long_noisy_06.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [],
+      "processing_time_ms": 378.167,
+      "requested_route": null,
+      "retry_visibility": {
+        "retry_detected": true,
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota"
+      },
+      "raw_confidence": null,
+      "calibrated_confidence": null,
+      "confidence_band": null,
+      "calibration_reason": null,
+      "route_mismatch_flag": false,
+      "review_recommendation": "operator_retry_after_quota_reset",
+      "intended_route": null,
+      "actual_route": null,
+      "fallback_reason": null,
+      "estimated_cost_units": 0.0,
+      "saved_cost_units": 0.0,
+      "quota_block_avoided": false,
+      "semantic_enrichment": null,
+      "enrichment_applied": false,
+      "negation_detected_count": 0,
+      "temporal_detected_count": 0,
+      "relationships_detected_count": 0
+    },
+    {
+      "document": "long_noisy_07.pdf",
       "status": "processed",
       "error": null,
       "outcome": "written",
@@ -519,10 +496,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=38.250 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 4830.507,
-      "requested_route": "gemini",
+      "processing_time_ms": 132.485,
+      "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
         "retry_delay_seconds": null,
@@ -531,14 +508,14 @@
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
       "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit",
-      "intended_route": "gemini",
+      "calibration_reason": "raw_confidence_retained",
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept",
+      "intended_route": "spacy",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:4730.000",
+      "fallback_reason": "None",
       "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
       "semantic_enrichment": {
         "applied": true,
@@ -586,83 +563,6 @@
           }
         ],
         "enriched_entity_count": 4,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      },
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0
-    },
-    {
-      "document": "long_noisy_07.pdf",
-      "status": "processed",
-      "error": null,
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "extractor_route": "phi3",
-      "extractor": "phi3",
-      "extractor_actual": "phi3",
-      "confidence": 0.68,
-      "entity_count": 2,
-      "written_count": 0,
-      "queued_count": 2,
-      "blocked_count": 0,
-      "review_reasons": [
-        "confidence_below_accept_threshold",
-        "pending_validation_review"
-      ],
-      "notes": [
-        "phi3_stub_local_fallback",
-        "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.735 cost=0.02000 confidence=0.900 latency_ms=120.000 success_rate=0.900 candidates=spacy,phi3,gemini"
-      ],
-      "processing_time_ms": 2690.905,
-      "requested_route": "gemini",
-      "retry_visibility": {
-        "retry_detected": false,
-        "retry_delay_seconds": null,
-        "retry_reason": null
-      },
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:2593.000",
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
         "negation_detected_count": 0,
         "temporal_detected_count": 0,
         "relationships_detected_count": 0
@@ -674,6 +574,46 @@
     },
     {
       "document": "long_noisy_08.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [],
+      "processing_time_ms": 382.24,
+      "requested_route": null,
+      "retry_visibility": {
+        "retry_detected": true,
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota"
+      },
+      "raw_confidence": null,
+      "calibrated_confidence": null,
+      "confidence_band": null,
+      "calibration_reason": null,
+      "route_mismatch_flag": false,
+      "review_recommendation": "operator_retry_after_quota_reset",
+      "intended_route": null,
+      "actual_route": null,
+      "fallback_reason": null,
+      "estimated_cost_units": 0.0,
+      "saved_cost_units": 0.0,
+      "quota_block_avoided": false,
+      "semantic_enrichment": null,
+      "enrichment_applied": false,
+      "negation_detected_count": 0,
+      "temporal_detected_count": 0,
+      "relationships_detected_count": 0
+    },
+    {
+      "document": "long_noisy_09.pdf",
       "status": "processed",
       "error": null,
       "outcome": "written",
@@ -690,10 +630,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=38.600 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 4214.737,
-      "requested_route": "gemini",
+      "processing_time_ms": 129.845,
+      "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
         "retry_delay_seconds": null,
@@ -702,14 +642,14 @@
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
       "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit",
-      "intended_route": "gemini",
+      "calibration_reason": "raw_confidence_retained",
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept",
+      "intended_route": "spacy",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:4112.000",
+      "fallback_reason": "None",
       "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
       "semantic_enrichment": {
         "applied": true,
@@ -757,83 +697,6 @@
           }
         ],
         "enriched_entity_count": 4,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      },
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0
-    },
-    {
-      "document": "long_noisy_09.pdf",
-      "status": "processed",
-      "error": null,
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "extractor_route": "phi3",
-      "extractor": "phi3",
-      "extractor_actual": "phi3",
-      "confidence": 0.68,
-      "entity_count": 2,
-      "written_count": 0,
-      "queued_count": 2,
-      "blocked_count": 0,
-      "review_reasons": [
-        "confidence_below_accept_threshold",
-        "pending_validation_review"
-      ],
-      "notes": [
-        "phi3_stub_local_fallback",
-        "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.735 cost=0.02000 confidence=0.900 latency_ms=120.000 success_rate=0.900 candidates=spacy,phi3,gemini"
-      ],
-      "processing_time_ms": 2670.315,
-      "requested_route": "gemini",
-      "retry_visibility": {
-        "retry_detected": false,
-        "retry_delay_seconds": null,
-        "retry_reason": null
-      },
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:2571.000",
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
         "negation_detected_count": 0,
         "temporal_detected_count": 0,
         "relationships_detected_count": 0
@@ -845,26 +708,69 @@
     },
     {
       "document": "long_noisy_10.pdf",
+      "status": "external_quota_blocked",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota",
+      "extractor": null,
+      "extractor_actual": null,
+      "confidence": 0.0,
+      "entity_count": 0,
+      "written_count": 0,
+      "queued_count": 0,
+      "blocked_count": 0,
+      "review_reasons": [],
+      "notes": [],
+      "processing_time_ms": 363.603,
+      "requested_route": null,
+      "retry_visibility": {
+        "retry_detected": true,
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota"
+      },
+      "raw_confidence": null,
+      "calibrated_confidence": null,
+      "confidence_band": null,
+      "calibration_reason": null,
+      "route_mismatch_flag": false,
+      "review_recommendation": "operator_retry_after_quota_reset",
+      "intended_route": null,
+      "actual_route": null,
+      "fallback_reason": null,
+      "estimated_cost_units": 0.0,
+      "saved_cost_units": 0.0,
+      "quota_block_avoided": false,
+      "semantic_enrichment": null,
+      "enrichment_applied": false,
+      "negation_detected_count": 0,
+      "temporal_detected_count": 0,
+      "relationships_detected_count": 0
+    },
+    {
+      "document": "short_01.pdf",
       "status": "processed",
       "error": null,
-      "outcome": "written",
+      "outcome": "written_with_review",
       "validation_status": "accepted",
       "extractor_route": "spacy",
       "extractor": "spacy",
       "extractor_actual": "spacy",
       "confidence": 0.7,
-      "entity_count": 4,
-      "written_count": 4,
-      "queued_count": 0,
+      "entity_count": 3,
+      "written_count": 2,
+      "queued_count": 2,
       "blocked_count": 0,
-      "review_reasons": [],
+      "review_reasons": [
+        "clear",
+        "quarantined"
+      ],
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=39.667 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 7453.62,
-      "requested_route": "gemini",
+      "processing_time_ms": 45.601,
+      "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
         "retry_delay_seconds": null,
@@ -873,14 +779,14 @@
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
       "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit",
-      "intended_route": "gemini",
+      "calibration_reason": "raw_confidence_retained",
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept",
+      "intended_route": "spacy",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:7349.000",
+      "fallback_reason": "None",
       "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
       "semantic_enrichment": {
         "applied": true,
@@ -898,93 +804,6 @@
           },
           {
             "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Valproate",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 2,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 3,
-            "entity_type": "test_result",
-            "entity_text": "Sodium",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 4,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      },
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0
-    },
-    {
-      "document": "short_01.pdf",
-      "status": "processed",
-      "error": null,
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "extractor_route": "phi3",
-      "extractor": "phi3",
-      "extractor_actual": "phi3",
-      "confidence": 0.68,
-      "entity_count": 2,
-      "written_count": 0,
-      "queued_count": 2,
-      "blocked_count": 0,
-      "review_reasons": [
-        "confidence_below_accept_threshold",
-        "pending_validation_review"
-      ],
-      "notes": [
-        "phi3_stub_local_fallback",
-        "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.735 cost=0.02000 confidence=0.900 latency_ms=120.000 success_rate=0.900 candidates=spacy,phi3,gemini"
-      ],
-      "processing_time_ms": 2199.646,
-      "requested_route": "gemini",
-      "retry_visibility": {
-        "retry_detected": false,
-        "retry_delay_seconds": null,
-        "retry_reason": null
-      },
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 29.586774204s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 29\n}\n]",
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
             "entity_type": "diagnosis",
             "entity_text": "focal epilepsy",
             "negation_flag": false,
@@ -994,9 +813,9 @@
             "enrichment_source": "rules_based"
           },
           {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
+            "entity_index": 2,
+            "entity_type": "test_result",
+            "entity_text": "EEG",
             "negation_flag": false,
             "temporal_info": null,
             "relationships": [],
@@ -1004,7 +823,7 @@
             "enrichment_source": "rules_based"
           }
         ],
-        "enriched_entity_count": 2,
+        "enriched_entity_count": 3,
         "negation_detected_count": 0,
         "temporal_detected_count": 0,
         "relationships_detected_count": 0
@@ -1032,9 +851,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.866 cost=0.00000 confidence=0.700 latency_ms=33.500 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=34.857 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 28.383,
+      "processing_time_ms": 26.658,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1096,9 +915,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=29.571 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.867 cost=0.00000 confidence=0.700 latency_ms=31.250 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 39.087,
+      "processing_time_ms": 33.829,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1170,9 +989,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=26.875 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=28.444 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 121.904,
+      "processing_time_ms": 40.313,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1254,9 +1073,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=24.667 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=26.200 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 49.701,
+      "processing_time_ms": 39.462,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1338,9 +1157,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=22.900 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=24.364 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 40.39,
+      "processing_time_ms": 43.581,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1412,9 +1231,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.545 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=22.833 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 28.289,
+      "processing_time_ms": 27.022,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1479,9 +1298,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=20.250 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.615 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 44.618,
+      "processing_time_ms": 39.909,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1556,9 +1375,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.231 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=20.500 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 55.809,
+      "processing_time_ms": 45.652,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1643,9 +1462,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.429 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.533 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 50.952,
+      "processing_time_ms": 45.347,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1727,9 +1546,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.600 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.688 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.444,
+      "processing_time_ms": 35.691,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1801,9 +1620,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.000 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.941 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 40.293,
+      "processing_time_ms": 26.023,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1865,9 +1684,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.471 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.222 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 37.792,
+      "processing_time_ms": 33.434,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1939,9 +1758,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=15.944 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.632 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.324,
+      "processing_time_ms": 45.249,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2023,9 +1842,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.421 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.100 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 48.91,
+      "processing_time_ms": 41.982,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2093,26 +1912,23 @@
       "document": "short_16.pdf",
       "status": "processed",
       "error": null,
-      "outcome": "written_with_review",
+      "outcome": "written",
       "validation_status": "accepted",
       "extractor_route": "spacy",
       "extractor": "spacy",
       "extractor_actual": "spacy",
       "confidence": 0.7,
       "entity_count": 3,
-      "written_count": 2,
-      "queued_count": 2,
+      "written_count": 3,
+      "queued_count": 0,
       "blocked_count": 0,
-      "review_reasons": [
-        "clear",
-        "quarantined"
-      ],
+      "review_reasons": [],
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.950 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.571 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 68.715,
+      "processing_time_ms": 41.901,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2194,9 +2010,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.571 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.136 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 34.605,
+      "processing_time_ms": 33.26,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2271,9 +2087,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.182 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.696 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 49.317,
+      "processing_time_ms": 40.618,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2345,9 +2161,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.826 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.375 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 38.115,
+      "processing_time_ms": 33.783,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2422,9 +2238,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.500 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.040 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 53.036,
+      "processing_time_ms": 50.424,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2506,9 +2322,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.240 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.731 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.671,
+      "processing_time_ms": 35.428,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2580,9 +2396,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=13.000 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.481 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 27.083,
+      "processing_time_ms": 27.221,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2644,9 +2460,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.741 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.214 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.593,
+      "processing_time_ms": 34.668,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2721,9 +2537,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.500 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.966 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 54.27,
+      "processing_time_ms": 45.91,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2805,9 +2621,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.276 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.733 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.061,
+      "processing_time_ms": 40.779,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2889,9 +2705,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.067 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.516 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 38.563,
+      "processing_time_ms": 36.353,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2963,9 +2779,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.903 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.312 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 28.789,
+      "processing_time_ms": 26.352,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3030,9 +2846,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.750 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.121 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.184,
+      "processing_time_ms": 39.047,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3104,9 +2920,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.606 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.941 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 46.235,
+      "processing_time_ms": 40.739,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3191,9 +3007,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.441 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.771 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 51.415,
+      "processing_time_ms": 46.597,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3275,9 +3091,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.286 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.583 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.721,
+      "processing_time_ms": 34.254,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3349,9 +3165,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.139 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.432 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 29.793,
+      "processing_time_ms": 25.983,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3413,9 +3229,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=10.973 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.289 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 35.298,
+      "processing_time_ms": 34.59,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3490,9 +3306,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=10.842 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.154 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 50.107,
+      "processing_time_ms": 47.46,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3574,9 +3390,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.718 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.025 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 42.158,
+      "processing_time_ms": 41.255,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3644,23 +3460,26 @@
       "document": "short_36.pdf",
       "status": "processed",
       "error": null,
-      "outcome": "written",
+      "outcome": "written_with_review",
       "validation_status": "accepted",
       "extractor_route": "spacy",
       "extractor": "spacy",
       "extractor_actual": "spacy",
       "confidence": 0.7,
       "entity_count": 3,
-      "written_count": 3,
-      "queued_count": 0,
+      "written_count": 2,
+      "queued_count": 2,
       "blocked_count": 0,
-      "review_reasons": [],
+      "review_reasons": [
+        "clear",
+        "quarantined"
+      ],
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.575 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=10.902 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.773,
+      "processing_time_ms": 47.214,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3742,9 +3561,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.488 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.786 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 27.396,
+      "processing_time_ms": 27.213,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3809,9 +3628,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.357 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.651 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.352,
+      "processing_time_ms": 39.261,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3883,9 +3702,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.256 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.545 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.793,
+      "processing_time_ms": 40.974,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3970,9 +3789,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.159 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.444 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 49.545,
+      "processing_time_ms": 46.379,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4043,6 +3862,7 @@
     "ordering": "sorted_pdf_listing"
   },
   "recommendations": [
+    "Some documents were skipped due to external API quota exhaustion; rerun later to complete the sample without changing pipeline behavior.",
     "Inspect review-queued documents and classify whether queues are expected governance behavior or extraction misses."
   ]
 }

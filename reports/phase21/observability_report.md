@@ -1,42 +1,42 @@
 # Phase 21 Observability Report
 
-- Generated at: `2026-04-25T13:18:33.660436+00:00`
+- Generated at: `2026-04-25T14:07:19.051260+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
-- Processed documents: `50`
+- Processed documents: `46`
 - Written documents: `45`
-- Queued for review documents: `5`
-- Review queue items: `29`
-- External quota blocked: `0`
+- Queued for review documents: `1`
+- Review queue items: `31`
+- External quota blocked: `4`
 - Hard failures: `0`
-- Average confidence: `0.698`
-- Route mismatch count: `10`
-- Low-confidence count: `5`
-- Quota-safe block count: `0`
-- Enrichment applied count: `50`
+- Average confidence: `0.692`
+- Route mismatch count: `1`
+- Low-confidence count: `1`
+- Quota-safe block count: `4`
+- Enrichment applied count: `45`
 - Negation detected count: `0`
 - Temporal detected count: `0`
 - Relationships detected count: `0`
 
 ## Route Counts
 
-- Extractor route counts: `{'phi3': 5, 'spacy': 45}`
-- Extractor actual counts: `{'phi3': 5, 'spacy': 45}`
+- Extractor route counts: `{'phi3': 1, 'spacy': 45}`
+- Extractor actual counts: `{'phi3': 1, 'spacy': 45}`
 
 ## Review Queue
 
-- Review queue category counts: `{'truth_resolution_review': 24, 'validation_review': 5}`
+- Review queue category counts: `{'external_quota_block': 4, 'truth_resolution_review': 26, 'validation_review': 1}`
 - Review queue path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase12_real_world_validation\runtime\review_queue.jsonl`
 
 ## Stage Durations
 
-- `consensus` -> records=50 events=50 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `extraction` -> records=50 events=100 total_ms=44165.982 avg_ms=883.32 max_ms=7415.505
-- `final_write` -> records=48 events=134 total_ms=182827.805 avg_ms=3808.913 max_ms=44355.948
-- `safety_gate` -> records=26 events=100 total_ms=177468.566 avg_ms=6825.714 max_ms=41427.605
-- `semantic_enrichment` -> records=50 events=50 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `truth_resolution` -> records=38 events=124 total_ms=183066.499 avg_ms=4817.539 max_ms=44367.731
-- `validation` -> records=50 events=50 total_ms=0.0 avg_ms=0.0 max_ms=0.0
+- `consensus` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
+- `extraction` -> records=50 events=96 total_ms=3807.811 avg_ms=76.156 max_ms=2657.54
+- `final_write` -> records=39 events=124 total_ms=31331.741 avg_ms=803.378 max_ms=4715.003
+- `safety_gate` -> records=26 events=98 total_ms=27948.037 avg_ms=1074.925 max_ms=4315.916
+- `semantic_enrichment` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
+- `truth_resolution` -> records=39 events=124 total_ms=31372.17 avg_ms=804.415 max_ms=4727.006
+- `validation` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 
 ## Stability Guardrails
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T13:18:33.660436+00:00",
+  "generated_at": "2026-04-25T14:07:19.051260+00:00",
   "phase": "Phase 24 Semantic Enrichment (non-destructive)",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -8,12 +8,12 @@
     "ordering": "sorted_pdf_listing"
   },
   "attempted_documents": 50,
-  "processed_documents": 50,
+  "processed_documents": 46,
   "written_documents": 45,
-  "queued_for_review_documents": 5,
-  "external_quota_blocked": 0,
+  "queued_for_review_documents": 1,
+  "external_quota_blocked": 4,
   "hard_failures": 0,
-  "enrichment_applied_count": 50,
+  "enrichment_applied_count": 45,
   "negation_detected_count": 0,
   "temporal_detected_count": 0,
   "relationships_detected_count": 0,
@@ -143,148 +143,17 @@
     {
       "document": "long_noisy_03.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "confidence": 0.68,
-      "confidence_band": "review",
-      "enrichment_applied": true,
+      "validation_status": "rejected",
+      "confidence": 0.345,
+      "confidence_band": "reject",
+      "enrichment_applied": false,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
       "relationships_detected_count": 0,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      }
-    },
-    {
-      "document": "long_noisy_04.pdf",
-      "outcome": "written",
-      "validation_status": "accepted",
-      "confidence": 0.7,
-      "confidence_band": "acceptable",
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Valproate",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 2,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 3,
-            "entity_type": "test_result",
-            "entity_text": "Sodium",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 4,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      }
+      "semantic_enrichment": null
     },
     {
       "document": "long_noisy_05.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "confidence": 0.68,
-      "confidence_band": "review",
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      }
-    },
-    {
-      "document": "long_noisy_06.pdf",
       "outcome": "written",
       "validation_status": "accepted",
       "confidence": 0.7,
@@ -346,47 +215,6 @@
     },
     {
       "document": "long_noisy_07.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "confidence": 0.68,
-      "confidence_band": "review",
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      }
-    },
-    {
-      "document": "long_noisy_08.pdf",
       "outcome": "written",
       "validation_status": "accepted",
       "confidence": 0.7,
@@ -448,47 +276,6 @@
     },
     {
       "document": "long_noisy_09.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "confidence": 0.68,
-      "confidence_band": "review",
-      "enrichment_applied": true,
-      "negation_detected_count": 0,
-      "temporal_detected_count": 0,
-      "relationships_detected_count": 0,
-      "semantic_enrichment": {
-        "applied": true,
-        "enrichment_source": "rules_based",
-        "entities": [
-          {
-            "entity_index": 0,
-            "entity_type": "diagnosis",
-            "entity_text": "seizure disorder",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          },
-          {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
-            "negation_flag": false,
-            "temporal_info": null,
-            "relationships": [],
-            "enrichment_confidence": 0.75,
-            "enrichment_source": "rules_based"
-          }
-        ],
-        "enriched_entity_count": 2,
-        "negation_detected_count": 0,
-        "temporal_detected_count": 0,
-        "relationships_detected_count": 0
-      }
-    },
-    {
-      "document": "long_noisy_10.pdf",
       "outcome": "written",
       "validation_status": "accepted",
       "confidence": 0.7,
@@ -550,10 +337,10 @@
     },
     {
       "document": "short_01.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "confidence": 0.68,
-      "confidence_band": "review",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence": 0.7,
+      "confidence_band": "acceptable",
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
@@ -564,6 +351,16 @@
         "entities": [
           {
             "entity_index": 0,
+            "entity_type": "medication",
+            "entity_text": "Levetiracetam",
+            "negation_flag": false,
+            "temporal_info": null,
+            "relationships": [],
+            "enrichment_confidence": 0.75,
+            "enrichment_source": "rules_based"
+          },
+          {
+            "entity_index": 1,
             "entity_type": "diagnosis",
             "entity_text": "focal epilepsy",
             "negation_flag": false,
@@ -573,9 +370,9 @@
             "enrichment_source": "rules_based"
           },
           {
-            "entity_index": 1,
-            "entity_type": "medication",
-            "entity_text": "Levetiracetam",
+            "entity_index": 2,
+            "entity_type": "test_result",
+            "entity_text": "EEG",
             "negation_flag": false,
             "temporal_info": null,
             "relationships": [],
@@ -583,7 +380,7 @@
             "enrichment_source": "rules_based"
           }
         ],
-        "enriched_entity_count": 2,
+        "enriched_entity_count": 3,
         "negation_detected_count": 0,
         "temporal_detected_count": 0,
         "relationships_detected_count": 0
@@ -1195,7 +992,7 @@
     },
     {
       "document": "short_16.pdf",
-      "outcome": "written_with_review",
+      "outcome": "written",
       "validation_status": "accepted",
       "confidence": 0.7,
       "confidence_band": "acceptable",
@@ -2065,7 +1862,7 @@
     },
     {
       "document": "short_36.pdf",
-      "outcome": "written",
+      "outcome": "written_with_review",
       "validation_status": "accepted",
       "confidence": 0.7,
       "confidence_band": "acceptable",

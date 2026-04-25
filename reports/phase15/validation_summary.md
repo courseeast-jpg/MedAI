@@ -1,25 +1,25 @@
 # Phase 15 Validation Summary
 
-- Generated at: 2026-04-25T13:18:33.660436+00:00
+- Generated at: 2026-04-25T14:07:19.051260+00:00
 - Dataset: `test_data\final_batch_50`
 - Total documents attempted: 50
-- Processed: 50
-- External quota blocked: 0
+- Processed: 46
+- External quota blocked: 4
 - Written: 45
-- Queued for review: 5
+- Queued for review: 1
 - Hard failures: 0
-- Average confidence (processed only): 0.698
+- Average confidence (processed only): 0.692
 
 ## Route Distribution
 
-- Actual routes: {'phi3': 5, 'spacy': 45}
-- Requested routes: {'gemini': 10, 'spacy': 40}
+- Actual routes: {'phi3': 1, 'spacy': 45}
+- Requested routes: {'gemini': 1, 'phi3': 1, 'spacy': 44, 'unknown': 4}
 
 ## Rejection Patterns
 
-- `clear`: 12
-- `quarantined`: 12
-- `confidence_below_accept_threshold`: 5
+- `clear`: 13
+- `quarantined`: 13
+- `agreement_below_accept_threshold`: 1
 
 ## Validation Integrity
 

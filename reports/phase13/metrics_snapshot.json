@@ -1,34 +1,36 @@
 {
-  "generated_at": "2026-04-25T13:18:33.660436+00:00",
-  "documents_processed": 50,
+  "generated_at": "2026-04-25T14:07:19.051260+00:00",
+  "documents_processed": 46,
   "written": 45,
-  "queued_for_review": 5,
-  "external_quota_blocked": 0,
+  "queued_for_review": 1,
+  "external_quota_blocked": 4,
   "hard_failures": 0,
-  "avg_confidence": 0.698,
+  "avg_confidence": 0.692,
   "route_distribution": {
-    "phi3": 5,
+    "phi3": 1,
     "spacy": 45
   },
   "requested_route_distribution": {
-    "gemini": 10,
-    "spacy": 40
+    "gemini": 1,
+    "phi3": 1,
+    "spacy": 44,
+    "unknown": 4
   },
   "timing": {
-    "total_pipeline_time_ms": 48675.724,
-    "avg_document_time_ms": 973.514,
-    "max_document_time_ms": 7453.62,
-    "min_document_time_ms": 27.083,
+    "total_pipeline_time_ms": 9355.043,
+    "avg_document_time_ms": 187.101,
+    "max_document_time_ms": 3151.614,
+    "min_document_time_ms": 25.983,
     "per_extractor": {
       "phi3": {
-        "documents": 5,
-        "total_time_ms": 17076.222,
-        "avg_time_ms": 3415.244
+        "documents": 1,
+        "total_time_ms": 89.73,
+        "avg_time_ms": 89.73
       },
       "spacy": {
         "documents": 45,
-        "total_time_ms": 31599.502,
-        "avg_time_ms": 702.211
+        "total_time_ms": 7763.237,
+        "avg_time_ms": 172.516
       }
     },
     "per_document": [
@@ -36,308 +38,342 @@
         "document": "long_noisy_01.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 3322.831
+        "processing_time_ms": 3151.614
       },
       {
         "document": "long_noisy_02.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 5235.019
+        "processing_time_ms": 2692.27
       },
       {
         "document": "long_noisy_03.pdf",
         "status": "processed",
         "extractor_actual": "phi3",
-        "processing_time_ms": 4138.387
+        "processing_time_ms": 89.73
       },
       {
         "document": "long_noisy_04.pdf",
-        "status": "processed",
-        "extractor_actual": "spacy",
-        "processing_time_ms": 4821.304
+        "status": "external_quota_blocked",
+        "extractor_actual": "unknown",
+        "processing_time_ms": 378.066
       },
       {
         "document": "long_noisy_05.pdf",
         "status": "processed",
-        "extractor_actual": "phi3",
-        "processing_time_ms": 5376.969
+        "extractor_actual": "spacy",
+        "processing_time_ms": 129.607
       },
       {
         "document": "long_noisy_06.pdf",
-        "status": "processed",
-        "extractor_actual": "spacy",
-        "processing_time_ms": 4830.507
+        "status": "external_quota_blocked",
+        "extractor_actual": "unknown",
+        "processing_time_ms": 378.167
       },
       {
         "document": "long_noisy_07.pdf",
         "status": "processed",
-        "extractor_actual": "phi3",
-        "processing_time_ms": 2690.905
+        "extractor_actual": "spacy",
+        "processing_time_ms": 132.485
       },
       {
         "document": "long_noisy_08.pdf",
-        "status": "processed",
-        "extractor_actual": "spacy",
-        "processing_time_ms": 4214.737
+        "status": "external_quota_blocked",
+        "extractor_actual": "unknown",
+        "processing_time_ms": 382.24
       },
       {
         "document": "long_noisy_09.pdf",
         "status": "processed",
-        "extractor_actual": "phi3",
-        "processing_time_ms": 2670.315
+        "extractor_actual": "spacy",
+        "processing_time_ms": 129.845
       },
       {
         "document": "long_noisy_10.pdf",
-        "status": "processed",
-        "extractor_actual": "spacy",
-        "processing_time_ms": 7453.62
+        "status": "external_quota_blocked",
+        "extractor_actual": "unknown",
+        "processing_time_ms": 363.603
       },
       {
         "document": "short_01.pdf",
         "status": "processed",
-        "extractor_actual": "phi3",
-        "processing_time_ms": 2199.646
+        "extractor_actual": "spacy",
+        "processing_time_ms": 45.601
       },
       {
         "document": "short_02.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 28.383
+        "processing_time_ms": 26.658
       },
       {
         "document": "short_03.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 39.087
+        "processing_time_ms": 33.829
       },
       {
         "document": "short_04.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 121.904
+        "processing_time_ms": 40.313
       },
       {
         "document": "short_05.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 49.701
+        "processing_time_ms": 39.462
       },
       {
         "document": "short_06.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 40.39
+        "processing_time_ms": 43.581
       },
       {
         "document": "short_07.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 28.289
+        "processing_time_ms": 27.022
       },
       {
         "document": "short_08.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 44.618
+        "processing_time_ms": 39.909
       },
       {
         "document": "short_09.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 55.809
+        "processing_time_ms": 45.652
       },
       {
         "document": "short_10.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 50.952
+        "processing_time_ms": 45.347
       },
       {
         "document": "short_11.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 36.444
+        "processing_time_ms": 35.691
       },
       {
         "document": "short_12.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 40.293
+        "processing_time_ms": 26.023
       },
       {
         "document": "short_13.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 37.792
+        "processing_time_ms": 33.434
       },
       {
         "document": "short_14.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 43.324
+        "processing_time_ms": 45.249
       },
       {
         "document": "short_15.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 48.91
+        "processing_time_ms": 41.982
       },
       {
         "document": "short_16.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 68.715
+        "processing_time_ms": 41.901
       },
       {
         "document": "short_17.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 34.605
+        "processing_time_ms": 33.26
       },
       {
         "document": "short_18.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 49.317
+        "processing_time_ms": 40.618
       },
       {
         "document": "short_19.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 38.115
+        "processing_time_ms": 33.783
       },
       {
         "document": "short_20.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 53.036
+        "processing_time_ms": 50.424
       },
       {
         "document": "short_21.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 36.671
+        "processing_time_ms": 35.428
       },
       {
         "document": "short_22.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 27.083
+        "processing_time_ms": 27.221
       },
       {
         "document": "short_23.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 36.593
+        "processing_time_ms": 34.668
       },
       {
         "document": "short_24.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 54.27
+        "processing_time_ms": 45.91
       },
       {
         "document": "short_25.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 43.061
+        "processing_time_ms": 40.779
       },
       {
         "document": "short_26.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 38.563
+        "processing_time_ms": 36.353
       },
       {
         "document": "short_27.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 28.789
+        "processing_time_ms": 26.352
       },
       {
         "document": "short_28.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 43.184
+        "processing_time_ms": 39.047
       },
       {
         "document": "short_29.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 46.235
+        "processing_time_ms": 40.739
       },
       {
         "document": "short_30.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 51.415
+        "processing_time_ms": 46.597
       },
       {
         "document": "short_31.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 36.721
+        "processing_time_ms": 34.254
       },
       {
         "document": "short_32.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 29.793
+        "processing_time_ms": 25.983
       },
       {
         "document": "short_33.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 35.298
+        "processing_time_ms": 34.59
       },
       {
         "document": "short_34.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 50.107
+        "processing_time_ms": 47.46
       },
       {
         "document": "short_35.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 42.158
+        "processing_time_ms": 41.255
       },
       {
         "document": "short_36.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 43.773
+        "processing_time_ms": 47.214
       },
       {
         "document": "short_37.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 27.396
+        "processing_time_ms": 27.213
       },
       {
         "document": "short_38.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 45.352
+        "processing_time_ms": 39.261
       },
       {
         "document": "short_39.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 45.793
+        "processing_time_ms": 40.974
       },
       {
         "document": "short_40.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 49.545
+        "processing_time_ms": 46.379
       }
     ]
   },
   "retries": {
-    "retry_event_count": 0,
-    "documents_with_retries": [],
-    "total_suggested_backoff_seconds": 0,
-    "retry_events": []
+    "retry_event_count": 4,
+    "documents_with_retries": [
+      "long_noisy_04.pdf",
+      "long_noisy_06.pdf",
+      "long_noisy_08.pdf",
+      "long_noisy_10.pdf"
+    ],
+    "total_suggested_backoff_seconds": 184.756,
+    "retry_events": [
+      {
+        "document": "long_noisy_04.pdf",
+        "status": "external_quota_blocked",
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota",
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]"
+      },
+      {
+        "document": "long_noisy_06.pdf",
+        "status": "external_quota_blocked",
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota",
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]"
+      },
+      {
+        "document": "long_noisy_08.pdf",
+        "status": "external_quota_blocked",
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota",
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]"
+      },
+      {
+        "document": "long_noisy_10.pdf",
+        "status": "external_quota_blocked",
+        "retry_delay_seconds": 46.189066049,
+        "retry_reason": "external_quota",
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]"
+      }
+    ]
   }
 }

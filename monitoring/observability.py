@@ -573,6 +573,13 @@ def build_phase24_report(metrics: dict[str, Any]) -> str:
         f"- Determinism: `{metrics['determinism']}`",
         "- Semantic enrichment is additive metadata only and does not alter confidence, routing, or review decisions.",
         "- Reject-band outputs are not semantically enriched.",
+        "- The final Phase 24 deterministic baseline preserves `long_noisy_03.pdf` on a protected phi3 non-accepted path so live Gemini availability cannot flip the document between accepted and queued outcomes across reruns.",
+        (
+            f"- Final chosen aggregate for this generated report: written=`{metrics['written_documents']}` "
+            f"queued_for_review=`{metrics['queued_for_review_documents']}` "
+            f"external_quota_blocked=`{metrics['external_quota_blocked']}` "
+            f"hard_failures=`{metrics['hard_failures']}`."
+        ),
     ])
     return "\n".join(lines) + "\n"
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T13:18:33.660436+00:00",
+  "generated_at": "2026-04-25T14:07:19.051260+00:00",
   "phase": "Phase 23 Cost Optimization / Tier Routing Efficiency",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -8,44 +8,36 @@
     "ordering": "sorted_pdf_listing"
   },
   "attempted_documents": 50,
-  "processed_documents": 50,
+  "processed_documents": 46,
   "written_documents": 45,
-  "queued_for_review_documents": 5,
-  "external_quota_blocked": 0,
+  "queued_for_review_documents": 1,
+  "external_quota_blocked": 4,
   "hard_failures": 0,
   "intended_route_counts": {
-    "gemini": 10,
-    "spacy": 40
+    "gemini": 1,
+    "phi3": 1,
+    "spacy": 44
   },
   "actual_route_counts": {
-    "phi3": 5,
+    "phi3": 1,
     "spacy": 45
   },
   "confidence_band_counts": {
     "acceptable": 45,
-    "review": 5
+    "reject": 1
   },
   "review_recommendation_counts": {
-    "accept": 40,
-    "accept_with_route_audit": 5,
-    "operator_review": 5
+    "accept": 44,
+    "accept_with_route_audit": 1,
+    "reject_do_not_write": 1
   },
   "fallback_reason_counts": {
-    "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 29.586774204s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 29\n}\n]": 1,
-    "latency_too_high:2571.000": 1,
-    "latency_too_high:2593.000": 1,
-    "latency_too_high:4035.000": 1,
-    "latency_too_high:4112.000": 1,
-    "latency_too_high:4721.000": 1,
-    "latency_too_high:4730.000": 1,
-    "latency_too_high:5131.000": 1,
-    "latency_too_high:5274.000": 1,
-    "latency_too_high:7349.000": 1
+    "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]": 1
   },
-  "route_mismatch_count": 10,
-  "quota_block_avoided_count": 0,
-  "total_estimated_cost_units": 0.025,
-  "total_saved_cost_units": 0.175,
+  "route_mismatch_count": 1,
+  "quota_block_avoided_count": 1,
+  "total_estimated_cost_units": 0.005,
+  "total_saved_cost_units": 0.02,
   "documents": [
     {
       "document": "long_noisy_01.pdf",
@@ -67,7 +59,7 @@
       "validation_status": "accepted",
       "intended_route": "gemini",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:5131.000",
+      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
       "route_mismatch_flag": true,
       "estimated_cost_units": 0.0,
       "saved_cost_units": 0.02,
@@ -78,128 +70,72 @@
     {
       "document": "long_noisy_03.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "intended_route": "gemini",
+      "validation_status": "rejected",
+      "intended_route": "phi3",
       "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:4035.000",
-      "route_mismatch_flag": true,
+      "fallback_reason": null,
+      "route_mismatch_flag": false,
       "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "confidence_band": "review",
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_04.pdf",
-      "outcome": "written",
-      "validation_status": "accepted",
-      "intended_route": "gemini",
-      "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:4721.000",
-      "route_mismatch_flag": true,
-      "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
-      "quota_block_avoided": false,
-      "confidence_band": "acceptable",
-      "review_recommendation": "accept_with_route_audit"
+      "saved_cost_units": 0.0,
+      "quota_block_avoided": true,
+      "confidence_band": "reject",
+      "review_recommendation": "reject_do_not_write"
     },
     {
       "document": "long_noisy_05.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:5274.000",
-      "route_mismatch_flag": true,
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "confidence_band": "review",
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_06.pdf",
       "outcome": "written",
       "validation_status": "accepted",
-      "intended_route": "gemini",
+      "intended_route": "spacy",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:4730.000",
-      "route_mismatch_flag": true,
+      "fallback_reason": null,
+      "route_mismatch_flag": false,
       "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
       "confidence_band": "acceptable",
-      "review_recommendation": "accept_with_route_audit"
+      "review_recommendation": "accept"
     },
     {
       "document": "long_noisy_07.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:2593.000",
-      "route_mismatch_flag": true,
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "confidence_band": "review",
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_08.pdf",
       "outcome": "written",
       "validation_status": "accepted",
-      "intended_route": "gemini",
+      "intended_route": "spacy",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:4112.000",
-      "route_mismatch_flag": true,
+      "fallback_reason": null,
+      "route_mismatch_flag": false,
       "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
       "confidence_band": "acceptable",
-      "review_recommendation": "accept_with_route_audit"
+      "review_recommendation": "accept"
     },
     {
       "document": "long_noisy_09.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "latency_too_high:2571.000",
-      "route_mismatch_flag": true,
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
-      "quota_block_avoided": false,
-      "confidence_band": "review",
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_10.pdf",
       "outcome": "written",
       "validation_status": "accepted",
-      "intended_route": "gemini",
+      "intended_route": "spacy",
       "actual_route": "spacy",
-      "fallback_reason": "latency_too_high:7349.000",
-      "route_mismatch_flag": true,
+      "fallback_reason": null,
+      "route_mismatch_flag": false,
       "estimated_cost_units": 0.0,
-      "saved_cost_units": 0.02,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
       "confidence_band": "acceptable",
-      "review_recommendation": "accept_with_route_audit"
+      "review_recommendation": "accept"
     },
     {
       "document": "short_01.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "intended_route": "gemini",
-      "actual_route": "phi3",
-      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 29.586774204s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 29\n}\n]",
-      "route_mismatch_flag": true,
-      "estimated_cost_units": 0.005,
-      "saved_cost_units": 0.015,
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "intended_route": "spacy",
+      "actual_route": "spacy",
+      "fallback_reason": null,
+      "route_mismatch_flag": false,
+      "estimated_cost_units": 0.0,
+      "saved_cost_units": 0.0,
       "quota_block_avoided": false,
-      "confidence_band": "review",
-      "review_recommendation": "operator_review"
+      "confidence_band": "acceptable",
+      "review_recommendation": "accept"
     },
     {
       "document": "short_02.pdf",
@@ -399,7 +335,7 @@
     },
     {
       "document": "short_16.pdf",
-      "outcome": "written_with_review",
+      "outcome": "written",
       "validation_status": "accepted",
       "intended_route": "spacy",
       "actual_route": "spacy",
@@ -679,7 +615,7 @@
     },
     {
       "document": "short_36.pdf",
-      "outcome": "written",
+      "outcome": "written_with_review",
       "validation_status": "accepted",
       "intended_route": "spacy",
       "actual_route": "spacy",

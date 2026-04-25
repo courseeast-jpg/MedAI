@@ -1,38 +1,34 @@
 # Phase 22 Accuracy Calibration Report
 
-- Generated at: `2026-04-25T13:18:33.660436+00:00`
+- Generated at: `2026-04-25T14:07:19.051260+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
-- Processed documents: `50`
+- Processed documents: `46`
 - Written documents: `45`
-- Queued for review documents: `5`
-- External quota blocked: `0`
+- Queued for review documents: `1`
+- External quota blocked: `4`
 - Hard failures: `0`
-- Average raw confidence: `0.698`
-- Average calibrated confidence: `0.698`
-- Route mismatch count: `10`
+- Average raw confidence: `0.692`
+- Average calibrated confidence: `0.692`
+- Route mismatch count: `1`
 
 ## Calibration Summary
 
-- Confidence band counts: `{'acceptable': 45, 'review': 5}`
-- Calibration reason counts: `{'raw_confidence_retained': 40, 'raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used': 10}`
-- Review recommendation counts: `{'accept': 40, 'accept_with_route_audit': 5, 'operator_review': 5}`
-- Extractor route counts: `{'phi3': 5, 'spacy': 45}`
-- Extractor actual counts: `{'phi3': 5, 'spacy': 45}`
+- Confidence band counts: `{'acceptable': 45, 'reject': 1}`
+- Calibration reason counts: `{'raw_confidence_retained': 45, 'raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used': 1}`
+- Review recommendation counts: `{'accept': 44, 'accept_with_route_audit': 1, 'reject_do_not_write': 1}`
+- Extractor route counts: `{'phi3': 1, 'spacy': 45}`
+- Extractor actual counts: `{'phi3': 1, 'spacy': 45}`
 
 ## Document Audit
 
 - `long_noisy_01.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False
 - `long_noisy_02.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept_with_route_audit route_mismatch=True
-- `long_noisy_03.pdf` -> band=review raw=0.68 calibrated=0.68 recommendation=operator_review route_mismatch=True
-- `long_noisy_04.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept_with_route_audit route_mismatch=True
-- `long_noisy_05.pdf` -> band=review raw=0.68 calibrated=0.68 recommendation=operator_review route_mismatch=True
-- `long_noisy_06.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept_with_route_audit route_mismatch=True
-- `long_noisy_07.pdf` -> band=review raw=0.68 calibrated=0.68 recommendation=operator_review route_mismatch=True
-- `long_noisy_08.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept_with_route_audit route_mismatch=True
-- `long_noisy_09.pdf` -> band=review raw=0.68 calibrated=0.68 recommendation=operator_review route_mismatch=True
-- `long_noisy_10.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept_with_route_audit route_mismatch=True
-- `short_01.pdf` -> band=review raw=0.68 calibrated=0.68 recommendation=operator_review route_mismatch=True
+- `long_noisy_03.pdf` -> band=reject raw=0.345 calibrated=0.345 recommendation=reject_do_not_write route_mismatch=False
+- `long_noisy_05.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False
+- `long_noisy_07.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False
+- `long_noisy_09.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False
+- `short_01.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False
 - `short_02.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False
 - `short_03.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False
 - `short_04.pdf` -> band=acceptable raw=0.7 calibrated=0.7 recommendation=accept route_mismatch=False

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T13:18:33.660436+00:00",
+  "generated_at": "2026-04-25T14:07:19.051260+00:00",
   "phase": "Phase 22 Accuracy Improvement / Confidence Calibration",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -8,35 +8,35 @@
     "ordering": "sorted_pdf_listing"
   },
   "attempted_documents": 50,
-  "processed_documents": 50,
+  "processed_documents": 46,
   "written_documents": 45,
-  "queued_for_review_documents": 5,
-  "external_quota_blocked": 0,
+  "queued_for_review_documents": 1,
+  "external_quota_blocked": 4,
   "hard_failures": 0,
-  "average_raw_confidence": 0.698,
-  "average_calibrated_confidence": 0.698,
+  "average_raw_confidence": 0.692,
+  "average_calibrated_confidence": 0.692,
   "confidence_band_counts": {
     "acceptable": 45,
-    "review": 5
+    "reject": 1
   },
   "calibration_reason_counts": {
-    "raw_confidence_retained": 40,
-    "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used": 10
+    "raw_confidence_retained": 45,
+    "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used": 1
   },
   "review_recommendation_counts": {
-    "accept": 40,
-    "accept_with_route_audit": 5,
-    "operator_review": 5
+    "accept": 44,
+    "accept_with_route_audit": 1,
+    "reject_do_not_write": 1
   },
   "extractor_route_counts": {
-    "phi3": 5,
+    "phi3": 1,
     "spacy": 45
   },
   "extractor_actual_counts": {
-    "phi3": 5,
+    "phi3": 1,
     "spacy": 45
   },
-  "route_mismatch_count": 10,
+  "route_mismatch_count": 1,
   "documents": [
     {
       "document": "long_noisy_01.pdf",
@@ -67,119 +67,67 @@
     {
       "document": "long_noisy_03.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
+      "validation_status": "rejected",
+      "raw_confidence": 0.345,
+      "calibrated_confidence": 0.345,
+      "confidence_band": "reject",
+      "calibration_reason": "raw_confidence_retained",
       "extractor_route": "phi3",
       "extractor_actual": "phi3",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_04.pdf",
-      "outcome": "written",
-      "validation_status": "accepted",
-      "raw_confidence": 0.7,
-      "calibrated_confidence": 0.7,
-      "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "extractor_route": "spacy",
-      "extractor_actual": "spacy",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit"
+      "route_mismatch_flag": false,
+      "review_recommendation": "reject_do_not_write"
     },
     {
       "document": "long_noisy_05.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "extractor_route": "phi3",
-      "extractor_actual": "phi3",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_06.pdf",
       "outcome": "written",
       "validation_status": "accepted",
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
       "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
+      "calibration_reason": "raw_confidence_retained",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit"
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept"
     },
     {
       "document": "long_noisy_07.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "extractor_route": "phi3",
-      "extractor_actual": "phi3",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_08.pdf",
       "outcome": "written",
       "validation_status": "accepted",
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
       "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
+      "calibration_reason": "raw_confidence_retained",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit"
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept"
     },
     {
       "document": "long_noisy_09.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "extractor_route": "phi3",
-      "extractor_actual": "phi3",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review"
-    },
-    {
-      "document": "long_noisy_10.pdf",
       "outcome": "written",
       "validation_status": "accepted",
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
       "confidence_band": "acceptable",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
+      "calibration_reason": "raw_confidence_retained",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "route_mismatch_flag": true,
-      "review_recommendation": "accept_with_route_audit"
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept"
     },
     {
       "document": "short_01.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "extractor_route": "phi3",
-      "extractor_actual": "phi3",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review"
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "raw_confidence": 0.7,
+      "calibrated_confidence": 0.7,
+      "confidence_band": "acceptable",
+      "calibration_reason": "raw_confidence_retained",
+      "extractor_route": "spacy",
+      "extractor_actual": "spacy",
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept"
     },
     {
       "document": "short_02.pdf",
@@ -365,7 +313,7 @@
     },
     {
       "document": "short_16.pdf",
-      "outcome": "written_with_review",
+      "outcome": "written",
       "validation_status": "accepted",
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,
@@ -625,7 +573,7 @@
     },
     {
       "document": "short_36.pdf",
-      "outcome": "written",
+      "outcome": "written_with_review",
       "validation_status": "accepted",
       "raw_confidence": 0.7,
       "calibrated_confidence": 0.7,

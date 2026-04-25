@@ -1,34 +1,36 @@
 {
-  "generated_at": "2026-04-25T13:18:33.660436+00:00",
+  "generated_at": "2026-04-25T14:07:19.051260+00:00",
   "phase": "Phase 15 Expanded Validation",
   "dataset_dir": "test_data\\final_batch_50",
   "documents_attempted": 50,
-  "documents_processed": 50,
-  "documents_quota_blocked": 0,
+  "documents_processed": 46,
+  "documents_quota_blocked": 4,
   "written": 45,
-  "queued_for_review": 5,
+  "queued_for_review": 1,
   "hard_failures": 0,
-  "avg_confidence_processed_only": 0.698,
+  "avg_confidence_processed_only": 0.692,
   "route_distribution_actual": {
-    "phi3": 5,
+    "phi3": 1,
     "spacy": 45
   },
   "route_distribution_requested": {
-    "gemini": 10,
-    "spacy": 40
+    "gemini": 1,
+    "phi3": 1,
+    "spacy": 44,
+    "unknown": 4
   },
   "top_rejection_patterns": [
     {
       "pattern": "clear",
-      "count": 12
+      "count": 13
     },
     {
       "pattern": "quarantined",
-      "count": 12
+      "count": 13
     },
     {
-      "pattern": "confidence_below_accept_threshold",
-      "count": 5
+      "pattern": "agreement_below_accept_threshold",
+      "count": 1
     }
   ],
   "counters": {
