@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from execution.runtime_controls import RuntimeRunGuard, deterministic_run_id
 from monitoring.run_comparator import write_stability_report
 
 PHASE18_REPORT_DIR = ROOT / "reports" / "phase18"
@@ -30,6 +31,9 @@ PHASE25_METRICS_PATH = ROOT / "artifacts" / "phase25" / "medical_coding.json"
 PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
 PHASE26_METRICS_PATH = ROOT / "artifacts" / "phase26" / "language_support.json"
 PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md"
+PHASE27_METRICS_PATH = ROOT / "artifacts" / "phase27" / "runtime_controls.json"
+PHASE27_REPORT_PATH = ROOT / "reports" / "phase27" / "production_hardening_report.md"
+PHASE27_LOCK_PATH = ROOT / "artifacts" / "phase27" / "full_cycle_run.lock"
 PHASE17_DASHBOARD_PATH = ROOT / "reports" / "phase17" / "dashboard_latest.md"
 
 PHASE18_STEPS: list[tuple[str, list[str]]] = [
@@ -111,6 +115,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
     phase24 = load_json(PHASE24_METRICS_PATH) if PHASE24_METRICS_PATH.exists() else {}
     phase25 = load_json(PHASE25_METRICS_PATH) if PHASE25_METRICS_PATH.exists() else {}
     phase26 = load_json(PHASE26_METRICS_PATH) if PHASE26_METRICS_PATH.exists() else {}
+    phase27 = load_json(PHASE27_METRICS_PATH) if PHASE27_METRICS_PATH.exists() else {}
     pytest_step = next((item for item in commands if item["name"] == "tests"), None)
     failed_step = next((item["name"] for item in commands if item["returncode"] != 0), None)
 
@@ -201,6 +206,18 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
             "requires_ocr_count": int(phase26.get("requires_ocr_count", 0)),
             "language_unknown_count": int(phase26.get("language_unknown_count", 0)),
         },
+        "runtime_controls_result": {
+            "metrics_path": str(PHASE27_METRICS_PATH),
+            "report_path": str(PHASE27_REPORT_PATH),
+            "run_lock_acquired": bool(phase27.get("run_lock_acquired", False)),
+            "run_lock_released": bool(phase27.get("run_lock_released", False)),
+            "stale_lock_recovered": bool(phase27.get("stale_lock_recovered", False)),
+            "retry_eligible_count": int(phase27.get("retry_eligible_count", 0)),
+            "non_retryable_failure_count": int(phase27.get("non_retryable_failure_count", 0)),
+            "timeout_count": int(phase27.get("timeout_count", 0)),
+            "cleanup_completed": bool(phase27.get("cleanup_completed", False)),
+            "failure_category_counts": phase27.get("failure_category_counts", {}),
+        },
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
         "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
@@ -219,6 +236,7 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
     semantic_enrichment = summary["semantic_enrichment_result"]
     medical_coding = summary["medical_coding_result"]
     language_support = summary["language_support_result"]
+    runtime_controls = summary["runtime_controls_result"]
     lines = [
         "# Phase 18 Full Cycle Summary",
         "",
@@ -280,6 +298,16 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Language support language_unknown_count: `{language_support['language_unknown_count']}`",
         f"- Language support metrics_path: `{language_support['metrics_path']}`",
         f"- Language support report_path: `{language_support['report_path']}`",
+        f"- Runtime controls run_lock_acquired: `{runtime_controls['run_lock_acquired']}`",
+        f"- Runtime controls run_lock_released: `{runtime_controls['run_lock_released']}`",
+        f"- Runtime controls stale_lock_recovered: `{runtime_controls['stale_lock_recovered']}`",
+        f"- Runtime controls retry_eligible_count: `{runtime_controls['retry_eligible_count']}`",
+        f"- Runtime controls non_retryable_failure_count: `{runtime_controls['non_retryable_failure_count']}`",
+        f"- Runtime controls timeout_count: `{runtime_controls['timeout_count']}`",
+        f"- Runtime controls cleanup_completed: `{runtime_controls['cleanup_completed']}`",
+        f"- Runtime controls failure_category_counts: `{runtime_controls['failure_category_counts']}`",
+        f"- Runtime controls metrics_path: `{runtime_controls['metrics_path']}`",
+        f"- Runtime controls report_path: `{runtime_controls['report_path']}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
         f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",
@@ -313,10 +341,25 @@ def execute_steps(
 
 
 def main() -> int:
+    run_id = deterministic_run_id(
+        scope="phase18_full_cycle",
+        values={
+            "steps": PHASE18_STEPS,
+        },
+    )
+    guard = RuntimeRunGuard(
+        script_name="run_phase18_full_cycle.py",
+        run_id=run_id,
+        lock_path=PHASE27_LOCK_PATH,
+    )
     started_at = datetime.now(UTC)
-    results = execute_steps()
-    ended_at = datetime.now(UTC)
-    summary = build_summary(commands=results, started_at=started_at, ended_at=ended_at)
+    guard.acquire()
+    try:
+        results = execute_steps()
+        ended_at = datetime.now(UTC)
+        summary = build_summary(commands=results, started_at=started_at, ended_at=ended_at)
+    finally:
+        guard.release()
     write_summary_reports(summary)
     write_stability_report()
     print(json.dumps(summary, indent=2))

@@ -1,0 +1,333 @@
+{
+  "generated_at": "2026-04-25T15:46:52.345746+00:00",
+  "phase": "Phase 27 Production Hardening / Failure Recovery / Runtime Controls",
+  "dataset_dir": "test_data\\final_batch_50",
+  "determinism": {
+    "mode": "deterministic_path",
+    "seed": null,
+    "ordering": "sorted_pdf_listing"
+  },
+  "attempted_documents": 50,
+  "processed_documents": 46,
+  "written_documents": 45,
+  "queued_for_review_documents": 1,
+  "external_quota_blocked": 4,
+  "hard_failures": 0,
+  "run_id": "phase12_validation-34dc9ad511d46ada",
+  "script_name": "run_phase12_real_world_validation.py",
+  "lock_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase27\\validation_run.lock",
+  "run_lock_acquired": true,
+  "run_lock_released": true,
+  "stale_lock_recovered": false,
+  "retry_eligible_count": 4,
+  "non_retryable_failure_count": 1,
+  "timeout_count": 0,
+  "cleanup_completed": false,
+  "failure_category_counts": {
+    "external_quota_block": 4,
+    "none": 45,
+    "operator_review_required": 1
+  },
+  "document_categories": [
+    {
+      "document": "long_noisy_01.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "long_noisy_02.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "long_noisy_03.pdf",
+      "status": "processed",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "document": "long_noisy_04.pdf",
+      "status": "external_quota_blocked",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota"
+    },
+    {
+      "document": "long_noisy_05.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "long_noisy_06.pdf",
+      "status": "external_quota_blocked",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota"
+    },
+    {
+      "document": "long_noisy_07.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "long_noisy_08.pdf",
+      "status": "external_quota_blocked",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota"
+    },
+    {
+      "document": "long_noisy_09.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "long_noisy_10.pdf",
+      "status": "external_quota_blocked",
+      "outcome": "external_quota_blocked",
+      "validation_status": "skipped_external_quota"
+    },
+    {
+      "document": "short_01.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_02.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_03.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_04.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_05.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_06.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_07.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_08.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_09.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_10.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_11.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_12.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_13.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_14.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_15.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_16.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_17.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_18.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_19.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_20.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_21.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_22.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_23.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_24.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_25.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_26.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_27.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_28.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_29.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_30.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_31.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_32.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_33.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_34.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_35.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_36.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_37.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_38.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_39.pdf",
+      "status": "processed",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "document": "short_40.pdf",
+      "status": "processed",
+      "outcome": "written_with_review",
+      "validation_status": "accepted"
+    }
+  ]
+}

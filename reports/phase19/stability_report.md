@@ -5,15 +5,13 @@
 
 ## Recent Runs
 
-- `final_batch_50-20260425T151029273413_0000` -> processed=47 written=45 queued=2 quota=3 avg_conf=0.699
-- `final_batch_50-20260425T151612490522_0000` -> processed=46 written=45 queued=1 quota=4 avg_conf=0.692
 - `final_batch_50-20260425T152049049544_0000` -> processed=46 written=45 queued=1 quota=4 avg_conf=0.692
+- `final_batch_50-20260425T154214174152_0000` -> processed=46 written=45 queued=1 quota=4 avg_conf=0.692
+- `final_batch_50-20260425T154652345746_0000` -> processed=46 written=45 queued=1 quota=4 avg_conf=0.692
 
 ## Comparisons
 
-- `final_batch_50-20260425T151029273413_0000` -> `final_batch_50-20260425T151612490522_0000` status=STABLE deltas={'processed': -1, 'written': 0, 'queued_for_review': -1, 'quota_blocked': 1, 'avg_confidence': -0.007}
-  explanation: Quota-blocked documents changed by 1, which can shift processed totals without any pipeline behavior change.
-  explanation: Derived queued document count changed by -1; inspect review counts and quota behavior for this run.
-  explanation: Average confidence changed by -0.007; compare document mix and quota-skipped documents.
-- `final_batch_50-20260425T151612490522_0000` -> `final_batch_50-20260425T152049049544_0000` status=STABLE deltas={'processed': 0, 'written': 0, 'queued_for_review': 0, 'quota_blocked': 0, 'avg_confidence': 0.0}
+- `final_batch_50-20260425T152049049544_0000` -> `final_batch_50-20260425T154214174152_0000` status=STABLE deltas={'processed': 0, 'written': 0, 'queued_for_review': 0, 'quota_blocked': 0, 'avg_confidence': 0.0}
+  explanation: No material variance detected between the compared runs.
+- `final_batch_50-20260425T154214174152_0000` -> `final_batch_50-20260425T154652345746_0000` status=STABLE deltas={'processed': 0, 'written': 0, 'queued_for_review': 0, 'quota_blocked': 0, 'avg_confidence': 0.0}
   explanation: No material variance detected between the compared runs.

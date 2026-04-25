@@ -31,6 +31,9 @@ DEFAULT_PHASE25_ARTIFACT_PATH = ROOT / "artifacts" / "phase25" / "medical_coding
 DEFAULT_PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
 DEFAULT_PHASE26_ARTIFACT_PATH = ROOT / "artifacts" / "phase26" / "language_support.json"
 DEFAULT_PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md"
+DEFAULT_PHASE27_ARTIFACT_PATH = ROOT / "artifacts" / "phase27" / "runtime_controls.json"
+DEFAULT_PHASE27_REPORT_PATH = ROOT / "reports" / "phase27" / "production_hardening_report.md"
+DEFAULT_PHASE27_LOCK_PATH = ROOT / "artifacts" / "phase27" / "validation_run.lock"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -41,6 +44,7 @@ from execution.audit import StageAuditLogger
 from execution.logging import AuditLogger
 from execution.pipeline import ExecutionPipeline
 from execution.review_queue import ReviewQueueWriter, read_review_queue
+from execution.runtime_controls import RuntimeRunGuard, deterministic_run_id
 from mkb.sqlite_store import SQLiteStore
 from monitoring.metrics_collector import collect_latest_run_metrics
 from monitoring.observability import (
@@ -50,6 +54,7 @@ from monitoring.observability import (
     write_phase24_outputs,
     write_phase25_outputs,
     write_phase26_outputs,
+    write_phase27_outputs,
 )
 
 
@@ -477,6 +482,7 @@ def build_phase12_summary(
             "seed": int(fixed_seed) if fixed_seed not in {None, ""} else None,
             "ordering": "sorted_pdf_listing",
         },
+        "runtime_controls": {},
         "recommendations": recommendations,
     }
 
@@ -807,6 +813,23 @@ def main() -> int:
     dataset_dir = Path(args.dataset_dir)
     output_dir = Path(args.output_dir)
     runtime_dir = output_dir / "runtime"
+    run_id = deterministic_run_id(
+        scope="phase12_validation",
+        values={
+            "dataset_dir": str(dataset_dir.resolve()),
+            "output_dir": str(output_dir.resolve()),
+            "limit": args.limit,
+            "specialty": args.specialty,
+            "quota_safe": bool(args.quota_safe),
+        },
+    )
+    guard = RuntimeRunGuard(
+        script_name="run_phase12_real_world_validation.py",
+        run_id=run_id,
+        lock_path=DEFAULT_PHASE27_LOCK_PATH,
+        cleanup_paths=[runtime_dir],
+    )
+    summary: dict[str, Any] | None = None
 
     if not dataset_dir.exists():
         raise SystemExit(f"Dataset directory not found: {dataset_dir}")
@@ -817,53 +840,60 @@ def main() -> int:
     else:
         logger.info("phase19 deterministic path seed=none ordering=sorted_pdf_listing")
 
-    if runtime_dir.exists():
-        shutil.rmtree(runtime_dir)
+    try:
+        guard.acquire()
+        if runtime_dir.exists():
+            shutil.rmtree(runtime_dir)
 
-    pdfs = list_pdf_documents(dataset_dir, args.limit)
-    pipeline, sql_store, component_state = build_validation_pipeline(runtime_dir)
-    review_queue = ReviewQueueWriter(Path(component_state["review_queue_path"]))
+        pdfs = list_pdf_documents(dataset_dir, args.limit)
+        pipeline, sql_store, component_state = build_validation_pipeline(runtime_dir)
+        review_queue = ReviewQueueWriter(Path(component_state["review_queue_path"]))
 
-    documents: list[dict[str, Any]] = []
-    for pdf_path in pdfs:
-        started = time.perf_counter()
-        try:
-            result = pipeline.process_pdf(
-                pdf_path,
-                specialty=args.specialty,
-                session_id=f"phase12-{pdf_path.stem}",
-            )
-            elapsed_ms = (time.perf_counter() - started) * 1000
-            documents.append(summarize_document(pdf_path, result, processing_time_ms=elapsed_ms))
-        except Exception as exc:  # pragma: no cover - defensive path for live validation
-            elapsed_ms = (time.perf_counter() - started) * 1000
-            document = summarize_document(
-                pdf_path,
-                None,
-                error=exc,
-                quota_safe=args.quota_safe,
-                processing_time_ms=elapsed_ms,
-            )
-            if document["status"] == "external_quota_blocked":
-                review_queue.append_external_quota_block(
-                    run_id=f"phase12-{pdf_path.stem}",
-                    document_id=pdf_path.name,
-                    source_filename=pdf_path.name,
-                    reason="external_quota_blocked",
-                    recommended_action="operator_retry_after_quota_reset",
-                    raw_evidence_path=str(pdf_path),
-                    error=str(exc),
-                    retry_visibility=document["retry_visibility"],
+        documents: list[dict[str, Any]] = []
+        for pdf_path in pdfs:
+            started = time.perf_counter()
+            try:
+                result = pipeline.process_pdf(
+                    pdf_path,
+                    specialty=args.specialty,
+                    session_id=f"phase12-{pdf_path.stem}",
                 )
-            documents.append(document)
+                elapsed_ms = (time.perf_counter() - started) * 1000
+                documents.append(summarize_document(pdf_path, result, processing_time_ms=elapsed_ms))
+            except Exception as exc:  # pragma: no cover - defensive path for live validation
+                elapsed_ms = (time.perf_counter() - started) * 1000
+                document = summarize_document(
+                    pdf_path,
+                    None,
+                    error=exc,
+                    quota_safe=args.quota_safe,
+                    processing_time_ms=elapsed_ms,
+                )
+                if document["status"] == "external_quota_blocked":
+                    review_queue.append_external_quota_block(
+                        run_id=f"phase12-{pdf_path.stem}",
+                        document_id=pdf_path.name,
+                        source_filename=pdf_path.name,
+                        reason="external_quota_blocked",
+                        recommended_action="operator_retry_after_quota_reset",
+                        raw_evidence_path=str(pdf_path),
+                        error=str(exc),
+                        retry_visibility=document["retry_visibility"],
+                    )
+                documents.append(document)
 
-    summary = build_phase12_summary(
-        dataset_dir=dataset_dir,
-        requested_limit=args.limit,
-        documents=documents,
-        runtime_counts=sql_store.count_records(),
-        component_state=component_state,
-    )
+        summary = build_phase12_summary(
+            dataset_dir=dataset_dir,
+            requested_limit=args.limit,
+            documents=documents,
+            runtime_counts=sql_store.count_records(),
+            component_state=component_state,
+        )
+        guard.finalize(documents=documents)
+    finally:
+        guard.release()
+
+    summary["runtime_controls"] = guard.state.to_dict()
     write_outputs(output_dir, summary)
     write_phase13_reports(DEFAULT_PHASE13_REPORT_DIR, summary)
     write_phase15_reports(DEFAULT_PHASE15_REPORT_DIR, summary)
@@ -896,6 +926,11 @@ def main() -> int:
         summary,
         artifact_path=DEFAULT_PHASE26_ARTIFACT_PATH,
         report_path=DEFAULT_PHASE26_REPORT_PATH,
+    )
+    write_phase27_outputs(
+        summary,
+        artifact_path=DEFAULT_PHASE27_ARTIFACT_PATH,
+        report_path=DEFAULT_PHASE27_REPORT_PATH,
     )
     collect_latest_run_metrics()
 

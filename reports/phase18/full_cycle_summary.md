@@ -1,11 +1,11 @@
 # Phase 18 Full Cycle Summary
 
-- Generated at: `2026-04-25T15:20:51.301744+00:00`
-- Commit hash: `c58f04d0924a161c1e4a54b52b25422edaf66111`
+- Generated at: `2026-04-25T15:46:54.651030+00:00`
+- Commit hash: `cda55ce0664241b09bed8cc2f7541609b42d278a`
 - Git status: `dirty`
 - Success: `True`
 - Failed step: `None`
-- Test result: `213 passed`
+- Test result: `222 passed`
 - Phase 11 audit result: `passed`
 - Validation attempted: `50`
 - Validation processed: `46`
@@ -58,9 +58,19 @@
 - Language support language_unknown_count: `0`
 - Language support metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase26\language_support.json`
 - Language support report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase26\language_support_report.md`
+- Runtime controls run_lock_acquired: `True`
+- Runtime controls run_lock_released: `True`
+- Runtime controls stale_lock_recovered: `False`
+- Runtime controls retry_eligible_count: `4`
+- Runtime controls non_retryable_failure_count: `1`
+- Runtime controls timeout_count: `0`
+- Runtime controls cleanup_completed: `False`
+- Runtime controls failure_category_counts: `{'external_quota_block': 4, 'none': 45, 'operator_review_required': 1}`
+- Runtime controls metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase27\runtime_controls.json`
+- Runtime controls report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase27\production_hardening_report.md`
 - Dashboard export path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase17\dashboard_latest.md`
 - Stability report path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase19\stability_report.md`
-- Duration seconds: `272.195`
+- Duration seconds: `273.5`
 
 ## Steps
 

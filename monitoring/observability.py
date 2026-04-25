@@ -23,6 +23,8 @@ DEFAULT_PHASE25_ARTIFACT_PATH = ROOT / "artifacts" / "phase25" / "medical_coding
 DEFAULT_PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
 DEFAULT_PHASE26_ARTIFACT_PATH = ROOT / "artifacts" / "phase26" / "language_support.json"
 DEFAULT_PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md"
+DEFAULT_PHASE27_ARTIFACT_PATH = ROOT / "artifacts" / "phase27" / "runtime_controls.json"
+DEFAULT_PHASE27_REPORT_PATH = ROOT / "reports" / "phase27" / "production_hardening_report.md"
 
 
 def _load_jsonl(path: Path | str | None) -> list[dict[str, Any]]:
@@ -123,6 +125,7 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
     pending_translation_count = sum(int(str(item.get("translation_status", "")) == "pending_translation") for item in processed)
     requires_ocr_count = sum(int(bool(item.get("requires_ocr", False))) for item in processed)
     language_unknown_count = sum(int(str(item.get("detected_language", "")) == "unknown") for item in processed)
+    runtime_controls = summary.get("runtime_controls", {})
 
     return {
         "generated_at": summary.get("generated_at"),
@@ -157,6 +160,13 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         "pending_translation_count": pending_translation_count,
         "requires_ocr_count": requires_ocr_count,
         "language_unknown_count": language_unknown_count,
+        "run_lock_acquired": bool(runtime_controls.get("run_lock_acquired", False)),
+        "run_lock_released": bool(runtime_controls.get("run_lock_released", False)),
+        "stale_lock_recovered": bool(runtime_controls.get("stale_lock_recovered", False)),
+        "retry_eligible_count": int(runtime_controls.get("retry_eligible_count", 0)),
+        "non_retryable_failure_count": int(runtime_controls.get("non_retryable_failure_count", 0)),
+        "timeout_count": int(runtime_controls.get("timeout_count", 0)),
+        "cleanup_completed": bool(runtime_controls.get("cleanup_completed", False)),
         "review_queue_category_counts": dict(sorted(review_queue_categories.items())),
         "per_stage_duration_ms": build_stage_duration_metrics(stage_events),
         "paths": {
@@ -198,6 +208,13 @@ def build_phase21_report(metrics: dict[str, Any]) -> str:
         f"- Pending translation count: `{metrics['pending_translation_count']}`",
         f"- Requires OCR count: `{metrics['requires_ocr_count']}`",
         f"- Language unknown count: `{metrics['language_unknown_count']}`",
+        f"- Run lock acquired: `{metrics['run_lock_acquired']}`",
+        f"- Run lock released: `{metrics['run_lock_released']}`",
+        f"- Stale lock recovered: `{metrics['stale_lock_recovered']}`",
+        f"- Retry eligible count: `{metrics['retry_eligible_count']}`",
+        f"- Non-retryable failure count: `{metrics['non_retryable_failure_count']}`",
+        f"- Timeout count: `{metrics['timeout_count']}`",
+        f"- Cleanup completed: `{metrics['cleanup_completed']}`",
         "",
         "## Route Counts",
         "",
@@ -860,4 +877,96 @@ def write_phase26_outputs(
     report_path.parent.mkdir(parents=True, exist_ok=True)
     artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     report_path.write_text(build_phase26_report(metrics), encoding="utf-8")
+    return metrics
+
+
+def build_phase27_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    runtime_controls = summary.get("runtime_controls", {})
+    documents = summary.get("documents", [])
+
+    failure_category_counts = dict(sorted({
+        str(key): int(value)
+        for key, value in dict(runtime_controls.get("failure_category_counts", {})).items()
+    }.items()))
+
+    return {
+        "generated_at": summary.get("generated_at"),
+        "phase": "Phase 27 Production Hardening / Failure Recovery / Runtime Controls",
+        "dataset_dir": summary.get("dataset_dir"),
+        "determinism": summary.get("determinism", {}),
+        "attempted_documents": int(summary.get("documents_selected", 0)),
+        "processed_documents": int(summary.get("documents_processed", 0)),
+        "written_documents": int(summary.get("written", 0)),
+        "queued_for_review_documents": int(summary.get("queued_for_review", 0)),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", 0)),
+        "hard_failures": int(summary.get("hard_failures", 0)),
+        "run_id": runtime_controls.get("run_id"),
+        "script_name": runtime_controls.get("script_name"),
+        "lock_path": runtime_controls.get("lock_path"),
+        "run_lock_acquired": bool(runtime_controls.get("run_lock_acquired", False)),
+        "run_lock_released": bool(runtime_controls.get("run_lock_released", False)),
+        "stale_lock_recovered": bool(runtime_controls.get("stale_lock_recovered", False)),
+        "retry_eligible_count": int(runtime_controls.get("retry_eligible_count", 0)),
+        "non_retryable_failure_count": int(runtime_controls.get("non_retryable_failure_count", 0)),
+        "timeout_count": int(runtime_controls.get("timeout_count", 0)),
+        "cleanup_completed": bool(runtime_controls.get("cleanup_completed", False)),
+        "failure_category_counts": failure_category_counts,
+        "document_categories": [
+            {
+                "document": item.get("document"),
+                "status": item.get("status"),
+                "outcome": item.get("outcome"),
+                "validation_status": item.get("validation_status"),
+            }
+            for item in documents
+            if item.get("document")
+        ],
+    }
+
+
+def build_phase27_report(metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 27 Production Hardening Report",
+        "",
+        f"- Generated at: `{metrics['generated_at']}`",
+        f"- Dataset: `{metrics['dataset_dir']}`",
+        f"- Attempted documents: `{metrics['attempted_documents']}`",
+        f"- Processed documents: `{metrics['processed_documents']}`",
+        f"- Written documents: `{metrics['written_documents']}`",
+        f"- Queued for review documents: `{metrics['queued_for_review_documents']}`",
+        f"- External quota blocked: `{metrics['external_quota_blocked']}`",
+        f"- Hard failures: `{metrics['hard_failures']}`",
+        f"- Run ID: `{metrics['run_id']}`",
+        f"- Script name: `{metrics['script_name']}`",
+        f"- Lock path: `{metrics['lock_path']}`",
+        f"- Run lock acquired: `{metrics['run_lock_acquired']}`",
+        f"- Run lock released: `{metrics['run_lock_released']}`",
+        f"- Stale lock recovered: `{metrics['stale_lock_recovered']}`",
+        f"- Retry eligible count: `{metrics['retry_eligible_count']}`",
+        f"- Non-retryable failure count: `{metrics['non_retryable_failure_count']}`",
+        f"- Timeout count: `{metrics['timeout_count']}`",
+        f"- Cleanup completed: `{metrics['cleanup_completed']}`",
+        f"- Failure category counts: `{metrics['failure_category_counts']}`",
+        "",
+        "## Runtime Guardrails",
+        "",
+        f"- Determinism: `{metrics['determinism']}`",
+        "- Runtime hardening is script-level only and does not alter extraction, routing, confidence, review, enrichment, coding, or language outputs.",
+        "- External quota blocks and operator-review outcomes remain non-hard-failure categories.",
+        "- The single-run lock rejects concurrent overlap and allows deterministic stale-lock recovery with safe cleanup.",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def write_phase27_outputs(
+    summary: dict[str, Any],
+    *,
+    artifact_path: Path = DEFAULT_PHASE27_ARTIFACT_PATH,
+    report_path: Path = DEFAULT_PHASE27_REPORT_PATH,
+) -> dict[str, Any]:
+    metrics = build_phase27_metrics(summary)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    report_path.write_text(build_phase27_report(metrics), encoding="utf-8")
     return metrics
