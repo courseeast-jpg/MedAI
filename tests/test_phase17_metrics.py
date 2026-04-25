@@ -21,6 +21,7 @@ def make_summary() -> dict:
         "queued_for_review": 0,
         "external_quota_blocked": 4,
         "hard_failures": 0,
+        "review_queue": {"items": 30},
         "aggregate": {
             "outcomes": {"written": 33, "written_with_review": 13},
             "avg_confidence": 0.7,
@@ -49,18 +50,28 @@ def make_aggregate() -> dict:
 
 
 def test_run_record_computed_from_existing_artifacts_shape():
-    record = build_run_record(make_summary(), make_aggregate())
+    phase21 = {
+        "review_queue_items": 30,
+        "route_mismatch_count": 1,
+        "low_confidence_count": 2,
+        "quota_safe_block_count": 4,
+    }
+    record = build_run_record(make_summary(), make_aggregate(), phase21_metrics=phase21)
 
     assert record.dataset == "test_data\\final_batch_50"
     assert record.attempted == 50
     assert record.processed == 46
     assert record.written == 46
     assert record.written_with_review == 13
+    assert record.review_queue_items == 30
     assert record.external_quota_blocked == 4
     assert record.hard_failures == 0
     assert record.avg_confidence == 0.7
     assert record.route_distribution_requested == {"gemini": 1, "spacy": 45, "unknown": 4}
     assert record.route_distribution_actual == {"spacy": 46}
+    assert record.route_mismatch_count == 1
+    assert record.low_confidence_count == 2
+    assert record.quota_safe_block_count == 4
     assert record.review_counts == {"clear": 13, "quarantined": 13}
     assert record.duration_sec == 3.5
 

@@ -1,24 +1,29 @@
 # Phase 18 Full Cycle Summary
 
-- Generated at: `2026-04-25T00:58:34.117260+00:00`
-- Commit hash: `78b58c453778e6413279489743a53642f5aa88ac`
+- Generated at: `2026-04-25T01:21:16.602927+00:00`
+- Commit hash: `7f42ccd1af3c860bd5a8dfdab20b85be214158bf`
 - Git status: `dirty`
 - Success: `True`
 - Failed step: `None`
-- Test result: `159 passed`
+- Test result: `164 passed`
 - Phase 11 audit result: `passed`
 - Validation attempted: `50`
-- Validation processed: `47`
+- Validation processed: `46`
 - Validation written: `46`
-- Validation queued_for_review: `1`
-- Validation external_quota_blocked: `3`
+- Validation queued_for_review: `0`
+- Validation external_quota_blocked: `4`
 - Validation hard_failures: `0`
 - Validation avg_confidence: `0.7`
 - Validation review_queue_items: `30`
 - Validation review_queue_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase12_real_world_validation\runtime\review_queue.jsonl`
+- Observability route_mismatch_count: `1`
+- Observability low_confidence_count: `0`
+- Observability quota_safe_block_count: `4`
+- Observability metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase21\observability_metrics.json`
+- Observability report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase21\observability_report.md`
 - Dashboard export path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase17\dashboard_latest.md`
 - Stability report path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase19\stability_report.md`
-- Duration seconds: `296.99`
+- Duration seconds: `292.16`
 
 ## Steps
 

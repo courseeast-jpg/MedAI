@@ -19,6 +19,8 @@ DEFAULT_DATASET_DIR = ROOT / "test_data" / "final_batch_50"
 DEFAULT_OUTPUT_DIR = ROOT / "artifacts" / "phase12_real_world_validation"
 DEFAULT_PHASE13_REPORT_DIR = ROOT / "reports" / "phase13"
 DEFAULT_PHASE15_REPORT_DIR = ROOT / "reports" / "phase15"
+DEFAULT_PHASE21_ARTIFACT_PATH = ROOT / "artifacts" / "phase21" / "observability_metrics.json"
+DEFAULT_PHASE21_REPORT_PATH = ROOT / "reports" / "phase21" / "observability_report.md"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -31,6 +33,7 @@ from execution.pipeline import ExecutionPipeline
 from execution.review_queue import ReviewQueueWriter, read_review_queue
 from mkb.sqlite_store import SQLiteStore
 from monitoring.metrics_collector import collect_latest_run_metrics
+from monitoring.observability import write_phase21_outputs
 
 
 def is_external_quota_error(error: Exception | str) -> bool:
@@ -182,6 +185,7 @@ def summarize_document(
         "error": None,
         "outcome": result.outcome,
         "validation_status": result.validation_status,
+        "extractor_route": result.audit.get("extractor_route", result.extractor_result.get("extractor_route")),
         "extractor": result.audit.get("extractor", result.extractor_result.get("extractor")),
         "extractor_actual": result.audit.get("extractor_actual", result.extractor_result.get("actual_extractor")),
         "confidence": float(result.audit.get("confidence", result.extractor_result.get("confidence", 0.0))),
@@ -660,6 +664,11 @@ def main() -> int:
     write_outputs(output_dir, summary)
     write_phase13_reports(DEFAULT_PHASE13_REPORT_DIR, summary)
     write_phase15_reports(DEFAULT_PHASE15_REPORT_DIR, summary)
+    write_phase21_outputs(
+        summary,
+        artifact_path=DEFAULT_PHASE21_ARTIFACT_PATH,
+        report_path=DEFAULT_PHASE21_REPORT_PATH,
+    )
     collect_latest_run_metrics()
 
     print(json.dumps(summary, indent=2))

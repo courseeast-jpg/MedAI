@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-04-25T01:21:14.151373+00:00",
+  "phase": "Phase 21 Observability & Metrics Tightening",
+  "dataset_dir": "test_data\\final_batch_50",
+  "determinism": {
+    "mode": "deterministic_path",
+    "seed": null,
+    "ordering": "sorted_pdf_listing"
+  },
+  "attempted_documents": 50,
+  "processed_documents": 46,
+  "written_documents": 46,
+  "queued_for_review_documents": 0,
+  "review_queue_items": 30,
+  "external_quota_blocked": 4,
+  "hard_failures": 0,
+  "average_confidence": 0.7,
+  "extractor_route_counts": {
+    "spacy": 46
+  },
+  "extractor_actual_counts": {
+    "spacy": 46
+  },
+  "route_mismatch_count": 1,
+  "low_confidence_count": 0,
+  "quota_safe_block_count": 4,
+  "review_queue_category_counts": {
+    "external_quota_block": 4,
+    "truth_resolution_review": 26
+  },
+  "per_stage_duration_ms": {
+    "consensus": {
+      "records": 46,
+      "events": 46,
+      "total_duration_ms": 0.0,
+      "avg_duration_ms": 0.0,
+      "max_duration_ms": 0.0
+    },
+    "extraction": {
+      "records": 50,
+      "events": 96,
+      "total_duration_ms": 3926.52,
+      "avg_duration_ms": 78.53,
+      "max_duration_ms": 2663.389
+    },
+    "final_write": {
+      "records": 39,
+      "events": 128,
+      "total_duration_ms": 34900.624,
+      "avg_duration_ms": 894.888,
+      "max_duration_ms": 4782.868
+    },
+    "safety_gate": {
+      "records": 26,
+      "events": 102,
+      "total_duration_ms": 30724.759,
+      "avg_duration_ms": 1181.721,
+      "max_duration_ms": 4368.87
+    },
+    "truth_resolution": {
+      "records": 39,
+      "events": 128,
+      "total_duration_ms": 34932.855,
+      "avg_duration_ms": 895.714,
+      "max_duration_ms": 4796.965
+    },
+    "validation": {
+      "records": 46,
+      "events": 46,
+      "total_duration_ms": 0.0,
+      "avg_duration_ms": 0.0,
+      "max_duration_ms": 0.0
+    }
+  },
+  "paths": {
+    "review_queue_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl",
+    "stage_audit_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\pipeline_stages.jsonl"
+  }
+}
