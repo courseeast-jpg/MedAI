@@ -1,6 +1,6 @@
 # Phase 12 Real-World Validation Summary
 
-- Generated at: 2026-04-25T03:11:54.109934+00:00
+- Generated at: 2026-04-25T03:41:34.252300+00:00
 - Dataset: `test_data\final_batch_50`
 - Documents processed: 46/50
 - Written: 46
@@ -22,6 +22,10 @@
 - Total written: 102
 - Total queued: 26
 - Total blocked: 0
+- Semantic enrichment applied: 46
+- Negation detected count: 0
+- Temporal detected count: 0
+- Relationships detected count: 0
 
 ## Runtime MKB
 

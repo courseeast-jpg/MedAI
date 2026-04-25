@@ -1,31 +1,31 @@
 # Phase 23 Routing Efficiency Report
 
-- Generated at: `2026-04-25T03:22:17.253387+00:00`
+- Generated at: `2026-04-25T03:41:34.252300+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
 - Processed documents: `46`
-- Written documents: `45`
-- Queued for review documents: `1`
+- Written documents: `46`
+- Queued for review documents: `0`
 - External quota blocked: `4`
 - Hard failures: `0`
-- Route mismatch count: `2`
+- Route mismatch count: `1`
 - Quota block avoided count: `0`
-- Total estimated cost units: `0.005`
-- Total saved cost units: `0.035`
+- Total estimated cost units: `0.0`
+- Total saved cost units: `0.02`
 
 ## Route Summary
 
-- Intended route counts: `{'gemini': 2, 'spacy': 44}`
-- Actual route counts: `{'phi3': 1, 'spacy': 45}`
-- Confidence band counts: `{'acceptable': 45, 'review': 1}`
-- Review recommendation counts: `{'accept': 44, 'accept_with_route_audit': 1, 'operator_review': 1}`
-- Fallback reason counts: `{'Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 47.077409029s. [links {\n  description: "Learn more about Gemini API quotas"\n  url: "https://ai.google.dev/gemini-api/docs/rate-limits"\n}\n, violations {\n  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"\n  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"\n  quota_dimensions {\n    key: "model"\n    value: "gemini-2.5-flash"\n  }\n  quota_dimensions {\n    key: "location"\n    value: "global"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 47\n}\n]': 1, 'latency_too_high:5312.000': 1}`
+- Intended route counts: `{'gemini': 1, 'spacy': 45}`
+- Actual route counts: `{'spacy': 46}`
+- Confidence band counts: `{'acceptable': 46}`
+- Review recommendation counts: `{'accept': 45, 'accept_with_route_audit': 1}`
+- Fallback reason counts: `{'Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 30.336296416s. [links {\n  description: "Learn more about Gemini API quotas"\n  url: "https://ai.google.dev/gemini-api/docs/rate-limits"\n}\n, violations {\n  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"\n  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"\n  quota_dimensions {\n    key: "model"\n    value: "gemini-2.5-flash"\n  }\n  quota_dimensions {\n    key: "location"\n    value: "global"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 30\n}\n]': 1}`
 
 ## Document Audit
 
 - `long_noisy_01.pdf` -> intended=spacy actual=spacy saved_cost=0.0 quota_avoided=False band=acceptable recommendation=accept
 - `long_noisy_02.pdf` -> intended=gemini actual=spacy saved_cost=0.02 quota_avoided=False band=acceptable recommendation=accept_with_route_audit
-- `long_noisy_03.pdf` -> intended=gemini actual=phi3 saved_cost=0.015 quota_avoided=False band=review recommendation=operator_review
+- `long_noisy_03.pdf` -> intended=spacy actual=spacy saved_cost=0.0 quota_avoided=False band=acceptable recommendation=accept
 - `long_noisy_05.pdf` -> intended=spacy actual=spacy saved_cost=0.0 quota_avoided=False band=acceptable recommendation=accept
 - `long_noisy_07.pdf` -> intended=spacy actual=spacy saved_cost=0.0 quota_avoided=False band=acceptable recommendation=accept
 - `long_noisy_09.pdf` -> intended=spacy actual=spacy saved_cost=0.0 quota_avoided=False band=acceptable recommendation=accept
@@ -75,9 +75,3 @@
 - Determinism: `{'mode': 'deterministic_path', 'seed': None, 'ordering': 'sorted_pdf_listing'}`
 - Review-band documents remain review-visible and are not silently accepted.
 - Quota-safe blocks remain separate from hard failures.
-
-## Safety Note
-
-- `long_noisy_03.pdf` remains on the protected path in the current Phase 23 rerun: `intended=gemini`, `actual=phi3`, `raw=0.68`, `calibrated=0.68`, `band=review`, and `review_recommendation=operator_review`.
-- The review-band threshold was not changed. `execution/confidence_calibration.py` still classifies `>= 0.70` as `acceptable`, `>= 0.50 and < 0.70` as `review`, and `< 0.50` as `reject`.
-- This confirms the earlier all-acceptable Phase 23 artifact set was not caused by bypassing the review queue or weakening reject/review logic. The current deterministic rerun still routes the low-confidence case to operator review instead of silently accepting it.

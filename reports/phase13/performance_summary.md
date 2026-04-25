@@ -1,14 +1,14 @@
 # Phase 13 Performance Summary
 
-- Generated at: 2026-04-25T03:11:54.109934+00:00
+- Generated at: 2026-04-25T03:41:34.252300+00:00
 - Documents processed: 46/50
 - Written: 46
 - Queued for review: 0
 - External quota blocked: 4
 - Hard failures: 0
 - Average confidence: 0.7
-- Total pipeline time (ms): 9798.89
-- Average document time (ms): 195.978
+- Total pipeline time (ms): 10027.882
+- Average document time (ms): 200.558
 
 ## Route Distribution
 
@@ -17,13 +17,13 @@
 
 ## Extractor Timing
 
-- `spacy` -> documents=46 total_ms=8258.521 avg_ms=179.533
+- `spacy` -> documents=46 total_ms=8487.303 avg_ms=184.507
 
 ## Retry Visibility
 
 - Retry events observed: 4
-- Total suggested backoff seconds: 41.011
-- `long_noisy_04.pdf` -> status=external_quota_blocked retry_delay_seconds=10.252861846 reason=external_quota
-- `long_noisy_06.pdf` -> status=external_quota_blocked retry_delay_seconds=10.252861846 reason=external_quota
-- `long_noisy_08.pdf` -> status=external_quota_blocked retry_delay_seconds=10.252861846 reason=external_quota
-- `long_noisy_10.pdf` -> status=external_quota_blocked retry_delay_seconds=10.252861846 reason=external_quota
+- Total suggested backoff seconds: 121.345
+- `long_noisy_04.pdf` -> status=external_quota_blocked retry_delay_seconds=30.336296416 reason=external_quota
+- `long_noisy_06.pdf` -> status=external_quota_blocked retry_delay_seconds=30.336296416 reason=external_quota
+- `long_noisy_08.pdf` -> status=external_quota_blocked retry_delay_seconds=30.336296416 reason=external_quota
+- `long_noisy_10.pdf` -> status=external_quota_blocked retry_delay_seconds=30.336296416 reason=external_quota

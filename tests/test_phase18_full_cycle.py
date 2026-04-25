@@ -85,6 +85,14 @@ def test_report_writer_works(tmp_path: Path):
             "total_estimated_cost_units": 0.0,
             "total_saved_cost_units": 0.0,
         },
+        "semantic_enrichment_result": {
+            "metrics_path": "artifacts/phase24/semantic_enrichment.json",
+            "report_path": "reports/phase24/semantic_enrichment_report.md",
+            "enrichment_applied_count": 46,
+            "negation_detected_count": 2,
+            "temporal_detected_count": 4,
+            "relationships_detected_count": 3,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -174,6 +182,14 @@ def test_no_pipeline_configuration_is_mutated(tmp_path: Path):
             "total_estimated_cost_units": 0.0,
             "total_saved_cost_units": 0.0,
         },
+        "semantic_enrichment_result": {
+            "metrics_path": "artifacts/phase24/semantic_enrichment.json",
+            "report_path": "reports/phase24/semantic_enrichment_report.md",
+            "enrichment_applied_count": 46,
+            "negation_detected_count": 2,
+            "temporal_detected_count": 4,
+            "relationships_detected_count": 3,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -199,6 +215,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     phase21_path = tmp_path / "phase21.json"
     phase22_path = tmp_path / "phase22.json"
     phase23_path = tmp_path / "phase23.json"
+    phase24_path = tmp_path / "phase24.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         """{
@@ -245,11 +262,21 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
 }""",
         encoding="utf-8",
     )
+    phase24_path.write_text(
+        """{
+  "enrichment_applied_count": 46,
+  "negation_detected_count": 2,
+  "temporal_detected_count": 4,
+  "relationships_detected_count": 3
+}""",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
     monkeypatch.setattr(phase18, "PHASE22_METRICS_PATH", phase22_path)
     monkeypatch.setattr(phase18, "PHASE23_METRICS_PATH", phase23_path)
+    monkeypatch.setattr(phase18, "PHASE24_METRICS_PATH", phase24_path)
 
     summary = build_summary(
         commands=[{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 159 passed ===", "stderr": ""}],
@@ -262,3 +289,4 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     assert summary["observability_result"]["quota_safe_block_count"] == 4
     assert summary["calibration_result"]["confidence_band_counts"] == {"acceptable": 46}
     assert summary["routing_efficiency_result"]["actual_route_counts"] == {"spacy": 46}
+    assert summary["semantic_enrichment_result"]["enrichment_applied_count"] == 46

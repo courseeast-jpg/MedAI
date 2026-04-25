@@ -24,6 +24,8 @@ PHASE22_METRICS_PATH = ROOT / "artifacts" / "phase22" / "confidence_calibration.
 PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
 PHASE23_METRICS_PATH = ROOT / "artifacts" / "phase23" / "routing_efficiency.json"
 PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
+PHASE24_METRICS_PATH = ROOT / "artifacts" / "phase24" / "semantic_enrichment.json"
+PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
 PHASE17_DASHBOARD_PATH = ROOT / "reports" / "phase17" / "dashboard_latest.md"
 
 PHASE18_STEPS: list[tuple[str, list[str]]] = [
@@ -102,6 +104,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
     phase21 = load_json(PHASE21_METRICS_PATH) if PHASE21_METRICS_PATH.exists() else {}
     phase22 = load_json(PHASE22_METRICS_PATH) if PHASE22_METRICS_PATH.exists() else {}
     phase23 = load_json(PHASE23_METRICS_PATH) if PHASE23_METRICS_PATH.exists() else {}
+    phase24 = load_json(PHASE24_METRICS_PATH) if PHASE24_METRICS_PATH.exists() else {}
     pytest_step = next((item for item in commands if item["name"] == "tests"), None)
     failed_step = next((item["name"] for item in commands if item["returncode"] != 0), None)
 
@@ -164,6 +167,14 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
             "total_estimated_cost_units": float(phase23.get("total_estimated_cost_units", 0.0)),
             "total_saved_cost_units": float(phase23.get("total_saved_cost_units", 0.0)),
         },
+        "semantic_enrichment_result": {
+            "metrics_path": str(PHASE24_METRICS_PATH),
+            "report_path": str(PHASE24_REPORT_PATH),
+            "enrichment_applied_count": int(phase24.get("enrichment_applied_count", 0)),
+            "negation_detected_count": int(phase24.get("negation_detected_count", 0)),
+            "temporal_detected_count": int(phase24.get("temporal_detected_count", 0)),
+            "relationships_detected_count": int(phase24.get("relationships_detected_count", 0)),
+        },
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
         "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
@@ -179,6 +190,7 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
     observability = summary["observability_result"]
     calibration = summary["calibration_result"]
     routing_efficiency = summary["routing_efficiency_result"]
+    semantic_enrichment = summary["semantic_enrichment_result"]
     lines = [
         "# Phase 18 Full Cycle Summary",
         "",
@@ -218,6 +230,12 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Routing efficiency total_saved_cost_units: `{routing_efficiency['total_saved_cost_units']}`",
         f"- Routing efficiency metrics_path: `{routing_efficiency['metrics_path']}`",
         f"- Routing efficiency report_path: `{routing_efficiency['report_path']}`",
+        f"- Semantic enrichment applied_count: `{semantic_enrichment['enrichment_applied_count']}`",
+        f"- Semantic enrichment negation_detected_count: `{semantic_enrichment['negation_detected_count']}`",
+        f"- Semantic enrichment temporal_detected_count: `{semantic_enrichment['temporal_detected_count']}`",
+        f"- Semantic enrichment relationships_detected_count: `{semantic_enrichment['relationships_detected_count']}`",
+        f"- Semantic enrichment metrics_path: `{semantic_enrichment['metrics_path']}`",
+        f"- Semantic enrichment report_path: `{semantic_enrichment['report_path']}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
         f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",

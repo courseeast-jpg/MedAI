@@ -5,13 +5,13 @@
 
 ## Recent Runs
 
-- `final_batch_50-20260425T025942618910_0000` -> processed=46 written=46 queued=0 quota=4 avg_conf=0.700
 - `final_batch_50-20260425T030550356688_0000` -> processed=46 written=46 queued=0 quota=4 avg_conf=0.700
 - `final_batch_50-20260425T031154109934_0000` -> processed=46 written=46 queued=0 quota=4 avg_conf=0.700
+- `final_batch_50-20260425T034134252300_0000` -> processed=46 written=46 queued=0 quota=4 avg_conf=0.700
 
 ## Comparisons
 
-- `final_batch_50-20260425T025942618910_0000` -> `final_batch_50-20260425T030550356688_0000` status=STABLE deltas={'processed': 0, 'written': 0, 'queued_for_review': 0, 'quota_blocked': 0, 'avg_confidence': 0.0}
-  explanation: No material variance detected between the compared runs.
 - `final_batch_50-20260425T030550356688_0000` -> `final_batch_50-20260425T031154109934_0000` status=STABLE deltas={'processed': 0, 'written': 0, 'queued_for_review': 0, 'quota_blocked': 0, 'avg_confidence': 0.0}
+  explanation: No material variance detected between the compared runs.
+- `final_batch_50-20260425T031154109934_0000` -> `final_batch_50-20260425T034134252300_0000` status=STABLE deltas={'processed': 0, 'written': 0, 'queued_for_review': 0, 'quota_blocked': 0, 'avg_confidence': 0.0}
   explanation: No material variance detected between the compared runs.

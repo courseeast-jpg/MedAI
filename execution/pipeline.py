@@ -31,6 +31,7 @@ from execution.mkb_writer import MKBWriter
 from execution.promotion import HypothesisPromotion
 from execution.review_queue import ReviewQueueWriter
 from execution.router import ExecutionRouter
+from execution.semantic_enrichment import enrich_semantics
 from execution.safety import ExecutionSafety
 from execution.truth_resolution import ResolutionBatch, TruthResolutionResolver
 from execution.validation import ValidationDecision, validate_extraction_result
@@ -189,6 +190,34 @@ class ExecutionPipeline:
             fallback_used=bool(extracted.get("fallback_used", False)),
         )
         extracted.update(calibration.to_dict())
+        semantic_enrichment = None
+        if str(extracted.get("confidence_band", "")) != "reject":
+            semantic_enrichment = enrich_semantics(
+                raw_text=str(extracted.get("raw_text", stripped_text)),
+                entities=list(extracted.get("entities", [])),
+            ).to_dict()
+            extracted["semantic_enrichment"] = semantic_enrichment
+            self._stage_log(
+                record_id=session_id,
+                stage="semantic_enrichment",
+                action="semantic_enrichment_applied",
+                confidence=float(extracted.get("confidence", 0.0)),
+                decision_reason=(
+                    f"entities={semantic_enrichment['enriched_entity_count']} "
+                    f"negation={semantic_enrichment['negation_detected_count']} "
+                    f"temporal={semantic_enrichment['temporal_detected_count']} "
+                    f"relationships={semantic_enrichment['relationships_detected_count']}"
+                ),
+            )
+        else:
+            extracted["semantic_enrichment"] = None
+            self._stage_log(
+                record_id=session_id,
+                stage="semantic_enrichment",
+                action="semantic_enrichment_skipped",
+                confidence=float(extracted.get("confidence", 0.0)),
+                decision_reason="reject_band_skipped",
+            )
         self.metrics.record_validation(
             record_count=len(extracted.get("entities", [])),
             validation_status=validation.status,

@@ -1,6 +1,6 @@
 # Phase 21 Observability Report
 
-- Generated at: `2026-04-25T03:11:54.109934+00:00`
+- Generated at: `2026-04-25T03:41:34.252300+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
 - Processed documents: `46`
@@ -13,6 +13,10 @@
 - Route mismatch count: `1`
 - Low-confidence count: `0`
 - Quota-safe block count: `4`
+- Enrichment applied count: `46`
+- Negation detected count: `0`
+- Temporal detected count: `0`
+- Relationships detected count: `0`
 
 ## Route Counts
 
@@ -27,10 +31,11 @@
 ## Stage Durations
 
 - `consensus` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `extraction` -> records=50 events=96 total_ms=3927.788 avg_ms=78.556 max_ms=2728.869
-- `final_write` -> records=39 events=128 total_ms=32629.339 avg_ms=836.65 max_ms=4855.346
-- `safety_gate` -> records=26 events=102 total_ms=29052.954 avg_ms=1117.421 max_ms=4428.241
-- `truth_resolution` -> records=39 events=128 total_ms=32663.191 avg_ms=837.518 max_ms=4863.337
+- `extraction` -> records=50 events=96 total_ms=4174.064 avg_ms=83.481 max_ms=2960.413
+- `final_write` -> records=39 events=128 total_ms=33712.548 avg_ms=864.424 max_ms=5094.306
+- `safety_gate` -> records=26 events=102 total_ms=30114.733 avg_ms=1158.259 max_ms=4659.122
+- `semantic_enrichment` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
+- `truth_resolution` -> records=39 events=128 total_ms=33778.825 avg_ms=866.124 max_ms=5106.221
 - `validation` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 
 ## Stability Guardrails

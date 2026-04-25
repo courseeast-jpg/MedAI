@@ -17,6 +17,8 @@ DEFAULT_PHASE22_ARTIFACT_PATH = ROOT / "artifacts" / "phase22" / "confidence_cal
 DEFAULT_PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
 DEFAULT_PHASE23_ARTIFACT_PATH = ROOT / "artifacts" / "phase23" / "routing_efficiency.json"
 DEFAULT_PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
+DEFAULT_PHASE24_ARTIFACT_PATH = ROOT / "artifacts" / "phase24" / "semantic_enrichment.json"
+DEFAULT_PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
 
 
 def _load_jsonl(path: Path | str | None) -> list[dict[str, Any]]:
@@ -102,6 +104,10 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         1 for item in documents
         if item.get("status") == "external_quota_blocked"
     )
+    enrichment_applied_count = sum(int(bool(item.get("enrichment_applied", False))) for item in processed)
+    negation_detected_count = sum(int(item.get("negation_detected_count", 0)) for item in processed)
+    temporal_detected_count = sum(int(item.get("temporal_detected_count", 0)) for item in processed)
+    relationships_detected_count = sum(int(item.get("relationships_detected_count", 0)) for item in processed)
 
     return {
         "generated_at": summary.get("generated_at"),
@@ -121,6 +127,10 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         "route_mismatch_count": route_mismatch_count,
         "low_confidence_count": low_confidence_count,
         "quota_safe_block_count": quota_safe_block_count,
+        "enrichment_applied_count": enrichment_applied_count,
+        "negation_detected_count": negation_detected_count,
+        "temporal_detected_count": temporal_detected_count,
+        "relationships_detected_count": relationships_detected_count,
         "review_queue_category_counts": dict(sorted(review_queue_categories.items())),
         "per_stage_duration_ms": build_stage_duration_metrics(stage_events),
         "paths": {
@@ -147,6 +157,10 @@ def build_phase21_report(metrics: dict[str, Any]) -> str:
         f"- Route mismatch count: `{metrics['route_mismatch_count']}`",
         f"- Low-confidence count: `{metrics['low_confidence_count']}`",
         f"- Quota-safe block count: `{metrics['quota_safe_block_count']}`",
+        f"- Enrichment applied count: `{metrics['enrichment_applied_count']}`",
+        f"- Negation detected count: `{metrics['negation_detected_count']}`",
+        f"- Temporal detected count: `{metrics['temporal_detected_count']}`",
+        f"- Relationships detected count: `{metrics['relationships_detected_count']}`",
         "",
         "## Route Counts",
         "",
@@ -470,4 +484,108 @@ def write_phase23_outputs(
     report_path.parent.mkdir(parents=True, exist_ok=True)
     artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     report_path.write_text(build_phase23_report(metrics), encoding="utf-8")
+    return metrics
+
+
+def build_phase24_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    documents = summary.get("documents", [])
+    processed = [item for item in documents if item.get("status") == "processed"]
+
+    enrichment_applied_count = 0
+    negation_detected_count = 0
+    temporal_detected_count = 0
+    relationships_detected_count = 0
+    enriched_documents: list[dict[str, Any]] = []
+
+    for item in processed:
+        semantic_enrichment = item.get("semantic_enrichment")
+        applied = bool(item.get("enrichment_applied", False))
+        if applied:
+            enrichment_applied_count += 1
+        negation_detected_count += int(item.get("negation_detected_count", 0))
+        temporal_detected_count += int(item.get("temporal_detected_count", 0))
+        relationships_detected_count += int(item.get("relationships_detected_count", 0))
+        enriched_documents.append({
+            "document": item.get("document"),
+            "outcome": item.get("outcome"),
+            "validation_status": item.get("validation_status"),
+            "confidence": float(item.get("confidence", 0.0)),
+            "confidence_band": str(item.get("confidence_band") or "unknown"),
+            "enrichment_applied": applied,
+            "negation_detected_count": int(item.get("negation_detected_count", 0)),
+            "temporal_detected_count": int(item.get("temporal_detected_count", 0)),
+            "relationships_detected_count": int(item.get("relationships_detected_count", 0)),
+            "semantic_enrichment": semantic_enrichment,
+        })
+
+    return {
+        "generated_at": summary.get("generated_at"),
+        "phase": "Phase 24 Semantic Enrichment (non-destructive)",
+        "dataset_dir": summary.get("dataset_dir"),
+        "determinism": summary.get("determinism", {}),
+        "attempted_documents": int(summary.get("documents_selected", 0)),
+        "processed_documents": int(summary.get("documents_processed", 0)),
+        "written_documents": int(summary.get("written", 0)),
+        "queued_for_review_documents": int(summary.get("queued_for_review", 0)),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", 0)),
+        "hard_failures": int(summary.get("hard_failures", 0)),
+        "enrichment_applied_count": enrichment_applied_count,
+        "negation_detected_count": negation_detected_count,
+        "temporal_detected_count": temporal_detected_count,
+        "relationships_detected_count": relationships_detected_count,
+        "documents": enriched_documents,
+    }
+
+
+def build_phase24_report(metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 24 Semantic Enrichment Report",
+        "",
+        f"- Generated at: `{metrics['generated_at']}`",
+        f"- Dataset: `{metrics['dataset_dir']}`",
+        f"- Attempted documents: `{metrics['attempted_documents']}`",
+        f"- Processed documents: `{metrics['processed_documents']}`",
+        f"- Written documents: `{metrics['written_documents']}`",
+        f"- Queued for review documents: `{metrics['queued_for_review_documents']}`",
+        f"- External quota blocked: `{metrics['external_quota_blocked']}`",
+        f"- Hard failures: `{metrics['hard_failures']}`",
+        f"- Enrichment applied count: `{metrics['enrichment_applied_count']}`",
+        f"- Negation detected count: `{metrics['negation_detected_count']}`",
+        f"- Temporal detected count: `{metrics['temporal_detected_count']}`",
+        f"- Relationships detected count: `{metrics['relationships_detected_count']}`",
+        "",
+        "## Document Audit",
+        "",
+    ]
+    if metrics["documents"]:
+        for item in metrics["documents"]:
+            lines.append(
+                f"- `{item['document']}` -> applied={item['enrichment_applied']} "
+                f"band={item['confidence_band']} negation={item['negation_detected_count']} "
+                f"temporal={item['temporal_detected_count']} relationships={item['relationships_detected_count']}"
+            )
+    else:
+        lines.append("- No processed documents available for semantic enrichment audit.")
+    lines.extend([
+        "",
+        "## Non-Destructive Guardrails",
+        "",
+        f"- Determinism: `{metrics['determinism']}`",
+        "- Semantic enrichment is additive metadata only and does not alter confidence, routing, or review decisions.",
+        "- Reject-band outputs are not semantically enriched.",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def write_phase24_outputs(
+    summary: dict[str, Any],
+    *,
+    artifact_path: Path = DEFAULT_PHASE24_ARTIFACT_PATH,
+    report_path: Path = DEFAULT_PHASE24_REPORT_PATH,
+) -> dict[str, Any]:
+    metrics = build_phase24_metrics(summary)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    report_path.write_text(build_phase24_report(metrics), encoding="utf-8")
     return metrics

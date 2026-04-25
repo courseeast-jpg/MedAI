@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T03:11:54.109934+00:00",
+  "generated_at": "2026-04-25T03:41:34.252300+00:00",
   "documents_processed": 46,
   "written": 46,
   "queued_for_review": 0,
@@ -15,15 +15,15 @@
     "unknown": 4
   },
   "timing": {
-    "total_pipeline_time_ms": 9798.89,
-    "avg_document_time_ms": 195.978,
-    "max_document_time_ms": 3363.527,
-    "min_document_time_ms": 26.731,
+    "total_pipeline_time_ms": 10027.882,
+    "avg_document_time_ms": 200.558,
+    "max_document_time_ms": 3329.931,
+    "min_document_time_ms": 26.802,
     "per_extractor": {
       "spacy": {
         "documents": 46,
-        "total_time_ms": 8258.521,
-        "avg_time_ms": 179.533
+        "total_time_ms": 8487.303,
+        "avg_time_ms": 184.507
       }
     },
     "per_document": [
@@ -31,301 +31,301 @@
         "document": "long_noisy_01.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 3363.527
+        "processing_time_ms": 3329.931
       },
       {
         "document": "long_noisy_02.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 2766.238
+        "processing_time_ms": 2998.418
       },
       {
         "document": "long_noisy_03.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 130.641
+        "processing_time_ms": 133.503
       },
       {
         "document": "long_noisy_04.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 380.358
+        "processing_time_ms": 386.38
       },
       {
         "document": "long_noisy_05.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 121.034
+        "processing_time_ms": 133.219
       },
       {
         "document": "long_noisy_06.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 381.723
+        "processing_time_ms": 382.709
       },
       {
         "document": "long_noisy_07.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 124.504
+        "processing_time_ms": 125.1
       },
       {
         "document": "long_noisy_08.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 391.194
+        "processing_time_ms": 375.001
       },
       {
         "document": "long_noisy_09.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 128.971
+        "processing_time_ms": 121.946
       },
       {
         "document": "long_noisy_10.pdf",
         "status": "external_quota_blocked",
         "extractor_actual": "unknown",
-        "processing_time_ms": 387.094
+        "processing_time_ms": 396.489
       },
       {
         "document": "short_01.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 51.093
+        "processing_time_ms": 50.621
       },
       {
         "document": "short_02.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 26.731
+        "processing_time_ms": 30.179
       },
       {
         "document": "short_03.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 35.048
+        "processing_time_ms": 44.973
       },
       {
         "document": "short_04.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 43.542
+        "processing_time_ms": 46.081
       },
       {
         "document": "short_05.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 41.485
+        "processing_time_ms": 43.679
       },
       {
         "document": "short_06.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 38.719
+        "processing_time_ms": 40.366
       },
       {
         "document": "short_07.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 31.321
+        "processing_time_ms": 28.209
       },
       {
         "document": "short_08.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 43.114
+        "processing_time_ms": 42.958
       },
       {
         "document": "short_09.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 50.697
+        "processing_time_ms": 47.763
       },
       {
         "document": "short_10.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 50.123
+        "processing_time_ms": 48.465
       },
       {
         "document": "short_11.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 48.657
+        "processing_time_ms": 48.079
       },
       {
         "document": "short_12.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 29.49
+        "processing_time_ms": 28.997
       },
       {
         "document": "short_13.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 35.515
+        "processing_time_ms": 36.339
       },
       {
         "document": "short_14.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 47.362
+        "processing_time_ms": 43.944
       },
       {
         "document": "short_15.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 48.068
+        "processing_time_ms": 50.853
       },
       {
         "document": "short_16.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 45.444
+        "processing_time_ms": 43.304
       },
       {
         "document": "short_17.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 34.013
+        "processing_time_ms": 36.154
       },
       {
         "document": "short_18.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 49.895
+        "processing_time_ms": 49.892
       },
       {
         "document": "short_19.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 34.153
+        "processing_time_ms": 34.986
       },
       {
         "document": "short_20.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 48.578
+        "processing_time_ms": 48.122
       },
       {
         "document": "short_21.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 39.665
+        "processing_time_ms": 42.144
       },
       {
         "document": "short_22.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 26.873
+        "processing_time_ms": 26.802
       },
       {
         "document": "short_23.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 34.599
+        "processing_time_ms": 39.149
       },
       {
         "document": "short_24.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 47.088
+        "processing_time_ms": 57.273
       },
       {
         "document": "short_25.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 40.49
+        "processing_time_ms": 43.131
       },
       {
         "document": "short_26.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 40.615
+        "processing_time_ms": 36.77
       },
       {
         "document": "short_27.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 27.095
+        "processing_time_ms": 27.441
       },
       {
         "document": "short_28.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 41.509
+        "processing_time_ms": 41.599
       },
       {
         "document": "short_29.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 40.491
+        "processing_time_ms": 42.582
       },
       {
         "document": "short_30.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 46.164
+        "processing_time_ms": 48.031
       },
       {
         "document": "short_31.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 35.466
+        "processing_time_ms": 35.962
       },
       {
         "document": "short_32.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 30.487
+        "processing_time_ms": 28.616
       },
       {
         "document": "short_33.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 35.347
+        "processing_time_ms": 35.839
       },
       {
         "document": "short_34.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 46.62
+        "processing_time_ms": 47.314
       },
       {
         "document": "short_35.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 40.497
+        "processing_time_ms": 42.359
       },
       {
         "document": "short_36.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 50.55
+        "processing_time_ms": 48.866
       },
       {
         "document": "short_37.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 35.137
+        "processing_time_ms": 27.072
       },
       {
         "document": "short_38.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 40.933
+        "processing_time_ms": 40.246
       },
       {
         "document": "short_39.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 41.223
+        "processing_time_ms": 41.333
       },
       {
         "document": "short_40.pdf",
         "status": "processed",
         "extractor_actual": "spacy",
-        "processing_time_ms": 49.709
+        "processing_time_ms": 48.693
       }
     ]
   },
@@ -337,35 +337,35 @@
       "long_noisy_08.pdf",
       "long_noisy_10.pdf"
     ],
-    "total_suggested_backoff_seconds": 41.011,
+    "total_suggested_backoff_seconds": 121.345,
     "retry_events": [
       {
         "document": "long_noisy_04.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 10.252861846,
+        "retry_delay_seconds": 30.336296416,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 10.252861846s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 10\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 30.336296416s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 30\n}\n]"
       },
       {
         "document": "long_noisy_06.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 10.252861846,
+        "retry_delay_seconds": 30.336296416,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 10.252861846s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 10\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 30.336296416s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 30\n}\n]"
       },
       {
         "document": "long_noisy_08.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 10.252861846,
+        "retry_delay_seconds": 30.336296416,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 10.252861846s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 10\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 30.336296416s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 30\n}\n]"
       },
       {
         "document": "long_noisy_10.pdf",
         "status": "external_quota_blocked",
-        "retry_delay_seconds": 10.252861846,
+        "retry_delay_seconds": 30.336296416,
         "retry_reason": "external_quota",
-        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 10.252861846s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 10\n}\n]"
+        "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 30.336296416s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 30\n}\n]"
       }
     ]
   }

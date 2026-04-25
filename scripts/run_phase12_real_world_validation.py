@@ -25,6 +25,8 @@ DEFAULT_PHASE22_ARTIFACT_PATH = ROOT / "artifacts" / "phase22" / "confidence_cal
 DEFAULT_PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
 DEFAULT_PHASE23_ARTIFACT_PATH = ROOT / "artifacts" / "phase23" / "routing_efficiency.json"
 DEFAULT_PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
+DEFAULT_PHASE24_ARTIFACT_PATH = ROOT / "artifacts" / "phase24" / "semantic_enrichment.json"
+DEFAULT_PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -37,7 +39,7 @@ from execution.pipeline import ExecutionPipeline
 from execution.review_queue import ReviewQueueWriter, read_review_queue
 from mkb.sqlite_store import SQLiteStore
 from monitoring.metrics_collector import collect_latest_run_metrics
-from monitoring.observability import write_phase21_outputs, write_phase22_outputs, write_phase23_outputs
+from monitoring.observability import write_phase21_outputs, write_phase22_outputs, write_phase23_outputs, write_phase24_outputs
 
 
 def is_external_quota_error(error: Exception | str) -> bool:
@@ -157,6 +159,11 @@ def summarize_document(
                 "estimated_cost_units": 0.0,
                 "saved_cost_units": 0.0,
                 "quota_block_avoided": False,
+                "semantic_enrichment": None,
+                "enrichment_applied": False,
+                "negation_detected_count": 0,
+                "temporal_detected_count": 0,
+                "relationships_detected_count": 0,
             }
         return {
             "document": pdf_path.name,
@@ -188,6 +195,11 @@ def summarize_document(
             "estimated_cost_units": 0.0,
             "saved_cost_units": 0.0,
             "quota_block_avoided": False,
+            "semantic_enrichment": None,
+            "enrichment_applied": False,
+            "negation_detected_count": 0,
+            "temporal_detected_count": 0,
+            "relationships_detected_count": 0,
         }
 
     review_reasons: list[str] = []
@@ -206,6 +218,9 @@ def summarize_document(
         or result.extractor_result.get("requested_extractor_route")
         or parse_requested_route(notes)
     )
+    semantic_enrichment = result.extractor_result.get("semantic_enrichment")
+    if not isinstance(semantic_enrichment, dict):
+        semantic_enrichment = None
 
     return {
         "document": pdf_path.name,
@@ -255,6 +270,11 @@ def summarize_document(
         "quota_block_avoided": bool(
             result.audit.get("quota_block_avoided", result.extractor_result.get("quota_block_avoided", False))
         ),
+        "semantic_enrichment": semantic_enrichment,
+        "enrichment_applied": bool(semantic_enrichment and semantic_enrichment.get("applied", False)),
+        "negation_detected_count": int((semantic_enrichment or {}).get("negation_detected_count", 0)),
+        "temporal_detected_count": int((semantic_enrichment or {}).get("temporal_detected_count", 0)),
+        "relationships_detected_count": int((semantic_enrichment or {}).get("relationships_detected_count", 0)),
     }
 
 
@@ -285,9 +305,17 @@ def build_phase12_summary(
     ) if processed else 0.0
 
     review_reasons = Counter()
+    enrichment_applied_count = 0
+    negation_detected_count = 0
+    temporal_detected_count = 0
+    relationships_detected_count = 0
     for item in processed:
         for reason in item["review_reasons"]:
             review_reasons[reason] += 1
+        enrichment_applied_count += int(bool(item.get("enrichment_applied", False)))
+        negation_detected_count += int(item.get("negation_detected_count", 0))
+        temporal_detected_count += int(item.get("temporal_detected_count", 0))
+        relationships_detected_count += int(item.get("relationships_detected_count", 0))
 
     written_document_count = outcome_counts.get("written", 0) + outcome_counts.get("written_with_review", 0)
 
@@ -338,6 +366,10 @@ def build_phase12_summary(
             "total_queued": sum(int(item["queued_count"]) for item in processed),
             "total_blocked": sum(int(item["blocked_count"]) for item in processed),
             "review_reasons": dict(sorted(review_reasons.items())),
+            "enrichment_applied_count": enrichment_applied_count,
+            "negation_detected_count": negation_detected_count,
+            "temporal_detected_count": temporal_detected_count,
+            "relationships_detected_count": relationships_detected_count,
         },
         "mkb_counts": runtime_counts,
         "documents": documents,
@@ -620,6 +652,10 @@ def write_outputs(output_dir: Path, summary: dict[str, Any]) -> None:
         f"- Total written: {summary['aggregate']['total_written']}",
         f"- Total queued: {summary['aggregate']['total_queued']}",
         f"- Total blocked: {summary['aggregate']['total_blocked']}",
+        f"- Semantic enrichment applied: {summary['aggregate']['enrichment_applied_count']}",
+        f"- Negation detected count: {summary['aggregate']['negation_detected_count']}",
+        f"- Temporal detected count: {summary['aggregate']['temporal_detected_count']}",
+        f"- Relationships detected count: {summary['aggregate']['relationships_detected_count']}",
         "",
         "## Runtime MKB",
         "",
@@ -735,6 +771,11 @@ def main() -> int:
         summary,
         artifact_path=DEFAULT_PHASE23_ARTIFACT_PATH,
         report_path=DEFAULT_PHASE23_REPORT_PATH,
+    )
+    write_phase24_outputs(
+        summary,
+        artifact_path=DEFAULT_PHASE24_ARTIFACT_PATH,
+        report_path=DEFAULT_PHASE24_REPORT_PATH,
     )
     collect_latest_run_metrics()
 

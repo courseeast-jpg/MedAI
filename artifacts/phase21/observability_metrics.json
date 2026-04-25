@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T03:11:54.109934+00:00",
+  "generated_at": "2026-04-25T03:41:34.252300+00:00",
   "phase": "Phase 21 Observability & Metrics Tightening",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -24,6 +24,10 @@
   "route_mismatch_count": 1,
   "low_confidence_count": 0,
   "quota_safe_block_count": 4,
+  "enrichment_applied_count": 46,
+  "negation_detected_count": 0,
+  "temporal_detected_count": 0,
+  "relationships_detected_count": 0,
   "review_queue_category_counts": {
     "external_quota_block": 4,
     "truth_resolution_review": 26
@@ -39,30 +43,37 @@
     "extraction": {
       "records": 50,
       "events": 96,
-      "total_duration_ms": 3927.788,
-      "avg_duration_ms": 78.556,
-      "max_duration_ms": 2728.869
+      "total_duration_ms": 4174.064,
+      "avg_duration_ms": 83.481,
+      "max_duration_ms": 2960.413
     },
     "final_write": {
       "records": 39,
       "events": 128,
-      "total_duration_ms": 32629.339,
-      "avg_duration_ms": 836.65,
-      "max_duration_ms": 4855.346
+      "total_duration_ms": 33712.548,
+      "avg_duration_ms": 864.424,
+      "max_duration_ms": 5094.306
     },
     "safety_gate": {
       "records": 26,
       "events": 102,
-      "total_duration_ms": 29052.954,
-      "avg_duration_ms": 1117.421,
-      "max_duration_ms": 4428.241
+      "total_duration_ms": 30114.733,
+      "avg_duration_ms": 1158.259,
+      "max_duration_ms": 4659.122
+    },
+    "semantic_enrichment": {
+      "records": 46,
+      "events": 46,
+      "total_duration_ms": 0.0,
+      "avg_duration_ms": 0.0,
+      "max_duration_ms": 0.0
     },
     "truth_resolution": {
       "records": 39,
       "events": 128,
-      "total_duration_ms": 32663.191,
-      "avg_duration_ms": 837.518,
-      "max_duration_ms": 4863.337
+      "total_duration_ms": 33778.825,
+      "avg_duration_ms": 866.124,
+      "max_duration_ms": 5106.221
     },
     "validation": {
       "records": 46,
