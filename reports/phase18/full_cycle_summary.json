@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-24T22:04:21.707191+00:00",
-  "started_at": "2026-04-24T21:59:43.023325+00:00",
-  "ended_at": "2026-04-24T22:04:21.707191+00:00",
-  "duration_seconds": 278.684,
-  "commit_hash": "3ee98e2c96cd02d234a693ed9bb218d341e8b6b4",
+  "generated_at": "2026-04-25T00:58:34.117260+00:00",
+  "started_at": "2026-04-25T00:53:37.126837+00:00",
+  "ended_at": "2026-04-25T00:58:34.117260+00:00",
+  "duration_seconds": 296.99,
+  "commit_hash": "78b58c453778e6413279489743a53642f5aa88ac",
   "git_status": "dirty",
   "steps": [
     {
@@ -56,16 +56,18 @@
   ],
   "success": true,
   "failed_step": null,
-  "test_result": "157 passed",
+  "test_result": "159 passed",
   "phase11_audit_result": "passed",
   "validation_result": {
     "attempted": 50,
-    "processed": 46,
+    "processed": 47,
     "written": 46,
-    "queued_for_review": 0,
-    "external_quota_blocked": 4,
+    "queued_for_review": 1,
+    "external_quota_blocked": 3,
     "hard_failures": 0,
-    "avg_confidence": 0.7
+    "avg_confidence": 0.7,
+    "review_queue_items": 30,
+    "review_queue_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl"
   },
   "dashboard_export_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase17\\dashboard_latest.md",
   "stability_report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase19\\stability_report.md"

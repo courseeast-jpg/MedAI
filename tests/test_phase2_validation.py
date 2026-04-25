@@ -138,7 +138,14 @@ def test_low_confidence_routes_to_needs_review(tmp_path: Path):
     assert any(error["code"] == "confidence_below_accept_threshold" for error in result.validation_errors)
     queued = read_queue(tmp_path / "review_queue.jsonl")
     assert len(queued) == 1
+    assert queued[0]["reason"] == "confidence_below_accept_threshold"
     assert queued[0]["reasons"] == ["confidence_below_accept_threshold"]
+    assert queued[0]["run_id"]
+    assert queued[0]["document_id"] == "manual"
+    assert queued[0]["extractor_route"] == "spacy"
+    assert queued[0]["extractor_actual"] == "spacy"
+    assert queued[0]["recommended_action"] == "operator_review_validation"
+    assert queued[0]["raw_evidence_path"] is None
 
 
 def test_gemini_fallback_uses_terminal_connector_for_validation_and_audit(tmp_path: Path):
@@ -265,3 +272,23 @@ def test_review_queue_and_metrics_capture_phase2_statuses(tmp_path: Path):
             "rejected": 0.9,
         },
     }
+
+
+def test_high_confidence_item_does_not_enter_review_queue(tmp_path: Path):
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Cluster headache"}],
+            "confidence": 0.92,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+    )
+
+    result = pipeline.process_text("Diagnosis: Cluster headache.", specialty="neurology")
+
+    assert result.outcome == "written"
+    assert result.validation_status == "accepted"
+    assert read_queue(tmp_path / "review_queue.jsonl") == []

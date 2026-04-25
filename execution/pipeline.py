@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import re
 from datetime import datetime
 from pathlib import Path
@@ -29,6 +28,7 @@ from execution.logging import AuditLogger
 from execution.metrics import PipelineMetrics
 from execution.mkb_writer import MKBWriter
 from execution.promotion import HypothesisPromotion
+from execution.review_queue import ReviewQueueWriter
 from execution.router import ExecutionRouter
 from execution.safety import ExecutionSafety
 from execution.truth_resolution import ResolutionBatch, TruthResolutionResolver
@@ -76,7 +76,7 @@ class ExecutionPipeline:
         self.gemini_extractor = gemini_extractor
         self.phi3_extractor = phi3_extractor
         self.review_queue_path = Path(review_queue_path)
-        self.review_queue_path.parent.mkdir(parents=True, exist_ok=True)
+        self.review_queue = ReviewQueueWriter(self.review_queue_path)
         self.writer = MKBWriter(sql_store, vector_store, quality_gate)
         self.safety = ExecutionSafety(
             medication_gate,
@@ -189,6 +189,7 @@ class ExecutionPipeline:
                 requested_extractor_route=requested_route,
                 extracted=extracted,
                 validation=validation,
+                raw_evidence_path=str(job.pdf_path) if job.pdf_path is not None else None,
             )
             queued_records: list[MKBRecord] = []
             if validation.status == "needs_review":
@@ -259,6 +260,7 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 requested_extractor_route=requested_route,
                 extracted=extracted,
+                raw_evidence_path=str(job.pdf_path) if job.pdf_path is not None else None,
             )
             for record in resolution.quarantined_records:
                 self._stage_log(
@@ -280,6 +282,7 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 requested_extractor_route=requested_route,
                 extracted=extracted,
+                raw_evidence_path=str(job.pdf_path) if job.pdf_path is not None else None,
             )
             for record in blocked_records:
                 self._stage_log(
@@ -319,6 +322,7 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 requested_extractor_route=requested_route,
                 extracted=extracted,
+                raw_evidence_path=str(job.pdf_path) if job.pdf_path is not None else None,
             )
             self.metrics.record_review(review_count=len(queued_records))
             combined_review_records = resolution.quarantined_records + queued_records
@@ -386,6 +390,7 @@ class ExecutionPipeline:
                 extractor_route=extractor_route,
                 requested_extractor_route=requested_route,
                 extracted=extracted,
+                raw_evidence_path=str(job.pdf_path) if job.pdf_path is not None else None,
             )
             self.metrics.record_review(review_count=len(enrichment_review_records))
             for record in enrichment_review_records:
@@ -696,26 +701,26 @@ class ExecutionPipeline:
         requested_extractor_route: str,
         extracted: dict,
         validation: ValidationDecision,
+        raw_evidence_path: str | None,
     ) -> None:
-        item = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "source_name": source_name,
-            "specialty": specialty,
-            "session_id": session_id,
-            "extractor_route": extractor_route,
-            "requested_extractor_route": requested_extractor_route,
-            "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
-            "extractor": str(extracted.get("extractor", "")),
-            "validation_status": validation.status,
-            "validation_errors": validation.errors,
-            "reasons": [error["code"] for error in validation.errors],
-            "confidence": float(extracted.get("confidence", 0.0)),
-            "entity_count": len(extracted.get("entities", [])),
-            "notes": list(extracted.get("notes", [])),
-            "raw_text": str(extracted.get("raw_text", "")),
-        }
-        with self.review_queue_path.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(item, sort_keys=True) + "\n")
+        reasons = [str(error["code"]) for error in validation.errors] or [validation.status]
+        self.review_queue.append_validation_review(
+            run_id=session_id,
+            document_id=source_name,
+            source_filename=source_name,
+            reason=reasons[0],
+            reasons=reasons,
+            confidence=float(extracted.get("confidence", 0.0)),
+            extractor_route=extractor_route,
+            extractor_actual=str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+            recommended_action="operator_review_validation",
+            raw_evidence_path=raw_evidence_path,
+            requested_extractor_route=requested_extractor_route,
+            validation_status=validation.status,
+            validation_errors=validation.errors,
+            entity_count=len(extracted.get("entities", [])),
+            notes=list(extracted.get("notes", [])),
+        )
 
     def _append_resolution_review_queue_items(
         self,
@@ -727,31 +732,29 @@ class ExecutionPipeline:
         extractor_route: str,
         requested_extractor_route: str,
         extracted: dict,
+        raw_evidence_path: str | None,
     ) -> None:
         for decision in resolution.decisions:
             if not decision.requires_review or decision.record is None:
                 continue
-            item = {
-                "timestamp": datetime.utcnow().isoformat(),
-                "source_name": source_name,
-                "specialty": specialty,
-                "session_id": session_id,
-                "extractor_route": extractor_route,
-                "requested_extractor_route": requested_extractor_route,
-                "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
-                "extractor": str(extracted.get("extractor", "")),
-                "validation_status": extracted.get("validation_status", "accepted"),
-                "resolution_action": decision.action,
-                "resolution_confidence": decision.confidence,
-                "requires_review": True,
-                "reasons": [decision.reason],
-                "record_id": decision.record.id,
-                "fact_type": decision.record.fact_type,
-                "content": decision.record.content,
-                "confidence": float(decision.record.confidence),
-            }
-            with self.review_queue_path.open("a", encoding="utf-8") as handle:
-                handle.write(json.dumps(item, sort_keys=True) + "\n")
+            self.review_queue.append_resolution_review(
+                run_id=session_id,
+                document_id=source_name,
+                source_filename=source_name,
+                reason=str(decision.reason or decision.action),
+                confidence=float(decision.record.confidence),
+                extractor_route=extractor_route,
+                extractor_actual=str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+                recommended_action="operator_review_truth_resolution",
+                raw_evidence_path=raw_evidence_path,
+                requested_extractor_route=requested_extractor_route,
+                validation_status=str(extracted.get("validation_status", "accepted")),
+                resolution_action=decision.action,
+                resolution_confidence=float(decision.confidence),
+                record_id=decision.record.id,
+                fact_type=decision.record.fact_type,
+                content=decision.record.content,
+            )
 
     def _append_medication_review_queue_items(
         self,
@@ -763,6 +766,7 @@ class ExecutionPipeline:
         extractor_route: str,
         requested_extractor_route: str,
         extracted: dict,
+        raw_evidence_path: str | None,
     ) -> None:
         for record in records:
             if record.fact_type != "medication":
@@ -773,27 +777,26 @@ class ExecutionPipeline:
                 reasons.append(str(ddi_note))
             if not reasons:
                 reasons.append(record.ddi_status or "medication_review")
-            item = {
-                "timestamp": datetime.utcnow().isoformat(),
-                "source_name": source_name,
-                "specialty": specialty,
-                "session_id": session_id,
-                "extractor_route": extractor_route,
-                "requested_extractor_route": requested_extractor_route,
-                "extractor_actual": str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
-                "extractor": str(extracted.get("extractor", "")),
-                "validation_status": extracted.get("validation_status", "accepted"),
-                "record_id": record.id,
-                "fact_type": record.fact_type,
-                "content": record.content,
-                "ddi_status": record.ddi_status,
-                "ddi_findings": record.ddi_findings,
-                "safety_action": record.safety_action,
-                "requires_review": record.requires_review,
-                "reasons": reasons,
-            }
-            with self.review_queue_path.open("a", encoding="utf-8") as handle:
-                handle.write(json.dumps(item, sort_keys=True) + "\n")
+            self.review_queue.append_medication_review(
+                run_id=session_id,
+                document_id=source_name,
+                source_filename=source_name,
+                reason=reasons[0],
+                confidence=float(record.confidence),
+                extractor_route=extractor_route,
+                extractor_actual=str(extracted.get("actual_extractor", extracted.get("extractor", ""))),
+                recommended_action="operator_review_medication_safety",
+                raw_evidence_path=raw_evidence_path,
+                requested_extractor_route=requested_extractor_route,
+                validation_status=str(extracted.get("validation_status", "accepted")),
+                record_id=record.id,
+                fact_type=record.fact_type,
+                content=record.content,
+                ddi_status=record.ddi_status,
+                ddi_findings=record.ddi_findings,
+                safety_action=record.safety_action,
+                requires_review=record.requires_review,
+            )
 
     def _mark_records_for_validation_review(
         self,

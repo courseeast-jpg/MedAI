@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sys
 import time
 from collections import Counter
@@ -27,6 +28,7 @@ if str(ROOT) not in sys.path:
 from execution.audit import StageAuditLogger
 from execution.logging import AuditLogger
 from execution.pipeline import ExecutionPipeline
+from execution.review_queue import ReviewQueueWriter, read_review_queue
 from mkb.sqlite_store import SQLiteStore
 from monitoring.metrics_collector import collect_latest_run_metrics
 
@@ -207,6 +209,8 @@ def build_phase12_summary(
     external_quota_blocked = [item for item in documents if item["status"] == "external_quota_blocked"]
     errors = [item for item in documents if item["status"] == "error"]
     coverage_count = len(processed) + len(external_quota_blocked)
+    review_queue_path = component_state.get("review_queue_path")
+    review_queue_items = read_review_queue(review_queue_path) if review_queue_path else []
 
     outcome_counts = Counter(item["outcome"] for item in processed)
     validation_counts = Counter(item["validation_status"] for item in processed)
@@ -259,6 +263,10 @@ def build_phase12_summary(
         "phase12_started": coverage_count > 0,
         "run_passed": coverage_count > 0 and len(errors) == 0,
         "component_state": component_state,
+        "review_queue": {
+            "path": review_queue_path,
+            "items": len(review_queue_items),
+        },
         "aggregate": {
             "outcomes": dict(sorted(outcome_counts.items())),
             "validation_statuses": dict(sorted(validation_counts.items())),
@@ -536,6 +544,8 @@ def write_outputs(output_dir: Path, summary: dict[str, Any]) -> None:
         f"- Queued for review: {summary['queued_for_review']}",
         f"- External quota blocked: {summary['external_quota_blocked']}",
         f"- Hard failures: {summary['hard_failures']}",
+        f"- Review queue path: `{summary['review_queue']['path']}`",
+        f"- Review queue items: {summary['review_queue']['items']}",
         f"- Target window met (10-20 docs): {summary['target_window_met']}",
         f"- Run passed: {summary['run_passed']}",
         "",
@@ -600,8 +610,12 @@ def main() -> int:
     else:
         logger.info("phase19 deterministic path seed=none ordering=sorted_pdf_listing")
 
+    if runtime_dir.exists():
+        shutil.rmtree(runtime_dir)
+
     pdfs = list_pdf_documents(dataset_dir, args.limit)
     pipeline, sql_store, component_state = build_validation_pipeline(runtime_dir)
+    review_queue = ReviewQueueWriter(Path(component_state["review_queue_path"]))
 
     documents: list[dict[str, Any]] = []
     for pdf_path in pdfs:
@@ -616,15 +630,25 @@ def main() -> int:
             documents.append(summarize_document(pdf_path, result, processing_time_ms=elapsed_ms))
         except Exception as exc:  # pragma: no cover - defensive path for live validation
             elapsed_ms = (time.perf_counter() - started) * 1000
-            documents.append(
-                summarize_document(
-                    pdf_path,
-                    None,
-                    error=exc,
-                    quota_safe=args.quota_safe,
-                    processing_time_ms=elapsed_ms,
-                )
+            document = summarize_document(
+                pdf_path,
+                None,
+                error=exc,
+                quota_safe=args.quota_safe,
+                processing_time_ms=elapsed_ms,
             )
+            if document["status"] == "external_quota_blocked":
+                review_queue.append_external_quota_block(
+                    run_id=f"phase12-{pdf_path.stem}",
+                    document_id=pdf_path.name,
+                    source_filename=pdf_path.name,
+                    reason="external_quota_blocked",
+                    recommended_action="operator_retry_after_quota_reset",
+                    raw_evidence_path=str(pdf_path),
+                    error=str(exc),
+                    retry_visibility=document["retry_visibility"],
+                )
+            documents.append(document)
 
     summary = build_phase12_summary(
         dataset_dir=dataset_dir,

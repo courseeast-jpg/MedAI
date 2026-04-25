@@ -31,6 +31,8 @@ This runs the same sequence and writes:
 - `reports/phase18/full_cycle_summary.json`
 - `reports/phase18/full_cycle_summary.md`
 
+The Phase 18 summary now also surfaces the Phase 12 review queue path and item count so operator-review load is visible in the one-command report.
+
 ## Expected Outputs
 
 - Updated validation artifacts under `artifacts/phase12_real_world_validation`

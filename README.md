@@ -75,7 +75,26 @@ Phase 2 outputs:
 - Durable review artifact at `data/review/review_queue.jsonl`
 - Extended metrics snapshot with validation counters and `avg_confidence_by_status`
 
-`review_queue.jsonl` contains only `needs_review` and `rejected` extraction items, each with structured reasons.
+Phase 20 extends the review queue into an operator audit loop. Items enter the queue when:
+
+- extraction validation returns `needs_review` or `rejected`
+- truth resolution quarantines a record for manual inspection
+- medication safety blocks or queues a medication record
+- a quota-safe validation run hits an external quota block
+
+Each queue row captures the operator-facing audit fields:
+
+- `run_id`
+- `document_id` and `source_filename`
+- `reason`
+- `confidence`
+- `extractor_route`
+- `extractor_actual`
+- `timestamp`
+- `recommended_action`
+- `raw_evidence_path` when available
+
+This keeps low-confidence or externally blocked documents observable without converting quota exhaustion into hard failures.
 
 ---
 

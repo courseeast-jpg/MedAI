@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from execution.review_queue import ReviewQueueWriter, read_review_queue
 from scripts.run_phase12_real_world_validation import (
     build_phase15_aggregate,
     build_phase13_metrics,
@@ -14,7 +15,25 @@ from scripts.run_phase12_real_world_validation import (
 )
 
 
-def test_build_phase12_summary_aggregates_documents():
+def test_build_phase12_summary_aggregates_documents(tmp_path: Path):
+    review_queue_path = tmp_path / "review_queue_fixture.jsonl"
+    ReviewQueueWriter(review_queue_path).append_validation_review(
+        run_id="run-1",
+        document_id="short_02.pdf",
+        source_filename="short_02.pdf",
+        reason="pending_validation_review",
+        reasons=["pending_validation_review"],
+        confidence=0.45,
+        extractor_route="gemini",
+        extractor_actual="rules_based",
+        recommended_action="operator_review_validation",
+        raw_evidence_path="test_data/final_batch_50/short_02.pdf",
+        requested_extractor_route="gemini",
+        validation_status="needs_review",
+        validation_errors=[],
+        entity_count=1,
+        notes=[],
+    )
     documents = [
         {
             "document": "short_01.pdf",
@@ -99,7 +118,7 @@ def test_build_phase12_summary_aggregates_documents():
         requested_limit=10,
         documents=documents,
         runtime_counts={"total": 3, "active": 2, "hypothesis": 0, "quarantined": 1},
-        component_state={"governance_active": True},
+        component_state={"governance_active": True, "review_queue_path": str(review_queue_path)},
     )
 
     assert summary["documents_processed"] == 2
@@ -109,6 +128,8 @@ def test_build_phase12_summary_aggregates_documents():
     assert summary["hard_failures"] == 1
     assert summary["documents_failed"] == 1
     assert summary["run_passed"] is False
+    assert summary["review_queue"]["path"] == str(review_queue_path)
+    assert summary["review_queue"]["items"] == 1
     assert summary["aggregate"]["outcomes"] == {"queued_for_review": 1, "written": 1}
     assert summary["aggregate"]["validation_statuses"] == {"accepted": 1, "needs_review": 1}
     assert summary["aggregate"]["extractors"] == {"rules_based": 1, "spacy": 1}
@@ -139,6 +160,37 @@ def test_quota_safe_mode_classifies_quota_exhaustion_as_external_block():
     assert "route_actual_mismatch" not in document["review_reasons"]
     assert document["retry_visibility"]["retry_detected"] is True
     assert document["retry_visibility"]["retry_delay_seconds"] == 36.0
+
+
+def test_external_quota_blocked_item_is_recorded_correctly(tmp_path: Path):
+    document = summarize_document(
+        tmp_path / "quota_blocked.pdf",
+        None,
+        error=RuntimeError("429 quota exceeded for metric generate_content; retry in 12 seconds"),
+        quota_safe=True,
+    )
+    queue_path = tmp_path / "review_queue.jsonl"
+
+    writer = ReviewQueueWriter(queue_path)
+    writer.append_external_quota_block(
+        run_id="phase12-quota_blocked",
+        document_id=document["document"],
+        source_filename=document["document"],
+        reason="external_quota_blocked",
+        recommended_action="operator_retry_after_quota_reset",
+        raw_evidence_path=str(tmp_path / "quota_blocked.pdf"),
+        error=document["error"],
+        retry_visibility=document["retry_visibility"],
+    )
+
+    queued = read_review_queue(queue_path)
+    assert len(queued) == 1
+    assert queued[0]["queue_category"] == "external_quota_block"
+    assert queued[0]["reason"] == "external_quota_blocked"
+    assert queued[0]["recommended_action"] == "operator_retry_after_quota_reset"
+    assert queued[0]["validation_status"] == "skipped_external_quota"
+    assert queued[0]["raw_evidence_path"] == str(tmp_path / "quota_blocked.pdf")
+    assert queued[0]["retry_visibility"]["retry_delay_seconds"] == 12.0
 
 
 def test_quota_safe_mode_does_not_hide_normal_hard_failures():
@@ -241,7 +293,7 @@ def test_phase13_reports_are_created_with_expected_counters(tmp_path: Path):
         requested_limit=10,
         documents=documents,
         runtime_counts={"total": 3, "active": 2, "hypothesis": 0, "quarantined": 1},
-        component_state={"governance_active": True},
+        component_state={"governance_active": True, "review_queue_path": str(tmp_path / "review_queue.jsonl")},
     )
     metrics = write_phase13_reports(tmp_path, summary)
 
@@ -271,7 +323,7 @@ def test_phase13_reports_are_created_with_expected_counters(tmp_path: Path):
     assert "`short_03.pdf` -> status=external_quota_blocked" in performance_summary
 
 
-def test_phase13_metrics_do_not_regress_phase12_counts():
+def test_phase13_metrics_do_not_regress_phase12_counts(tmp_path: Path):
     documents = [
         {
             "document": "short_01.pdf",
@@ -317,7 +369,7 @@ def test_phase13_metrics_do_not_regress_phase12_counts():
         requested_limit=10,
         documents=documents,
         runtime_counts={"total": 2, "active": 1, "hypothesis": 0, "quarantined": 0},
-        component_state={"governance_active": True},
+        component_state={"governance_active": True, "review_queue_path": str(tmp_path / "review_queue.jsonl")},
     )
     metrics = build_phase13_metrics(summary)
 
@@ -415,7 +467,7 @@ def test_phase15_reports_are_created_with_expected_aggregate(tmp_path: Path):
         requested_limit=0,
         documents=documents,
         runtime_counts={"total": 3, "active": 2, "hypothesis": 0, "quarantined": 1},
-        component_state={"governance_active": True},
+        component_state={"governance_active": True, "review_queue_path": str(tmp_path / "review_queue.jsonl")},
     )
 
     aggregate = write_phase15_reports(tmp_path, summary)
@@ -447,7 +499,7 @@ def test_phase15_reports_are_created_with_expected_aggregate(tmp_path: Path):
     assert "`pending_validation_review`: 2" in report_text
 
 
-def test_phase15_aggregate_does_not_regress_phase12_counts():
+def test_phase15_aggregate_does_not_regress_phase12_counts(tmp_path: Path):
     documents = [
         {
             "document": "short_01.pdf",
@@ -493,7 +545,7 @@ def test_phase15_aggregate_does_not_regress_phase12_counts():
         requested_limit=0,
         documents=documents,
         runtime_counts={"total": 2, "active": 1, "hypothesis": 0, "quarantined": 0},
-        component_state={"governance_active": True},
+        component_state={"governance_active": True, "review_queue_path": str(tmp_path / "review_queue.jsonl")},
     )
     aggregate = build_phase15_aggregate(summary)
 
@@ -505,7 +557,7 @@ def test_phase15_aggregate_does_not_regress_phase12_counts():
     assert aggregate["counters"]["attempted_equals_processed_plus_quota_blocked_plus_hard_failures"] is True
 
 
-def test_written_with_review_counts_as_written_not_queue():
+def test_written_with_review_counts_as_written_not_queue(tmp_path: Path):
     documents = [
         {
             "document": "short_01.pdf",
@@ -552,7 +604,7 @@ def test_written_with_review_counts_as_written_not_queue():
         requested_limit=0,
         documents=documents,
         runtime_counts={"total": 3, "active": 2, "hypothesis": 0, "quarantined": 1},
-        component_state={"governance_active": True},
+        component_state={"governance_active": True, "review_queue_path": str(tmp_path / "review_queue.jsonl")},
     )
     aggregate = build_phase15_aggregate(summary)
 
