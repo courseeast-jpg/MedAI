@@ -73,6 +73,7 @@ def test_audit_records_and_metrics_cover_all_stages(tmp_path: Path):
     audit_events = read_jsonl(audit_path)
     stages = {event["stage"] for event in audit_events}
     assert stages == {
+        "language_support",
         "extraction",
         "consensus",
         "validation",
@@ -85,6 +86,7 @@ def test_audit_records_and_metrics_cover_all_stages(tmp_path: Path):
         "final_write",
     }
     assert {event["action"] for event in audit_events} >= {
+        "language_support_detected",
         "extraction_started",
         "extraction_completed",
         "consensus_result",

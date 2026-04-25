@@ -1,6 +1,6 @@
 # Phase 21 Observability Report
 
-- Generated at: `2026-04-25T14:40:02.288659+00:00`
+- Generated at: `2026-04-25T15:20:49.049544+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
 - Processed documents: `46`
@@ -22,6 +22,12 @@
 - Coding unmapped count: `74`
 - Coding ambiguous count: `0`
 - Coding skipped count: `29`
+- Language detected counts: `{'english': 46}`
+- Cyrillic detected count: `0`
+- Mixed language count: `0`
+- Pending translation count: `0`
+- Requires OCR count: `0`
+- Language unknown count: `0`
 
 ## Route Counts
 
@@ -36,12 +42,13 @@
 ## Stage Durations
 
 - `consensus` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `extraction` -> records=50 events=96 total_ms=3969.82 avg_ms=79.396 max_ms=2728.533
-- `final_write` -> records=39 events=124 total_ms=43076.886 avg_ms=1104.536 max_ms=5185.021
+- `extraction` -> records=50 events=96 total_ms=3622.413 avg_ms=72.448 max_ms=2382.12
+- `final_write` -> records=39 events=124 total_ms=31480.512 avg_ms=807.193 max_ms=4550.862
+- `language_support` -> records=50 events=50 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 - `medical_coding` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `safety_gate` -> records=26 events=98 total_ms=37496.772 avg_ms=1442.184 max_ms=4715.383
+- `safety_gate` -> records=26 events=98 total_ms=27884.254 avg_ms=1072.471 max_ms=4126.598
 - `semantic_enrichment` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `truth_resolution` -> records=39 events=124 total_ms=43037.813 avg_ms=1103.534 max_ms=5181.487
+- `truth_resolution` -> records=39 events=124 total_ms=31509.536 avg_ms=807.937 max_ms=4560.696
 - `validation` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 
 ## Stability Guardrails

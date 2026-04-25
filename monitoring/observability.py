@@ -21,6 +21,8 @@ DEFAULT_PHASE24_ARTIFACT_PATH = ROOT / "artifacts" / "phase24" / "semantic_enric
 DEFAULT_PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
 DEFAULT_PHASE25_ARTIFACT_PATH = ROOT / "artifacts" / "phase25" / "medical_coding.json"
 DEFAULT_PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
+DEFAULT_PHASE26_ARTIFACT_PATH = ROOT / "artifacts" / "phase26" / "language_support.json"
+DEFAULT_PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md"
 
 
 def _load_jsonl(path: Path | str | None) -> list[dict[str, Any]]:
@@ -115,6 +117,12 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
     coding_unmapped_count = sum(int(item.get("coding_unmapped_count", 0)) for item in processed)
     coding_ambiguous_count = sum(int(item.get("coding_ambiguous_count", 0)) for item in processed)
     coding_skipped_count = sum(int(item.get("coding_skipped_count", 0)) for item in processed)
+    language_detected_counts = Counter(str(item.get("detected_language", "unknown")) for item in processed)
+    cyrillic_detected_count = sum(int(bool(item.get("cyrillic_detected", False))) for item in processed)
+    mixed_language_count = sum(int(str(item.get("detected_language", "")) == "mixed") for item in processed)
+    pending_translation_count = sum(int(str(item.get("translation_status", "")) == "pending_translation") for item in processed)
+    requires_ocr_count = sum(int(bool(item.get("requires_ocr", False))) for item in processed)
+    language_unknown_count = sum(int(str(item.get("detected_language", "")) == "unknown") for item in processed)
 
     return {
         "generated_at": summary.get("generated_at"),
@@ -143,6 +151,12 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         "coding_unmapped_count": coding_unmapped_count,
         "coding_ambiguous_count": coding_ambiguous_count,
         "coding_skipped_count": coding_skipped_count,
+        "language_detected_counts": dict(sorted(language_detected_counts.items())),
+        "cyrillic_detected_count": cyrillic_detected_count,
+        "mixed_language_count": mixed_language_count,
+        "pending_translation_count": pending_translation_count,
+        "requires_ocr_count": requires_ocr_count,
+        "language_unknown_count": language_unknown_count,
         "review_queue_category_counts": dict(sorted(review_queue_categories.items())),
         "per_stage_duration_ms": build_stage_duration_metrics(stage_events),
         "paths": {
@@ -178,6 +192,12 @@ def build_phase21_report(metrics: dict[str, Any]) -> str:
         f"- Coding unmapped count: `{metrics['coding_unmapped_count']}`",
         f"- Coding ambiguous count: `{metrics['coding_ambiguous_count']}`",
         f"- Coding skipped count: `{metrics['coding_skipped_count']}`",
+        f"- Language detected counts: `{metrics['language_detected_counts']}`",
+        f"- Cyrillic detected count: `{metrics['cyrillic_detected_count']}`",
+        f"- Mixed language count: `{metrics['mixed_language_count']}`",
+        f"- Pending translation count: `{metrics['pending_translation_count']}`",
+        f"- Requires OCR count: `{metrics['requires_ocr_count']}`",
+        f"- Language unknown count: `{metrics['language_unknown_count']}`",
         "",
         "## Route Counts",
         "",
@@ -728,4 +748,116 @@ def write_phase25_outputs(
     report_path.parent.mkdir(parents=True, exist_ok=True)
     artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     report_path.write_text(build_phase25_report(metrics), encoding="utf-8")
+    return metrics
+
+
+def build_phase26_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    documents = summary.get("documents", [])
+    processed = [item for item in documents if item.get("status") == "processed"]
+
+    language_detected_counts = Counter()
+    cyrillic_detected_count = 0
+    mixed_language_count = 0
+    pending_translation_count = 0
+    requires_ocr_count = 0
+    language_unknown_count = 0
+    language_documents: list[dict[str, Any]] = []
+
+    for item in processed:
+        detected_language = str(item.get("detected_language", "unknown"))
+        language_detected_counts[detected_language] += 1
+        cyrillic_detected_count += int(bool(item.get("cyrillic_detected", False)))
+        mixed_language_count += int(detected_language == "mixed")
+        pending_translation_count += int(str(item.get("translation_status", "")) == "pending_translation")
+        requires_ocr_count += int(bool(item.get("requires_ocr", False)))
+        language_unknown_count += int(detected_language == "unknown")
+        language_documents.append({
+            "document": item.get("document"),
+            "outcome": item.get("outcome"),
+            "validation_status": item.get("validation_status"),
+            "detected_language": detected_language,
+            "language_confidence": float(item.get("language_confidence", 0.0)),
+            "script_detected": str(item.get("script_detected", "unknown")),
+            "cyrillic_detected": bool(item.get("cyrillic_detected", False)),
+            "requires_ocr": bool(item.get("requires_ocr", False)),
+            "language_route_note": str(item.get("language_route_note", "")),
+            "translation_status": str(item.get("translation_status", "not_required")),
+            "language_support_status": str(item.get("language_support_status", "unknown_metadata_only")),
+            "language_support": item.get("language_support"),
+        })
+
+    return {
+        "generated_at": summary.get("generated_at"),
+        "phase": "Phase 26 Multi-language / Russian Support",
+        "dataset_dir": summary.get("dataset_dir"),
+        "determinism": summary.get("determinism", {}),
+        "attempted_documents": int(summary.get("documents_selected", 0)),
+        "processed_documents": int(summary.get("documents_processed", 0)),
+        "written_documents": int(summary.get("written", 0)),
+        "queued_for_review_documents": int(summary.get("queued_for_review", 0)),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", 0)),
+        "hard_failures": int(summary.get("hard_failures", 0)),
+        "language_detected_counts": dict(sorted(language_detected_counts.items())),
+        "cyrillic_detected_count": cyrillic_detected_count,
+        "mixed_language_count": mixed_language_count,
+        "pending_translation_count": pending_translation_count,
+        "requires_ocr_count": requires_ocr_count,
+        "language_unknown_count": language_unknown_count,
+        "documents": language_documents,
+    }
+
+
+def build_phase26_report(metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 26 Language Support Report",
+        "",
+        f"- Generated at: `{metrics['generated_at']}`",
+        f"- Dataset: `{metrics['dataset_dir']}`",
+        f"- Attempted documents: `{metrics['attempted_documents']}`",
+        f"- Processed documents: `{metrics['processed_documents']}`",
+        f"- Written documents: `{metrics['written_documents']}`",
+        f"- Queued for review documents: `{metrics['queued_for_review_documents']}`",
+        f"- External quota blocked: `{metrics['external_quota_blocked']}`",
+        f"- Hard failures: `{metrics['hard_failures']}`",
+        f"- Language detected counts: `{metrics['language_detected_counts']}`",
+        f"- Cyrillic detected count: `{metrics['cyrillic_detected_count']}`",
+        f"- Mixed language count: `{metrics['mixed_language_count']}`",
+        f"- Pending translation count: `{metrics['pending_translation_count']}`",
+        f"- Requires OCR count: `{metrics['requires_ocr_count']}`",
+        f"- Language unknown count: `{metrics['language_unknown_count']}`",
+        "",
+        "## Document Audit",
+        "",
+    ]
+    if metrics["documents"]:
+        for item in metrics["documents"]:
+            lines.append(
+                f"- `{item['document']}` -> language={item['detected_language']} "
+                f"script={item['script_detected']} cyrillic={item['cyrillic_detected']} "
+                f"requires_ocr={item['requires_ocr']} translation={item['translation_status']}"
+            )
+    else:
+        lines.append("- No processed documents available for language support audit.")
+    lines.extend([
+        "",
+        "## Non-Destructive Guardrails",
+        "",
+        f"- Determinism: `{metrics['determinism']}`",
+        "- Language support is metadata only in this phase and does not alter confidence, routing, review, write, semantic enrichment, or medical coding outputs.",
+        "- OCR and translation are not executed in this phase; `requires_ocr` and `translation_status` are advisory metadata only.",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def write_phase26_outputs(
+    summary: dict[str, Any],
+    *,
+    artifact_path: Path = DEFAULT_PHASE26_ARTIFACT_PATH,
+    report_path: Path = DEFAULT_PHASE26_REPORT_PATH,
+) -> dict[str, Any]:
+    metrics = build_phase26_metrics(summary)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    report_path.write_text(build_phase26_report(metrics), encoding="utf-8")
     return metrics

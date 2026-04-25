@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T14:40:02.288659+00:00",
+  "generated_at": "2026-04-25T15:20:49.049544+00:00",
   "phase": "Phase 21 Observability & Metrics Tightening",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -35,6 +35,14 @@
   "coding_unmapped_count": 74,
   "coding_ambiguous_count": 0,
   "coding_skipped_count": 29,
+  "language_detected_counts": {
+    "english": 46
+  },
+  "cyrillic_detected_count": 0,
+  "mixed_language_count": 0,
+  "pending_translation_count": 0,
+  "requires_ocr_count": 0,
+  "language_unknown_count": 0,
   "review_queue_category_counts": {
     "external_quota_block": 4,
     "truth_resolution_review": 26,
@@ -51,16 +59,23 @@
     "extraction": {
       "records": 50,
       "events": 96,
-      "total_duration_ms": 3969.82,
-      "avg_duration_ms": 79.396,
-      "max_duration_ms": 2728.533
+      "total_duration_ms": 3622.413,
+      "avg_duration_ms": 72.448,
+      "max_duration_ms": 2382.12
     },
     "final_write": {
       "records": 39,
       "events": 124,
-      "total_duration_ms": 43076.886,
-      "avg_duration_ms": 1104.536,
-      "max_duration_ms": 5185.021
+      "total_duration_ms": 31480.512,
+      "avg_duration_ms": 807.193,
+      "max_duration_ms": 4550.862
+    },
+    "language_support": {
+      "records": 50,
+      "events": 50,
+      "total_duration_ms": 0.0,
+      "avg_duration_ms": 0.0,
+      "max_duration_ms": 0.0
     },
     "medical_coding": {
       "records": 46,
@@ -72,9 +87,9 @@
     "safety_gate": {
       "records": 26,
       "events": 98,
-      "total_duration_ms": 37496.772,
-      "avg_duration_ms": 1442.184,
-      "max_duration_ms": 4715.383
+      "total_duration_ms": 27884.254,
+      "avg_duration_ms": 1072.471,
+      "max_duration_ms": 4126.598
     },
     "semantic_enrichment": {
       "records": 46,
@@ -86,9 +101,9 @@
     "truth_resolution": {
       "records": 39,
       "events": 124,
-      "total_duration_ms": 43037.813,
-      "avg_duration_ms": 1103.534,
-      "max_duration_ms": 5181.487
+      "total_duration_ms": 31509.536,
+      "avg_duration_ms": 807.937,
+      "max_duration_ms": 4560.696
     },
     "validation": {
       "records": 46,

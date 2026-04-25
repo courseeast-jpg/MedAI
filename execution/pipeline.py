@@ -25,6 +25,7 @@ from execution.connectors.phi3_connector import Phi3Connector
 from execution.connectors.spacy_connector import SpacyConnector
 from execution.enrichment import ControlledEnrichment
 from execution.jobs import ExecutionJob, ExecutionResult
+from execution.language_support import detect_language_support
 from execution.logging import AuditLogger
 from execution.medical_coding import map_medical_codes
 from execution.metrics import PipelineMetrics
@@ -101,12 +102,27 @@ class ExecutionPipeline:
             source_text = self.extract_pdf_text(job.pdf_path)
             source_name = job.source_name or job.pdf_path.name
 
+        language_support = detect_language_support(text=source_text).to_dict()
+        self._stage_log(
+            record_id=session_id,
+            stage="language_support",
+            action="language_support_detected",
+            confidence=float(language_support["language_confidence"]),
+            decision_reason=(
+                f"language={language_support['detected_language']} "
+                f"script={language_support['script_detected']} "
+                f"translation={language_support['translation_status']} "
+                f"requires_ocr={language_support['requires_ocr']}"
+            ),
+            extra=language_support,
+        )
+
         self._stage_log(
             record_id=session_id,
             stage="extraction",
             action="extraction_started",
             confidence=0.0,
-            decision_reason=f"source={source_name}",
+            decision_reason=f"source={source_name} language={language_support['detected_language']}",
         )
         stripped_text, pii_method = self._strip_pii(source_text)
         routed = self.router.execute(stripped_text, specialty=job.specialty, source_name=source_name)
@@ -154,10 +170,12 @@ class ExecutionPipeline:
         extracted["estimated_cost_units"] = routed.estimated_cost_units
         extracted["saved_cost_units"] = routed.saved_cost_units
         extracted["quota_block_avoided"] = routed.quota_block_avoided
+        extracted["language_support"] = language_support
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
         extracted["notes"].append(f"routing_decision={routed.decision_reason}")
+        extracted["notes"].append(f"language_route_note={language_support['language_route_note']}")
         self.metrics.record_routing(
             extractor_actual=str(extracted.get("actual_extractor", "")),
             fallback_used=routed.fallback_used,

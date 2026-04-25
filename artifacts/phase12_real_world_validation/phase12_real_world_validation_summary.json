@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T14:40:02.288659+00:00",
+  "generated_at": "2026-04-25T15:20:49.049544+00:00",
   "phase": "Phase 12 Real-World Validation",
   "dataset_dir": "test_data\\final_batch_50",
   "requested_limit": 0,
@@ -62,7 +62,15 @@
     "coding_success_count": 8,
     "coding_unmapped_count": 74,
     "coding_ambiguous_count": 0,
-    "coding_skipped_count": 29
+    "coding_skipped_count": 29,
+    "language_detected_counts": {
+      "english": 46
+    },
+    "cyrillic_detected_count": 0,
+    "mixed_language_count": 0,
+    "pending_translation_count": 0,
+    "requires_ocr_count": 0,
+    "language_unknown_count": 0
   },
   "mkb_counts": {
     "total": 39,
@@ -89,9 +97,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 4160.518,
+      "processing_time_ms": 3210.141,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -224,7 +233,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 3,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "long_noisy_02.pdf",
@@ -244,9 +271,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 2793.95,
+      "processing_time_ms": 2420.856,
       "requested_route": "gemini",
       "retry_visibility": {
         "retry_detected": false,
@@ -261,7 +289,7 @@
       "review_recommendation": "accept_with_route_audit",
       "intended_route": "gemini",
       "actual_route": "spacy",
-      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
+      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 16.06289861s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 16\n}\n]",
       "estimated_cost_units": 0.0,
       "saved_cost_units": 0.02,
       "quota_block_avoided": false,
@@ -379,7 +407,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 3,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "long_noisy_03.pdf",
@@ -404,9 +450,10 @@
         "loaded en_core_sci_md",
         "phi3_stub_local_fallback",
         "pii_method=presidio",
-        "routing_decision=selected=phi3 score=0.806 cost=0.00500 confidence=0.760 latency_ms=25.000 success_rate=0.950 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=phi3 score=0.806 cost=0.00500 confidence=0.760 latency_ms=25.000 success_rate=0.950 candidates=gemini,phi3,spacy",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 105.203,
+      "processing_time_ms": 122.85,
       "requested_route": "phi3",
       "retry_visibility": {
         "retry_detected": false,
@@ -436,12 +483,30 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 0,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "long_noisy_04.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 16.06289861s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 16\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -453,11 +518,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 382.507,
+      "processing_time_ms": 411.855,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 4.457540095,
+        "retry_delay_seconds": 16.06289861,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -483,7 +548,16 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 0,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": null,
+      "detected_language": "unknown",
+      "language_confidence": 0.0,
+      "script_detected": "unknown",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:language_signal_insufficient",
+      "translation_status": "not_required",
+      "language_support_status": "unknown_metadata_only"
     },
     {
       "document": "long_noisy_05.pdf",
@@ -503,9 +577,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=41.333 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=42.333 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 161.925,
+      "processing_time_ms": 136.33,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -638,12 +713,30 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 3,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "long_noisy_06.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 16.06289861s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 16\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -655,11 +748,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 386.299,
+      "processing_time_ms": 386.341,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 4.457540095,
+        "retry_delay_seconds": 16.06289861,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -685,7 +778,16 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 0,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": null,
+      "detected_language": "unknown",
+      "language_confidence": 0.0,
+      "script_detected": "unknown",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:language_signal_insufficient",
+      "translation_status": "not_required",
+      "language_support_status": "unknown_metadata_only"
     },
     {
       "document": "long_noisy_07.pdf",
@@ -705,9 +807,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=42.250 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=44.250 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 330.413,
+      "processing_time_ms": 130.194,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -840,12 +943,30 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 3,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "long_noisy_08.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 16.06289861s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 16\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -857,11 +978,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 390.279,
+      "processing_time_ms": 382.266,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 4.457540095,
+        "retry_delay_seconds": 16.06289861,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -887,7 +1008,16 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 0,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": null,
+      "detected_language": "unknown",
+      "language_confidence": 0.0,
+      "script_detected": "unknown",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:language_signal_insufficient",
+      "translation_status": "not_required",
+      "language_support_status": "unknown_metadata_only"
     },
     {
       "document": "long_noisy_09.pdf",
@@ -907,9 +1037,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=42.800 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.861 cost=0.00000 confidence=0.700 latency_ms=44.600 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 162.169,
+      "processing_time_ms": 133.424,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1042,12 +1173,30 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 3,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "long_noisy_10.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 16.06289861s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 16\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -1059,11 +1208,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 387.4,
+      "processing_time_ms": 382.445,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 4.457540095,
+        "retry_delay_seconds": 16.06289861,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -1089,7 +1238,16 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 0,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": null,
+      "detected_language": "unknown",
+      "language_confidence": 0.0,
+      "script_detected": "unknown",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:language_signal_insufficient",
+      "translation_status": "not_required",
+      "language_support_status": "unknown_metadata_only"
     },
     {
       "document": "short_01.pdf",
@@ -1112,9 +1270,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=43.667 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.861 cost=0.00000 confidence=0.700 latency_ms=44.667 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 131.018,
+      "processing_time_ms": 50.829,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1226,7 +1385,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_02.pdf",
@@ -1246,9 +1423,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=38.286 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=39.429 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 50.346,
+      "processing_time_ms": 28.973,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1318,7 +1496,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_03.pdf",
@@ -1338,9 +1534,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.866 cost=0.00000 confidence=0.700 latency_ms=34.625 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=35.500 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 48.805,
+      "processing_time_ms": 35.995,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1431,7 +1628,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_04.pdf",
@@ -1451,9 +1666,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.867 cost=0.00000 confidence=0.700 latency_ms=31.444 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.867 cost=0.00000 confidence=0.700 latency_ms=32.222 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 63.408,
+      "processing_time_ms": 42.772,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1565,7 +1781,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_05.pdf",
@@ -1585,9 +1819,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=28.900 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=29.600 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 57.873,
+      "processing_time_ms": 46.691,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1699,7 +1934,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_06.pdf",
@@ -1719,9 +1972,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=26.818 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=27.636 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 53.628,
+      "processing_time_ms": 43.466,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1812,7 +2066,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_07.pdf",
@@ -1832,9 +2104,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=25.167 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=25.917 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 37.614,
+      "processing_time_ms": 28.205,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1904,7 +2177,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_08.pdf",
@@ -1927,9 +2218,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=23.769 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=24.308 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 50.276,
+      "processing_time_ms": 43.699,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2020,7 +2312,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_09.pdf",
@@ -2043,9 +2353,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=22.571 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=23.000 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 68.7,
+      "processing_time_ms": 47.693,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2157,7 +2468,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_10.pdf",
@@ -2180,9 +2509,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.533 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.867 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 202.319,
+      "processing_time_ms": 50.079,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2294,7 +2624,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_11.pdf",
@@ -2314,9 +2662,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=20.688 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=20.875 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 48.432,
+      "processing_time_ms": 36.759,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2407,7 +2756,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_12.pdf",
@@ -2427,9 +2794,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.882 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=20.059 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 37.703,
+      "processing_time_ms": 27.685,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2499,7 +2867,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_13.pdf",
@@ -2519,9 +2905,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.111 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.278 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 50.821,
+      "processing_time_ms": 35.393,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2612,7 +2999,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_14.pdf",
@@ -2632,9 +3037,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.421 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.579 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 66.914,
+      "processing_time_ms": 47.429,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2746,7 +3152,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_15.pdf",
@@ -2766,9 +3190,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.800 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.950 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 68.605,
+      "processing_time_ms": 41.381,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2880,7 +3305,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_16.pdf",
@@ -2900,9 +3343,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.238 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.381 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 67.15,
+      "processing_time_ms": 42.882,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3014,7 +3458,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_17.pdf",
@@ -3034,9 +3496,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.727 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.909 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 54.211,
+      "processing_time_ms": 35.811,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3127,7 +3590,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_18.pdf",
@@ -3150,9 +3631,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.261 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.435 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 174.655,
+      "processing_time_ms": 42.373,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3243,7 +3725,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_19.pdf",
@@ -3263,9 +3763,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=15.917 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.042 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 53.154,
+      "processing_time_ms": 35.371,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3356,7 +3857,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_20.pdf",
@@ -3379,9 +3898,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.520 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=15.640 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 78.239,
+      "processing_time_ms": 51.224,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3493,7 +4013,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_21.pdf",
@@ -3513,9 +4051,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.154 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.269 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 57.449,
+      "processing_time_ms": 45.917,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3606,7 +4145,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_22.pdf",
@@ -3626,9 +4183,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.815 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.926 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 34.826,
+      "processing_time_ms": 27.11,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3698,7 +4256,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_23.pdf",
@@ -3718,9 +4294,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.500 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.607 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 53.087,
+      "processing_time_ms": 36.723,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3811,7 +4388,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_24.pdf",
@@ -3834,9 +4429,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.241 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.345 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 73.156,
+      "processing_time_ms": 48.468,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3948,7 +4544,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_25.pdf",
@@ -3968,9 +4582,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.000 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.067 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 112.347,
+      "processing_time_ms": 42.539,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4082,7 +4697,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_26.pdf",
@@ -4102,9 +4735,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.742 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.806 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 52.976,
+      "processing_time_ms": 36.576,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4195,7 +4829,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_27.pdf",
@@ -4215,9 +4867,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.531 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.594 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 37.059,
+      "processing_time_ms": 32.096,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4287,7 +4940,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_28.pdf",
@@ -4310,9 +4981,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.303 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.424 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 63.981,
+      "processing_time_ms": 41.916,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4403,7 +5075,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_29.pdf",
@@ -4423,9 +5113,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=13.088 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.206 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 66.565,
+      "processing_time_ms": 43.307,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4537,7 +5228,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_30.pdf",
@@ -4560,9 +5269,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.886 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=13.000 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 75.023,
+      "processing_time_ms": 47.971,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4674,7 +5384,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_31.pdf",
@@ -4694,9 +5422,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.694 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.806 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 50.451,
+      "processing_time_ms": 36.082,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4787,7 +5516,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_32.pdf",
@@ -4807,9 +5554,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.541 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.622 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 37.071,
+      "processing_time_ms": 28.572,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4879,7 +5627,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_33.pdf",
@@ -4899,9 +5665,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.368 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.447 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 51.756,
+      "processing_time_ms": 36.458,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -4992,7 +5759,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_34.pdf",
@@ -5015,9 +5800,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.231 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.282 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 73.283,
+      "processing_time_ms": 48.021,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -5129,7 +5915,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_35.pdf",
@@ -5149,9 +5953,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.075 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.125 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 62.341,
+      "processing_time_ms": 43.464,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -5263,7 +6068,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_36.pdf",
@@ -5286,9 +6109,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.951 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.976 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 79.183,
+      "processing_time_ms": 49.09,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -5400,7 +6224,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_37.pdf",
@@ -5420,9 +6262,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.810 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.833 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 35.62,
+      "processing_time_ms": 27.69,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -5492,7 +6335,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_38.pdf",
@@ -5515,9 +6376,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.674 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.698 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 67.013,
+      "processing_time_ms": 53.227,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -5608,7 +6470,25 @@
       "coding_success_count": 1,
       "coding_unmapped_count": 1,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 0
+      "coding_skipped_count": 0,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_39.pdf",
@@ -5628,9 +6508,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.545 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.591 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 65.301,
+      "processing_time_ms": 43.436,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -5742,7 +6623,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     },
     {
       "document": "short_40.pdf",
@@ -5765,9 +6664,10 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.422 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.489 success_rate=1.000 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ],
-      "processing_time_ms": 75.047,
+      "processing_time_ms": 47.517,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -5879,7 +6779,25 @@
       "coding_success_count": 0,
       "coding_unmapped_count": 2,
       "coding_ambiguous_count": 0,
-      "coding_skipped_count": 1
+      "coding_skipped_count": 1,
+      "language_support": {
+        "detected_language": "english",
+        "language_confidence": 1.0,
+        "script_detected": "latin",
+        "cyrillic_detected": false,
+        "requires_ocr": false,
+        "language_route_note": "metadata_only:english_latin_detected",
+        "translation_status": "not_required",
+        "language_support_status": "supported_metadata_only"
+      },
+      "detected_language": "english",
+      "language_confidence": 1.0,
+      "script_detected": "latin",
+      "cyrillic_detected": false,
+      "requires_ocr": false,
+      "language_route_note": "metadata_only:english_latin_detected",
+      "translation_status": "not_required",
+      "language_support_status": "supported_metadata_only"
     }
   ],
   "determinism": {

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-25T14:40:04.585927+00:00",
-  "started_at": "2026-04-25T14:35:11.066491+00:00",
-  "ended_at": "2026-04-25T14:40:04.585927+00:00",
-  "duration_seconds": 293.519,
-  "commit_hash": "9bb3eaca81de6d5356c24e289be82a6fcce35acd",
+  "generated_at": "2026-04-25T15:20:51.301744+00:00",
+  "started_at": "2026-04-25T15:16:19.107087+00:00",
+  "ended_at": "2026-04-25T15:20:51.301744+00:00",
+  "duration_seconds": 272.195,
+  "commit_hash": "c58f04d0924a161c1e4a54b52b25422edaf66111",
   "git_status": "dirty",
   "steps": [
     {
@@ -56,7 +56,7 @@
   ],
   "success": true,
   "failed_step": null,
-  "test_result": "200 passed",
+  "test_result": "213 passed",
   "phase11_audit_result": "passed",
   "validation_result": {
     "attempted": 50,
@@ -94,16 +94,23 @@
       "extraction": {
         "records": 50,
         "events": 96,
-        "total_duration_ms": 3969.82,
-        "avg_duration_ms": 79.396,
-        "max_duration_ms": 2728.533
+        "total_duration_ms": 3622.413,
+        "avg_duration_ms": 72.448,
+        "max_duration_ms": 2382.12
       },
       "final_write": {
         "records": 39,
         "events": 124,
-        "total_duration_ms": 43076.886,
-        "avg_duration_ms": 1104.536,
-        "max_duration_ms": 5185.021
+        "total_duration_ms": 31480.512,
+        "avg_duration_ms": 807.193,
+        "max_duration_ms": 4550.862
+      },
+      "language_support": {
+        "records": 50,
+        "events": 50,
+        "total_duration_ms": 0.0,
+        "avg_duration_ms": 0.0,
+        "max_duration_ms": 0.0
       },
       "medical_coding": {
         "records": 46,
@@ -115,9 +122,9 @@
       "safety_gate": {
         "records": 26,
         "events": 98,
-        "total_duration_ms": 37496.772,
-        "avg_duration_ms": 1442.184,
-        "max_duration_ms": 4715.383
+        "total_duration_ms": 27884.254,
+        "avg_duration_ms": 1072.471,
+        "max_duration_ms": 4126.598
       },
       "semantic_enrichment": {
         "records": 46,
@@ -129,9 +136,9 @@
       "truth_resolution": {
         "records": 39,
         "events": 124,
-        "total_duration_ms": 43037.813,
-        "avg_duration_ms": 1103.534,
-        "max_duration_ms": 5181.487
+        "total_duration_ms": 31509.536,
+        "avg_duration_ms": 807.937,
+        "max_duration_ms": 4560.696
       },
       "validation": {
         "records": 46,
@@ -196,6 +203,18 @@
       "skipped": 29,
       "unmapped": 74
     }
+  },
+  "language_support_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase26\\language_support.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase26\\language_support_report.md",
+    "language_detected_counts": {
+      "english": 46
+    },
+    "cyrillic_detected_count": 0,
+    "mixed_language_count": 0,
+    "pending_translation_count": 0,
+    "requires_ocr_count": 0,
+    "language_unknown_count": 0
   },
   "dashboard_export_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase17\\dashboard_latest.md",
   "stability_report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase19\\stability_report.md"

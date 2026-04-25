@@ -28,6 +28,8 @@ PHASE24_METRICS_PATH = ROOT / "artifacts" / "phase24" / "semantic_enrichment.jso
 PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
 PHASE25_METRICS_PATH = ROOT / "artifacts" / "phase25" / "medical_coding.json"
 PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
+PHASE26_METRICS_PATH = ROOT / "artifacts" / "phase26" / "language_support.json"
+PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md"
 PHASE17_DASHBOARD_PATH = ROOT / "reports" / "phase17" / "dashboard_latest.md"
 
 PHASE18_STEPS: list[tuple[str, list[str]]] = [
@@ -108,6 +110,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
     phase23 = load_json(PHASE23_METRICS_PATH) if PHASE23_METRICS_PATH.exists() else {}
     phase24 = load_json(PHASE24_METRICS_PATH) if PHASE24_METRICS_PATH.exists() else {}
     phase25 = load_json(PHASE25_METRICS_PATH) if PHASE25_METRICS_PATH.exists() else {}
+    phase26 = load_json(PHASE26_METRICS_PATH) if PHASE26_METRICS_PATH.exists() else {}
     pytest_step = next((item for item in commands if item["name"] == "tests"), None)
     failed_step = next((item["name"] for item in commands if item["returncode"] != 0), None)
 
@@ -188,6 +191,16 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
             "coding_skipped_count": int(phase25.get("coding_skipped_count", 0)),
             "coding_status_counts": phase25.get("coding_status_counts", {}),
         },
+        "language_support_result": {
+            "metrics_path": str(PHASE26_METRICS_PATH),
+            "report_path": str(PHASE26_REPORT_PATH),
+            "language_detected_counts": phase26.get("language_detected_counts", {}),
+            "cyrillic_detected_count": int(phase26.get("cyrillic_detected_count", 0)),
+            "mixed_language_count": int(phase26.get("mixed_language_count", 0)),
+            "pending_translation_count": int(phase26.get("pending_translation_count", 0)),
+            "requires_ocr_count": int(phase26.get("requires_ocr_count", 0)),
+            "language_unknown_count": int(phase26.get("language_unknown_count", 0)),
+        },
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
         "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
@@ -205,6 +218,7 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
     routing_efficiency = summary["routing_efficiency_result"]
     semantic_enrichment = summary["semantic_enrichment_result"]
     medical_coding = summary["medical_coding_result"]
+    language_support = summary["language_support_result"]
     lines = [
         "# Phase 18 Full Cycle Summary",
         "",
@@ -258,6 +272,14 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Medical coding status_counts: `{medical_coding['coding_status_counts']}`",
         f"- Medical coding metrics_path: `{medical_coding['metrics_path']}`",
         f"- Medical coding report_path: `{medical_coding['report_path']}`",
+        f"- Language support detected_counts: `{language_support['language_detected_counts']}`",
+        f"- Language support cyrillic_detected_count: `{language_support['cyrillic_detected_count']}`",
+        f"- Language support mixed_language_count: `{language_support['mixed_language_count']}`",
+        f"- Language support pending_translation_count: `{language_support['pending_translation_count']}`",
+        f"- Language support requires_ocr_count: `{language_support['requires_ocr_count']}`",
+        f"- Language support language_unknown_count: `{language_support['language_unknown_count']}`",
+        f"- Language support metrics_path: `{language_support['metrics_path']}`",
+        f"- Language support report_path: `{language_support['report_path']}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
         f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",

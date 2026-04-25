@@ -1,6 +1,6 @@
 # Phase 12 Real-World Validation Summary
 
-- Generated at: 2026-04-25T14:40:02.288659+00:00
+- Generated at: 2026-04-25T15:20:49.049544+00:00
 - Dataset: `test_data\final_batch_50`
 - Documents processed: 46/50
 - Written: 45
@@ -31,6 +31,12 @@
 - Coding unmapped count: 74
 - Coding ambiguous count: 0
 - Coding skipped count: 29
+- Language detected counts: {'english': 46}
+- Cyrillic detected count: 0
+- Mixed language count: 0
+- Pending translation count: 0
+- Requires OCR count: 0
+- Language unknown count: 0
 
 ## Runtime MKB
 

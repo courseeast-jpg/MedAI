@@ -103,6 +103,16 @@ def test_report_writer_works(tmp_path: Path):
             "coding_skipped_count": 7,
             "coding_status_counts": {"ambiguous": 1, "coded": 12, "skipped": 7, "unmapped": 70},
         },
+        "language_support_result": {
+            "metrics_path": "artifacts/phase26/language_support.json",
+            "report_path": "reports/phase26/language_support_report.md",
+            "language_detected_counts": {"english": 46},
+            "cyrillic_detected_count": 0,
+            "mixed_language_count": 0,
+            "pending_translation_count": 0,
+            "requires_ocr_count": 0,
+            "language_unknown_count": 0,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -210,6 +220,16 @@ def test_no_pipeline_configuration_is_mutated(tmp_path: Path):
             "coding_skipped_count": 7,
             "coding_status_counts": {"ambiguous": 1, "coded": 12, "skipped": 7, "unmapped": 70},
         },
+        "language_support_result": {
+            "metrics_path": "artifacts/phase26/language_support.json",
+            "report_path": "reports/phase26/language_support_report.md",
+            "language_detected_counts": {"english": 46},
+            "cyrillic_detected_count": 0,
+            "mixed_language_count": 0,
+            "pending_translation_count": 0,
+            "requires_ocr_count": 0,
+            "language_unknown_count": 0,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -237,6 +257,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     phase23_path = tmp_path / "phase23.json"
     phase24_path = tmp_path / "phase24.json"
     phase25_path = tmp_path / "phase25.json"
+    phase26_path = tmp_path / "phase26.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         """{
@@ -303,6 +324,17 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
 }""",
         encoding="utf-8",
     )
+    phase26_path.write_text(
+        """{
+  "language_detected_counts": {"english": 46},
+  "cyrillic_detected_count": 0,
+  "mixed_language_count": 0,
+  "pending_translation_count": 0,
+  "requires_ocr_count": 0,
+  "language_unknown_count": 0
+}""",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
@@ -310,6 +342,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     monkeypatch.setattr(phase18, "PHASE23_METRICS_PATH", phase23_path)
     monkeypatch.setattr(phase18, "PHASE24_METRICS_PATH", phase24_path)
     monkeypatch.setattr(phase18, "PHASE25_METRICS_PATH", phase25_path)
+    monkeypatch.setattr(phase18, "PHASE26_METRICS_PATH", phase26_path)
 
     summary = build_summary(
         commands=[{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 159 passed ===", "stderr": ""}],
@@ -324,6 +357,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     assert summary["routing_efficiency_result"]["actual_route_counts"] == {"spacy": 46}
     assert summary["semantic_enrichment_result"]["enrichment_applied_count"] == 46
     assert summary["medical_coding_result"]["coding_success_count"] == 12
+    assert summary["language_support_result"]["language_detected_counts"] == {"english": 46}
 
 
 def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path, monkeypatch):
@@ -336,6 +370,7 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
     phase23_path = tmp_path / "phase23.json"
     phase24_path = tmp_path / "phase24.json"
     phase25_path = tmp_path / "phase25.json"
+    phase26_path = tmp_path / "phase26.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         '{"documents_selected": 50, "documents_processed": 46, "written": 45, "queued_for_review": 1, "external_quota_blocked": 4, "hard_failures": 0, "review_queue": {"items": 31, "path": "runtime/review_queue.jsonl"}, "aggregate": {"avg_confidence": 0.692}}',
@@ -361,6 +396,10 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
         '{"coding_attempted_count": 86, "coding_success_count": 12, "coding_unmapped_count": 70, "coding_ambiguous_count": 1, "coding_skipped_count": 3, "coding_status_counts": {"ambiguous": 1, "coded": 12, "skipped": 3, "unmapped": 70}}',
         encoding="utf-8",
     )
+    phase26_path.write_text(
+        '{"language_detected_counts": {"english": 45}, "cyrillic_detected_count": 0, "mixed_language_count": 0, "pending_translation_count": 0, "requires_ocr_count": 0, "language_unknown_count": 0}',
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
@@ -368,6 +407,7 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
     monkeypatch.setattr(phase18, "PHASE23_METRICS_PATH", phase23_path)
     monkeypatch.setattr(phase18, "PHASE24_METRICS_PATH", phase24_path)
     monkeypatch.setattr(phase18, "PHASE25_METRICS_PATH", phase25_path)
+    monkeypatch.setattr(phase18, "PHASE26_METRICS_PATH", phase26_path)
 
     commands = [{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 190 passed ===", "stderr": ""}]
     started_at = phase18.datetime.fromisoformat("2026-04-25T00:00:00+00:00")
@@ -377,3 +417,4 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
     second = build_summary(commands=commands, started_at=started_at, ended_at=ended_at)
 
     assert first == second
+    assert first["language_support_result"]["language_detected_counts"] == {"english": 45}

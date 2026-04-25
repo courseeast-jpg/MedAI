@@ -29,6 +29,8 @@ DEFAULT_PHASE24_ARTIFACT_PATH = ROOT / "artifacts" / "phase24" / "semantic_enric
 DEFAULT_PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
 DEFAULT_PHASE25_ARTIFACT_PATH = ROOT / "artifacts" / "phase25" / "medical_coding.json"
 DEFAULT_PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
+DEFAULT_PHASE26_ARTIFACT_PATH = ROOT / "artifacts" / "phase26" / "language_support.json"
+DEFAULT_PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -47,6 +49,7 @@ from monitoring.observability import (
     write_phase23_outputs,
     write_phase24_outputs,
     write_phase25_outputs,
+    write_phase26_outputs,
 )
 
 
@@ -179,6 +182,15 @@ def summarize_document(
                 "coding_unmapped_count": 0,
                 "coding_ambiguous_count": 0,
                 "coding_skipped_count": 0,
+                "language_support": None,
+                "detected_language": "unknown",
+                "language_confidence": 0.0,
+                "script_detected": "unknown",
+                "cyrillic_detected": False,
+                "requires_ocr": False,
+                "language_route_note": "metadata_only:language_signal_insufficient",
+                "translation_status": "not_required",
+                "language_support_status": "unknown_metadata_only",
             }
         return {
             "document": pdf_path.name,
@@ -222,6 +234,15 @@ def summarize_document(
             "coding_unmapped_count": 0,
             "coding_ambiguous_count": 0,
             "coding_skipped_count": 0,
+            "language_support": None,
+            "detected_language": "unknown",
+            "language_confidence": 0.0,
+            "script_detected": "unknown",
+            "cyrillic_detected": False,
+            "requires_ocr": False,
+            "language_route_note": "metadata_only:language_signal_insufficient",
+            "translation_status": "not_required",
+            "language_support_status": "unknown_metadata_only",
         }
 
     review_reasons: list[str] = []
@@ -246,6 +267,9 @@ def summarize_document(
     medical_coding = result.extractor_result.get("medical_coding")
     if not isinstance(medical_coding, dict):
         medical_coding = None
+    language_support = result.extractor_result.get("language_support")
+    if not isinstance(language_support, dict):
+        language_support = None
 
     return {
         "document": pdf_path.name,
@@ -307,6 +331,15 @@ def summarize_document(
         "coding_unmapped_count": int((medical_coding or {}).get("coding_unmapped_count", 0)),
         "coding_ambiguous_count": int((medical_coding or {}).get("coding_ambiguous_count", 0)),
         "coding_skipped_count": int((medical_coding or {}).get("coding_skipped_count", 0)),
+        "language_support": language_support,
+        "detected_language": str((language_support or {}).get("detected_language", "unknown")),
+        "language_confidence": float((language_support or {}).get("language_confidence", 0.0)),
+        "script_detected": str((language_support or {}).get("script_detected", "unknown")),
+        "cyrillic_detected": bool((language_support or {}).get("cyrillic_detected", False)),
+        "requires_ocr": bool((language_support or {}).get("requires_ocr", False)),
+        "language_route_note": str((language_support or {}).get("language_route_note", "metadata_only:language_signal_insufficient")),
+        "translation_status": str((language_support or {}).get("translation_status", "not_required")),
+        "language_support_status": str((language_support or {}).get("language_support_status", "unknown_metadata_only")),
     }
 
 
@@ -346,6 +379,12 @@ def build_phase12_summary(
     coding_unmapped_count = 0
     coding_ambiguous_count = 0
     coding_skipped_count = 0
+    language_detected_counts = Counter()
+    cyrillic_detected_count = 0
+    mixed_language_count = 0
+    pending_translation_count = 0
+    requires_ocr_count = 0
+    language_unknown_count = 0
     for item in processed:
         for reason in item["review_reasons"]:
             review_reasons[reason] += 1
@@ -358,6 +397,13 @@ def build_phase12_summary(
         coding_unmapped_count += int(item.get("coding_unmapped_count", 0))
         coding_ambiguous_count += int(item.get("coding_ambiguous_count", 0))
         coding_skipped_count += int(item.get("coding_skipped_count", 0))
+        detected_language = str(item.get("detected_language", "unknown"))
+        language_detected_counts[detected_language] += 1
+        cyrillic_detected_count += int(bool(item.get("cyrillic_detected", False)))
+        mixed_language_count += int(detected_language == "mixed")
+        pending_translation_count += int(str(item.get("translation_status", "")) == "pending_translation")
+        requires_ocr_count += int(bool(item.get("requires_ocr", False)))
+        language_unknown_count += int(detected_language == "unknown")
 
     written_document_count = outcome_counts.get("written", 0) + outcome_counts.get("written_with_review", 0)
 
@@ -417,6 +463,12 @@ def build_phase12_summary(
             "coding_unmapped_count": coding_unmapped_count,
             "coding_ambiguous_count": coding_ambiguous_count,
             "coding_skipped_count": coding_skipped_count,
+            "language_detected_counts": dict(sorted(language_detected_counts.items())),
+            "cyrillic_detected_count": cyrillic_detected_count,
+            "mixed_language_count": mixed_language_count,
+            "pending_translation_count": pending_translation_count,
+            "requires_ocr_count": requires_ocr_count,
+            "language_unknown_count": language_unknown_count,
         },
         "mkb_counts": runtime_counts,
         "documents": documents,
@@ -708,6 +760,12 @@ def write_outputs(output_dir: Path, summary: dict[str, Any]) -> None:
         f"- Coding unmapped count: {summary['aggregate']['coding_unmapped_count']}",
         f"- Coding ambiguous count: {summary['aggregate']['coding_ambiguous_count']}",
         f"- Coding skipped count: {summary['aggregate']['coding_skipped_count']}",
+        f"- Language detected counts: {summary['aggregate']['language_detected_counts']}",
+        f"- Cyrillic detected count: {summary['aggregate']['cyrillic_detected_count']}",
+        f"- Mixed language count: {summary['aggregate']['mixed_language_count']}",
+        f"- Pending translation count: {summary['aggregate']['pending_translation_count']}",
+        f"- Requires OCR count: {summary['aggregate']['requires_ocr_count']}",
+        f"- Language unknown count: {summary['aggregate']['language_unknown_count']}",
         "",
         "## Runtime MKB",
         "",
@@ -833,6 +891,11 @@ def main() -> int:
         summary,
         artifact_path=DEFAULT_PHASE25_ARTIFACT_PATH,
         report_path=DEFAULT_PHASE25_REPORT_PATH,
+    )
+    write_phase26_outputs(
+        summary,
+        artifact_path=DEFAULT_PHASE26_ARTIFACT_PATH,
+        report_path=DEFAULT_PHASE26_REPORT_PATH,
     )
     collect_latest_run_metrics()
 
