@@ -23,6 +23,8 @@ DEFAULT_PHASE21_ARTIFACT_PATH = ROOT / "artifacts" / "phase21" / "observability_
 DEFAULT_PHASE21_REPORT_PATH = ROOT / "reports" / "phase21" / "observability_report.md"
 DEFAULT_PHASE22_ARTIFACT_PATH = ROOT / "artifacts" / "phase22" / "confidence_calibration.json"
 DEFAULT_PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
+DEFAULT_PHASE23_ARTIFACT_PATH = ROOT / "artifacts" / "phase23" / "routing_efficiency.json"
+DEFAULT_PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -35,7 +37,7 @@ from execution.pipeline import ExecutionPipeline
 from execution.review_queue import ReviewQueueWriter, read_review_queue
 from mkb.sqlite_store import SQLiteStore
 from monitoring.metrics_collector import collect_latest_run_metrics
-from monitoring.observability import write_phase21_outputs, write_phase22_outputs
+from monitoring.observability import write_phase21_outputs, write_phase22_outputs, write_phase23_outputs
 
 
 def is_external_quota_error(error: Exception | str) -> bool:
@@ -149,6 +151,12 @@ def summarize_document(
                 "calibration_reason": None,
                 "route_mismatch_flag": False,
                 "review_recommendation": "operator_retry_after_quota_reset",
+                "intended_route": None,
+                "actual_route": None,
+                "fallback_reason": None,
+                "estimated_cost_units": 0.0,
+                "saved_cost_units": 0.0,
+                "quota_block_avoided": False,
             }
         return {
             "document": pdf_path.name,
@@ -174,6 +182,12 @@ def summarize_document(
             "calibration_reason": None,
             "route_mismatch_flag": False,
             "review_recommendation": None,
+            "intended_route": None,
+            "actual_route": None,
+            "fallback_reason": None,
+            "estimated_cost_units": 0.0,
+            "saved_cost_units": 0.0,
+            "quota_block_avoided": False,
         }
 
     review_reasons: list[str] = []
@@ -228,6 +242,18 @@ def summarize_document(
         "review_recommendation": result.audit.get(
             "review_recommendation",
             result.extractor_result.get("review_recommendation"),
+        ),
+        "intended_route": result.audit.get("intended_route", result.extractor_result.get("intended_route")),
+        "actual_route": result.audit.get("actual_route", result.extractor_result.get("actual_route")),
+        "fallback_reason": result.audit.get("fallback_reason", result.extractor_result.get("fallback_reason")),
+        "estimated_cost_units": float(
+            result.audit.get("estimated_cost_units", result.extractor_result.get("estimated_cost_units", 0.0))
+        ),
+        "saved_cost_units": float(
+            result.audit.get("saved_cost_units", result.extractor_result.get("saved_cost_units", 0.0))
+        ),
+        "quota_block_avoided": bool(
+            result.audit.get("quota_block_avoided", result.extractor_result.get("quota_block_avoided", False))
         ),
     }
 
@@ -704,6 +730,11 @@ def main() -> int:
         summary,
         artifact_path=DEFAULT_PHASE22_ARTIFACT_PATH,
         report_path=DEFAULT_PHASE22_REPORT_PATH,
+    )
+    write_phase23_outputs(
+        summary,
+        artifact_path=DEFAULT_PHASE23_ARTIFACT_PATH,
+        report_path=DEFAULT_PHASE23_REPORT_PATH,
     )
     collect_latest_run_metrics()
 

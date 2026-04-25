@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T02:31:12.027145+00:00",
+  "generated_at": "2026-04-25T03:11:54.109934+00:00",
   "phase": "Phase 22 Accuracy Improvement / Confidence Calibration",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -9,34 +9,30 @@
   },
   "attempted_documents": 50,
   "processed_documents": 46,
-  "written_documents": 45,
-  "queued_for_review_documents": 1,
+  "written_documents": 46,
+  "queued_for_review_documents": 0,
   "external_quota_blocked": 4,
   "hard_failures": 0,
   "average_raw_confidence": 0.7,
   "average_calibrated_confidence": 0.7,
   "confidence_band_counts": {
-    "acceptable": 45,
-    "review": 1
+    "acceptable": 46
   },
   "calibration_reason_counts": {
-    "raw_confidence_retained": 44,
-    "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used": 2
+    "raw_confidence_retained": 45,
+    "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used": 1
   },
   "review_recommendation_counts": {
-    "accept": 44,
-    "accept_with_route_audit": 1,
-    "operator_review": 1
+    "accept": 45,
+    "accept_with_route_audit": 1
   },
   "extractor_route_counts": {
-    "phi3": 1,
-    "spacy": 45
+    "spacy": 46
   },
   "extractor_actual_counts": {
-    "phi3": 1,
-    "spacy": 45
+    "spacy": 46
   },
-  "route_mismatch_count": 2,
+  "route_mismatch_count": 1,
   "documents": [
     {
       "document": "long_noisy_01.pdf",
@@ -66,16 +62,16 @@
     },
     {
       "document": "long_noisy_03.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "needs_review",
-      "raw_confidence": 0.68,
-      "calibrated_confidence": 0.68,
-      "confidence_band": "review",
-      "calibration_reason": "raw_confidence_retained,requested_route_mismatch_observed,fallback_connector_used",
-      "extractor_route": "phi3",
-      "extractor_actual": "phi3",
-      "route_mismatch_flag": true,
-      "review_recommendation": "operator_review"
+      "outcome": "written",
+      "validation_status": "accepted",
+      "raw_confidence": 0.7,
+      "calibrated_confidence": 0.7,
+      "confidence_band": "acceptable",
+      "calibration_reason": "raw_confidence_retained",
+      "extractor_route": "spacy",
+      "extractor_actual": "spacy",
+      "route_mismatch_flag": false,
+      "review_recommendation": "accept"
     },
     {
       "document": "long_noisy_05.pdf",

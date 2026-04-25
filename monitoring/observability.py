@@ -15,6 +15,8 @@ DEFAULT_PHASE21_ARTIFACT_PATH = ROOT / "artifacts" / "phase21" / "observability_
 DEFAULT_PHASE21_REPORT_PATH = ROOT / "reports" / "phase21" / "observability_report.md"
 DEFAULT_PHASE22_ARTIFACT_PATH = ROOT / "artifacts" / "phase22" / "confidence_calibration.json"
 DEFAULT_PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
+DEFAULT_PHASE23_ARTIFACT_PATH = ROOT / "artifacts" / "phase23" / "routing_efficiency.json"
+DEFAULT_PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
 
 
 def _load_jsonl(path: Path | str | None) -> list[dict[str, Any]]:
@@ -319,4 +321,153 @@ def write_phase22_outputs(
     report_path.parent.mkdir(parents=True, exist_ok=True)
     artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     report_path.write_text(build_phase22_report(metrics), encoding="utf-8")
+    return metrics
+
+
+def _normalized_optional_text(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if text in {"", "None", "null"}:
+        return None
+    return text
+
+
+def build_phase23_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    documents = summary.get("documents", [])
+    processed = [item for item in documents if item.get("status") == "processed"]
+
+    intended_route_counts = Counter()
+    actual_route_counts = Counter()
+    confidence_band_counts = Counter()
+    review_recommendation_counts = Counter()
+    fallback_reason_counts = Counter()
+    total_estimated_cost_units = 0.0
+    total_saved_cost_units = 0.0
+    route_mismatch_count = 0
+    quota_block_avoided_count = 0
+
+    routing_documents: list[dict[str, Any]] = []
+    for item in processed:
+        intended_route = str(item.get("intended_route") or item.get("requested_route") or "unknown")
+        actual_route = str(item.get("actual_route") or item.get("extractor_actual") or item.get("extractor") or "unknown")
+        fallback_reason = _normalized_optional_text(item.get("fallback_reason"))
+        route_mismatch_flag = bool(item.get("route_mismatch_flag", False))
+        estimated_cost_units = round(float(item.get("estimated_cost_units", 0.0)), 5)
+        saved_cost_units = round(float(item.get("saved_cost_units", 0.0)), 5)
+        quota_block_avoided = bool(item.get("quota_block_avoided", False))
+        confidence_band = str(item.get("confidence_band") or "unknown")
+        review_recommendation = str(item.get("review_recommendation") or "unknown")
+
+        intended_route_counts[intended_route] += 1
+        actual_route_counts[actual_route] += 1
+        confidence_band_counts[confidence_band] += 1
+        review_recommendation_counts[review_recommendation] += 1
+        if fallback_reason:
+            fallback_reason_counts[str(fallback_reason)] += 1
+        if route_mismatch_flag:
+            route_mismatch_count += 1
+        if quota_block_avoided:
+            quota_block_avoided_count += 1
+        total_estimated_cost_units += estimated_cost_units
+        total_saved_cost_units += saved_cost_units
+
+        routing_documents.append({
+            "document": item.get("document"),
+            "outcome": item.get("outcome"),
+            "validation_status": item.get("validation_status"),
+            "intended_route": intended_route,
+            "actual_route": actual_route,
+            "fallback_reason": fallback_reason,
+            "route_mismatch_flag": route_mismatch_flag,
+            "estimated_cost_units": estimated_cost_units,
+            "saved_cost_units": saved_cost_units,
+            "quota_block_avoided": quota_block_avoided,
+            "confidence_band": confidence_band,
+            "review_recommendation": review_recommendation,
+        })
+
+    return {
+        "generated_at": summary.get("generated_at"),
+        "phase": "Phase 23 Cost Optimization / Tier Routing Efficiency",
+        "dataset_dir": summary.get("dataset_dir"),
+        "determinism": summary.get("determinism", {}),
+        "attempted_documents": int(summary.get("documents_selected", 0)),
+        "processed_documents": int(summary.get("documents_processed", 0)),
+        "written_documents": int(summary.get("written", 0)),
+        "queued_for_review_documents": int(summary.get("queued_for_review", 0)),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", 0)),
+        "hard_failures": int(summary.get("hard_failures", 0)),
+        "intended_route_counts": dict(sorted(intended_route_counts.items())),
+        "actual_route_counts": dict(sorted(actual_route_counts.items())),
+        "confidence_band_counts": dict(sorted(confidence_band_counts.items())),
+        "review_recommendation_counts": dict(sorted(review_recommendation_counts.items())),
+        "fallback_reason_counts": dict(sorted(fallback_reason_counts.items())),
+        "route_mismatch_count": route_mismatch_count,
+        "quota_block_avoided_count": quota_block_avoided_count,
+        "total_estimated_cost_units": round(total_estimated_cost_units, 5),
+        "total_saved_cost_units": round(total_saved_cost_units, 5),
+        "documents": routing_documents,
+    }
+
+
+def build_phase23_report(metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 23 Routing Efficiency Report",
+        "",
+        f"- Generated at: `{metrics['generated_at']}`",
+        f"- Dataset: `{metrics['dataset_dir']}`",
+        f"- Attempted documents: `{metrics['attempted_documents']}`",
+        f"- Processed documents: `{metrics['processed_documents']}`",
+        f"- Written documents: `{metrics['written_documents']}`",
+        f"- Queued for review documents: `{metrics['queued_for_review_documents']}`",
+        f"- External quota blocked: `{metrics['external_quota_blocked']}`",
+        f"- Hard failures: `{metrics['hard_failures']}`",
+        f"- Route mismatch count: `{metrics['route_mismatch_count']}`",
+        f"- Quota block avoided count: `{metrics['quota_block_avoided_count']}`",
+        f"- Total estimated cost units: `{metrics['total_estimated_cost_units']}`",
+        f"- Total saved cost units: `{metrics['total_saved_cost_units']}`",
+        "",
+        "## Route Summary",
+        "",
+        f"- Intended route counts: `{metrics['intended_route_counts']}`",
+        f"- Actual route counts: `{metrics['actual_route_counts']}`",
+        f"- Confidence band counts: `{metrics['confidence_band_counts']}`",
+        f"- Review recommendation counts: `{metrics['review_recommendation_counts']}`",
+        f"- Fallback reason counts: `{metrics['fallback_reason_counts']}`",
+        "",
+        "## Document Audit",
+        "",
+    ]
+    if metrics["documents"]:
+        for item in metrics["documents"]:
+            lines.append(
+                f"- `{item['document']}` -> intended={item['intended_route']} actual={item['actual_route']} "
+                f"saved_cost={item['saved_cost_units']} quota_avoided={item['quota_block_avoided']} "
+                f"band={item['confidence_band']} recommendation={item['review_recommendation']}"
+            )
+    else:
+        lines.append("- No processed documents available for routing-efficiency audit.")
+    lines.extend([
+        "",
+        "## Stability Guardrails",
+        "",
+        f"- Determinism: `{metrics['determinism']}`",
+        "- Review-band documents remain review-visible and are not silently accepted.",
+        "- Quota-safe blocks remain separate from hard failures.",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def write_phase23_outputs(
+    summary: dict[str, Any],
+    *,
+    artifact_path: Path = DEFAULT_PHASE23_ARTIFACT_PATH,
+    report_path: Path = DEFAULT_PHASE23_REPORT_PATH,
+) -> dict[str, Any]:
+    metrics = build_phase23_metrics(summary)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    report_path.write_text(build_phase23_report(metrics), encoding="utf-8")
     return metrics

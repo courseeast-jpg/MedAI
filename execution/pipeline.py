@@ -128,6 +128,13 @@ class ExecutionPipeline:
                 "routing_decision_reason": routed.decision_reason,
                 "route_score": routed.route_score,
                 "routing_events": routed.events,
+                "intended_route": routed.intended_route,
+                "actual_route": routed.extractor_actual,
+                "fallback_reason": routed.fallback_reason,
+                "route_mismatch_flag": routed.route_mismatch_flag,
+                "estimated_cost_units": routed.estimated_cost_units,
+                "saved_cost_units": routed.saved_cost_units,
+                "quota_block_avoided": routed.quota_block_avoided,
             },
         )
         extracted = consensus_merge(extraction_results, extractor_route=extractor_route)
@@ -138,6 +145,13 @@ class ExecutionPipeline:
         extracted["routing_events"] = routed.events
         extracted["routing_decision_reason"] = routed.decision_reason
         extracted["routing_route_score"] = routed.route_score
+        extracted["intended_route"] = routed.intended_route
+        extracted["actual_route"] = routed.extractor_actual
+        extracted["fallback_reason"] = routed.fallback_reason
+        extracted["route_mismatch_flag"] = routed.route_mismatch_flag
+        extracted["estimated_cost_units"] = routed.estimated_cost_units
+        extracted["saved_cost_units"] = routed.saved_cost_units
+        extracted["quota_block_avoided"] = routed.quota_block_avoided
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
@@ -194,6 +208,12 @@ class ExecutionPipeline:
                 "calibration_reason": extracted.get("calibration_reason"),
                 "route_mismatch_flag": extracted.get("route_mismatch_flag"),
                 "review_recommendation": extracted.get("review_recommendation"),
+                "intended_route": extracted.get("intended_route"),
+                "actual_route": extracted.get("actual_route"),
+                "fallback_reason": extracted.get("fallback_reason"),
+                "estimated_cost_units": extracted.get("estimated_cost_units"),
+                "saved_cost_units": extracted.get("saved_cost_units"),
+                "quota_block_avoided": extracted.get("quota_block_avoided"),
             },
         )
 
@@ -743,6 +763,12 @@ class ExecutionPipeline:
             calibration_reason=str(extracted.get("calibration_reason", "")) or None,
             route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
             review_recommendation=str(extracted.get("review_recommendation", "")) or None,
+            intended_route=str(extracted.get("intended_route", requested_extractor_route or extractor_route)) or None,
+            actual_route=str(extracted.get("actual_route", extracted.get("actual_extractor", extracted.get("extractor", "")))) or None,
+            fallback_reason=str(extracted.get("fallback_reason", "")) or None,
+            estimated_cost_units=float(extracted.get("estimated_cost_units", 0.0)),
+            saved_cost_units=float(extracted.get("saved_cost_units", 0.0)),
+            quota_block_avoided=bool(extracted.get("quota_block_avoided", False)),
         )
 
     def _append_resolution_review_queue_items(
@@ -783,6 +809,12 @@ class ExecutionPipeline:
                 calibration_reason=str(extracted.get("calibration_reason", "")) or None,
                 route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
                 review_recommendation=str(extracted.get("review_recommendation", "")) or None,
+                intended_route=str(extracted.get("intended_route", requested_extractor_route or extractor_route)) or None,
+                actual_route=str(extracted.get("actual_route", extracted.get("actual_extractor", extracted.get("extractor", "")))) or None,
+                fallback_reason=str(extracted.get("fallback_reason", "")) or None,
+                estimated_cost_units=float(extracted.get("estimated_cost_units", 0.0)),
+                saved_cost_units=float(extracted.get("saved_cost_units", 0.0)),
+                quota_block_avoided=bool(extracted.get("quota_block_avoided", False)),
             )
 
     def _append_medication_review_queue_items(
@@ -831,6 +863,12 @@ class ExecutionPipeline:
                 calibration_reason=str(extracted.get("calibration_reason", "")) or None,
                 route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
                 review_recommendation=str(extracted.get("review_recommendation", "")) or None,
+                intended_route=str(extracted.get("intended_route", requested_extractor_route or extractor_route)) or None,
+                actual_route=str(extracted.get("actual_route", extracted.get("actual_extractor", extracted.get("extractor", "")))) or None,
+                fallback_reason=str(extracted.get("fallback_reason", "")) or None,
+                estimated_cost_units=float(extracted.get("estimated_cost_units", 0.0)),
+                saved_cost_units=float(extracted.get("saved_cost_units", 0.0)),
+                quota_block_avoided=bool(extracted.get("quota_block_avoided", False)),
             )
 
     def _mark_records_for_validation_review(
@@ -879,13 +917,18 @@ class ExecutionPipeline:
             outcome=outcome,
             run_id=run_id,
             document_id=document_id,
-            fallback_reason=self._fallback_reason(extracted),
             confidence_band=str(extracted.get("confidence_band", self._confidence_band(float(extracted.get("confidence", 0.0))))),
             raw_confidence=float(extracted.get("raw_confidence", extracted.get("confidence", 0.0))),
             calibrated_confidence=float(extracted.get("calibrated_confidence", extracted.get("confidence", 0.0))),
             calibration_reason=str(extracted.get("calibration_reason", "")) or None,
             route_mismatch_flag=bool(extracted.get("route_mismatch_flag", False)),
             review_recommendation=str(extracted.get("review_recommendation", "")) or None,
+            intended_route=str(extracted.get("intended_route", requested_extractor_route or extractor_route)) or None,
+            actual_route=str(extracted.get("actual_route", extracted.get("actual_extractor", extracted.get("extractor", "")))) or None,
+            fallback_reason=str(extracted.get("fallback_reason", self._fallback_reason(extracted) or "")) or None,
+            estimated_cost_units=float(extracted.get("estimated_cost_units", 0.0)),
+            saved_cost_units=float(extracted.get("saved_cost_units", 0.0)),
+            quota_block_avoided=bool(extracted.get("quota_block_avoided", False)),
             quality_gate_decision=self._quality_gate_decision(outcome, validation),
             error_category=self._error_category(outcome, validation, extracted),
         )

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-25T02:31:14.809768+00:00",
-  "started_at": "2026-04-25T02:26:52.472708+00:00",
-  "ended_at": "2026-04-25T02:31:14.809768+00:00",
-  "duration_seconds": 262.337,
-  "commit_hash": "23818a0b9345ff5707b0ce83710b7eb333a39de3",
+  "generated_at": "2026-04-25T03:11:56.346920+00:00",
+  "started_at": "2026-04-25T03:06:46.456050+00:00",
+  "ended_at": "2026-04-25T03:11:56.346920+00:00",
+  "duration_seconds": 309.891,
+  "commit_hash": "f4b365c75d7cbc259f656c2a9e740dbb5797705e",
   "git_status": "dirty",
   "steps": [
     {
@@ -56,32 +56,30 @@
   ],
   "success": true,
   "failed_step": null,
-  "test_result": "171 passed",
+  "test_result": "179 passed",
   "phase11_audit_result": "passed",
   "validation_result": {
     "attempted": 50,
     "processed": 46,
-    "written": 45,
-    "queued_for_review": 1,
+    "written": 46,
+    "queued_for_review": 0,
     "external_quota_blocked": 4,
     "hard_failures": 0,
     "avg_confidence": 0.7,
-    "review_queue_items": 31,
+    "review_queue_items": 30,
     "review_queue_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl"
   },
   "observability_result": {
     "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase21\\observability_metrics.json",
     "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase21\\observability_report.md",
-    "route_mismatch_count": 2,
-    "low_confidence_count": 1,
+    "route_mismatch_count": 1,
+    "low_confidence_count": 0,
     "quota_safe_block_count": 4,
     "extractor_route_counts": {
-      "phi3": 1,
-      "spacy": 45
+      "spacy": 46
     },
     "extractor_actual_counts": {
-      "phi3": 1,
-      "spacy": 45
+      "spacy": 46
     },
     "per_stage_duration_ms": {
       "consensus": {
@@ -94,30 +92,30 @@
       "extraction": {
         "records": 50,
         "events": 96,
-        "total_duration_ms": 8825.074,
-        "avg_duration_ms": 176.501,
-        "max_duration_ms": 5065.951
+        "total_duration_ms": 3927.788,
+        "avg_duration_ms": 78.556,
+        "max_duration_ms": 2728.869
       },
       "final_write": {
-        "records": 41,
-        "events": 126,
-        "total_duration_ms": 51840.436,
-        "avg_duration_ms": 1264.401,
-        "max_duration_ms": 9713.009
+        "records": 39,
+        "events": 128,
+        "total_duration_ms": 32629.339,
+        "avg_duration_ms": 836.65,
+        "max_duration_ms": 4855.346
       },
       "safety_gate": {
         "records": 26,
-        "events": 98,
-        "total_duration_ms": 48301.387,
-        "avg_duration_ms": 1857.746,
-        "max_duration_ms": 9282.912
+        "events": 102,
+        "total_duration_ms": 29052.954,
+        "avg_duration_ms": 1117.421,
+        "max_duration_ms": 4428.241
       },
       "truth_resolution": {
         "records": 39,
-        "events": 124,
-        "total_duration_ms": 51872.563,
-        "avg_duration_ms": 1330.066,
-        "max_duration_ms": 9725.01
+        "events": 128,
+        "total_duration_ms": 32663.191,
+        "avg_duration_ms": 837.518,
+        "max_duration_ms": 4863.337
       },
       "validation": {
         "records": 46,
@@ -134,15 +132,28 @@
     "average_raw_confidence": 0.7,
     "average_calibrated_confidence": 0.7,
     "confidence_band_counts": {
-      "acceptable": 45,
-      "review": 1
+      "acceptable": 46
     },
     "review_recommendation_counts": {
-      "accept": 44,
-      "accept_with_route_audit": 1,
-      "operator_review": 1
+      "accept": 45,
+      "accept_with_route_audit": 1
     },
-    "route_mismatch_count": 2
+    "route_mismatch_count": 1
+  },
+  "routing_efficiency_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase23\\routing_efficiency.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase23\\routing_efficiency_report.md",
+    "intended_route_counts": {
+      "gemini": 1,
+      "spacy": 45
+    },
+    "actual_route_counts": {
+      "spacy": 46
+    },
+    "route_mismatch_count": 1,
+    "quota_block_avoided_count": 0,
+    "total_estimated_cost_units": 0.0,
+    "total_saved_cost_units": 0.02
   },
   "dashboard_export_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase17\\dashboard_latest.md",
   "stability_report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase19\\stability_report.md"

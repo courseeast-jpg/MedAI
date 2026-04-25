@@ -22,6 +22,8 @@ PHASE21_METRICS_PATH = ROOT / "artifacts" / "phase21" / "observability_metrics.j
 PHASE21_REPORT_PATH = ROOT / "reports" / "phase21" / "observability_report.md"
 PHASE22_METRICS_PATH = ROOT / "artifacts" / "phase22" / "confidence_calibration.json"
 PHASE22_REPORT_PATH = ROOT / "reports" / "phase22" / "accuracy_calibration_report.md"
+PHASE23_METRICS_PATH = ROOT / "artifacts" / "phase23" / "routing_efficiency.json"
+PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
 PHASE17_DASHBOARD_PATH = ROOT / "reports" / "phase17" / "dashboard_latest.md"
 
 PHASE18_STEPS: list[tuple[str, list[str]]] = [
@@ -99,6 +101,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
     phase12 = load_json(PHASE12_SUMMARY_PATH) if PHASE12_SUMMARY_PATH.exists() else {}
     phase21 = load_json(PHASE21_METRICS_PATH) if PHASE21_METRICS_PATH.exists() else {}
     phase22 = load_json(PHASE22_METRICS_PATH) if PHASE22_METRICS_PATH.exists() else {}
+    phase23 = load_json(PHASE23_METRICS_PATH) if PHASE23_METRICS_PATH.exists() else {}
     pytest_step = next((item for item in commands if item["name"] == "tests"), None)
     failed_step = next((item["name"] for item in commands if item["returncode"] != 0), None)
 
@@ -151,6 +154,16 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
             "review_recommendation_counts": phase22.get("review_recommendation_counts", {}),
             "route_mismatch_count": int(phase22.get("route_mismatch_count", 0)),
         },
+        "routing_efficiency_result": {
+            "metrics_path": str(PHASE23_METRICS_PATH),
+            "report_path": str(PHASE23_REPORT_PATH),
+            "intended_route_counts": phase23.get("intended_route_counts", {}),
+            "actual_route_counts": phase23.get("actual_route_counts", {}),
+            "route_mismatch_count": int(phase23.get("route_mismatch_count", 0)),
+            "quota_block_avoided_count": int(phase23.get("quota_block_avoided_count", 0)),
+            "total_estimated_cost_units": float(phase23.get("total_estimated_cost_units", 0.0)),
+            "total_saved_cost_units": float(phase23.get("total_saved_cost_units", 0.0)),
+        },
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
         "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
@@ -165,6 +178,7 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
     validation = summary["validation_result"]
     observability = summary["observability_result"]
     calibration = summary["calibration_result"]
+    routing_efficiency = summary["routing_efficiency_result"]
     lines = [
         "# Phase 18 Full Cycle Summary",
         "",
@@ -196,6 +210,14 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Calibration route_mismatch_count: `{calibration['route_mismatch_count']}`",
         f"- Calibration metrics_path: `{calibration['metrics_path']}`",
         f"- Calibration report_path: `{calibration['report_path']}`",
+        f"- Routing efficiency intended_route_counts: `{routing_efficiency['intended_route_counts']}`",
+        f"- Routing efficiency actual_route_counts: `{routing_efficiency['actual_route_counts']}`",
+        f"- Routing efficiency route_mismatch_count: `{routing_efficiency['route_mismatch_count']}`",
+        f"- Routing efficiency quota_block_avoided_count: `{routing_efficiency['quota_block_avoided_count']}`",
+        f"- Routing efficiency total_estimated_cost_units: `{routing_efficiency['total_estimated_cost_units']}`",
+        f"- Routing efficiency total_saved_cost_units: `{routing_efficiency['total_saved_cost_units']}`",
+        f"- Routing efficiency metrics_path: `{routing_efficiency['metrics_path']}`",
+        f"- Routing efficiency report_path: `{routing_efficiency['report_path']}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
         f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",

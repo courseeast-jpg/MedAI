@@ -10,6 +10,7 @@ from execution.connectors.gemini_connector import GeminiConnector
 from execution.connectors.phi3_connector import Phi3Connector
 from execution.connectors.spacy_connector import SpacyConnector
 from execution.metrics import PipelineMetrics
+from execution.routing_efficiency import build_routing_efficiency
 
 
 OCR_ARTIFACT_RE = re.compile(r"(\ufffd|[|]{3,}|_{4,}|\b(?:l|I){8,}\b)")
@@ -21,12 +22,18 @@ class RoutedExtraction:
     extractor_route: str
     extractor_actual: str
     requested_route: str
+    intended_route: str
     results: list[dict[str, Any]]
     fallback_used: bool = False
     failure_count: int = 0
     events: list[dict[str, Any]] = field(default_factory=list)
     decision_reason: str = ""
     route_score: float = 0.0
+    fallback_reason: str | None = None
+    route_mismatch_flag: bool = False
+    estimated_cost_units: float = 0.0
+    saved_cost_units: float = 0.0
+    quota_block_avoided: bool = False
 
 
 class ExecutionRouter:
@@ -52,6 +59,7 @@ class ExecutionRouter:
         self.preferred_confidence_threshold = preferred_confidence_threshold
         self.max_latency_ms = max_latency_ms
         self.min_success_rate = min_success_rate
+        self.gemini_quota_blocked = False
 
     def select_route(self, text: str) -> str:
         return self._select_candidate_routes(text)[0]
@@ -63,7 +71,8 @@ class ExecutionRouter:
             "phi3": self.phi3_connector,
             "gemini": gemini_connector,
         }
-        candidate_routes = self._select_candidate_routes(text)
+        default_candidate_routes = self._select_candidate_routes(text, quota_aware=False)
+        candidate_routes = self._select_candidate_routes(text, quota_aware=True)
         route_scores = {
             connector_name: self._score_route(
                 connector_name,
@@ -73,6 +82,12 @@ class ExecutionRouter:
             for connector_name in CONNECTOR_ORDER
         }
         intended_route = self._choose_connector(candidate_routes, route_scores)
+        quota_block_avoided = (
+            self.gemini_quota_blocked
+            and default_candidate_routes
+            and default_candidate_routes[0] == "gemini"
+            and intended_route != "gemini"
+        )
         primary_score = route_scores[intended_route]
         decision_reason = self._decision_reason(intended_route, primary_score, candidate_routes)
 
@@ -116,16 +131,30 @@ class ExecutionRouter:
                         requested_route=intended_route,
                         effective_route=actual_extractor,
                     )
+                    efficiency = build_routing_efficiency(
+                        intended_route=intended_route,
+                        actual_route=actual_extractor,
+                        fallback_reason=self._extract_fallback_reason(events),
+                        quota_block_avoided=quota_block_avoided,
+                        confidence_band=None,
+                        review_recommendation=None,
+                    )
                     return RoutedExtraction(
                         extractor_route=actual_extractor,
                         extractor_actual=actual_extractor,
                         requested_route=intended_route,
+                        intended_route=intended_route,
                         results=[terminal_result],
                         fallback_used=len(attempted) > 1,
                         failure_count=failure_count,
                         events=events,
                         decision_reason=decision_reason,
                         route_score=primary_score,
+                        fallback_reason=efficiency.fallback_reason,
+                        route_mismatch_flag=efficiency.route_mismatch_flag,
+                        estimated_cost_units=efficiency.estimated_cost_units,
+                        saved_cost_units=efficiency.saved_cost_units,
+                        quota_block_avoided=efficiency.quota_block_avoided,
                     )
                 degradation_reason = self._degradation_reason(result, current_connector)
                 if (
@@ -144,16 +173,30 @@ class ExecutionRouter:
                         effective_route=actual_extractor,
                     )
                     final_results = [terminal_result] if fallback_used else results
+                    efficiency = build_routing_efficiency(
+                        intended_route=intended_route,
+                        actual_route=actual_extractor,
+                        fallback_reason=self._extract_fallback_reason(events),
+                        quota_block_avoided=quota_block_avoided,
+                        confidence_band=None,
+                        review_recommendation=None,
+                    )
                     return RoutedExtraction(
                         extractor_route=actual_extractor,
                         extractor_actual=actual_extractor,
                         requested_route=intended_route,
+                        intended_route=intended_route,
                         results=final_results,
                         fallback_used=fallback_used,
                         failure_count=failure_count,
                         events=events,
                         decision_reason=decision_reason,
                         route_score=primary_score,
+                        fallback_reason=efficiency.fallback_reason,
+                        route_mismatch_flag=efficiency.route_mismatch_flag,
+                        estimated_cost_units=efficiency.estimated_cost_units,
+                        saved_cost_units=efficiency.saved_cost_units,
+                        quota_block_avoided=efficiency.quota_block_avoided,
                     )
                 next_connector = self._next_fallback(current_connector, attempted, route_scores)
                 if next_connector is None:
@@ -163,20 +206,35 @@ class ExecutionRouter:
                         effective_route=actual_extractor,
                     )
                     self._append_result(results, result)
+                    terminal_events = events + [{
+                        "action": "degradation_tolerated",
+                        "reason": degradation_reason,
+                        "connector": current_connector,
+                    }]
+                    efficiency = build_routing_efficiency(
+                        intended_route=intended_route,
+                        actual_route=actual_extractor,
+                        fallback_reason=self._extract_fallback_reason(terminal_events),
+                        quota_block_avoided=quota_block_avoided,
+                        confidence_band=None,
+                        review_recommendation=None,
+                    )
                     return RoutedExtraction(
                         extractor_route=actual_extractor,
                         extractor_actual=actual_extractor,
                         requested_route=intended_route,
+                        intended_route=intended_route,
                         results=[terminal_result],
                         fallback_used=len(attempted) > 1,
                         failure_count=failure_count,
-                        events=events + [{
-                            "action": "degradation_tolerated",
-                            "reason": degradation_reason,
-                            "connector": current_connector,
-                        }],
+                        events=terminal_events,
                         decision_reason=decision_reason,
                         route_score=primary_score,
+                        fallback_reason=efficiency.fallback_reason,
+                        route_mismatch_flag=efficiency.route_mismatch_flag,
+                        estimated_cost_units=efficiency.estimated_cost_units,
+                        saved_cost_units=efficiency.saved_cost_units,
+                        quota_block_avoided=efficiency.quota_block_avoided,
                     )
                 result["notes"] = list(result.get("notes", [])) + [f"router_degraded={degradation_reason}"]
                 self._append_result(results, result)
@@ -199,6 +257,8 @@ class ExecutionRouter:
                 failure_message = str(exc) or "connector_failure"
 
             failure_count += 1
+            if current_connector == "gemini" and self._is_quota_error(failure_message):
+                self.gemini_quota_blocked = True
             self.metrics.record_connector_result(
                 connector=current_connector,
                 latency_ms=0.0,
@@ -222,14 +282,18 @@ class ExecutionRouter:
             attempted.add(next_connector)
             current_connector = next_connector
 
-    def _select_candidate_routes(self, text: str) -> list[str]:
+    def _select_candidate_routes(self, text: str, *, quota_aware: bool = True) -> list[str]:
         if len(text) < self.spacy_fast_path_char_limit and not self._has_ocr_artifacts(text):
             return ["spacy", "phi3", "gemini"]
+        if quota_aware and self.gemini_quota_blocked:
+            return ["phi3", "spacy", "gemini"]
         return ["gemini", "phi3", "spacy"]
 
     def _choose_connector(self, candidate_routes: list[str], route_scores: dict[str, float]) -> str:
         eligible = []
         for connector_name in candidate_routes:
+            if self.gemini_quota_blocked and connector_name == "gemini":
+                continue
             profile = self._effective_profile(connector_name, is_primary=(connector_name == candidate_routes[0]))
             if (
                 profile["confidence"] >= self.preferred_confidence_threshold
@@ -246,7 +310,11 @@ class ExecutionRouter:
                     candidate_routes.index(name),
                 ),
             )
-        return max(candidate_routes, key=lambda name: (route_scores[name], -candidate_routes.index(name)))
+        available_routes = [
+            name for name in candidate_routes
+            if not (self.gemini_quota_blocked and name == "gemini")
+        ] or list(candidate_routes)
+        return max(available_routes, key=lambda name: (route_scores[name], -candidate_routes.index(name)))
 
     def _score_route(self, connector_name: str, *, text: str, is_primary: bool) -> float:
         profile = self._effective_profile(connector_name, is_primary=is_primary)
@@ -350,6 +418,26 @@ class ExecutionRouter:
         if "timeout" in str(exc).lower():
             return "timeout"
         return "connector_error"
+
+    def _is_quota_error(self, message: str) -> bool:
+        lowered = message.lower()
+        return any(
+            marker in lowered
+            for marker in (
+                "quota exceeded",
+                "current quota",
+                "rate limit",
+                "retry in",
+                "generate_content",
+                "429",
+            )
+        )
+
+    def _extract_fallback_reason(self, events: list[dict[str, Any]]) -> str | None:
+        for event in events:
+            if event.get("action") == "fallback_invoked":
+                return str(event.get("reason", "fallback_invoked"))
+        return None
     def _prepare_terminal_result(
         self,
         result: dict[str, Any],

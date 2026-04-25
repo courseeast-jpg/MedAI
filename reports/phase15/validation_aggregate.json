@@ -1,21 +1,20 @@
 {
-  "generated_at": "2026-04-25T02:31:12.027145+00:00",
+  "generated_at": "2026-04-25T03:11:54.109934+00:00",
   "phase": "Phase 15 Expanded Validation",
   "dataset_dir": "test_data\\final_batch_50",
   "documents_attempted": 50,
   "documents_processed": 46,
   "documents_quota_blocked": 4,
-  "written": 45,
-  "queued_for_review": 1,
+  "written": 46,
+  "queued_for_review": 0,
   "hard_failures": 0,
   "avg_confidence_processed_only": 0.7,
   "route_distribution_actual": {
-    "phi3": 1,
-    "spacy": 45
+    "spacy": 46
   },
   "route_distribution_requested": {
-    "gemini": 2,
-    "spacy": 44,
+    "gemini": 1,
+    "spacy": 45,
     "unknown": 4
   },
   "top_rejection_patterns": [
@@ -26,10 +25,6 @@
     {
       "pattern": "quarantined",
       "count": 13
-    },
-    {
-      "pattern": "confidence_below_accept_threshold",
-      "count": 1
     }
   ],
   "counters": {

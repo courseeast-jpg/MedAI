@@ -50,6 +50,12 @@ class ReviewQueueWriter:
         calibration_reason: str | None = None,
         route_mismatch_flag: bool | None = None,
         review_recommendation: str | None = None,
+        intended_route: str | None = None,
+        actual_route: str | None = None,
+        fallback_reason: str | None = None,
+        estimated_cost_units: float | None = None,
+        saved_cost_units: float | None = None,
+        quota_block_avoided: bool | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "validation_review",
@@ -76,6 +82,12 @@ class ReviewQueueWriter:
             "calibration_reason": calibration_reason,
             "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
             "review_recommendation": review_recommendation,
+            "intended_route": intended_route,
+            "actual_route": actual_route,
+            "fallback_reason": fallback_reason,
+            "estimated_cost_units": float(estimated_cost_units or 0.0),
+            "saved_cost_units": float(saved_cost_units or 0.0),
+            "quota_block_avoided": bool(quota_block_avoided) if quota_block_avoided is not None else False,
         })
 
     def append_external_quota_block(
@@ -95,6 +107,12 @@ class ReviewQueueWriter:
         calibration_reason: str | None = None,
         route_mismatch_flag: bool | None = None,
         review_recommendation: str | None = None,
+        intended_route: str | None = None,
+        actual_route: str | None = None,
+        fallback_reason: str | None = None,
+        estimated_cost_units: float | None = None,
+        saved_cost_units: float | None = None,
+        quota_block_avoided: bool | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "external_quota_block",
@@ -116,6 +134,12 @@ class ReviewQueueWriter:
             "calibration_reason": calibration_reason,
             "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
             "review_recommendation": review_recommendation,
+            "intended_route": intended_route,
+            "actual_route": actual_route,
+            "fallback_reason": fallback_reason,
+            "estimated_cost_units": float(estimated_cost_units or 0.0),
+            "saved_cost_units": float(saved_cost_units or 0.0),
+            "quota_block_avoided": bool(quota_block_avoided) if quota_block_avoided is not None else False,
         })
 
     def append_resolution_review(
@@ -143,6 +167,12 @@ class ReviewQueueWriter:
         calibration_reason: str | None = None,
         route_mismatch_flag: bool | None = None,
         review_recommendation: str | None = None,
+        intended_route: str | None = None,
+        actual_route: str | None = None,
+        fallback_reason: str | None = None,
+        estimated_cost_units: float | None = None,
+        saved_cost_units: float | None = None,
+        quota_block_avoided: bool | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "truth_resolution_review",
@@ -170,6 +200,12 @@ class ReviewQueueWriter:
             "calibration_reason": calibration_reason,
             "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
             "review_recommendation": review_recommendation,
+            "intended_route": intended_route,
+            "actual_route": actual_route,
+            "fallback_reason": fallback_reason,
+            "estimated_cost_units": float(estimated_cost_units or 0.0),
+            "saved_cost_units": float(saved_cost_units or 0.0),
+            "quota_block_avoided": bool(quota_block_avoided) if quota_block_avoided is not None else False,
         })
 
     def append_medication_review(
@@ -199,6 +235,12 @@ class ReviewQueueWriter:
         calibration_reason: str | None = None,
         route_mismatch_flag: bool | None = None,
         review_recommendation: str | None = None,
+        intended_route: str | None = None,
+        actual_route: str | None = None,
+        fallback_reason: str | None = None,
+        estimated_cost_units: float | None = None,
+        saved_cost_units: float | None = None,
+        quota_block_avoided: bool | None = None,
     ) -> dict[str, Any]:
         return self.append({
             "queue_category": "medication_review",
@@ -228,6 +270,12 @@ class ReviewQueueWriter:
             "calibration_reason": calibration_reason,
             "route_mismatch_flag": bool(route_mismatch_flag) if route_mismatch_flag is not None else False,
             "review_recommendation": review_recommendation,
+            "intended_route": intended_route,
+            "actual_route": actual_route,
+            "fallback_reason": fallback_reason,
+            "estimated_cost_units": float(estimated_cost_units or 0.0),
+            "saved_cost_units": float(saved_cost_units or 0.0),
+            "quota_block_avoided": bool(quota_block_avoided) if quota_block_avoided is not None else False,
         })
 
 

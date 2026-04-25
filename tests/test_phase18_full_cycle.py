@@ -75,6 +75,16 @@ def test_report_writer_works(tmp_path: Path):
             "review_recommendation_counts": {"accept": 46},
             "route_mismatch_count": 1,
         },
+        "routing_efficiency_result": {
+            "metrics_path": "artifacts/phase23/routing_efficiency.json",
+            "report_path": "reports/phase23/routing_efficiency_report.md",
+            "intended_route_counts": {"spacy": 46},
+            "actual_route_counts": {"spacy": 46},
+            "route_mismatch_count": 1,
+            "quota_block_avoided_count": 0,
+            "total_estimated_cost_units": 0.0,
+            "total_saved_cost_units": 0.0,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -154,6 +164,16 @@ def test_no_pipeline_configuration_is_mutated(tmp_path: Path):
             "review_recommendation_counts": {"accept": 46},
             "route_mismatch_count": 1,
         },
+        "routing_efficiency_result": {
+            "metrics_path": "artifacts/phase23/routing_efficiency.json",
+            "report_path": "reports/phase23/routing_efficiency_report.md",
+            "intended_route_counts": {"spacy": 46},
+            "actual_route_counts": {"spacy": 46},
+            "route_mismatch_count": 1,
+            "quota_block_avoided_count": 0,
+            "total_estimated_cost_units": 0.0,
+            "total_saved_cost_units": 0.0,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -178,6 +198,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     phase12_path = tmp_path / "phase12.json"
     phase21_path = tmp_path / "phase21.json"
     phase22_path = tmp_path / "phase22.json"
+    phase23_path = tmp_path / "phase23.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         """{
@@ -213,10 +234,22 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
 }""",
         encoding="utf-8",
     )
+    phase23_path.write_text(
+        """{
+  "intended_route_counts": {"spacy": 46},
+  "actual_route_counts": {"spacy": 46},
+  "route_mismatch_count": 1,
+  "quota_block_avoided_count": 0,
+  "total_estimated_cost_units": 0.0,
+  "total_saved_cost_units": 0.0
+}""",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
     monkeypatch.setattr(phase18, "PHASE22_METRICS_PATH", phase22_path)
+    monkeypatch.setattr(phase18, "PHASE23_METRICS_PATH", phase23_path)
 
     summary = build_summary(
         commands=[{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 159 passed ===", "stderr": ""}],
@@ -228,3 +261,4 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     assert summary["validation_result"]["hard_failures"] == 0
     assert summary["observability_result"]["quota_safe_block_count"] == 4
     assert summary["calibration_result"]["confidence_band_counts"] == {"acceptable": 46}
+    assert summary["routing_efficiency_result"]["actual_route_counts"] == {"spacy": 46}
