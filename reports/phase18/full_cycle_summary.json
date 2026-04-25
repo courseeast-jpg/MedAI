@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-25T03:41:36.585960+00:00",
-  "started_at": "2026-04-25T03:36:37.146372+00:00",
-  "ended_at": "2026-04-25T03:41:36.585960+00:00",
-  "duration_seconds": 299.44,
-  "commit_hash": "d7ea415a3d7b9e749cc32101207c8b4a32c974fe",
+  "generated_at": "2026-04-25T13:18:35.884778+00:00",
+  "started_at": "2026-04-25T13:13:01.639340+00:00",
+  "ended_at": "2026-04-25T13:18:35.884778+00:00",
+  "duration_seconds": 334.245,
+  "commit_hash": "6f90715b8582748c4b2ab6860ae2d3a3b0384ab7",
   "git_status": "dirty",
   "steps": [
     {
@@ -56,77 +56,79 @@
   ],
   "success": true,
   "failed_step": null,
-  "test_result": "187 passed",
+  "test_result": "188 passed",
   "phase11_audit_result": "passed",
   "validation_result": {
     "attempted": 50,
-    "processed": 46,
-    "written": 46,
-    "queued_for_review": 0,
-    "external_quota_blocked": 4,
+    "processed": 50,
+    "written": 45,
+    "queued_for_review": 5,
+    "external_quota_blocked": 0,
     "hard_failures": 0,
-    "avg_confidence": 0.7,
-    "review_queue_items": 30,
+    "avg_confidence": 0.698,
+    "review_queue_items": 29,
     "review_queue_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl"
   },
   "observability_result": {
     "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase21\\observability_metrics.json",
     "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase21\\observability_report.md",
-    "route_mismatch_count": 1,
-    "low_confidence_count": 0,
-    "quota_safe_block_count": 4,
+    "route_mismatch_count": 10,
+    "low_confidence_count": 5,
+    "quota_safe_block_count": 0,
     "extractor_route_counts": {
-      "spacy": 46
+      "phi3": 5,
+      "spacy": 45
     },
     "extractor_actual_counts": {
-      "spacy": 46
+      "phi3": 5,
+      "spacy": 45
     },
     "per_stage_duration_ms": {
       "consensus": {
-        "records": 46,
-        "events": 46,
+        "records": 50,
+        "events": 50,
         "total_duration_ms": 0.0,
         "avg_duration_ms": 0.0,
         "max_duration_ms": 0.0
       },
       "extraction": {
         "records": 50,
-        "events": 96,
-        "total_duration_ms": 4174.064,
-        "avg_duration_ms": 83.481,
-        "max_duration_ms": 2960.413
+        "events": 100,
+        "total_duration_ms": 44165.982,
+        "avg_duration_ms": 883.32,
+        "max_duration_ms": 7415.505
       },
       "final_write": {
-        "records": 39,
-        "events": 128,
-        "total_duration_ms": 33712.548,
-        "avg_duration_ms": 864.424,
-        "max_duration_ms": 5094.306
+        "records": 48,
+        "events": 134,
+        "total_duration_ms": 182827.805,
+        "avg_duration_ms": 3808.913,
+        "max_duration_ms": 44355.948
       },
       "safety_gate": {
         "records": 26,
-        "events": 102,
-        "total_duration_ms": 30114.733,
-        "avg_duration_ms": 1158.259,
-        "max_duration_ms": 4659.122
+        "events": 100,
+        "total_duration_ms": 177468.566,
+        "avg_duration_ms": 6825.714,
+        "max_duration_ms": 41427.605
       },
       "semantic_enrichment": {
-        "records": 46,
-        "events": 46,
+        "records": 50,
+        "events": 50,
         "total_duration_ms": 0.0,
         "avg_duration_ms": 0.0,
         "max_duration_ms": 0.0
       },
       "truth_resolution": {
-        "records": 39,
-        "events": 128,
-        "total_duration_ms": 33778.825,
-        "avg_duration_ms": 866.124,
-        "max_duration_ms": 5106.221
+        "records": 38,
+        "events": 124,
+        "total_duration_ms": 183066.499,
+        "avg_duration_ms": 4817.539,
+        "max_duration_ms": 44367.731
       },
       "validation": {
-        "records": 46,
-        "events": 46,
+        "records": 50,
+        "events": 50,
         "total_duration_ms": 0.0,
         "avg_duration_ms": 0.0,
         "max_duration_ms": 0.0
@@ -136,36 +138,39 @@
   "calibration_result": {
     "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase22\\confidence_calibration.json",
     "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase22\\accuracy_calibration_report.md",
-    "average_raw_confidence": 0.7,
-    "average_calibrated_confidence": 0.7,
+    "average_raw_confidence": 0.698,
+    "average_calibrated_confidence": 0.698,
     "confidence_band_counts": {
-      "acceptable": 46
+      "acceptable": 45,
+      "review": 5
     },
     "review_recommendation_counts": {
-      "accept": 45,
-      "accept_with_route_audit": 1
+      "accept": 40,
+      "accept_with_route_audit": 5,
+      "operator_review": 5
     },
-    "route_mismatch_count": 1
+    "route_mismatch_count": 10
   },
   "routing_efficiency_result": {
     "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase23\\routing_efficiency.json",
     "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase23\\routing_efficiency_report.md",
     "intended_route_counts": {
-      "gemini": 1,
-      "spacy": 45
+      "gemini": 10,
+      "spacy": 40
     },
     "actual_route_counts": {
-      "spacy": 46
+      "phi3": 5,
+      "spacy": 45
     },
-    "route_mismatch_count": 1,
+    "route_mismatch_count": 10,
     "quota_block_avoided_count": 0,
-    "total_estimated_cost_units": 0.0,
-    "total_saved_cost_units": 0.02
+    "total_estimated_cost_units": 0.025,
+    "total_saved_cost_units": 0.175
   },
   "semantic_enrichment_result": {
     "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase24\\semantic_enrichment.json",
     "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase24\\semantic_enrichment_report.md",
-    "enrichment_applied_count": 46,
+    "enrichment_applied_count": 50,
     "negation_detected_count": 0,
     "temporal_detected_count": 0,
     "relationships_detected_count": 0

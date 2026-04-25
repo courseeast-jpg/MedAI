@@ -108,7 +108,7 @@ class ExecutionPipeline:
             decision_reason=f"source={source_name}",
         )
         stripped_text, pii_method = self._strip_pii(source_text)
-        routed = self.router.execute(stripped_text, specialty=job.specialty)
+        routed = self.router.execute(stripped_text, specialty=job.specialty, source_name=source_name)
         extractor_route = routed.extractor_route
         requested_route = routed.requested_route
         extraction_results = routed.results

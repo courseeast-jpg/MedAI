@@ -257,7 +257,7 @@ def test_cost_based_routing_prefers_cheapest_eligible_connector(tmp_path: Path):
         metrics=metrics,
     )
 
-    result = pipeline.process_text("x" * 4500, specialty="epilepsy")
+    result = pipeline.process_text("x" * 2500, specialty="epilepsy")
 
     assert result.audit["extractor_route"] == "phi3"
     assert result.audit["extractor_actual"] == "phi3"

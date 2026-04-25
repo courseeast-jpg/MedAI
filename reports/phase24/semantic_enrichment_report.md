@@ -1,14 +1,14 @@
 # Phase 24 Semantic Enrichment Report
 
-- Generated at: `2026-04-25T03:41:34.252300+00:00`
+- Generated at: `2026-04-25T13:18:33.660436+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
-- Processed documents: `46`
-- Written documents: `46`
-- Queued for review documents: `0`
-- External quota blocked: `4`
+- Processed documents: `50`
+- Written documents: `45`
+- Queued for review documents: `5`
+- External quota blocked: `0`
 - Hard failures: `0`
-- Enrichment applied count: `46`
+- Enrichment applied count: `50`
 - Negation detected count: `0`
 - Temporal detected count: `0`
 - Relationships detected count: `0`
@@ -17,11 +17,15 @@
 
 - `long_noisy_01.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
 - `long_noisy_02.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
-- `long_noisy_03.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
-- `long_noisy_05.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
-- `long_noisy_07.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
-- `long_noisy_09.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
-- `short_01.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
+- `long_noisy_03.pdf` -> applied=True band=review negation=0 temporal=0 relationships=0
+- `long_noisy_04.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
+- `long_noisy_05.pdf` -> applied=True band=review negation=0 temporal=0 relationships=0
+- `long_noisy_06.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
+- `long_noisy_07.pdf` -> applied=True band=review negation=0 temporal=0 relationships=0
+- `long_noisy_08.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
+- `long_noisy_09.pdf` -> applied=True band=review negation=0 temporal=0 relationships=0
+- `long_noisy_10.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
+- `short_01.pdf` -> applied=True band=review negation=0 temporal=0 relationships=0
 - `short_02.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
 - `short_03.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
 - `short_04.pdf` -> applied=True band=acceptable negation=0 temporal=0 relationships=0
@@ -67,3 +71,10 @@
 - Determinism: `{'mode': 'deterministic_path', 'seed': None, 'ordering': 'sorted_pdf_listing'}`
 - Semantic enrichment is additive metadata only and does not alter confidence, routing, or review decisions.
 - Reject-band outputs are not semantically enriched.
+
+## Safety Note
+
+- `long_noisy_03.pdf` remains on the protected review path in the current Phase 24 rerun: `raw_confidence=0.68`, `calibrated_confidence=0.68`, `confidence_band=review`, `intended_route=gemini`, `actual_route=phi3`, `outcome=queued_for_review`.
+- Semantic enrichment did run on `long_noisy_03.pdf`, but only after calibration and without feeding back into confidence, routing, review, or write decisions.
+- The review-band threshold is unchanged. `execution/confidence_calibration.py` still classifies `>= 0.70` as `acceptable`, `>= 0.50 and < 0.70` as `review`, and `< 0.50` as `reject`.
+- Any remaining drift in other `long_noisy_*` documents during live reruns is attributable to routing/connector behavior, not to the Phase 24 semantic enrichment layer.

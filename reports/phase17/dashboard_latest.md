@@ -1,22 +1,22 @@
 # Phase 17 Dashboard
 
-- run_id: `final_batch_50-20260425T034134252300_0000`
-- timestamp: `2026-04-25T03:41:34.252300+00:00`
+- run_id: `final_batch_50-20260425T131833660436_0000`
+- timestamp: `2026-04-25T13:18:33.660436+00:00`
 - dataset: `test_data\final_batch_50`
 - attempted: `50`
-- processed: `46`
-- written: `46`
-- written_with_review: `13`
-- external_quota_blocked: `4`
+- processed: `50`
+- written: `45`
+- written_with_review: `12`
+- external_quota_blocked: `0`
 - hard_failures: `0`
-- avg_confidence: `0.700`
-- duration_sec: `10.028`
-- derived_queued_documents: `0`
-- delta_written_vs_previous: `+0`
-- delta_queued_vs_previous: `+0`
-- route_distribution_requested: `{'gemini': 1, 'spacy': 45, 'unknown': 4}`
-- route_distribution_actual: `{'spacy': 46}`
-- review_counts: `{'clear': 13, 'quarantined': 13}`
+- avg_confidence: `0.698`
+- duration_sec: `48.676`
+- derived_queued_documents: `5`
+- delta_written_vs_previous: `-1`
+- delta_queued_vs_previous: `+2`
+- route_distribution_requested: `{'gemini': 10, 'spacy': 40}`
+- route_distribution_actual: `{'phi3': 5, 'spacy': 45}`
+- review_counts: `{'clear': 12, 'quarantined': 12}`
 
 ## Inputs To Outputs
 
