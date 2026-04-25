@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T14:07:19.051260+00:00",
+  "generated_at": "2026-04-25T14:40:02.288659+00:00",
   "phase": "Phase 12 Real-World Validation",
   "dataset_dir": "test_data\\final_batch_50",
   "requested_limit": 0,
@@ -57,7 +57,12 @@
     "enrichment_applied_count": 45,
     "negation_detected_count": 0,
     "temporal_detected_count": 0,
-    "relationships_detected_count": 0
+    "relationships_detected_count": 0,
+    "coding_attempted_count": 82,
+    "coding_success_count": 8,
+    "coding_unmapped_count": 74,
+    "coding_ambiguous_count": 0,
+    "coding_skipped_count": 29
   },
   "mkb_counts": {
     "total": 39,
@@ -86,7 +91,7 @@
         "pii_method=presidio",
         "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 3151.614,
+      "processing_time_ms": 4160.518,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -158,7 +163,68 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "long_noisy_02.pdf",
@@ -180,7 +246,7 @@
         "pii_method=presidio",
         "routing_decision=selected=gemini score=0.797 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
       ],
-      "processing_time_ms": 2692.27,
+      "processing_time_ms": 2793.95,
       "requested_route": "gemini",
       "retry_visibility": {
         "retry_detected": false,
@@ -195,7 +261,7 @@
       "review_recommendation": "accept_with_route_audit",
       "intended_route": "gemini",
       "actual_route": "spacy",
-      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "fallback_reason": "Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
       "estimated_cost_units": 0.0,
       "saved_cost_units": 0.02,
       "quota_block_avoided": false,
@@ -252,7 +318,68 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "long_noisy_03.pdf",
@@ -279,7 +406,7 @@
         "pii_method=presidio",
         "routing_decision=selected=phi3 score=0.806 cost=0.00500 confidence=0.760 latency_ms=25.000 success_rate=0.950 candidates=gemini,phi3,spacy"
       ],
-      "processing_time_ms": 89.73,
+      "processing_time_ms": 105.203,
       "requested_route": "phi3",
       "retry_visibility": {
         "retry_detected": false,
@@ -302,12 +429,19 @@
       "enrichment_applied": false,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": null,
+      "coding_applied": false,
+      "coding_attempted_count": 0,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 0,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "long_noisy_04.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -319,11 +453,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 378.066,
+      "processing_time_ms": 382.507,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 46.189066049,
+        "retry_delay_seconds": 4.457540095,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -342,7 +476,14 @@
       "enrichment_applied": false,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": null,
+      "coding_applied": false,
+      "coding_attempted_count": 0,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 0,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "long_noisy_05.pdf",
@@ -362,9 +503,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=37.000 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=41.333 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 129.607,
+      "processing_time_ms": 161.925,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -436,12 +577,73 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "long_noisy_06.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -453,11 +655,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 378.167,
+      "processing_time_ms": 386.299,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 46.189066049,
+        "retry_delay_seconds": 4.457540095,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -476,7 +678,14 @@
       "enrichment_applied": false,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": null,
+      "coding_applied": false,
+      "coding_attempted_count": 0,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 0,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "long_noisy_07.pdf",
@@ -496,9 +705,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=38.250 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=42.250 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 132.485,
+      "processing_time_ms": 330.413,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -570,12 +779,73 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "long_noisy_08.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -587,11 +857,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 382.24,
+      "processing_time_ms": 390.279,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 46.189066049,
+        "retry_delay_seconds": 4.457540095,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -610,7 +880,14 @@
       "enrichment_applied": false,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": null,
+      "coding_applied": false,
+      "coding_attempted_count": 0,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 0,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "long_noisy_09.pdf",
@@ -630,9 +907,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=38.600 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=42.800 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 129.845,
+      "processing_time_ms": 162.169,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -704,12 +981,73 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "long_noisy_10.pdf",
       "status": "external_quota_blocked",
-      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.189066049s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 46\n}\n]",
+      "error": "gemini failed with no fallback available: Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 4.457540095s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 4\n}\n]",
       "outcome": "external_quota_blocked",
       "validation_status": "skipped_external_quota",
       "extractor": null,
@@ -721,11 +1059,11 @@
       "blocked_count": 0,
       "review_reasons": [],
       "notes": [],
-      "processing_time_ms": 363.603,
+      "processing_time_ms": 387.4,
       "requested_route": null,
       "retry_visibility": {
         "retry_detected": true,
-        "retry_delay_seconds": 46.189066049,
+        "retry_delay_seconds": 4.457540095,
         "retry_reason": "external_quota"
       },
       "raw_confidence": null,
@@ -744,7 +1082,14 @@
       "enrichment_applied": false,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": null,
+      "coding_applied": false,
+      "coding_attempted_count": 0,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 0,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_01.pdf",
@@ -767,9 +1112,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.863 cost=0.00000 confidence=0.700 latency_ms=39.667 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.862 cost=0.00000 confidence=0.700 latency_ms=43.667 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.601,
+      "processing_time_ms": 131.018,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -831,7 +1176,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_02.pdf",
@@ -851,9 +1246,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.865 cost=0.00000 confidence=0.700 latency_ms=34.857 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.864 cost=0.00000 confidence=0.700 latency_ms=38.286 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 26.658,
+      "processing_time_ms": 50.346,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -895,7 +1290,35 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_03.pdf",
@@ -915,9 +1338,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.867 cost=0.00000 confidence=0.700 latency_ms=31.250 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.866 cost=0.00000 confidence=0.700 latency_ms=34.625 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 33.829,
+      "processing_time_ms": 48.805,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -969,7 +1392,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_04.pdf",
@@ -989,9 +1451,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=28.444 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.867 cost=0.00000 confidence=0.700 latency_ms=31.444 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 40.313,
+      "processing_time_ms": 63.408,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1053,7 +1515,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_05.pdf",
@@ -1073,9 +1585,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=26.200 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.868 cost=0.00000 confidence=0.700 latency_ms=28.900 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 39.462,
+      "processing_time_ms": 57.873,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1137,7 +1649,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_06.pdf",
@@ -1157,9 +1719,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=24.364 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.869 cost=0.00000 confidence=0.700 latency_ms=26.818 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 43.581,
+      "processing_time_ms": 53.628,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1211,7 +1773,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_07.pdf",
@@ -1231,9 +1832,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=22.833 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=25.167 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 27.022,
+      "processing_time_ms": 37.614,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1275,7 +1876,35 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_08.pdf",
@@ -1298,9 +1927,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.615 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.870 cost=0.00000 confidence=0.700 latency_ms=23.769 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 39.909,
+      "processing_time_ms": 50.276,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1352,7 +1981,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_09.pdf",
@@ -1375,9 +2043,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=20.500 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=22.571 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.652,
+      "processing_time_ms": 68.7,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1439,7 +2107,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_10.pdf",
@@ -1462,9 +2180,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.533 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=21.533 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.347,
+      "processing_time_ms": 202.319,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1526,7 +2244,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_11.pdf",
@@ -1546,9 +2314,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.688 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.871 cost=0.00000 confidence=0.700 latency_ms=20.688 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 35.691,
+      "processing_time_ms": 48.432,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1600,7 +2368,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_12.pdf",
@@ -1620,9 +2427,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.941 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.882 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 26.023,
+      "processing_time_ms": 37.703,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1664,7 +2471,35 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_13.pdf",
@@ -1684,9 +2519,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.222 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=19.111 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 33.434,
+      "processing_time_ms": 50.821,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1738,7 +2573,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_14.pdf",
@@ -1758,9 +2632,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.632 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.872 cost=0.00000 confidence=0.700 latency_ms=18.421 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.249,
+      "processing_time_ms": 66.914,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1822,7 +2696,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_15.pdf",
@@ -1842,9 +2766,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.100 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.800 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 41.982,
+      "processing_time_ms": 68.605,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1906,7 +2830,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_16.pdf",
@@ -1926,9 +2900,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.571 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=17.238 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 41.901,
+      "processing_time_ms": 67.15,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -1990,7 +2964,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_17.pdf",
@@ -2010,9 +3034,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.136 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.727 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 33.26,
+      "processing_time_ms": 54.211,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2064,7 +3088,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Topiramate",
+            "normalized_entity_text": "topiramate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_18.pdf",
@@ -2087,9 +3150,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.696 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=16.261 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 40.618,
+      "processing_time_ms": 174.655,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2141,7 +3204,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_19.pdf",
@@ -2161,9 +3263,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.375 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.873 cost=0.00000 confidence=0.700 latency_ms=15.917 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 33.783,
+      "processing_time_ms": 53.154,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2215,7 +3317,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_20.pdf",
@@ -2238,9 +3379,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.040 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.520 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 50.424,
+      "processing_time_ms": 78.239,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2302,7 +3443,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_21.pdf",
@@ -2322,9 +3513,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.731 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=15.154 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 35.428,
+      "processing_time_ms": 57.449,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2376,7 +3567,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_22.pdf",
@@ -2396,9 +3626,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.481 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.815 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 27.221,
+      "processing_time_ms": 34.826,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2440,7 +3670,35 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_23.pdf",
@@ -2460,9 +3718,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.214 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.500 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 34.668,
+      "processing_time_ms": 53.087,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2514,7 +3772,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_24.pdf",
@@ -2537,9 +3834,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.966 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.241 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 45.91,
+      "processing_time_ms": 73.156,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2601,7 +3898,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_25.pdf",
@@ -2621,9 +3968,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.733 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=14.000 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 40.779,
+      "processing_time_ms": 112.347,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2685,7 +4032,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_26.pdf",
@@ -2705,9 +4102,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.516 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.742 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 36.353,
+      "processing_time_ms": 52.976,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2759,7 +4156,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_27.pdf",
@@ -2779,9 +4215,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.312 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.531 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 26.352,
+      "processing_time_ms": 37.059,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2823,7 +4259,35 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_28.pdf",
@@ -2846,9 +4310,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.121 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.874 cost=0.00000 confidence=0.700 latency_ms=13.303 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 39.047,
+      "processing_time_ms": 63.981,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2900,7 +4364,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_29.pdf",
@@ -2920,9 +4423,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.941 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=13.088 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 40.739,
+      "processing_time_ms": 66.565,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -2984,7 +4487,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_30.pdf",
@@ -3007,9 +4560,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.771 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.886 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 46.597,
+      "processing_time_ms": 75.023,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3071,7 +4624,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_31.pdf",
@@ -3091,9 +4694,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.583 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.694 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 34.254,
+      "processing_time_ms": 50.451,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3145,7 +4748,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_32.pdf",
@@ -3165,9 +4807,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.432 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.541 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 25.983,
+      "processing_time_ms": 37.071,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3209,7 +4851,35 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_33.pdf",
@@ -3229,9 +4899,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.289 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.368 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 34.59,
+      "processing_time_ms": 51.756,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3283,7 +4953,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_34.pdf",
@@ -3306,9 +5015,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.154 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.231 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 47.46,
+      "processing_time_ms": 73.283,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3370,7 +5079,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_35.pdf",
@@ -3390,9 +5149,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.025 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=12.075 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 41.255,
+      "processing_time_ms": 62.341,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3454,7 +5213,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_36.pdf",
@@ -3477,9 +5286,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=10.902 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.951 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 47.214,
+      "processing_time_ms": 79.183,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3541,7 +5350,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_37.pdf",
@@ -3561,9 +5420,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.786 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.810 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 27.213,
+      "processing_time_ms": 35.62,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3605,7 +5464,35 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_38.pdf",
@@ -3628,9 +5515,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.651 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.674 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 39.261,
+      "processing_time_ms": 67.013,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3682,7 +5569,46 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0
     },
     {
       "document": "short_39.pdf",
@@ -3702,9 +5628,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.545 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.545 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 40.974,
+      "processing_time_ms": 65.301,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3766,7 +5692,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     },
     {
       "document": "short_40.pdf",
@@ -3789,9 +5765,9 @@
       "notes": [
         "loaded en_core_sci_md",
         "pii_method=presidio",
-        "routing_decision=selected=spacy score=0.876 cost=0.00000 confidence=0.700 latency_ms=10.444 success_rate=1.000 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.875 cost=0.00000 confidence=0.700 latency_ms=11.422 success_rate=1.000 candidates=spacy,phi3,gemini"
       ],
-      "processing_time_ms": 46.379,
+      "processing_time_ms": 75.047,
       "requested_route": "spacy",
       "retry_visibility": {
         "retry_detected": false,
@@ -3853,7 +5829,57 @@
       "enrichment_applied": true,
       "negation_detected_count": 0,
       "temporal_detected_count": 0,
-      "relationships_detected_count": 0
+      "relationships_detected_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      },
+      "coding_applied": true,
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1
     }
   ],
   "determinism": {

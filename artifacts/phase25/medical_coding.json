@@ -1,0 +1,2251 @@
+{
+  "generated_at": "2026-04-25T14:40:02.288659+00:00",
+  "phase": "Phase 25 Medical Coding / SNOMED-UMLS Mapping",
+  "dataset_dir": "test_data\\final_batch_50",
+  "determinism": {
+    "mode": "deterministic_path",
+    "seed": null,
+    "ordering": "sorted_pdf_listing"
+  },
+  "attempted_documents": 50,
+  "processed_documents": 46,
+  "written_documents": 45,
+  "queued_for_review_documents": 1,
+  "external_quota_blocked": 4,
+  "hard_failures": 0,
+  "coding_attempted_count": 82,
+  "coding_success_count": 8,
+  "coding_unmapped_count": 74,
+  "coding_ambiguous_count": 0,
+  "coding_skipped_count": 29,
+  "coding_status_counts": {
+    "coded": 8,
+    "skipped": 29,
+    "unmapped": 74
+  },
+  "documents": [
+    {
+      "document": "long_noisy_01.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "long_noisy_02.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "long_noisy_03.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "confidence_band": "reject",
+      "coding_attempted_count": 0,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 0,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": null
+    },
+    {
+      "document": "long_noisy_05.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "long_noisy_07.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "long_noisy_09.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 3,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 3,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Valproate",
+            "normalized_entity_text": "valproate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "seizure disorder",
+            "normalized_entity_text": "seizure disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Sodium",
+            "normalized_entity_text": "sodium",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 3,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 3,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_01.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_02.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_03.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_04.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_05.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_06.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_07.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_08.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_09.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_10.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_11.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_12.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_13.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_14.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_15.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_16.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_17.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Topiramate",
+            "normalized_entity_text": "topiramate",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_18.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_19.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_20.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_21.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_22.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_23.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_24.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_25.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_26.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_27.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_28.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_29.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_30.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_31.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_32.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_33.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_34.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_35.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_36.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levetiracetam",
+            "normalized_entity_text": "levetiracetam",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "focal epilepsy",
+            "normalized_entity_text": "focal epilepsy",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "EEG",
+            "normalized_entity_text": "eeg",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_37.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 1,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "migraine disorder",
+            "normalized_entity_text": "migraine disorder",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          }
+        ],
+        "coding_attempted_count": 1,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_38.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 1,
+      "coding_unmapped_count": 1,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 0,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Amlodipine",
+            "normalized_entity_text": "amlodipine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypertension",
+            "normalized_entity_text": "hypertension",
+            "entity_type": "diagnosis",
+            "coding_system": "SNOMED-CT-seed",
+            "code": "38341003",
+            "code_display": "Hypertensive disorder, systemic arterial",
+            "coding_confidence": 0.95,
+            "coding_source": "rules_based_seed",
+            "coding_status": "coded"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 1,
+        "coding_unmapped_count": 1,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 0
+      }
+    },
+    {
+      "document": "short_39.pdf",
+      "outcome": "written",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Albuterol",
+            "normalized_entity_text": "albuterol",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "asthma",
+            "normalized_entity_text": "asthma",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "Pulse",
+            "normalized_entity_text": "pulse",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    },
+    {
+      "document": "short_40.pdf",
+      "outcome": "written_with_review",
+      "validation_status": "accepted",
+      "confidence_band": "acceptable",
+      "coding_attempted_count": 2,
+      "coding_success_count": 0,
+      "coding_unmapped_count": 2,
+      "coding_ambiguous_count": 0,
+      "coding_skipped_count": 1,
+      "medical_coding": {
+        "applied": true,
+        "coding_source": "rules_based_seed",
+        "entries": [
+          {
+            "original_entity_text": "Levothyroxine",
+            "normalized_entity_text": "levothyroxine",
+            "entity_type": "medication",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "hypothyroidism",
+            "normalized_entity_text": "hypothyroidism",
+            "entity_type": "diagnosis",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "unmapped"
+          },
+          {
+            "original_entity_text": "TSH",
+            "normalized_entity_text": "tsh",
+            "entity_type": "test_result",
+            "coding_system": null,
+            "code": null,
+            "code_display": null,
+            "coding_confidence": 0.0,
+            "coding_source": "rules_based_seed",
+            "coding_status": "skipped"
+          }
+        ],
+        "coding_attempted_count": 2,
+        "coding_success_count": 0,
+        "coding_unmapped_count": 2,
+        "coding_ambiguous_count": 0,
+        "coding_skipped_count": 1
+      }
+    }
+  ]
+}

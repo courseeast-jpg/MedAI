@@ -26,6 +26,7 @@ from execution.connectors.spacy_connector import SpacyConnector
 from execution.enrichment import ControlledEnrichment
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.logging import AuditLogger
+from execution.medical_coding import map_medical_codes
 from execution.metrics import PipelineMetrics
 from execution.mkb_writer import MKBWriter
 from execution.promotion import HypothesisPromotion
@@ -191,6 +192,7 @@ class ExecutionPipeline:
         )
         extracted.update(calibration.to_dict())
         semantic_enrichment = None
+        medical_coding = None
         if str(extracted.get("confidence_band", "")) != "reject":
             semantic_enrichment = enrich_semantics(
                 raw_text=str(extracted.get("raw_text", stripped_text)),
@@ -209,12 +211,37 @@ class ExecutionPipeline:
                     f"relationships={semantic_enrichment['relationships_detected_count']}"
                 ),
             )
+            medical_coding = map_medical_codes(
+                entities=list(extracted.get("entities", [])),
+            ).to_dict()
+            extracted["medical_coding"] = medical_coding
+            self._stage_log(
+                record_id=session_id,
+                stage="medical_coding",
+                action="medical_coding_applied",
+                confidence=float(extracted.get("confidence", 0.0)),
+                decision_reason=(
+                    f"attempted={medical_coding['coding_attempted_count']} "
+                    f"coded={medical_coding['coding_success_count']} "
+                    f"unmapped={medical_coding['coding_unmapped_count']} "
+                    f"ambiguous={medical_coding['coding_ambiguous_count']} "
+                    f"skipped={medical_coding['coding_skipped_count']}"
+                ),
+            )
         else:
             extracted["semantic_enrichment"] = None
+            extracted["medical_coding"] = None
             self._stage_log(
                 record_id=session_id,
                 stage="semantic_enrichment",
                 action="semantic_enrichment_skipped",
+                confidence=float(extracted.get("confidence", 0.0)),
+                decision_reason="reject_band_skipped",
+            )
+            self._stage_log(
+                record_id=session_id,
+                stage="medical_coding",
+                action="medical_coding_skipped",
                 confidence=float(extracted.get("confidence", 0.0)),
                 decision_reason="reject_band_skipped",
             )

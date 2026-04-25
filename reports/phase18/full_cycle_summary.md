@@ -1,11 +1,11 @@
 # Phase 18 Full Cycle Summary
 
-- Generated at: `2026-04-25T14:07:21.234796+00:00`
-- Commit hash: `6876f5c759eb47bf3967943c6f789aa080ead769`
+- Generated at: `2026-04-25T14:40:04.585927+00:00`
+- Commit hash: `9bb3eaca81de6d5356c24e289be82a6fcce35acd`
 - Git status: `dirty`
 - Success: `True`
 - Failed step: `None`
-- Test result: `189 passed`
+- Test result: `200 passed`
 - Phase 11 audit result: `passed`
 - Validation attempted: `50`
 - Validation processed: `46`
@@ -42,9 +42,17 @@
 - Semantic enrichment relationships_detected_count: `0`
 - Semantic enrichment metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase24\semantic_enrichment.json`
 - Semantic enrichment report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase24\semantic_enrichment_report.md`
+- Medical coding attempted_count: `82`
+- Medical coding success_count: `8`
+- Medical coding unmapped_count: `74`
+- Medical coding ambiguous_count: `0`
+- Medical coding skipped_count: `29`
+- Medical coding status_counts: `{'coded': 8, 'skipped': 29, 'unmapped': 74}`
+- Medical coding metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase25\medical_coding.json`
+- Medical coding report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase25\medical_coding_report.md`
 - Dashboard export path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase17\dashboard_latest.md`
 - Stability report path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase19\stability_report.md`
-- Duration seconds: `269.899`
+- Duration seconds: `293.519`
 
 ## Steps
 

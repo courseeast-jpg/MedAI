@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T14:07:19.051260+00:00",
+  "generated_at": "2026-04-25T14:40:02.288659+00:00",
   "phase": "Phase 21 Observability & Metrics Tightening",
   "dataset_dir": "test_data\\final_batch_50",
   "determinism": {
@@ -30,6 +30,11 @@
   "negation_detected_count": 0,
   "temporal_detected_count": 0,
   "relationships_detected_count": 0,
+  "coding_attempted_count": 82,
+  "coding_success_count": 8,
+  "coding_unmapped_count": 74,
+  "coding_ambiguous_count": 0,
+  "coding_skipped_count": 29,
   "review_queue_category_counts": {
     "external_quota_block": 4,
     "truth_resolution_review": 26,
@@ -46,23 +51,30 @@
     "extraction": {
       "records": 50,
       "events": 96,
-      "total_duration_ms": 3807.811,
-      "avg_duration_ms": 76.156,
-      "max_duration_ms": 2657.54
+      "total_duration_ms": 3969.82,
+      "avg_duration_ms": 79.396,
+      "max_duration_ms": 2728.533
     },
     "final_write": {
       "records": 39,
       "events": 124,
-      "total_duration_ms": 31331.741,
-      "avg_duration_ms": 803.378,
-      "max_duration_ms": 4715.003
+      "total_duration_ms": 43076.886,
+      "avg_duration_ms": 1104.536,
+      "max_duration_ms": 5185.021
+    },
+    "medical_coding": {
+      "records": 46,
+      "events": 46,
+      "total_duration_ms": 0.0,
+      "avg_duration_ms": 0.0,
+      "max_duration_ms": 0.0
     },
     "safety_gate": {
       "records": 26,
       "events": 98,
-      "total_duration_ms": 27948.037,
-      "avg_duration_ms": 1074.925,
-      "max_duration_ms": 4315.916
+      "total_duration_ms": 37496.772,
+      "avg_duration_ms": 1442.184,
+      "max_duration_ms": 4715.383
     },
     "semantic_enrichment": {
       "records": 46,
@@ -74,9 +86,9 @@
     "truth_resolution": {
       "records": 39,
       "events": 124,
-      "total_duration_ms": 31372.17,
-      "avg_duration_ms": 804.415,
-      "max_duration_ms": 4727.006
+      "total_duration_ms": 43037.813,
+      "avg_duration_ms": 1103.534,
+      "max_duration_ms": 5181.487
     },
     "validation": {
       "records": 46,

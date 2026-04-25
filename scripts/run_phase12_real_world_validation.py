@@ -27,6 +27,8 @@ DEFAULT_PHASE23_ARTIFACT_PATH = ROOT / "artifacts" / "phase23" / "routing_effici
 DEFAULT_PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
 DEFAULT_PHASE24_ARTIFACT_PATH = ROOT / "artifacts" / "phase24" / "semantic_enrichment.json"
 DEFAULT_PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
+DEFAULT_PHASE25_ARTIFACT_PATH = ROOT / "artifacts" / "phase25" / "medical_coding.json"
+DEFAULT_PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
 ROUTING_DECISION_RE = re.compile(r"routing_decision=selected=([a-zA-Z0-9_]+)")
 RETRY_DELAY_RE = re.compile(r"retry in (\d+(?:\.\d+)?)(?:s| seconds?)", re.IGNORECASE)
 
@@ -39,7 +41,13 @@ from execution.pipeline import ExecutionPipeline
 from execution.review_queue import ReviewQueueWriter, read_review_queue
 from mkb.sqlite_store import SQLiteStore
 from monitoring.metrics_collector import collect_latest_run_metrics
-from monitoring.observability import write_phase21_outputs, write_phase22_outputs, write_phase23_outputs, write_phase24_outputs
+from monitoring.observability import (
+    write_phase21_outputs,
+    write_phase22_outputs,
+    write_phase23_outputs,
+    write_phase24_outputs,
+    write_phase25_outputs,
+)
 
 
 def is_external_quota_error(error: Exception | str) -> bool:
@@ -164,6 +172,13 @@ def summarize_document(
                 "negation_detected_count": 0,
                 "temporal_detected_count": 0,
                 "relationships_detected_count": 0,
+                "medical_coding": None,
+                "coding_applied": False,
+                "coding_attempted_count": 0,
+                "coding_success_count": 0,
+                "coding_unmapped_count": 0,
+                "coding_ambiguous_count": 0,
+                "coding_skipped_count": 0,
             }
         return {
             "document": pdf_path.name,
@@ -200,6 +215,13 @@ def summarize_document(
             "negation_detected_count": 0,
             "temporal_detected_count": 0,
             "relationships_detected_count": 0,
+            "medical_coding": None,
+            "coding_applied": False,
+            "coding_attempted_count": 0,
+            "coding_success_count": 0,
+            "coding_unmapped_count": 0,
+            "coding_ambiguous_count": 0,
+            "coding_skipped_count": 0,
         }
 
     review_reasons: list[str] = []
@@ -221,6 +243,9 @@ def summarize_document(
     semantic_enrichment = result.extractor_result.get("semantic_enrichment")
     if not isinstance(semantic_enrichment, dict):
         semantic_enrichment = None
+    medical_coding = result.extractor_result.get("medical_coding")
+    if not isinstance(medical_coding, dict):
+        medical_coding = None
 
     return {
         "document": pdf_path.name,
@@ -275,6 +300,13 @@ def summarize_document(
         "negation_detected_count": int((semantic_enrichment or {}).get("negation_detected_count", 0)),
         "temporal_detected_count": int((semantic_enrichment or {}).get("temporal_detected_count", 0)),
         "relationships_detected_count": int((semantic_enrichment or {}).get("relationships_detected_count", 0)),
+        "medical_coding": medical_coding,
+        "coding_applied": bool(medical_coding and medical_coding.get("applied", False)),
+        "coding_attempted_count": int((medical_coding or {}).get("coding_attempted_count", 0)),
+        "coding_success_count": int((medical_coding or {}).get("coding_success_count", 0)),
+        "coding_unmapped_count": int((medical_coding or {}).get("coding_unmapped_count", 0)),
+        "coding_ambiguous_count": int((medical_coding or {}).get("coding_ambiguous_count", 0)),
+        "coding_skipped_count": int((medical_coding or {}).get("coding_skipped_count", 0)),
     }
 
 
@@ -309,6 +341,11 @@ def build_phase12_summary(
     negation_detected_count = 0
     temporal_detected_count = 0
     relationships_detected_count = 0
+    coding_attempted_count = 0
+    coding_success_count = 0
+    coding_unmapped_count = 0
+    coding_ambiguous_count = 0
+    coding_skipped_count = 0
     for item in processed:
         for reason in item["review_reasons"]:
             review_reasons[reason] += 1
@@ -316,6 +353,11 @@ def build_phase12_summary(
         negation_detected_count += int(item.get("negation_detected_count", 0))
         temporal_detected_count += int(item.get("temporal_detected_count", 0))
         relationships_detected_count += int(item.get("relationships_detected_count", 0))
+        coding_attempted_count += int(item.get("coding_attempted_count", 0))
+        coding_success_count += int(item.get("coding_success_count", 0))
+        coding_unmapped_count += int(item.get("coding_unmapped_count", 0))
+        coding_ambiguous_count += int(item.get("coding_ambiguous_count", 0))
+        coding_skipped_count += int(item.get("coding_skipped_count", 0))
 
     written_document_count = outcome_counts.get("written", 0) + outcome_counts.get("written_with_review", 0)
 
@@ -370,6 +412,11 @@ def build_phase12_summary(
             "negation_detected_count": negation_detected_count,
             "temporal_detected_count": temporal_detected_count,
             "relationships_detected_count": relationships_detected_count,
+            "coding_attempted_count": coding_attempted_count,
+            "coding_success_count": coding_success_count,
+            "coding_unmapped_count": coding_unmapped_count,
+            "coding_ambiguous_count": coding_ambiguous_count,
+            "coding_skipped_count": coding_skipped_count,
         },
         "mkb_counts": runtime_counts,
         "documents": documents,
@@ -656,6 +703,11 @@ def write_outputs(output_dir: Path, summary: dict[str, Any]) -> None:
         f"- Negation detected count: {summary['aggregate']['negation_detected_count']}",
         f"- Temporal detected count: {summary['aggregate']['temporal_detected_count']}",
         f"- Relationships detected count: {summary['aggregate']['relationships_detected_count']}",
+        f"- Coding attempted count: {summary['aggregate']['coding_attempted_count']}",
+        f"- Coding success count: {summary['aggregate']['coding_success_count']}",
+        f"- Coding unmapped count: {summary['aggregate']['coding_unmapped_count']}",
+        f"- Coding ambiguous count: {summary['aggregate']['coding_ambiguous_count']}",
+        f"- Coding skipped count: {summary['aggregate']['coding_skipped_count']}",
         "",
         "## Runtime MKB",
         "",
@@ -776,6 +828,11 @@ def main() -> int:
         summary,
         artifact_path=DEFAULT_PHASE24_ARTIFACT_PATH,
         report_path=DEFAULT_PHASE24_REPORT_PATH,
+    )
+    write_phase25_outputs(
+        summary,
+        artifact_path=DEFAULT_PHASE25_ARTIFACT_PATH,
+        report_path=DEFAULT_PHASE25_REPORT_PATH,
     )
     collect_latest_run_metrics()
 

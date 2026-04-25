@@ -93,6 +93,16 @@ def test_report_writer_works(tmp_path: Path):
             "temporal_detected_count": 4,
             "relationships_detected_count": 3,
         },
+        "medical_coding_result": {
+            "metrics_path": "artifacts/phase25/medical_coding.json",
+            "report_path": "reports/phase25/medical_coding_report.md",
+            "coding_attempted_count": 90,
+            "coding_success_count": 12,
+            "coding_unmapped_count": 70,
+            "coding_ambiguous_count": 1,
+            "coding_skipped_count": 7,
+            "coding_status_counts": {"ambiguous": 1, "coded": 12, "skipped": 7, "unmapped": 70},
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -190,6 +200,16 @@ def test_no_pipeline_configuration_is_mutated(tmp_path: Path):
             "temporal_detected_count": 4,
             "relationships_detected_count": 3,
         },
+        "medical_coding_result": {
+            "metrics_path": "artifacts/phase25/medical_coding.json",
+            "report_path": "reports/phase25/medical_coding_report.md",
+            "coding_attempted_count": 90,
+            "coding_success_count": 12,
+            "coding_unmapped_count": 70,
+            "coding_ambiguous_count": 1,
+            "coding_skipped_count": 7,
+            "coding_status_counts": {"ambiguous": 1, "coded": 12, "skipped": 7, "unmapped": 70},
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -216,6 +236,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     phase22_path = tmp_path / "phase22.json"
     phase23_path = tmp_path / "phase23.json"
     phase24_path = tmp_path / "phase24.json"
+    phase25_path = tmp_path / "phase25.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         """{
@@ -271,12 +292,24 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
 }""",
         encoding="utf-8",
     )
+    phase25_path.write_text(
+        """{
+  "coding_attempted_count": 90,
+  "coding_success_count": 12,
+  "coding_unmapped_count": 70,
+  "coding_ambiguous_count": 1,
+  "coding_skipped_count": 7,
+  "coding_status_counts": {"ambiguous": 1, "coded": 12, "skipped": 7, "unmapped": 70}
+}""",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
     monkeypatch.setattr(phase18, "PHASE22_METRICS_PATH", phase22_path)
     monkeypatch.setattr(phase18, "PHASE23_METRICS_PATH", phase23_path)
     monkeypatch.setattr(phase18, "PHASE24_METRICS_PATH", phase24_path)
+    monkeypatch.setattr(phase18, "PHASE25_METRICS_PATH", phase25_path)
 
     summary = build_summary(
         commands=[{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 159 passed ===", "stderr": ""}],
@@ -290,3 +323,57 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     assert summary["calibration_result"]["confidence_band_counts"] == {"acceptable": 46}
     assert summary["routing_efficiency_result"]["actual_route_counts"] == {"spacy": 46}
     assert summary["semantic_enrichment_result"]["enrichment_applied_count"] == 46
+    assert summary["medical_coding_result"]["coding_success_count"] == 12
+
+
+def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path, monkeypatch):
+    from scripts import run_phase18_full_cycle as phase18
+
+    phase11_path = tmp_path / "phase11.json"
+    phase12_path = tmp_path / "phase12.json"
+    phase21_path = tmp_path / "phase21.json"
+    phase22_path = tmp_path / "phase22.json"
+    phase23_path = tmp_path / "phase23.json"
+    phase24_path = tmp_path / "phase24.json"
+    phase25_path = tmp_path / "phase25.json"
+    phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
+    phase12_path.write_text(
+        '{"documents_selected": 50, "documents_processed": 46, "written": 45, "queued_for_review": 1, "external_quota_blocked": 4, "hard_failures": 0, "review_queue": {"items": 31, "path": "runtime/review_queue.jsonl"}, "aggregate": {"avg_confidence": 0.692}}',
+        encoding="utf-8",
+    )
+    phase21_path.write_text(
+        '{"route_mismatch_count": 1, "low_confidence_count": 1, "quota_safe_block_count": 4, "extractor_route_counts": {"phi3": 1, "spacy": 45}, "extractor_actual_counts": {"phi3": 1, "spacy": 45}, "per_stage_duration_ms": {"medical_coding": {"avg_duration_ms": 0.0}}}',
+        encoding="utf-8",
+    )
+    phase22_path.write_text(
+        '{"average_raw_confidence": 0.692, "average_calibrated_confidence": 0.692, "confidence_band_counts": {"acceptable": 45, "reject": 1}, "review_recommendation_counts": {"accept": 44, "accept_with_route_audit": 1, "reject_do_not_write": 1}, "route_mismatch_count": 1}',
+        encoding="utf-8",
+    )
+    phase23_path.write_text(
+        '{"intended_route_counts": {"gemini": 1, "phi3": 1, "spacy": 44}, "actual_route_counts": {"phi3": 1, "spacy": 45}, "route_mismatch_count": 1, "quota_block_avoided_count": 1, "total_estimated_cost_units": 0.005, "total_saved_cost_units": 0.02}',
+        encoding="utf-8",
+    )
+    phase24_path.write_text(
+        '{"enrichment_applied_count": 45, "negation_detected_count": 0, "temporal_detected_count": 0, "relationships_detected_count": 0}',
+        encoding="utf-8",
+    )
+    phase25_path.write_text(
+        '{"coding_attempted_count": 86, "coding_success_count": 12, "coding_unmapped_count": 70, "coding_ambiguous_count": 1, "coding_skipped_count": 3, "coding_status_counts": {"ambiguous": 1, "coded": 12, "skipped": 3, "unmapped": 70}}',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
+    monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
+    monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
+    monkeypatch.setattr(phase18, "PHASE22_METRICS_PATH", phase22_path)
+    monkeypatch.setattr(phase18, "PHASE23_METRICS_PATH", phase23_path)
+    monkeypatch.setattr(phase18, "PHASE24_METRICS_PATH", phase24_path)
+    monkeypatch.setattr(phase18, "PHASE25_METRICS_PATH", phase25_path)
+
+    commands = [{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 190 passed ===", "stderr": ""}]
+    started_at = phase18.datetime.fromisoformat("2026-04-25T00:00:00+00:00")
+    ended_at = phase18.datetime.fromisoformat("2026-04-25T00:05:00+00:00")
+
+    first = build_summary(commands=commands, started_at=started_at, ended_at=ended_at)
+    second = build_summary(commands=commands, started_at=started_at, ended_at=ended_at)
+
+    assert first == second

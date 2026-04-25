@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-25T14:07:21.234796+00:00",
-  "started_at": "2026-04-25T14:02:51.335318+00:00",
-  "ended_at": "2026-04-25T14:07:21.234796+00:00",
-  "duration_seconds": 269.899,
-  "commit_hash": "6876f5c759eb47bf3967943c6f789aa080ead769",
+  "generated_at": "2026-04-25T14:40:04.585927+00:00",
+  "started_at": "2026-04-25T14:35:11.066491+00:00",
+  "ended_at": "2026-04-25T14:40:04.585927+00:00",
+  "duration_seconds": 293.519,
+  "commit_hash": "9bb3eaca81de6d5356c24e289be82a6fcce35acd",
   "git_status": "dirty",
   "steps": [
     {
@@ -56,7 +56,7 @@
   ],
   "success": true,
   "failed_step": null,
-  "test_result": "189 passed",
+  "test_result": "200 passed",
   "phase11_audit_result": "passed",
   "validation_result": {
     "attempted": 50,
@@ -94,23 +94,30 @@
       "extraction": {
         "records": 50,
         "events": 96,
-        "total_duration_ms": 3807.811,
-        "avg_duration_ms": 76.156,
-        "max_duration_ms": 2657.54
+        "total_duration_ms": 3969.82,
+        "avg_duration_ms": 79.396,
+        "max_duration_ms": 2728.533
       },
       "final_write": {
         "records": 39,
         "events": 124,
-        "total_duration_ms": 31331.741,
-        "avg_duration_ms": 803.378,
-        "max_duration_ms": 4715.003
+        "total_duration_ms": 43076.886,
+        "avg_duration_ms": 1104.536,
+        "max_duration_ms": 5185.021
+      },
+      "medical_coding": {
+        "records": 46,
+        "events": 46,
+        "total_duration_ms": 0.0,
+        "avg_duration_ms": 0.0,
+        "max_duration_ms": 0.0
       },
       "safety_gate": {
         "records": 26,
         "events": 98,
-        "total_duration_ms": 27948.037,
-        "avg_duration_ms": 1074.925,
-        "max_duration_ms": 4315.916
+        "total_duration_ms": 37496.772,
+        "avg_duration_ms": 1442.184,
+        "max_duration_ms": 4715.383
       },
       "semantic_enrichment": {
         "records": 46,
@@ -122,9 +129,9 @@
       "truth_resolution": {
         "records": 39,
         "events": 124,
-        "total_duration_ms": 31372.17,
-        "avg_duration_ms": 804.415,
-        "max_duration_ms": 4727.006
+        "total_duration_ms": 43037.813,
+        "avg_duration_ms": 1103.534,
+        "max_duration_ms": 5181.487
       },
       "validation": {
         "records": 46,
@@ -175,6 +182,20 @@
     "negation_detected_count": 0,
     "temporal_detected_count": 0,
     "relationships_detected_count": 0
+  },
+  "medical_coding_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase25\\medical_coding.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase25\\medical_coding_report.md",
+    "coding_attempted_count": 82,
+    "coding_success_count": 8,
+    "coding_unmapped_count": 74,
+    "coding_ambiguous_count": 0,
+    "coding_skipped_count": 29,
+    "coding_status_counts": {
+      "coded": 8,
+      "skipped": 29,
+      "unmapped": 74
+    }
   },
   "dashboard_export_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase17\\dashboard_latest.md",
   "stability_report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase19\\stability_report.md"

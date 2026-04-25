@@ -19,6 +19,8 @@ DEFAULT_PHASE23_ARTIFACT_PATH = ROOT / "artifacts" / "phase23" / "routing_effici
 DEFAULT_PHASE23_REPORT_PATH = ROOT / "reports" / "phase23" / "routing_efficiency_report.md"
 DEFAULT_PHASE24_ARTIFACT_PATH = ROOT / "artifacts" / "phase24" / "semantic_enrichment.json"
 DEFAULT_PHASE24_REPORT_PATH = ROOT / "reports" / "phase24" / "semantic_enrichment_report.md"
+DEFAULT_PHASE25_ARTIFACT_PATH = ROOT / "artifacts" / "phase25" / "medical_coding.json"
+DEFAULT_PHASE25_REPORT_PATH = ROOT / "reports" / "phase25" / "medical_coding_report.md"
 
 
 def _load_jsonl(path: Path | str | None) -> list[dict[str, Any]]:
@@ -108,6 +110,11 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
     negation_detected_count = sum(int(item.get("negation_detected_count", 0)) for item in processed)
     temporal_detected_count = sum(int(item.get("temporal_detected_count", 0)) for item in processed)
     relationships_detected_count = sum(int(item.get("relationships_detected_count", 0)) for item in processed)
+    coding_attempted_count = sum(int(item.get("coding_attempted_count", 0)) for item in processed)
+    coding_success_count = sum(int(item.get("coding_success_count", 0)) for item in processed)
+    coding_unmapped_count = sum(int(item.get("coding_unmapped_count", 0)) for item in processed)
+    coding_ambiguous_count = sum(int(item.get("coding_ambiguous_count", 0)) for item in processed)
+    coding_skipped_count = sum(int(item.get("coding_skipped_count", 0)) for item in processed)
 
     return {
         "generated_at": summary.get("generated_at"),
@@ -131,6 +138,11 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         "negation_detected_count": negation_detected_count,
         "temporal_detected_count": temporal_detected_count,
         "relationships_detected_count": relationships_detected_count,
+        "coding_attempted_count": coding_attempted_count,
+        "coding_success_count": coding_success_count,
+        "coding_unmapped_count": coding_unmapped_count,
+        "coding_ambiguous_count": coding_ambiguous_count,
+        "coding_skipped_count": coding_skipped_count,
         "review_queue_category_counts": dict(sorted(review_queue_categories.items())),
         "per_stage_duration_ms": build_stage_duration_metrics(stage_events),
         "paths": {
@@ -161,6 +173,11 @@ def build_phase21_report(metrics: dict[str, Any]) -> str:
         f"- Negation detected count: `{metrics['negation_detected_count']}`",
         f"- Temporal detected count: `{metrics['temporal_detected_count']}`",
         f"- Relationships detected count: `{metrics['relationships_detected_count']}`",
+        f"- Coding attempted count: `{metrics['coding_attempted_count']}`",
+        f"- Coding success count: `{metrics['coding_success_count']}`",
+        f"- Coding unmapped count: `{metrics['coding_unmapped_count']}`",
+        f"- Coding ambiguous count: `{metrics['coding_ambiguous_count']}`",
+        f"- Coding skipped count: `{metrics['coding_skipped_count']}`",
         "",
         "## Route Counts",
         "",
@@ -595,4 +612,120 @@ def write_phase24_outputs(
     report_path.parent.mkdir(parents=True, exist_ok=True)
     artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     report_path.write_text(build_phase24_report(metrics), encoding="utf-8")
+    return metrics
+
+
+def build_phase25_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    documents = summary.get("documents", [])
+    processed = [item for item in documents if item.get("status") == "processed"]
+
+    coding_attempted_count = 0
+    coding_success_count = 0
+    coding_unmapped_count = 0
+    coding_ambiguous_count = 0
+    coding_skipped_count = 0
+    coding_status_counts = Counter()
+    coded_documents: list[dict[str, Any]] = []
+
+    for item in processed:
+        medical_coding = item.get("medical_coding")
+        entries = list((medical_coding or {}).get("entries", []))
+        coding_attempted_count += int(item.get("coding_attempted_count", 0))
+        coding_success_count += int(item.get("coding_success_count", 0))
+        coding_unmapped_count += int(item.get("coding_unmapped_count", 0))
+        coding_ambiguous_count += int(item.get("coding_ambiguous_count", 0))
+        coding_skipped_count += int(item.get("coding_skipped_count", 0))
+        for entry in entries:
+            coding_status_counts[str(entry.get("coding_status") or "unknown")] += 1
+        coded_documents.append({
+            "document": item.get("document"),
+            "outcome": item.get("outcome"),
+            "validation_status": item.get("validation_status"),
+            "confidence_band": str(item.get("confidence_band") or "unknown"),
+            "coding_attempted_count": int(item.get("coding_attempted_count", 0)),
+            "coding_success_count": int(item.get("coding_success_count", 0)),
+            "coding_unmapped_count": int(item.get("coding_unmapped_count", 0)),
+            "coding_ambiguous_count": int(item.get("coding_ambiguous_count", 0)),
+            "coding_skipped_count": int(item.get("coding_skipped_count", 0)),
+            "medical_coding": medical_coding,
+        })
+
+    return {
+        "generated_at": summary.get("generated_at"),
+        "phase": "Phase 25 Medical Coding / SNOMED-UMLS Mapping",
+        "dataset_dir": summary.get("dataset_dir"),
+        "determinism": summary.get("determinism", {}),
+        "attempted_documents": int(summary.get("documents_selected", 0)),
+        "processed_documents": int(summary.get("documents_processed", 0)),
+        "written_documents": int(summary.get("written", 0)),
+        "queued_for_review_documents": int(summary.get("queued_for_review", 0)),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", 0)),
+        "hard_failures": int(summary.get("hard_failures", 0)),
+        "coding_attempted_count": coding_attempted_count,
+        "coding_success_count": coding_success_count,
+        "coding_unmapped_count": coding_unmapped_count,
+        "coding_ambiguous_count": coding_ambiguous_count,
+        "coding_skipped_count": coding_skipped_count,
+        "coding_status_counts": dict(sorted(coding_status_counts.items())),
+        "documents": coded_documents,
+    }
+
+
+def build_phase25_report(metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 25 Medical Coding Report",
+        "",
+        f"- Generated at: `{metrics['generated_at']}`",
+        f"- Dataset: `{metrics['dataset_dir']}`",
+        f"- Attempted documents: `{metrics['attempted_documents']}`",
+        f"- Processed documents: `{metrics['processed_documents']}`",
+        f"- Written documents: `{metrics['written_documents']}`",
+        f"- Queued for review documents: `{metrics['queued_for_review_documents']}`",
+        f"- External quota blocked: `{metrics['external_quota_blocked']}`",
+        f"- Hard failures: `{metrics['hard_failures']}`",
+        f"- Coding attempted count: `{metrics['coding_attempted_count']}`",
+        f"- Coding success count: `{metrics['coding_success_count']}`",
+        f"- Coding unmapped count: `{metrics['coding_unmapped_count']}`",
+        f"- Coding ambiguous count: `{metrics['coding_ambiguous_count']}`",
+        f"- Coding skipped count: `{metrics['coding_skipped_count']}`",
+        f"- Coding status counts: `{metrics['coding_status_counts']}`",
+        "",
+        "## Document Audit",
+        "",
+    ]
+    if metrics["documents"]:
+        for item in metrics["documents"]:
+            lines.append(
+                f"- `{item['document']}` -> band={item['confidence_band']} "
+                f"attempted={item['coding_attempted_count']} "
+                f"coded={item['coding_success_count']} "
+                f"unmapped={item['coding_unmapped_count']} "
+                f"ambiguous={item['coding_ambiguous_count']} "
+                f"skipped={item['coding_skipped_count']}"
+            )
+    else:
+        lines.append("- No processed documents available for medical coding audit.")
+    lines.extend([
+        "",
+        "## Non-Destructive Guardrails",
+        "",
+        f"- Determinism: `{metrics['determinism']}`",
+        "- Medical coding is additive metadata only and does not alter confidence, routing, review, write, or semantic enrichment outputs.",
+        "- Rejected outputs are not coded.",
+        "- Seed mappings are local deterministic placeholders for future SNOMED/UMLS expansion and do not require external installation or licensing for this phase.",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def write_phase25_outputs(
+    summary: dict[str, Any],
+    *,
+    artifact_path: Path = DEFAULT_PHASE25_ARTIFACT_PATH,
+    report_path: Path = DEFAULT_PHASE25_REPORT_PATH,
+) -> dict[str, Any]:
+    metrics = build_phase25_metrics(summary)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    report_path.write_text(build_phase25_report(metrics), encoding="utf-8")
     return metrics
