@@ -1,6 +1,6 @@
 # Phase 21 Observability Report
 
-- Generated at: `2026-04-26T03:13:49.855556+00:00`
+- Generated at: `2026-04-26T03:33:33.101317+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
 - Processed documents: `46`
@@ -55,13 +55,13 @@
 ## Stage Durations
 
 - `consensus` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `extraction` -> records=50 events=96 total_ms=4474.544 avg_ms=89.491 max_ms=3060.053
-- `final_write` -> records=39 events=124 total_ms=34785.118 avg_ms=891.926 max_ms=5150.657
+- `extraction` -> records=50 events=96 total_ms=4101.314 avg_ms=82.026 max_ms=2701.746
+- `final_write` -> records=39 events=124 total_ms=32472.798 avg_ms=832.636 max_ms=4801.736
 - `language_support` -> records=50 events=50 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 - `medical_coding` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `safety_gate` -> records=26 events=98 total_ms=30962.591 avg_ms=1190.869 max_ms=4740.476
+- `safety_gate` -> records=26 events=98 total_ms=28860.973 avg_ms=1110.037 max_ms=4362.805
 - `semantic_enrichment` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `truth_resolution` -> records=39 events=124 total_ms=34804.618 avg_ms=892.426 max_ms=5176.336
+- `truth_resolution` -> records=39 events=124 total_ms=32514.224 avg_ms=833.698 max_ms=4805.802
 - `validation` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 
 ## Stability Guardrails

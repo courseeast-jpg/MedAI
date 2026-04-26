@@ -16,6 +16,7 @@ from scripts.run_phase18_full_cycle import (
     PHASE18_STEPS,
     build_phase18_steps,
     phase12_summary_path_for_mode,
+    reconcile_with_trusted_baseline,
     summary_report_dir_for_mode,
 )
 
@@ -231,6 +232,37 @@ def test_phase28_outputs_are_written(tmp_path: Path):
             "audit_report_available": True,
             "review_queue_items": 31,
         },
+        "observed_run_result": {
+            "validation_result": {
+                "attempted": 50,
+                "processed": 47,
+                "written": 46,
+                "queued_for_review": 1,
+                "external_quota_blocked": 3,
+                "hard_failures": 0,
+                "avg_confidence": 0.7,
+                "review_queue_items": 31,
+            },
+            "observability_result": {
+                "route_mismatch_count": 2,
+                "low_confidence_count": 1,
+                "quota_safe_block_count": 3,
+                "extractor_route_counts": {"gemini": 1, "spacy": 45},
+                "extractor_actual_counts": {"phi3": 1, "spacy": 45},
+            },
+            "routing_efficiency_result": {
+                "route_mismatch_count": 2,
+                "intended_route_counts": {"gemini": 1, "spacy": 45},
+                "actual_route_counts": {"phi3": 1, "spacy": 45},
+                "quota_block_avoided_count": 1,
+                "total_estimated_cost_units": 0.005,
+                "total_saved_cost_units": 0.02,
+            },
+        },
+        "baseline_reconciled": True,
+        "baseline_source_snapshot": "C:\\baseline",
+        "reconciliation_scope": "reporting_and_artifact_reconciliation_only",
+        "reconciliation_reason": "observed_validation_drift",
     }
 
     metrics = write_phase28_outputs(summary, artifact_path=artifact_path, report_path=report_path)
@@ -239,3 +271,109 @@ def test_phase28_outputs_are_written(tmp_path: Path):
     assert report_path.exists()
     assert json.loads(artifact_path.read_text(encoding="utf-8")) == metrics
     assert build_phase28_metrics(summary)["production_mode"] == "OFF"
+    assert metrics["observed_validation_result"]["processed"] == 47
+    assert metrics["canonical_validation_result"]["processed"] == 46
+    report_text = report_path.read_text(encoding="utf-8")
+    assert "Observed validation result" in report_text
+    assert "Canonical validation result" in report_text
+    assert "drift remain visible" in report_text
+
+
+def test_reconciliation_preserves_observed_drift_visibility(tmp_path: Path, monkeypatch):
+    snapshot_dir = tmp_path / "snapshot"
+    snapshot_phase12 = snapshot_dir / "artifacts" / "phase12_real_world_validation" / "phase12_real_world_validation_summary.json"
+    snapshot_phase12.parent.mkdir(parents=True, exist_ok=True)
+    snapshot_phase12.write_text(
+        json.dumps(
+            {
+                "documents_selected": 50,
+                "documents_processed": 46,
+                "written": 45,
+                "queued_for_review": 1,
+                "external_quota_blocked": 4,
+                "hard_failures": 0,
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "scripts.run_phase18_full_cycle.restore_trusted_baseline_outputs",
+        lambda _: None,
+    )
+    monkeypatch.setattr(
+        "scripts.run_phase18_full_cycle.build_summary",
+        lambda **_: {
+            "generated_at": "2026-04-26T03:13:52+00:00",
+            "started_at": "2026-04-26T03:00:00+00:00",
+            "ended_at": "2026-04-26T03:13:52+00:00",
+            "duration_seconds": 832.0,
+            "validation_result": {
+                "attempted": 50,
+                "processed": 46,
+                "written": 45,
+                "queued_for_review": 1,
+                "external_quota_blocked": 4,
+                "hard_failures": 0,
+            },
+            "observability_result": {
+                "route_mismatch_count": 1,
+                "low_confidence_count": 1,
+                "quota_safe_block_count": 4,
+                "extractor_route_counts": {"spacy": 45, "phi3": 1},
+                "extractor_actual_counts": {"spacy": 45, "phi3": 1},
+            },
+            "calibration_result": {},
+            "routing_efficiency_result": {
+                "route_mismatch_count": 1,
+                "intended_route_counts": {"gemini": 1, "spacy": 45},
+                "actual_route_counts": {"phi3": 1, "spacy": 45},
+                "quota_block_avoided_count": 0,
+                "total_estimated_cost_units": 0.0,
+                "total_saved_cost_units": 0.0,
+            },
+            "production_mode_result": {"production_mode": "OFF"},
+        },
+    )
+    summary = {
+        "started_at": "2026-04-26T03:00:00+00:00",
+        "ended_at": "2026-04-26T03:13:52+00:00",
+        "steps": [],
+        "production_mode": {"production_mode": "OFF"},
+        "validation_result": {
+            "attempted": 50,
+            "processed": 47,
+            "written": 46,
+            "queued_for_review": 1,
+            "external_quota_blocked": 3,
+            "hard_failures": 0,
+        },
+        "observability_result": {
+            "route_mismatch_count": 2,
+            "low_confidence_count": 1,
+            "quota_safe_block_count": 3,
+            "extractor_route_counts": {"gemini": 1, "spacy": 45},
+            "extractor_actual_counts": {"phi3": 1, "spacy": 45},
+        },
+        "calibration_result": {},
+        "routing_efficiency_result": {
+            "route_mismatch_count": 2,
+            "intended_route_counts": {"gemini": 2, "spacy": 44},
+            "actual_route_counts": {"phi3": 2, "spacy": 44},
+            "quota_block_avoided_count": 1,
+            "total_estimated_cost_units": 0.005,
+            "total_saved_cost_units": 0.02,
+        },
+    }
+
+    reconciled = reconcile_with_trusted_baseline(
+        summary,
+        config=ProductionModeConfig(mode=MODE_OFF),
+        snapshot_dir=snapshot_dir,
+    )
+
+    assert reconciled["baseline_reconciled"] is True
+    assert reconciled["reconciliation_reason"] == "observed_validation_drift"
+    assert reconciled["observed_run_result"]["validation_result"]["processed"] == 47
+    assert reconciled["validation_result"]["processed"] == 46
+    assert reconciled["observed_run_result"]["routing_efficiency_result"]["route_mismatch_count"] == 2
+    assert reconciled["routing_efficiency_result"]["route_mismatch_count"] == 1

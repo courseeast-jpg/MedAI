@@ -990,17 +990,31 @@ def write_phase27_outputs(
 def build_phase28_metrics(summary: dict[str, Any]) -> dict[str, Any]:
     production_mode = summary.get("production_mode", {})
     validation_result = summary.get("validation_result", {})
+    canonical_validation = {
+        "attempted": int(summary.get("documents_selected", validation_result.get("attempted", 0))),
+        "processed": int(summary.get("documents_processed", validation_result.get("processed", 0))),
+        "written": int(summary.get("written", validation_result.get("written", 0))),
+        "queued_for_review": int(summary.get("queued_for_review", validation_result.get("queued_for_review", 0))),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", validation_result.get("external_quota_blocked", 0))),
+        "hard_failures": int(summary.get("hard_failures", validation_result.get("hard_failures", 0))),
+        "avg_confidence": float(validation_result.get("avg_confidence", 0.0)),
+        "review_queue_items": int(validation_result.get("review_queue_items", 0)),
+    }
+    observed_run_result = summary.get("observed_run_result", {})
+    observed_validation = dict(observed_run_result.get("validation_result", {}))
+    observed_observability = dict(observed_run_result.get("observability_result", {}))
+    observed_routing = dict(observed_run_result.get("routing_efficiency_result", {}))
     return {
         "generated_at": summary.get("generated_at"),
         "phase": "Phase 28 Controlled Production Mode / Real-Use Readiness Gate",
         "dataset_dir": summary.get("dataset_dir"),
         "determinism": summary.get("determinism", {}),
-        "attempted_documents": int(summary.get("documents_selected", validation_result.get("attempted", 0))),
-        "processed_documents": int(summary.get("documents_processed", validation_result.get("processed", 0))),
-        "written_documents": int(summary.get("written", validation_result.get("written", 0))),
-        "queued_for_review_documents": int(summary.get("queued_for_review", validation_result.get("queued_for_review", 0))),
-        "external_quota_blocked": int(summary.get("external_quota_blocked", validation_result.get("external_quota_blocked", 0))),
-        "hard_failures": int(summary.get("hard_failures", validation_result.get("hard_failures", 0))),
+        "attempted_documents": canonical_validation["attempted"],
+        "processed_documents": canonical_validation["processed"],
+        "written_documents": canonical_validation["written"],
+        "queued_for_review_documents": canonical_validation["queued_for_review"],
+        "external_quota_blocked": canonical_validation["external_quota_blocked"],
+        "hard_failures": canonical_validation["hard_failures"],
         "production_mode": str(production_mode.get("production_mode", "OFF")),
         "production_gate_passed": bool(production_mode.get("production_gate_passed", True)),
         "production_gate_failed_reason": production_mode.get("production_gate_failed_reason"),
@@ -1023,6 +1037,38 @@ def build_phase28_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         "review_queue_items": int(production_mode.get("review_queue_items", 0)),
         "baseline_reconciled": bool(summary.get("baseline_reconciled", False)),
         "baseline_source_snapshot": summary.get("baseline_source_snapshot"),
+        "reconciliation_scope": summary.get("reconciliation_scope"),
+        "reconciliation_reason": summary.get("reconciliation_reason"),
+        "observed_validation_result": {
+            "attempted": int(observed_validation.get("attempted", canonical_validation["attempted"])),
+            "processed": int(observed_validation.get("processed", canonical_validation["processed"])),
+            "written": int(observed_validation.get("written", canonical_validation["written"])),
+            "queued_for_review": int(observed_validation.get("queued_for_review", canonical_validation["queued_for_review"])),
+            "external_quota_blocked": int(
+                observed_validation.get("external_quota_blocked", canonical_validation["external_quota_blocked"])
+            ),
+            "hard_failures": int(observed_validation.get("hard_failures", canonical_validation["hard_failures"])),
+            "avg_confidence": float(observed_validation.get("avg_confidence", canonical_validation["avg_confidence"])),
+            "review_queue_items": int(observed_validation.get("review_queue_items", canonical_validation["review_queue_items"])),
+        },
+        "canonical_validation_result": canonical_validation,
+        "observed_observability_result": {
+            "route_mismatch_count": int(observed_observability.get("route_mismatch_count", 0)),
+            "low_confidence_count": int(observed_observability.get("low_confidence_count", 0)),
+            "quota_safe_block_count": int(observed_observability.get("quota_safe_block_count", 0)),
+            "extractor_route_counts": dict(observed_observability.get("extractor_route_counts", {})),
+            "extractor_actual_counts": dict(observed_observability.get("extractor_actual_counts", {})),
+        },
+        "canonical_observability_result": dict(summary.get("observability_result", {})),
+        "observed_routing_efficiency_result": {
+            "route_mismatch_count": int(observed_routing.get("route_mismatch_count", 0)),
+            "intended_route_counts": dict(observed_routing.get("intended_route_counts", {})),
+            "actual_route_counts": dict(observed_routing.get("actual_route_counts", {})),
+            "quota_block_avoided_count": int(observed_routing.get("quota_block_avoided_count", 0)),
+            "total_estimated_cost_units": float(observed_routing.get("total_estimated_cost_units", 0.0)),
+            "total_saved_cost_units": float(observed_routing.get("total_saved_cost_units", 0.0)),
+        },
+        "canonical_routing_efficiency_result": dict(summary.get("routing_efficiency_result", {})),
     }
 
 
@@ -1053,6 +1099,8 @@ def build_phase28_report(metrics: dict[str, Any]) -> str:
         f"- Review queue items: `{metrics['review_queue_items']}`",
         f"- Baseline reconciled: `{metrics['baseline_reconciled']}`",
         f"- Baseline source snapshot: `{metrics['baseline_source_snapshot']}`",
+        f"- Reconciliation scope: `{metrics['reconciliation_scope']}`",
+        f"- Reconciliation reason: `{metrics['reconciliation_reason']}`",
         "",
         "## Gate Checks",
         "",
@@ -1064,12 +1112,23 @@ def build_phase28_report(metrics: dict[str, Any]) -> str:
         f"- Required snapshot dir: `{metrics['required_snapshot_dir']}`",
         f"- Required snapshot zip: `{metrics['required_snapshot_zip']}`",
         "",
+        "## Observed vs Canonical",
+        "",
+        f"- Observed validation result: `{metrics['observed_validation_result']}`",
+        f"- Canonical validation result: `{metrics['canonical_validation_result']}`",
+        f"- Observed observability result: `{metrics['observed_observability_result']}`",
+        f"- Canonical observability result: `{metrics['canonical_observability_result']}`",
+        f"- Observed routing efficiency result: `{metrics['observed_routing_efficiency_result']}`",
+        f"- Canonical routing efficiency result: `{metrics['canonical_routing_efficiency_result']}`",
+        "",
         "## Control-Layer Guardrails",
         "",
         f"- Determinism: `{metrics['determinism']}`",
         "- Production mode is a gate-only layer and does not alter extraction, routing, confidence, review, enrichment, coding, or language behavior.",
         "- `OFF` mode preserves the validated Phase 27 baseline behavior.",
         "- When live external quota variance shifts canonical aggregates, `OFF` mode can restore the verified snapshot artifact set to preserve the trusted baseline outputs.",
+        "- The live observed run is emitted separately from reconciled canonical outputs so quota and routing drift remain visible instead of being silently overwritten.",
+        "- Reconciliation is limited to reporting and artifact restoration after pipeline execution completes; it does not alter the executed pipeline path.",
         "- `DRY_RUN` reroutes run-local outputs away from canonical full-cycle outputs while still producing audit artifacts.",
         "- `CONTROLLED` and `LIVE` require gate checks to pass before execution proceeds.",
     ]

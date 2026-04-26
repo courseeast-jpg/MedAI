@@ -192,6 +192,15 @@ def validation_aggregate(snapshot: dict) -> dict[str, int]:
     }
 
 
+def capture_observed_run_result(summary: dict[str, object]) -> dict[str, object]:
+    return {
+        "validation_result": dict(summary.get("validation_result", {})),
+        "observability_result": dict(summary.get("observability_result", {})),
+        "calibration_result": dict(summary.get("calibration_result", {})),
+        "routing_efficiency_result": dict(summary.get("routing_efficiency_result", {})),
+    }
+
+
 def restore_trusted_baseline_outputs(snapshot_dir: Path) -> None:
     restore_pairs = [
         (snapshot_dir / "artifacts" / "phase12_real_world_validation", ROOT / "artifacts" / "phase12_real_world_validation"),
@@ -229,6 +238,12 @@ def reconcile_with_trusted_baseline(
     config: ProductionModeConfig,
     snapshot_dir: Path,
 ) -> dict[str, object]:
+    observed_run_result = capture_observed_run_result(summary)
+    summary["observed_run_result"] = observed_run_result
+    summary["baseline_reconciled"] = False
+    summary["baseline_source_snapshot"] = None
+    summary["reconciliation_scope"] = "reporting_and_artifact_reconciliation_only"
+    summary["reconciliation_reason"] = None
     if config.normalized_mode() != MODE_OFF or not snapshot_dir.exists():
         return summary
 
@@ -257,8 +272,11 @@ def reconcile_with_trusted_baseline(
         phase12_summary_path=PHASE12_SUMMARY_PATH,
         production_mode=dict(summary.get("production_mode", {})),
     )
+    rebuilt["observed_run_result"] = observed_run_result
     rebuilt["baseline_reconciled"] = True
     rebuilt["baseline_source_snapshot"] = str(snapshot_dir)
+    rebuilt["reconciliation_scope"] = "reporting_and_artifact_reconciliation_only"
+    rebuilt["reconciliation_reason"] = "observed_validation_drift"
     return rebuilt
 
 
@@ -282,6 +300,7 @@ def build_summary(
     phase28 = production_mode or (load_json(PHASE28_METRICS_PATH) if PHASE28_METRICS_PATH.exists() else {})
     pytest_step = next((item for item in commands if item["name"] == "tests"), None)
     failed_step = next((item["name"] for item in commands if item["returncode"] != 0), None)
+    observed_run_result: dict[str, object] = {}
 
     return {
         "generated_at": ended_at.isoformat(),
@@ -394,6 +413,11 @@ def build_summary(
             "controlled_run_limit_applied": bool(phase28.get("controlled_run_limit_applied", False)),
             "run_blocked_by_gate": bool(phase28.get("run_blocked_by_gate", False)),
         },
+        "observed_run_result": observed_run_result,
+        "baseline_reconciled": False,
+        "baseline_source_snapshot": None,
+        "reconciliation_scope": None,
+        "reconciliation_reason": None,
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
         "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
@@ -414,6 +438,9 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
     language_support = summary["language_support_result"]
     runtime_controls = summary["runtime_controls_result"]
     production_mode = summary["production_mode_result"]
+    observed = summary.get("observed_run_result", {})
+    observed_validation = observed.get("validation_result", {})
+    observed_routing = observed.get("routing_efficiency_result", {})
     lines = [
         "# Phase 18 Full Cycle Summary",
         "",
@@ -493,9 +520,25 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Run blocked by gate: `{production_mode['run_blocked_by_gate']}`",
         f"- Production metrics_path: `{production_mode['metrics_path']}`",
         f"- Production report_path: `{production_mode['report_path']}`",
+        f"- Baseline reconciled: `{summary.get('baseline_reconciled', False)}`",
+        f"- Baseline source snapshot: `{summary.get('baseline_source_snapshot')}`",
+        f"- Reconciliation scope: `{summary.get('reconciliation_scope')}`",
+        f"- Reconciliation reason: `{summary.get('reconciliation_reason')}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
         f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",
+        "",
+        "## Observed Run",
+        "",
+        f"- Observed attempted: `{observed_validation.get('attempted')}`",
+        f"- Observed processed: `{observed_validation.get('processed')}`",
+        f"- Observed written: `{observed_validation.get('written')}`",
+        f"- Observed queued_for_review: `{observed_validation.get('queued_for_review')}`",
+        f"- Observed external_quota_blocked: `{observed_validation.get('external_quota_blocked')}`",
+        f"- Observed hard_failures: `{observed_validation.get('hard_failures')}`",
+        f"- Observed route_mismatch_count: `{observed_routing.get('route_mismatch_count')}`",
+        f"- Observed intended_route_counts: `{observed_routing.get('intended_route_counts')}`",
+        f"- Observed actual_route_counts: `{observed_routing.get('actual_route_counts')}`",
         "",
         "## Steps",
         "",

@@ -1,11 +1,11 @@
 # Phase 18 Full Cycle Summary
 
-- Generated at: `2026-04-26T03:13:52.056690+00:00`
-- Commit hash: `8aea3c7c2af065d77a97616803004462b2506c7e`
+- Generated at: `2026-04-26T03:33:35.310207+00:00`
+- Commit hash: `a48adfa41fc62b7223e151844083c169dc34af2a`
 - Git status: `dirty`
 - Success: `True`
 - Failed step: `None`
-- Test result: `231 passed`
+- Test result: `232 passed`
 - Phase 11 audit result: `passed`
 - Validation attempted: `50`
 - Validation processed: `46`
@@ -76,9 +76,25 @@
 - Run blocked by gate: `False`
 - Production metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase28\production_mode.json`
 - Production report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase28\production_readiness_report.md`
+- Baseline reconciled: `False`
+- Baseline source snapshot: `None`
+- Reconciliation scope: `reporting_and_artifact_reconciliation_only`
+- Reconciliation reason: `None`
 - Dashboard export path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase17\dashboard_latest.md`
 - Stability report path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase19\stability_report.md`
-- Duration seconds: `287.484`
+- Duration seconds: `273.644`
+
+## Observed Run
+
+- Observed attempted: `50`
+- Observed processed: `46`
+- Observed written: `45`
+- Observed queued_for_review: `1`
+- Observed external_quota_blocked: `4`
+- Observed hard_failures: `0`
+- Observed route_mismatch_count: `1`
+- Observed intended_route_counts: `{'gemini': 1, 'phi3': 1, 'spacy': 44}`
+- Observed actual_route_counts: `{'phi3': 1, 'spacy': 45}`
 
 ## Steps
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24T22:03:09.449650+00:00",
+  "generated_at": "2026-04-26T03:32:27.460840+00:00",
   "phase": "Phase 10 Hardening Protocol",
   "overall_passed": true,
   "validation_matrix": [
@@ -13,21 +13,22 @@
       "extractor_actual": "phi3",
       "fallback_reason": "gemini unavailable",
       "confidence": 0.82,
-      "confidence_band": "auto_accept",
+      "confidence_band": "acceptable",
       "quality_gate_decision": "queued_for_review",
-      "timestamp": "2026-04-24T22:03:09.420916",
+      "timestamp": "2026-04-26T03:32:27.423004",
       "error_category": "connector_failure",
       "outcome": "queued_for_review",
       "validation_status": "accepted",
       "fallback_used": true,
       "api_call_count": 2,
-      "extraction_time_ms": 2.865,
+      "extraction_time_ms": 6.306,
       "tier": "hypothesis",
       "notes": [
         "router_fallback=gemini:connector_error",
         "gemini_configured_fallback=true",
         "pii_method=noop",
-        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     },
     {
@@ -42,13 +43,13 @@
       "confidence": 0.45,
       "confidence_band": "reject",
       "quality_gate_decision": "rejected",
-      "timestamp": "2026-04-24T22:03:09.421917+00:00",
+      "timestamp": "2026-04-26T03:32:27.424005+00:00",
       "error_category": "claude_unavailable",
       "outcome": "fallback_to_rules",
       "validation_status": "rejected",
       "fallback_used": true,
       "api_call_count": 0,
-      "extraction_time_ms": 0.011,
+      "extraction_time_ms": 0.016,
       "tier": "quarantined",
       "notes": [
         "legacy claude compatibility flag exercised"
@@ -64,20 +65,21 @@
       "extractor_actual": "spacy",
       "fallback_reason": "gemini unavailable",
       "confidence": 0.72,
-      "confidence_band": "auto_accept",
+      "confidence_band": "acceptable",
       "quality_gate_decision": "accepted",
-      "timestamp": "2026-04-24T22:03:09.424917",
+      "timestamp": "2026-04-26T03:32:27.430005",
       "error_category": "connector_failure",
       "outcome": "written",
       "validation_status": "accepted",
       "fallback_used": true,
       "api_call_count": 3,
-      "extraction_time_ms": 2.633,
+      "extraction_time_ms": 5.514,
       "tier": "active",
       "notes": [
         "router_fallback=phi3:connector_error",
         "pii_method=noop",
-        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     },
     {
@@ -92,13 +94,13 @@
       "confidence": 0.73,
       "confidence_band": "auto_accept",
       "quality_gate_decision": "rejected",
-      "timestamp": "2026-04-24T22:03:09.425920+00:00",
+      "timestamp": "2026-04-26T03:32:27.431100+00:00",
       "error_category": "ocr_failure",
       "outcome": "rejected",
       "validation_status": "rejected",
       "fallback_used": false,
       "api_call_count": 0,
-      "extraction_time_ms": 0.619,
+      "extraction_time_ms": 0.672,
       "tier": "quarantined",
       "notes": [
         "50Omg (O\u21920 confusion)",
@@ -117,13 +119,13 @@
       "confidence": 0.0,
       "confidence_band": "reject",
       "quality_gate_decision": "rejected",
-      "timestamp": "2026-04-24T22:03:09.426924+00:00",
+      "timestamp": "2026-04-26T03:32:27.432099+00:00",
       "error_category": "corrupt_pdf",
       "outcome": "rejected",
       "validation_status": "rejected",
       "fallback_used": false,
       "api_call_count": 0,
-      "extraction_time_ms": 0.165,
+      "extraction_time_ms": 0.185,
       "tier": "quarantined",
       "notes": [
         "insufficient text extracted from corrupt PDF"
@@ -137,21 +139,22 @@
       "document_id": "empty_extraction.txt",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "fallback_reason": null,
+      "fallback_reason": "None",
       "confidence": 0.95,
-      "confidence_band": "auto_accept",
+      "confidence_band": "high",
       "quality_gate_decision": "rejected",
-      "timestamp": "2026-04-24T22:03:09.428924",
+      "timestamp": "2026-04-26T03:32:27.435099",
       "error_category": "empty_extraction",
       "outcome": "queued_for_review",
       "validation_status": "rejected",
       "fallback_used": false,
       "api_call_count": 1,
-      "extraction_time_ms": 2.183,
+      "extraction_time_ms": 2.816,
       "tier": "active",
       "notes": [
         "pii_method=noop",
-        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     },
     {
@@ -162,21 +165,22 @@
       "document_id": "low_confidence_extraction.txt",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "fallback_reason": null,
+      "fallback_reason": "None",
       "confidence": 0.45,
       "confidence_band": "reject",
       "quality_gate_decision": "rejected",
-      "timestamp": "2026-04-24T22:03:09.432925",
+      "timestamp": "2026-04-26T03:32:27.439100",
       "error_category": "confidence_below_reject_threshold",
       "outcome": "queued_for_review",
       "validation_status": "rejected",
       "fallback_used": false,
       "api_call_count": 1,
-      "extraction_time_ms": 2.473,
+      "extraction_time_ms": 3.18,
       "tier": "active",
       "notes": [
         "pii_method=noop",
-        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     },
     {
@@ -187,21 +191,22 @@
       "document_id": "confidence_below_reject_threshold.txt",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "fallback_reason": null,
+      "fallback_reason": "None",
       "confidence": 0.3,
       "confidence_band": "reject",
       "quality_gate_decision": "rejected",
-      "timestamp": "2026-04-24T22:03:09.435926",
+      "timestamp": "2026-04-26T03:32:27.443193",
       "error_category": "confidence_below_reject_threshold",
       "outcome": "queued_for_review",
       "validation_status": "rejected",
       "fallback_used": false,
       "api_call_count": 1,
-      "extraction_time_ms": 2.121,
+      "extraction_time_ms": 2.974,
       "tier": "active",
       "notes": [
         "pii_method=noop",
-        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     },
     {
@@ -212,21 +217,22 @@
       "document_id": "confidence_in_review_band.txt",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "fallback_reason": null,
+      "fallback_reason": "None",
       "confidence": 0.6,
       "confidence_band": "review",
       "quality_gate_decision": "review",
-      "timestamp": "2026-04-24T22:03:09.439847",
+      "timestamp": "2026-04-26T03:32:27.447193",
       "error_category": "confidence_below_accept_threshold",
       "outcome": "queued_for_review",
       "validation_status": "needs_review",
       "fallback_used": false,
       "api_call_count": 1,
-      "extraction_time_ms": 2.853,
+      "extraction_time_ms": 3.217,
       "tier": "quarantined",
       "notes": [
         "pii_method=noop",
-        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     },
     {
@@ -237,21 +243,22 @@
       "document_id": "confidence_above_auto_accept_threshold.txt",
       "extractor_route": "spacy",
       "extractor_actual": "spacy",
-      "fallback_reason": null,
+      "fallback_reason": "None",
       "confidence": 0.9,
-      "confidence_band": "auto_accept",
+      "confidence_band": "high",
       "quality_gate_decision": "accepted",
-      "timestamp": "2026-04-24T22:03:09.443647",
+      "timestamp": "2026-04-26T03:32:27.452250",
       "error_category": null,
       "outcome": "written",
       "validation_status": "accepted",
       "fallback_used": false,
       "api_call_count": 1,
-      "extraction_time_ms": 2.474,
+      "extraction_time_ms": 4.406,
       "tier": "active",
       "notes": [
         "pii_method=noop",
-        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini"
+        "routing_decision=selected=spacy score=0.907 cost=0.00000 confidence=0.780 latency_ms=5.000 success_rate=0.990 candidates=spacy,phi3,gemini",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     },
     {
@@ -262,22 +269,23 @@
       "document_id": "model_route_vs_actual_extractor_mismatch.txt",
       "extractor_route": "rules_based",
       "extractor_actual": "rules_based",
-      "fallback_reason": null,
+      "fallback_reason": "None",
       "confidence": 0.85,
-      "confidence_band": "auto_accept",
+      "confidence_band": "high",
       "quality_gate_decision": "accepted",
-      "timestamp": "2026-04-24T22:03:09.446648",
+      "timestamp": "2026-04-26T03:32:27.457251",
       "error_category": null,
       "outcome": "written",
       "validation_status": "accepted",
       "fallback_used": false,
       "api_call_count": 1,
-      "extraction_time_ms": 2.783,
+      "extraction_time_ms": 5.186,
       "tier": "active",
       "notes": [
         "gemini_route_legacy_fallback=rules_based",
         "pii_method=noop",
-        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy"
+        "routing_decision=selected=gemini score=0.847 cost=0.02000 confidence=0.930 latency_ms=120.000 success_rate=0.900 candidates=gemini,phi3,spacy",
+        "language_route_note=metadata_only:english_latin_detected"
       ]
     }
   ],
@@ -298,17 +306,12 @@
       "confidence_in_review_band"
     ],
     "auto_accept_cases": [
-      "gemini_unavailable",
-      "all_external_apis_unavailable",
-      "ocr_failure",
-      "empty_extraction",
-      "confidence_above_auto_accept_threshold",
-      "model_route_vs_actual_extractor_mismatch"
+      "ocr_failure"
     ]
   },
   "performance": {
-    "average_extraction_time_ms": 1.925,
-    "p95_extraction_time_ms": 2.853,
+    "average_extraction_time_ms": 3.134,
+    "p95_extraction_time_ms": 5.514,
     "sample_size": 11,
     "tier_distribution": {
       "active": 6,
