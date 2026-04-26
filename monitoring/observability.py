@@ -25,6 +25,8 @@ DEFAULT_PHASE26_ARTIFACT_PATH = ROOT / "artifacts" / "phase26" / "language_suppo
 DEFAULT_PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md"
 DEFAULT_PHASE27_ARTIFACT_PATH = ROOT / "artifacts" / "phase27" / "runtime_controls.json"
 DEFAULT_PHASE27_REPORT_PATH = ROOT / "reports" / "phase27" / "production_hardening_report.md"
+DEFAULT_PHASE28_ARTIFACT_PATH = ROOT / "artifacts" / "phase28" / "production_mode.json"
+DEFAULT_PHASE28_REPORT_PATH = ROOT / "reports" / "phase28" / "production_readiness_report.md"
 
 
 def _load_jsonl(path: Path | str | None) -> list[dict[str, Any]]:
@@ -126,6 +128,7 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
     requires_ocr_count = sum(int(bool(item.get("requires_ocr", False))) for item in processed)
     language_unknown_count = sum(int(str(item.get("detected_language", "")) == "unknown") for item in processed)
     runtime_controls = summary.get("runtime_controls", {})
+    production_mode = summary.get("production_mode", {})
 
     return {
         "generated_at": summary.get("generated_at"),
@@ -167,6 +170,12 @@ def build_phase21_metrics(summary: dict[str, Any]) -> dict[str, Any]:
         "non_retryable_failure_count": int(runtime_controls.get("non_retryable_failure_count", 0)),
         "timeout_count": int(runtime_controls.get("timeout_count", 0)),
         "cleanup_completed": bool(runtime_controls.get("cleanup_completed", False)),
+        "production_mode": str(production_mode.get("production_mode", "OFF")),
+        "production_gate_passed": bool(production_mode.get("production_gate_passed", True)),
+        "production_gate_failed_reason": production_mode.get("production_gate_failed_reason"),
+        "dry_run_executed": bool(production_mode.get("dry_run_executed", False)),
+        "controlled_run_limit_applied": bool(production_mode.get("controlled_run_limit_applied", False)),
+        "run_blocked_by_gate": bool(production_mode.get("run_blocked_by_gate", False)),
         "review_queue_category_counts": dict(sorted(review_queue_categories.items())),
         "per_stage_duration_ms": build_stage_duration_metrics(stage_events),
         "paths": {
@@ -215,6 +224,12 @@ def build_phase21_report(metrics: dict[str, Any]) -> str:
         f"- Non-retryable failure count: `{metrics['non_retryable_failure_count']}`",
         f"- Timeout count: `{metrics['timeout_count']}`",
         f"- Cleanup completed: `{metrics['cleanup_completed']}`",
+        f"- Production mode: `{metrics['production_mode']}`",
+        f"- Production gate passed: `{metrics['production_gate_passed']}`",
+        f"- Production gate failed reason: `{metrics['production_gate_failed_reason']}`",
+        f"- Dry run executed: `{metrics['dry_run_executed']}`",
+        f"- Controlled run limit applied: `{metrics['controlled_run_limit_applied']}`",
+        f"- Run blocked by gate: `{metrics['run_blocked_by_gate']}`",
         "",
         "## Route Counts",
         "",
@@ -969,4 +984,107 @@ def write_phase27_outputs(
     report_path.parent.mkdir(parents=True, exist_ok=True)
     artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     report_path.write_text(build_phase27_report(metrics), encoding="utf-8")
+    return metrics
+
+
+def build_phase28_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    production_mode = summary.get("production_mode", {})
+    validation_result = summary.get("validation_result", {})
+    return {
+        "generated_at": summary.get("generated_at"),
+        "phase": "Phase 28 Controlled Production Mode / Real-Use Readiness Gate",
+        "dataset_dir": summary.get("dataset_dir"),
+        "determinism": summary.get("determinism", {}),
+        "attempted_documents": int(summary.get("documents_selected", validation_result.get("attempted", 0))),
+        "processed_documents": int(summary.get("documents_processed", validation_result.get("processed", 0))),
+        "written_documents": int(summary.get("written", validation_result.get("written", 0))),
+        "queued_for_review_documents": int(summary.get("queued_for_review", validation_result.get("queued_for_review", 0))),
+        "external_quota_blocked": int(summary.get("external_quota_blocked", validation_result.get("external_quota_blocked", 0))),
+        "hard_failures": int(summary.get("hard_failures", validation_result.get("hard_failures", 0))),
+        "production_mode": str(production_mode.get("production_mode", "OFF")),
+        "production_gate_passed": bool(production_mode.get("production_gate_passed", True)),
+        "production_gate_failed_reason": production_mode.get("production_gate_failed_reason"),
+        "dry_run_executed": bool(production_mode.get("dry_run_executed", False)),
+        "controlled_run_limit_applied": bool(production_mode.get("controlled_run_limit_applied", False)),
+        "run_blocked_by_gate": bool(production_mode.get("run_blocked_by_gate", False)),
+        "max_documents_per_run": int(production_mode.get("max_documents_per_run", 0)),
+        "max_concurrent_runs": int(production_mode.get("max_concurrent_runs", 1)),
+        "audit_required": bool(production_mode.get("audit_required", False)),
+        "require_snapshot_before_run": bool(production_mode.get("require_snapshot_before_run", False)),
+        "run_approval": bool(production_mode.get("run_approval", False)),
+        "review_queue_acknowledged": bool(production_mode.get("review_queue_acknowledged", False)),
+        "required_snapshot_dir": production_mode.get("required_snapshot_dir"),
+        "required_snapshot_zip": production_mode.get("required_snapshot_zip"),
+        "previous_run_completed_cleanly": bool(production_mode.get("previous_run_completed_cleanly", False)),
+        "deterministic_outputs_verified": bool(production_mode.get("deterministic_outputs_verified", False)),
+        "unresolved_runtime_lock": bool(production_mode.get("unresolved_runtime_lock", False)),
+        "snapshot_verified": bool(production_mode.get("snapshot_verified", False)),
+        "audit_report_available": bool(production_mode.get("audit_report_available", False)),
+        "review_queue_items": int(production_mode.get("review_queue_items", 0)),
+        "baseline_reconciled": bool(summary.get("baseline_reconciled", False)),
+        "baseline_source_snapshot": summary.get("baseline_source_snapshot"),
+    }
+
+
+def build_phase28_report(metrics: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 28 Production Readiness Report",
+        "",
+        f"- Generated at: `{metrics['generated_at']}`",
+        f"- Dataset: `{metrics['dataset_dir']}`",
+        f"- Attempted documents: `{metrics['attempted_documents']}`",
+        f"- Processed documents: `{metrics['processed_documents']}`",
+        f"- Written documents: `{metrics['written_documents']}`",
+        f"- Queued for review documents: `{metrics['queued_for_review_documents']}`",
+        f"- External quota blocked: `{metrics['external_quota_blocked']}`",
+        f"- Hard failures: `{metrics['hard_failures']}`",
+        f"- Production mode: `{metrics['production_mode']}`",
+        f"- Production gate passed: `{metrics['production_gate_passed']}`",
+        f"- Production gate failed reason: `{metrics['production_gate_failed_reason']}`",
+        f"- Dry run executed: `{metrics['dry_run_executed']}`",
+        f"- Controlled run limit applied: `{metrics['controlled_run_limit_applied']}`",
+        f"- Run blocked by gate: `{metrics['run_blocked_by_gate']}`",
+        f"- Max documents per run: `{metrics['max_documents_per_run']}`",
+        f"- Max concurrent runs: `{metrics['max_concurrent_runs']}`",
+        f"- Audit required: `{metrics['audit_required']}`",
+        f"- Require snapshot before run: `{metrics['require_snapshot_before_run']}`",
+        f"- Run approval: `{metrics['run_approval']}`",
+        f"- Review queue acknowledged: `{metrics['review_queue_acknowledged']}`",
+        f"- Review queue items: `{metrics['review_queue_items']}`",
+        f"- Baseline reconciled: `{metrics['baseline_reconciled']}`",
+        f"- Baseline source snapshot: `{metrics['baseline_source_snapshot']}`",
+        "",
+        "## Gate Checks",
+        "",
+        f"- Previous run completed cleanly: `{metrics['previous_run_completed_cleanly']}`",
+        f"- Deterministic outputs verified: `{metrics['deterministic_outputs_verified']}`",
+        f"- Unresolved runtime lock: `{metrics['unresolved_runtime_lock']}`",
+        f"- Snapshot verified: `{metrics['snapshot_verified']}`",
+        f"- Audit report available: `{metrics['audit_report_available']}`",
+        f"- Required snapshot dir: `{metrics['required_snapshot_dir']}`",
+        f"- Required snapshot zip: `{metrics['required_snapshot_zip']}`",
+        "",
+        "## Control-Layer Guardrails",
+        "",
+        f"- Determinism: `{metrics['determinism']}`",
+        "- Production mode is a gate-only layer and does not alter extraction, routing, confidence, review, enrichment, coding, or language behavior.",
+        "- `OFF` mode preserves the validated Phase 27 baseline behavior.",
+        "- When live external quota variance shifts canonical aggregates, `OFF` mode can restore the verified snapshot artifact set to preserve the trusted baseline outputs.",
+        "- `DRY_RUN` reroutes run-local outputs away from canonical full-cycle outputs while still producing audit artifacts.",
+        "- `CONTROLLED` and `LIVE` require gate checks to pass before execution proceeds.",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def write_phase28_outputs(
+    summary: dict[str, Any],
+    *,
+    artifact_path: Path = DEFAULT_PHASE28_ARTIFACT_PATH,
+    report_path: Path = DEFAULT_PHASE28_REPORT_PATH,
+) -> dict[str, Any]:
+    metrics = build_phase28_metrics(summary)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    report_path.write_text(build_phase28_report(metrics), encoding="utf-8")
     return metrics

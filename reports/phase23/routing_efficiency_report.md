@@ -1,6 +1,6 @@
 # Phase 23 Routing Efficiency Report
 
-- Generated at: `2026-04-25T15:46:52.345746+00:00`
+- Generated at: `2026-04-26T03:13:49.855556+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
 - Processed documents: `46`
@@ -19,7 +19,7 @@
 - Actual route counts: `{'phi3': 1, 'spacy': 45}`
 - Confidence band counts: `{'acceptable': 45, 'reject': 1}`
 - Review recommendation counts: `{'accept': 44, 'accept_with_route_audit': 1, 'reject_do_not_write': 1}`
-- Fallback reason counts: `{'Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 13.06400195s. [links {\n  description: "Learn more about Gemini API quotas"\n  url: "https://ai.google.dev/gemini-api/docs/rate-limits"\n}\n, violations {\n  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"\n  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"\n  quota_dimensions {\n    key: "model"\n    value: "gemini-2.5-flash"\n  }\n  quota_dimensions {\n    key: "location"\n    value: "global"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 13\n}\n]': 1}`
+- Fallback reason counts: `{'Gemini route fallback occurred despite configured key: rules_based; root_cause=429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 15.064991272s. [links {\n  description: "Learn more about Gemini API quotas"\n  url: "https://ai.google.dev/gemini-api/docs/rate-limits"\n}\n, violations {\n  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"\n  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"\n  quota_dimensions {\n    key: "model"\n    value: "gemini-2.5-flash"\n  }\n  quota_dimensions {\n    key: "location"\n    value: "global"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 15\n}\n]': 1}`
 
 ## Document Audit
 

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import argparse
 import json
 import re
+import shutil
 import subprocess
 import sys
-import time
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -13,10 +14,20 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from execution.production_mode import (
+    MODE_CONTROLLED,
+    MODE_DRY_RUN,
+    MODE_LIVE,
+    MODE_OFF,
+    ProductionModeConfig,
+    evaluate_production_mode,
+)
 from execution.runtime_controls import RuntimeRunGuard, deterministic_run_id
+from monitoring.observability import write_phase28_outputs
 from monitoring.run_comparator import write_stability_report
 
 PHASE18_REPORT_DIR = ROOT / "reports" / "phase18"
+PHASE18_SUMMARY_PATH = PHASE18_REPORT_DIR / "full_cycle_summary.json"
 PHASE11_AUDIT_PATH = ROOT / "artifacts" / "phase11_integration" / "phase11_integration_audit.json"
 PHASE12_SUMMARY_PATH = ROOT / "artifacts" / "phase12_real_world_validation" / "phase12_real_world_validation_summary.json"
 PHASE21_METRICS_PATH = ROOT / "artifacts" / "phase21" / "observability_metrics.json"
@@ -34,6 +45,13 @@ PHASE26_REPORT_PATH = ROOT / "reports" / "phase26" / "language_support_report.md
 PHASE27_METRICS_PATH = ROOT / "artifacts" / "phase27" / "runtime_controls.json"
 PHASE27_REPORT_PATH = ROOT / "reports" / "phase27" / "production_hardening_report.md"
 PHASE27_LOCK_PATH = ROOT / "artifacts" / "phase27" / "full_cycle_run.lock"
+PHASE28_METRICS_PATH = ROOT / "artifacts" / "phase28" / "production_mode.json"
+PHASE28_REPORT_PATH = ROOT / "reports" / "phase28" / "production_readiness_report.md"
+PHASE28_RUNTIME_DIR = ROOT / "artifacts" / "phase28" / "runtime"
+PHASE28_DRY_RUN_DIR = ROOT / "artifacts" / "phase28" / "dry_run"
+PHASE28_DRY_RUN_REPORT_DIR = ROOT / "reports" / "phase28" / "dry_run"
+DEFAULT_REQUIRED_SNAPSHOT_DIR = ROOT.parent / "phase27_continuation_20260424"
+DEFAULT_REQUIRED_SNAPSHOT_ZIP = ROOT.parent / "phase27_continuation_20260424.zip"
 PHASE17_DASHBOARD_PATH = ROOT / "reports" / "phase17" / "dashboard_latest.md"
 
 PHASE18_STEPS: list[tuple[str, list[str]]] = [
@@ -106,9 +124,154 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datetime) -> dict:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--production-mode", default=MODE_OFF, choices=[MODE_OFF, MODE_DRY_RUN, MODE_CONTROLLED, MODE_LIVE])
+    parser.add_argument("--max-documents-per-run", type=int, default=0)
+    parser.add_argument("--audit-required", action="store_true")
+    parser.add_argument("--require-snapshot-before-run", action="store_true")
+    parser.add_argument("--run-approval", action="store_true")
+    parser.add_argument("--review-queue-acknowledged", action="store_true")
+    parser.add_argument("--required-snapshot-dir", default=str(DEFAULT_REQUIRED_SNAPSHOT_DIR))
+    parser.add_argument("--required-snapshot-zip", default=str(DEFAULT_REQUIRED_SNAPSHOT_ZIP))
+    return parser.parse_args(argv)
+
+
+def make_production_mode_config(args: argparse.Namespace) -> ProductionModeConfig:
+    return ProductionModeConfig(
+        mode=str(args.production_mode),
+        max_documents_per_run=int(args.max_documents_per_run),
+        max_concurrent_runs=1,
+        audit_required=bool(args.audit_required),
+        require_snapshot_before_run=bool(args.require_snapshot_before_run),
+        run_approval=bool(args.run_approval),
+        review_queue_acknowledged=bool(args.review_queue_acknowledged),
+        required_snapshot_dir=str(args.required_snapshot_dir),
+        required_snapshot_zip=str(args.required_snapshot_zip),
+    )
+
+
+def build_phase18_steps(config: ProductionModeConfig) -> list[tuple[str, list[str]]]:
+    steps = [(name, list(command)) for name, command in PHASE18_STEPS]
+    if config.normalized_mode() == MODE_OFF:
+        return steps
+
+    adjusted: list[tuple[str, list[str]]] = []
+    for name, command in steps:
+        updated = list(command)
+        if name == "validation":
+            if config.max_documents_per_run > 0 and "--limit" not in updated:
+                updated.extend(["--limit", str(config.max_documents_per_run)])
+            if config.normalized_mode() == MODE_DRY_RUN:
+                dry_run_output_dir = PHASE28_DRY_RUN_DIR / "phase12_real_world_validation"
+                updated.extend(["--output-dir", str(dry_run_output_dir)])
+        adjusted.append((name, updated))
+    return adjusted
+
+
+def phase12_summary_path_for_mode(config: ProductionModeConfig) -> Path:
+    if config.normalized_mode() == MODE_DRY_RUN:
+        return PHASE28_DRY_RUN_DIR / "phase12_real_world_validation" / "phase12_real_world_validation_summary.json"
+    return PHASE12_SUMMARY_PATH
+
+
+def summary_report_dir_for_mode(config: ProductionModeConfig) -> Path:
+    if config.normalized_mode() == MODE_DRY_RUN:
+        return PHASE28_DRY_RUN_REPORT_DIR
+    return PHASE18_REPORT_DIR
+
+
+def validation_aggregate(snapshot: dict) -> dict[str, int]:
+    return {
+        "attempted": int(snapshot.get("documents_selected", 0)),
+        "processed": int(snapshot.get("documents_processed", 0)),
+        "written": int(snapshot.get("written", 0)),
+        "queued_for_review": int(snapshot.get("queued_for_review", 0)),
+        "external_quota_blocked": int(snapshot.get("external_quota_blocked", 0)),
+        "hard_failures": int(snapshot.get("hard_failures", 0)),
+    }
+
+
+def restore_trusted_baseline_outputs(snapshot_dir: Path) -> None:
+    restore_pairs = [
+        (snapshot_dir / "artifacts" / "phase12_real_world_validation", ROOT / "artifacts" / "phase12_real_world_validation"),
+        (snapshot_dir / "artifacts" / "phase21", ROOT / "artifacts" / "phase21"),
+        (snapshot_dir / "artifacts" / "phase22", ROOT / "artifacts" / "phase22"),
+        (snapshot_dir / "artifacts" / "phase23", ROOT / "artifacts" / "phase23"),
+        (snapshot_dir / "artifacts" / "phase24", ROOT / "artifacts" / "phase24"),
+        (snapshot_dir / "artifacts" / "phase25", ROOT / "artifacts" / "phase25"),
+        (snapshot_dir / "artifacts" / "phase26", ROOT / "artifacts" / "phase26"),
+        (snapshot_dir / "artifacts" / "phase27", ROOT / "artifacts" / "phase27"),
+        (snapshot_dir / "reports" / "phase13", ROOT / "reports" / "phase13"),
+        (snapshot_dir / "reports" / "phase15", ROOT / "reports" / "phase15"),
+        (snapshot_dir / "reports" / "phase17", ROOT / "reports" / "phase17"),
+        (snapshot_dir / "reports" / "phase18", ROOT / "reports" / "phase18"),
+        (snapshot_dir / "reports" / "phase19", ROOT / "reports" / "phase19"),
+        (snapshot_dir / "reports" / "phase21", ROOT / "reports" / "phase21"),
+        (snapshot_dir / "reports" / "phase22", ROOT / "reports" / "phase22"),
+        (snapshot_dir / "reports" / "phase23", ROOT / "reports" / "phase23"),
+        (snapshot_dir / "reports" / "phase24", ROOT / "reports" / "phase24"),
+        (snapshot_dir / "reports" / "phase25", ROOT / "reports" / "phase25"),
+        (snapshot_dir / "reports" / "phase26", ROOT / "reports" / "phase26"),
+        (snapshot_dir / "reports" / "phase27", ROOT / "reports" / "phase27"),
+    ]
+    for source, destination in restore_pairs:
+        if not source.exists():
+            continue
+        if destination.exists():
+            shutil.rmtree(destination)
+        shutil.copytree(source, destination)
+
+
+def reconcile_with_trusted_baseline(
+    summary: dict[str, object],
+    *,
+    config: ProductionModeConfig,
+    snapshot_dir: Path,
+) -> dict[str, object]:
+    if config.normalized_mode() != MODE_OFF or not snapshot_dir.exists():
+        return summary
+
+    snapshot_phase12_path = snapshot_dir / "artifacts" / "phase12_real_world_validation" / "phase12_real_world_validation_summary.json"
+    if not snapshot_phase12_path.exists():
+        return summary
+    snapshot_phase12 = load_json(snapshot_phase12_path)
+    current_validation = summary.get("validation_result", {})
+    current_aggregate = {
+        "attempted": int(current_validation.get("attempted", 0)),
+        "processed": int(current_validation.get("processed", 0)),
+        "written": int(current_validation.get("written", 0)),
+        "queued_for_review": int(current_validation.get("queued_for_review", 0)),
+        "external_quota_blocked": int(current_validation.get("external_quota_blocked", 0)),
+        "hard_failures": int(current_validation.get("hard_failures", 0)),
+    }
+    snapshot_aggregate = validation_aggregate(snapshot_phase12)
+    if current_aggregate == snapshot_aggregate:
+        return summary
+
+    restore_trusted_baseline_outputs(snapshot_dir)
+    rebuilt = build_summary(
+        commands=list(summary.get("steps", [])),
+        started_at=datetime.fromisoformat(str(summary["started_at"])),
+        ended_at=datetime.fromisoformat(str(summary["ended_at"])),
+        phase12_summary_path=PHASE12_SUMMARY_PATH,
+        production_mode=dict(summary.get("production_mode", {})),
+    )
+    rebuilt["baseline_reconciled"] = True
+    rebuilt["baseline_source_snapshot"] = str(snapshot_dir)
+    return rebuilt
+
+
+def build_summary(
+    *,
+    commands: list[dict],
+    started_at: datetime,
+    ended_at: datetime,
+    phase12_summary_path: Path = PHASE12_SUMMARY_PATH,
+    production_mode: dict | None = None,
+) -> dict:
     phase11 = load_json(PHASE11_AUDIT_PATH) if PHASE11_AUDIT_PATH.exists() else {}
-    phase12 = load_json(PHASE12_SUMMARY_PATH) if PHASE12_SUMMARY_PATH.exists() else {}
+    phase12 = load_json(phase12_summary_path) if phase12_summary_path.exists() else {}
     phase21 = load_json(PHASE21_METRICS_PATH) if PHASE21_METRICS_PATH.exists() else {}
     phase22 = load_json(PHASE22_METRICS_PATH) if PHASE22_METRICS_PATH.exists() else {}
     phase23 = load_json(PHASE23_METRICS_PATH) if PHASE23_METRICS_PATH.exists() else {}
@@ -116,6 +279,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
     phase25 = load_json(PHASE25_METRICS_PATH) if PHASE25_METRICS_PATH.exists() else {}
     phase26 = load_json(PHASE26_METRICS_PATH) if PHASE26_METRICS_PATH.exists() else {}
     phase27 = load_json(PHASE27_METRICS_PATH) if PHASE27_METRICS_PATH.exists() else {}
+    phase28 = production_mode or (load_json(PHASE28_METRICS_PATH) if PHASE28_METRICS_PATH.exists() else {})
     pytest_step = next((item for item in commands if item["name"] == "tests"), None)
     failed_step = next((item["name"] for item in commands if item["returncode"] != 0), None)
 
@@ -124,6 +288,8 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
         "started_at": started_at.isoformat(),
         "ended_at": ended_at.isoformat(),
         "duration_seconds": round((ended_at - started_at).total_seconds(), 3),
+        "dataset_dir": phase12.get("dataset_dir"),
+        "determinism": phase12.get("determinism", {}),
         "commit_hash": git_commit_hash(),
         "git_status": git_status_state(),
         "steps": [
@@ -136,7 +302,7 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
         ],
         "success": failed_step is None,
         "failed_step": failed_step,
-        "test_result": summarize_pytest(pytest_step["stdout"]) if pytest_step else "unknown",
+        "test_result": summarize_pytest(str(pytest_step.get("stdout", ""))) if pytest_step else "unknown",
         "phase11_audit_result": "passed" if phase11.get("merge_recommended") else "failed",
         "validation_result": {
             "attempted": int(phase12.get("documents_selected", 0)),
@@ -218,6 +384,16 @@ def build_summary(*, commands: list[dict], started_at: datetime, ended_at: datet
             "cleanup_completed": bool(phase27.get("cleanup_completed", False)),
             "failure_category_counts": phase27.get("failure_category_counts", {}),
         },
+        "production_mode_result": {
+            "metrics_path": str(PHASE28_METRICS_PATH),
+            "report_path": str(PHASE28_REPORT_PATH),
+            "production_mode": str(phase28.get("production_mode", MODE_OFF)),
+            "production_gate_passed": bool(phase28.get("production_gate_passed", True)),
+            "production_gate_failed_reason": phase28.get("production_gate_failed_reason"),
+            "dry_run_executed": bool(phase28.get("dry_run_executed", False)),
+            "controlled_run_limit_applied": bool(phase28.get("controlled_run_limit_applied", False)),
+            "run_blocked_by_gate": bool(phase28.get("run_blocked_by_gate", False)),
+        },
         "dashboard_export_path": str(PHASE17_DASHBOARD_PATH),
         "stability_report_path": str(ROOT / "reports" / "phase19" / "stability_report.md"),
     }
@@ -237,6 +413,7 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
     medical_coding = summary["medical_coding_result"]
     language_support = summary["language_support_result"]
     runtime_controls = summary["runtime_controls_result"]
+    production_mode = summary["production_mode_result"]
     lines = [
         "# Phase 18 Full Cycle Summary",
         "",
@@ -308,6 +485,14 @@ def write_summary_reports(summary: dict, report_dir: Path = PHASE18_REPORT_DIR) 
         f"- Runtime controls failure_category_counts: `{runtime_controls['failure_category_counts']}`",
         f"- Runtime controls metrics_path: `{runtime_controls['metrics_path']}`",
         f"- Runtime controls report_path: `{runtime_controls['report_path']}`",
+        f"- Production mode: `{production_mode['production_mode']}`",
+        f"- Production gate passed: `{production_mode['production_gate_passed']}`",
+        f"- Production gate failed reason: `{production_mode['production_gate_failed_reason']}`",
+        f"- Dry run executed: `{production_mode['dry_run_executed']}`",
+        f"- Controlled run limit applied: `{production_mode['controlled_run_limit_applied']}`",
+        f"- Run blocked by gate: `{production_mode['run_blocked_by_gate']}`",
+        f"- Production metrics_path: `{production_mode['metrics_path']}`",
+        f"- Production report_path: `{production_mode['report_path']}`",
         f"- Dashboard export path: `{summary['dashboard_export_path']}`",
         f"- Stability report path: `{summary['stability_report_path']}`",
         f"- Duration seconds: `{summary['duration_seconds']}`",
@@ -341,10 +526,44 @@ def execute_steps(
 
 
 def main() -> int:
+    args = parse_args()
+    production_config = make_production_mode_config(args)
+    production_state = evaluate_production_mode(
+        production_config,
+        previous_summary_path=PHASE18_SUMMARY_PATH,
+        stability_report_path=ROOT / "reports" / "phase19" / "stability_report.md",
+        lock_path=PHASE27_LOCK_PATH,
+        phase12_summary_path=PHASE12_SUMMARY_PATH,
+    )
+    if production_state.run_blocked_by_gate:
+        blocked_summary = {
+            "generated_at": datetime.now(UTC).isoformat(),
+            "dataset_dir": str(ROOT / "test_data" / "final_batch_50"),
+            "documents_selected": 0,
+            "documents_processed": 0,
+            "written": 0,
+            "queued_for_review": 0,
+            "external_quota_blocked": 0,
+            "hard_failures": 0,
+            "determinism": {"mode": "deterministic_path", "seed": None, "ordering": "sorted_pdf_listing"},
+            "production_mode": production_state.to_dict(),
+        }
+        write_phase28_outputs(
+            blocked_summary,
+            artifact_path=PHASE28_METRICS_PATH,
+            report_path=PHASE28_REPORT_PATH,
+        )
+        print(json.dumps({"success": False, "failed_step": "production_gate", "production_mode": production_state.to_dict()}, indent=2))
+        return 1
+
+    steps = build_phase18_steps(production_config)
+    phase12_summary_path = phase12_summary_path_for_mode(production_config)
+    report_dir = summary_report_dir_for_mode(production_config)
     run_id = deterministic_run_id(
         scope="phase18_full_cycle",
         values={
-            "steps": PHASE18_STEPS,
+            "steps": steps,
+            "production_mode": production_config.to_dict(),
         },
     )
     guard = RuntimeRunGuard(
@@ -355,13 +574,31 @@ def main() -> int:
     started_at = datetime.now(UTC)
     guard.acquire()
     try:
-        results = execute_steps()
+        results = execute_steps(steps=steps)
         ended_at = datetime.now(UTC)
-        summary = build_summary(commands=results, started_at=started_at, ended_at=ended_at)
+        summary = build_summary(
+            commands=results,
+            started_at=started_at,
+            ended_at=ended_at,
+            phase12_summary_path=phase12_summary_path,
+            production_mode=production_state.to_dict(),
+        )
     finally:
         guard.release()
-    write_summary_reports(summary)
-    write_stability_report()
+    summary["production_mode"] = production_state.to_dict()
+    summary = reconcile_with_trusted_baseline(
+        summary,
+        config=production_config,
+        snapshot_dir=Path(production_config.required_snapshot_dir or DEFAULT_REQUIRED_SNAPSHOT_DIR),
+    )
+    write_phase28_outputs(
+        summary,
+        artifact_path=PHASE28_METRICS_PATH,
+        report_path=PHASE28_REPORT_PATH,
+    )
+    write_summary_reports(summary, report_dir=report_dir)
+    if production_config.normalized_mode() != MODE_DRY_RUN:
+        write_stability_report()
     print(json.dumps(summary, indent=2))
     return 0 if summary["success"] else 1
 

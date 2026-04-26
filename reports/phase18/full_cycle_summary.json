@@ -1,9 +1,15 @@
 {
-  "generated_at": "2026-04-25T15:46:54.651030+00:00",
-  "started_at": "2026-04-25T15:42:21.150959+00:00",
-  "ended_at": "2026-04-25T15:46:54.651030+00:00",
-  "duration_seconds": 273.5,
-  "commit_hash": "cda55ce0664241b09bed8cc2f7541609b42d278a",
+  "generated_at": "2026-04-26T03:13:52.056690+00:00",
+  "started_at": "2026-04-26T03:09:04.572573+00:00",
+  "ended_at": "2026-04-26T03:13:52.056690+00:00",
+  "duration_seconds": 287.484,
+  "dataset_dir": "test_data\\final_batch_50",
+  "determinism": {
+    "mode": "deterministic_path",
+    "seed": null,
+    "ordering": "sorted_pdf_listing"
+  },
+  "commit_hash": "8aea3c7c2af065d77a97616803004462b2506c7e",
   "git_status": "dirty",
   "steps": [
     {
@@ -56,7 +62,7 @@
   ],
   "success": true,
   "failed_step": null,
-  "test_result": "222 passed",
+  "test_result": "231 passed",
   "phase11_audit_result": "passed",
   "validation_result": {
     "attempted": 50,
@@ -94,16 +100,16 @@
       "extraction": {
         "records": 50,
         "events": 96,
-        "total_duration_ms": 4157.541,
-        "avg_duration_ms": 83.151,
-        "max_duration_ms": 2764.078
+        "total_duration_ms": 4474.544,
+        "avg_duration_ms": 89.491,
+        "max_duration_ms": 3060.053
       },
       "final_write": {
         "records": 39,
         "events": 124,
-        "total_duration_ms": 32929.676,
-        "avg_duration_ms": 844.351,
-        "max_duration_ms": 4873.473
+        "total_duration_ms": 34785.118,
+        "avg_duration_ms": 891.926,
+        "max_duration_ms": 5150.657
       },
       "language_support": {
         "records": 50,
@@ -122,9 +128,9 @@
       "safety_gate": {
         "records": 26,
         "events": 98,
-        "total_duration_ms": 29302.352,
-        "avg_duration_ms": 1127.014,
-        "max_duration_ms": 4453.65
+        "total_duration_ms": 30962.591,
+        "avg_duration_ms": 1190.869,
+        "max_duration_ms": 4740.476
       },
       "semantic_enrichment": {
         "records": 46,
@@ -136,9 +142,9 @@
       "truth_resolution": {
         "records": 39,
         "events": 124,
-        "total_duration_ms": 32963.77,
-        "avg_duration_ms": 845.225,
-        "max_duration_ms": 4884.746
+        "total_duration_ms": 34804.618,
+        "avg_duration_ms": 892.426,
+        "max_duration_ms": 5176.336
       },
       "validation": {
         "records": 46,
@@ -232,6 +238,38 @@
       "operator_review_required": 1
     }
   },
+  "production_mode_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase28\\production_mode.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase28\\production_readiness_report.md",
+    "production_mode": "OFF",
+    "production_gate_passed": true,
+    "production_gate_failed_reason": null,
+    "dry_run_executed": false,
+    "controlled_run_limit_applied": false,
+    "run_blocked_by_gate": false
+  },
   "dashboard_export_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase17\\dashboard_latest.md",
-  "stability_report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase19\\stability_report.md"
+  "stability_report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase19\\stability_report.md",
+  "production_mode": {
+    "production_mode": "OFF",
+    "max_documents_per_run": 0,
+    "max_concurrent_runs": 1,
+    "audit_required": false,
+    "require_snapshot_before_run": false,
+    "run_approval": false,
+    "review_queue_acknowledged": false,
+    "required_snapshot_dir": "C:\\Users\\S1\\Documents\\Codex\\phase27_continuation_20260424",
+    "required_snapshot_zip": "C:\\Users\\S1\\Documents\\Codex\\phase27_continuation_20260424.zip",
+    "production_gate_passed": true,
+    "production_gate_failed_reason": null,
+    "dry_run_executed": false,
+    "controlled_run_limit_applied": false,
+    "run_blocked_by_gate": false,
+    "previous_run_completed_cleanly": true,
+    "deterministic_outputs_verified": true,
+    "unresolved_runtime_lock": false,
+    "snapshot_verified": true,
+    "audit_report_available": true,
+    "review_queue_items": 31
+  }
 }

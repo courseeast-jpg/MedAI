@@ -1,11 +1,11 @@
 # Phase 18 Full Cycle Summary
 
-- Generated at: `2026-04-25T15:46:54.651030+00:00`
-- Commit hash: `cda55ce0664241b09bed8cc2f7541609b42d278a`
+- Generated at: `2026-04-26T03:13:52.056690+00:00`
+- Commit hash: `8aea3c7c2af065d77a97616803004462b2506c7e`
 - Git status: `dirty`
 - Success: `True`
 - Failed step: `None`
-- Test result: `222 passed`
+- Test result: `231 passed`
 - Phase 11 audit result: `passed`
 - Validation attempted: `50`
 - Validation processed: `46`
@@ -68,9 +68,17 @@
 - Runtime controls failure_category_counts: `{'external_quota_block': 4, 'none': 45, 'operator_review_required': 1}`
 - Runtime controls metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase27\runtime_controls.json`
 - Runtime controls report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase27\production_hardening_report.md`
+- Production mode: `OFF`
+- Production gate passed: `True`
+- Production gate failed reason: `None`
+- Dry run executed: `False`
+- Controlled run limit applied: `False`
+- Run blocked by gate: `False`
+- Production metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase28\production_mode.json`
+- Production report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase28\production_readiness_report.md`
 - Dashboard export path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase17\dashboard_latest.md`
 - Stability report path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase19\stability_report.md`
-- Duration seconds: `273.5`
+- Duration seconds: `287.484`
 
 ## Steps
 

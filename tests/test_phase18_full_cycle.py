@@ -125,6 +125,16 @@ def test_report_writer_works(tmp_path: Path):
             "cleanup_completed": False,
             "failure_category_counts": {"external_quota_block": 4, "none": 45, "operator_review_required": 1},
         },
+        "production_mode_result": {
+            "metrics_path": "artifacts/phase28/production_mode.json",
+            "report_path": "reports/phase28/production_readiness_report.md",
+            "production_mode": "OFF",
+            "production_gate_passed": True,
+            "production_gate_failed_reason": None,
+            "dry_run_executed": False,
+            "controlled_run_limit_applied": False,
+            "run_blocked_by_gate": False,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -254,6 +264,16 @@ def test_no_pipeline_configuration_is_mutated(tmp_path: Path):
             "cleanup_completed": False,
             "failure_category_counts": {"external_quota_block": 4, "none": 45, "operator_review_required": 1},
         },
+        "production_mode_result": {
+            "metrics_path": "artifacts/phase28/production_mode.json",
+            "report_path": "reports/phase28/production_readiness_report.md",
+            "production_mode": "OFF",
+            "production_gate_passed": True,
+            "production_gate_failed_reason": None,
+            "dry_run_executed": False,
+            "controlled_run_limit_applied": False,
+            "run_blocked_by_gate": False,
+        },
         "dashboard_export_path": "reports/phase17/dashboard_latest.md",
         "stability_report_path": "reports/phase19/stability_report.md",
     }
@@ -283,6 +303,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     phase25_path = tmp_path / "phase25.json"
     phase26_path = tmp_path / "phase26.json"
     phase27_path = tmp_path / "phase27.json"
+    phase28_path = tmp_path / "phase28.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         """{
@@ -373,6 +394,17 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
 }""",
         encoding="utf-8",
     )
+    phase28_path.write_text(
+        """{
+  "production_mode": "OFF",
+  "production_gate_passed": true,
+  "production_gate_failed_reason": null,
+  "dry_run_executed": false,
+  "controlled_run_limit_applied": false,
+  "run_blocked_by_gate": false
+}""",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
@@ -382,6 +414,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     monkeypatch.setattr(phase18, "PHASE25_METRICS_PATH", phase25_path)
     monkeypatch.setattr(phase18, "PHASE26_METRICS_PATH", phase26_path)
     monkeypatch.setattr(phase18, "PHASE27_METRICS_PATH", phase27_path)
+    monkeypatch.setattr(phase18, "PHASE28_METRICS_PATH", phase28_path)
 
     summary = build_summary(
         commands=[{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 159 passed ===", "stderr": ""}],
@@ -398,6 +431,7 @@ def test_successful_full_cycle_summary_remains_passing_with_phase21_observabilit
     assert summary["medical_coding_result"]["coding_success_count"] == 12
     assert summary["language_support_result"]["language_detected_counts"] == {"english": 46}
     assert summary["runtime_controls_result"]["run_lock_acquired"] is True
+    assert summary["production_mode_result"]["production_mode"] == "OFF"
 
 
 def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path, monkeypatch):
@@ -412,6 +446,7 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
     phase25_path = tmp_path / "phase25.json"
     phase26_path = tmp_path / "phase26.json"
     phase27_path = tmp_path / "phase27.json"
+    phase28_path = tmp_path / "phase28.json"
     phase11_path.write_text('{"merge_recommended": true}', encoding="utf-8")
     phase12_path.write_text(
         '{"documents_selected": 50, "documents_processed": 46, "written": 45, "queued_for_review": 1, "external_quota_blocked": 4, "hard_failures": 0, "review_queue": {"items": 31, "path": "runtime/review_queue.jsonl"}, "aggregate": {"avg_confidence": 0.692}}',
@@ -445,6 +480,10 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
         '{"run_lock_acquired": true, "run_lock_released": true, "stale_lock_recovered": false, "retry_eligible_count": 4, "non_retryable_failure_count": 1, "timeout_count": 0, "cleanup_completed": false, "failure_category_counts": {"external_quota_block": 4, "none": 45, "operator_review_required": 1}}',
         encoding="utf-8",
     )
+    phase28_path.write_text(
+        '{"production_mode": "OFF", "production_gate_passed": true, "production_gate_failed_reason": null, "dry_run_executed": false, "controlled_run_limit_applied": false, "run_blocked_by_gate": false}',
+        encoding="utf-8",
+    )
     monkeypatch.setattr(phase18, "PHASE11_AUDIT_PATH", phase11_path)
     monkeypatch.setattr(phase18, "PHASE12_SUMMARY_PATH", phase12_path)
     monkeypatch.setattr(phase18, "PHASE21_METRICS_PATH", phase21_path)
@@ -454,6 +493,7 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
     monkeypatch.setattr(phase18, "PHASE25_METRICS_PATH", phase25_path)
     monkeypatch.setattr(phase18, "PHASE26_METRICS_PATH", phase26_path)
     monkeypatch.setattr(phase18, "PHASE27_METRICS_PATH", phase27_path)
+    monkeypatch.setattr(phase18, "PHASE28_METRICS_PATH", phase28_path)
 
     commands = [{"name": "tests", "command": ["python", "-m", "pytest", "tests"], "returncode": 0, "stdout": "=== 190 passed ===", "stderr": ""}]
     started_at = phase18.datetime.fromisoformat("2026-04-25T00:00:00+00:00")
@@ -465,3 +505,4 @@ def test_full_cycle_summary_is_deterministic_with_phase25_metrics(tmp_path: Path
     assert first == second
     assert first["language_support_result"]["language_detected_counts"] == {"english": 45}
     assert first["runtime_controls_result"]["retry_eligible_count"] == 4
+    assert first["production_mode_result"]["production_gate_passed"] is True

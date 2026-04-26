@@ -1,6 +1,6 @@
 # Phase 21 Observability Report
 
-- Generated at: `2026-04-25T15:46:52.345746+00:00`
+- Generated at: `2026-04-26T03:13:49.855556+00:00`
 - Dataset: `test_data\final_batch_50`
 - Attempted documents: `50`
 - Processed documents: `46`
@@ -35,6 +35,12 @@
 - Non-retryable failure count: `1`
 - Timeout count: `0`
 - Cleanup completed: `False`
+- Production mode: `OFF`
+- Production gate passed: `True`
+- Production gate failed reason: `None`
+- Dry run executed: `False`
+- Controlled run limit applied: `False`
+- Run blocked by gate: `False`
 
 ## Route Counts
 
@@ -49,13 +55,13 @@
 ## Stage Durations
 
 - `consensus` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `extraction` -> records=50 events=96 total_ms=4157.541 avg_ms=83.151 max_ms=2764.078
-- `final_write` -> records=39 events=124 total_ms=32929.676 avg_ms=844.351 max_ms=4873.473
+- `extraction` -> records=50 events=96 total_ms=4474.544 avg_ms=89.491 max_ms=3060.053
+- `final_write` -> records=39 events=124 total_ms=34785.118 avg_ms=891.926 max_ms=5150.657
 - `language_support` -> records=50 events=50 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 - `medical_coding` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `safety_gate` -> records=26 events=98 total_ms=29302.352 avg_ms=1127.014 max_ms=4453.65
+- `safety_gate` -> records=26 events=98 total_ms=30962.591 avg_ms=1190.869 max_ms=4740.476
 - `semantic_enrichment` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
-- `truth_resolution` -> records=39 events=124 total_ms=32963.77 avg_ms=845.225 max_ms=4884.746
+- `truth_resolution` -> records=39 events=124 total_ms=34804.618 avg_ms=892.426 max_ms=5176.336
 - `validation` -> records=46 events=46 total_ms=0.0 avg_ms=0.0 max_ms=0.0
 
 ## Stability Guardrails
