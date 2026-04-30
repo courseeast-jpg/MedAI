@@ -24,6 +24,8 @@ BATCH_REVIEW_DIR = BATCH_REPORT_DIR / "review"
 BATCH_ERROR_DIR = BATCH_REPORT_DIR / "error"
 BATCH_JSON_REPORT = BATCH_REPORT_DIR / "latest_batch_validation.json"
 BATCH_MD_REPORT = BATCH_REPORT_DIR / "latest_batch_validation.md"
+REVIEW_AUDIT_JSON_REPORT = BATCH_REPORT_DIR / "review_audit.json"
+REVIEW_AUDIT_MD_REPORT = BATCH_REPORT_DIR / "review_audit.md"
 SUPPORTED_EXTENSIONS = {".pdf", ".txt"}
 ACCEPTED_OUTCOMES = {"written"}
 REVIEW_REASON_KEYS = [
@@ -40,6 +42,7 @@ REQUIRED_RESULT_FIELDS = [
     "filename",
     "status",
     "entity_count",
+    "entities",
     "selected_extractor",
     "primary_extractor",
     "fallback_extractor",
@@ -187,6 +190,7 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "filename": source_path.name,
             "status": status,
             "entity_count": len(entities),
+            "entities": entities,
             "selected_extractor": str(selected_extractor) if selected_extractor is not None else None,
             "primary_extractor": extractor_result.get("primary_extractor"),
             "fallback_extractor": extractor_result.get("fallback_extractor"),
@@ -213,6 +217,7 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "filename": source_path.name,
             "status": "error",
             "entity_count": 0,
+            "entities": [],
             "selected_extractor": None,
             "primary_extractor": None,
             "fallback_extractor": None,
@@ -441,7 +446,145 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         lines.append("- None")
 
     BATCH_MD_REPORT.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_review_audit_reports_from_latest()
     return BATCH_JSON_REPORT, BATCH_MD_REPORT
+
+
+def write_review_audit_reports_from_latest() -> tuple[Path, Path]:
+    ensure_batch_validation_dirs()
+    if BATCH_JSON_REPORT.exists():
+        summary = json.loads(BATCH_JSON_REPORT.read_text(encoding="utf-8"))
+    else:
+        summary = {"timestamp": datetime.now(UTC).isoformat(), "results": []}
+
+    audit = build_review_audit(summary)
+    REVIEW_AUDIT_JSON_REPORT.write_text(json.dumps(audit, indent=2), encoding="utf-8")
+    REVIEW_AUDIT_MD_REPORT.write_text(render_review_audit_markdown(audit), encoding="utf-8")
+    return REVIEW_AUDIT_JSON_REPORT, REVIEW_AUDIT_MD_REPORT
+
+
+def build_review_audit(summary: dict[str, Any]) -> dict[str, Any]:
+    reviewed = [item for item in summary.get("results", []) if item.get("status") == "review"]
+    items = [review_audit_item(item) for item in reviewed]
+    breakdown = {category: 0 for category in REVIEW_FIX_CATEGORIES}
+    for item in items:
+        category = item["recommended_fix_category"]
+        if category in breakdown:
+            breakdown[category] += 1
+    return {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "source_report": str(BATCH_JSON_REPORT),
+        "source_timestamp": summary.get("timestamp"),
+        "total_reviewed": len(items),
+        "review_fix_breakdown": breakdown,
+        "files": items,
+    }
+
+
+REVIEW_FIX_CATEGORIES = (
+    "no_entities",
+    "low_entity_count",
+    "low_confidence",
+    "low_coverage",
+    "low_diversity",
+    "extractor_issue",
+)
+
+
+def review_audit_item(item: dict[str, Any]) -> dict[str, Any]:
+    diagnostics = item.get("text_diagnostics") if isinstance(item.get("text_diagnostics"), dict) else {}
+    breakdown = normalized_review_confidence_breakdown(item.get("confidence_breakdown"))
+    entity_count = int(item.get("entity_count") or 0)
+    confidence = safe_float(item.get("confidence"))
+    return {
+        "filename": item.get("filename"),
+        "entity_count": entity_count,
+        "entities": list(item.get("entities") or []),
+        "confidence": confidence,
+        "confidence_breakdown": breakdown,
+        "why_reviewed": list(item.get("why_reviewed") or []),
+        "text_preview": str(diagnostics.get("preview") or "")[:300],
+        "text_length": int(diagnostics.get("length") or 0),
+        "extraction_method": diagnostics.get("method"),
+        "recommended_fix_category": recommended_fix_category(
+            entity_count=entity_count,
+            confidence=confidence,
+            coverage_score=breakdown["coverage_score"],
+            diversity_score=breakdown["diversity_score"],
+            extractor_weight=breakdown["extractor_weight"],
+        ),
+    }
+
+
+def normalized_review_confidence_breakdown(value: Any) -> dict[str, float | None]:
+    source = value if isinstance(value, dict) else {}
+    extractor_weight = safe_float(source.get("extractor_weight"))
+    calibrated_weight = safe_float(source.get("calibrated_extractor_weight"))
+    return {
+        "entity_count_score": safe_float(source.get("entity_count")),
+        "coverage_score": safe_float(source.get("coverage")),
+        "diversity_score": safe_float(source.get("diversity")),
+        "extractor_weight": extractor_weight,
+        "calibrated_weight": calibrated_weight if calibrated_weight is not None else extractor_weight,
+    }
+
+
+def recommended_fix_category(
+    *,
+    entity_count: int,
+    confidence: float | None,
+    coverage_score: float | None,
+    diversity_score: float | None,
+    extractor_weight: float | None,
+) -> str:
+    if entity_count == 0:
+        return "no_entities"
+    if entity_count == 1:
+        return "low_entity_count"
+    if confidence is not None and confidence < 0.5:
+        return "low_confidence"
+    if coverage_score is not None and coverage_score < 0.3:
+        return "low_coverage"
+    if diversity_score is not None and diversity_score < 0.3:
+        return "low_diversity"
+    if extractor_weight is not None and extractor_weight < 0.7:
+        return "extractor_issue"
+    return "low_confidence"
+
+
+def render_review_audit_markdown(audit: dict[str, Any]) -> str:
+    lines = [
+        "# MedAI Review Audit",
+        "",
+        f"- Source report: `{audit.get('source_report')}`",
+        f"- Reviewed files: `{audit.get('total_reviewed', 0)}`",
+        "",
+        "## Review Fix Breakdown",
+        "",
+    ]
+    breakdown = audit.get("review_fix_breakdown") or {}
+    lines.extend(f"- {category}: `{breakdown.get(category, 0)}`" for category in REVIEW_FIX_CATEGORIES)
+
+    for item in audit.get("files", []):
+        entity_texts = [
+            str(entity.get("text", ""))
+            for entity in item.get("entities", [])
+            if isinstance(entity, dict) and str(entity.get("text", "")).strip()
+        ]
+        lines.extend([
+            "",
+            f"## {item.get('filename')}",
+            "",
+            f"- confidence: {item.get('confidence')}",
+            f"- entities: {entity_texts}",
+            f"- why reviewed: {item.get('why_reviewed') or []}",
+            f"- recommended fix: {item.get('recommended_fix_category')}",
+            "",
+            "- preview:",
+            str(item.get("text_preview") or ""),
+        ])
+
+    return "\n".join(lines) + "\n"
 
 
 def copy_to_unique_destination(source_path: Path, destination_dir: Path) -> Path:

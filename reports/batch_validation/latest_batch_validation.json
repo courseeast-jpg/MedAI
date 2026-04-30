@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-30T22:24:19.564291+00:00",
-  "run_id": "02365443-740f-4696-8141-505b43a01f44",
+  "timestamp": "2026-04-30T22:33:19.347227+00:00",
+  "run_id": "b5a0dfca-2edd-47f3-a689-fef2572ff478",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\real_validation_input",
   "total_files": 15,
   "accepted_count": 9,
@@ -23,6 +23,53 @@
       "filename": "1.pdf",
       "status": "accepted",
       "entity_count": 5,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urine Cytology",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "diagnosis",
+          "text": "Negative for high-grade urothelial carcinoma",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Benign Urothelial Cells",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Red Blood Cells",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Blood",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "spacy",
       "primary_extractor": null,
       "fallback_extractor": null,
@@ -50,7 +97,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\1_2.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\1_3.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -58,6 +105,126 @@
       "filename": "2.pdf",
       "status": "accepted",
       "entity_count": 13,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Result",
+          "value": "1",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "No Growth",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "note",
+          "text": "Final Report",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Epithelial Cells",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Protein",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Glucose",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Bacteria",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Blood",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "RBC",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "WBC",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "spacy",
       "primary_extractor": null,
       "fallback_extractor": null,
@@ -85,7 +252,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\2_2.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\2_3.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -93,6 +260,48 @@
       "filename": "21.pdf",
       "status": "accepted",
       "entity_count": 4,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Flow time",
+          "value": "84",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Averase flow",
+          "value": "2",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Peak flow",
+          "value": "19",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "AWW",
+          "value": "8",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "spacy",
       "primary_extractor": null,
       "fallback_extractor": null,
@@ -120,7 +329,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_8.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_9.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -128,6 +337,7 @@
       "filename": "22.pdf",
       "status": "review",
       "entity_count": 0,
+      "entities": [],
       "selected_extractor": "spacy",
       "primary_extractor": "gemini",
       "fallback_extractor": "spacy",
@@ -161,7 +371,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_8.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_9.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -169,6 +379,17 @@
       "filename": "23.pdf",
       "status": "review",
       "entity_count": 1,
+      "entities": [
+        {
+          "type": "diagnosis",
+          "text": "INNGE EE",
+          "negated": true,
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -200,7 +421,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_8.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_9.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -208,6 +429,35 @@
       "filename": "3-1.pdf",
       "status": "accepted",
       "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Protein",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Glucose",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -235,7 +485,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\3-1_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\3-1_4.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -243,6 +493,26 @@
       "filename": "3-2.pdf",
       "status": "review",
       "entity_count": 2,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Blood",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -273,7 +543,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_5.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -281,6 +551,35 @@
       "filename": "4.pdf",
       "status": "accepted",
       "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Glucose",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -308,7 +607,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\4_2.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\4_3.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -316,6 +615,35 @@
       "filename": "5.pdf",
       "status": "accepted",
       "entity_count": 3,
+      "entities": [
+        {
+          "type": "diagnosis",
+          "text": "growth",
+          "negated": true,
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "No Growth",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -343,7 +671,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\5.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\5_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -351,6 +679,43 @@
       "filename": "6.pdf",
       "status": "accepted",
       "entity_count": 4,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "RBC",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Epithelial Cells",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Bacteria",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "WBC",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -378,7 +743,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\6_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -386,6 +751,35 @@
       "filename": "7-1.pdf",
       "status": "accepted",
       "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Glucose",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Blood",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -413,7 +807,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-1_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-1_4.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -421,6 +815,35 @@
       "filename": "7-2.pdf",
       "status": "accepted",
       "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Leukocyte",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Protein",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -448,7 +871,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-2_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-2_7.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -456,6 +879,17 @@
       "filename": "8-1.pdf",
       "status": "review",
       "entity_count": 1,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urine Cytology",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -487,7 +921,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_8.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_9.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -495,6 +929,16 @@
       "filename": "8-2.pdf",
       "status": "review",
       "entity_count": 1,
+      "entities": [
+        {
+          "type": "diagnosis",
+          "text": "Recommendation",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -526,7 +970,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_8.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_9.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -534,6 +978,26 @@
       "filename": "9.pdf",
       "status": "review",
       "entity_count": 2,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "note",
+          "text": "Final Report",
+          "source": "supplemental_lab_rules",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
@@ -564,7 +1028,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_8.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_9.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     }
