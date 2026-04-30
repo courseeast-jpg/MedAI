@@ -5,6 +5,7 @@ from pathlib import Path
 
 from execution.logging import AuditLogger
 from execution.pipeline import ExecutionPipeline
+from extractors.spacy_extractor import SpacyExtractor
 
 
 class NoopPIIStripper:
@@ -225,6 +226,36 @@ def test_zero_entities_routes_to_review_regardless_of_extractor(tmp_path: Path):
 
     assert result.outcome == "queued_for_review"
     assert result.validation_status == "rejected"
+    assert any(error["code"] == "empty_extraction" for error in result.validation_errors)
+
+
+def test_supplemental_rules_turn_empty_local_extraction_into_review_with_audit(tmp_path: Path):
+    pipeline = make_pipeline(
+        extractor=SpacyExtractor(),
+        tmp_path=tmp_path,
+    )
+
+    result = pipeline.process_text("CYTOLOGY, URINE Collected on [DATE] Results", specialty="general")
+
+    assert result.outcome == "queued_for_review"
+    assert result.validation_status == "needs_review"
+    assert result.extractor_result["supplemental_rules_applied"] is True
+    assert result.extractor_result["supplemental_entity_count"] >= 1
+    assert result.extractor_result["final_entity_count_after_supplement"] == len(result.extractor_result["entities"])
+
+
+def test_supplemental_rules_do_not_false_accept_zero_entities(tmp_path: Path):
+    pipeline = make_pipeline(
+        extractor=SpacyExtractor(),
+        tmp_path=tmp_path,
+    )
+
+    result = pipeline.process_text("unreadable document fragment", specialty="general")
+
+    assert result.outcome == "queued_for_review"
+    assert result.validation_status == "rejected"
+    assert result.extractor_result.get("supplemental_entity_count", 0) == 0
+    assert result.extractor_result.get("final_entity_count_after_supplement", len(result.extractor_result["entities"])) == 0
     assert any(error["code"] == "empty_extraction" for error in result.validation_errors)
 
 

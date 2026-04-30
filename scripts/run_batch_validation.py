@@ -26,6 +26,14 @@ BATCH_JSON_REPORT = BATCH_REPORT_DIR / "latest_batch_validation.json"
 BATCH_MD_REPORT = BATCH_REPORT_DIR / "latest_batch_validation.md"
 SUPPORTED_EXTENSIONS = {".pdf", ".txt"}
 ACCEPTED_OUTCOMES = {"written"}
+REVIEW_REASON_KEYS = [
+    "empty_extraction",
+    "confidence_below_threshold",
+    "low_entity_count",
+    "low_coverage",
+    "low_diversity",
+    "low_extractor_weight",
+]
 
 
 REQUIRED_RESULT_FIELDS = [
@@ -39,7 +47,11 @@ REQUIRED_RESULT_FIELDS = [
     "terminal_empty_prevented",
     "confidence",
     "confidence_breakdown",
+    "supplemental_rules_applied",
+    "supplemental_entity_count",
+    "final_entity_count_after_supplement",
     "review_reason",
+    "why_reviewed",
     "error",
     "text_diagnostics",
 ]
@@ -82,6 +94,7 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
         "fallback_count": 0,
         "low_text_quality_count": 0,
         "avg_text_length": 0,
+        "review_reason_summary": {reason: 0 for reason in REVIEW_REASON_KEYS},
         "results": [],
         "files_needing_review": [],
         "errors": [],
@@ -100,6 +113,9 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
         elif result["status"] == "review":
             summary["review_count"] += 1
             summary["files_needing_review"].append(result["filename"])
+            for reason in result.get("why_reviewed") or []:
+                if reason in summary["review_reason_summary"]:
+                    summary["review_reason_summary"][reason] += 1
         else:
             summary["error_count"] += 1
             summary["errors"].append({"filename": result["filename"], "error": result["error"]})
@@ -154,6 +170,14 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             BATCH_ARCHIVE_DIR if status == "accepted" else BATCH_REVIEW_DIR,
         )
         review_reason = review_reason_for(result, extractor_result)
+        confidence = safe_float(extractor_result.get("confidence", audit.get("confidence")))
+        confidence_breakdown = extractor_result.get("confidence_breakdown")
+        why_reviewed = review_reasons_for(
+            status=status,
+            entity_count=len(entities),
+            confidence=confidence,
+            confidence_breakdown=confidence_breakdown,
+        )
         return normalize_result({
             "filename": source_path.name,
             "status": status,
@@ -163,9 +187,15 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "fallback_extractor": extractor_result.get("fallback_extractor"),
             "fallback_reason": extractor_result.get("fallback_reason"),
             "terminal_empty_prevented": bool(extractor_result.get("terminal_empty_prevented", False)),
-            "confidence": safe_float(extractor_result.get("confidence", audit.get("confidence"))),
-            "confidence_breakdown": extractor_result.get("confidence_breakdown"),
+            "confidence": confidence,
+            "confidence_breakdown": confidence_breakdown,
+            "supplemental_rules_applied": bool(extractor_result.get("supplemental_rules_applied", False)),
+            "supplemental_entity_count": int(extractor_result.get("supplemental_entity_count", 0) or 0),
+            "final_entity_count_after_supplement": int(
+                extractor_result.get("final_entity_count_after_supplement", len(entities)) or 0
+            ),
             "review_reason": review_reason,
+            "why_reviewed": why_reviewed,
             "error": None,
             "text_diagnostics": text_diagnostics,
             "copied_to": str(copy_destination),
@@ -184,7 +214,12 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "fallback_reason": None,
             "terminal_empty_prevented": False,
             "confidence": None,
+            "confidence_breakdown": None,
+            "supplemental_rules_applied": False,
+            "supplemental_entity_count": 0,
+            "final_entity_count_after_supplement": 0,
             "review_reason": None,
+            "why_reviewed": [],
             "error": str(exc),
             "text_diagnostics": text_diagnostics,
             "copied_to": str(copy_destination),
@@ -197,6 +232,37 @@ def normalize_result(result: dict[str, Any]) -> dict[str, Any]:
     for field in REQUIRED_RESULT_FIELDS:
         result.setdefault(field, None)
     return result
+
+
+def review_reasons_for(
+    *,
+    status: str,
+    entity_count: int,
+    confidence: float | None,
+    confidence_breakdown: dict[str, Any] | None,
+) -> list[str]:
+    if status != "review":
+        return []
+
+    reasons: list[str] = []
+    breakdown = confidence_breakdown if isinstance(confidence_breakdown, dict) else {}
+    coverage_score = safe_float(breakdown.get("coverage"))
+    diversity_score = safe_float(breakdown.get("diversity"))
+    extractor_weight = safe_float(breakdown.get("extractor_weight"))
+
+    if entity_count == 0:
+        reasons.append("empty_extraction")
+    if confidence is not None and confidence < 0.65:
+        reasons.append("confidence_below_threshold")
+    if entity_count <= 1:
+        reasons.append("low_entity_count")
+    if coverage_score is not None and coverage_score < 0.3:
+        reasons.append("low_coverage")
+    if diversity_score is not None and diversity_score < 0.3:
+        reasons.append("low_diversity")
+    if extractor_weight is not None and extractor_weight < 0.7:
+        reasons.append("low_extractor_weight")
+    return reasons
 
 
 def build_initial_text_diagnostics(source_path: Path) -> dict[str, Any]:
@@ -300,6 +366,13 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         f"- Low text quality: `{summary.get('low_text_quality_count', 0)}`",
         f"- Average text length: `{summary.get('avg_text_length', 0)}`",
         "",
+        "## Review Reason Breakdown",
+        "",
+        *[
+            f"- {reason}: `{summary.get('review_reason_summary', {}).get(reason, 0)}`"
+            for reason in REVIEW_REASON_KEYS
+        ],
+        "",
         "## Results",
         "",
     ]
@@ -307,8 +380,8 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         lines.append("No supported PDF or TXT files found in `real_validation_input/`.")
     else:
         lines.extend([
-            "| File | Status | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Review reason | Error |",
-            "| --- | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- |",
+            "| File | Status | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Why reviewed | Review reason | Error |",
+            "| --- | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- | --- |",
         ])
         for item in summary["results"]:
             fallback = item.get("fallback_extractor") or item.get("fallback_reason") or ""
@@ -325,6 +398,7 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
                     "yes" if diagnostics.get("suspicious") else "no",
                     escape_md(fallback),
                     "" if item.get("confidence") is None else str(item.get("confidence")),
+                    escape_md(", ".join(item.get("why_reviewed") or [])),
                     escape_md(item.get("review_reason")),
                     escape_md(item.get("error")),
                 ])
@@ -393,6 +467,7 @@ def main() -> int:
     print(f"fallbacks: {summary['fallback_count']}")
     print(f"low_text_quality: {summary['low_text_quality_count']}")
     print(f"avg_text_length: {summary['avg_text_length']}")
+    print(f"review_reason_summary: {summary['review_reason_summary']}")
     print(f"json_report: {BATCH_JSON_REPORT}")
     print(f"markdown_report: {BATCH_MD_REPORT}")
     return 0

@@ -117,7 +117,15 @@ def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> d
                 3,
             ),
         }
-    for key in ("primary_extractor", "fallback_extractor", "fallback_reason", "terminal_empty_prevented"):
+    for key in (
+        "primary_extractor",
+        "fallback_extractor",
+        "fallback_reason",
+        "terminal_empty_prevented",
+        "supplemental_rules_applied",
+        "supplemental_entity_count",
+        "final_entity_count_after_supplement",
+    ):
         if key in primary_result:
             merged[key] = primary_result[key]
     return merged

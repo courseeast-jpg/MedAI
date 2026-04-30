@@ -392,7 +392,7 @@ def test_scan_urinalysis_style_table_prefers_non_empty_local_result_over_empty_p
 
     assert result.audit["actual_route"] == "spacy"
     assert result.audit["entity_count"] > 0
-    assert result.extractor_result["discarded_empty_fallback"] is True
+    assert result.extractor_result["supplemental_rules_applied"] is True
     assert result.outcome == "written"
 
 
@@ -438,9 +438,10 @@ def test_ua_structured_documents_remain_written_when_phi3_fallback_is_empty(
     result = pipeline.process_text(text, specialty="general")
 
     assert result.audit["actual_route"] == "spacy"
-    assert result.outcome == "queued_for_review"
-    assert result.validation_status == "needs_review"
+    assert result.outcome == "written"
+    assert result.validation_status == "accepted"
     assert result.extractor_result["selected_extractor"] == "spacy"
+    assert result.extractor_result["supplemental_rules_applied"] is True
     assert any(entity.get("text") == expected_text for entity in result.extractor_result["entities"])
 
 

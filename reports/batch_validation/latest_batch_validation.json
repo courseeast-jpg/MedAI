@@ -1,80 +1,32 @@
 {
-  "timestamp": "2026-04-30T19:07:43.404357+00:00",
-  "run_id": "7a71c636-7442-4eb1-901c-5950aebf2006",
+  "timestamp": "2026-04-30T22:00:18.957304+00:00",
+  "run_id": "c060b4d4-ef60-4879-907b-e0e3df53860e",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\real_validation_input",
   "total_files": 15,
   "accepted_count": 3,
   "review_count": 12,
   "error_count": 0,
-  "empty_extraction_count": 3,
-  "fallback_count": 6,
+  "empty_extraction_count": 1,
+  "fallback_count": 12,
   "low_text_quality_count": 0,
   "avg_text_length": 338.6,
+  "review_reason_summary": {
+    "empty_extraction": 1,
+    "confidence_below_threshold": 12,
+    "low_entity_count": 4,
+    "low_coverage": 1,
+    "low_diversity": 1,
+    "low_extractor_weight": 11
+  },
   "results": [
     {
       "filename": "1.pdf",
-      "status": "review",
-      "entity_count": 7,
-      "selected_extractor": "gemini",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": "confidence_too_low:0.120",
-      "terminal_empty_prevented": false,
-      "confidence": 0.8,
-      "confidence_breakdown": {
-        "entity_count": 0.8,
-        "coverage": 1.0,
-        "diversity": 1.0,
-        "extractor_weight": 0.9
-      },
-      "review_reason": "accept_with_route_audit",
-      "error": null,
-      "text_diagnostics": {
-        "length": 408,
-        "preview": "[Page 1] Tests Ordered: Clinician Provided ICD Code(s) & Clinical History: (02) Urine Cytology R31.0; Diagnosis: (02) URINE Clinician Provided Cytology Information: NEGATIVE FOR HIGH-GRADE UROTHELIAL CARCINOMA Jj} Source: URINE (NHGUC). BENIGN UROTHELIAL CELLS ARE PRESENT. Number of Containers:01 St",
-        "method": "tesseract fallback",
-        "suspicious": false
-      },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\1_4.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "accepted"
-    },
-    {
-      "filename": "2.pdf",
-      "status": "review",
-      "entity_count": 1,
+      "status": "accepted",
+      "entity_count": 5,
       "selected_extractor": "spacy",
       "primary_extractor": null,
       "fallback_extractor": null,
       "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.425,
-      "confidence_breakdown": {
-        "entity_count": 0.3,
-        "coverage": 0.2,
-        "diversity": 0.6,
-        "extractor_weight": 0.8
-      },
-      "review_reason": "confidence_below_reject_threshold",
-      "error": null,
-      "text_diagnostics": {
-        "length": 1485,
-        "preview": "[Page 1] EEE Date Collected: [DATE] - Urinalysis, Routine Test Current Result and Flag Previous Result and Date Units Reference Interval Urinalysis Gross Exam\u201d Specific Gravity\u201d 1.020 1.015 [DATE] 1.005-1.030 pH\u2122 7.5 5.0 [DATE] 5.0-7.5 Urine-Color\u2122 Orange Yellow [DATE] Yellow Appearance\u201d Clear Clear",
-        "method": "tesseract fallback",
-        "suspicious": false
-      },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\2_4.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "rejected"
-    },
-    {
-      "filename": "21.pdf",
-      "status": "accepted",
-      "entity_count": 4,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": "confidence_too_low:0.090",
       "terminal_empty_prevented": false,
       "confidence": 0.83,
       "confidence_breakdown": {
@@ -83,7 +35,75 @@
         "diversity": 1.0,
         "extractor_weight": 0.8
       },
-      "review_reason": "accept_with_route_audit",
+      "supplemental_rules_applied": true,
+      "supplemental_entity_count": 5,
+      "final_entity_count_after_supplement": 5,
+      "review_reason": "accept",
+      "why_reviewed": [],
+      "error": null,
+      "text_diagnostics": {
+        "length": 408,
+        "preview": "[Page 1] Tests Ordered: Clinician Provided ICD Code(s) & Clinical History: (02) Urine Cytology R31.0; Diagnosis: (02) URINE Clinician Provided Cytology Information: NEGATIVE FOR HIGH-GRADE UROTHELIAL CARCINOMA Jj} Source: URINE (NHGUC). BENIGN UROTHELIAL CELLS ARE PRESENT. Number of Containers:01 St",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\1.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "2.pdf",
+      "status": "accepted",
+      "entity_count": 13,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.838,
+      "confidence_breakdown": {
+        "entity_count": 0.8,
+        "coverage": 0.75,
+        "diversity": 1.0,
+        "extractor_weight": 0.8
+      },
+      "supplemental_rules_applied": true,
+      "supplemental_entity_count": 12,
+      "final_entity_count_after_supplement": 13,
+      "review_reason": "accept",
+      "why_reviewed": [],
+      "error": null,
+      "text_diagnostics": {
+        "length": 1485,
+        "preview": "[Page 1] EEE Date Collected: [DATE] - Urinalysis, Routine Test Current Result and Flag Previous Result and Date Units Reference Interval Urinalysis Gross Exam\u201d Specific Gravity\u201d 1.020 1.015 [DATE] 1.005-1.030 pH\u2122 7.5 5.0 [DATE] 5.0-7.5 Urine-Color\u2122 Orange Yellow [DATE] Yellow Appearance\u201d Clear Clear",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\2.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "21.pdf",
+      "status": "accepted",
+      "entity_count": 4,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.83,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 1.0,
+        "diversity": 1.0,
+        "extractor_weight": 0.8
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 4,
+      "review_reason": "accept",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 176,
@@ -91,7 +111,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_6.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -111,7 +131,17 @@
         "diversity": 0.0,
         "extractor_weight": 0.8
       },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 0,
       "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "why_reviewed": [
+        "empty_extraction",
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_diversity"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 77,
@@ -119,7 +149,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -130,7 +160,7 @@
       "selected_extractor": "phi3",
       "primary_extractor": "gemini",
       "fallback_extractor": "phi3",
-      "fallback_reason": "confidence_too_low:0.532",
+      "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
       "confidence": 0.45,
       "confidence_breakdown": {
@@ -139,7 +169,15 @@
         "diversity": 0.6,
         "extractor_weight": 0.6
       },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 1,
       "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 122,
@@ -147,27 +185,34 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
     {
       "filename": "3-1.pdf",
       "status": "review",
-      "entity_count": 1,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.487,
+      "entity_count": 3,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
-        "entity_count": 0.3,
+        "entity_count": 0.6,
         "coverage": 0.45,
-        "diversity": 0.6,
-        "extractor_weight": 0.8
+        "diversity": 1.0,
+        "extractor_weight": 0.6
       },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
       "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 441,
@@ -175,7 +220,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-1_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-1_3.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -183,19 +228,26 @@
       "filename": "3-2.pdf",
       "status": "review",
       "entity_count": 2,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.562,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
         "entity_count": 0.3,
         "coverage": 0.45,
         "diversity": 0.9,
-        "extractor_weight": 0.8
+        "extractor_weight": 0.6
       },
-      "review_reason": "confidence_below_accept_threshold",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 2,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 302,
@@ -203,27 +255,34 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_3.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "needs_review"
+      "validation_status": "rejected"
     },
     {
       "filename": "4.pdf",
-      "status": "accepted",
-      "entity_count": 4,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.693,
+      "status": "review",
+      "entity_count": 3,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
         "entity_count": 0.6,
         "coverage": 0.45,
         "diversity": 1.0,
-        "extractor_weight": 0.8
+        "extractor_weight": 0.6
       },
-      "review_reason": "accept",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 645,
@@ -231,27 +290,34 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\4.pdf",
-      "outcome": "written",
-      "validation_status": "accepted"
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\4_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
     },
     {
       "filename": "5.pdf",
       "status": "review",
-      "entity_count": 1,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.562,
+      "entity_count": 3,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
-        "entity_count": 0.3,
-        "coverage": 0.75,
-        "diversity": 0.6,
-        "extractor_weight": 0.8
+        "entity_count": 0.6,
+        "coverage": 1.0,
+        "diversity": 1.0,
+        "extractor_weight": 0.6
       },
-      "review_reason": "confidence_below_accept_threshold",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 59,
@@ -259,27 +325,34 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\5_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\5_6.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "needs_review"
+      "validation_status": "rejected"
     },
     {
       "filename": "6.pdf",
       "status": "review",
-      "entity_count": 2,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.637,
+      "entity_count": 4,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
-        "entity_count": 0.3,
+        "entity_count": 0.6,
         "coverage": 0.75,
-        "diversity": 0.9,
-        "extractor_weight": 0.8
+        "diversity": 1.0,
+        "extractor_weight": 0.6
       },
-      "review_reason": "confidence_below_accept_threshold",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 4,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 340,
@@ -287,27 +360,34 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\6_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\6_6.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "needs_review"
+      "validation_status": "rejected"
     },
     {
       "filename": "7-1.pdf",
       "status": "review",
-      "entity_count": 2,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.562,
+      "entity_count": 3,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
-        "entity_count": 0.3,
+        "entity_count": 0.6,
         "coverage": 0.45,
-        "diversity": 0.9,
-        "extractor_weight": 0.8
+        "diversity": 1.0,
+        "extractor_weight": 0.6
       },
-      "review_reason": "confidence_below_accept_threshold",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 501,
@@ -315,27 +395,34 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-1_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-1_3.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "needs_review"
+      "validation_status": "rejected"
     },
     {
       "filename": "7-2.pdf",
-      "status": "accepted",
-      "entity_count": 2,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.7,
+      "status": "review",
+      "entity_count": 3,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
-        "entity_count": 0.3,
-        "coverage": 1.0,
-        "diversity": 0.9,
-        "extractor_weight": 0.8
+        "entity_count": 0.6,
+        "coverage": 0.75,
+        "diversity": 1.0,
+        "extractor_weight": 0.6
       },
-      "review_reason": "accept",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 202,
@@ -343,27 +430,35 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-2_4.pdf",
-      "outcome": "written",
-      "validation_status": "accepted"
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-2.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
     },
     {
       "filename": "8-1.pdf",
       "status": "review",
-      "entity_count": 0,
-      "selected_extractor": "spacy",
+      "entity_count": 1,
+      "selected_extractor": "phi3",
       "primary_extractor": "gemini",
-      "fallback_extractor": "spacy",
-      "fallback_reason": "confidence_too_low:0.120",
-      "terminal_empty_prevented": false,
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
       "confidence": 0.45,
       "confidence_breakdown": {
-        "entity_count": 0.0,
-        "coverage": 0.0,
-        "diversity": 0.0,
-        "extractor_weight": 0.8
+        "entity_count": 0.3,
+        "coverage": 1.0,
+        "diversity": 0.6,
+        "extractor_weight": 0.6
       },
-      "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 1,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 52,
@@ -371,7 +466,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -379,19 +474,27 @@
       "filename": "8-2.pdf",
       "status": "review",
       "entity_count": 1,
-      "selected_extractor": "spacy",
-      "primary_extractor": null,
-      "fallback_extractor": null,
-      "fallback_reason": null,
-      "terminal_empty_prevented": false,
-      "confidence": 0.487,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
       "confidence_breakdown": {
         "entity_count": 0.3,
         "coverage": 0.45,
         "diversity": 0.6,
-        "extractor_weight": 0.8
+        "extractor_weight": 0.6
       },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 1,
       "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 219,
@@ -399,27 +502,34 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
     {
       "filename": "9.pdf",
       "status": "review",
-      "entity_count": 0,
-      "selected_extractor": "spacy",
+      "entity_count": 2,
+      "selected_extractor": "phi3",
       "primary_extractor": "gemini",
-      "fallback_extractor": "spacy",
-      "fallback_reason": "confidence_too_low:0.120",
-      "terminal_empty_prevented": false,
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
       "confidence": 0.45,
       "confidence_breakdown": {
-        "entity_count": 0.0,
-        "coverage": 0.0,
-        "diversity": 0.0,
-        "extractor_weight": 0.8
+        "entity_count": 0.3,
+        "coverage": 1.0,
+        "diversity": 0.9,
+        "extractor_weight": 0.6
       },
-      "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 2,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
       "error": null,
       "text_diagnostics": {
         "length": 50,
@@ -427,21 +537,21 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     }
   ],
   "files_needing_review": [
-    "1.pdf",
-    "2.pdf",
     "22.pdf",
     "23.pdf",
     "3-1.pdf",
     "3-2.pdf",
+    "4.pdf",
     "5.pdf",
     "6.pdf",
     "7-1.pdf",
+    "7-2.pdf",
     "8-1.pdf",
     "8-2.pdf",
     "9.pdf"

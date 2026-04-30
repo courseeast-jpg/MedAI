@@ -9,6 +9,7 @@ from loguru import logger
 
 from extractors.base_extractor import BaseExtractor
 from execution.confidence_scorer import score_extraction_result
+from execution.supplemental_rules import apply_supplemental_rules
 
 
 STRUCTURED_PARSER_VERSION = "structured_lab_parser_v1"
@@ -46,7 +47,7 @@ class SpacyExtractor(BaseExtractor):
 
         entities = self._dedupe(entities)
         latency_ms = int((time.perf_counter() - started) * 1000)
-        return score_extraction_result({
+        result = apply_supplemental_rules({
             "extractor": "spacy",
             "entities": entities,
             "confidence": 0.0,
@@ -57,6 +58,7 @@ class SpacyExtractor(BaseExtractor):
             "structured_entities_count": len(structured_entities),
             "structured_parser_version": STRUCTURED_PARSER_VERSION,
         })
+        return score_extraction_result(result)
 
     def _load_model(self) -> None:
         try:

@@ -1,4 +1,5 @@
 from extractors.spacy_extractor import SpacyExtractor
+from execution.supplemental_rules import supplemental_entities
 
 
 def test_spacy_extractor_filters_page_number_test_result():
@@ -48,6 +49,32 @@ def test_spacy_extractor_keeps_existing_medication_and_diagnosis_patterns():
     )
 
 
+def test_urinalysis_supplemental_rules_extract_common_findings():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract("UA BLOOD positive RBC 10-20 /hpf calcium oxalate crystals present")
+    entity_texts = {entity["text"].upper() for entity in result["entities"]}
+
+    assert "BLOOD" in entity_texts
+    assert "RBC" in entity_texts
+    assert "CALCIUM OXALATE CRYSTALS" in entity_texts
+    assert result["supplemental_rules_applied"] is True
+    assert result["supplemental_entity_count"] >= 3
+    assert result["final_entity_count_after_supplement"] == len(result["entities"])
+
+
+def test_supplemental_rules_do_not_duplicate_existing_entities():
+    additions = supplemental_entities(
+        "RBC seen. BLOOD positive.",
+        existing_entities=[
+            {"type": "test_result", "text": "RBC"},
+            {"type": "test_result", "text": "Blood"},
+        ],
+    )
+
+    assert additions == []
+
+
 def test_structured_lab_parser_extracts_ua_blood_trace_abnormal_block():
     extractor = SpacyExtractor()
 
@@ -63,7 +90,7 @@ def test_structured_lab_parser_extracts_ua_blood_trace_abnormal_block():
     assert result["structured_parser_used"] is True
     assert result["structured_entities_count"] >= 1
     assert result["structured_parser_version"] == "structured_lab_parser_v1"
-    assert result["confidence"] == 0.625
+    assert result["confidence"] == 0.7
     assert result["confidence_breakdown"]["entity_count"] == 0.3
     assert result["confidence_breakdown"]["extractor_weight"] == 0.8
     assert len(result["entities"]) > 0
@@ -92,8 +119,8 @@ def test_structured_lab_parser_extracts_ua_rbc_and_ua_crystals_layouts():
 
     assert result["structured_parser_used"] is True
     assert result["structured_entities_count"] >= 2
-    assert result["confidence"] == 0.7
-    assert result["confidence_breakdown"]["entity_count"] == 0.3
+    assert result["confidence"] == 0.83
+    assert result["confidence_breakdown"]["entity_count"] == 0.6
     assert result["confidence_breakdown"]["extractor_weight"] == 0.8
     assert len(result["entities"]) >= 2
     assert any(

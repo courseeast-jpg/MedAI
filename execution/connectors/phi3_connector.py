@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 
 from execution.confidence_scorer import score_extraction_result
+from execution.supplemental_rules import apply_supplemental_rules
 
 
 class Phi3Connector:
@@ -66,7 +67,7 @@ class Phi3Connector:
         if "calcium oxalate crystals" in normalized:
             entities.append({"type": "test_result", "text": "Calcium Oxalate Crystals"})
 
-        return score_extraction_result({
+        result = apply_supplemental_rules({
             "extractor": self.name,
             "actual_extractor": self.name,
             "entities": entities,
@@ -75,3 +76,4 @@ class Phi3Connector:
             "raw_text": text,
             "notes": ["phi3_stub_local_fallback"],
         })
+        return score_extraction_result(result)
