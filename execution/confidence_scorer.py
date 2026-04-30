@@ -20,11 +20,24 @@ def score_extraction_result(result: dict[str, Any], *, overwrite_confidence: boo
     raw_text = str(scored.get("raw_text") or "")
     extractor = str(scored.get("actual_extractor") or scored.get("extractor") or "unknown").lower()
 
+    base_extractor_weight = extractor_reliability_weight(extractor)
+    diversity_score = entity_diversity_score(entities)
+    calibrated_weight, calibration_reason = calibrated_extractor_reliability_weight(
+        extractor=extractor,
+        base_weight=base_extractor_weight,
+        entity_count=len(entities),
+        diversity_score=diversity_score,
+        supplemental_rules_applied=bool(scored.get("supplemental_rules_applied", False)),
+    )
+
     breakdown = {
         "entity_count": entity_count_score(len(entities)),
         "coverage": text_coverage_score(entities, raw_text),
-        "diversity": entity_diversity_score(entities),
-        "extractor_weight": extractor_reliability_weight(extractor),
+        "diversity": diversity_score,
+        "extractor_weight": calibrated_weight,
+        "base_extractor_weight": base_extractor_weight,
+        "calibrated_extractor_weight": calibrated_weight,
+        "calibration_reason": calibration_reason,
     }
     confidence = (
         breakdown["entity_count"] * 0.35
@@ -37,7 +50,10 @@ def score_extraction_result(result: dict[str, Any], *, overwrite_confidence: boo
         scored["confidence"] = computed_confidence
     else:
         scored.setdefault("confidence", computed_confidence)
-    scored["confidence_breakdown"] = {key: round(float(value), 3) for key, value in breakdown.items()}
+    scored["confidence_breakdown"] = {
+        key: round(float(value), 3) if isinstance(value, (int, float)) else value
+        for key, value in breakdown.items()
+    }
     return scored
 
 
@@ -102,3 +118,23 @@ def entity_diversity_score(entities: list[dict[str, Any]]) -> float:
 
 def extractor_reliability_weight(extractor: str) -> float:
     return EXTRACTOR_RELIABILITY_WEIGHTS.get(str(extractor or "").lower(), 0.5)
+
+
+def calibrated_extractor_reliability_weight(
+    *,
+    extractor: str,
+    base_weight: float,
+    entity_count: int,
+    diversity_score: float,
+    supplemental_rules_applied: bool,
+) -> tuple[float, str]:
+    extractor_name = str(extractor or "").lower()
+    if extractor_name != "phi3":
+        return base_weight, "none"
+    if entity_count <= 0:
+        return base_weight, "none"
+    if entity_count >= 3 and (supplemental_rules_applied or diversity_score >= 0.5):
+        if supplemental_rules_applied:
+            return 1.0, "phi3_supplemental_entities"
+        return 1.0, "phi3_diverse_entities"
+    return base_weight, "none"

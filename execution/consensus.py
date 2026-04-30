@@ -5,7 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from execution.confidence_scorer import score_extraction_result
+from execution.confidence_scorer import entity_diversity_score, score_extraction_result
 
 
 def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> dict[str, Any]:
@@ -14,10 +14,7 @@ def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> d
     if not results:
         raise ValueError("consensus_merge requires at least one extractor result")
 
-    normalized_results = [
-        deepcopy(result) if result.get("confidence_breakdown") else score_extraction_result(deepcopy(result), overwrite_confidence=False)
-        for result in results
-    ]
+    normalized_results = [_normalize_result_confidence(result) for result in results]
     source_names = [str(result.get("extractor", "unknown")) for result in normalized_results]
     total_sources = len(normalized_results)
     primary_result = next(
@@ -116,6 +113,40 @@ def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> d
                 / total_sources,
                 3,
             ),
+            "base_extractor_weight": round(
+                sum(
+                    float(
+                        result.get("confidence_breakdown", {}).get(
+                            "base_extractor_weight",
+                            result.get("confidence_breakdown", {}).get("extractor_weight", 0.0),
+                        )
+                    )
+                    for result in normalized_results
+                )
+                / total_sources,
+                3,
+            ),
+            "calibrated_extractor_weight": round(
+                sum(
+                    float(
+                        result.get("confidence_breakdown", {}).get(
+                            "calibrated_extractor_weight",
+                            result.get("confidence_breakdown", {}).get("extractor_weight", 0.0),
+                        )
+                    )
+                    for result in normalized_results
+                )
+                / total_sources,
+                3,
+            ),
+            "calibration_reason": ",".join(
+                sorted({
+                    str(result.get("confidence_breakdown", {}).get("calibration_reason", "none"))
+                    for result in normalized_results
+                    if str(result.get("confidence_breakdown", {}).get("calibration_reason", "none")) != "none"
+                })
+            )
+            or "none",
         }
     for key in (
         "primary_extractor",
@@ -129,6 +160,23 @@ def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> d
         if key in primary_result:
             merged[key] = primary_result[key]
     return merged
+
+
+def _normalize_result_confidence(result: dict[str, Any]) -> dict[str, Any]:
+    copied = deepcopy(result)
+    if copied.get("confidence_breakdown"):
+        return copied
+    return score_extraction_result(copied, overwrite_confidence=_should_recompute_phi3_confidence(copied))
+
+
+def _should_recompute_phi3_confidence(result: dict[str, Any]) -> bool:
+    extractor = str(result.get("actual_extractor") or result.get("extractor") or "").lower()
+    if extractor != "phi3":
+        return False
+    entities = [entity for entity in result.get("entities", []) if isinstance(entity, dict)]
+    if len(entities) < 3:
+        return False
+    return bool(result.get("supplemental_rules_applied")) or entity_diversity_score(entities) >= 0.5
 
 
 def _entity_key(entity: dict[str, Any]) -> tuple[str, str]:

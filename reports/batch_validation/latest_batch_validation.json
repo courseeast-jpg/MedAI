@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-30T22:00:18.957304+00:00",
-  "run_id": "c060b4d4-ef60-4879-907b-e0e3df53860e",
+  "timestamp": "2026-04-30T22:15:29.609983+00:00",
+  "run_id": "5867700e-ae68-40c7-ac51-0008b1c1a96d",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\real_validation_input",
   "total_files": 15,
   "accepted_count": 3,
@@ -12,11 +12,11 @@
   "avg_text_length": 338.6,
   "review_reason_summary": {
     "empty_extraction": 1,
-    "confidence_below_threshold": 12,
+    "confidence_below_threshold": 6,
     "low_entity_count": 4,
     "low_coverage": 1,
     "low_diversity": 1,
-    "low_extractor_weight": 11
+    "low_extractor_weight": 5
   },
   "results": [
     {
@@ -33,7 +33,10 @@
         "entity_count": 0.6,
         "coverage": 1.0,
         "diversity": 1.0,
-        "extractor_weight": 0.8
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": true,
       "supplemental_entity_count": 5,
@@ -47,7 +50,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\1_1.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -65,7 +68,10 @@
         "entity_count": 0.8,
         "coverage": 0.75,
         "diversity": 1.0,
-        "extractor_weight": 0.8
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": true,
       "supplemental_entity_count": 12,
@@ -79,7 +85,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\2.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\2_1.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -97,7 +103,10 @@
         "entity_count": 0.6,
         "coverage": 1.0,
         "diversity": 1.0,
-        "extractor_weight": 0.8
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
@@ -111,7 +120,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_7.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -129,7 +138,10 @@
         "entity_count": 0.0,
         "coverage": 0.0,
         "diversity": 0.0,
-        "extractor_weight": 0.8
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
@@ -149,7 +161,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_7.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -167,7 +179,10 @@
         "entity_count": 0.3,
         "coverage": 0.75,
         "diversity": 0.6,
-        "extractor_weight": 0.6
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
@@ -185,7 +200,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_7.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -198,21 +213,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.723,
       "confidence_breakdown": {
         "entity_count": 0.6,
         "coverage": 0.45,
         "diversity": 1.0,
-        "extractor_weight": 0.6
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
       "final_entity_count_after_supplement": 3,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 441,
@@ -220,9 +235,9 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-1_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-1_4.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "3-2.pdf",
@@ -238,7 +253,10 @@
         "entity_count": 0.3,
         "coverage": 0.45,
         "diversity": 0.9,
-        "extractor_weight": 0.6
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
@@ -255,7 +273,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_4.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -268,21 +286,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.723,
       "confidence_breakdown": {
         "entity_count": 0.6,
         "coverage": 0.45,
         "diversity": 1.0,
-        "extractor_weight": 0.6
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
       "final_entity_count_after_supplement": 3,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 645,
@@ -290,9 +308,9 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\4_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\4_5.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "5.pdf",
@@ -303,21 +321,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.86,
       "confidence_breakdown": {
         "entity_count": 0.6,
         "coverage": 1.0,
         "diversity": 1.0,
-        "extractor_weight": 0.6
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
       "final_entity_count_after_supplement": 3,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 59,
@@ -325,9 +343,9 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\5_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\5_7.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "6.pdf",
@@ -338,21 +356,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.797,
       "confidence_breakdown": {
         "entity_count": 0.6,
         "coverage": 0.75,
         "diversity": 1.0,
-        "extractor_weight": 0.6
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
       "final_entity_count_after_supplement": 4,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 340,
@@ -360,9 +378,9 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\6_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\6_7.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "7-1.pdf",
@@ -373,21 +391,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.723,
       "confidence_breakdown": {
         "entity_count": 0.6,
         "coverage": 0.45,
         "diversity": 1.0,
-        "extractor_weight": 0.6
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
       "final_entity_count_after_supplement": 3,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 501,
@@ -395,9 +413,9 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-1_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-1_4.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "7-2.pdf",
@@ -408,21 +426,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.797,
       "confidence_breakdown": {
         "entity_count": 0.6,
         "coverage": 0.75,
         "diversity": 1.0,
-        "extractor_weight": 0.6
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
       "final_entity_count_after_supplement": 3,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 202,
@@ -430,9 +448,9 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-2.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-2_1.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "8-1.pdf",
@@ -448,7 +466,10 @@
         "entity_count": 0.3,
         "coverage": 1.0,
         "diversity": 0.6,
-        "extractor_weight": 0.6
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
@@ -466,7 +487,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_7.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -484,7 +505,10 @@
         "entity_count": 0.3,
         "coverage": 0.45,
         "diversity": 0.6,
-        "extractor_weight": 0.6
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
@@ -502,7 +526,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_7.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -520,7 +544,10 @@
         "entity_count": 0.3,
         "coverage": 1.0,
         "diversity": 0.9,
-        "extractor_weight": 0.6
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
@@ -537,7 +564,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_7.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     }
