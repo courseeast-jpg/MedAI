@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import re
 
+from execution.confidence_scorer import score_extraction_result
+
 
 class Phi3Connector:
     name = "phi3"
@@ -39,12 +41,37 @@ class Phi3Connector:
                 "dose": f"{medication_match.group(2)}{medication_match.group(3)}",
             })
 
-        return {
+        has_match = re.search(r"\b(?:has|with)\s+([A-Za-z][A-Za-z -]{2,60})\b", text, re.IGNORECASE)
+        if has_match:
+            diagnosis = has_match.group(1).strip(" .;")
+            if not any(item["type"] == "diagnosis" and item["text"].lower() == diagnosis.lower() for item in entities):
+                entities.append({"type": "diagnosis", "text": diagnosis})
+
+        takes_match = re.search(r"\btakes\s+([A-Za-z][A-Za-z-]{2,40})\b", text, re.IGNORECASE)
+        if takes_match:
+            medication = takes_match.group(1).strip(" .;")
+            if not any(item["type"] == "medication" and item["text"].lower() == medication.lower() for item in entities):
+                entities.append({"type": "medication", "text": medication})
+
+        for negated in re.findall(r"\bno\s+([A-Za-z][A-Za-z -]{2,60})", text, re.IGNORECASE):
+            diagnosis = negated.strip(" .;")
+            if not any(item["type"] == "diagnosis" and item["text"].lower() == diagnosis.lower() for item in entities):
+                entities.append({"type": "diagnosis", "text": diagnosis, "negated": True})
+
+        normalized = text.lower()
+        if "ua blood" in normalized or "blood positive" in normalized:
+            entities.append({"type": "test_result", "text": "UA Blood"})
+        if re.search(r"\brbc\b", text, re.IGNORECASE):
+            entities.append({"type": "test_result", "text": "RBC"})
+        if "calcium oxalate crystals" in normalized:
+            entities.append({"type": "test_result", "text": "Calcium Oxalate Crystals"})
+
+        return score_extraction_result({
             "extractor": self.name,
             "actual_extractor": self.name,
             "entities": entities,
-            "confidence": 0.68 if entities else 0.4,
+            "confidence": 0.0,
             "latency_ms": 1,
             "raw_text": text,
             "notes": ["phi3_stub_local_fallback"],
-        }
+        })

@@ -188,7 +188,7 @@ def test_enrichment_does_not_remove_review_band_items(tmp_path: Path):
             "extractor": "spacy",
             "actual_extractor": "spacy",
             "entities": [{"type": "diagnosis", "text": "Migraine"}],
-            "confidence": 0.68,
+            "confidence": 0.64,
             "latency_ms": 1,
             "notes": [],
         }),

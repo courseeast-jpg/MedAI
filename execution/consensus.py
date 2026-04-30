@@ -5,6 +5,8 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
+from execution.confidence_scorer import score_extraction_result
+
 
 def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> dict[str, Any]:
     """Merge one or more extractor outputs into a consensus payload."""
@@ -12,7 +14,10 @@ def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> d
     if not results:
         raise ValueError("consensus_merge requires at least one extractor result")
 
-    normalized_results = [deepcopy(result) for result in results]
+    normalized_results = [
+        deepcopy(result) if result.get("confidence_breakdown") else score_extraction_result(deepcopy(result), overwrite_confidence=False)
+        for result in results
+    ]
     source_names = [str(result.get("extractor", "unknown")) for result in normalized_results]
     total_sources = len(normalized_results)
     primary_result = next(
@@ -73,7 +78,7 @@ def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> d
         agreement_score = 1.0
         consensus_confidence = round(avg_confidence, 3)
 
-    return {
+    merged = {
         "extractor": extractor_route,
         "actual_extractor": str(primary_result.get("actual_extractor", primary_result.get("extractor", "unknown"))),
         "entities": merged_entities,
@@ -87,6 +92,35 @@ def consensus_merge(results: list[dict[str, Any]], *, extractor_route: str) -> d
         "agreement_avg_confidence": avg_confidence,
         "disagreement_flag": disagreement_flag,
     }
+    if total_sources == 1:
+        merged["confidence_breakdown"] = dict(primary_result.get("confidence_breakdown", {}))
+    else:
+        merged["confidence_breakdown"] = {
+            "entity_count": round(
+                sum(float(result.get("confidence_breakdown", {}).get("entity_count", 0.0)) for result in normalized_results)
+                / total_sources,
+                3,
+            ),
+            "coverage": round(
+                sum(float(result.get("confidence_breakdown", {}).get("coverage", 0.0)) for result in normalized_results)
+                / total_sources,
+                3,
+            ),
+            "diversity": round(
+                sum(float(result.get("confidence_breakdown", {}).get("diversity", 0.0)) for result in normalized_results)
+                / total_sources,
+                3,
+            ),
+            "extractor_weight": round(
+                sum(float(result.get("confidence_breakdown", {}).get("extractor_weight", 0.0)) for result in normalized_results)
+                / total_sources,
+                3,
+            ),
+        }
+    for key in ("primary_extractor", "fallback_extractor", "fallback_reason", "terminal_empty_prevented"):
+        if key in primary_result:
+            merged[key] = primary_result[key]
+    return merged
 
 
 def _entity_key(entity: dict[str, Any]) -> tuple[str, str]:

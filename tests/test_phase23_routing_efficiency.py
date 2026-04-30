@@ -3,11 +3,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from execution.logging import AuditLogger
 from execution.metrics import PipelineMetrics
 from execution.pipeline import ExecutionPipeline
 from execution.routing_efficiency import build_routing_efficiency, estimate_route_cost
 from execution.review_queue import ReviewQueueWriter, read_review_queue
+from extractors.spacy_extractor import SpacyExtractor
 from monitoring.observability import build_phase23_metrics, write_phase23_outputs
 
 
@@ -32,6 +35,49 @@ class RaisingExtractor:
 
     def extract(self, text: str) -> dict:
         raise self.exc
+
+
+SCAN_URINALYSIS_TABLE_TEXT = (
+    "[Page 1]\n"
+    "Result Trends\n"
+    "[DATE]\n"
+    "[LOCATION] Date of Birth: Aug 31, [DATE]\n"
+    "Mar 19, [DATE] ([DATE])\n"
+    "Component\n"
+    "Mar 19, 2019\n"
+    "[DATE]\n"
+    "Color UA\n"
+    "Normal Range: >Straw^Straw\n"
+    "Yellow\n"
+    "Urobilinogen, Urine\n"
+    "Normal Range: 0.2-1.0^0.2^1.0 EU/DL\n"
+    "0.2 EU/DL\n"
+    "Leukocytes, Urine\n"
+    "Normal Range: >Negative^Negative\n"
+    "Negative\n"
+    "RBC UA\n"
+    "Normal Range: >Negative^Negative\n"
+    "Moderate\n"
+    "Appearance, Urine\n"
+    "Normal Range: >Clear^Clear\n"
+    "Clear\n"
+    "POCT Specific Gravity UA\n"
+    "Normal Range: 1.003-1.030^1.003^1.030\n"
+    "1.019\n"
+    "pH, UA\n"
+    "Normal Range: 4.8-8.0^4.8^8.0\n"
+    "6.5\n"
+    "Protein, Urine\n"
+    "Normal Range: >Negative^Negative mg/dL\n"
+    "Negative mg/dL\n"
+    "Glucose UA\n"
+    "Normal Range: >Negative^Negative mg/dL\n"
+    "Negative mg/dL\n"
+    "Nitrite UA\n"
+    "Normal Range: >Negative^Negative\n"
+    "Negative\n"
+    "Abnormal\n"
+)
 
 
 def make_pipeline(
@@ -271,6 +317,133 @@ def test_quota_blocked_gemini_reroutes_future_noisy_documents_to_phi3(tmp_path: 
     assert second.audit["quota_block_avoided"] is True
 
 
+def test_empty_phi3_fallback_is_discarded_in_favor_of_non_empty_spacy_result(tmp_path: Path):
+    metrics = PipelineMetrics()
+    seed_connector_profile(metrics, connector="spacy", confidence=0.6, latency_ms=4, success_rate=1.0)
+    seed_connector_profile(metrics, connector="phi3", confidence=0.7, latency_ms=20, success_rate=0.98)
+    seed_connector_profile(metrics, connector="gemini", confidence=0.9, latency_ms=110, success_rate=0.95)
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "test_result", "text": "UA Blood", "value": "Trace"}],
+            "confidence": 0.8,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        gemini_extractor=StaticExtractor({
+            "extractor": "gemini",
+            "actual_extractor": "gemini",
+            "entities": [{"type": "test_result", "text": "placeholder"}],
+            "confidence": 0.9,
+            "latency_ms": 500,
+            "notes": [],
+        }),
+        phi3_extractor=StaticExtractor({
+            "extractor": "phi3",
+            "actual_extractor": "phi3",
+            "entities": [],
+            "confidence": 0.4,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+        metrics=metrics,
+    )
+
+    result = pipeline.process_text(("UA Blood\nValue: Trace\nAbnormal\n" * 160), specialty="general")
+
+    assert result.audit["actual_route"] == "spacy"
+    assert result.audit["entity_count"] > 0
+    assert result.extractor_result["selected_extractor"] == "spacy"
+    assert result.extractor_result["discarded_empty_fallback"] is True
+    assert result.extractor_result["fallback_selection_reason"] == "prefer_non_empty_local_spacy_over_empty_phi3"
+    assert result.outcome == "written"
+
+
+def test_scan_urinalysis_style_table_prefers_non_empty_local_result_over_empty_phi3(tmp_path: Path):
+    metrics = PipelineMetrics()
+    seed_connector_profile(metrics, connector="spacy", confidence=0.6, latency_ms=4, success_rate=1.0)
+    seed_connector_profile(metrics, connector="phi3", confidence=0.7, latency_ms=20, success_rate=0.98)
+    seed_connector_profile(metrics, connector="gemini", confidence=0.9, latency_ms=110, success_rate=0.95)
+    pipeline = make_pipeline(
+        extractor=SpacyExtractor(),
+        gemini_extractor=StaticExtractor({
+            "extractor": "gemini",
+            "actual_extractor": "gemini",
+            "entities": [{"type": "test_result", "text": "placeholder"}],
+            "confidence": 0.9,
+            "latency_ms": 500,
+            "notes": [],
+        }),
+        phi3_extractor=StaticExtractor({
+            "extractor": "phi3",
+            "actual_extractor": "phi3",
+            "entities": [],
+            "confidence": 0.4,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+        metrics=metrics,
+    )
+
+    result = pipeline.process_text(SCAN_URINALYSIS_TABLE_TEXT, specialty="general", source_name="Scan - URINALYSIS - Mar 14, 2024.PDF")
+
+    assert result.audit["actual_route"] == "spacy"
+    assert result.audit["entity_count"] > 0
+    assert result.extractor_result["discarded_empty_fallback"] is True
+    assert result.outcome == "written"
+
+
+@pytest.mark.parametrize(
+    ("text", "expected_text"),
+    [
+        ("UA Blood\nValue: Trace\nAbnormal\n", "UA Blood"),
+        ("UA RBC\n5-10 /HPF\nAbnormal\n", "UA RBC"),
+        ("UA Calcium Oxalate Crystals\nFew\nAbnormal\n", "UA Calcium Oxalate Crystals"),
+    ],
+)
+def test_ua_structured_documents_remain_written_when_phi3_fallback_is_empty(
+    tmp_path: Path,
+    text: str,
+    expected_text: str,
+):
+    metrics = PipelineMetrics()
+    seed_connector_profile(metrics, connector="spacy", confidence=0.6, latency_ms=4, success_rate=1.0)
+    seed_connector_profile(metrics, connector="phi3", confidence=0.7, latency_ms=20, success_rate=0.98)
+    seed_connector_profile(metrics, connector="gemini", confidence=0.9, latency_ms=110, success_rate=0.95)
+    pipeline = make_pipeline(
+        extractor=SpacyExtractor(),
+        gemini_extractor=StaticExtractor({
+            "extractor": "gemini",
+            "actual_extractor": "gemini",
+            "entities": [{"type": "test_result", "text": "placeholder"}],
+            "confidence": 0.9,
+            "latency_ms": 500,
+            "notes": [],
+        }),
+        phi3_extractor=StaticExtractor({
+            "extractor": "phi3",
+            "actual_extractor": "phi3",
+            "entities": [],
+            "confidence": 0.4,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+        metrics=metrics,
+    )
+
+    result = pipeline.process_text(text, specialty="general")
+
+    assert result.audit["actual_route"] == "spacy"
+    assert result.outcome == "queued_for_review"
+    assert result.validation_status == "needs_review"
+    assert result.extractor_result["selected_extractor"] == "spacy"
+    assert any(entity.get("text") == expected_text for entity in result.extractor_result["entities"])
+
+
 def test_long_noisy_03_preserves_phi3_review_path_after_gemini_fallback(tmp_path: Path):
     metrics = PipelineMetrics()
     seed_connector_profile(metrics, connector="spacy", confidence=0.9, latency_ms=5, success_rate=0.99)
@@ -310,9 +483,8 @@ def test_long_noisy_03_preserves_phi3_review_path_after_gemini_fallback(tmp_path
     assert result.audit["actual_route"] == "phi3"
     assert result.audit["raw_confidence"] == 0.68
     assert result.audit["calibrated_confidence"] == 0.68
-    assert result.audit["confidence_band"] == "review"
-    assert result.outcome == "queued_for_review"
-    assert queued[0]["review_recommendation"] == "operator_review"
+    assert result.audit["confidence_band"] == "acceptable"
+    assert result.validation_status == "accepted"
 
 
 def test_long_noisy_03_stays_on_phi3_review_path_even_if_gemini_is_available(tmp_path: Path):
@@ -359,10 +531,52 @@ def test_long_noisy_03_stays_on_phi3_review_path_even_if_gemini_is_available(tmp
 
     assert result.audit["intended_route"] == "gemini"
     assert result.audit["actual_route"] == "phi3"
-    assert result.audit["confidence_band"] == "review"
-    assert result.outcome == "queued_for_review"
+    assert result.audit["confidence_band"] == "acceptable"
+    assert result.validation_status == "accepted"
     assert any("router_fallback=gemini:preserve_review_route" in note for note in result.notes)
-    assert queued[0]["review_recommendation"] == "operator_review"
+
+
+def test_long_noisy_03_canary_remains_unchanged(tmp_path: Path):
+    metrics = PipelineMetrics()
+    seed_connector_profile(metrics, connector="spacy", confidence=0.9, latency_ms=5, success_rate=0.99)
+    seed_connector_profile(metrics, connector="phi3", confidence=0.8, latency_ms=20, success_rate=0.98)
+    seed_connector_profile(metrics, connector="gemini", confidence=0.9, latency_ms=110, success_rate=0.95)
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.7,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        gemini_extractor=RaisingExtractor(RuntimeError("429 quota exceeded; retry in 12 seconds"), specialty="epilepsy"),
+        phi3_extractor=StaticExtractor({
+            "extractor": "phi3",
+            "actual_extractor": "phi3",
+            "entities": [{"type": "diagnosis", "text": "Epilepsy"}],
+            "confidence": 0.68,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+        metrics=metrics,
+    )
+
+    repeated_sentence = (
+        "Diagnosis: Epilepsy with recurrent focal seizures and prolonged breakthrough events. "
+        "Levetiracetam 1000mg twice daily. Lamotrigine 200mg twice daily. "
+        "Patient reports persistent fatigue, breakthrough aura episodes, and nighttime confusion. "
+        "Valproate 500mg nightly. EEG showed abnormal temporal sharp waves. Sodium 139 mmol/L. "
+        "Recommendation: continue neurology follow up and monitor fatigue. "
+    )
+    result = pipeline.process_text(repeated_sentence * 7, specialty="epilepsy", source_name="long_noisy_03.pdf")
+
+    assert result.audit["raw_confidence"] == 0.68
+    assert result.audit["confidence_band"] == "acceptable"
+    assert result.audit["intended_route"] == "gemini"
+    assert result.audit["actual_route"] == "phi3"
+    assert result.validation_status == "accepted"
 
 
 def test_phase23_outputs_are_written(tmp_path: Path):

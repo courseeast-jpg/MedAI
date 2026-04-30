@@ -148,6 +148,86 @@ def test_low_confidence_routes_to_needs_review(tmp_path: Path):
     assert queued[0]["raw_evidence_path"] is None
 
 
+def test_confidence_064_routes_to_review(tmp_path: Path):
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Migraine"}],
+            "confidence": 0.64,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+    )
+
+    result = pipeline.process_text("Diagnosis: Migraine.", specialty="neurology")
+
+    assert result.outcome == "queued_for_review"
+    assert result.validation_status == "needs_review"
+    assert result.audit["confidence_band"] == "review"
+
+
+def test_confidence_065_is_accepted(tmp_path: Path):
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Migraine"}],
+            "confidence": 0.65,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+    )
+
+    result = pipeline.process_text("Diagnosis: Migraine.", specialty="neurology")
+
+    assert result.outcome == "written"
+    assert result.validation_status == "accepted"
+    assert result.audit["confidence_band"] == "acceptable"
+
+
+def test_confidence_070_is_accepted(tmp_path: Path):
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [{"type": "diagnosis", "text": "Migraine"}],
+            "confidence": 0.70,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+    )
+
+    result = pipeline.process_text("Diagnosis: Migraine.", specialty="neurology")
+
+    assert result.outcome == "written"
+    assert result.validation_status == "accepted"
+    assert result.audit["confidence_band"] == "acceptable"
+
+
+def test_zero_entities_routes_to_review_regardless_of_extractor(tmp_path: Path):
+    pipeline = make_pipeline(
+        extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [],
+            "confidence": 0.90,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        tmp_path=tmp_path,
+    )
+
+    result = pipeline.process_text("No extractable clinical facts.", specialty="general")
+
+    assert result.outcome == "queued_for_review"
+    assert result.validation_status == "rejected"
+    assert any(error["code"] == "empty_extraction" for error in result.validation_errors)
+
+
 def test_gemini_fallback_uses_terminal_connector_for_validation_and_audit(tmp_path: Path):
     gemini_extractor = StaticExtractor({
         "extractor": "gemini",
@@ -172,13 +252,13 @@ def test_gemini_fallback_uses_terminal_connector_for_validation_and_audit(tmp_pa
 
     result = pipeline.process_text("x" * 4000, specialty="epilepsy")
 
-    assert result.outcome == "queued_for_review"
-    assert result.validation_status == "needs_review"
+    assert result.outcome == "written"
+    assert result.validation_status == "accepted"
     assert result.audit["extractor_route"] == "rules_based"
     assert result.audit["extractor_actual"] == "rules_based"
     assert result.audit["requested_extractor_route"] == "gemini"
-    assert result.queued_count == 1
-    assert result.queued_records[0].status == "pending_validation_review"
+    assert result.written_count == 1
+    assert result.queued_count == 0
     assert not any(error["code"] == "route_actual_mismatch" for error in result.validation_errors)
 
 

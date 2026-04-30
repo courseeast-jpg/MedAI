@@ -1,14 +1,450 @@
 {
-  "timestamp": "2026-04-30T17:48:28.149675+00:00",
-  "run_id": "fdaf5a70-232c-4d9c-aa4d-2a5fa0e9889d",
+  "timestamp": "2026-04-30T19:07:43.404357+00:00",
+  "run_id": "7a71c636-7442-4eb1-901c-5950aebf2006",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\real_validation_input",
-  "total_files": 0,
-  "accepted_count": 0,
-  "review_count": 0,
+  "total_files": 15,
+  "accepted_count": 3,
+  "review_count": 12,
   "error_count": 0,
-  "empty_extraction_count": 0,
-  "fallback_count": 0,
-  "results": [],
-  "files_needing_review": [],
+  "empty_extraction_count": 3,
+  "fallback_count": 6,
+  "low_text_quality_count": 0,
+  "avg_text_length": 338.6,
+  "results": [
+    {
+      "filename": "1.pdf",
+      "status": "review",
+      "entity_count": 7,
+      "selected_extractor": "gemini",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "confidence_too_low:0.120",
+      "terminal_empty_prevented": false,
+      "confidence": 0.8,
+      "confidence_breakdown": {
+        "entity_count": 0.8,
+        "coverage": 1.0,
+        "diversity": 1.0,
+        "extractor_weight": 0.9
+      },
+      "review_reason": "accept_with_route_audit",
+      "error": null,
+      "text_diagnostics": {
+        "length": 408,
+        "preview": "[Page 1] Tests Ordered: Clinician Provided ICD Code(s) & Clinical History: (02) Urine Cytology R31.0; Diagnosis: (02) URINE Clinician Provided Cytology Information: NEGATIVE FOR HIGH-GRADE UROTHELIAL CARCINOMA Jj} Source: URINE (NHGUC). BENIGN UROTHELIAL CELLS ARE PRESENT. Number of Containers:01 St",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\1_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "2.pdf",
+      "status": "review",
+      "entity_count": 1,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.425,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.2,
+        "diversity": 0.6,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "confidence_below_reject_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 1485,
+        "preview": "[Page 1] EEE Date Collected: [DATE] - Urinalysis, Routine Test Current Result and Flag Previous Result and Date Units Reference Interval Urinalysis Gross Exam\u201d Specific Gravity\u201d 1.020 1.015 [DATE] 1.005-1.030 pH\u2122 7.5 5.0 [DATE] 5.0-7.5 Urine-Color\u2122 Orange Yellow [DATE] Yellow Appearance\u201d Clear Clear",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\2_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "21.pdf",
+      "status": "accepted",
+      "entity_count": 4,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "confidence_too_low:0.090",
+      "terminal_empty_prevented": false,
+      "confidence": 0.83,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 1.0,
+        "diversity": 1.0,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "accept_with_route_audit",
+      "error": null,
+      "text_diagnostics": {
+        "length": 176,
+        "preview": "[Page 1] Total volume: [PERSON] time: 4 - Flow time: 84 ; Averase flow: 2 als Peak flow: 19 [PERSON] to peak: 6 4 [LOCATION] nomosram for tales Peak flow [DATE] AWW 8 INN WX) -",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_4.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "22.pdf",
+      "status": "review",
+      "entity_count": 0,
+      "selected_extractor": "spacy",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "spacy",
+      "fallback_reason": "confidence_too_low:0.120",
+      "terminal_empty_prevented": false,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.0,
+        "coverage": 0.0,
+        "diversity": 0.0,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 77,
+        "preview": "[Page 1] Each time divisiot ach time 2 , ie so 10 20 aa <a > =a _ ine 1 i 7 .",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "23.pdf",
+      "status": "review",
+      "entity_count": 1,
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "confidence_too_low:0.532",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.75,
+        "diversity": 0.6,
+        "extractor_weight": 0.6
+      },
+      "review_reason": "confidence_below_reject_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 122,
+        "preview": "[Page 1] Each thee diviel\u201d \u201ca o 2 m0 iH \u2014\u2014\u2014T . Total volume: \u20ac25 mi Poa time a ae Tiverosl ease ss io 2 ww No INNGE EE Woe",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "3-1.pdf",
+      "status": "review",
+      "entity_count": 1,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.487,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.45,
+        "diversity": 0.6,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "confidence_below_reject_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 441,
+        "preview": "[Page 1] Specific Gravity, Urine Ph. Ua. Qn. Test Strip Normal range: 1.005 - 1.030 Normal range: 5.0-7.5 1.020 | 7.5 | wr id ee Ee 1,005 1,03 4 1.5 Urine-Color Appearance. Urine Normal value: Yellow Normal value: Clear Value Value Orange Clear [PERSON] UA Protein UA Normal value: Negative Normal va",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-1_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "3-2.pdf",
+      "status": "review",
+      "entity_count": 2,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.562,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.45,
+        "diversity": 0.9,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "confidence_below_accept_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 302,
+        "preview": "[Page 1] Blood UA Bilirubin UA Normal value: Negative Normal value: Negative Value Value Trace Negative Urobilinogen UA Nitrite UA Normal range: 0.2 - 1.0 mg/dL Normal value: Negative 0.2 = Value Sees \u2018 02 1 Negative Microscopic Examination Value See below: Microscopic was indicated and was performe",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "4.pdf",
+      "status": "accepted",
+      "entity_count": 4,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.693,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.45,
+        "diversity": 1.0,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "accept",
+      "error": null,
+      "text_diagnostics": {
+        "length": 645,
+        "preview": "[Page 1] [DATE] (Table 1 of 1) [DATE], [DATE], [DATE] Specific Gravity, Urine Normal Range: 1.005 - 1.030 po ae rare Bilirubin UA : s Urobilinogen UA Normal Range: 0.2 - 1.0 mg/dL po oe meal 2 maa Nitrite UA : : [PERSON] Nome) Rane: Require | ernie | mirosctammton || comme | [LOCATION]. Ua. Qn. Test",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\4.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "5.pdf",
+      "status": "review",
+      "entity_count": 1,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.562,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.75,
+        "diversity": 0.6,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "confidence_below_accept_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 59,
+        "preview": "[Page 1] Result 1 (Urine Culture) (Labcorp) Value No growth",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\5_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "6.pdf",
+      "status": "review",
+      "entity_count": 2,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.637,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.75,
+        "diversity": 0.9,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "confidence_below_accept_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 340,
+        "preview": "[Page 1] WBC Micro (Labcorp) RBC Micro (Labcorp) Normal range: 0 - 5 /hpf Normal range: 0 - 2 /hpf Value Value 0-5 3-10 Epithelial Cells (non renal) (Labcorp) Casts (Micro) (Labcorp) Normal range: 0 - 10 /hpf Normal value: None seen /lpf Value Value None seen None seen Bacteria (Micro) (Labcorp) Nor",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\6_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "7-1.pdf",
+      "status": "review",
+      "entity_count": 2,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.562,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.45,
+        "diversity": 0.9,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "confidence_below_accept_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 501,
+        "preview": "[Page 1] POCT PERFORM URINE DIPSTICK Collected on [DATE] Lab tests - Urine Results Color, UA Clarity, UA Normal value: Colorless, Yellow, Straw, Dark Normal value: Clear Value Value Red Clear Glucose, UA Bilirubin, UA Normal value: Negative Normal value: Negative Value Value Negative Negative Ketone",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\7-1_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "7-2.pdf",
+      "status": "accepted",
+      "entity_count": 2,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.7,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 1.0,
+        "diversity": 0.9,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "accept",
+      "error": null,
+      "text_diagnostics": {
+        "length": 202,
+        "preview": "[Page 1] Protein, UA Urobilinogen, UA Normal value: Negative Normal value: 0.2, 1.0 Value Value 2+ 3.0 Leukocytes, UA Nitrite, UA Normal value: Negative Normal value: Negative Value Value Trace Negative",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-2_4.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "8-1.pdf",
+      "status": "review",
+      "entity_count": 0,
+      "selected_extractor": "spacy",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "spacy",
+      "fallback_reason": "confidence_too_low:0.120",
+      "terminal_empty_prevented": false,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.0,
+        "coverage": 0.0,
+        "diversity": 0.0,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 52,
+        "preview": "[Page 1] CYTOLOGY, URINE Collected on [DATE] Results",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "8-2.pdf",
+      "status": "review",
+      "entity_count": 1,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.487,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.45,
+        "diversity": 0.6,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "confidence_below_reject_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 219,
+        "preview": "[Page 1] Source: Clinician provided ICD10: Value Value Comment Comment DIAGNOSIS: Recommendation: Value Value Comment Comment Signed out by: Performed by: Value Value Comment Comment Gross description: Value Comment",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "9.pdf",
+      "status": "review",
+      "entity_count": 0,
+      "selected_extractor": "spacy",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "spacy",
+      "fallback_reason": "confidence_too_low:0.120",
+      "terminal_empty_prevented": false,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.0,
+        "coverage": 0.0,
+        "diversity": 0.0,
+        "extractor_weight": 0.8
+      },
+      "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "error": null,
+      "text_diagnostics": {
+        "length": 50,
+        "preview": "[Page 1] Urine Culture, Routine Value Final report",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_4.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    }
+  ],
+  "files_needing_review": [
+    "1.pdf",
+    "2.pdf",
+    "22.pdf",
+    "23.pdf",
+    "3-1.pdf",
+    "3-2.pdf",
+    "5.pdf",
+    "6.pdf",
+    "7-1.pdf",
+    "8-1.pdf",
+    "8-2.pdf",
+    "9.pdf"
+  ],
   "errors": []
 }

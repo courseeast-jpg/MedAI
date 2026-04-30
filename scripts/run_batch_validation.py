@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import sys
 from datetime import UTC, datetime
@@ -37,9 +38,13 @@ REQUIRED_RESULT_FIELDS = [
     "fallback_reason",
     "terminal_empty_prevented",
     "confidence",
+    "confidence_breakdown",
     "review_reason",
     "error",
+    "text_diagnostics",
 ]
+
+OCR_ARTIFACT_PATTERN = re.compile(r"(\S)\1{7,}|[|_]{4,}|(?:\b[Il1]{8,}\b)|\ufffd")
 
 
 def ensure_batch_validation_dirs() -> None:
@@ -75,6 +80,8 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
         "error_count": 0,
         "empty_extraction_count": 0,
         "fallback_count": 0,
+        "low_text_quality_count": 0,
+        "avg_text_length": 0,
         "results": [],
         "files_needing_review": [],
         "errors": [],
@@ -100,18 +107,30 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
             summary["empty_extraction_count"] += 1
         if result["fallback_extractor"] or result["fallback_reason"] or result["terminal_empty_prevented"]:
             summary["fallback_count"] += 1
+        diagnostics = result.get("text_diagnostics") or {}
+        if diagnostics.get("suspicious"):
+            summary["low_text_quality_count"] += 1
+
+    text_lengths = [
+        int((item.get("text_diagnostics") or {}).get("length", 0))
+        for item in summary["results"]
+    ]
+    summary["avg_text_length"] = round(sum(text_lengths) / len(text_lengths), 2) if text_lengths else 0
 
     write_batch_reports(summary)
     return summary
 
 
 def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: str) -> dict[str, Any]:
+    text_diagnostics = build_initial_text_diagnostics(source_path)
     try:
         if source_path.suffix.lower() == ".pdf":
             result = pipeline.process_pdf(source_path, specialty="general", session_id=run_id)
         elif source_path.suffix.lower() == ".txt":
+            source_text = source_path.read_text(encoding="utf-8", errors="replace")
+            text_diagnostics = analyze_text(source_text, method="plain_text")
             result = pipeline.process_text(
-                source_path.read_text(encoding="utf-8", errors="replace"),
+                source_text,
                 specialty="general",
                 source_name=source_path.name,
                 session_id=run_id,
@@ -122,6 +141,7 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
         extractor_result = dict(result.extractor_result or {})
         audit = dict(result.audit or {})
         entities = list(extractor_result.get("entities", []))
+        text_diagnostics = diagnostics_from_result(source_path, extractor_result, text_diagnostics)
         selected_extractor = (
             extractor_result.get("selected_extractor")
             or extractor_result.get("actual_extractor")
@@ -144,8 +164,10 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "fallback_reason": extractor_result.get("fallback_reason"),
             "terminal_empty_prevented": bool(extractor_result.get("terminal_empty_prevented", False)),
             "confidence": safe_float(extractor_result.get("confidence", audit.get("confidence"))),
+            "confidence_breakdown": extractor_result.get("confidence_breakdown"),
             "review_reason": review_reason,
             "error": None,
+            "text_diagnostics": text_diagnostics,
             "copied_to": str(copy_destination),
             "outcome": result.outcome,
             "validation_status": result.validation_status,
@@ -164,6 +186,7 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "confidence": None,
             "review_reason": None,
             "error": str(exc),
+            "text_diagnostics": text_diagnostics,
             "copied_to": str(copy_destination),
             "outcome": None,
             "validation_status": None,
@@ -174,6 +197,72 @@ def normalize_result(result: dict[str, Any]) -> dict[str, Any]:
     for field in REQUIRED_RESULT_FIELDS:
         result.setdefault(field, None)
     return result
+
+
+def build_initial_text_diagnostics(source_path: Path) -> dict[str, Any]:
+    if source_path.suffix.lower() == ".txt":
+        return analyze_text(source_path.read_text(encoding="utf-8", errors="replace"), method="plain_text")
+    return analyze_text("", method=infer_pdf_method({}) if source_path.suffix.lower() == ".pdf" else "unsupported")
+
+
+def diagnostics_from_result(
+    source_path: Path,
+    extractor_result: dict[str, Any],
+    fallback_diagnostics: dict[str, Any],
+) -> dict[str, Any]:
+    if source_path.suffix.lower() == ".txt":
+        return fallback_diagnostics
+
+    raw_text = str(extractor_result.get("raw_text") or "")
+    method = infer_pdf_method(extractor_result)
+    if raw_text:
+        return analyze_text(raw_text, method=method)
+
+    diagnostics = dict(fallback_diagnostics)
+    diagnostics["method"] = method
+    diagnostics["suspicious"] = True
+    return diagnostics
+
+
+def infer_pdf_method(extractor_result: dict[str, Any]) -> str:
+    if extractor_result.get("ocr_fallback_used") or extractor_result.get("ocr_engine"):
+        return "tesseract fallback"
+    status = str(extractor_result.get("text_quality_status") or "").lower()
+    if status in {"readable_native", "unreadable_after_ocr", "ocr_fallback_applied"}:
+        if "ocr" in status:
+            return "pymupdf"
+        try:
+            from ingestion.pdf_pipeline import DOCLING_AVAILABLE
+        except Exception:
+            DOCLING_AVAILABLE = False
+        return "docling" if DOCLING_AVAILABLE else "pymupdf"
+    return "unknown"
+
+
+def analyze_text(text: str, *, method: str) -> dict[str, Any]:
+    normalized = str(text or "")
+    stripped = normalized.strip()
+    length = len(stripped)
+    compact = re.sub(r"\s+", " ", stripped)
+    suspicious = (
+        length < 50
+        or non_alnum_ratio(stripped) > 0.40
+        or bool(OCR_ARTIFACT_PATTERN.search(stripped))
+    )
+    return {
+        "length": length,
+        "preview": compact[:300],
+        "method": method,
+        "suspicious": bool(suspicious),
+    }
+
+
+def non_alnum_ratio(text: str) -> float:
+    visible = [char for char in text if not char.isspace()]
+    if not visible:
+        return 1.0
+    non_alnum = sum(1 for char in visible if not char.isalnum())
+    return non_alnum / len(visible)
 
 
 def review_reason_for(result, extractor_result: dict[str, Any]) -> str | None:
@@ -208,6 +297,8 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         f"- Errors: `{summary['error_count']}`",
         f"- Empty extractions: `{summary['empty_extraction_count']}`",
         f"- Fallbacks: `{summary['fallback_count']}`",
+        f"- Low text quality: `{summary.get('low_text_quality_count', 0)}`",
+        f"- Average text length: `{summary.get('avg_text_length', 0)}`",
         "",
         "## Results",
         "",
@@ -216,11 +307,12 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         lines.append("No supported PDF or TXT files found in `real_validation_input/`.")
     else:
         lines.extend([
-            "| File | Status | Entities | Extractor | Fallback | Confidence | Review reason | Error |",
-            "| --- | --- | ---: | --- | --- | ---: | --- | --- |",
+            "| File | Status | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Review reason | Error |",
+            "| --- | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- |",
         ])
         for item in summary["results"]:
             fallback = item.get("fallback_extractor") or item.get("fallback_reason") or ""
+            diagnostics = item.get("text_diagnostics") or {}
             lines.append(
                 "| "
                 + " | ".join([
@@ -228,6 +320,9 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
                     escape_md(item.get("status")),
                     str(item.get("entity_count", 0)),
                     escape_md(item.get("selected_extractor")),
+                    str(diagnostics.get("length", 0)),
+                    escape_md(diagnostics.get("method")),
+                    "yes" if diagnostics.get("suspicious") else "no",
                     escape_md(fallback),
                     "" if item.get("confidence") is None else str(item.get("confidence")),
                     escape_md(item.get("review_reason")),
@@ -296,6 +391,8 @@ def main() -> int:
     print(f"errors: {summary['error_count']}")
     print(f"empty_extractions: {summary['empty_extraction_count']}")
     print(f"fallbacks: {summary['fallback_count']}")
+    print(f"low_text_quality: {summary['low_text_quality_count']}")
+    print(f"avg_text_length: {summary['avg_text_length']}")
     print(f"json_report: {BATCH_JSON_REPORT}")
     print(f"markdown_report: {BATCH_MD_REPORT}")
     return 0
@@ -303,4 +400,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

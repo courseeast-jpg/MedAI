@@ -142,7 +142,7 @@ def test_phase21_quota_safe_blocks_are_counted_without_hard_failures(tmp_path: P
 
     assert metrics["quota_safe_block_count"] == 1
     assert metrics["hard_failures"] == 0
-    assert metrics["low_confidence_count"] == 1
+    assert metrics["low_confidence_count"] == 0
     assert metrics["per_stage_duration_ms"]["extraction"]["total_duration_ms"] == 90.0
 
 
