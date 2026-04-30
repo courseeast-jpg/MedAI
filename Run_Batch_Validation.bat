@@ -1,0 +1,1 @@
+python scripts/run_batch_validation.py

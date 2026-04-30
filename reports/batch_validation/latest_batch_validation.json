@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-04-30T17:48:28.149675+00:00",
+  "run_id": "fdaf5a70-232c-4d9c-aa4d-2a5fa0e9889d",
+  "input_dir": "G:\\Codex\\2026-04-22-connect-github\\real_validation_input",
+  "total_files": 0,
+  "accepted_count": 0,
+  "review_count": 0,
+  "error_count": 0,
+  "empty_extraction_count": 0,
+  "fallback_count": 0,
+  "results": [],
+  "files_needing_review": [],
+  "errors": []
+}
