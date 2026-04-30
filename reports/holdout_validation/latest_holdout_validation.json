@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-04-30T23:02:18.201678+00:00",
+  "run_id": "c1349ea3-660f-4fcc-aa1e-859d6777a561",
+  "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
+  "total_files": 0,
+  "accepted_count": 0,
+  "review_count": 0,
+  "error_count": 0,
+  "empty_extraction_count": 0,
+  "fallback_count": 0,
+  "low_text_quality_count": 0,
+  "avg_text_length": 0,
+  "review_reason_summary": {
+    "empty_extraction": 0,
+    "confidence_below_threshold": 0,
+    "low_entity_count": 0,
+    "low_coverage": 0,
+    "low_diversity": 0,
+    "low_extractor_weight": 0
+  },
+  "results": [],
+  "files_needing_review": [],
+  "errors": []
+}
