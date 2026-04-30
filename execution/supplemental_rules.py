@@ -9,6 +9,10 @@ from typing import Any
 LAB_FINDINGS: tuple[tuple[str, str], ...] = (
     (r"\bcalcium\s+oxalate\s+crystals?\b", "Calcium Oxalate Crystals"),
     (r"\bepithelial\s+cells?\b", "Epithelial Cells"),
+    (r"\bblood\s+ua\b|\bua\s+blood\b", "Blood UA"),
+    (r"\bbilirubin\s+ua\b|\bua\s+bilirubin\b", "Bilirubin UA"),
+    (r"\burobilinogen\s+ua\b|\bua\s+urobilinogen\b", "Urobilinogen UA"),
+    (r"\bnitrite\s+ua\b|\bua\s+nitrite\b", "Nitrite UA"),
     (r"\bleukocyte(?:s| esterase)?\b", "Leukocyte"),
     (r"\bnitrite\b", "Nitrite"),
     (r"\bketones?\b", "Ketones"),
@@ -22,13 +26,17 @@ LAB_FINDINGS: tuple[tuple[str, str], ...] = (
 )
 
 REPORT_FINDINGS: tuple[tuple[str, str, str], ...] = (
-    (r"\burine\s+culture\b", "test_result", "Urine Culture"),
+    (r"\burine\s+culture(?:,\s*routine)?\b", "test_result", "Urine Culture"),
     (r"\burine\s+cytology\b|\bcytology,\s*urine\b", "test_result", "Urine Cytology"),
     (r"\bno\s+growth\b", "test_result", "No Growth"),
     (r"\bnegative\s+for\s+high-grade\s+urothelial\s+carcinoma\b", "diagnosis", "Negative for high-grade urothelial carcinoma"),
     (r"\bbenign\s+urothelial\s+cells?\b", "test_result", "Benign Urothelial Cells"),
     (r"\bred\s+blood\s+cells?\b", "test_result", "Red Blood Cells"),
     (r"\bfinal\s+report\b", "note", "Final Report"),
+    (r"\bdiagnosis\s*:", "diagnosis", "Diagnosis"),
+    (r"\brecommendation\s*:", "recommendation", "Recommendation"),
+    (r"\bgross\s+description\s*:", "note", "Gross Description"),
+    (r"\bmicroscopic\s+examination\b", "test_result", "Microscopic Examination"),
 )
 
 
@@ -59,6 +67,7 @@ def supplemental_entities(text: str, *, existing_entities: list[dict[str, Any]] 
             "type": entity_type,
             "text": label,
             "source": "supplemental_lab_rules",
+            "rule_pack": "urology_cytology_culture",
         }
         key = _entity_key(entity)
         if key in existing_keys:

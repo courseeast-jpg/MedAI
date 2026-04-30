@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-04-30T22:33:19.347227+00:00",
-  "run_id": "b5a0dfca-2edd-47f3-a689-fef2572ff478",
+  "timestamp": "2026-04-30T22:49:55.927200+00:00",
+  "run_id": "ec3f1623-e8fb-487a-96a6-6f4be05c3233",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\real_validation_input",
   "total_files": 15,
-  "accepted_count": 9,
-  "review_count": 6,
+  "accepted_count": 11,
+  "review_count": 4,
   "error_count": 0,
   "empty_extraction_count": 1,
   "fallback_count": 12,
@@ -12,22 +12,23 @@
   "avg_text_length": 338.6,
   "review_reason_summary": {
     "empty_extraction": 1,
-    "confidence_below_threshold": 6,
-    "low_entity_count": 4,
+    "confidence_below_threshold": 4,
+    "low_entity_count": 3,
     "low_coverage": 1,
     "low_diversity": 1,
-    "low_extractor_weight": 5
+    "low_extractor_weight": 3
   },
   "results": [
     {
       "filename": "1.pdf",
       "status": "accepted",
-      "entity_count": 5,
+      "entity_count": 6,
       "entities": [
         {
           "type": "test_result",
           "text": "Urine Cytology",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -37,6 +38,7 @@
           "type": "diagnosis",
           "text": "Negative for high-grade urothelial carcinoma",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -46,6 +48,7 @@
           "type": "test_result",
           "text": "Benign Urothelial Cells",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -55,6 +58,17 @@
           "type": "test_result",
           "text": "Red Blood Cells",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "diagnosis",
+          "text": "Diagnosis",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -64,6 +78,7 @@
           "type": "test_result",
           "text": "Blood",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -75,9 +90,9 @@
       "fallback_extractor": null,
       "fallback_reason": null,
       "terminal_empty_prevented": false,
-      "confidence": 0.83,
+      "confidence": 0.9,
       "confidence_breakdown": {
-        "entity_count": 0.6,
+        "entity_count": 0.8,
         "coverage": 1.0,
         "diversity": 1.0,
         "extractor_weight": 0.8,
@@ -86,8 +101,8 @@
         "calibration_reason": "none"
       },
       "supplemental_rules_applied": true,
-      "supplemental_entity_count": 5,
-      "final_entity_count_after_supplement": 5,
+      "supplemental_entity_count": 6,
+      "final_entity_count_after_supplement": 6,
       "review_reason": "accept",
       "why_reviewed": [],
       "error": null,
@@ -97,14 +112,14 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\1_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\1_4.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
     {
       "filename": "2.pdf",
       "status": "accepted",
-      "entity_count": 13,
+      "entity_count": 14,
       "entities": [
         {
           "type": "test_result",
@@ -120,6 +135,7 @@
           "type": "test_result",
           "text": "Urine Culture",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -129,6 +145,7 @@
           "type": "test_result",
           "text": "No Growth",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -138,6 +155,17 @@
           "type": "note",
           "text": "Final Report",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Microscopic Examination",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -147,6 +175,7 @@
           "type": "test_result",
           "text": "Epithelial Cells",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -156,6 +185,7 @@
           "type": "test_result",
           "text": "Nitrite",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -165,6 +195,7 @@
           "type": "test_result",
           "text": "Ketones",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -174,6 +205,7 @@
           "type": "test_result",
           "text": "Protein",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -183,6 +215,7 @@
           "type": "test_result",
           "text": "Glucose",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -192,6 +225,7 @@
           "type": "test_result",
           "text": "Bacteria",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -201,6 +235,7 @@
           "type": "test_result",
           "text": "Blood",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -210,6 +245,7 @@
           "type": "test_result",
           "text": "RBC",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -219,6 +255,7 @@
           "type": "test_result",
           "text": "WBC",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "spacy"
           ],
@@ -241,8 +278,8 @@
         "calibration_reason": "none"
       },
       "supplemental_rules_applied": true,
-      "supplemental_entity_count": 12,
-      "final_entity_count_after_supplement": 13,
+      "supplemental_entity_count": 13,
+      "final_entity_count_after_supplement": 14,
       "review_reason": "accept",
       "why_reviewed": [],
       "error": null,
@@ -252,7 +289,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\2_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\2_4.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -329,7 +366,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_9.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\21_10.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -371,7 +408,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_9.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\22_10.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -421,7 +458,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_9.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\23_10.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -434,6 +471,7 @@
           "type": "test_result",
           "text": "Ketones",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -443,6 +481,7 @@
           "type": "test_result",
           "text": "Protein",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -452,6 +491,7 @@
           "type": "test_result",
           "text": "Glucose",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -485,19 +525,70 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\3-1_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\3-1_5.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
     {
       "filename": "3-2.pdf",
-      "status": "review",
-      "entity_count": 2,
+      "status": "accepted",
+      "entity_count": 7,
       "entities": [
+        {
+          "type": "test_result",
+          "text": "Microscopic Examination",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Blood UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Bilirubin UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Urobilinogen UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
         {
           "type": "test_result",
           "text": "Nitrite",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -507,6 +598,7 @@
           "type": "test_result",
           "text": "Blood",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -518,24 +610,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.93,
       "confidence_breakdown": {
-        "entity_count": 0.3,
-        "coverage": 0.45,
-        "diversity": 0.9,
-        "extractor_weight": 0.6,
+        "entity_count": 0.8,
+        "coverage": 1.0,
+        "diversity": 1.0,
+        "extractor_weight": 1.0,
         "base_extractor_weight": 0.6,
-        "calibrated_extractor_weight": 0.6,
-        "calibration_reason": "none"
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
-      "final_entity_count_after_supplement": 2,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
+      "final_entity_count_after_supplement": 7,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 302,
@@ -543,19 +632,50 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\3-2_6.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\3-2_3.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "4.pdf",
       "status": "accepted",
-      "entity_count": 3,
+      "entity_count": 6,
       "entities": [
+        {
+          "type": "test_result",
+          "text": "Bilirubin UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Urobilinogen UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
         {
           "type": "test_result",
           "text": "Nitrite",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -565,6 +685,7 @@
           "type": "test_result",
           "text": "Ketones",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -574,6 +695,7 @@
           "type": "test_result",
           "text": "Glucose",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -585,10 +707,10 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.723,
+      "confidence": 0.868,
       "confidence_breakdown": {
-        "entity_count": 0.6,
-        "coverage": 0.45,
+        "entity_count": 0.8,
+        "coverage": 0.75,
         "diversity": 1.0,
         "extractor_weight": 1.0,
         "base_extractor_weight": 0.6,
@@ -597,7 +719,7 @@
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
-      "final_entity_count_after_supplement": 3,
+      "final_entity_count_after_supplement": 6,
       "review_reason": "accept_with_route_audit",
       "why_reviewed": [],
       "error": null,
@@ -607,7 +729,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\4_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\4_4.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -629,6 +751,7 @@
           "type": "test_result",
           "text": "Urine Culture",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -638,6 +761,7 @@
           "type": "test_result",
           "text": "No Growth",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -671,7 +795,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\5_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\5_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -692,6 +816,7 @@
           "type": "test_result",
           "text": "Epithelial Cells",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -701,6 +826,7 @@
           "type": "test_result",
           "text": "Bacteria",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -710,6 +836,7 @@
           "type": "test_result",
           "text": "WBC",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -743,19 +870,30 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\6_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\6_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
     {
       "filename": "7-1.pdf",
       "status": "accepted",
-      "entity_count": 3,
+      "entity_count": 4,
       "entities": [
+        {
+          "type": "test_result",
+          "text": "Bilirubin UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
         {
           "type": "test_result",
           "text": "Ketones",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -765,6 +903,7 @@
           "type": "test_result",
           "text": "Glucose",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -774,70 +913,7 @@
           "type": "test_result",
           "text": "Blood",
           "source": "supplemental_lab_rules",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        }
-      ],
-      "selected_extractor": "phi3",
-      "primary_extractor": "gemini",
-      "fallback_extractor": "phi3",
-      "fallback_reason": "gemini_quota_or_rate_limit",
-      "terminal_empty_prevented": true,
-      "confidence": 0.723,
-      "confidence_breakdown": {
-        "entity_count": 0.6,
-        "coverage": 0.45,
-        "diversity": 1.0,
-        "extractor_weight": 1.0,
-        "base_extractor_weight": 0.6,
-        "calibrated_extractor_weight": 1.0,
-        "calibration_reason": "phi3_diverse_entities"
-      },
-      "supplemental_rules_applied": false,
-      "supplemental_entity_count": 0,
-      "final_entity_count_after_supplement": 3,
-      "review_reason": "accept_with_route_audit",
-      "why_reviewed": [],
-      "error": null,
-      "text_diagnostics": {
-        "length": 501,
-        "preview": "[Page 1] POCT PERFORM URINE DIPSTICK Collected on [DATE] Lab tests - Urine Results Color, UA Clarity, UA Normal value: Colorless, Yellow, Straw, Dark Normal value: Clear Value Value Red Clear Glucose, UA Bilirubin, UA Normal value: Negative Normal value: Negative Value Value Negative Negative Ketone",
-        "method": "tesseract fallback",
-        "suspicious": false
-      },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-1_4.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "accepted"
-    },
-    {
-      "filename": "7-2.pdf",
-      "status": "accepted",
-      "entity_count": 3,
-      "entities": [
-        {
-          "type": "test_result",
-          "text": "Leukocyte",
-          "source": "supplemental_lab_rules",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        },
-        {
-          "type": "test_result",
-          "text": "Nitrite",
-          "source": "supplemental_lab_rules",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        },
-        {
-          "type": "test_result",
-          "text": "Protein",
-          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -861,7 +937,94 @@
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
-      "final_entity_count_after_supplement": 3,
+      "final_entity_count_after_supplement": 4,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
+      "error": null,
+      "text_diagnostics": {
+        "length": 501,
+        "preview": "[Page 1] POCT PERFORM URINE DIPSTICK Collected on [DATE] Lab tests - Urine Results Color, UA Clarity, UA Normal value: Colorless, Yellow, Straw, Dark Normal value: Clear Value Value Red Clear Glucose, UA Bilirubin, UA Normal value: Negative Normal value: Negative Value Value Negative Negative Ketone",
+        "method": "tesseract fallback",
+        "suspicious": false
+      },
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-1_5.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "7-2.pdf",
+      "status": "accepted",
+      "entity_count": 5,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urobilinogen UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite UA",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Leukocyte",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Protein",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.86,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 1.0,
+        "diversity": 1.0,
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 5,
       "review_reason": "accept_with_route_audit",
       "why_reviewed": [],
       "error": null,
@@ -871,7 +1034,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-2_7.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\7-2_8.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     },
@@ -884,6 +1047,7 @@
           "type": "test_result",
           "text": "Urine Cytology",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -921,18 +1085,48 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_9.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-1_10.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
     {
       "filename": "8-2.pdf",
-      "status": "review",
-      "entity_count": 1,
+      "status": "accepted",
+      "entity_count": 4,
       "entities": [
         {
           "type": "diagnosis",
           "text": "Recommendation",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "diagnosis",
+          "text": "Diagnosis",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "recommendation",
+          "text": "Recommendation",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "note",
+          "text": "Gross Description",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -944,25 +1138,21 @@
       "fallback_extractor": "phi3",
       "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "confidence": 0.86,
       "confidence_breakdown": {
-        "entity_count": 0.3,
-        "coverage": 0.45,
-        "diversity": 0.6,
-        "extractor_weight": 0.6,
+        "entity_count": 0.6,
+        "coverage": 1.0,
+        "diversity": 1.0,
+        "extractor_weight": 1.0,
         "base_extractor_weight": 0.6,
-        "calibrated_extractor_weight": 0.6,
-        "calibration_reason": "none"
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
       },
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
-      "final_entity_count_after_supplement": 1,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_entity_count",
-        "low_extractor_weight"
-      ],
+      "final_entity_count_after_supplement": 4,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 219,
@@ -970,9 +1160,9 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\8-2_9.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\archive\\8-2.pdf",
       "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "validation_status": "accepted"
     },
     {
       "filename": "9.pdf",
@@ -983,6 +1173,7 @@
           "type": "test_result",
           "text": "Urine Culture",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -992,6 +1183,7 @@
           "type": "note",
           "text": "Final Report",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -1028,7 +1220,7 @@
         "method": "tesseract fallback",
         "suspicious": false
       },
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_9.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\review\\9_10.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     }
@@ -1036,9 +1228,7 @@
   "files_needing_review": [
     "22.pdf",
     "23.pdf",
-    "3-2.pdf",
     "8-1.pdf",
-    "8-2.pdf",
     "9.pdf"
   ],
   "errors": []

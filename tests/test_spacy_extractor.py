@@ -75,6 +75,51 @@ def test_supplemental_rules_do_not_duplicate_existing_entities():
     assert additions == []
 
 
+def test_urology_rules_extract_urine_cytology():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract("CYTOLOGY, URINE Collected on [DATE] Results")
+    entity_texts = {entity["text"] for entity in result["entities"]}
+
+    assert "Urine Cytology" in entity_texts
+    assert result["supplemental_rules_applied"] is True
+
+
+def test_urology_rules_extract_urine_culture_and_final_report():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract("Urine Culture, Routine Value Final report")
+    entity_texts = {entity["text"] for entity in result["entities"]}
+
+    assert "Urine Culture" in entity_texts
+    assert "Final Report" in entity_texts
+    assert result["supplemental_rules_applied"] is True
+
+
+def test_urology_rules_extract_ua_panel_specific_entities():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract(
+        "Blood UA Bilirubin UA Urobilinogen UA Nitrite UA "
+        "Microscopic Examination Value See below"
+    )
+    entity_texts = {entity["text"] for entity in result["entities"]}
+
+    assert "Blood UA" in entity_texts
+    assert "Nitrite UA" in entity_texts
+    assert "Bilirubin UA" in entity_texts
+    assert "Urobilinogen UA" in entity_texts
+
+
+def test_recommendation_alone_does_not_auto_accept_without_supporting_entities():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract("Recommendation: Value")
+
+    assert any(entity["type"] == "recommendation" and entity["text"] == "Recommendation" for entity in result["entities"])
+    assert result["confidence"] < 0.65
+
+
 def test_structured_lab_parser_extracts_ua_blood_trace_abnormal_block():
     extractor = SpacyExtractor()
 
@@ -90,8 +135,8 @@ def test_structured_lab_parser_extracts_ua_blood_trace_abnormal_block():
     assert result["structured_parser_used"] is True
     assert result["structured_entities_count"] >= 1
     assert result["structured_parser_version"] == "structured_lab_parser_v1"
-    assert result["confidence"] == 0.7
-    assert result["confidence_breakdown"]["entity_count"] == 0.3
+    assert result["confidence"] == 0.83
+    assert result["confidence_breakdown"]["entity_count"] == 0.6
     assert result["confidence_breakdown"]["extractor_weight"] == 0.8
     assert len(result["entities"]) > 0
     assert any(

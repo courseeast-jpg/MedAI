@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-04-30T22:34:02.566369+00:00",
+  "generated_at": "2026-04-30T22:50:41.861986+00:00",
   "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\latest_batch_validation.json",
-  "source_timestamp": "2026-04-30T22:33:19.347227+00:00",
-  "total_reviewed": 6,
+  "source_timestamp": "2026-04-30T22:49:55.927200+00:00",
+  "total_reviewed": 4,
   "review_fix_breakdown": {
     "no_entities": 1,
-    "low_entity_count": 3,
-    "low_confidence": 2,
+    "low_entity_count": 2,
+    "low_confidence": 1,
     "low_coverage": 0,
     "low_diversity": 0,
     "extractor_issue": 0
@@ -69,46 +69,6 @@
       "recommended_fix_category": "low_entity_count"
     },
     {
-      "filename": "3-2.pdf",
-      "entity_count": 2,
-      "entities": [
-        {
-          "type": "test_result",
-          "text": "Nitrite",
-          "source": "supplemental_lab_rules",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        },
-        {
-          "type": "test_result",
-          "text": "Blood",
-          "source": "supplemental_lab_rules",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        }
-      ],
-      "confidence": 0.45,
-      "confidence_breakdown": {
-        "entity_count_score": 0.3,
-        "coverage_score": 0.45,
-        "diversity_score": 0.9,
-        "extractor_weight": 0.6,
-        "calibrated_weight": 0.6
-      },
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_extractor_weight"
-      ],
-      "text_preview": "[Page 1] Blood UA Bilirubin UA Normal value: Negative Normal value: Negative Value Value Trace Negative Urobilinogen UA Nitrite UA Normal range: 0.2 - 1.0 mg/dL Normal value: Negative 0.2 = Value Sees \u2018 02 1 Negative Microscopic Examination Value See below: Microscopic was indicated and was performe",
-      "text_length": 302,
-      "extraction_method": "tesseract fallback",
-      "recommended_fix_category": "low_confidence"
-    },
-    {
       "filename": "8-1.pdf",
       "entity_count": 1,
       "entities": [
@@ -116,6 +76,7 @@
           "type": "test_result",
           "text": "Urine Cytology",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -141,37 +102,6 @@
       "recommended_fix_category": "low_entity_count"
     },
     {
-      "filename": "8-2.pdf",
-      "entity_count": 1,
-      "entities": [
-        {
-          "type": "diagnosis",
-          "text": "Recommendation",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        }
-      ],
-      "confidence": 0.45,
-      "confidence_breakdown": {
-        "entity_count_score": 0.3,
-        "coverage_score": 0.45,
-        "diversity_score": 0.6,
-        "extractor_weight": 0.6,
-        "calibrated_weight": 0.6
-      },
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_entity_count",
-        "low_extractor_weight"
-      ],
-      "text_preview": "[Page 1] Source: Clinician provided ICD10: Value Value Comment Comment DIAGNOSIS: Recommendation: Value Value Comment Comment Signed out by: Performed by: Value Value Comment Comment Gross description: Value Comment",
-      "text_length": 219,
-      "extraction_method": "tesseract fallback",
-      "recommended_fix_category": "low_entity_count"
-    },
-    {
       "filename": "9.pdf",
       "entity_count": 2,
       "entities": [
@@ -179,6 +109,7 @@
           "type": "test_result",
           "text": "Urine Culture",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
@@ -188,6 +119,7 @@
           "type": "note",
           "text": "Final Report",
           "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
           "consensus_support": [
             "phi3"
           ],
