@@ -164,14 +164,19 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             or audit.get("extractor_actual")
             or audit.get("extractor")
         )
-        status = "accepted" if result.outcome in ACCEPTED_OUTCOMES else "review"
+        review_reason = review_reason_for(result, extractor_result)
+        confidence = safe_float(extractor_result.get("confidence", audit.get("confidence")))
+        confidence_breakdown = extractor_result.get("confidence_breakdown")
+        status = classify_batch_status(
+            outcome=result.outcome,
+            review_reason=review_reason,
+            confidence=confidence,
+            entity_count=len(entities),
+        )
         copy_destination = copy_to_unique_destination(
             source_path,
             BATCH_ARCHIVE_DIR if status == "accepted" else BATCH_REVIEW_DIR,
         )
-        review_reason = review_reason_for(result, extractor_result)
-        confidence = safe_float(extractor_result.get("confidence", audit.get("confidence")))
-        confidence_breakdown = extractor_result.get("confidence_breakdown")
         why_reviewed = review_reasons_for(
             status=status,
             entity_count=len(entities),
@@ -232,6 +237,24 @@ def normalize_result(result: dict[str, Any]) -> dict[str, Any]:
     for field in REQUIRED_RESULT_FIELDS:
         result.setdefault(field, None)
     return result
+
+
+def classify_batch_status(
+    *,
+    outcome: str | None,
+    review_reason: str | None,
+    confidence: float | None,
+    entity_count: int,
+) -> str:
+    if entity_count == 0:
+        return "review"
+    if confidence is None or confidence < 0.65:
+        return "review"
+    if review_reason == "accept_with_route_audit":
+        return "accepted"
+    if outcome in ACCEPTED_OUTCOMES:
+        return "accepted"
+    return "review"
 
 
 def review_reasons_for(
