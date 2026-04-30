@@ -16,6 +16,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
 from app.schemas import MKBRecord, SystemState, UnifiedResponse
+from app.test_launcher import (
+    LATEST_MD_REPORT,
+    ensure_test_launcher_dirs,
+    list_test_input_files,
+    load_latest_test_run,
+    run_medai_test_batch,
+    save_uploaded_test_file,
+)
 from execution.pipeline import ExecutionPipeline
 
 
@@ -292,6 +300,69 @@ def render_conflict_tab(sys_components: dict) -> None:
         st.error(f"Conflict review unavailable: {exc}")
 
 
+def render_test_launcher_tab(sys_components: dict) -> None:
+    ensure_test_launcher_dirs()
+    st.subheader("Local Test Launcher")
+    st.caption("Processes supported files from test_input/ through the current MedAI pipeline.")
+
+    specialty = st.selectbox(
+        "Test specialty",
+        ["general", "neurology", "epilepsy", "gastroenterology", "urology"],
+        key="test_launcher_specialty",
+    )
+    uploaded_files = st.file_uploader(
+        "Add test files",
+        type=["pdf", "txt"],
+        accept_multiple_files=True,
+        help="The current local test launcher supports PDF and TXT inputs.",
+    )
+    if uploaded_files:
+        saved_uploads = st.session_state.setdefault("test_launcher_saved_uploads", set())
+        saved = []
+        for uploaded_file in uploaded_files:
+            upload_key = f"{uploaded_file.name}:{uploaded_file.size}"
+            if upload_key in saved_uploads:
+                continue
+            saved.append(save_uploaded_test_file(uploaded_file))
+            saved_uploads.add(upload_key)
+        if saved:
+            st.success(f"Added {len(saved)} file(s) to test_input/.")
+
+    files = list_test_input_files()
+    st.markdown("**Files currently in test_input/**")
+    if files:
+        for path in files:
+            st.caption(path.name)
+    else:
+        st.caption("No supported files waiting.")
+
+    latest = load_latest_test_run()
+    status_cols = st.columns(4)
+    status_cols[0].metric("Run status", "Ready")
+    status_cols[1].metric("Accepted", int((latest or {}).get("accepted_count", 0)))
+    status_cols[2].metric("Review", int((latest or {}).get("review_count", 0)))
+    status_cols[3].metric("Errors", int((latest or {}).get("error_count", 0)))
+
+    if st.button("Start MedAI Test Run", type="primary"):
+        with st.spinner("Running MedAI local test batch..."):
+            summary = run_medai_test_batch(sys_components["execution"], specialty=specialty)
+        st.success(
+            f"Run complete: {summary.accepted_count} accepted, "
+            f"{summary.review_count} review, {summary.error_count} errors."
+        )
+        latest = load_latest_test_run()
+
+    st.markdown("**Latest report**")
+    if LATEST_MD_REPORT.exists():
+        st.code(str(LATEST_MD_REPORT))
+    else:
+        st.caption("No test run report has been written yet.")
+
+    if latest:
+        with st.expander("Latest run details", expanded=False):
+            st.json(latest)
+
+
 def main() -> None:
     sys_components = load_system()
     st.title("MedAI v1.1")
@@ -311,8 +382,8 @@ def main() -> None:
         st.caption(f"Connectors: {', '.join(ACTIVE_CONNECTORS)}")
         st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
 
-    tab_query, tab_upload, tab_mkb, tab_conflicts = st.tabs(
-        ["Query", "Upload Document", "MKB Explorer", "Conflict Review"]
+    tab_query, tab_upload, tab_mkb, tab_conflicts, tab_test_launcher = st.tabs(
+        ["Query", "Upload Document", "MKB Explorer", "Conflict Review", "Local Test Launcher"]
     )
     with tab_query:
         render_query_tab(sys_components)
@@ -322,6 +393,8 @@ def main() -> None:
         render_mkb_tab(sys_components)
     with tab_conflicts:
         render_conflict_tab(sys_components)
+    with tab_test_launcher:
+        render_test_launcher_tab(sys_components)
 
     st.divider()
     st.caption("MedAI v1.1. Decision support only. Not a medical device. All outputs require clinical verification.")
