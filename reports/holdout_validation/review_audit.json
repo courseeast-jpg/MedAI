@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-01T01:48:31.443568+00:00",
+  "generated_at": "2026-05-01T02:01:13.501980+00:00",
   "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\latest_holdout_validation.json",
-  "source_timestamp": "2026-05-01T01:47:43.425692+00:00",
-  "total_reviewed": 5,
+  "source_timestamp": "2026-05-01T02:00:24.223552+00:00",
+  "total_reviewed": 6,
   "review_fix_breakdown": {
     "no_entities": 0,
     "low_entity_count": 1,
     "low_confidence": 1,
-    "low_coverage": 3,
+    "low_coverage": 4,
     "low_diversity": 0,
     "extractor_issue": 0
   },
@@ -88,6 +88,87 @@
       "text_length": 939,
       "extraction_method": "tesseract fallback",
       "recommended_fix_category": "low_entity_count"
+    },
+    {
+      "filename": "Test Results 2.pdf",
+      "entity_count": 6,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "CKOH",
+          "value": "51",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Macca",
+          "value": "10",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "He BbiHBneHO",
+          "value": "4",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "BneHO",
+          "value": "7",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "IIr",
+          "value": "5.7",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "HBneHO",
+          "value": "22",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "confidence": 0.7,
+      "confidence_breakdown": {
+        "entity_count_score": 0.8,
+        "coverage_score": 0.2,
+        "diversity_score": 1.0,
+        "extractor_weight": 0.8,
+        "calibrated_weight": 0.8
+      },
+      "why_reviewed": [
+        "low_coverage"
+      ],
+      "text_preview": "[Page 1] N2 ):[PERSON] npo6>IpK>1 <!>.1.1.0. naI..1>IeHra non BoJpacr OpraHL'IJai..\\L'IH Bpa4 np>IMe4aH>Ie loIccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>[ID_REMOVED] MeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l [DATE], [DATE] 101462359601 <lleAeHYeHKO CrenaH MYlf<CKOH 51 HaJBaHHe HCC",
+      "text_length": 2689,
+      "extraction_method": "unknown",
+      "recommended_fix_category": "low_coverage"
     },
     {
       "filename": "Test Results 3.pdf",

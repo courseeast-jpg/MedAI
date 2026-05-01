@@ -55,6 +55,26 @@ class FakeReviewPipeline:
         )
 
 
+class FakeNoisyOcrPipeline:
+    def process_text(self, text: str, *, specialty: str, source_name: str, session_id: str) -> FakeResult:
+        del text, specialty, source_name, session_id
+        return FakeResult(
+            extractor_result={
+                "entities": [{"type": "test_result", "text": "Nitrite"}],
+                "actual_extractor": "spacy",
+                "confidence": 0.86,
+                "confidence_breakdown": {
+                    "entity_count": 0.3,
+                    "coverage": 0.2,
+                    "diversity": 0.6,
+                    "extractor_weight": 0.8,
+                },
+                "normalization_applied": True,
+                "normalized_text_preview": "Urine Culture Negative Yellow",
+            },
+        )
+
+
 def configure_paths(monkeypatch, tmp_path: Path) -> None:
     input_dir = tmp_path / "real_validation_input"
     report_dir = tmp_path / "reports" / "batch_validation"
@@ -142,6 +162,99 @@ def test_route_audit_acceptance_with_0723_confidence_is_accepted() -> None:
     )
 
     assert status == "accepted"
+
+
+def test_noisy_ocr_routes_to_review_ocr_quality() -> None:
+    diagnostics = {
+        "suspicious": True,
+        "method": "tesseract fallback",
+        "non_alnum_ratio": 0.55,
+    }
+    breakdown = {"coverage": 0.2}
+
+    is_low_quality = batch.detect_ocr_low_quality(
+        text_diagnostics=diagnostics,
+        normalization_applied=True,
+        confidence_breakdown=breakdown,
+    )
+    status = batch.classify_batch_status(
+        outcome="queued_for_review",
+        review_reason="confidence_below_accept_threshold",
+        confidence=0.45,
+        entity_count=2,
+        is_ocr_low_quality=is_low_quality,
+    )
+
+    assert is_low_quality is True
+    assert status == "review_ocr_quality"
+    assert batch.review_type_for(status=status, is_ocr_low_quality=is_low_quality) == "ocr_quality"
+
+
+def test_clean_text_not_flagged_as_ocr_low_quality() -> None:
+    diagnostics = batch.analyze_text("Patient has diabetes.", method="plain_text")
+
+    assert diagnostics["suspicious"] is True
+    assert batch.detect_ocr_low_quality(
+        text_diagnostics=diagnostics,
+        normalization_applied=False,
+        confidence_breakdown={"coverage": 0.8},
+    ) is False
+
+
+def test_high_confidence_ocr_noisy_still_routes_to_review_ocr_quality() -> None:
+    is_low_quality = batch.detect_ocr_low_quality(
+        text_diagnostics={
+            "suspicious": True,
+            "method": "tesseract fallback",
+            "non_alnum_ratio": 0.12,
+        },
+        normalization_applied=False,
+        confidence_breakdown={"coverage": 0.9},
+    )
+    status = batch.classify_batch_status(
+        outcome="written",
+        review_reason="accept",
+        confidence=0.91,
+        entity_count=8,
+        is_ocr_low_quality=is_low_quality,
+    )
+
+    assert is_low_quality is True
+    assert status == "review_ocr_quality"
+
+
+def test_accepted_clean_files_do_not_regress(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "clean.txt"
+    source.write_text("Patient has diabetes and takes metformin with stable labs.", encoding="utf-8")
+
+    summary = batch.run_batch_validation(pipeline=FakePipeline())
+    result = summary["results"][0]
+
+    assert summary["accepted_count"] == 1
+    assert summary["review_count"] == 0
+    assert summary["ocr_low_quality_count"] == 0
+    assert result["status"] == "accepted"
+    assert result["is_ocr_low_quality"] is False
+    assert result["review_type"] == "other"
+
+
+def test_normalized_low_coverage_output_routes_to_review_ocr_quality(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "noisy.txt"
+    source.write_text("UR0KULTURE |||| NEGAT1V ____ VERDHE", encoding="utf-8")
+
+    summary = batch.run_batch_validation(pipeline=FakeNoisyOcrPipeline())
+    result = summary["results"][0]
+
+    assert summary["accepted_count"] == 0
+    assert summary["review_count"] == 1
+    assert summary["ocr_low_quality_count"] == 1
+    assert result["status"] == "review_ocr_quality"
+    assert result["is_ocr_low_quality"] is True
+    assert result["review_type"] == "ocr_quality"
 
 
 def test_route_audit_acceptance_with_086_confidence_is_accepted() -> None:

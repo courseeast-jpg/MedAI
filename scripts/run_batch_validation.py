@@ -59,6 +59,8 @@ REQUIRED_RESULT_FIELDS = [
     "text_diagnostics",
     "normalization_applied",
     "normalized_text_preview",
+    "is_ocr_low_quality",
+    "review_type",
 ]
 
 OCR_ARTIFACT_PATTERN = re.compile(r"(\S)\1{7,}|[|_]{4,}|(?:\b[Il1]{8,}\b)|\ufffd")
@@ -98,6 +100,7 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
         "empty_extraction_count": 0,
         "fallback_count": 0,
         "low_text_quality_count": 0,
+        "ocr_low_quality_count": 0,
         "avg_text_length": 0,
         "review_reason_summary": {reason: 0 for reason in REVIEW_REASON_KEYS},
         "results": [],
@@ -115,7 +118,7 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
         summary["results"].append(result)
         if result["status"] == "accepted":
             summary["accepted_count"] += 1
-        elif result["status"] == "review":
+        elif result["status"] in {"review", "review_ocr_quality"}:
             summary["review_count"] += 1
             summary["files_needing_review"].append(result["filename"])
             for reason in result.get("why_reviewed") or []:
@@ -131,6 +134,8 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
         diagnostics = result.get("text_diagnostics") or {}
         if diagnostics.get("suspicious"):
             summary["low_text_quality_count"] += 1
+        if result.get("is_ocr_low_quality"):
+            summary["ocr_low_quality_count"] += 1
 
     text_lengths = [
         int((item.get("text_diagnostics") or {}).get("length", 0))
@@ -172,11 +177,18 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
         review_reason = review_reason_for(result, extractor_result)
         confidence = safe_float(extractor_result.get("confidence", audit.get("confidence")))
         confidence_breakdown = extractor_result.get("confidence_breakdown")
+        normalization_applied = bool(extractor_result.get("normalization_applied", False))
+        is_ocr_low_quality = detect_ocr_low_quality(
+            text_diagnostics=text_diagnostics,
+            normalization_applied=normalization_applied,
+            confidence_breakdown=confidence_breakdown,
+        )
         status = classify_batch_status(
             outcome=result.outcome,
             review_reason=review_reason,
             confidence=confidence,
             entity_count=len(entities),
+            is_ocr_low_quality=is_ocr_low_quality,
         )
         copy_destination = copy_to_unique_destination(
             source_path,
@@ -209,8 +221,10 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "why_reviewed": why_reviewed,
             "error": None,
             "text_diagnostics": text_diagnostics,
-            "normalization_applied": bool(extractor_result.get("normalization_applied", False)),
+            "normalization_applied": normalization_applied,
             "normalized_text_preview": extractor_result.get("normalized_text_preview"),
+            "is_ocr_low_quality": is_ocr_low_quality,
+            "review_type": review_type_for(status=status, is_ocr_low_quality=is_ocr_low_quality),
             "copied_to": str(copy_destination),
             "outcome": result.outcome,
             "validation_status": result.validation_status,
@@ -238,6 +252,8 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "text_diagnostics": text_diagnostics,
             "normalization_applied": False,
             "normalized_text_preview": None,
+            "is_ocr_low_quality": False,
+            "review_type": "other",
             "copied_to": str(copy_destination),
             "outcome": None,
             "validation_status": None,
@@ -256,7 +272,10 @@ def classify_batch_status(
     review_reason: str | None,
     confidence: float | None,
     entity_count: int,
+    is_ocr_low_quality: bool = False,
 ) -> str:
+    if is_ocr_low_quality:
+        return "review_ocr_quality"
     if entity_count == 0:
         return "review"
     if confidence is None or confidence < 0.65:
@@ -268,6 +287,32 @@ def classify_batch_status(
     return "review"
 
 
+def detect_ocr_low_quality(
+    *,
+    text_diagnostics: dict[str, Any],
+    normalization_applied: bool,
+    confidence_breakdown: dict[str, Any] | None,
+) -> bool:
+    diagnostics = text_diagnostics if isinstance(text_diagnostics, dict) else {}
+    method = str(diagnostics.get("method") or "").lower()
+    likely_ocr_context = "tesseract" in method or "ocr" in method
+    suspicious_ocr = bool(diagnostics.get("suspicious", False)) and likely_ocr_context
+    breakdown = confidence_breakdown if isinstance(confidence_breakdown, dict) else {}
+    coverage_score = safe_float(breakdown.get("coverage"))
+    normalized_low_coverage = normalization_applied and coverage_score is not None and coverage_score < 0.3
+    ratio = safe_float(diagnostics.get("non_alnum_ratio"))
+    excessive_noise = ratio is not None and ratio > 0.40 and likely_ocr_context
+    return bool(suspicious_ocr or normalized_low_coverage or excessive_noise)
+
+
+def review_type_for(*, status: str, is_ocr_low_quality: bool) -> str:
+    if is_ocr_low_quality or status == "review_ocr_quality":
+        return "ocr_quality"
+    if status == "review":
+        return "confidence"
+    return "other"
+
+
 def review_reasons_for(
     *,
     status: str,
@@ -275,7 +320,7 @@ def review_reasons_for(
     confidence: float | None,
     confidence_breakdown: dict[str, Any] | None,
 ) -> list[str]:
-    if status != "review":
+    if status not in {"review", "review_ocr_quality"}:
         return []
 
     reasons: list[str] = []
@@ -344,9 +389,10 @@ def analyze_text(text: str, *, method: str) -> dict[str, Any]:
     stripped = normalized.strip()
     length = len(stripped)
     compact = re.sub(r"\s+", " ", stripped)
+    ratio = non_alnum_ratio(stripped)
     suspicious = (
         length < 50
-        or non_alnum_ratio(stripped) > 0.40
+        or ratio > 0.40
         or bool(OCR_ARTIFACT_PATTERN.search(stripped))
     )
     return {
@@ -354,6 +400,7 @@ def analyze_text(text: str, *, method: str) -> dict[str, Any]:
         "preview": compact[:300],
         "method": method,
         "suspicious": bool(suspicious),
+        "non_alnum_ratio": round(ratio, 4),
     }
 
 
@@ -400,6 +447,10 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         f"- Low text quality: `{summary.get('low_text_quality_count', 0)}`",
         f"- Average text length: `{summary.get('avg_text_length', 0)}`",
         "",
+        "## OCR Quality Summary",
+        "",
+        f"- ocr_low_quality_count: `{summary.get('ocr_low_quality_count', 0)}`",
+        "",
         "## Review Reason Breakdown",
         "",
         *[
@@ -414,8 +465,8 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         lines.append("No supported PDF or TXT files found in `real_validation_input/`.")
     else:
         lines.extend([
-            "| File | Status | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Why reviewed | Review reason | Error |",
-            "| --- | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- | --- |",
+            "| File | Status | Review type | OCR low quality | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Why reviewed | Review reason | Error |",
+            "| --- | --- | --- | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- | --- |",
         ])
         for item in summary["results"]:
             fallback = item.get("fallback_extractor") or item.get("fallback_reason") or ""
@@ -425,6 +476,8 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
                 + " | ".join([
                     escape_md(item.get("filename")),
                     escape_md(item.get("status")),
+                    escape_md(item.get("review_type")),
+                    "yes" if item.get("is_ocr_low_quality") else "no",
                     str(item.get("entity_count", 0)),
                     escape_md(item.get("selected_extractor")),
                     str(diagnostics.get("length", 0)),
@@ -470,7 +523,7 @@ def write_review_audit_reports_from_latest() -> tuple[Path, Path]:
 
 
 def build_review_audit(summary: dict[str, Any]) -> dict[str, Any]:
-    reviewed = [item for item in summary.get("results", []) if item.get("status") == "review"]
+    reviewed = [item for item in summary.get("results", []) if item.get("status") in {"review", "review_ocr_quality"}]
     items = [review_audit_item(item) for item in reviewed]
     breakdown = {category: 0 for category in REVIEW_FIX_CATEGORIES}
     for item in items:

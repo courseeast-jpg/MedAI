@@ -1,11 +1,11 @@
 # Phase 35 Holdout Review Audit
 
 - Source report: `G:\Codex\2026-04-22-connect-github\reports\holdout_validation\latest_holdout_validation.json`
-- Reviewed files: `5`
+- Reviewed files: `6`
 
 ## Remaining Issue Breakdown
 
-- ocr_noise_remaining: `5`
+- ocr_noise_remaining: `6`
 - low_coverage_after_normalization: `0`
 - missing_domain_rules: `0`
 - correctly_flagged_review: `0`
@@ -43,6 +43,23 @@
 
 - original preview:
 [Page 1] s . . a Y, ’ ‘ : BIO MED LABORATOR MIKROBIOLOGIIK i . \ [PERSON] — STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 [DATE] * > ‘ a : 3 = ’ * i UROKULTURE Y * ie = 1 NGA KULTIVIMI’ PER 24h REZULTOI NEGATIV i * * . 2 ae ANTIBIOGRAME « CIPROFLOXACINI......... LEVOFLOXACINI........... ' * . * ’ MPMPE T
+
+## Test Results 2.pdf
+
+- remaining issue: ocr_noise_remaining
+- confidence: 0.7
+- entity count: 6
+- entities: ['CKOH', 'Macca', 'He BbiHBneHO', 'BneHO', 'IIr', 'HBneHO']
+- why reviewed: ['low_coverage']
+- normalization applied: True
+- extraction method: unknown
+- text length: 2689
+
+- normalized preview:
+[Page 1] N2 ):[PERSON] npo6>IpK>1 <!>.1.1.0. naI..1>IeHra non BoJpacr OpraHL'IJai..\L'IH Bpa4 np>IMe4aH>Ie loIccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>[ID_REMOVED] MeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l [DATE], [DATE] 101462359601 <lleAeHYeHKO CrenaH MYlf<CKOH 51 HaJBaHHe HCC
+
+- original preview:
+[Page 1] N2 ):[PERSON] npo6>IpK>1 <!>.1.1.0. naI..1>IeHra non BoJpacr OpraHL'IJai..\L'IH Bpa4 np>IMe4aH>Ie loIccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>[ID_REMOVED] MeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l [DATE], [DATE] 101462359601 <lleAeHYeHKO CrenaH MYlf<CKOH 51 HaJBaHHe HCC
 
 ## Test Results 3.pdf
 

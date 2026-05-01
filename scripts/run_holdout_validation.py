@@ -118,7 +118,7 @@ def write_phase35_review_audit() -> tuple[Path, Path]:
 
 
 def build_phase35_review_audit(summary: dict[str, Any]) -> dict[str, Any]:
-    reviewed = [item for item in summary.get("results", []) if item.get("status") == "review"]
+    reviewed = [item for item in summary.get("results", []) if item.get("status") in {"review", "review_ocr_quality"}]
     files = [phase35_review_item(item) for item in reviewed]
     breakdown = {category: 0 for category in PHASE35_ISSUE_CATEGORIES}
     for item in files:
@@ -173,6 +173,8 @@ def classify_phase35_remaining_issue(
     normalization_applied: bool,
 ) -> str:
     suspicious = bool(diagnostics.get("suspicious", False))
+    if item.get("is_ocr_low_quality") or item.get("review_type") == "ocr_quality":
+        return "ocr_noise_remaining"
     low_coverage = coverage_score is not None and coverage_score < 0.3
     if suspicious or (normalization_applied and low_coverage):
         return "ocr_noise_remaining"
