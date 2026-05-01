@@ -26,6 +26,23 @@ QUALITATIVE_ROW_RE = re.compile(
     re.I,
 )
 
+# Matches "Name ValueUnit [Range] [Flag]" — value is directly adjacent to unit (no space).
+# Handles OCR output like "Glucose 103mg/dL 65-99 H".
+ADJACENT_VALUE_UNIT_RE = re.compile(
+    rf"^\s*(?P<name>[A-Za-z][A-Za-z0-9 /().,%+-]{{1,60}}?)\s+"
+    rf"(?P<value>[<>]?\d+(?:\.\d+)?)(?P<unit>{UNIT_PATTERN})"
+    rf"(?:\s+(?P<range>{RANGE_PATTERN}))?"
+    rf"(?:\s+(?P<flag>{ABNORMAL_PATTERN}))?\s*$",
+    re.I,
+)
+
+# Matches a line that is only a reference range (possibly with flag).
+# Used to detect split-range rows where range appears on the line after the value.
+_RANGE_ONLY_LINE_RE = re.compile(
+    rf"^\s*(?P<range>{RANGE_PATTERN})\s*(?P<flag>{ABNORMAL_PATTERN})?\s*$",
+    re.I,
+)
+
 
 @dataclass(frozen=True)
 class LabRow:
@@ -45,9 +62,19 @@ class LabRow:
 def parse_lab_rows(text: str) -> list[LabRow]:
     rows: list[LabRow] = []
     lines = candidate_lab_lines(text)
-    for line in lines:
+    skip_indices: set[int] = set()
+    for i, line in enumerate(lines):
+        if i in skip_indices:
+            continue
         parsed = parse_lab_row(line)
         if parsed is not None:
+            if parsed.reference_range is None and i + 1 < len(lines):
+                upgraded, consumed = _try_attach_range_from_next_line(parsed, lines[i + 1])
+                if upgraded is not None:
+                    rows.append(upgraded)
+                    if consumed:
+                        skip_indices.add(i + 1)
+                    continue
             rows.append(parsed)
     rows.extend(parse_paired_microbiology_rows(lines))
     return rows
@@ -57,7 +84,14 @@ def parse_lab_row(line: str) -> LabRow | None:
     cleaned = normalize_line(line)
     if not cleaned:
         return None
-    match = NUMERIC_ROW_RE.match(cleaned) or QUALITATIVE_ROW_RE.match(cleaned)
+    warnings: list[str] = []
+    # Try adjacent-value-unit first: it is more specific and would be falsely
+    # consumed by NUMERIC_ROW_RE (which allows digits in the name group).
+    match = ADJACENT_VALUE_UNIT_RE.match(cleaned)
+    if match is not None:
+        warnings.append("adjacent_value_unit")
+    else:
+        match = NUMERIC_ROW_RE.match(cleaned) or QUALITATIVE_ROW_RE.match(cleaned)
     if not match:
         return None
     name = clean_name(match.group("name"))
@@ -67,7 +101,6 @@ def parse_lab_row(line: str) -> LabRow | None:
     unit = _clean_optional(match.groupdict().get("unit"))
     reference_range = _clean_optional(match.groupdict().get("range"))
     abnormal_flag = _clean_optional(match.groupdict().get("flag"))
-    warnings: list[str] = []
     confidence = 0.72
     if unit:
         confidence += 0.08
@@ -89,6 +122,39 @@ def parse_lab_row(line: str) -> LabRow | None:
         parser_confidence=round(min(confidence, 0.98), 3),
         warnings=warnings,
     )
+
+
+def _try_attach_range_from_next_line(
+    row: LabRow, next_line: str
+) -> tuple[LabRow | None, bool]:
+    """Attempt to upgrade a row missing a reference range by reading the next line.
+
+    Returns (upgraded_row, consumed) where consumed=True means the next line
+    was a range-only line and should be skipped in the main loop.
+    """
+    cleaned_next = normalize_line(next_line)
+    if not cleaned_next:
+        return None, False
+    range_match = _RANGE_ONLY_LINE_RE.match(cleaned_next)
+    if range_match is None:
+        return None, False
+    new_range = _clean_optional(range_match.group("range"))
+    if new_range is None:
+        return None, False
+    new_flag = _clean_optional(range_match.groupdict().get("flag")) or row.abnormal_flag
+    upgraded_warnings = [w for w in row.warnings if w != "qualitative_or_sparse_row"]
+    upgraded_warnings.append("split_range_row")
+    upgraded_confidence = round(min(row.parser_confidence + 0.10, 0.98), 3)
+    return LabRow(
+        test_name=row.test_name,
+        value=row.value,
+        unit=row.unit,
+        reference_range=new_range,
+        abnormal_flag=new_flag,
+        raw_line=row.raw_line,
+        parser_confidence=upgraded_confidence,
+        warnings=upgraded_warnings,
+    ), True
 
 
 def parse_paired_microbiology_rows(lines: list[str]) -> list[LabRow]:
@@ -124,7 +190,7 @@ def candidate_lab_lines(text: str) -> list[str]:
     raw_lines: list[str] = []
     for line in source.splitlines():
         raw_lines.extend(split_flattened_line(line))
-    return [line for line in raw_lines if len(line.strip()) >= 5]
+    return [line for line in raw_lines if len(line.strip()) >= 3]
 
 
 def split_flattened_line(line: str) -> list[str]:

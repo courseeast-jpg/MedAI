@@ -1,6 +1,6 @@
 # Phase 40 Lab Table Normalization
 
-- Generated at: `2026-05-01T16:08:48.654594+00:00`
+- Generated at: `2026-05-01T18:37:28.892643+00:00`
 
 ## Baselines
 
@@ -30,9 +30,9 @@
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
 | Results 1.pdf | usable_with_review | review | review | yes | 0 | 0.0 | none | no | low_text_density, table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence |
 | Results 2.pdf | usable_with_review | review | review | yes | 0 | 0.0 | none | no | low_text_density, table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, extraction_sparse_entities |
-| Test Results 2.pdf | good | review_ocr_quality | review | yes | 9 | 0.085 | partial | yes | table_structure_loss, extraction_low_coverage, lab_table_recovered, lab_table_recovered_review_only |
-| Test Results 3.pdf | good | review_ocr_quality | review_ocr_quality | yes | 1 | 0.02 | weak | no | table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, classifier_legacy_ocr_flag, legacy_normalized_low_coverage |
-| Test Results 4.pdf | good | accepted | accepted | yes | 1 | 0.025 | weak | no | low_text_density, table_structure_loss, accepted_clean_input |
-| Test Results 5.pdf | usable_with_review | review_ocr_quality | review_ocr_quality | yes | 3 | 0.043 | weak | no | table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, classifier_legacy_ocr_flag, legacy_normalized_low_coverage |
-| Test Results 6.pdf | good | review_ocr_quality | review_ocr_quality | yes | 0 | 0.0 | none | no | table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, classifier_legacy_ocr_flag, legacy_normalized_low_coverage |
-| Urinalysis, Routine.pdf | usable_with_review | accepted | accepted | yes | 14 | 0.171 | partial | no | accepted_clean_input |
+| Test Results 2.pdf | good | review_ocr_quality | review_ocr_quality | yes | 9 | 0.077 | weak | no | table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, classifier_legacy_ocr_flag, legacy_normalized_low_coverage |
+| Test Results 3.pdf | good | review_ocr_quality | review_ocr_quality | yes | 1 | 0.018 | weak | no | table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, classifier_legacy_ocr_flag, legacy_normalized_low_coverage |
+| Test Results 4.pdf | good | accepted | accepted | yes | 1 | 0.024 | weak | no | low_text_density, table_structure_loss, accepted_clean_input |
+| Test Results 5.pdf | usable_with_review | review_ocr_quality | review_ocr_quality | yes | 3 | 0.041 | weak | no | table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, classifier_legacy_ocr_flag, legacy_normalized_low_coverage |
+| Test Results 6.pdf | good | review | review | yes | 0 | 0.0 | none | no | table_structure_loss, extraction_low_coverage, extraction_low_confidence, safety_gate_low_confidence, extraction_sparse_entities |
+| Urinalysis, Routine.pdf | usable_with_review | accepted | accepted | yes | 14 | 0.167 | partial | no | accepted_clean_input |

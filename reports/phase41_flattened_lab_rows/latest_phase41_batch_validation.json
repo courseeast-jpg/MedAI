@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-05-01T18:36:07.416853+00:00",
-  "run_id": "78269bc4-55af-4fe9-9015-1844e02e3eee",
+  "timestamp": "2026-05-01T18:38:24.581970+00:00",
+  "run_id": "c1d0378c-0a9b-4b42-b2c2-b3b9f41d19ce",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
   "total_files": 8,
   "accepted_count": 2,
@@ -241,7 +241,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Results 1_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\review\\Results 1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -449,7 +449,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Results 2_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\review\\Results 2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -802,7 +802,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 2_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\review\\Test Results 2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1047,7 +1047,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 3_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\review\\Test Results 3.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1280,7 +1280,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\archive\\Test Results 4_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\archive\\Test Results 4.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -1551,7 +1551,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 5_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\review\\Test Results 5.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1752,7 +1752,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 6_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\review\\Test Results 6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -2213,7 +2213,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\archive\\Urinalysis, Routine_3.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\archive\\Urinalysis, Routine.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     }
