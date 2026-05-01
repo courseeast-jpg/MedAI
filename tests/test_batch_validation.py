@@ -359,6 +359,68 @@ def test_good_input_with_legacy_ocr_review_sets_mismatch_flag(monkeypatch, tmp_p
     assert "legacy_normalized_low_coverage" in result["classification_reason_codes"]
 
 
+def test_lab_normalization_changes_review_ocr_quality_to_review(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "lab_review.txt"
+    source.write_text(
+        "\n".join([
+            "Urinalysis Test Results",
+            "Specific Gravity 1.025 1.005-1.030",
+            "RBC UA 0-2 /hpf 0-2",
+            "Ketones Negative",
+            "Blood Negative",
+            "Protein Trace",
+        ]),
+        encoding="utf-8",
+    )
+
+    summary = batch.run_batch_validation(pipeline=FakeLegacyOcrFlagPipeline())
+    result = summary["results"][0]
+
+    assert result["final_status_before_lab_normalization"] == "review_ocr_quality"
+    assert result["status"] == "review"
+    assert result["final_status_after_lab_normalization"] == "review"
+    assert result["lab_normalizer_changed_status"] is True
+    assert result["accepted_due_to_lab_normalizer"] is False
+    assert "lab_table_recovered" in result["classification_reason_codes"]
+    assert "classifier_legacy_ocr_flag" in result["original_classification_reason_codes"]
+
+
+def test_lab_normalization_never_changes_result_to_accepted(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "lab_review.txt"
+    source.write_text(
+        "Glucose 103 mg/dL 65-99 H\nWBC 6.2 x10E3/uL 3.4-10.8\nKetones Negative",
+        encoding="utf-8",
+    )
+
+    summary = batch.run_batch_validation(pipeline=FakeLegacyOcrFlagPipeline())
+    result = summary["results"][0]
+
+    assert result["status"] != "accepted"
+    assert result["accepted_due_to_lab_normalizer"] is False
+
+
+def test_lab_normalization_keeps_poor_ocr_in_review_ocr_quality(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "poor_ocr_lab.txt"
+    source.write_text(
+        ("|||| ____ \ufffd \ufffd 11111111 ~~~~~ ??? " * 8)
+        + "Glucose 103 mg/dL 65-99 H WBC 6.2 x10E3/uL 3.4-10.8 Ketones Negative",
+        encoding="utf-8",
+    )
+
+    summary = batch.run_batch_validation(pipeline=FakeLegacyOcrFlagPipeline())
+    result = summary["results"][0]
+
+    assert result["input_quality_band"] == "poor_ocr"
+    assert result["status"] == "review_ocr_quality"
+    assert result["lab_normalizer_changed_status"] is False
+
+
 def test_route_audit_acceptance_with_086_confidence_is_accepted() -> None:
     status = batch.classify_batch_status(
         outcome="queued_for_review",

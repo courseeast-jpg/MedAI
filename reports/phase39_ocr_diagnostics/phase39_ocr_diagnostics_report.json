@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01T15:44:30.297753+00:00",
+  "generated_at": "2026-05-01T16:07:47.865724+00:00",
   "phase": "Phase 39 OCR/Layout Diagnostic Reconciliation",
   "source_phase38_batch_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\latest_phase38_batch_validation.json",
   "phase37_baseline": {
@@ -15,22 +15,20 @@
     "review_ocr_quality": 4,
     "empty": 0,
     "safety_regression": false,
-    "phase37_review_ocr_quality_improved_count": 2
+    "phase37_review_ocr_quality_improved_count": 3
   },
   "phase39_diagnostics": {
     "total_files": 8,
-    "ocr_status_mismatch_count": 3,
-    "review_ocr_quality_count": 4,
+    "ocr_status_mismatch_count": 2,
+    "review_ocr_quality_count": 3,
     "safety_regression": false,
     "status_taxonomy_changed": false
   },
   "mismatch_files": [
-    "Test Results 2.pdf",
     "Test Results 3.pdf",
     "Test Results 6.pdf"
   ],
   "review_ocr_quality_reasons": {
-    "Test Results 2.pdf": "table_structure_loss,extraction_low_coverage,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
     "Test Results 3.pdf": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
     "Test Results 5.pdf": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
     "Test Results 6.pdf": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage"
@@ -41,24 +39,30 @@
       "ocr_layout_quality_band": "usable_with_review",
       "ocr_layout_quality_score": 0.745,
       "ocr_layout_route": "scanned_or_low_text",
-      "downstream_classifier_status": "accepted",
-      "downstream_classifier_reason": "accepted_clean_input",
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "low_text_density,table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence",
       "classification_reason_codes": [
         "low_text_density",
         "table_structure_loss",
-        "accepted_clean_input"
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
       ],
-      "extraction_entity_count": 4,
-      "confidence_score": 0.767,
+      "extraction_entity_count": 2,
+      "confidence_score": 0.45,
       "empty_extraction_flag": false,
       "table_layout_warning": true,
-      "normalization_applied": true,
+      "normalization_applied": false,
       "ocr_status_mismatch": false,
       "mismatch_type": null,
       "selected_extraction_engine": "existing_pdf_pipeline",
-      "selected_extractor": "spacy",
-      "review_type": "other",
-      "why_reviewed": [],
+      "selected_extractor": "phi3",
+      "review_type": "confidence",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage",
+        "low_extractor_weight"
+      ],
       "text_method": "existing_pdf_pipeline",
       "text_suspicious": false
     },
@@ -67,24 +71,32 @@
       "ocr_layout_quality_band": "usable_with_review",
       "ocr_layout_quality_score": 0.735,
       "ocr_layout_route": "scanned_or_low_text",
-      "downstream_classifier_status": "accepted",
-      "downstream_classifier_reason": "accepted_clean_input",
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "low_text_density,table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,extraction_sparse_entities",
       "classification_reason_codes": [
         "low_text_density",
         "table_structure_loss",
-        "accepted_clean_input"
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
       ],
-      "extraction_entity_count": 3,
-      "confidence_score": 0.693,
+      "extraction_entity_count": 1,
+      "confidence_score": 0.45,
       "empty_extraction_flag": false,
       "table_layout_warning": true,
-      "normalization_applied": true,
+      "normalization_applied": false,
       "ocr_status_mismatch": false,
       "mismatch_type": null,
       "selected_extraction_engine": "existing_pdf_pipeline",
-      "selected_extractor": "spacy",
-      "review_type": "other",
-      "why_reviewed": [],
+      "selected_extractor": "phi3",
+      "review_type": "confidence",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_extractor_weight"
+      ],
       "text_method": "existing_pdf_pipeline",
       "text_suspicious": false
     },
@@ -93,24 +105,24 @@
       "ocr_layout_quality_band": "good",
       "ocr_layout_quality_score": 0.818,
       "ocr_layout_route": "digital_clean_text",
-      "downstream_classifier_status": "review_ocr_quality",
-      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,lab_table_recovered,lab_table_recovered_review_only",
       "classification_reason_codes": [
         "table_structure_loss",
         "extraction_low_coverage",
-        "classifier_legacy_ocr_flag",
-        "legacy_normalized_low_coverage"
+        "lab_table_recovered",
+        "lab_table_recovered_review_only"
       ],
       "extraction_entity_count": 6,
       "confidence_score": 0.7,
       "empty_extraction_flag": false,
       "table_layout_warning": true,
       "normalization_applied": true,
-      "ocr_status_mismatch": true,
-      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "selected_extraction_engine": "existing_pdf_pipeline",
       "selected_extractor": "spacy",
-      "review_type": "ocr_quality",
+      "review_type": "confidence",
       "why_reviewed": [
         "low_coverage"
       ],

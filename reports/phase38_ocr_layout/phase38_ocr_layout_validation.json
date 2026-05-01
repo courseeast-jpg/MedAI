@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01T15:44:19.355022+00:00",
+  "generated_at": "2026-05-01T16:06:51.172518+00:00",
   "phase": "Phase 38 v2 OCR/Layout Engine Foundation",
   "source_input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
   "phase37_holdout_baseline": {
@@ -9,9 +9,9 @@
     "empty": 0
   },
   "total_files": 8,
-  "accepted": 4,
-  "review": 4,
-  "review_ocr_quality": 4,
+  "accepted": 2,
+  "review": 6,
+  "review_ocr_quality": 3,
   "empty": 0,
   "ocr_layout_route_summary": {
     "scanned_or_low_text": 3,
@@ -21,16 +21,16 @@
     "usable_with_review": 4,
     "good": 4
   },
-  "phase37_review_ocr_quality_improved_count": 2,
-  "ocr_status_mismatch_count": 3,
+  "phase37_review_ocr_quality_improved_count": 3,
+  "ocr_status_mismatch_count": 2,
   "input_quality_improved": true,
   "safety_regression": false,
   "safety_regression_reason": null,
   "results": [
     {
       "filename": "Results 1.pdf",
-      "status": "accepted",
-      "entity_count": 4,
+      "status": "review",
+      "entity_count": 2,
       "route_decision": "scanned_or_low_text",
       "input_quality_score": 0.745,
       "input_quality_band": "usable_with_review",
@@ -40,15 +40,17 @@
         "repeated_symbol_noise"
       ],
       "selected_extraction_engine": "existing_pdf_pipeline",
-      "selected_extractor": "spacy",
-      "review_type": "other",
+      "selected_extractor": "phi3",
+      "review_type": "confidence",
       "is_ocr_low_quality": false,
-      "downstream_classifier_status": "accepted",
-      "downstream_classifier_reason": "accepted_clean_input",
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "low_text_density,table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence",
       "classification_reason_codes": [
         "low_text_density",
         "table_structure_loss",
-        "accepted_clean_input"
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
       ],
       "empty_extraction_flag": false,
       "table_layout_warning": true,
@@ -56,12 +58,16 @@
       "mismatch_type": null,
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": true,
-      "why_reviewed": []
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage",
+        "low_extractor_weight"
+      ]
     },
     {
       "filename": "Results 2.pdf",
-      "status": "accepted",
-      "entity_count": 3,
+      "status": "review",
+      "entity_count": 1,
       "route_decision": "scanned_or_low_text",
       "input_quality_score": 0.735,
       "input_quality_band": "usable_with_review",
@@ -71,15 +77,18 @@
         "repeated_symbol_noise"
       ],
       "selected_extraction_engine": "existing_pdf_pipeline",
-      "selected_extractor": "spacy",
-      "review_type": "other",
+      "selected_extractor": "phi3",
+      "review_type": "confidence",
       "is_ocr_low_quality": false,
-      "downstream_classifier_status": "accepted",
-      "downstream_classifier_reason": "accepted_clean_input",
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "low_text_density,table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,extraction_sparse_entities",
       "classification_reason_codes": [
         "low_text_density",
         "table_structure_loss",
-        "accepted_clean_input"
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
       ],
       "empty_extraction_flag": false,
       "table_layout_warning": true,
@@ -87,11 +96,16 @@
       "mismatch_type": null,
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": true,
-      "why_reviewed": []
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_extractor_weight"
+      ]
     },
     {
       "filename": "Test Results 2.pdf",
-      "status": "review_ocr_quality",
+      "status": "review",
       "entity_count": 6,
       "route_decision": "digital_clean_text",
       "input_quality_score": 0.818,
@@ -101,22 +115,22 @@
       ],
       "selected_extraction_engine": "existing_pdf_pipeline",
       "selected_extractor": "spacy",
-      "review_type": "ocr_quality",
-      "is_ocr_low_quality": true,
-      "downstream_classifier_status": "review_ocr_quality",
-      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "review_type": "confidence",
+      "is_ocr_low_quality": false,
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,lab_table_recovered,lab_table_recovered_review_only",
       "classification_reason_codes": [
         "table_structure_loss",
         "extraction_low_coverage",
-        "classifier_legacy_ocr_flag",
-        "legacy_normalized_low_coverage"
+        "lab_table_recovered",
+        "lab_table_recovered_review_only"
       ],
       "empty_extraction_flag": false,
       "table_layout_warning": true,
-      "ocr_status_mismatch": true,
-      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "phase37_was_review_ocr_quality": true,
-      "phase37_review_ocr_quality_improved": false,
+      "phase37_review_ocr_quality_improved": true,
       "why_reviewed": [
         "low_coverage"
       ]

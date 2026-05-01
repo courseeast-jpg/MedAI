@@ -1,0 +1,251 @@
+{
+  "generated_at": "2026-05-01T16:08:48.654594+00:00",
+  "phase": "Phase 40 Lab Table Normalization & Coverage Recovery",
+  "phase37_baseline": {
+    "total_files": 8,
+    "accepted": 2,
+    "review_ocr_quality": 6,
+    "empty": 0
+  },
+  "phase38_baseline": {
+    "total_files": 8,
+    "accepted": 2,
+    "review": 6,
+    "review_ocr_quality": 4,
+    "empty": 0
+  },
+  "phase39_baseline": {
+    "total_files": 8,
+    "ocr_status_mismatches": 3,
+    "review_ocr_quality": 4,
+    "safety_regression": false
+  },
+  "phase40_result": {
+    "total_files": 8,
+    "accepted": 2,
+    "review": 6,
+    "review_ocr_quality": 3,
+    "empty": 0,
+    "review_ocr_quality_decreased_from_phase39": true
+  },
+  "safety": {
+    "false_accept_on_poor_ocr": false,
+    "accepted_due_to_lab_normalizer": false,
+    "empty_extraction_leakage": false,
+    "phase37_gate_bypassed": false
+  },
+  "results": [
+    {
+      "filename": "Results 1.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status_before_lab_normalization": "review",
+      "final_status_after_lab_normalization": "review",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 0,
+      "lab_coverage_ratio": 0.0,
+      "lab_coverage_band": "none",
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "original_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Results 2.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status_before_lab_normalization": "review",
+      "final_status_after_lab_normalization": "review",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 0,
+      "lab_coverage_ratio": 0.0,
+      "lab_coverage_band": "none",
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "original_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 2.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status_before_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 9,
+      "lab_coverage_ratio": 0.085,
+      "lab_coverage_band": "partial",
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "lab_table_recovered",
+        "lab_table_recovered_review_only"
+      ],
+      "original_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": true,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 3.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status_before_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review_ocr_quality",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 1,
+      "lab_coverage_ratio": 0.02,
+      "lab_coverage_band": "weak",
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "original_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 4.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status_before_lab_normalization": "accepted",
+      "final_status_after_lab_normalization": "accepted",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 1,
+      "lab_coverage_ratio": 0.025,
+      "lab_coverage_band": "weak",
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "original_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 5.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status_before_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review_ocr_quality",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 3,
+      "lab_coverage_ratio": 0.043,
+      "lab_coverage_band": "weak",
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "original_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 6.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status_before_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review_ocr_quality",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 0,
+      "lab_coverage_ratio": 0.0,
+      "lab_coverage_band": "none",
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "original_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Urinalysis, Routine.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status_before_lab_normalization": "accepted",
+      "final_status_after_lab_normalization": "accepted",
+      "lab_table_detected": true,
+      "parsed_lab_row_count": 14,
+      "lab_coverage_ratio": 0.171,
+      "lab_coverage_band": "partial",
+      "reason_codes": [
+        "accepted_clean_input"
+      ],
+      "original_reason_codes": [
+        "accepted_clean_input"
+      ],
+      "upgraded_from_review_ocr_quality_to_review": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_flag": false
+    }
+  ],
+  "raw_batch_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\latest_phase40_batch_validation.json",
+  "raw_batch_markdown": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\latest_phase40_batch_validation.md"
+}

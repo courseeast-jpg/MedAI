@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from lab_normalization.lab_normalizer import normalize_lab_text
 from execution.pipeline import ExecutionPipeline
 from ocr_layout.ocr_candidates import collect_candidates
 from ocr_layout.ocr_router import route_ocr_input
@@ -78,6 +79,12 @@ REQUIRED_RESULT_FIELDS = [
     "table_layout_warning",
     "ocr_status_mismatch",
     "mismatch_type",
+    "final_status_before_lab_normalization",
+    "final_status_after_lab_normalization",
+    "original_classification_reason_codes",
+    "lab_normalization",
+    "lab_normalizer_changed_status",
+    "accepted_due_to_lab_normalizer",
 ]
 
 OCR_ARTIFACT_PATTERN = re.compile(r"(\S)\1{7,}|[|_]{4,}|(?:\b[Il1]{8,}\b)|\ufffd")
@@ -217,10 +224,6 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             entity_count=len(entities),
             is_ocr_low_quality=is_ocr_low_quality,
         )
-        copy_destination = copy_to_unique_destination(
-            source_path,
-            BATCH_ARCHIVE_DIR if status == "accepted" else BATCH_REVIEW_DIR,
-        )
         why_reviewed = review_reasons_for(
             status=status,
             entity_count=len(entities),
@@ -237,7 +240,30 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             ocr_layout=ocr_layout,
             legacy_ocr_reason_codes=legacy_ocr_reason_codes,
         )
+        lab_recovery = apply_lab_normalization_recovery(
+            selected_text=str(ocr_layout.get("selected_text") or ""),
+            status=status,
+            entity_count=len(entities),
+            is_ocr_low_quality=is_ocr_low_quality,
+            classification_reason_codes=classification_reasons,
+            ocr_layout=ocr_layout,
+        )
+        status_before_lab = status
+        original_classification_reasons = list(classification_reasons)
+        status = lab_recovery["status"]
+        is_ocr_low_quality = lab_recovery["is_ocr_low_quality"]
+        classification_reasons = lab_recovery["classification_reason_codes"]
+        why_reviewed = review_reasons_for(
+            status=status,
+            entity_count=len(entities),
+            confidence=confidence,
+            confidence_breakdown=confidence_breakdown,
+        )
         mismatch = ocr_status_mismatch_for(status=status, ocr_layout=ocr_layout)
+        copy_destination = copy_to_unique_destination(
+            source_path,
+            BATCH_ARCHIVE_DIR if status == "accepted" else BATCH_REVIEW_DIR,
+        )
         return normalize_result({
             "filename": source_path.name,
             "status": status,
@@ -275,6 +301,12 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "table_layout_warning": table_layout_warning_for(ocr_layout=ocr_layout, classification_reason_codes=classification_reasons),
             "ocr_status_mismatch": mismatch["ocr_status_mismatch"],
             "mismatch_type": mismatch["mismatch_type"],
+            "final_status_before_lab_normalization": status_before_lab,
+            "final_status_after_lab_normalization": status,
+            "original_classification_reason_codes": original_classification_reasons,
+            "lab_normalization": lab_recovery["lab_normalization"],
+            "lab_normalizer_changed_status": lab_recovery["lab_normalizer_changed_status"],
+            "accepted_due_to_lab_normalizer": False,
             "copied_to": str(copy_destination),
             "outcome": result.outcome,
             "validation_status": result.validation_status,
@@ -312,6 +344,12 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "table_layout_warning": table_layout_warning_for(ocr_layout=ocr_layout, classification_reason_codes=[]),
             "ocr_status_mismatch": False,
             "mismatch_type": None,
+            "final_status_before_lab_normalization": "error",
+            "final_status_after_lab_normalization": "error",
+            "original_classification_reason_codes": ["processing_error"],
+            "lab_normalization": {},
+            "lab_normalizer_changed_status": False,
+            "accepted_due_to_lab_normalizer": False,
             "copied_to": str(copy_destination),
             "outcome": None,
             "validation_status": None,
@@ -367,6 +405,47 @@ def ocr_layout_forces_ocr_review(ocr_layout: dict[str, Any]) -> bool:
     return str(ocr_layout.get("route_decision")) in {"poor_ocr", "empty"} or str(
         ocr_layout.get("input_quality_band")
     ) in {"poor_ocr", "empty"}
+
+
+def apply_lab_normalization_recovery(
+    *,
+    selected_text: str,
+    status: str,
+    entity_count: int,
+    is_ocr_low_quality: bool,
+    classification_reason_codes: list[str],
+    ocr_layout: dict[str, Any],
+) -> dict[str, Any]:
+    lab_result = normalize_lab_text(
+        selected_text,
+        ocr_layout_quality_band=str(ocr_layout.get("input_quality_band") or "unknown"),
+        current_status=status,
+        entity_count=entity_count,
+        safety_gate_blocked=False,
+    )
+    lab_payload = lab_result.to_dict()
+    if not lab_result.should_upgrade_from_ocr_review_to_review:
+        return {
+            "status": status,
+            "is_ocr_low_quality": is_ocr_low_quality,
+            "classification_reason_codes": list(classification_reason_codes),
+            "lab_normalization": lab_payload,
+            "lab_normalizer_changed_status": False,
+        }
+
+    recovered_reasons = [
+        reason
+        for reason in classification_reason_codes
+        if reason not in {"classifier_legacy_ocr_flag", "legacy_normalized_low_coverage"}
+    ]
+    recovered_reasons.extend(["lab_table_recovered", "lab_table_recovered_review_only"])
+    return {
+        "status": "review",
+        "is_ocr_low_quality": False,
+        "classification_reason_codes": dedupe_preserve_order(recovered_reasons),
+        "lab_normalization": lab_payload,
+        "lab_normalizer_changed_status": True,
+    }
 
 
 def ocr_status_mismatch_for(*, status: str, ocr_layout: dict[str, Any]) -> dict[str, Any]:

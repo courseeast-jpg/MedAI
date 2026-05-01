@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-01T16:06:51.157245+00:00",
-  "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\latest_phase38_batch_validation.json",
-  "source_timestamp": "2026-05-01T16:05:51.347327+00:00",
+  "generated_at": "2026-05-01T16:08:48.652594+00:00",
+  "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\latest_phase40_batch_validation.json",
+  "source_timestamp": "2026-05-01T16:07:54.317983+00:00",
   "total_reviewed": 6,
   "review_fix_breakdown": {
     "no_entities": 0,
