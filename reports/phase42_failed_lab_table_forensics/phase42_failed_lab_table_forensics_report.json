@@ -1,0 +1,1065 @@
+{
+  "generated_at": "2026-05-01T18:55:38.354908+00:00",
+  "phase": "Phase 42 Failed Lab Table Forensics",
+  "targets": [
+    "Test Results 3.pdf",
+    "Test Results 6.pdf"
+  ],
+  "files": [
+    {
+      "filename": "Test Results 3.pdf",
+      "ocr_layout": {
+        "selected_engine": "existing_pdf_pipeline",
+        "input_quality_score": 0.811,
+        "input_quality_band": "good",
+        "route_decision": "digital_clean_text",
+        "input_quality_warnings": [
+          "low_medical_token_density"
+        ]
+      },
+      "raw_text_length": 3900,
+      "raw_text_preview": "[Page 1]\nLllccneAoBaHHe MHKpocpnopbl yporeHHTailbHoro TpaKTa MY>KliHH \nMeTOAOM nl..tp B pe>KHMe peailbHOrO BpeMeHH \nAHApocpnop\u00ae,AHApOcpnop\u00aeCKpHH \nOnHcaHHe 6naHKa peJynbTaToB \nV1CCile,Q08aHIIIe np080,QIIITCfl MeTO,QOM nOI1111Mepa3HOVl 1...\\enHOVl peaKl...\\111111 8 pe)KII!Me peailbHOrO 8peMeHIII. \nC 1...\\eilbiO :3Tlt10IlOrlll4eCKOVl ,QIIIarHOCTIIIKIII 111HcpeKL\\lt10HH0-80Cnaili!ITeilbHbiX 3a60ile8aHIIIVl M04enOI1080Vl \nc~t~creMbl MY)K4lt1H 8 aHanlt131t1pyeMOM 6~t~oMarep~t~ane O,QHOspeMeHHO BblnOil",
+      "classification": {
+        "status": "review_ocr_quality",
+        "entity_count": 4,
+        "confidence": 0.63,
+        "confidence_breakdown": {
+          "entity_count": 0.6,
+          "coverage": 0.2,
+          "diversity": 1.0,
+          "extractor_weight": 0.8,
+          "base_extractor_weight": 0.8,
+          "calibrated_extractor_weight": 0.8,
+          "calibration_reason": "none"
+        },
+        "why_reviewed": [
+          "confidence_below_threshold",
+          "low_coverage"
+        ],
+        "review_reason": "confidence_below_accept_threshold",
+        "is_ocr_low_quality": true,
+        "legacy_ocr_reason_codes": [
+          "legacy_normalized_low_coverage"
+        ],
+        "classification_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage"
+        ]
+      },
+      "debug_parse": {
+        "candidate_line_count": 55,
+        "parsed_row_count": 0,
+        "rejected_line_count": 55,
+        "candidate_lines": [
+          "[Page 1]",
+          "LllccneAoBaHHe MHKpocpnopbl yporeHHTailbHoro TpaKTa MY>KliHH",
+          "MeTOAOM nl..tp B pe>KHMe peailbHOrO BpeMeHH",
+          "AHApocpnop\u00ae,AHApOcpnop\u00aeCKpHH",
+          "OnHcaHHe 6naHKa peJynbTaToB",
+          "V1CCile,Q08aHIIIe np080,QIIITCfl MeTO,QOM nOI1111Mepa3HOVl 1...\\enHOVl peaKl...\\111111 8 pe)KII!Me peailbHOrO 8peMeHIII.",
+          "C 1...\\eilbiO :3Tlt10IlOrlll4eCKOVl ,QIIIarHOCTIIIKIII 111HcpeKL\\lt10HH0-80Cnaili!ITeilbHbiX 3a60ile8aHIIIVl M04enOI1080Vl",
+          "c~t~creMbl MY)K4lt1H 8 aHanlt131t1pyeMOM 6~t~oMarep~t~ane O,QHOspeMeHHO BblnOilHfltOr:",
+          "- onpe,QeneHIIIe Haillt14111f!/orcyrcT8111f! naroreHo8: Neisseria gonorrhoeae, Chlamydia trachomatis,",
+          "Mycoplasma genitalium, Trichomonas vaginalis;",
+          "- KOillt14eCT8eHHYIO 01...\\eHKY 8CeX 6aKreplt1Vl (06Ll.\\af! 6aKrep111ailbHafl Macca - 06M), HOpMOcpi10pb1 lt1",
+          "ycno8Ho-naroreHHbiX MIIIKpoopraHlt13M08; TepMIIIH \"YnM, accOL\\IIIItlposaHHble c 6aK8arlt1H030M\" IIICnOilb3YIOT",
+          "Ailfl o6o3Ha4eHlt1fl rpynnbl M111KpoopraHIII3M08, 8nep8ble 8blf!8IleHHbiX y )KeHLl.\\IIIH. B HaCTOf!Ll.\\ee 8peMf!",
+          "AOKa3aHa ponb 3Tlt1X MIIIKpoopraHIII3MOB s pa38lt1Tlt1lt1 yporeHIIITailbHbiX 3a6one8aHIIIVI y MY)K4111H*.",
+          "- KOillt14eCT8eHHYIO Ol...\\eHKY rp111608 po,Qa Candida.",
+          "Kon~t~4ecr8eHHble pe3ynbrarbl IIICcne,Qo8aHlt1fl npe,QcrasneHbl 8 reHoM-3KBIIIBaneHrax (r3), 3Ha4eHlt1fl",
+          "KOTOpbiX nponOpl...\\IIIOHailbHbl MIIIKp06HOVl 06CeMeHeHHOCTlt1 yporeHlt1T8IlbHOrO 6lt10TOna. A6COiliOTHble",
+          "3Ha4eHlt1fl r3 np11180,QfiTCf! 8 CTOI16l...\\e 6naHKa \u00abPe3yilbTaTbl. KOI11114eCT8eHHbiVl\u00bb.",
+          "0THOClt1TeilbHble nOKa3aTeillt1 npe,QCTaBileHbl 8 CTOI16l...\\e 6naHKa \u00abPe3yilbTaTbl. 0THOClt1TeilbHbiVl\u00bb B ABYX",
+          "cpopMaTaX: B Blti,Qe pa3HIIIl...\\bl a6COiliOTHbiX 3Ha4eH~Vl Ka)K,Qoro 1113 noKa3aTeileVllt1 06M (lg1 0) Ill B npOL\\eHTaX",
+          "(%) or 06M. 3Ha4eHIIIf! noKa3areneV! 8 npol...\\eHrax (% ), rpa.QIIIl...\\IIIOHHOM cpopMare Ailfl KOillt14ecrseHHbiX",
+          ",QaHHbiX, nplt18e,QeHbl cnpaB04HO, O,QHaKO 8 paC4eTHOM anrOpiiiTMe 3aKI1104eHIIIfl OHitl He IIICnOilb3YIOTCfl,",
+          "CYMMlt1p08aTb npOL\\eHTbl (%) HeKOppeKTHO.",
+          ",[J,nfl APO)K)Keno,Qo6HbiX rp~t~6os 111 MIIIKOnna3M (Ureaplasma urealyticum, Ureaplasma parvum,",
+          "Mycoplasma hominis) 8bi,QatOTCfl TOilbKO a6conteTHble 3Ha4BHIIIf!.",
+          "np111 cpopMIIIpOBaHIIIIII 3aKI1104eHIIIfl lt1CnOilb3YIOTCfl noKa3aTBillll COOTHOWeHIIIVl pa3HbiX",
+          "Mlt1KpoopraHIII3M08/rpynn M111KpoopraHlt13M08 C 06M Ill Me)K,Qy C060V!, KOTOpble xapaKTep1113YIOT COCTOf!HIIIe",
+          "6IIIOL\\eHo3a. CreneHb AIIIC61!1o3a Ol...\\eHit18aercf! TOilbKO np111 06M>105.",
+          ",[J,nfl y,Qo6cr8a rpaKT08KIII pe3yilbTaros** s ra6Illt1l...\\e IIICnOilb308aHa l...\\BeT08af! MapK111p08Ka. B",
+          "3a8111CIIIMOCTIII OT 1113Mepf!eMOrO napaMerpa MapKepbl 0603Ha4aiOT Cile,QytOLl.\\ee:",
+          "KoHTPOilbHble noKa3aTemll (reHOMHa~ ,QHK 4enoseKa, o6Ll.\\a~ 6aKTepL1alibHa~ Macca, TpaH3L1TOpHa~ ML1Kpo\u00a2nopa):",
+          "D \u2022",
+          "COOT8eTCT8111e KOIIITeOitlf!M",
+          "He COOT8eTCT8111e KOIIITeOitlf!M",
+          "HopMoQ>nopa:",
+          "D \u2022",
+          "D \u2022",
+          "COOT8eTCT8lt1e KOlt1TeOlt1f!M HOOMbl",
+          "VMeOeHHOe OTKilOHeHitle OT KDlt1TeOlt1e8 HOOMbl",
+          "8bi08)KeHHOe OTKilOHeHitle OT KOIIITeOIIIe8 HOOMbl",
+          "COOT8eTCT8lt1e KOlt1TeOlt1f!M HOOMbl",
+          "VMeOeHHOe OTKilOHeHitle OT KDlt1TeOIIIe8 HOOMbl",
+          "8bi08)KeHHOe OTKilOHeHitle OT KOIIITeOIIIe8 HOOMbl",
+          "naToreHbl:",
+          "D \u2022",
+          "He 8blf!8IleHO",
+          "06H80V)KeHO",
+          "Pe3yilbTaT, 8 KOTOpOM 3Ha4eHIIIe noKa3aTeils:l 05M Hlti)Ke noporo80ro 3H84eHIIIs:l C04eTaeTCs:l CO",
+          "3Ha4eHlt1eM noKa3arens:J \u00abreHOMHas:J ,D,HK 4eil08eKa\u00bb 8b1We noporo8oro 3Ha4eHlt1s:l, rpaKryercs:J KaK",
+          "\u00abHopMOL\\eH03\u00bb 6e3 Ol..\\eHKIII crpyKrypbi Mlt1Kpo6~t~oMa. B 3TOM cny4ae l..\\8eT08as:J MapK~t~posKa 8 6naHKe"
+        ],
+        "parsed_rows": [],
+        "rejected_lines": [
+          {
+            "line": "[Page 1]",
+            "reason": "empty_or_noise",
+            "matched_partial_pattern": null,
+            "notes": "empty after normalization",
+            "index": 0
+          },
+          {
+            "line": "LllccneAoBaHHe MHKpocpnopbl yporeHHTailbHoro TpaKTa MY>KliHH",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 1
+          },
+          {
+            "line": "MeTOAOM nl..tp B pe>KHMe peailbHOrO BpeMeHH",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 2
+          },
+          {
+            "line": "AHApocpnop\u00ae,AHApOcpnop\u00aeCKpHH",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 3
+          },
+          {
+            "line": "OnHcaHHe 6naHKa peJynbTaToB",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 4
+          },
+          {
+            "line": "V1CCile,Q08aHIIIe np080,QIIITCfl MeTO,QOM nOI1111Mepa3HOVl 1...\\enHOVl peaKl...\\111111 8 pe)KII!Me peailbHOrO 8peMeHIII.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 5
+          },
+          {
+            "line": "C 1...\\eilbiO :3Tlt10IlOrlll4eCKOVl ,QIIIarHOCTIIIKIII 111HcpeKL\\lt10HH0-80Cnaili!ITeilbHbiX 3a60ile8aHIIIVl M04enOI1080Vl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 6
+          },
+          {
+            "line": "c~t~creMbl MY)K4lt1H 8 aHanlt131t1pyeMOM 6~t~oMarep~t~ane O,QHOspeMeHHO BblnOilHfltOr:",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 7
+          },
+          {
+            "line": "- onpe,QeneHIIIe Haillt14111f!/orcyrcT8111f! naroreHo8: Neisseria gonorrhoeae, Chlamydia trachomatis,",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 8
+          },
+          {
+            "line": "Mycoplasma genitalium, Trichomonas vaginalis;",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 9
+          },
+          {
+            "line": "- KOillt14eCT8eHHYIO 01...\\eHKY 8CeX 6aKreplt1Vl (06Ll.\\af! 6aKrep111ailbHafl Macca - 06M), HOpMOcpi10pb1 lt1",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 10
+          },
+          {
+            "line": "ycno8Ho-naroreHHbiX MIIIKpoopraHlt13M08; TepMIIIH \"YnM, accOL\\IIIItlposaHHble c 6aK8arlt1H030M\" IIICnOilb3YIOT",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 11
+          },
+          {
+            "line": "Ailfl o6o3Ha4eHlt1fl rpynnbl M111KpoopraHIII3M08, 8nep8ble 8blf!8IleHHbiX y )KeHLl.\\IIIH. B HaCTOf!Ll.\\ee 8peMf!",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 12
+          },
+          {
+            "line": "AOKa3aHa ponb 3Tlt1X MIIIKpoopraHIII3MOB s pa38lt1Tlt1lt1 yporeHIIITailbHbiX 3a6one8aHIIIVI y MY)K4111H*.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 13
+          },
+          {
+            "line": "- KOillt14eCT8eHHYIO Ol...\\eHKY rp111608 po,Qa Candida.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 14
+          },
+          {
+            "line": "Kon~t~4ecr8eHHble pe3ynbrarbl IIICcne,Qo8aHlt1fl npe,QcrasneHbl 8 reHoM-3KBIIIBaneHrax (r3), 3Ha4eHlt1fl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 15
+          },
+          {
+            "line": "KOTOpbiX nponOpl...\\IIIOHailbHbl MIIIKp06HOVl 06CeMeHeHHOCTlt1 yporeHlt1T8IlbHOrO 6lt10TOna. A6COiliOTHble",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 16
+          },
+          {
+            "line": "3Ha4eHlt1fl r3 np11180,QfiTCf! 8 CTOI16l...\\e 6naHKa \u00abPe3yilbTaTbl. KOI11114eCT8eHHbiVl\u00bb.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 17
+          },
+          {
+            "line": "0THOClt1TeilbHble nOKa3aTeillt1 npe,QCTaBileHbl 8 CTOI16l...\\e 6naHKa \u00abPe3yilbTaTbl. 0THOClt1TeilbHbiVl\u00bb B ABYX",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 18
+          },
+          {
+            "line": "cpopMaTaX: B Blti,Qe pa3HIIIl...\\bl a6COiliOTHbiX 3Ha4eH~Vl Ka)K,Qoro 1113 noKa3aTeileVllt1 06M (lg1 0) Ill B npOL\\eHTaX",
+            "reason": "malformed_lab_row",
+            "matched_partial_pattern": "partial",
+            "notes": "name+value+unit-like content but failed all parser patterns",
+            "index": 19
+          },
+          {
+            "line": "(%) or 06M. 3Ha4eHIIIf! noKa3areneV! 8 npol...\\eHrax (% ), rpa.QIIIl...\\IIIOHHOM cpopMare Ailfl KOillt14ecrseHHbiX",
+            "reason": "malformed_lab_row",
+            "matched_partial_pattern": "partial",
+            "notes": "name+value+unit-like content but failed all parser patterns",
+            "index": 20
+          },
+          {
+            "line": ",QaHHbiX, nplt18e,QeHbl cnpaB04HO, O,QHaKO 8 paC4eTHOM anrOpiiiTMe 3aKI1104eHIIIfl OHitl He IIICnOilb3YIOTCfl,",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 21
+          },
+          {
+            "line": "CYMMlt1p08aTb npOL\\eHTbl (%) HeKOppeKTHO.",
+            "reason": "malformed_lab_row",
+            "matched_partial_pattern": "partial",
+            "notes": "name+value+unit-like content but failed all parser patterns",
+            "index": 22
+          },
+          {
+            "line": ",[J,nfl APO)K)Keno,Qo6HbiX rp~t~6os 111 MIIIKOnna3M (Ureaplasma urealyticum, Ureaplasma parvum,",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 23
+          },
+          {
+            "line": "Mycoplasma hominis) 8bi,QatOTCfl TOilbKO a6conteTHble 3Ha4BHIIIf!.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 24
+          },
+          {
+            "line": "np111 cpopMIIIpOBaHIIIIII 3aKI1104eHIIIfl lt1CnOilb3YIOTCfl noKa3aTBillll COOTHOWeHIIIVl pa3HbiX",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 25
+          },
+          {
+            "line": "Mlt1KpoopraHIII3M08/rpynn M111KpoopraHlt13M08 C 06M Ill Me)K,Qy C060V!, KOTOpble xapaKTep1113YIOT COCTOf!HIIIe",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 26
+          },
+          {
+            "line": "6IIIOL\\eHo3a. CreneHb AIIIC61!1o3a Ol...\\eHit18aercf! TOilbKO np111 06M>105.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 27
+          },
+          {
+            "line": ",[J,nfl y,Qo6cr8a rpaKT08KIII pe3yilbTaros** s ra6Illt1l...\\e IIICnOilb308aHa l...\\BeT08af! MapK111p08Ka. B",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 28
+          },
+          {
+            "line": "3a8111CIIIMOCTIII OT 1113Mepf!eMOrO napaMerpa MapKepbl 0603Ha4aiOT Cile,QytOLl.\\ee:",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 29
+          },
+          {
+            "line": "KoHTPOilbHble noKa3aTemll (reHOMHa~ ,QHK 4enoseKa, o6Ll.\\a~ 6aKTepL1alibHa~ Macca, TpaH3L1TOpHa~ ML1Kpo\u00a2nopa):",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 30
+          },
+          {
+            "line": "D \u2022",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 31
+          },
+          {
+            "line": "COOT8eTCT8111e KOIIITeOitlf!M",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 32
+          },
+          {
+            "line": "He COOT8eTCT8111e KOIIITeOitlf!M",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 33
+          },
+          {
+            "line": "HopMoQ>nopa:",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 34
+          },
+          {
+            "line": "D \u2022",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 35
+          },
+          {
+            "line": "D \u2022",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 36
+          },
+          {
+            "line": "COOT8eTCT8lt1e KOlt1TeOlt1f!M HOOMbl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 37
+          },
+          {
+            "line": "VMeOeHHOe OTKilOHeHitle OT KDlt1TeOlt1e8 HOOMbl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 38
+          },
+          {
+            "line": "8bi08)KeHHOe OTKilOHeHitle OT KOIIITeOIIIe8 HOOMbl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 39
+          },
+          {
+            "line": "COOT8eTCT8lt1e KOlt1TeOlt1f!M HOOMbl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 40
+          },
+          {
+            "line": "VMeOeHHOe OTKilOHeHitle OT KDlt1TeOIIIe8 HOOMbl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 41
+          },
+          {
+            "line": "8bi08)KeHHOe OTKilOHeHitle OT KOIIITeOIIIe8 HOOMbl",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 42
+          },
+          {
+            "line": "naToreHbl:",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 43
+          },
+          {
+            "line": "D \u2022",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 44
+          },
+          {
+            "line": "He 8blf!8IleHO",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 45
+          },
+          {
+            "line": "06H80V)KeHO",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 46
+          },
+          {
+            "line": "Pe3yilbTaT, 8 KOTOpOM 3Ha4eHIIIe noKa3aTeils:l 05M Hlti)Ke noporo80ro 3H84eHIIIs:l C04eTaeTCs:l CO",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 47
+          },
+          {
+            "line": "3Ha4eHlt1eM noKa3arens:J \u00abreHOMHas:J ,D,HK 4eil08eKa\u00bb 8b1We noporo8oro 3Ha4eHlt1s:l, rpaKryercs:J KaK",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 48
+          },
+          {
+            "line": "\u00abHopMOL\\eH03\u00bb 6e3 Ol..\\eHKIII crpyKrypbi Mlt1Kpo6~t~oMa. B 3TOM cny4ae l..\\8eT08as:J MapK~t~posKa 8 6naHKe",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 49
+          }
+        ],
+        "rejection_reason_breakdown": {
+          "empty_or_noise": 1,
+          "unrecognized": 8,
+          "no_unit_or_qualitative": 41,
+          "name_only": 2,
+          "malformed_lab_row": 3
+        },
+        "signal_summary": {
+          "has_value_only_lines": false,
+          "has_name_only_lines": true,
+          "has_range_only_lines": false,
+          "appears_table_like_no_separators": true,
+          "text_too_fragmented": false,
+          "text_too_sparse": false,
+          "short_line_ratio": 0.091
+        }
+      },
+      "lab_normalization": {
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.018,
+        "lab_coverage_band": "weak",
+        "lab_reason_codes": [
+          "lab_table_recovered",
+          "lab_table_weak_coverage",
+          "lab_table_low_ratio",
+          "lab_table_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": false,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": true
+        },
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [
+            "microbiology_pcr"
+          ],
+          "table_confidence": 0.7,
+          "warnings": [],
+          "metadata": {
+            "line_count": 67,
+            "row_signal_count": 8,
+            "numeric_unit_count": 0,
+            "qualitative_count": 0,
+            "microbiology_count": 2,
+            "table_marker_count": 0
+          }
+        }
+      },
+      "diagnosis": {
+        "primary_bottleneck_category": "C",
+        "category_legend": {
+          "A": "OCR/Layout candidate generation",
+          "B": "Table block segmentation",
+          "C": "Row parser",
+          "D": "Classifier threshold/reasoning",
+          "E": "True manual-review boundary"
+        },
+        "rationale": "Multiple lines look like rows but failed parser regexes \u2014 row parser is the bottleneck.",
+        "notes": [
+          "appears_table_like_no_separators=True \u2014 multi-column layout without | or \\t separators.",
+          "rejection breakdown: {'empty_or_noise': 1, 'unrecognized': 8, 'no_unit_or_qualitative': 41, 'name_only': 2, 'malformed_lab_row': 3}"
+        ]
+      }
+    },
+    {
+      "filename": "Test Results 6.pdf",
+      "ocr_layout": {
+        "selected_engine": "existing_pdf_pipeline",
+        "input_quality_score": 0.809,
+        "input_quality_band": "good",
+        "route_decision": "digital_clean_text",
+        "input_quality_warnings": [
+          "layout_or_table_heavy",
+          "low_medical_token_density"
+        ]
+      },
+      "raw_text_length": 2305,
+      "raw_text_preview": "[Page 1]\n<D.I1.Q. na:qHeHTa \n<l>e,n:eHLJ:eHKO CTenaH J1eoHH,ll;OBHLJ: \nN2 KapTbr \n720862 \n., \nl ,rf \n. / )' \nl \n[ \n\u00b7.:.c\n.,_, ~ t:71,. J\u00ab \nMeC5II.J. \n)J,HarH03 XpoHHLJ:eCKHH 6aKTepHanbHhiH ypeTponpoCTaTHT. \n~----~------~--\nl1PEIIAPAT1I I L(ATA \n1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \nlO \n11 \n12 \nl3 \n14 \n15 \n16 \n17 \nCseLJ:H ,IUIKJio\u00a2eHaK 100Mr ,f \n}--\nJ \nno 1 cseqe Ha HOLJ:h \n. J \n.j \ncf-\nJ . \n-! \n~-\n(1-\nCse'1H BHTarrpocT \u00a2opn rro \n_j \n,+ \n.+ \nrf \n/ \nt! \n.J \n1 CBCLJ:e Ha H0'1b \nI \nMeTpOHH,n:a3on no 500Mr 2 \n.",
+      "classification": {
+        "status": "review",
+        "entity_count": 1,
+        "confidence": 0.45,
+        "confidence_breakdown": {
+          "entity_count": 0.3,
+          "coverage": 0.2,
+          "diversity": 0.6,
+          "extractor_weight": 0.6,
+          "base_extractor_weight": 0.6,
+          "calibrated_extractor_weight": 0.6,
+          "calibration_reason": "none"
+        },
+        "why_reviewed": [
+          "confidence_below_threshold",
+          "low_entity_count",
+          "low_coverage",
+          "low_extractor_weight"
+        ],
+        "review_reason": "confidence_below_reject_threshold",
+        "is_ocr_low_quality": false,
+        "legacy_ocr_reason_codes": [],
+        "classification_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities"
+        ]
+      },
+      "debug_parse": {
+        "candidate_line_count": 106,
+        "parsed_row_count": 0,
+        "rejected_line_count": 106,
+        "candidate_lines": [
+          "[Page 1]",
+          "<D.I1.Q. na:qHeHTa",
+          "<l>e,n:eHLJ:eHKO CTenaH J1eoHH,ll;OBHLJ:",
+          "N2 KapTbr",
+          "720862",
+          "l ,rf",
+          ". / )'",
+          "\u00b7.:.c",
+          ".,_, ~ t:71,. J\u00ab",
+          "MeC5II.J.",
+          ")J,HarH03 XpoHHLJ:eCKHH 6aKTepHanbHhiH ypeTponpoCTaTHT.",
+          "~----~------~--",
+          "l1PEIIAPAT1I I L(ATA",
+          "CseLJ:H ,IUIKJio\u00a2eHaK 100Mr ,f",
+          "}--",
+          "no 1 cseqe Ha HOLJ:h",
+          ". J",
+          "cf-",
+          "J .",
+          "(1-",
+          "Cse'1H BHTarrpocT \u00a2opn rro",
+          "1 CBCLJ:e Ha H0'1b",
+          "MeTpOHH,n:a3on no 500Mr 2",
+          ". .J",
+          ";;..",
+          "\")._",
+          ",i-",
+          "p B .ueHb rrocne e,n:br",
+          "J1eso\u00a2noKCai.J.HH no 500Mr",
+          ".).-",
+          ",:;",
+          ".-f",
+          "1 _IJ_ 3a 1 '1ac .uo o6e.ua",
+          "<l>nyKOHa3011 no 150 Mr 1 p",
+          ".:+-",
+          ",-./-",
+          ".f.",
+          "\\+-",
+          "nOCJie 33BTp3K3",
+          "J1HHeKC cpOpT3 no lKancyne",
+          ".J\u00b7",
+          "\u2022 .!.-",
+          ",.l",
+          "1.-",
+          "1 p .UO 33RTpaKa",
+          "TaMcyJio3HH no 0.4Mr 1p",
+          ".1-",
+          ".1-",
+          ",l-",
+          ",J.."
+        ],
+        "parsed_rows": [],
+        "rejected_lines": [
+          {
+            "line": "[Page 1]",
+            "reason": "empty_or_noise",
+            "matched_partial_pattern": null,
+            "notes": "empty after normalization",
+            "index": 0
+          },
+          {
+            "line": "<D.I1.Q. na:qHeHTa",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 1
+          },
+          {
+            "line": "<l>e,n:eHLJ:eHKO CTenaH J1eoHH,ll;OBHLJ:",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 2
+          },
+          {
+            "line": "N2 KapTbr",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 3
+          },
+          {
+            "line": "720862",
+            "reason": "value_only",
+            "matched_partial_pattern": "value",
+            "notes": "numeric-only line, no analyte name",
+            "index": 4
+          },
+          {
+            "line": "l ,rf",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 5
+          },
+          {
+            "line": ". / )'",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.75 above 0.40 threshold",
+            "index": 6
+          },
+          {
+            "line": "\u00b7.:.c",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.80 above 0.40 threshold",
+            "index": 7
+          },
+          {
+            "line": ".,_, ~ t:71,. J\u00ab",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.53 above 0.40 threshold",
+            "index": 8
+          },
+          {
+            "line": "MeC5II.J.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 9
+          },
+          {
+            "line": ")J,HarH03 XpoHHLJ:eCKHH 6aKTepHanbHhiH ypeTponpoCTaTHT.",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 10
+          },
+          {
+            "line": "~----~------~--",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 11
+          },
+          {
+            "line": "l1PEIIAPAT1I I L(ATA",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 12
+          },
+          {
+            "line": "CseLJ:H ,IUIKJio\u00a2eHaK 100Mr ,f",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 13
+          },
+          {
+            "line": "}--",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 14
+          },
+          {
+            "line": "no 1 cseqe Ha HOLJ:h",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 15
+          },
+          {
+            "line": ". J",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 16
+          },
+          {
+            "line": "cf-",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 17
+          },
+          {
+            "line": "J .",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 18
+          },
+          {
+            "line": "(1-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.67 above 0.40 threshold",
+            "index": 19
+          },
+          {
+            "line": "Cse'1H BHTarrpocT \u00a2opn rro",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 20
+          },
+          {
+            "line": "1 CBCLJ:e Ha H0'1b",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 21
+          },
+          {
+            "line": "MeTpOHH,n:a3on no 500Mr 2",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 22
+          },
+          {
+            "line": ". .J",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 23
+          },
+          {
+            "line": ";;..",
+            "reason": "empty_or_noise",
+            "matched_partial_pattern": null,
+            "notes": "empty after normalization",
+            "index": 24
+          },
+          {
+            "line": "\")._",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 25
+          },
+          {
+            "line": ",i-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.67 above 0.40 threshold",
+            "index": 26
+          },
+          {
+            "line": "p B .ueHb rrocne e,n:br",
+            "reason": "unrecognized",
+            "matched_partial_pattern": null,
+            "notes": "no clear lab row structure",
+            "index": 27
+          },
+          {
+            "line": "J1eso\u00a2noKCai.J.HH no 500Mr",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 28
+          },
+          {
+            "line": ".).-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 29
+          },
+          {
+            "line": ",:;",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 30
+          },
+          {
+            "line": ".-f",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.50 above 0.40 threshold",
+            "index": 31
+          },
+          {
+            "line": "1 _IJ_ 3a 1 '1ac .uo o6e.ua",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 32
+          },
+          {
+            "line": "<l>nyKOHa3011 no 150 Mr 1 p",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 33
+          },
+          {
+            "line": ".:+-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 34
+          },
+          {
+            "line": ",-./-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 35
+          },
+          {
+            "line": ".f.",
+            "reason": "name_only",
+            "matched_partial_pattern": "name",
+            "notes": "alpha-only line, no value present",
+            "index": 36
+          },
+          {
+            "line": "\\+-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 1.00 above 0.40 threshold",
+            "index": 37
+          },
+          {
+            "line": "nOCJie 33BTp3K3",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 38
+          },
+          {
+            "line": "J1HHeKC cpOpT3 no lKancyne",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 39
+          },
+          {
+            "line": ".J\u00b7",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.50 above 0.40 threshold",
+            "index": 40
+          },
+          {
+            "line": "\u2022 .!.-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.83 above 0.40 threshold",
+            "index": 41
+          },
+          {
+            "line": ",.l",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.67 above 0.40 threshold",
+            "index": 42
+          },
+          {
+            "line": "1.-",
+            "reason": "value_only",
+            "matched_partial_pattern": "value",
+            "notes": "numeric-only line, no analyte name",
+            "index": 43
+          },
+          {
+            "line": "1 p .UO 33RTpaKa",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 44
+          },
+          {
+            "line": "TaMcyJio3HH no 0.4Mr 1p",
+            "reason": "no_unit_or_qualitative",
+            "matched_partial_pattern": "name+value",
+            "notes": "name and digits present but no recognized unit or qualitative term",
+            "index": 45
+          },
+          {
+            "line": ".1-",
+            "reason": "value_only",
+            "matched_partial_pattern": "value",
+            "notes": "numeric-only line, no analyte name",
+            "index": 46
+          },
+          {
+            "line": ".1-",
+            "reason": "value_only",
+            "matched_partial_pattern": "value",
+            "notes": "numeric-only line, no analyte name",
+            "index": 47
+          },
+          {
+            "line": ",l-",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.67 above 0.40 threshold",
+            "index": 48
+          },
+          {
+            "line": ",J..",
+            "reason": "noisy_high_punctuation",
+            "matched_partial_pattern": null,
+            "notes": "non-alnum ratio 0.50 above 0.40 threshold",
+            "index": 49
+          }
+        ],
+        "rejection_reason_breakdown": {
+          "empty_or_noise": 2,
+          "no_unit_or_qualitative": 29,
+          "value_only": 7,
+          "name_only": 17,
+          "noisy_high_punctuation": 44,
+          "unrecognized": 7
+        },
+        "signal_summary": {
+          "has_value_only_lines": true,
+          "has_name_only_lines": true,
+          "has_range_only_lines": false,
+          "appears_table_like_no_separators": true,
+          "text_too_fragmented": true,
+          "text_too_sparse": false,
+          "short_line_ratio": 0.67
+        }
+      },
+      "lab_normalization": {
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.0,
+        "lab_coverage_band": "none",
+        "lab_reason_codes": [
+          "lab_table_not_recovered",
+          "lab_table_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": false,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": false
+        },
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [],
+          "table_confidence": 0.45,
+          "warnings": [
+            "flattened_table_markers"
+          ],
+          "metadata": {
+            "line_count": 304,
+            "row_signal_count": 6,
+            "numeric_unit_count": 0,
+            "qualitative_count": 0,
+            "microbiology_count": 0,
+            "table_marker_count": 7
+          }
+        }
+      },
+      "diagnosis": {
+        "primary_bottleneck_category": "A",
+        "category_legend": {
+          "A": "OCR/Layout candidate generation",
+          "B": "Table block segmentation",
+          "C": "Row parser",
+          "D": "Classifier threshold/reasoning",
+          "E": "True manual-review boundary"
+        },
+        "rationale": "Selected text is sparse or fragmented \u2014 OCR/Layout is dropping lines before parsing.",
+        "notes": [
+          "appears_table_like_no_separators=True \u2014 multi-column layout without | or \\t separators.",
+          "rejection breakdown: {'empty_or_noise': 2, 'no_unit_or_qualitative': 29, 'value_only': 7, 'name_only': 17, 'noisy_high_punctuation': 44, 'unrecognized': 7}"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "files_analyzed": 2,
+    "files_missing": 0,
+    "category_distribution": {
+      "C": 1,
+      "A": 1
+    }
+  }
+}
