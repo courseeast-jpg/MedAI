@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01T18:55:38.354908+00:00",
+  "generated_at": "2026-05-01T19:19:44.692211+00:00",
   "phase": "Phase 42 Failed Lab Table Forensics",
   "targets": [
     "Test Results 3.pdf",
@@ -477,45 +477,33 @@
         }
       },
       "lab_normalization": {
-        "lab_table_detected": true,
-        "lab_coverage_ratio": 0.018,
-        "lab_coverage_band": "weak",
+        "lab_table_detected": false,
+        "lab_coverage_ratio": 0.0,
+        "lab_coverage_band": "none",
         "lab_reason_codes": [
-          "lab_table_recovered",
-          "lab_table_weak_coverage",
-          "lab_table_low_ratio",
-          "lab_table_detected"
+          "non_lab_document_skipped_lab_normalization",
+          "microbiology_pcr_report_detected",
+          "language_aware_ocr_required"
         ],
         "should_upgrade_from_ocr_review_to_review": false,
         "safety_checks": {
-          "ocr_layout_quality_safe": true,
-          "lab_table_detected": true,
+          "ocr_layout_quality_safe": false,
+          "lab_table_detected": false,
           "parsed_lab_row_minimum_met": false,
           "coverage_recovered": false,
-          "no_empty_extraction_leakage": true,
+          "no_empty_extraction_leakage": false,
           "not_poor_ocr_band": true,
           "no_safety_gate_block": true,
-          "current_status_review_ocr_quality": true
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": false
         },
         "detection": {
-          "has_lab_table": true,
-          "detected_sections": [
-            "microbiology_pcr"
-          ],
-          "table_confidence": 0.7,
-          "warnings": [],
-          "metadata": {
-            "line_count": 67,
-            "row_signal_count": 8,
-            "numeric_unit_count": 0,
-            "qualitative_count": 0,
-            "microbiology_count": 2,
-            "table_marker_count": 0
-          }
+          "skipped_for_document_type": "microbiology_pcr_report",
+          "language_hint": "mixed"
         }
       },
       "diagnosis": {
-        "primary_bottleneck_category": "C",
+        "primary_bottleneck_category": "B",
         "category_legend": {
           "A": "OCR/Layout candidate generation",
           "B": "Table block segmentation",
@@ -523,7 +511,7 @@
           "D": "Classifier threshold/reasoning",
           "E": "True manual-review boundary"
         },
-        "rationale": "Multiple lines look like rows but failed parser regexes \u2014 row parser is the bottleneck.",
+        "rationale": "Lines exist but lab_table_detector did not recognize a table \u2014 segmentation is the bottleneck.",
         "notes": [
           "appears_table_like_no_separators=True \u2014 multi-column layout without | or \\t separators.",
           "rejection breakdown: {'empty_or_noise': 1, 'unrecognized': 8, 'no_unit_or_qualitative': 41, 'name_only': 2, 'malformed_lab_row': 3}"
@@ -1002,39 +990,29 @@
         }
       },
       "lab_normalization": {
-        "lab_table_detected": true,
+        "lab_table_detected": false,
         "lab_coverage_ratio": 0.0,
         "lab_coverage_band": "none",
         "lab_reason_codes": [
-          "lab_table_not_recovered",
-          "lab_table_detected"
+          "non_lab_document_skipped_lab_normalization",
+          "document_type_prescription_not_lab",
+          "language_aware_ocr_required"
         ],
         "should_upgrade_from_ocr_review_to_review": false,
         "safety_checks": {
-          "ocr_layout_quality_safe": true,
-          "lab_table_detected": true,
+          "ocr_layout_quality_safe": false,
+          "lab_table_detected": false,
           "parsed_lab_row_minimum_met": false,
           "coverage_recovered": false,
-          "no_empty_extraction_leakage": true,
+          "no_empty_extraction_leakage": false,
           "not_poor_ocr_band": true,
           "no_safety_gate_block": true,
-          "current_status_review_ocr_quality": false
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": false
         },
         "detection": {
-          "has_lab_table": true,
-          "detected_sections": [],
-          "table_confidence": 0.45,
-          "warnings": [
-            "flattened_table_markers"
-          ],
-          "metadata": {
-            "line_count": 304,
-            "row_signal_count": 6,
-            "numeric_unit_count": 0,
-            "qualitative_count": 0,
-            "microbiology_count": 0,
-            "table_marker_count": 7
-          }
+          "skipped_for_document_type": "prescription",
+          "language_hint": "mixed"
         }
       },
       "diagnosis": {
@@ -1058,7 +1036,7 @@
     "files_analyzed": 2,
     "files_missing": 0,
     "category_distribution": {
-      "C": 1,
+      "B": 1,
       "A": 1
     }
   }

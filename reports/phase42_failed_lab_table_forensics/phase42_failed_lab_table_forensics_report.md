@@ -1,13 +1,13 @@
 # Phase 42 Failed Lab Table Forensics
 
-- Generated at: `2026-05-01T18:55:38.354908+00:00`
+- Generated at: `2026-05-01T19:19:44.692211+00:00`
 - Targets: `Test Results 3.pdf`, `Test Results 6.pdf`
 
 ## Summary
 
 - Files analyzed: `2`
 - Files missing: `0`
-- Bottleneck category distribution: `{'C': 1, 'A': 1}`
+- Bottleneck category distribution: `{'B': 1, 'A': 1}`
 
 ## Category Legend
 
@@ -38,10 +38,10 @@
 
 ### Lab Normalization
 
-- Lab table detected: `True`
-- Coverage ratio: `0.018`
-- Coverage band: `weak`
-- Reason codes: `lab_table_recovered, lab_table_weak_coverage, lab_table_low_ratio, lab_table_detected`
+- Lab table detected: `False`
+- Coverage ratio: `0.0`
+- Coverage band: `none`
+- Reason codes: `non_lab_document_skipped_lab_normalization, microbiology_pcr_report_detected, language_aware_ocr_required`
 - Would upgrade review_ocr_quality→review: `False`
 
 ### Forensic Parse
@@ -173,8 +173,8 @@ Pe3yilbTaT, 8 KOTOpOM 3Ha4eHIIIe noKa3aTeils:l 05M Hlti)Ke noporo80ro 3H84eHIIIs
 
 ### Diagnosis
 
-- **Primary bottleneck:** `C` (Row parser)
-- Rationale: Multiple lines look like rows but failed parser regexes — row parser is the bottleneck.
+- **Primary bottleneck:** `B` (Table block segmentation)
+- Rationale: Lines exist but lab_table_detector did not recognize a table — segmentation is the bottleneck.
 
 - Note: appears_table_like_no_separators=True — multi-column layout without | or \t separators.
 - Note: rejection breakdown: {'empty_or_noise': 1, 'unrecognized': 8, 'no_unit_or_qualitative': 41, 'name_only': 2, 'malformed_lab_row': 3}
@@ -213,10 +213,10 @@ c~t~creMbl MY)K4lt1H 8 aHanlt131t1pyeMOM 6~t~oMarep~t~ane O,QHOspeMeHHO BblnOil
 
 ### Lab Normalization
 
-- Lab table detected: `True`
+- Lab table detected: `False`
 - Coverage ratio: `0.0`
 - Coverage band: `none`
-- Reason codes: `lab_table_not_recovered, lab_table_detected`
+- Reason codes: `non_lab_document_skipped_lab_normalization, document_type_prescription_not_lab, language_aware_ocr_required`
 - Would upgrade review_ocr_quality→review: `False`
 
 ### Forensic Parse

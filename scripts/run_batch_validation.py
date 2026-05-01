@@ -407,6 +407,18 @@ def ocr_layout_forces_ocr_review(ocr_layout: dict[str, Any]) -> bool:
     ) in {"poor_ocr", "empty"}
 
 
+DOCUMENT_TYPE_SURFACE_CODES = {
+    "non_lab_document_skipped_lab_normalization",
+    "document_type_prescription_not_lab",
+    "microbiology_pcr_report_detected",
+    "language_aware_ocr_required",
+    "lab_report_detected",
+    "imaging_report_detected",
+    "unknown_document_type",
+    "low_confidence_document_type",
+}
+
+
 def apply_lab_normalization_recovery(
     *,
     selected_text: str,
@@ -424,11 +436,17 @@ def apply_lab_normalization_recovery(
         safety_gate_blocked=False,
     )
     lab_payload = lab_result.to_dict()
+    doc_type_codes = [
+        code
+        for code in (lab_payload.get("lab_reason_codes") or [])
+        if code in DOCUMENT_TYPE_SURFACE_CODES
+    ]
     if not lab_result.should_upgrade_from_ocr_review_to_review:
+        merged_reasons = list(classification_reason_codes) + doc_type_codes
         return {
             "status": status,
             "is_ocr_low_quality": is_ocr_low_quality,
-            "classification_reason_codes": list(classification_reason_codes),
+            "classification_reason_codes": dedupe_preserve_order(merged_reasons),
             "lab_normalization": lab_payload,
             "lab_normalizer_changed_status": False,
         }
@@ -439,6 +457,7 @@ def apply_lab_normalization_recovery(
         if reason not in {"classifier_legacy_ocr_flag", "legacy_normalized_low_coverage"}
     ]
     recovered_reasons.extend(["lab_table_recovered", "lab_table_recovered_review_only"])
+    recovered_reasons.extend(doc_type_codes)
     return {
         "status": "review",
         "is_ocr_low_quality": False,
