@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01T15:26:49.390079+00:00",
+  "generated_at": "2026-05-01T15:44:19.355022+00:00",
   "phase": "Phase 38 v2 OCR/Layout Engine Foundation",
   "source_input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
   "phase37_holdout_baseline": {
@@ -9,8 +9,8 @@
     "empty": 0
   },
   "total_files": 8,
-  "accepted": 2,
-  "review": 6,
+  "accepted": 4,
+  "review": 4,
   "review_ocr_quality": 4,
   "empty": 0,
   "ocr_layout_route_summary": {
@@ -22,14 +22,15 @@
     "good": 4
   },
   "phase37_review_ocr_quality_improved_count": 2,
+  "ocr_status_mismatch_count": 3,
   "input_quality_improved": true,
   "safety_regression": false,
   "safety_regression_reason": null,
   "results": [
     {
       "filename": "Results 1.pdf",
-      "status": "review",
-      "entity_count": 2,
+      "status": "accepted",
+      "entity_count": 4,
       "route_decision": "scanned_or_low_text",
       "input_quality_score": 0.745,
       "input_quality_band": "usable_with_review",
@@ -39,21 +40,28 @@
         "repeated_symbol_noise"
       ],
       "selected_extraction_engine": "existing_pdf_pipeline",
-      "selected_extractor": "phi3",
-      "review_type": "confidence",
+      "selected_extractor": "spacy",
+      "review_type": "other",
       "is_ocr_low_quality": false,
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": true,
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_coverage",
-        "low_extractor_weight"
-      ]
+      "why_reviewed": []
     },
     {
       "filename": "Results 2.pdf",
-      "status": "review",
-      "entity_count": 1,
+      "status": "accepted",
+      "entity_count": 3,
       "route_decision": "scanned_or_low_text",
       "input_quality_score": 0.735,
       "input_quality_band": "usable_with_review",
@@ -63,17 +71,23 @@
         "repeated_symbol_noise"
       ],
       "selected_extraction_engine": "existing_pdf_pipeline",
-      "selected_extractor": "phi3",
-      "review_type": "confidence",
+      "selected_extractor": "spacy",
+      "review_type": "other",
       "is_ocr_low_quality": false,
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": true,
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_entity_count",
-        "low_coverage",
-        "low_extractor_weight"
-      ]
+      "why_reviewed": []
     },
     {
       "filename": "Test Results 2.pdf",
@@ -89,6 +103,18 @@
       "selected_extractor": "spacy",
       "review_type": "ocr_quality",
       "is_ocr_low_quality": true,
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": false,
       "why_reviewed": [
@@ -109,6 +135,20 @@
       "selected_extractor": "spacy",
       "review_type": "ocr_quality",
       "is_ocr_low_quality": true,
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": false,
       "why_reviewed": [
@@ -131,6 +171,17 @@
       "selected_extractor": "spacy",
       "review_type": "other",
       "is_ocr_low_quality": false,
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "phase37_was_review_ocr_quality": false,
       "phase37_review_ocr_quality_improved": false,
       "why_reviewed": []
@@ -151,6 +202,20 @@
       "selected_extractor": "spacy",
       "review_type": "ocr_quality",
       "is_ocr_low_quality": true,
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": false,
       "why_reviewed": [
@@ -173,6 +238,20 @@
       "selected_extractor": "spacy",
       "review_type": "ocr_quality",
       "is_ocr_low_quality": true,
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
       "phase37_was_review_ocr_quality": true,
       "phase37_review_ocr_quality_improved": false,
       "why_reviewed": [
@@ -194,6 +273,15 @@
       "selected_extractor": "phi3",
       "review_type": "other",
       "is_ocr_low_quality": false,
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": false,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "phase37_was_review_ocr_quality": false,
       "phase37_review_ocr_quality_improved": false,
       "why_reviewed": []

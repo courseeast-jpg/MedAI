@@ -1,94 +1,17 @@
 {
-  "generated_at": "2026-05-01T15:26:49.366969+00:00",
+  "generated_at": "2026-05-01T15:44:19.354022+00:00",
   "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\latest_phase38_batch_validation.json",
-  "source_timestamp": "2026-05-01T15:25:27.675170+00:00",
-  "total_reviewed": 6,
+  "source_timestamp": "2026-05-01T15:43:08.380067+00:00",
+  "total_reviewed": 4,
   "review_fix_breakdown": {
     "no_entities": 0,
-    "low_entity_count": 1,
-    "low_confidence": 1,
+    "low_entity_count": 0,
+    "low_confidence": 0,
     "low_coverage": 4,
     "low_diversity": 0,
     "extractor_issue": 0
   },
   "files": [
-    {
-      "filename": "Results 1.pdf",
-      "entity_count": 2,
-      "entities": [
-        {
-          "type": "test_result",
-          "text": "Nitrite",
-          "source": "supplemental_lab_rules",
-          "rule_pack": "urology_cytology_culture",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        },
-        {
-          "type": "test_result",
-          "text": "Ketones",
-          "source": "supplemental_lab_rules",
-          "rule_pack": "urology_cytology_culture",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        }
-      ],
-      "confidence": 0.45,
-      "confidence_breakdown": {
-        "entity_count_score": 0.3,
-        "coverage_score": 0.2,
-        "diversity_score": 0.9,
-        "extractor_weight": 0.6,
-        "calibrated_weight": 0.6
-      },
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_coverage",
-        "low_extractor_weight"
-      ],
-      "text_preview": "[Page 1] ee ee * . . e \u00e9 * \u2019 ~~ 2 . \u2019 - . \u2019 \u2019 - . 4 - ; . BIO MED LABORATOR MIKROBIOLOGJIK \u2018 \u00e9 EMRI \u2014 STEPAN\u2019 FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 : \u00b0 eae \u2019 # Se URINE KOMPLET # KARAKTERISTIKAT FIZIKE : \u00a5 . \u2019 * NGJYRA.......%eeeeee0ee006eE VERDHE \u2019 a * \u2019 ae PAMIAS . See cas ce en's\u00bb o'siee e's E",
-      "text_length": 1030,
-      "extraction_method": "existing_pdf_pipeline",
-      "recommended_fix_category": "low_confidence"
-    },
-    {
-      "filename": "Results 2.pdf",
-      "entity_count": 1,
-      "entities": [
-        {
-          "type": "test_result",
-          "text": "Urine Culture",
-          "source": "supplemental_lab_rules",
-          "rule_pack": "urology_cytology_culture",
-          "consensus_support": [
-            "phi3"
-          ],
-          "consensus_support_count": 1
-        }
-      ],
-      "confidence": 0.45,
-      "confidence_breakdown": {
-        "entity_count_score": 0.3,
-        "coverage_score": 0.2,
-        "diversity_score": 0.6,
-        "extractor_weight": 0.6,
-        "calibrated_weight": 0.6
-      },
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_entity_count",
-        "low_coverage",
-        "low_extractor_weight"
-      ],
-      "text_preview": "[Page 1] s . . a Y, \u2019 \u2018 : BIO MED LABORATOR MIKROBIOLOGIIK i . \\ J EMRI \u2014 STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 11 2022 * > \u2018 a : 3 = \u2019 * i UROKULTURE Y * ie = 1 NGA KULTIVIMI\u2019 PER 24h REZULTOI NEGATIV i * * . 2 ae ANTIBIOGRAME \u00ab CIPROFLOXACINI......... LEVOFLOXACINI........... ' * . * \u2019 MPMPE TR",
-      "text_length": 953,
-      "extraction_method": "existing_pdf_pipeline",
-      "recommended_fix_category": "low_entity_count"
-    },
     {
       "filename": "Test Results 2.pdf",
       "entity_count": 6,

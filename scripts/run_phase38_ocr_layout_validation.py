@@ -69,6 +69,7 @@ def build_phase38_report(summary: dict[str, Any]) -> dict[str, Any]:
         item["status"] == "accepted" and item["input_quality_band"] in {"poor_ocr", "empty"}
         for item in per_file
     )
+    mismatch_count = sum(1 for item in per_file if item["ocr_status_mismatch"])
 
     return {
         "generated_at": datetime.now(UTC).isoformat(),
@@ -83,6 +84,7 @@ def build_phase38_report(summary: dict[str, Any]) -> dict[str, Any]:
         "ocr_layout_route_summary": dict(summary.get("ocr_layout_route_summary") or {}),
         "ocr_layout_quality_summary": dict(summary.get("ocr_layout_quality_summary") or {}),
         "phase37_review_ocr_quality_improved_count": improved,
+        "ocr_status_mismatch_count": mismatch_count,
         "input_quality_improved": improved > 0,
         "safety_regression": safety_regression,
         "safety_regression_reason": None
@@ -110,6 +112,13 @@ def phase38_file_row(item: dict[str, Any], previous_ocr_review_files: set[str]) 
         "selected_extractor": item.get("selected_extractor"),
         "review_type": item.get("review_type"),
         "is_ocr_low_quality": bool(item.get("is_ocr_low_quality", False)),
+        "downstream_classifier_status": item.get("downstream_classifier_status"),
+        "downstream_classifier_reason": item.get("downstream_classifier_reason"),
+        "classification_reason_codes": list(item.get("classification_reason_codes") or []),
+        "empty_extraction_flag": bool(item.get("empty_extraction_flag", False)),
+        "table_layout_warning": bool(item.get("table_layout_warning", False)),
+        "ocr_status_mismatch": bool(item.get("ocr_status_mismatch", False)),
+        "mismatch_type": item.get("mismatch_type"),
         "phase37_was_review_ocr_quality": was_phase37_ocr_review,
         "phase37_review_ocr_quality_improved": bool(was_phase37_ocr_review and status != "review_ocr_quality"),
         "why_reviewed": list(item.get("why_reviewed") or []),
@@ -152,6 +161,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- Phase37 review_ocr_quality: `{baseline['review_ocr_quality']}`",
         f"- Phase37 empty: `{baseline['empty']}`",
         f"- Phase37 review_ocr_quality improved: `{report['phase37_review_ocr_quality_improved_count']}`",
+        f"- OCR status mismatches: `{report.get('ocr_status_mismatch_count', 0)}`",
         f"- OCR/Layout improved input quality: `{report['input_quality_improved']}`",
         f"- Safety regression: `{report['safety_regression']}`",
     ]
@@ -162,8 +172,8 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         "## Per-file OCR/Layout Decisions",
         "",
-        "| File | Status | Route | Quality | Score | Selected engine | Phase37 OCR review improved |",
-        "| --- | --- | --- | --- | ---: | --- | --- |",
+        "| File | Status | Route | Quality | Score | Selected engine | Mismatch | Reason codes | Phase37 OCR review improved |",
+        "| --- | --- | --- | --- | ---: | --- | --- | --- | --- |",
     ])
     for item in report.get("results", []):
         lines.append(
@@ -175,6 +185,8 @@ def render_markdown(report: dict[str, Any]) -> str:
                 _escape_md(item.get("input_quality_band")),
                 "" if item.get("input_quality_score") is None else str(item.get("input_quality_score")),
                 _escape_md(item.get("selected_extraction_engine")),
+                _escape_md(item.get("mismatch_type")) if item.get("ocr_status_mismatch") else "no",
+                _escape_md(", ".join(item.get("classification_reason_codes") or [])),
                 "yes" if item.get("phase37_review_ocr_quality_improved") else "no",
             ])
             + " |"

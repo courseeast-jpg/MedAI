@@ -75,6 +75,32 @@ class FakeNoisyOcrPipeline:
         )
 
 
+class FakeLegacyOcrFlagPipeline:
+    def process_text(self, text: str, *, specialty: str, source_name: str, session_id: str) -> FakeResult:
+        del text, specialty, source_name, session_id
+        return FakeResult(
+            extractor_result={
+                "entities": [
+                    {"type": "test_result", "text": "RBC"},
+                    {"type": "test_result", "text": "WBC"},
+                    {"type": "test_result", "text": "Nitrite"},
+                    {"type": "test_result", "text": "Glucose"},
+                    {"type": "test_result", "text": "Protein"},
+                    {"type": "test_result", "text": "Culture"},
+                ],
+                "actual_extractor": "spacy",
+                "confidence": 0.7,
+                "confidence_breakdown": {
+                    "entity_count": 0.8,
+                    "coverage": 0.2,
+                    "diversity": 1.0,
+                    "extractor_weight": 0.8,
+                },
+                "normalization_applied": True,
+            },
+        )
+
+
 def configure_paths(monkeypatch, tmp_path: Path) -> None:
     input_dir = tmp_path / "real_validation_input"
     report_dir = tmp_path / "reports" / "batch_validation"
@@ -272,6 +298,65 @@ def test_phase38_poor_input_quality_cannot_auto_accept(monkeypatch, tmp_path: Pa
     assert result["route_decision"] == "poor_ocr"
     assert result["input_quality_band"] == "poor_ocr"
     assert result["is_ocr_low_quality"] is True
+
+
+def test_good_ocr_layout_quality_does_not_force_acceptance(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "good_review.txt"
+    source.write_text(
+        (
+            "Patient urinalysis result negative. Glucose negative. Protein negative. "
+            "RBC normal. WBC normal. Nitrite negative. Culture no growth. "
+        ) * 8,
+        encoding="utf-8",
+    )
+
+    summary = batch.run_batch_validation(pipeline=FakeReviewPipeline())
+    result = summary["results"][0]
+
+    assert result["input_quality_band"] == "good"
+    assert result["status"] == "review"
+    assert "extraction_low_confidence" in result["classification_reason_codes"]
+    assert summary["accepted_count"] == 0
+
+
+def test_final_classifier_emits_reason_codes(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "review.txt"
+    source.write_text("Patient has diabetes.", encoding="utf-8")
+
+    summary = batch.run_batch_validation(pipeline=FakeReviewPipeline())
+    result = summary["results"][0]
+
+    assert result["downstream_classifier_status"] == "review"
+    assert "extraction_low_confidence" in result["classification_reason_codes"]
+    assert "extraction_sparse_entities" in result["classification_reason_codes"]
+    assert result["downstream_classifier_reason"]
+
+
+def test_good_input_with_legacy_ocr_review_sets_mismatch_flag(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "good_input_legacy_review.txt"
+    source.write_text(
+        (
+            "Patient urinalysis result negative. Glucose negative. Protein negative. "
+            "RBC normal. WBC normal. Nitrite negative. Culture no growth. "
+        ) * 8,
+        encoding="utf-8",
+    )
+
+    summary = batch.run_batch_validation(pipeline=FakeLegacyOcrFlagPipeline())
+    result = summary["results"][0]
+
+    assert result["input_quality_band"] == "good"
+    assert result["status"] == "review_ocr_quality"
+    assert result["ocr_status_mismatch"] is True
+    assert result["mismatch_type"] == "good_input_but_downstream_ocr_review"
+    assert "classifier_legacy_ocr_flag" in result["classification_reason_codes"]
+    assert "legacy_normalized_low_coverage" in result["classification_reason_codes"]
 
 
 def test_route_audit_acceptance_with_086_confidence_is_accepted() -> None:

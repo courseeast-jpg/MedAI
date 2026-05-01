@@ -71,6 +71,13 @@ REQUIRED_RESULT_FIELDS = [
     "route_decision",
     "ocr_layout_profile",
     "ocr_layout_candidates",
+    "downstream_classifier_status",
+    "downstream_classifier_reason",
+    "classification_reason_codes",
+    "empty_extraction_flag",
+    "table_layout_warning",
+    "ocr_status_mismatch",
+    "mismatch_type",
 ]
 
 OCR_ARTIFACT_PATTERN = re.compile(r"(\S)\1{7,}|[|_]{4,}|(?:\b[Il1]{8,}\b)|\ufffd")
@@ -197,11 +204,12 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
         confidence = safe_float(extractor_result.get("confidence", audit.get("confidence")))
         confidence_breakdown = extractor_result.get("confidence_breakdown")
         normalization_applied = bool(extractor_result.get("normalization_applied", False))
-        is_ocr_low_quality = detect_ocr_low_quality(
+        legacy_ocr_reason_codes = detect_ocr_low_quality_reason_codes(
             text_diagnostics=text_diagnostics,
             normalization_applied=normalization_applied,
             confidence_breakdown=confidence_breakdown,
-        ) or ocr_layout_forces_ocr_review(ocr_layout)
+        )
+        is_ocr_low_quality = bool(legacy_ocr_reason_codes) or ocr_layout_forces_ocr_review(ocr_layout)
         status = classify_batch_status(
             outcome=result.outcome,
             review_reason=review_reason,
@@ -219,6 +227,17 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             confidence=confidence,
             confidence_breakdown=confidence_breakdown,
         )
+        classification_reasons = classification_reason_codes_for(
+            status=status,
+            entity_count=len(entities),
+            confidence=confidence,
+            confidence_breakdown=confidence_breakdown,
+            review_reason=review_reason,
+            why_reviewed=why_reviewed,
+            ocr_layout=ocr_layout,
+            legacy_ocr_reason_codes=legacy_ocr_reason_codes,
+        )
+        mismatch = ocr_status_mismatch_for(status=status, ocr_layout=ocr_layout)
         return normalize_result({
             "filename": source_path.name,
             "status": status,
@@ -245,6 +264,17 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "is_ocr_low_quality": is_ocr_low_quality,
             "review_type": review_type_for(status=status, is_ocr_low_quality=is_ocr_low_quality),
             **ocr_layout_report_fields(ocr_layout),
+            "downstream_classifier_status": status,
+            "downstream_classifier_reason": downstream_classifier_reason_for(
+                status=status,
+                classification_reason_codes=classification_reasons,
+                review_reason=review_reason,
+            ),
+            "classification_reason_codes": classification_reasons,
+            "empty_extraction_flag": len(entities) == 0,
+            "table_layout_warning": table_layout_warning_for(ocr_layout=ocr_layout, classification_reason_codes=classification_reasons),
+            "ocr_status_mismatch": mismatch["ocr_status_mismatch"],
+            "mismatch_type": mismatch["mismatch_type"],
             "copied_to": str(copy_destination),
             "outcome": result.outcome,
             "validation_status": result.validation_status,
@@ -275,6 +305,13 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "is_ocr_low_quality": False,
             "review_type": "other",
             **ocr_layout_report_fields(ocr_layout),
+            "downstream_classifier_status": "error",
+            "downstream_classifier_reason": "processing_error",
+            "classification_reason_codes": ["processing_error"],
+            "empty_extraction_flag": True,
+            "table_layout_warning": table_layout_warning_for(ocr_layout=ocr_layout, classification_reason_codes=[]),
+            "ocr_status_mismatch": False,
+            "mismatch_type": None,
             "copied_to": str(copy_destination),
             "outcome": None,
             "validation_status": None,
@@ -332,6 +369,92 @@ def ocr_layout_forces_ocr_review(ocr_layout: dict[str, Any]) -> bool:
     ) in {"poor_ocr", "empty"}
 
 
+def ocr_status_mismatch_for(*, status: str, ocr_layout: dict[str, Any]) -> dict[str, Any]:
+    if status == "review_ocr_quality" and str(ocr_layout.get("input_quality_band")) == "good":
+        return {
+            "ocr_status_mismatch": True,
+            "mismatch_type": "good_input_but_downstream_ocr_review",
+        }
+    return {"ocr_status_mismatch": False, "mismatch_type": None}
+
+
+def table_layout_warning_for(*, ocr_layout: dict[str, Any], classification_reason_codes: list[str]) -> bool:
+    warnings = set(str(item) for item in ocr_layout.get("input_quality_warnings") or [])
+    return bool(
+        "layout_or_table_heavy" in warnings
+        or "table_or_numeric_heavy" in warnings
+        or "table_structure_loss" in classification_reason_codes
+    )
+
+
+def downstream_classifier_reason_for(
+    *,
+    status: str,
+    classification_reason_codes: list[str],
+    review_reason: str | None,
+) -> str:
+    if status == "accepted":
+        return "accepted_clean_input" if "accepted_clean_input" in classification_reason_codes else "accepted"
+    if classification_reason_codes:
+        return ",".join(classification_reason_codes)
+    return str(review_reason or status)
+
+
+def classification_reason_codes_for(
+    *,
+    status: str,
+    entity_count: int,
+    confidence: float | None,
+    confidence_breakdown: dict[str, Any] | None,
+    review_reason: str | None,
+    why_reviewed: list[str],
+    ocr_layout: dict[str, Any],
+    legacy_ocr_reason_codes: list[str],
+) -> list[str]:
+    reasons: list[str] = []
+    input_band = str(ocr_layout.get("input_quality_band") or "unknown")
+    route_decision = str(ocr_layout.get("route_decision") or "unknown")
+    warnings = {str(item) for item in ocr_layout.get("input_quality_warnings") or []}
+    breakdown = confidence_breakdown if isinstance(confidence_breakdown, dict) else {}
+    coverage_score = safe_float(breakdown.get("coverage"))
+
+    if input_band in {"poor_ocr", "empty"} or route_decision in {"poor_ocr", "empty"}:
+        reasons.append("poor_input_ocr" if input_band != "empty" else "empty_or_near_empty_text")
+    if route_decision == "scanned_or_low_text" or "low_text_density" in warnings:
+        reasons.append("low_text_density")
+    if "empty_or_near_empty_text" in warnings:
+        reasons.append("empty_or_near_empty_text")
+    if "layout_or_table_heavy" in warnings or "table_or_numeric_heavy" in warnings:
+        reasons.append("table_structure_loss")
+    if coverage_score is not None and coverage_score < 0.3:
+        reasons.append("table_structure_loss")
+        reasons.append("extraction_low_coverage")
+    if confidence is not None and confidence < 0.65:
+        reasons.append("extraction_low_confidence")
+        if "confidence_below_threshold" in why_reviewed or str(review_reason or "").startswith("confidence_below"):
+            reasons.append("safety_gate_low_confidence")
+    if status in {"review", "review_ocr_quality"} and entity_count <= 1:
+        reasons.append("extraction_sparse_entities")
+    if legacy_ocr_reason_codes:
+        reasons.append("classifier_legacy_ocr_flag")
+        reasons.extend(legacy_ocr_reason_codes)
+    if status == "accepted" and input_band in {"good", "usable_with_review"}:
+        reasons.append("accepted_clean_input")
+    if status == "review" and not reasons:
+        reasons.append("manual_review_required")
+    return dedupe_preserve_order(reasons)
+
+
+def dedupe_preserve_order(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value not in seen:
+            seen.add(value)
+            result.append(value)
+    return result
+
+
 def diagnostics_from_ocr_layout(ocr_layout: dict[str, Any], fallback_diagnostics: dict[str, Any]) -> dict[str, Any]:
     diagnostics = dict(fallback_diagnostics)
     diagnostics.update({
@@ -380,6 +503,19 @@ def detect_ocr_low_quality(
     normalization_applied: bool,
     confidence_breakdown: dict[str, Any] | None,
 ) -> bool:
+    return bool(detect_ocr_low_quality_reason_codes(
+        text_diagnostics=text_diagnostics,
+        normalization_applied=normalization_applied,
+        confidence_breakdown=confidence_breakdown,
+    ))
+
+
+def detect_ocr_low_quality_reason_codes(
+    *,
+    text_diagnostics: dict[str, Any],
+    normalization_applied: bool,
+    confidence_breakdown: dict[str, Any] | None,
+) -> list[str]:
     diagnostics = text_diagnostics if isinstance(text_diagnostics, dict) else {}
     method = str(diagnostics.get("method") or "").lower()
     likely_ocr_context = "tesseract" in method or "ocr" in method
@@ -389,7 +525,14 @@ def detect_ocr_low_quality(
     normalized_low_coverage = normalization_applied and coverage_score is not None and coverage_score < 0.3
     ratio = safe_float(diagnostics.get("non_alnum_ratio"))
     excessive_noise = ratio is not None and ratio > 0.40 and likely_ocr_context
-    return bool(suspicious_ocr or normalized_low_coverage or excessive_noise)
+    reasons: list[str] = []
+    if suspicious_ocr:
+        reasons.append("legacy_suspicious_ocr_context")
+    if normalized_low_coverage:
+        reasons.append("legacy_normalized_low_coverage")
+    if excessive_noise:
+        reasons.append("legacy_excessive_ocr_noise")
+    return reasons
 
 
 def review_type_for(*, status: str, is_ocr_low_quality: bool) -> str:
@@ -554,8 +697,8 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         lines.append("No supported PDF or TXT files found in `real_validation_input/`.")
     else:
         lines.extend([
-            "| File | Status | Review type | OCR low quality | Route | Quality | Input score | Engine | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Why reviewed | Review reason | Error |",
-            "| --- | --- | --- | --- | --- | --- | ---: | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- | --- |",
+            "| File | Status | Review type | OCR low quality | Mismatch | Route | Quality | Input score | Engine | Reason codes | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Why reviewed | Review reason | Error |",
+            "| --- | --- | --- | --- | --- | --- | --- | ---: | --- | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- | --- |",
         ])
         for item in summary["results"]:
             fallback = item.get("fallback_extractor") or item.get("fallback_reason") or ""
@@ -567,10 +710,12 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
                     escape_md(item.get("status")),
                     escape_md(item.get("review_type")),
                     "yes" if item.get("is_ocr_low_quality") else "no",
+                    escape_md(item.get("mismatch_type")) if item.get("ocr_status_mismatch") else "no",
                     escape_md(item.get("route_decision")),
                     escape_md(item.get("input_quality_band")),
                     "" if item.get("input_quality_score") is None else str(item.get("input_quality_score")),
                     escape_md(item.get("selected_engine")),
+                    escape_md(", ".join(item.get("classification_reason_codes") or [])),
                     str(item.get("entity_count", 0)),
                     escape_md(item.get("selected_extractor")),
                     str(diagnostics.get("length", 0)),

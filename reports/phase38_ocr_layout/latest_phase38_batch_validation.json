@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-01T15:25:27.675170+00:00",
-  "run_id": "84549f4b-5b63-4987-b490-fa187f39e963",
+  "timestamp": "2026-05-01T15:43:08.380067+00:00",
+  "run_id": "cd04f576-a819-49ee-b38e-b9bb46409f6c",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
   "total_files": 8,
-  "accepted_count": 2,
-  "review_count": 6,
+  "accepted_count": 4,
+  "review_count": 4,
   "error_count": 0,
   "empty_extraction_count": 0,
-  "fallback_count": 7,
+  "fallback_count": 8,
   "low_text_quality_count": 0,
   "ocr_low_quality_count": 4,
   "ocr_layout_route_summary": {
@@ -21,25 +21,45 @@
   "avg_text_length": 2102.5,
   "review_reason_summary": {
     "empty_extraction": 0,
-    "confidence_below_threshold": 5,
-    "low_entity_count": 1,
-    "low_coverage": 6,
+    "confidence_below_threshold": 3,
+    "low_entity_count": 0,
+    "low_coverage": 4,
     "low_diversity": 0,
-    "low_extractor_weight": 2
+    "low_extractor_weight": 0
   },
   "results": [
     {
       "filename": "Results 1.pdf",
-      "status": "review",
-      "entity_count": 2,
+      "status": "accepted",
+      "entity_count": 4,
       "entities": [
+        {
+          "type": "test_result",
+          "text": "FEDECHENKO ADRESA UKRAINE DATA",
+          "value": "9",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "CTLINDRASS",
+          "value": "2.45",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
         {
           "type": "test_result",
           "text": "Nitrite",
           "source": "supplemental_lab_rules",
           "rule_pack": "urology_cytology_culture",
           "consensus_support": [
-            "phi3"
+            "spacy"
           ],
           "consensus_support_count": 1
         },
@@ -49,35 +69,31 @@
           "source": "supplemental_lab_rules",
           "rule_pack": "urology_cytology_culture",
           "consensus_support": [
-            "phi3"
+            "spacy"
           ],
           "consensus_support_count": 1
         }
       ],
-      "selected_extractor": "phi3",
-      "primary_extractor": "gemini",
-      "fallback_extractor": "phi3",
-      "fallback_reason": "gemini_quota_or_rate_limit",
-      "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "latency_too_high:7653.000",
+      "terminal_empty_prevented": false,
+      "confidence": 0.767,
       "confidence_breakdown": {
-        "entity_count": 0.3,
-        "coverage": 0.2,
-        "diversity": 0.9,
-        "extractor_weight": 0.6,
-        "base_extractor_weight": 0.6,
-        "calibrated_extractor_weight": 0.6,
+        "entity_count": 0.6,
+        "coverage": 0.75,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
         "calibration_reason": "none"
       },
-      "supplemental_rules_applied": false,
-      "supplemental_entity_count": 0,
-      "final_entity_count_after_supplement": 2,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_coverage",
-        "low_extractor_weight"
-      ],
+      "supplemental_rules_applied": true,
+      "supplemental_entity_count": 2,
+      "final_entity_count_after_supplement": 4,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 1030,
@@ -89,10 +105,10 @@
         "input_quality_band": "usable_with_review",
         "route_decision": "scanned_or_low_text"
       },
-      "normalization_applied": false,
-      "normalized_text_preview": null,
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] ee ee * . . e \u00e9 * \u2019 ~~ 2 . \u2019 - . \u2019 \u2019 - . 4 - ; . BIO MED LABORATOR MIKROBIOLOGJIK \u2018 \u00e9 EMRI \u2014 STEPAN\u2019 FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 : \u00b0 eae \u2019 # Se URINE KOMPLET # KARAKTERISTIKAT FIZIKE : \u00a5 . \u2019 * NGJYRA.......%eeeeeeOeeOO6eE Yellow \u2019 a * \u2019 ae PAMIAS . See cas ce en's\u00bb o'siee e's E",
       "is_ocr_low_quality": false,
-      "review_type": "confidence",
+      "review_type": "other",
       "selected_text": "[Page 1]\nee ee\n* . .\ne \u00e9 * \u2019\n~~ 2 . \u2019\n- . \u2019 \u2019\n- . 4\n- ; . BIO MED LABORATOR MIKROBIOLOGJIK \u2018\n\u00e9 EMRI \u2014 STEPAN\u2019 FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 :\n\u00b0 eae \u2019\n# Se URINE KOMPLET\n# KARAKTERISTIKAT FIZIKE :\n\u00a5 . \u2019\n* NGJYRA.......%eeeeee0ee006eE VERDHE \u2019\na * \u2019\nae PAMIAS . See cas ce en's\u00bb o'siee e's E QARTE\nPo) .e \u2019 ;\n# DENSITETI<.. ye... 0.008% 1020 :\n|. Soe ee oe es - \u2019\n. : EGZAMINIMI. KIMIK\n\u00a7 GLUKOZE eee eee eee ee sNEGATIV :\n# + \u2018\n# PROTEINURIA. ..............NEGATIV :\n* BILIRUBIN.................NEGATIV :\n* + x\ntp KETONE. .2.....0...0....oNEGATLV\n* UROBILINOGEN..............0.2 E.U\\d1 ;\n* NITRITE...........2.2....~NEGATIV \u2018\n3 : EGZAMINIMI MIMROSKOPIK :\n* . .\ngj UEUKOCITE#.2., .......26.02+-+2 _ 3 PER FUSHE :\n* . '\n# ERITROCITE...4............1 _ 2 PER FUSHE :\naa * .\nEPITELE 68s 8 aes ors coe :\ne MRISHAMGIIRS oe... AE i\n\u201c . ar. Ress: ey eps \u2019\n@ BAKTERIE.....0.2+eeee++++-+NEGATIV /\n* CTLINDRASS 2.45 ..s 000.050. :\nfy MUKOZITER Est oc Suess \\ :\n- ; Dr.MANUELA LI\nPy : \u2019 r. \\ 4\n* Be \u2019 gt) \u2018\nFa . gee yok i\nr \u2019 .\n. * ,\n",
       "selected_engine": "existing_pdf_pipeline",
       "input_quality_score": 0.745,
@@ -168,51 +184,77 @@
           "text_length": 1131
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Results 1.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\archive\\Results 1_1.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
     },
     {
       "filename": "Results 2.pdf",
-      "status": "review",
-      "entity_count": 1,
+      "status": "accepted",
+      "entity_count": 3,
       "entities": [
+        {
+          "type": "test_result",
+          "text": "MPMPE TRIMS",
+          "value": "2",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "HAGEFACUOR",
+          "value": "0",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
         {
           "type": "test_result",
           "text": "Urine Culture",
           "source": "supplemental_lab_rules",
           "rule_pack": "urology_cytology_culture",
           "consensus_support": [
-            "phi3"
+            "spacy"
           ],
           "consensus_support_count": 1
         }
       ],
-      "selected_extractor": "phi3",
-      "primary_extractor": "gemini",
-      "fallback_extractor": "phi3",
-      "fallback_reason": "gemini_quota_or_rate_limit",
-      "terminal_empty_prevented": true,
-      "confidence": 0.45,
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "latency_too_high:8184.000",
+      "terminal_empty_prevented": false,
+      "confidence": 0.693,
       "confidence_breakdown": {
-        "entity_count": 0.3,
-        "coverage": 0.2,
-        "diversity": 0.6,
-        "extractor_weight": 0.6,
-        "base_extractor_weight": 0.6,
-        "calibrated_extractor_weight": 0.6,
+        "entity_count": 0.6,
+        "coverage": 0.45,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
         "calibration_reason": "none"
       },
-      "supplemental_rules_applied": false,
-      "supplemental_entity_count": 0,
-      "final_entity_count_after_supplement": 1,
-      "review_reason": "confidence_below_reject_threshold",
-      "why_reviewed": [
-        "confidence_below_threshold",
-        "low_entity_count",
-        "low_coverage",
-        "low_extractor_weight"
-      ],
+      "supplemental_rules_applied": true,
+      "supplemental_entity_count": 1,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
       "error": null,
       "text_diagnostics": {
         "length": 953,
@@ -224,10 +266,10 @@
         "input_quality_band": "usable_with_review",
         "route_decision": "scanned_or_low_text"
       },
-      "normalization_applied": false,
-      "normalized_text_preview": null,
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] s . . a Y, \u2019 \u2018 : BIO MED LABORATOR MIKROBIOLOGIIK i . \\ [PERSON] \u2014 STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 [DATE] * > \u2018 a : 3 = \u2019 * i Urine Culture Y * ie = 1 NGA KULTIVIMI\u2019 PER 24h REZULTOI Negative i * * . 2 ae ANTIBIOGRAME \u00ab CIPROFLOXACINI......... LEVOFLOXACINI........... ' * . * \u2019 MPM",
       "is_ocr_low_quality": false,
-      "review_type": "confidence",
+      "review_type": "other",
       "selected_text": "[Page 1]\ns . .\na\nY, \u2019 \u2018\n: BIO MED LABORATOR MIKROBIOLOGIIK\ni . \\\nJ EMRI \u2014 STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 11 2022\n* > \u2018\na : 3 = \u2019\n* i UROKULTURE\nY * ie = 1\nNGA KULTIVIMI\u2019 PER 24h REZULTOI NEGATIV i\n* * .\n2 ae ANTIBIOGRAME\n\u00ab CIPROFLOXACINI......... LEVOFLOXACINI........... '\n* . * \u2019\nMPMPE TRIMS 2, 0% 1 20ST NITROFURANTOINI.........\n* : z * x\nHAGEFACUOR: 0 views oe cgire es CEFTAZIDIMI.......00000. '\n* . \u00b0 \u2019\n\u2019 :\n@# CEFUROXIME...%........6. DOXYCICLINI..........055\nLa * \u2019\no * \u2018\n\u00a5 * .\n@ CLINDAMYCIN..,......00. AMPICIUUIN: \u00ab1. \u00abesheets :\n* . .\n* CLARITHROMYCIN. ........ AUGMENTIN. ..........0005\n2\n| CEFPROZIL Ss .ay sce. ERYTHROMYCIN. .........0% :\n+ AZITHROMYCIN........04. CEFTRIAXION. 1.0 seis ers \u2019\nww * 4\n$ VANCOMYCIN. 0/0... 0.0. GENTAMVCING\u00a7. 5. JiSiieeeee 6s |\n* : + \u2019\n* . .\n\u00ab S SENSIBEL . R REZISTENT | MS MESATARISHT SENSIBEL\n* , - \u2018\n. om Dr.MANUELA XHULI\n* . |\n* . . :\n: . mane X8oL)\n, eer:\nad . *\n. ne\n* ba *\n* ; Fs\n\u00a5 :\n* .\n* 7 \u2018\n",
       "selected_engine": "existing_pdf_pipeline",
       "input_quality_score": 0.735,
@@ -304,9 +346,20 @@
           "text_length": 974
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Results 2.pdf",
-      "outcome": "queued_for_review",
-      "validation_status": "rejected"
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\archive\\Results 2_1.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
     },
     {
       "filename": "Test Results 2.pdf",
@@ -377,7 +430,7 @@
       "selected_extractor": "spacy",
       "primary_extractor": null,
       "fallback_extractor": null,
-      "fallback_reason": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
       "terminal_empty_prevented": false,
       "confidence": 0.7,
       "confidence_breakdown": {
@@ -392,7 +445,7 @@
       "supplemental_rules_applied": false,
       "supplemental_entity_count": 0,
       "final_entity_count_after_supplement": 6,
-      "review_reason": "accept",
+      "review_reason": "accept_with_route_audit",
       "why_reviewed": [
         "low_coverage"
       ],
@@ -479,7 +532,19 @@
           "text_length": 2732
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 2.pdf",
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 2_2.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -635,7 +700,21 @@
           "text_length": 3900
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 3.pdf",
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 3_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -793,7 +872,18 @@
           "text_length": 1678
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\archive\\Test Results 4.pdf",
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\archive\\Test Results 4_2.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -947,7 +1037,21 @@
           "text_length": 2500
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 5.pdf",
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 5_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1097,7 +1201,21 @@
           "text_length": 2305
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 6.pdf",
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\review\\Test Results 6_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1328,14 +1446,21 @@
           "text_length": 2365
         }
       ],
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\archive\\Urinalysis, Routine.pdf",
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": false,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\archive\\Urinalysis, Routine_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     }
   ],
   "files_needing_review": [
-    "Results 1.pdf",
-    "Results 2.pdf",
     "Test Results 2.pdf",
     "Test Results 3.pdf",
     "Test Results 5.pdf",

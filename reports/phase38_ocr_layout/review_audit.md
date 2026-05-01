@@ -1,36 +1,16 @@
 # MedAI Review Audit
 
 - Source report: `G:\Codex\2026-04-22-connect-github\reports\phase38_ocr_layout\latest_phase38_batch_validation.json`
-- Reviewed files: `6`
+- Reviewed files: `4`
 
 ## Review Fix Breakdown
 
 - no_entities: `0`
-- low_entity_count: `1`
-- low_confidence: `1`
+- low_entity_count: `0`
+- low_confidence: `0`
 - low_coverage: `4`
 - low_diversity: `0`
 - extractor_issue: `0`
-
-## Results 1.pdf
-
-- confidence: 0.45
-- entities: ['Nitrite', 'Ketones']
-- why reviewed: ['confidence_below_threshold', 'low_coverage', 'low_extractor_weight']
-- recommended fix: low_confidence
-
-- preview:
-[Page 1] ee ee * . . e é * ’ ~~ 2 . ’ - . ’ ’ - . 4 - ; . BIO MED LABORATOR MIKROBIOLOGJIK ‘ é EMRI — STEPAN’ FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 : ° eae ’ # Se URINE KOMPLET # KARAKTERISTIKAT FIZIKE : ¥ . ’ * NGJYRA.......%eeeeee0ee006eE VERDHE ’ a * ’ ae PAMIAS . See cas ce en's» o'siee e's E
-
-## Results 2.pdf
-
-- confidence: 0.45
-- entities: ['Urine Culture']
-- why reviewed: ['confidence_below_threshold', 'low_entity_count', 'low_coverage', 'low_extractor_weight']
-- recommended fix: low_entity_count
-
-- preview:
-[Page 1] s . . a Y, ’ ‘ : BIO MED LABORATOR MIKROBIOLOGIIK i . \ J EMRI — STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 11 2022 * > ‘ a : 3 = ’ * i UROKULTURE Y * ie = 1 NGA KULTIVIMI’ PER 24h REZULTOI NEGATIV i * * . 2 ae ANTIBIOGRAME « CIPROFLOXACINI......... LEVOFLOXACINI........... ' * . * ’ MPMPE TR
 
 ## Test Results 2.pdf
 
