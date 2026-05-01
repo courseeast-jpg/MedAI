@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-05-01T23:07:37.599120+00:00",
+  "phase": "Phase 48 Operator Review Package + Release Snapshot",
+  "snapshot_id": "MedAI_Snapshot_Phase48_2026-05-01",
+  "current_head": "31024c7f18b65144addf0141876b040fbf92eaaf",
+  "validated_source_commit": "31024c7f18b65144addf0141876b040fbf92eaaf",
+  "phase47_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase47_final_regression_hardening\\phase47_final_regression_hardening_report.json",
+  "phase47_release_candidate_ready": true,
+  "required_files": {
+    "release_summary": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase48_operator_release_package\\medai_v2_ocr_layout_release_summary.md",
+    "operator_review_guide": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase48_operator_release_package\\operator_review_guide.md",
+    "validation_runbook": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase48_operator_release_package\\validation_runbook.md",
+    "release_snapshot_json": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase48_operator_release_package\\release_snapshot.json",
+    "release_snapshot_md": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase48_operator_release_package\\release_snapshot.md"
+  },
+  "missing_docs": [],
+  "doc_checks": {
+    "tests_baseline_referenced": true,
+    "phase47_commit_referenced": true,
+    "current_commit_hash_present": true,
+    "count_convention_documented": true,
+    "safety_guarantees_documented": true,
+    "not_medical_device_documented": true
+  },
+  "phi_artifact_check": {
+    "tracked_report_phi_files": [],
+    "tracked_report_archive_or_review_files": [],
+    "passed": true
+  },
+  "release_snapshot_schema_valid": true,
+  "conclusion": "release_snapshot_ready"
+}

@@ -1,0 +1,71 @@
+{
+  "snapshot_id": "MedAI_Snapshot_Phase48_2026-05-01",
+  "release_name": "MedAI v2 OCR/Layout HITL Release",
+  "validated_source_commit": "31024c7f18b65144addf0141876b040fbf92eaaf",
+  "phase47_commit": "31024c7f18b65144addf0141876b040fbf92eaaf",
+  "completed_phases": [
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48
+  ],
+  "test_result": {
+    "command": "python -m pytest tests",
+    "result": "411 passed, 5 warnings"
+  },
+  "final_metrics": {
+    "total_files": 8,
+    "accepted": 2,
+    "review": 6,
+    "review_ocr_quality": 2,
+    "empty": 2,
+    "runtime_drift_detected": false,
+    "safety_regression": false,
+    "phi_report_artifacts_tracked": false
+  },
+  "count_convention": {
+    "name": "overlapping_review_total_with_review_ocr_quality_and_empty_subsets",
+    "rule": "total == accepted + review",
+    "review_ocr_quality": "subset of review",
+    "empty": "subset of review"
+  },
+  "safety_invariants": [
+    "Poor OCR cannot become accepted.",
+    "Empty extraction cannot become accepted.",
+    "Lab normalizer cannot produce accepted.",
+    "Cyrillic non-lab reconciliation cannot produce accepted.",
+    "Phase37 confidence and safety gates remain enforced.",
+    "Runtime drift is labeled and not counted as release improvement.",
+    "Copied PDFs and PHI artifacts are not tracked under report archive/review folders."
+  ],
+  "known_limitations": [
+    "HITL validation-ready release, not production-autonomous.",
+    "OCR quality depends on scan quality and local OCR capabilities.",
+    "Near-threshold upstream extractor output may drift and must be treated as drift, not improvement.",
+    "Review outputs require operator inspection before downstream use."
+  ],
+  "resume_commands": [
+    "cd /d G:\\Codex\\2026-04-22-connect-github",
+    "git status --short",
+    "git rev-parse HEAD"
+  ],
+  "validation_commands": [
+    "python -m pytest tests",
+    "python scripts\\run_phase46_validation_drift_lock.py",
+    "python scripts\\run_phase47_final_regression_hardening.py",
+    "python scripts\\run_phase48_release_snapshot_validation.py"
+  ],
+  "next_valid_future_work": [
+    "Use HITL release.",
+    "Build broader v2 features later, separately.",
+    "Do not continue tuning OCR/Layout without new evidence."
+  ]
+}
