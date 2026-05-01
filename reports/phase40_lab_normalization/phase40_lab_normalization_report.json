@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01T18:37:28.892643+00:00",
+  "generated_at": "2026-05-01T22:18:39.156139+00:00",
   "phase": "Phase 40 Lab Table Normalization & Coverage Recovery",
   "phase37_baseline": {
     "total_files": 8,
@@ -24,8 +24,8 @@
     "total_files": 8,
     "accepted": 2,
     "review": 6,
-    "review_ocr_quality": 3,
-    "empty": 0,
+    "review_ocr_quality": 2,
+    "empty": 2,
     "review_ocr_quality_decreased_from_phase39": true
   },
   "safety": {
@@ -49,7 +49,8 @@
         "table_structure_loss",
         "extraction_low_coverage",
         "extraction_low_confidence",
-        "safety_gate_low_confidence"
+        "safety_gate_low_confidence",
+        "lab_report_detected"
       ],
       "original_reason_codes": [
         "low_text_density",
@@ -123,31 +124,32 @@
     {
       "filename": "Test Results 3.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status_before_lab_normalization": "review_ocr_quality",
-      "final_status_after_lab_normalization": "review_ocr_quality",
-      "lab_table_detected": true,
-      "parsed_lab_row_count": 1,
-      "lab_coverage_ratio": 0.018,
-      "lab_coverage_band": "weak",
+      "final_status_before_lab_normalization": "review",
+      "final_status_after_lab_normalization": "review",
+      "lab_table_detected": false,
+      "parsed_lab_row_count": 0,
+      "lab_coverage_ratio": 0.0,
+      "lab_coverage_band": "none",
       "reason_codes": [
         "table_structure_loss",
         "extraction_low_coverage",
         "extraction_low_confidence",
         "safety_gate_low_confidence",
-        "classifier_legacy_ocr_flag",
-        "legacy_normalized_low_coverage"
+        "extraction_sparse_entities",
+        "non_lab_document_skipped_lab_normalization",
+        "microbiology_pcr_report_detected",
+        "language_aware_ocr_required"
       ],
       "original_reason_codes": [
         "table_structure_loss",
         "extraction_low_coverage",
         "extraction_low_confidence",
         "safety_gate_low_confidence",
-        "classifier_legacy_ocr_flag",
-        "legacy_normalized_low_coverage"
+        "extraction_sparse_entities"
       ],
       "upgraded_from_review_ocr_quality_to_review": false,
       "accepted_due_to_lab_normalizer": false,
-      "empty_extraction_flag": false
+      "empty_extraction_flag": true
     },
     {
       "filename": "Test Results 4.pdf",
@@ -204,9 +206,9 @@
     {
       "filename": "Test Results 6.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status_before_lab_normalization": "review",
+      "final_status_before_lab_normalization": "review_ocr_quality",
       "final_status_after_lab_normalization": "review",
-      "lab_table_detected": true,
+      "lab_table_detected": false,
       "parsed_lab_row_count": 0,
       "lab_coverage_ratio": 0.0,
       "lab_coverage_band": "none",
@@ -215,18 +217,28 @@
         "extraction_low_coverage",
         "extraction_low_confidence",
         "safety_gate_low_confidence",
-        "extraction_sparse_entities"
+        "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage",
+        "non_lab_document_skipped_lab_normalization",
+        "document_type_prescription_not_lab",
+        "language_aware_ocr_required",
+        "cyrillic_non_lab_document_review",
+        "ocr_quality_recovered_non_lab",
+        "prescription_or_medication_instruction_detected"
       ],
       "original_reason_codes": [
         "table_structure_loss",
         "extraction_low_coverage",
         "extraction_low_confidence",
         "safety_gate_low_confidence",
-        "extraction_sparse_entities"
+        "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
       ],
       "upgraded_from_review_ocr_quality_to_review": false,
       "accepted_due_to_lab_normalizer": false,
-      "empty_extraction_flag": false
+      "empty_extraction_flag": true
     },
     {
       "filename": "Urinalysis, Routine.pdf",
@@ -238,7 +250,8 @@
       "lab_coverage_ratio": 0.167,
       "lab_coverage_band": "partial",
       "reason_codes": [
-        "accepted_clean_input"
+        "accepted_clean_input",
+        "lab_report_detected"
       ],
       "original_reason_codes": [
         "accepted_clean_input"

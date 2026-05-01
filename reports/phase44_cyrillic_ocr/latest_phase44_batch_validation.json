@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-05-01T19:40:42.087946+00:00",
-  "run_id": "5a982e99-61bf-468c-b72c-1d73017b98fd",
+  "timestamp": "2026-05-01T22:16:36.216657+00:00",
+  "run_id": "5b8a0974-2aa8-460d-8875-012a8218aff6",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
   "total_files": 8,
   "accepted_count": 2,
@@ -9,7 +9,7 @@
   "empty_extraction_count": 2,
   "fallback_count": 7,
   "low_text_quality_count": 0,
-  "ocr_low_quality_count": 3,
+  "ocr_low_quality_count": 2,
   "ocr_layout_route_summary": {
     "scanned_or_low_text": 3,
     "digital_clean_text": 5
@@ -297,7 +297,40 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Results 1.pdf",
+      "phase45_status_before": "review",
+      "phase45_status_after": "review",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": false,
+        "triggered": false,
+        "new_status": "review",
+        "cyrillic_non_lab_document_detected": false,
+        "ocr_quality_recovered_non_lab": false,
+        "new_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "lab_report_detected"
+        ],
+        "explanation": [
+          "current_status=review not review_ocr_quality"
+        ],
+        "metadata": {
+          "current_status": "review",
+          "ocr_layout_quality_band": "usable_with_review",
+          "document_type": "lab_report",
+          "lab_coverage_band": "none",
+          "cyrillic_ratio_in_selected_text": 0.0,
+          "entity_count": 2,
+          "is_ocr_low_quality_input": false
+        }
+      },
+      "cyrillic_non_lab_document_detected": false,
+      "ocr_quality_recovered_non_lab": false,
+      "phase45_moved_review_ocr_to_review": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Results 1_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -561,7 +594,40 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Results 2.pdf",
+      "phase45_status_before": "review",
+      "phase45_status_after": "review",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": false,
+        "triggered": false,
+        "new_status": "review",
+        "cyrillic_non_lab_document_detected": false,
+        "ocr_quality_recovered_non_lab": false,
+        "new_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities"
+        ],
+        "explanation": [
+          "current_status=review not review_ocr_quality"
+        ],
+        "metadata": {
+          "current_status": "review",
+          "ocr_layout_quality_band": "usable_with_review",
+          "document_type": "unknown_medical",
+          "lab_coverage_band": "none",
+          "cyrillic_ratio_in_selected_text": 0.0,
+          "entity_count": 1,
+          "is_ocr_low_quality_input": false
+        }
+      },
+      "cyrillic_non_lab_document_detected": false,
+      "ocr_quality_recovered_non_lab": false,
+      "phase45_moved_review_ocr_to_review": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Results 2_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -968,7 +1034,40 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 2.pdf",
+      "phase45_status_before": "review_ocr_quality",
+      "phase45_status_after": "review_ocr_quality",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": false,
+        "triggered": false,
+        "new_status": "review_ocr_quality",
+        "cyrillic_non_lab_document_detected": false,
+        "ocr_quality_recovered_non_lab": false,
+        "new_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage"
+        ],
+        "explanation": [
+          "document_type=microbiology_pcr_report not in ['prescription', 'unknown_medical']"
+        ],
+        "metadata": {
+          "current_status": "review_ocr_quality",
+          "ocr_layout_quality_band": "good",
+          "document_type": "microbiology_pcr_report",
+          "lab_coverage_band": "weak",
+          "cyrillic_ratio_in_selected_text": 0.0,
+          "entity_count": 5,
+          "is_ocr_low_quality_input": true
+        }
+      },
+      "cyrillic_non_lab_document_detected": false,
+      "ocr_quality_recovered_non_lab": false,
+      "phase45_moved_review_ocr_to_review": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 2_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1237,7 +1336,42 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 3.pdf",
+      "phase45_status_before": "review",
+      "phase45_status_after": "review",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": false,
+        "triggered": false,
+        "new_status": "review",
+        "cyrillic_non_lab_document_detected": false,
+        "ocr_quality_recovered_non_lab": false,
+        "new_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities",
+          "non_lab_document_skipped_lab_normalization",
+          "microbiology_pcr_report_detected",
+          "language_aware_ocr_required"
+        ],
+        "explanation": [
+          "current_status=review not review_ocr_quality"
+        ],
+        "metadata": {
+          "current_status": "review",
+          "ocr_layout_quality_band": "good",
+          "document_type": "microbiology_pcr_report",
+          "lab_coverage_band": "none",
+          "cyrillic_ratio_in_selected_text": 0.8561,
+          "entity_count": 0,
+          "is_ocr_low_quality_input": false
+        }
+      },
+      "cyrillic_non_lab_document_detected": false,
+      "ocr_quality_recovered_non_lab": false,
+      "phase45_moved_review_ocr_to_review": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 3_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -1524,7 +1658,37 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\archive\\Test Results 4.pdf",
+      "phase45_status_before": "accepted",
+      "phase45_status_after": "accepted",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": false,
+        "triggered": false,
+        "new_status": "accepted",
+        "cyrillic_non_lab_document_detected": false,
+        "ocr_quality_recovered_non_lab": false,
+        "new_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "accepted_clean_input"
+        ],
+        "explanation": [
+          "current_status=accepted not review_ocr_quality"
+        ],
+        "metadata": {
+          "current_status": "accepted",
+          "ocr_layout_quality_band": "good",
+          "document_type": "microbiology_pcr_report",
+          "lab_coverage_band": "weak",
+          "cyrillic_ratio_in_selected_text": 0.0,
+          "entity_count": 3,
+          "is_ocr_low_quality_input": false
+        }
+      },
+      "cyrillic_non_lab_document_detected": false,
+      "ocr_quality_recovered_non_lab": false,
+      "phase45_moved_review_ocr_to_review": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\archive\\Test Results 4_2.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -1851,13 +2015,46 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 5.pdf",
+      "phase45_status_before": "review_ocr_quality",
+      "phase45_status_after": "review_ocr_quality",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": false,
+        "triggered": false,
+        "new_status": "review_ocr_quality",
+        "cyrillic_non_lab_document_detected": false,
+        "ocr_quality_recovered_non_lab": false,
+        "new_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage"
+        ],
+        "explanation": [
+          "document_type=unknown_medical with rx_signal_total=0 < 2"
+        ],
+        "metadata": {
+          "current_status": "review_ocr_quality",
+          "ocr_layout_quality_band": "usable_with_review",
+          "document_type": "unknown_medical",
+          "lab_coverage_band": "weak",
+          "cyrillic_ratio_in_selected_text": 0.0,
+          "entity_count": 3,
+          "is_ocr_low_quality_input": true
+        }
+      },
+      "cyrillic_non_lab_document_detected": false,
+      "ocr_quality_recovered_non_lab": false,
+      "phase45_moved_review_ocr_to_review": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 5_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
     {
       "filename": "Test Results 6.pdf",
-      "status": "review_ocr_quality",
+      "status": "review",
       "entity_count": 0,
       "entities": [],
       "selected_extractor": "phi3",
@@ -1900,8 +2097,8 @@
       },
       "normalization_applied": true,
       "normalized_text_preview": "[Page 1] \u0424.\u0418.\u041e. \u043f\u0430\u0446\u0438\u0435\u043d\u0442\u0430 \u0424\u0435\u0434\u0435\u043d\u0447\u0435\u043d\u043a\u043e \u0421\u0442\u0435\u043f\u0430\u043d \u041b\u0435\u043e\u043d\u0438\u0434\u043e\u0432\u0438\u0447 \u2116 \u043a\u0430\u0440\u0442\u044b 720862 \u0424.\u0418.\u041e. \u0432\u0440\u0430\u0447\u0430 [PERSON] \u0441 Ad \u042f. \u043c\u0435\u0441\u044f\u0446 [PERSON] \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0430\u043b\u044c\u043d\u044b\u0439 \u0443\u0440\u0435\u0442\u0440\u043e\u043f\u0440\u043e\u0441\u0442\u0430\u0442\u0438\u0442. 89152224504 / tye \u0432 ) \u041f\u0420\u0415\u041f\u0410\u0420\u0410\u0422\u042b / \u0414\u0410\u0422\u0410 1 |213 141516 |718 |9 | 10] \u043f | 12} 13| 14| 15| 16 | 17| [DATE] [PERSON]\u043c\u0433 | y | 2 \u043f\u043e 1 \u0441\u0432\u0435\u0447\u0435 \u043d\u0430 \u043d\u043e\u0447\u044c \u0421\u0432\u0435\u0447\u0438 \u0432\u0438\u0442\u0430\u043f\u0440\u043e\u0441",
-      "is_ocr_low_quality": true,
-      "review_type": "ocr_quality",
+      "is_ocr_low_quality": false,
+      "review_type": "confidence",
       "selected_text": "[Page 1]\n\u0424.\u0418.\u041e. \u043f\u0430\u0446\u0438\u0435\u043d\u0442\u0430 \u0424\u0435\u0434\u0435\u043d\u0447\u0435\u043d\u043a\u043e \u0421\u0442\u0435\u043f\u0430\u043d \u041b\u0435\u043e\u043d\u0438\u0434\u043e\u0432\u0438\u0447 \u2116 \u043a\u0430\u0440\u0442\u044b 720862 \u0424.\u0418.\u041e. \u0432\u0440\u0430\u0447\u0430 \u0425\u0430\u0437\u0438\u0430\u0445\u043c\u0435\u0442\u043e\u0432 \u0410.\u0421.\n\n\u0441 Ad \u042f. \u043c\u0435\u0441\u044f\u0446 \u0414\u0438\u0430\u0433\u043d\u043e\u0437 \u0425\u0440\u043e\u043d\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0430\u043b\u044c\u043d\u044b\u0439 \u0443\u0440\u0435\u0442\u0440\u043e\u043f\u0440\u043e\u0441\u0442\u0430\u0442\u0438\u0442. 89152224504 / tye \u0432 )\n\u041f\u0420\u0415\u041f\u0410\u0420\u0410\u0422\u042b / \u0414\u0410\u0422\u0410 1 |213 141516 |718 |9 | 10] \u043f | 12} 13| 14| 15| 16 | 17| 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31\n\n\u0421\u0432\u0435\u0447\u0438 \u0434\u0438\u043a\u043b\u043e\u0444\u0435\u043d\u0430\u043a 100\u043c\u0433 | y | 2\n\u043f\u043e 1 \u0441\u0432\u0435\u0447\u0435 \u043d\u0430 \u043d\u043e\u0447\u044c\n\u0421\u0432\u0435\u0447\u0438 \u0432\u0438\u0442\u0430\u043f\u0440\u043e\u0441\u0442 \u0444\u043e\u0440\u0442\u044d \u043f\u043e diel elelel\u00a2 le lele te\n1 \u0441\u0432\u0435\u0447\u0435 \u043d\u0430 \u043d\u043e\u0447\u044c\n\u041c\u0435\u0442\u0440\u043e\u043d\u0438\u0434\u0430\u0437\u043e\u043b \u043f\u043e 500\u043c\u0433 2 \u0430\u044f | el ene\n\u0440 \u0432 \u0434\u0435\u043d\u044c \u043f\u043e\u0441\u043b\u0435 \u0435\u0434\u044b\n\u041b\u0435\u0432\u043e\u0444\u043b\u043e\u043a\u0441\u0430\u0446\u0438\u043d \u043f\u043e 500\u043c\u0433 fe alee \u0435\u0435 | \u044f \u044b\u044b\n1 p3a 1 \u0447\u0430\u0441 \u0434\u043e \u043e\u0431\u0435\u0434\u0430 \u041c\u0415 `\n\u0424\u043b\u0443\u043a\u043e\u043d\u0430\u0437\u043e\u043b \u043f\u043e 150 mr 1 \u0440 2 4 \u00a2 \u00a2 3) +\n\u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\u041b\u0438\u043d\u0435\u043a\u0441 \u0444\u043e\u0440\u0442\u044d \u043f\u043e \u043a\u0430\u043f\u0441\u0443\u043b\u0435 i\n1 \u0440 \u0434\u043e \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\u0422\u0430\u043c\u0441\u0443\u043b\u043e\u0437\u0438\u043d \u043f\u043e 0.4\u043c\u0433 \u0440]; | 2] 7\n\u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\u041c\u0438\u043b\u0434\u0440\u043e\u043d\u0430\u0442 \u043f\u043e 500 mr 1 \u0440\u0430\u0437\u0430\n\u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\n\u041f\u0440\u043e\u0441\u0442\u0430\u043a\u043e\u0440 \u043f\u043e 1 MI} cg] el gl al alelele 9\n\u0432\u043d\u0443\u0442\u0440\u0438\u043c\u044b\u0448\u0435\u0447\u043d\u043e :\n\n\\>\nA\n~\n\n\u00bb\n\nAL,\n<\n\n8\n\na\n\n\u043a\n\n\\\n\nu\n~\naL\n\u2014\n`\n<.\n5.\n+\nay\nas\nnn\noa\ni\n4\n3.\n\n\u041c\u0435\u043a\u0441\u0438\u0434\u043e\u043b \u043f\u043e 2 mom} 4\n\u0432\u043d\u0443\u0442\u0440\u0438\u043c\u044b\u0448\u0435\u0447\u043d\u043e\n\u0424\u0418\u0417\u0418\u041e\u041f\u0420\u041e\u0426\u0415\u0414\u0423\u0420\u042b\n\na\nay\n9.\n\u0421\n\u0417-\n\\\n3\n=\n\n\u041b\u0430\u0437\u0435\u0440\u043e\u0442\u0435\u0440\u0430\u043f\u0438\u044f, \u2014 \u043c\u0430\u0441\u0441\u0430\u0436 \u043f\u0435 rake b\n\u043f\u0440\u043e\u0441\u0442\u0430\u0442\u044b ; \u0415 '\n\n\u2116\nBS\nxX\nNS\n5\n&\n25%.\n:\n&\n&\nWw\n>\n\n\u0414\u0438\u0435\u0442\u0430: \u0438\u0441\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u0437 \u0440\u0430\u0446\u0438\u043e\u043d\u0430 \u043f\u0438\u0442\u0430\u043d\u0438\u044f (\u0430\u043b\u043a\u043e\u0433\u043e\u043b\u044c, \u043e\u0441\u0442\u0440\u044b\u0435 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u044b, \u0441\u043e\u043b\u0435\u043d\u044b\u0435, \u043a\u043e\u043f\u0447\u0435\u043d\u044b\u0435, \u0436\u0438\u0440\u043d\u0443\u044e \u043f\u0438\u0449\u0443. \u041f\u0438\u0442\u044c\u0435\u0432\u043e\u0439 \u0440\u0435\u0436\u0438\u043c: \u043f\u0438\u0442\u044c \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 2-- $\n\u043b\u0438\u0442\u0440\u043e\u0432 \u0436\u0438\u0434\u043a\u043e\u0441\u0442\u0438 \u0432 \u0434\u0435\u043d\u044c (\u0432\u043e\u0434\u0430) \u043f\u043b\u044e\u0441 \u0441\u043e\u043a\u0438, \u0431\u0443\u043b\u044c\u043e\u043d\u044b. \u041d\u0435 \u043f\u043e\u0441\u0435\u0449\u0430\u0442\u044c: \u0431\u0430\u043d\u044e, \u0441\u0430\u0443\u043d\u0443, \u0431\u0430\u0441\u0441\u0435\u0439\u043d, \u0441\u043e\u043b\u044f\u0440\u0438\u0439 \u0438 \u043d\u0435 \u0437\u0430\u0433\u043e\u0440\u0430\u0442\u044c \u043d\u0430 \u043e\u0442\u043a\u0440\u044b\u0442\u043e\u043c \u0441\u043e\u043b\u043d\u0446\u0435. \u041e\u0433\u0440\u0430\u043d\u0438\u0447\u0438\u0442\u044c\n\u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u0443\u044e \u043d\u0430\u0433\u0440\u0443\u0437\u043a\u0443. \u041f\u043e\u043b\u043e\u0432\u043e\u0439 \u0436\u0438\u0437\u043d\u044c\u044e/\u0436\u0438\u0442\u044c.\n\n\u041e\u0437\u043d\u0430\u043a\u043e\u043c\u043b\u0435\u043d: \u201c  ~ \u0415\u0415\u041e ) \u0414\u0430\u0442\u0430 \u0430\n\n7\n\n\u041e \u0432\u0442",
       "selected_engine": "tesseract_rus_eng",
       "input_quality_score": 0.82,
@@ -2026,8 +2223,8 @@
           "text_length": 1383
         }
       ],
-      "downstream_classifier_status": "review_ocr_quality",
-      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,extraction_sparse_entities,classifier_legacy_ocr_flag,legacy_normalized_low_coverage,non_lab_document_skipped_lab_normalization,document_type_prescription_not_lab,language_aware_ocr_required",
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,extraction_sparse_entities,classifier_legacy_ocr_flag,legacy_normalized_low_coverage,non_lab_document_skipped_lab_normalization,document_type_prescription_not_lab,language_aware_ocr_required,cyrillic_non_lab_document_review,ocr_quality_recovered_non_lab,prescription_or_medication_instruction_detected",
       "classification_reason_codes": [
         "table_structure_loss",
         "extraction_low_coverage",
@@ -2038,14 +2235,17 @@
         "legacy_normalized_low_coverage",
         "non_lab_document_skipped_lab_normalization",
         "document_type_prescription_not_lab",
-        "language_aware_ocr_required"
+        "language_aware_ocr_required",
+        "cyrillic_non_lab_document_review",
+        "ocr_quality_recovered_non_lab",
+        "prescription_or_medication_instruction_detected"
       ],
       "empty_extraction_flag": true,
       "table_layout_warning": true,
-      "ocr_status_mismatch": true,
-      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
       "final_status_before_lab_normalization": "review_ocr_quality",
-      "final_status_after_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review",
       "original_classification_reason_codes": [
         "table_structure_loss",
         "extraction_low_coverage",
@@ -2101,7 +2301,7 @@
           "should_recommend_language_aware_ocr": true,
           "review_reason": "document_type_prescription_not_lab",
           "evidence": [
-            "prescription_terms=17",
+            "prescription_terms=23",
             "russian_or_pseudo_russian_prescription_markers"
           ],
           "warnings": [
@@ -2116,9 +2316,9 @@
             "microbiology_token_count_ru": 1,
             "microbiology_pseudo_count": 0,
             "prescription_token_count_en": 0,
-            "prescription_token_count_ru": 17,
+            "prescription_token_count_ru": 23,
             "prescription_pseudo_count": 0,
-            "rx_signal_total": 17,
+            "rx_signal_total": 23,
             "micro_signal_total": 1,
             "lab_signal_total": 0,
             "text_length": 1383,
@@ -2129,7 +2329,47 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 6.pdf",
+      "phase45_status_before": "review_ocr_quality",
+      "phase45_status_after": "review",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": true,
+        "triggered": true,
+        "new_status": "review",
+        "cyrillic_non_lab_document_detected": true,
+        "ocr_quality_recovered_non_lab": true,
+        "new_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage",
+          "non_lab_document_skipped_lab_normalization",
+          "document_type_prescription_not_lab",
+          "language_aware_ocr_required",
+          "cyrillic_non_lab_document_review",
+          "ocr_quality_recovered_non_lab",
+          "prescription_or_medication_instruction_detected"
+        ],
+        "explanation": [
+          "reconciled review_ocr_quality -> review (doc_type=prescription, band=good, coverage=none, cyr_ratio=0.684)"
+        ],
+        "metadata": {
+          "current_status": "review_ocr_quality",
+          "ocr_layout_quality_band": "good",
+          "document_type": "prescription",
+          "lab_coverage_band": "none",
+          "cyrillic_ratio_in_selected_text": 0.6845,
+          "entity_count": 0,
+          "is_ocr_low_quality_input": true
+        }
+      },
+      "cyrillic_non_lab_document_detected": true,
+      "ocr_quality_recovered_non_lab": true,
+      "phase45_moved_review_ocr_to_review": true,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 6_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -2647,7 +2887,36 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\archive\\Urinalysis, Routine.pdf",
+      "phase45_status_before": "accepted",
+      "phase45_status_after": "accepted",
+      "cyrillic_nonlab_reconciliation": {
+        "eligible": false,
+        "triggered": false,
+        "new_status": "accepted",
+        "cyrillic_non_lab_document_detected": false,
+        "ocr_quality_recovered_non_lab": false,
+        "new_reason_codes": [
+          "accepted_clean_input",
+          "lab_report_detected"
+        ],
+        "explanation": [
+          "current_status=accepted not review_ocr_quality"
+        ],
+        "metadata": {
+          "current_status": "accepted",
+          "ocr_layout_quality_band": "usable_with_review",
+          "document_type": "lab_report",
+          "lab_coverage_band": "partial",
+          "cyrillic_ratio_in_selected_text": 0.0,
+          "entity_count": 11,
+          "is_ocr_low_quality_input": false
+        }
+      },
+      "cyrillic_non_lab_document_detected": false,
+      "ocr_quality_recovered_non_lab": false,
+      "phase45_moved_review_ocr_to_review": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\archive\\Urinalysis, Routine_2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     }

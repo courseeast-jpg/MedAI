@@ -53,10 +53,19 @@ _PRESCRIPTION_TOKENS_EN = re.compile(
 # ---------------------------------------------------------------------------
 
 _PRESCRIPTION_TOKENS_RU = re.compile(
+    # Specific medication brand/INN names
     r"(?:диклофенак|метронидазол|левофлоксацин|тамсулозин|флуконазол|"
-    r"линекс|витапрост|свеч[аиеуюя]|таблетк|капсул|"
-    r"\b\d+\s*мг\b|\bмг\b|"
-    r"рецепт|принимать|препарат)",
+    r"линекс|витапрост|"
+    # Dosage form words
+    r"свеч[аиеуюя]|таблетк|капсул|"
+    # Dose units (Russian milligram/milliliter)
+    r"\b\d+\s*мг\b|\b\d+\s*мл\b|\bмг\b|\bмл\b|"
+    # Generic prescription / instruction vocabulary
+    r"рецепт|назначени|препарат|лекарств|принимать|дозировк|"
+    # Frequency / timing instructions
+    r"раз\s+в\s+день|после\s+еды|до\s+еды|на\s+ночь|"
+    # Clinical context words common on prescription forms
+    r"врач|аптек|пациент|диагноз|рекомендаци)",
     re.I,
 )
 

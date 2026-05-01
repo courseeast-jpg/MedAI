@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01T19:41:59.586614+00:00",
+  "generated_at": "2026-05-01T22:18:39.162139+00:00",
   "phase": "Phase 44 Cyrillic OCR Candidate Generation",
   "capability_report": {
     "tesseract_available": true,
@@ -188,9 +188,9 @@
     "total_files": 8,
     "accepted": 2,
     "review": 6,
-    "review_ocr_quality": 3,
+    "review_ocr_quality": 2,
     "empty": 2,
-    "review_ocr_quality_decreased_from_phase43": false,
+    "review_ocr_quality_decreased_from_phase43": true,
     "accepted_safe": true,
     "cyrillic_ocr_attempts": 2,
     "cyrillic_ocr_succeeded": 2
@@ -245,7 +245,7 @@
     "Test Results 6.pdf": {
       "filename": "Test Results 6.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status": "review_ocr_quality",
+      "final_status": "review",
       "document_type": "prescription",
       "language_hint": "ru",
       "language_aware_ocr_recommended": true,
@@ -281,7 +281,10 @@
         "legacy_normalized_low_coverage",
         "non_lab_document_skipped_lab_normalization",
         "document_type_prescription_not_lab",
-        "language_aware_ocr_required"
+        "language_aware_ocr_required",
+        "cyrillic_non_lab_document_review",
+        "ocr_quality_recovered_non_lab",
+        "prescription_or_medication_instruction_detected"
       ],
       "empty_extraction_flag": true
     }
@@ -503,7 +506,7 @@
     {
       "filename": "Test Results 6.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status": "review_ocr_quality",
+      "final_status": "review",
       "document_type": "prescription",
       "language_hint": "ru",
       "language_aware_ocr_recommended": true,
@@ -539,7 +542,10 @@
         "legacy_normalized_low_coverage",
         "non_lab_document_skipped_lab_normalization",
         "document_type_prescription_not_lab",
-        "language_aware_ocr_required"
+        "language_aware_ocr_required",
+        "cyrillic_non_lab_document_review",
+        "ocr_quality_recovered_non_lab",
+        "prescription_or_medication_instruction_detected"
       ],
       "empty_extraction_flag": true
     },

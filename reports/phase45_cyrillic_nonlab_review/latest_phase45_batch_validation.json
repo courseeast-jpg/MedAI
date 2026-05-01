@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-05-01T22:16:34.809368+00:00",
-  "run_id": "a425dd07-f945-4007-bf19-2a56a48b46e8",
+  "timestamp": "2026-05-01T22:13:57.903665+00:00",
+  "run_id": "adb57ca9-c966-4866-9641-497d96887f0e",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
   "total_files": 8,
   "accepted_count": 2,
@@ -330,7 +330,7 @@
       "ocr_quality_recovered_non_lab": false,
       "phase45_moved_review_ocr_to_review": false,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Results 1_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\review\\Results 1_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -627,7 +627,7 @@
       "ocr_quality_recovered_non_lab": false,
       "phase45_moved_review_ocr_to_review": false,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Results 2_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\review\\Results 2_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -1067,7 +1067,7 @@
       "ocr_quality_recovered_non_lab": false,
       "phase45_moved_review_ocr_to_review": false,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 2_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\review\\Test Results 2_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1371,7 +1371,7 @@
       "ocr_quality_recovered_non_lab": false,
       "phase45_moved_review_ocr_to_review": false,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 3_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\review\\Test Results 3_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -1688,7 +1688,7 @@
       "ocr_quality_recovered_non_lab": false,
       "phase45_moved_review_ocr_to_review": false,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\archive\\Test Results 4_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\archive\\Test Results 4_1.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -2048,7 +2048,7 @@
       "ocr_quality_recovered_non_lab": false,
       "phase45_moved_review_ocr_to_review": false,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 5_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\review\\Test Results 5_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -2369,7 +2369,7 @@
       "ocr_quality_recovered_non_lab": true,
       "phase45_moved_review_ocr_to_review": true,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\review\\Test Results 6_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\review\\Test Results 6_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -2916,7 +2916,7 @@
       "ocr_quality_recovered_non_lab": false,
       "phase45_moved_review_ocr_to_review": false,
       "accepted_due_to_cyrillic_nonlab_reconciliation": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\archive\\Urinalysis, Routine_4.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\archive\\Urinalysis, Routine_1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     }

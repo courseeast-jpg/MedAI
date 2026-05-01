@@ -1,6 +1,6 @@
 # MedAI Review Audit
 
-- Source report: `G:\Codex\2026-04-22-connect-github\reports\phase40_lab_normalization\latest_phase40_batch_validation.json`
+- Source report: `G:\Codex\2026-04-22-connect-github\reports\phase45_cyrillic_nonlab_review\latest_phase45_batch_validation.json`
 - Reviewed files: `6`
 
 ## Review Fix Breakdown

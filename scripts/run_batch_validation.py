@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from document_classification import reconcile_cyrillic_nonlab_status
 from lab_normalization.lab_normalizer import normalize_lab_text
 from execution.pipeline import ExecutionPipeline
 from ocr_layout.ocr_candidates import collect_candidates
@@ -253,6 +254,26 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
         status = lab_recovery["status"]
         is_ocr_low_quality = lab_recovery["is_ocr_low_quality"]
         classification_reasons = lab_recovery["classification_reason_codes"]
+
+        # Phase 45 — Cyrillic non-lab review reconciliation. Only ever flips
+        # review_ocr_quality -> review for prescription / unknown_medical
+        # documents whose OCR was actually good and that have no real lab
+        # content. Never promotes to accepted; never weakens any safety gate.
+        status_before_phase45 = status
+        nonlab_reconciliation = reconcile_cyrillic_nonlab_status(
+            current_status=status,
+            is_ocr_low_quality=is_ocr_low_quality,
+            classification_reason_codes=classification_reasons,
+            selected_text=str(ocr_layout.get("selected_text") or ""),
+            ocr_layout=ocr_layout,
+            lab_normalization=lab_recovery["lab_normalization"],
+            entity_count=len(entities),
+        )
+        if nonlab_reconciliation.triggered:
+            status = nonlab_reconciliation.new_status
+            is_ocr_low_quality = False
+            classification_reasons = list(nonlab_reconciliation.new_reason_codes)
+
         why_reviewed = review_reasons_for(
             status=status,
             entity_count=len(entities),
@@ -307,6 +328,15 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "lab_normalization": lab_recovery["lab_normalization"],
             "lab_normalizer_changed_status": lab_recovery["lab_normalizer_changed_status"],
             "accepted_due_to_lab_normalizer": False,
+            "phase45_status_before": status_before_phase45,
+            "phase45_status_after": status,
+            "cyrillic_nonlab_reconciliation": nonlab_reconciliation.to_dict(),
+            "cyrillic_non_lab_document_detected": nonlab_reconciliation.cyrillic_non_lab_document_detected,
+            "ocr_quality_recovered_non_lab": nonlab_reconciliation.ocr_quality_recovered_non_lab,
+            "phase45_moved_review_ocr_to_review": (
+                status_before_phase45 == "review_ocr_quality" and status == "review"
+            ),
+            "accepted_due_to_cyrillic_nonlab_reconciliation": False,
             "copied_to": str(copy_destination),
             "outcome": result.outcome,
             "validation_status": result.validation_status,
