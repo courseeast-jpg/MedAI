@@ -257,6 +257,23 @@ def test_normalized_low_coverage_output_routes_to_review_ocr_quality(monkeypatch
     assert result["review_type"] == "ocr_quality"
 
 
+def test_phase38_poor_input_quality_cannot_auto_accept(monkeypatch, tmp_path: Path) -> None:
+    configure_paths(monkeypatch, tmp_path)
+    batch.ensure_batch_validation_dirs()
+    source = batch.REAL_VALIDATION_INPUT_DIR / "poor_ocr.txt"
+    source.write_text("|||| ____ \ufffd \ufffd 11111111 ~~~~~ BIO MED L4B ??? " * 3, encoding="utf-8")
+
+    summary = batch.run_batch_validation(pipeline=FakePipeline())
+    result = summary["results"][0]
+
+    assert summary["accepted_count"] == 0
+    assert summary["review_count"] == 1
+    assert result["status"] == "review_ocr_quality"
+    assert result["route_decision"] == "poor_ocr"
+    assert result["input_quality_band"] == "poor_ocr"
+    assert result["is_ocr_low_quality"] is True
+
+
 def test_route_audit_acceptance_with_086_confidence_is_accepted() -> None:
     status = batch.classify_batch_status(
         outcome="queued_for_review",

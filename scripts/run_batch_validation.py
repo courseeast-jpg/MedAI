@@ -15,6 +15,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from execution.pipeline import ExecutionPipeline
+from ocr_layout.ocr_candidates import collect_candidates
+from ocr_layout.ocr_router import route_ocr_input
 
 
 REAL_VALIDATION_INPUT_DIR = ROOT / "real_validation_input"
@@ -61,6 +63,14 @@ REQUIRED_RESULT_FIELDS = [
     "normalized_text_preview",
     "is_ocr_low_quality",
     "review_type",
+    "selected_text",
+    "selected_engine",
+    "input_quality_score",
+    "input_quality_band",
+    "input_quality_warnings",
+    "route_decision",
+    "ocr_layout_profile",
+    "ocr_layout_candidates",
 ]
 
 OCR_ARTIFACT_PATTERN = re.compile(r"(\S)\1{7,}|[|_]{4,}|(?:\b[Il1]{8,}\b)|\ufffd")
@@ -101,6 +111,8 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
         "fallback_count": 0,
         "low_text_quality_count": 0,
         "ocr_low_quality_count": 0,
+        "ocr_layout_route_summary": {},
+        "ocr_layout_quality_summary": {},
         "avg_text_length": 0,
         "review_reason_summary": {reason: 0 for reason in REVIEW_REASON_KEYS},
         "results": [],
@@ -136,6 +148,10 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
             summary["low_text_quality_count"] += 1
         if result.get("is_ocr_low_quality"):
             summary["ocr_low_quality_count"] += 1
+        route_decision = str(result.get("route_decision") or "unknown")
+        quality_band = str(result.get("input_quality_band") or "unknown")
+        summary["ocr_layout_route_summary"][route_decision] = summary["ocr_layout_route_summary"].get(route_decision, 0) + 1
+        summary["ocr_layout_quality_summary"][quality_band] = summary["ocr_layout_quality_summary"].get(quality_band, 0) + 1
 
     text_lengths = [
         int((item.get("text_diagnostics") or {}).get("length", 0))
@@ -149,14 +165,14 @@ def run_batch_validation(pipeline: ExecutionPipeline | None = None) -> dict[str,
 
 def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: str) -> dict[str, Any]:
     text_diagnostics = build_initial_text_diagnostics(source_path)
+    ocr_layout = build_ocr_layout_context(source_path)
     try:
-        if source_path.suffix.lower() == ".pdf":
-            result = pipeline.process_pdf(source_path, specialty="general", session_id=run_id)
-        elif source_path.suffix.lower() == ".txt":
-            source_text = source_path.read_text(encoding="utf-8", errors="replace")
-            text_diagnostics = analyze_text(source_text, method="plain_text")
+        if source_path.suffix.lower() in SUPPORTED_EXTENSIONS:
+            selected_text = str(ocr_layout.get("selected_text") or "")
+            method = str(ocr_layout.get("selected_engine") or "ocr_layout")
+            text_diagnostics = analyze_text(selected_text, method=method)
             result = pipeline.process_text(
-                source_text,
+                selected_text,
                 specialty="general",
                 source_name=source_path.name,
                 session_id=run_id,
@@ -167,7 +183,10 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
         extractor_result = dict(result.extractor_result or {})
         audit = dict(result.audit or {})
         entities = list(extractor_result.get("entities", []))
-        text_diagnostics = diagnostics_from_result(source_path, extractor_result, text_diagnostics)
+        if source_path.suffix.lower() == ".pdf":
+            text_diagnostics = diagnostics_from_ocr_layout(ocr_layout, text_diagnostics)
+        else:
+            text_diagnostics = diagnostics_from_result(source_path, extractor_result, text_diagnostics)
         selected_extractor = (
             extractor_result.get("selected_extractor")
             or extractor_result.get("actual_extractor")
@@ -182,7 +201,7 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             text_diagnostics=text_diagnostics,
             normalization_applied=normalization_applied,
             confidence_breakdown=confidence_breakdown,
-        )
+        ) or ocr_layout_forces_ocr_review(ocr_layout)
         status = classify_batch_status(
             outcome=result.outcome,
             review_reason=review_reason,
@@ -225,6 +244,7 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "normalized_text_preview": extractor_result.get("normalized_text_preview"),
             "is_ocr_low_quality": is_ocr_low_quality,
             "review_type": review_type_for(status=status, is_ocr_low_quality=is_ocr_low_quality),
+            **ocr_layout_report_fields(ocr_layout),
             "copied_to": str(copy_destination),
             "outcome": result.outcome,
             "validation_status": result.validation_status,
@@ -254,10 +274,77 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "normalized_text_preview": None,
             "is_ocr_low_quality": False,
             "review_type": "other",
+            **ocr_layout_report_fields(ocr_layout),
             "copied_to": str(copy_destination),
             "outcome": None,
             "validation_status": None,
         })
+
+
+def build_ocr_layout_context(source_path: Path) -> dict[str, Any]:
+    candidates = collect_candidates(source_path)
+    decision = route_ocr_input(candidates)
+    selected_profile = decision.selected_candidate.metadata.get("document_profile", {})
+    return {
+        "selected_text": decision.selected_text,
+        "selected_engine": decision.selected_engine,
+        "input_quality_score": decision.input_quality_score,
+        "input_quality_band": decision.input_quality_band,
+        "input_quality_warnings": decision.input_quality_warnings,
+        "route_decision": decision.route_decision,
+        "language": decision.language,
+        "ocr_layout_profile": selected_profile,
+        "ocr_layout_candidates": [
+            {
+                "engine_name": candidate.engine_name,
+                "quality_score": candidate.quality_score,
+                "quality_band": candidate.quality_band,
+                "language": candidate.language,
+                "warnings": list(candidate.warnings),
+                "metadata": {
+                    key: value
+                    for key, value in candidate.metadata.items()
+                    if key in {"source", "text_quality_status", "text_quality_score", "ocr_fallback_used", "ocr_engine", "candidate_error"}
+                },
+                "text_length": len(candidate.text.strip()),
+            }
+            for candidate in decision.candidates
+        ],
+    }
+
+
+def ocr_layout_report_fields(ocr_layout: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "selected_text": str(ocr_layout.get("selected_text") or ""),
+        "selected_engine": ocr_layout.get("selected_engine"),
+        "input_quality_score": ocr_layout.get("input_quality_score"),
+        "input_quality_band": ocr_layout.get("input_quality_band"),
+        "input_quality_warnings": list(ocr_layout.get("input_quality_warnings") or []),
+        "route_decision": ocr_layout.get("route_decision"),
+        "ocr_layout_profile": dict(ocr_layout.get("ocr_layout_profile") or {}),
+        "ocr_layout_candidates": list(ocr_layout.get("ocr_layout_candidates") or []),
+    }
+
+
+def ocr_layout_forces_ocr_review(ocr_layout: dict[str, Any]) -> bool:
+    return str(ocr_layout.get("route_decision")) in {"poor_ocr", "empty"} or str(
+        ocr_layout.get("input_quality_band")
+    ) in {"poor_ocr", "empty"}
+
+
+def diagnostics_from_ocr_layout(ocr_layout: dict[str, Any], fallback_diagnostics: dict[str, Any]) -> dict[str, Any]:
+    diagnostics = dict(fallback_diagnostics)
+    diagnostics.update({
+        "length": len(str(ocr_layout.get("selected_text") or "").strip()),
+        "preview": re.sub(r"\s+", " ", str(ocr_layout.get("selected_text") or "").strip())[:300],
+        "method": ocr_layout.get("selected_engine") or diagnostics.get("method"),
+        "suspicious": str(ocr_layout.get("input_quality_band")) in {"poor_ocr", "empty"},
+        "non_alnum_ratio": diagnostics.get("non_alnum_ratio", 0.0),
+        "input_quality_score": ocr_layout.get("input_quality_score"),
+        "input_quality_band": ocr_layout.get("input_quality_band"),
+        "route_decision": ocr_layout.get("route_decision"),
+    })
+    return diagnostics
 
 
 def normalize_result(result: dict[str, Any]) -> dict[str, Any]:
@@ -450,6 +537,8 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         "## OCR Quality Summary",
         "",
         f"- ocr_low_quality_count: `{summary.get('ocr_low_quality_count', 0)}`",
+        f"- OCR/Layout routes: `{summary.get('ocr_layout_route_summary', {})}`",
+        f"- OCR/Layout quality bands: `{summary.get('ocr_layout_quality_summary', {})}`",
         "",
         "## Review Reason Breakdown",
         "",
@@ -465,8 +554,8 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
         lines.append("No supported PDF or TXT files found in `real_validation_input/`.")
     else:
         lines.extend([
-            "| File | Status | Review type | OCR low quality | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Why reviewed | Review reason | Error |",
-            "| --- | --- | --- | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- | --- |",
+            "| File | Status | Review type | OCR low quality | Route | Quality | Input score | Engine | Entities | Extractor | Text length | Text method | Suspicious text | Fallback | Confidence | Why reviewed | Review reason | Error |",
+            "| --- | --- | --- | --- | --- | --- | ---: | --- | ---: | --- | ---: | --- | --- | --- | ---: | --- | --- | --- |",
         ])
         for item in summary["results"]:
             fallback = item.get("fallback_extractor") or item.get("fallback_reason") or ""
@@ -478,6 +567,10 @@ def write_batch_reports(summary: dict[str, Any]) -> tuple[Path, Path]:
                     escape_md(item.get("status")),
                     escape_md(item.get("review_type")),
                     "yes" if item.get("is_ocr_low_quality") else "no",
+                    escape_md(item.get("route_decision")),
+                    escape_md(item.get("input_quality_band")),
+                    "" if item.get("input_quality_score") is None else str(item.get("input_quality_score")),
+                    escape_md(item.get("selected_engine")),
                     str(item.get("entity_count", 0)),
                     escape_md(item.get("selected_extractor")),
                     str(diagnostics.get("length", 0)),

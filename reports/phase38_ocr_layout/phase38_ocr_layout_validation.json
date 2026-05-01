@@ -1,0 +1,204 @@
+{
+  "generated_at": "2026-05-01T15:26:49.390079+00:00",
+  "phase": "Phase 38 v2 OCR/Layout Engine Foundation",
+  "source_input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
+  "phase37_holdout_baseline": {
+    "total_files": 8,
+    "accepted": 2,
+    "review_ocr_quality": 6,
+    "empty": 0
+  },
+  "total_files": 8,
+  "accepted": 2,
+  "review": 6,
+  "review_ocr_quality": 4,
+  "empty": 0,
+  "ocr_layout_route_summary": {
+    "scanned_or_low_text": 3,
+    "digital_clean_text": 5
+  },
+  "ocr_layout_quality_summary": {
+    "usable_with_review": 4,
+    "good": 4
+  },
+  "phase37_review_ocr_quality_improved_count": 2,
+  "input_quality_improved": true,
+  "safety_regression": false,
+  "safety_regression_reason": null,
+  "results": [
+    {
+      "filename": "Results 1.pdf",
+      "status": "review",
+      "entity_count": 2,
+      "route_decision": "scanned_or_low_text",
+      "input_quality_score": 0.745,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density",
+        "repeated_symbol_noise"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "phi3",
+      "review_type": "confidence",
+      "is_ocr_low_quality": false,
+      "phase37_was_review_ocr_quality": true,
+      "phase37_review_ocr_quality_improved": true,
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage",
+        "low_extractor_weight"
+      ]
+    },
+    {
+      "filename": "Results 2.pdf",
+      "status": "review",
+      "entity_count": 1,
+      "route_decision": "scanned_or_low_text",
+      "input_quality_score": 0.735,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density",
+        "repeated_symbol_noise"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "phi3",
+      "review_type": "confidence",
+      "is_ocr_low_quality": false,
+      "phase37_was_review_ocr_quality": true,
+      "phase37_review_ocr_quality_improved": true,
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_extractor_weight"
+      ]
+    },
+    {
+      "filename": "Test Results 2.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 6,
+      "route_decision": "digital_clean_text",
+      "input_quality_score": 0.818,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "low_medical_token_density"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "spacy",
+      "review_type": "ocr_quality",
+      "is_ocr_low_quality": true,
+      "phase37_was_review_ocr_quality": true,
+      "phase37_review_ocr_quality_improved": false,
+      "why_reviewed": [
+        "low_coverage"
+      ]
+    },
+    {
+      "filename": "Test Results 3.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 4,
+      "route_decision": "digital_clean_text",
+      "input_quality_score": 0.811,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "low_medical_token_density"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "spacy",
+      "review_type": "ocr_quality",
+      "is_ocr_low_quality": true,
+      "phase37_was_review_ocr_quality": true,
+      "phase37_review_ocr_quality_improved": false,
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ]
+    },
+    {
+      "filename": "Test Results 4.pdf",
+      "status": "accepted",
+      "entity_count": 4,
+      "route_decision": "scanned_or_low_text",
+      "input_quality_score": 0.816,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "spacy",
+      "review_type": "other",
+      "is_ocr_low_quality": false,
+      "phase37_was_review_ocr_quality": false,
+      "phase37_review_ocr_quality_improved": false,
+      "why_reviewed": []
+    },
+    {
+      "filename": "Test Results 5.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 3,
+      "route_decision": "digital_clean_text",
+      "input_quality_score": 0.796,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density",
+        "repeated_symbol_noise"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "spacy",
+      "review_type": "ocr_quality",
+      "is_ocr_low_quality": true,
+      "phase37_was_review_ocr_quality": true,
+      "phase37_review_ocr_quality_improved": false,
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ]
+    },
+    {
+      "filename": "Test Results 6.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 3,
+      "route_decision": "digital_clean_text",
+      "input_quality_score": 0.809,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "spacy",
+      "review_type": "ocr_quality",
+      "is_ocr_low_quality": true,
+      "phase37_was_review_ocr_quality": true,
+      "phase37_review_ocr_quality_improved": false,
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ]
+    },
+    {
+      "filename": "Urinalysis, Routine.pdf",
+      "status": "accepted",
+      "entity_count": 12,
+      "route_decision": "digital_clean_text",
+      "input_quality_score": 0.925,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "garbage_characters"
+      ],
+      "selected_extraction_engine": "existing_pdf_pipeline",
+      "selected_extractor": "phi3",
+      "review_type": "other",
+      "is_ocr_low_quality": false,
+      "phase37_was_review_ocr_quality": false,
+      "phase37_review_ocr_quality_improved": false,
+      "why_reviewed": []
+    }
+  ],
+  "raw_batch_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\latest_phase38_batch_validation.json",
+  "raw_batch_markdown": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\latest_phase38_batch_validation.md"
+}
