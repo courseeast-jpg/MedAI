@@ -57,6 +57,8 @@ REQUIRED_RESULT_FIELDS = [
     "why_reviewed",
     "error",
     "text_diagnostics",
+    "normalization_applied",
+    "normalized_text_preview",
 ]
 
 OCR_ARTIFACT_PATTERN = re.compile(r"(\S)\1{7,}|[|_]{4,}|(?:\b[Il1]{8,}\b)|\ufffd")
@@ -207,6 +209,8 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "why_reviewed": why_reviewed,
             "error": None,
             "text_diagnostics": text_diagnostics,
+            "normalization_applied": bool(extractor_result.get("normalization_applied", False)),
+            "normalized_text_preview": extractor_result.get("normalized_text_preview"),
             "copied_to": str(copy_destination),
             "outcome": result.outcome,
             "validation_status": result.validation_status,
@@ -232,6 +236,8 @@ def process_one_file(pipeline: ExecutionPipeline, source_path: Path, *, run_id: 
             "why_reviewed": [],
             "error": str(exc),
             "text_diagnostics": text_diagnostics,
+            "normalization_applied": False,
+            "normalized_text_preview": None,
             "copied_to": str(copy_destination),
             "outcome": None,
             "validation_status": None,
@@ -581,7 +587,7 @@ def render_review_audit_markdown(audit: dict[str, Any]) -> str:
             f"- recommended fix: {item.get('recommended_fix_category')}",
             "",
             "- preview:",
-            str(item.get("text_preview") or ""),
+            str(item.get("text_preview") or "").rstrip(),
         ])
 
     return "\n".join(lines) + "\n"

@@ -10,6 +10,7 @@ from loguru import logger
 from extractors.base_extractor import BaseExtractor
 from execution.confidence_scorer import score_extraction_result
 from execution.supplemental_rules import apply_supplemental_rules
+from execution.text_normalizer import normalize_text
 
 
 STRUCTURED_PARSER_VERSION = "structured_lab_parser_v1"
@@ -30,12 +31,14 @@ class SpacyExtractor(BaseExtractor):
 
     def extract(self, text: str) -> dict:
         started = time.perf_counter()
-        structured_entities = self._extract_structured_lab_entities(text)
+        normalization = normalize_text(text)
+        extraction_text = normalization.text
+        structured_entities = self._extract_structured_lab_entities(extraction_text)
         entities = list(structured_entities)
-        entities.extend(self._regex_entities(text))
+        entities.extend(self._regex_entities(extraction_text))
 
         if self.nlp is not None:
-            doc = self.nlp(text[:5000])
+            doc = self.nlp(extraction_text[:5000])
             for ent in doc.ents:
                 entity_type = self._map_label(ent.label_)
                 if entity_type:
@@ -52,7 +55,10 @@ class SpacyExtractor(BaseExtractor):
             "entities": entities,
             "confidence": 0.0,
             "latency_ms": latency_ms,
-            "raw_text": text,
+            "raw_text": extraction_text,
+            "original_raw_text": text,
+            "normalization_applied": normalization.applied,
+            "normalized_text_preview": normalization.preview,
             "notes": list(self.notes),
             "structured_parser_used": bool(structured_entities),
             "structured_entities_count": len(structured_entities),

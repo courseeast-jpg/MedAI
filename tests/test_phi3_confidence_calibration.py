@@ -55,6 +55,17 @@ def test_phi3_with_valid_supplemental_entities_gets_calibrated_confidence():
     assert result["confidence_breakdown"]["calibration_reason"] == "phi3_supplemental_entities"
 
 
+def test_phi3_normalizes_noisy_lab_text_before_supplemental_rules():
+    result = Phi3Connector().extract("UR0KULTURE |||| NEGAT1V ____ VERDHE")
+    entity_texts = {entity["text"] for entity in result["entities"]}
+
+    assert result["normalization_applied"] is True
+    assert "Urine Culture" in result["normalized_text_preview"]
+    assert "Negative" in result["normalized_text_preview"]
+    assert "Yellow" in result["normalized_text_preview"]
+    assert "Urine Culture" in entity_texts
+
+
 def test_consensus_recomputes_stale_phi3_confidence_when_calibration_applies():
     merged = consensus_merge([
         {

@@ -120,6 +120,40 @@ def test_recommendation_alone_does_not_auto_accept_without_supporting_entities()
     assert result["confidence"] < 0.65
 
 
+def test_noisy_ocr_text_becomes_readable_before_extraction():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract("UR0KULTURE |||| NEGAT1V ____ VERDHE")
+    entity_texts = {entity["text"] for entity in result["entities"]}
+
+    assert result["normalization_applied"] is True
+    assert "Urine Culture" in result["normalized_text_preview"]
+    assert "Negative" in result["normalized_text_preview"]
+    assert "Yellow" in result["normalized_text_preview"]
+    assert "Urine Culture" in entity_texts
+
+
+def test_foreign_lab_terms_map_to_known_entities():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract("UROKULTURE NEGATIV VERDHE")
+    entity_texts = {entity["text"] for entity in result["entities"]}
+
+    assert result["normalization_applied"] is True
+    assert "Urine Culture" in entity_texts
+
+
+def test_clean_english_report_does_not_apply_normalization():
+    extractor = SpacyExtractor()
+
+    result = extractor.extract("Urine Culture, Routine Value Final report")
+    entity_texts = {entity["text"] for entity in result["entities"]}
+
+    assert result["normalization_applied"] is False
+    assert "Urine Culture" in entity_texts
+    assert "Final Report" in entity_texts
+
+
 def test_structured_lab_parser_extracts_ua_blood_trace_abnormal_block():
     extractor = SpacyExtractor()
 
