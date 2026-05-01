@@ -1,15 +1,13 @@
 {
-  "generated_at": "2026-05-01T01:48:31.443568+00:00",
+  "generated_at": "2026-05-01T01:48:31.446568+00:00",
   "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\latest_holdout_validation.json",
   "source_timestamp": "2026-05-01T01:47:43.425692+00:00",
   "total_reviewed": 5,
-  "review_fix_breakdown": {
-    "no_entities": 0,
-    "low_entity_count": 1,
-    "low_confidence": 1,
-    "low_coverage": 3,
-    "low_diversity": 0,
-    "extractor_issue": 0
+  "remaining_issue_breakdown": {
+    "ocr_noise_remaining": 5,
+    "low_coverage_after_normalization": 0,
+    "missing_domain_rules": 0,
+    "correctly_flagged_review": 0
   },
   "files": [
     {
@@ -50,10 +48,12 @@
         "low_coverage",
         "low_extractor_weight"
       ],
+      "normalization_applied": false,
+      "normalized_text_preview": "",
       "text_preview": "[Page 1] ee ee * . . e \u00e9 * \u2019 ~~ 2 . \u2019 - . \u2019 \u2019 - . 4 - ; . BIO MED LABORATOR MIKROBIOLOGJIK \u2018 \u00e9 EMRI \u2014 STEPAN\u2019 FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 : \u00b0 eae \u2019 # Se URINE KOMPLET # KARAKTERISTIKAT FIZIKE : \u00a5 . \u2019 * NGJYRA.......%eeeeee0ee006eE VERDHE \u2019 a * \u2019 ae PAMIAS . See cas ce en's\u00bb o'siee e's E",
       "text_length": 1007,
       "extraction_method": "tesseract fallback",
-      "recommended_fix_category": "low_confidence"
+      "remaining_issue_category": "ocr_noise_remaining"
     },
     {
       "filename": "Results 2.pdf",
@@ -84,10 +84,12 @@
         "low_coverage",
         "low_extractor_weight"
       ],
+      "normalization_applied": false,
+      "normalized_text_preview": "",
       "text_preview": "[Page 1] s . . a Y, \u2019 \u2018 : BIO MED LABORATOR MIKROBIOLOGIIK i . \\ [PERSON] \u2014 STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 [DATE] * > \u2018 a : 3 = \u2019 * i UROKULTURE Y * ie = 1 NGA KULTIVIMI\u2019 PER 24h REZULTOI NEGATIV i * * . 2 ae ANTIBIOGRAME \u00ab CIPROFLOXACINI......... LEVOFLOXACINI........... ' * . * \u2019 MPMPE T",
       "text_length": 939,
       "extraction_method": "tesseract fallback",
-      "recommended_fix_category": "low_entity_count"
+      "remaining_issue_category": "ocr_noise_remaining"
     },
     {
       "filename": "Test Results 3.pdf",
@@ -146,10 +148,12 @@
         "confidence_below_threshold",
         "low_coverage"
       ],
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] LllccneAoBaHHe MHKpocpnopbl yporeHHTailbHoro TpaKTa MY>KliHH MeTOAOM [URL_REMOVED] B pe>KHMe peailbHOrO [ID_REMOVED] AHApocpnop\u00ae,AHApOcpnop\u00aeCKpHH OnHcaHHe 6naHKa peJynbTaToB VICCile,QO8aHIIIe [LOCATION],[PERSON]...\\enHOVl peaKl...\\111111 8 pe)KII!Me peailbHOrO 8peMeHIII. C 1...\\eilbiO :[DAT",
       "text_preview": "[Page 1] LllccneAoBaHHe MHKpocpnopbl yporeHHTailbHoro TpaKTa MY>KliHH MeTOAOM [URL_REMOVED] B pe>KHMe peailbHOrO [ID_REMOVED] AHApocpnop\u00ae,AHApOcpnop\u00aeCKpHH OnHcaHHe 6naHKa peJynbTaToB VICCile,QO8aHIIIe [LOCATION],[PERSON]...\\enHOVl peaKl...\\111111 8 pe)KII!Me peailbHOrO 8peMeHIII. C 1...\\eilbiO :[DAT",
       "text_length": 3723,
       "extraction_method": "unknown",
-      "recommended_fix_category": "low_coverage"
+      "remaining_issue_category": "ocr_noise_remaining"
     },
     {
       "filename": "Test Results 5.pdf",
@@ -198,10 +202,12 @@
         "confidence_below_threshold",
         "low_coverage"
       ],
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] fi;KDL [URL_REMOVED] I'!HTIIflll'!poBIIHHfUII OCI\"EIMI!. Mfl~ c:>epT$1,UoIpc:la!IHil [PERSON] OOOTMTCI'Il ~8 'Tplil\u2022 ISc:oaH.,._, rOCT P ltIOCHlOO'1\u00b72OHi, r OOT P IIK:O , 51 89-~015. roor P 11100 14001\u00b7 [DATE], rOOT F' I'IOO/M3K 27001\u00b72006, OHSo\\S 1 OCKJI ::<DO7. SAl SA BCXXJ:2014 ~:; ro~a ",
       "text_preview": "[Page 1] fi;KDL [URL_REMOVED] I'!HTIIflll'!poBIIHHfUII OCI\"EIMI!. Mfl~ c:>epT$1,UoIpc:la!IHil [PERSON] OOOTMTCI'Il ~8 'Tplil\u2022 ISc:oaH.,._, rOCT P ltIOCHlOO'1\u00b72OHi, r OOT P IIK:O , 51 89-~015. roor P 11100 14001\u00b7 [DATE], rOOT F' I'IOO/M3K 27001\u00b72006, OHSo\\S 1 OCKJI ::<DO7. SAl SA BCXXJ:2014 ~:; ro~a ",
       "text_length": 2312,
       "extraction_method": "unknown",
-      "recommended_fix_category": "low_coverage"
+      "remaining_issue_category": "ocr_noise_remaining"
     },
     {
       "filename": "Test Results 6.pdf",
@@ -250,10 +256,12 @@
         "confidence_below_threshold",
         "low_coverage"
       ],
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] <D.II.Q. na:qHeHTa <l>e,n:eHLJ:eHKO CTenaH JIeoHH,ll;OBHLJ: N2 KapTbr [DATE] ., l ,rf . / )' l [ \u00b7.:.c .,_, ~ t:71,. J\u00ab MeC5II.J. )J,HarHO3 XpoHHLJ:eCKHH 6aKTepHanbHhiH ypeTponpoCTaTHT. ~ ~ ~-- lIPEIIAPATII I L(ATA 1 2 3 4 5 6 7 8 9 lO 11 12 l3 14 15 16 17 CseLJ:H ,IUIKJio\u00a2eHaK IOOMr ,f }--",
       "text_preview": "[Page 1] <D.II.Q. na:qHeHTa <l>e,n:eHLJ:eHKO CTenaH JIeoHH,ll;OBHLJ: N2 KapTbr [DATE] ., l ,rf . / )' l [ \u00b7.:.c .,_, ~ t:71,. J\u00ab MeC5II.J. )J,HarHO3 XpoHHLJ:eCKHH 6aKTepHanbHhiH ypeTponpoCTaTHT. ~ ~ ~-- lIPEIIAPATII I L(ATA 1 2 3 4 5 6 7 8 9 lO 11 12 l3 14 15 16 17 CseLJ:H ,IUIKJio\u00a2eHaK IOOMr ,f }--",
       "text_length": 2325,
       "extraction_method": "unknown",
-      "recommended_fix_category": "low_coverage"
+      "remaining_issue_category": "ocr_noise_remaining"
     }
   ]
 }

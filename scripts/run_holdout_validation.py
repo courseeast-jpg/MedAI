@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -22,8 +23,16 @@ HOLDOUT_JSON_REPORT = HOLDOUT_REPORT_DIR / "latest_holdout_validation.json"
 HOLDOUT_MD_REPORT = HOLDOUT_REPORT_DIR / "latest_holdout_validation.md"
 HOLDOUT_REVIEW_AUDIT_JSON = HOLDOUT_REPORT_DIR / "review_audit.json"
 HOLDOUT_REVIEW_AUDIT_MD = HOLDOUT_REPORT_DIR / "review_audit.md"
+HOLDOUT_PHASE35_AUDIT_JSON = HOLDOUT_REPORT_DIR / "review_audit_phase35.json"
+HOLDOUT_PHASE35_AUDIT_MD = HOLDOUT_REPORT_DIR / "review_audit_phase35.md"
 HOLDOUT_COMPARISON_REPORT = HOLDOUT_REPORT_DIR / "comparison_to_baseline.md"
 BASELINE_JSON_REPORT = ROOT / "reports" / "baseline_phase33" / "baseline_metrics.json"
+PHASE35_ISSUE_CATEGORIES = (
+    "ocr_noise_remaining",
+    "low_coverage_after_normalization",
+    "missing_domain_rules",
+    "correctly_flagged_review",
+)
 
 
 def configure_holdout_paths() -> None:
@@ -54,6 +63,7 @@ def run_holdout_validation(pipeline=None) -> dict[str, Any]:
     configure_holdout_paths()
     summary = batch.run_batch_validation(pipeline=pipeline)
     write_comparison_to_baseline(summary)
+    write_phase35_review_audit()
     return summary
 
 
@@ -96,6 +106,144 @@ def percent(value: int, total: int) -> float:
     return (value / total) * 100
 
 
+def write_phase35_review_audit() -> tuple[Path, Path]:
+    if HOLDOUT_JSON_REPORT.exists():
+        summary = json.loads(HOLDOUT_JSON_REPORT.read_text(encoding="utf-8"))
+    else:
+        summary = {"timestamp": None, "results": []}
+    audit = build_phase35_review_audit(summary)
+    HOLDOUT_PHASE35_AUDIT_JSON.write_text(json.dumps(audit, indent=2), encoding="utf-8")
+    HOLDOUT_PHASE35_AUDIT_MD.write_text(render_phase35_review_audit_markdown(audit), encoding="utf-8")
+    return HOLDOUT_PHASE35_AUDIT_JSON, HOLDOUT_PHASE35_AUDIT_MD
+
+
+def build_phase35_review_audit(summary: dict[str, Any]) -> dict[str, Any]:
+    reviewed = [item for item in summary.get("results", []) if item.get("status") == "review"]
+    files = [phase35_review_item(item) for item in reviewed]
+    breakdown = {category: 0 for category in PHASE35_ISSUE_CATEGORIES}
+    for item in files:
+        category = item["remaining_issue_category"]
+        if category in breakdown:
+            breakdown[category] += 1
+    return {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "source_report": str(HOLDOUT_JSON_REPORT),
+        "source_timestamp": summary.get("timestamp"),
+        "total_reviewed": len(files),
+        "remaining_issue_breakdown": breakdown,
+        "files": files,
+    }
+
+
+def phase35_review_item(item: dict[str, Any]) -> dict[str, Any]:
+    diagnostics = item.get("text_diagnostics") if isinstance(item.get("text_diagnostics"), dict) else {}
+    confidence_breakdown = item.get("confidence_breakdown") if isinstance(item.get("confidence_breakdown"), dict) else {}
+    normalized_breakdown = batch.normalized_review_confidence_breakdown(confidence_breakdown)
+    text_preview = str(diagnostics.get("preview") or "")[:300]
+    normalized_preview = str(item.get("normalized_text_preview") or "")[:300]
+    normalization_applied = bool(item.get("normalization_applied", False))
+    return {
+        "filename": item.get("filename"),
+        "entity_count": int(item.get("entity_count") or 0),
+        "entities": list(item.get("entities") or []),
+        "confidence": batch.safe_float(item.get("confidence")),
+        "confidence_breakdown": normalized_breakdown,
+        "why_reviewed": list(item.get("why_reviewed") or []),
+        "normalization_applied": normalization_applied,
+        "normalized_text_preview": normalized_preview,
+        "text_preview": text_preview,
+        "text_length": int(diagnostics.get("length") or 0),
+        "extraction_method": diagnostics.get("method"),
+        "remaining_issue_category": classify_phase35_remaining_issue(
+            item=item,
+            diagnostics=diagnostics,
+            coverage_score=normalized_breakdown["coverage_score"],
+            text_preview=text_preview,
+            normalization_applied=normalization_applied,
+        ),
+    }
+
+
+def classify_phase35_remaining_issue(
+    *,
+    item: dict[str, Any],
+    diagnostics: dict[str, Any],
+    coverage_score: float | None,
+    text_preview: str,
+    normalization_applied: bool,
+) -> str:
+    suspicious = bool(diagnostics.get("suspicious", False))
+    low_coverage = coverage_score is not None and coverage_score < 0.3
+    if suspicious or (normalization_applied and low_coverage):
+        return "ocr_noise_remaining"
+    if low_coverage:
+        return "low_coverage_after_normalization"
+    if int(item.get("entity_count") or 0) <= 1 and looks_like_medical_text(text_preview):
+        return "missing_domain_rules"
+    return "correctly_flagged_review"
+
+
+def looks_like_medical_text(text: str) -> bool:
+    normalized = text.lower()
+    indicators = (
+        "urine",
+        "blood",
+        "culture",
+        "diagnosis",
+        "cytology",
+        "glucose",
+        "protein",
+        "nitrite",
+        "rbc",
+        "wbc",
+        "patient",
+        "specimen",
+        "report",
+    )
+    return any(indicator in normalized for indicator in indicators)
+
+
+def render_phase35_review_audit_markdown(audit: dict[str, Any]) -> str:
+    lines = [
+        "# Phase 35 Holdout Review Audit",
+        "",
+        f"- Source report: `{audit.get('source_report')}`",
+        f"- Reviewed files: `{audit.get('total_reviewed', 0)}`",
+        "",
+        "## Remaining Issue Breakdown",
+        "",
+    ]
+    breakdown = audit.get("remaining_issue_breakdown") or {}
+    lines.extend(f"- {category}: `{breakdown.get(category, 0)}`" for category in PHASE35_ISSUE_CATEGORIES)
+
+    for item in audit.get("files", []):
+        entity_texts = [
+            str(entity.get("text", ""))
+            for entity in item.get("entities", [])
+            if isinstance(entity, dict) and str(entity.get("text", "")).strip()
+        ]
+        lines.extend([
+            "",
+            f"## {item.get('filename')}",
+            "",
+            f"- remaining issue: {item.get('remaining_issue_category')}",
+            f"- confidence: {item.get('confidence')}",
+            f"- entity count: {item.get('entity_count')}",
+            f"- entities: {entity_texts}",
+            f"- why reviewed: {item.get('why_reviewed') or []}",
+            f"- normalization applied: {item.get('normalization_applied')}",
+            f"- extraction method: {item.get('extraction_method')}",
+            f"- text length: {item.get('text_length')}",
+            "",
+            "- normalized preview:",
+            str(item.get("normalized_text_preview") or "").rstrip(),
+            "",
+            "- original preview:",
+            str(item.get("text_preview") or "").rstrip(),
+        ])
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     summary = run_holdout_validation()
     if summary["total_files"] == 0:
@@ -110,6 +258,8 @@ def main() -> int:
     print(f"json_report: {HOLDOUT_JSON_REPORT}")
     print(f"markdown_report: {HOLDOUT_MD_REPORT}")
     print(f"comparison_report: {HOLDOUT_COMPARISON_REPORT}")
+    print(f"phase35_review_audit_json: {HOLDOUT_PHASE35_AUDIT_JSON}")
+    print(f"phase35_review_audit_md: {HOLDOUT_PHASE35_AUDIT_MD}")
     return 0
 
 
