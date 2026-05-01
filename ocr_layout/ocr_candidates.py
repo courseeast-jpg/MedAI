@@ -4,7 +4,9 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from ocr_layout.cyrillic_ocr import try_cyrillic_ocr_candidate
 from ocr_layout.document_profiler import profile_document
+from ocr_layout.ocr_capabilities import OcrCapabilityReport, get_ocr_capability_report
 from ocr_layout.text_quality import assess_text_quality
 
 
@@ -103,7 +105,83 @@ def _pdf_candidates(source_path: Path) -> list[OcrCandidate]:
             metadata=pymupdf_metadata,
         )
     )
+
+    cyrillic_candidate = _maybe_cyrillic_ocr_candidate(source_path, candidates)
+    if cyrillic_candidate is not None:
+        candidates.append(cyrillic_candidate)
     return candidates
+
+
+def _maybe_cyrillic_ocr_candidate(
+    source_path: Path,
+    existing_candidates: list[OcrCandidate],
+) -> OcrCandidate | None:
+    """Generate a Cyrillic OCR candidate when language hints suggest it.
+
+    Triggered when the best existing candidate text shows Cyrillic markers,
+    or when the document classifier flags the source as needing
+    language-aware OCR. No-ops when local OCR capability is unavailable.
+    """
+    if not existing_candidates:
+        return None
+    best = max(existing_candidates, key=lambda c: c.quality_score)
+    if not _should_attempt_cyrillic_ocr(best):
+        return None
+
+    capability = get_ocr_capability_report()
+    cyrillic_metadata: dict[str, Any] = {
+        "trigger_reason": "language_aware_ocr_required",
+        "capability": capability.to_dict(),
+    }
+    if not capability.tesseract_available or not capability.russian_available:
+        # Emit a placeholder candidate with empty text so the report shows that
+        # we wanted to try Cyrillic OCR but couldn't.
+        cyrillic_metadata["cyrillic_ocr_unavailable"] = True
+        cyrillic_metadata["candidate_error"] = (
+            "tesseract_binary_not_found"
+            if not capability.tesseract_available
+            else "rus_traineddata_missing"
+        )
+        return build_candidate(
+            engine_name="tesseract_rus_unavailable",
+            text="",
+            source_path=source_path,
+            metadata=cyrillic_metadata,
+        )
+
+    result = try_cyrillic_ocr_candidate(source_path, capability=capability)
+    cyrillic_metadata.update(result.get("metadata") or {})
+    return build_candidate(
+        engine_name="tesseract_rus_eng",
+        text=result.get("text") or "",
+        source_path=source_path,
+        metadata={
+            **cyrillic_metadata,
+            "candidate_warnings": list(result.get("warnings") or []),
+        },
+    )
+
+
+def _should_attempt_cyrillic_ocr(candidate: OcrCandidate) -> bool:
+    """Heuristic: trigger when Cyrillic indicators appear in existing text.
+
+    Uses two signals so we work for both proper-Cyrillic OCR (cyrillic_ratio
+    high) and OCR-mangled-to-Latin homoglyph cases (document classifier
+    detects pseudo-Russian markers).
+    """
+    metrics = (candidate.metadata or {}).get("quality_metrics") or {}
+    cyrillic_ratio = float(metrics.get("cyrillic_ratio") or 0.0)
+    if cyrillic_ratio >= 0.10:
+        return True
+    text = candidate.text or ""
+    if not text.strip():
+        return False
+    try:
+        from document_classification import classify_document
+    except Exception:  # noqa: BLE001
+        return False
+    classification = classify_document(text)
+    return bool(classification.should_recommend_language_aware_ocr)
 
 
 def _existing_pdf_pipeline_text(source_path: Path) -> tuple[str, dict[str, Any]]:

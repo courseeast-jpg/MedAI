@@ -379,7 +379,21 @@ def build_ocr_layout_context(source_path: Path) -> dict[str, Any]:
                 "metadata": {
                     key: value
                     for key, value in candidate.metadata.items()
-                    if key in {"source", "text_quality_status", "text_quality_score", "ocr_fallback_used", "ocr_engine", "candidate_error"}
+                    if key in {
+                        "source",
+                        "text_quality_status",
+                        "text_quality_score",
+                        "ocr_fallback_used",
+                        "ocr_engine",
+                        "candidate_error",
+                        "quality_metrics",
+                        "cyrillic_ocr_unavailable",
+                        "trigger_reason",
+                        "pages_processed",
+                        "pages_skipped",
+                        "ocr_attempted",
+                        "candidate_warnings",
+                    }
                 },
                 "text_length": len(candidate.text.strip()),
             }

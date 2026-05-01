@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-01T19:34:54.745294+00:00",
-  "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\latest_phase43_batch_validation.json",
-  "source_timestamp": "2026-05-01T19:33:32.923831+00:00",
+  "generated_at": "2026-05-01T19:41:59.585614+00:00",
+  "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\latest_phase44_batch_validation.json",
+  "source_timestamp": "2026-05-01T19:40:42.087946+00:00",
   "total_reviewed": 6,
   "review_fix_breakdown": {
     "no_entities": 2,

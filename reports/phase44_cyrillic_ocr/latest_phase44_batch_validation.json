@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-05-01T19:33:32.923831+00:00",
-  "run_id": "602770b0-6d4c-4fde-b665-28b4156741b9",
+  "timestamp": "2026-05-01T19:40:42.087946+00:00",
+  "run_id": "5a982e99-61bf-468c-b72c-1d73017b98fd",
   "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
   "total_files": 8,
   "accepted_count": 2,
@@ -297,7 +297,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Results 1_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Results 1.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -561,7 +561,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Results 2_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Results 2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -968,7 +968,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 2_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 2.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -1237,7 +1237,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 3_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 3.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -1524,7 +1524,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\archive\\Test Results 4_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\archive\\Test Results 4.pdf",
       "outcome": "written",
       "validation_status": "accepted"
     },
@@ -1851,7 +1851,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 5_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 5.pdf",
       "outcome": "queued_for_review",
       "validation_status": "needs_review"
     },
@@ -2129,7 +2129,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 6_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\review\\Test Results 6.pdf",
       "outcome": "queued_for_review",
       "validation_status": "rejected"
     },
@@ -2647,7 +2647,7 @@
       },
       "lab_normalizer_changed_status": false,
       "accepted_due_to_lab_normalizer": false,
-      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\archive\\Urinalysis, Routine_1.pdf",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\archive\\Urinalysis, Routine.pdf",
       "outcome": "queued_for_review",
       "validation_status": "accepted"
     }

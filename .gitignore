@@ -15,3 +15,9 @@ build/
 .venv/
 venv/
 artifacts/
+
+# Validation runs copy holdout/real input PDFs into per-phase report
+# subdirectories named "archive/" and "review/". Those copies may
+# contain PHI and must not be committed.
+reports/**/archive/
+reports/**/review/

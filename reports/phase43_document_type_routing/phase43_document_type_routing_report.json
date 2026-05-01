@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01T19:17:30.384868+00:00",
+  "generated_at": "2026-05-01T19:34:54.746294+00:00",
   "phase": "Phase 43 Document Type and Language-Aware Routing",
   "phase42_baseline": {
     "total_files": 8,
@@ -12,7 +12,7 @@
     "accepted": 2,
     "review": 6,
     "review_ocr_quality": 3,
-    "empty": 0,
+    "empty": 2,
     "review_ocr_quality_decreased_from_phase42": false,
     "accepted_safe": true,
     "document_type_distribution": {
@@ -33,10 +33,10 @@
     "Test Results 3.pdf": {
       "filename": "Test Results 3.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status": "review_ocr_quality",
+      "final_status": "review",
       "document_type": "microbiology_pcr_report",
       "document_type_confidence": 0.92,
-      "language_hint": "mixed",
+      "language_hint": "ru",
       "should_run_lab_normalization": false,
       "should_recommend_language_aware_ocr": true,
       "review_reason_doc_type": "microbiology_pcr_report_detected",
@@ -46,21 +46,20 @@
         "extraction_low_coverage",
         "extraction_low_confidence",
         "safety_gate_low_confidence",
-        "classifier_legacy_ocr_flag",
-        "legacy_normalized_low_coverage",
+        "extraction_sparse_entities",
         "non_lab_document_skipped_lab_normalization",
         "microbiology_pcr_report_detected",
         "language_aware_ocr_required"
       ],
-      "empty_extraction_flag": false
+      "empty_extraction_flag": true
     },
     "Test Results 6.pdf": {
       "filename": "Test Results 6.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status": "review",
+      "final_status": "review_ocr_quality",
       "document_type": "prescription",
       "document_type_confidence": 0.95,
-      "language_hint": "mixed",
+      "language_hint": "ru",
       "should_run_lab_normalization": false,
       "should_recommend_language_aware_ocr": true,
       "review_reason_doc_type": "document_type_prescription_not_lab",
@@ -71,11 +70,13 @@
         "extraction_low_confidence",
         "safety_gate_low_confidence",
         "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage",
         "non_lab_document_skipped_lab_normalization",
         "document_type_prescription_not_lab",
         "language_aware_ocr_required"
       ],
-      "empty_extraction_flag": false
+      "empty_extraction_flag": true
     }
   },
   "results": [
@@ -145,10 +146,10 @@
     {
       "filename": "Test Results 3.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status": "review_ocr_quality",
+      "final_status": "review",
       "document_type": "microbiology_pcr_report",
       "document_type_confidence": 0.92,
-      "language_hint": "mixed",
+      "language_hint": "ru",
       "should_run_lab_normalization": false,
       "should_recommend_language_aware_ocr": true,
       "review_reason_doc_type": "microbiology_pcr_report_detected",
@@ -158,13 +159,12 @@
         "extraction_low_coverage",
         "extraction_low_confidence",
         "safety_gate_low_confidence",
-        "classifier_legacy_ocr_flag",
-        "legacy_normalized_low_coverage",
+        "extraction_sparse_entities",
         "non_lab_document_skipped_lab_normalization",
         "microbiology_pcr_report_detected",
         "language_aware_ocr_required"
       ],
-      "empty_extraction_flag": false
+      "empty_extraction_flag": true
     },
     {
       "filename": "Test Results 4.pdf",
@@ -208,10 +208,10 @@
     {
       "filename": "Test Results 6.pdf",
       "ocr_layout_quality_band": "good",
-      "final_status": "review",
+      "final_status": "review_ocr_quality",
       "document_type": "prescription",
       "document_type_confidence": 0.95,
-      "language_hint": "mixed",
+      "language_hint": "ru",
       "should_run_lab_normalization": false,
       "should_recommend_language_aware_ocr": true,
       "review_reason_doc_type": "document_type_prescription_not_lab",
@@ -222,11 +222,13 @@
         "extraction_low_confidence",
         "safety_gate_low_confidence",
         "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage",
         "non_lab_document_skipped_lab_normalization",
         "document_type_prescription_not_lab",
         "language_aware_ocr_required"
       ],
-      "empty_extraction_flag": false
+      "empty_extraction_flag": true
     },
     {
       "filename": "Urinalysis, Routine.pdf",
