@@ -122,19 +122,42 @@ def compare_live_to_baseline(
 
 
 def tracked_report_phi_files(root: Path = ROOT) -> list[str]:
+    """Return tracked report files that may contain PHI or copied source artifacts."""
+    tracked = _git_ls_files(["reports/**/*"], root=root)
+    return [
+        path
+        for path in tracked
+        if _is_disallowed_report_artifact(path)
+    ]
+
+
+def tracked_report_archive_or_review_files(root: Path = ROOT) -> list[str]:
+    """Return tracked files under report archive/review directories, excluding placeholders."""
+    tracked = _git_ls_files(["reports/**/archive/*", "reports/**/review/*"], root=root)
+    return [path for path in tracked if not path.endswith("/.gitkeep")]
+
+
+def _git_ls_files(patterns: list[str], *, root: Path = ROOT) -> list[str]:
     result = subprocess.run(
-        ["git", "ls-files", "reports/**/archive/*", "reports/**/review/*"],
+        ["git", "ls-files", *patterns],
         cwd=str(root),
         capture_output=True,
         text=True,
         check=False,
         timeout=15,
     )
-    return [
-        line.strip()
-        for line in (result.stdout or "").splitlines()
-        if line.strip() and not line.strip().endswith("/.gitkeep")
-    ]
+    return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
+
+
+def _is_disallowed_report_artifact(path: str) -> bool:
+    normalized = path.replace("\\", "/")
+    if normalized.endswith("/.gitkeep"):
+        return False
+    if not normalized.startswith("reports/"):
+        return False
+    if "/archive/" in normalized or "/review/" in normalized:
+        return True
+    return normalized.lower().endswith(".pdf")
 
 
 def _compare_file(filename: str, expected: dict[str, Any], live: dict[str, Any] | None) -> dict[str, Any]:

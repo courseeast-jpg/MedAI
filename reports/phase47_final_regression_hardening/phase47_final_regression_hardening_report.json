@@ -1,0 +1,632 @@
+{
+  "generated_at": "2026-05-01T22:56:28.688257+00:00",
+  "phase": "Phase 47 Final OCR/Layout Regression Hardening",
+  "phase37_baseline": {
+    "total_files": 8,
+    "accepted": 2,
+    "review_ocr_quality": 6,
+    "empty": 0
+  },
+  "phase38_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase38_ocr_layout\\phase38_ocr_layout_validation.json",
+    "generated_at": "2026-05-01T22:18:48.395630+00:00",
+    "phase": "Phase 38 v2 OCR/Layout Engine Foundation",
+    "summary": {},
+    "safety": {}
+  },
+  "phase39_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase39_ocr_diagnostics\\phase39_ocr_diagnostics_report.json",
+    "generated_at": "2026-05-01T22:16:31.056740+00:00",
+    "phase": "Phase 39 OCR/Layout Diagnostic Reconciliation",
+    "summary": {
+      "total_files": 8,
+      "ocr_status_mismatch_count": 1,
+      "review_ocr_quality_count": 2,
+      "safety_regression": false,
+      "status_taxonomy_changed": false
+    },
+    "safety": {}
+  },
+  "phase40_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase40_lab_normalization\\phase40_lab_normalization_report.json",
+    "generated_at": "2026-05-01T22:18:39.156139+00:00",
+    "phase": "Phase 40 Lab Table Normalization & Coverage Recovery",
+    "summary": {
+      "total_files": 8,
+      "accepted": 2,
+      "review": 6,
+      "review_ocr_quality": 2,
+      "empty": 2,
+      "review_ocr_quality_decreased_from_phase39": true
+    },
+    "safety": {
+      "false_accept_on_poor_ocr": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_leakage": false,
+      "phase37_gate_bypassed": false
+    }
+  },
+  "phase41_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase41_flattened_lab_rows\\phase41_flattened_lab_rows_report.json",
+    "generated_at": "2026-05-01T18:59:54.816589+00:00",
+    "phase": "Phase 41 Flattened Lab Row Parser Expansion",
+    "summary": {
+      "total_files": 8,
+      "accepted": 2,
+      "review": 6,
+      "review_ocr_quality": 3,
+      "empty": 0,
+      "review_ocr_quality_vs_phase40_baseline": 0,
+      "review_ocr_quality_decreased_from_phase40": false,
+      "accepted_safe": true
+    },
+    "safety": {
+      "false_accept_on_poor_ocr": false,
+      "accepted_due_to_lab_normalizer": false,
+      "empty_extraction_leakage": false,
+      "safety_regression": false
+    }
+  },
+  "phase42_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase42_failed_lab_table_forensics\\phase42_failed_lab_table_forensics_report.json",
+    "generated_at": "2026-05-01T19:19:44.692211+00:00",
+    "phase": "Phase 42 Failed Lab Table Forensics",
+    "summary": {},
+    "safety": {}
+  },
+  "phase43_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\phase43_document_type_routing_report.json",
+    "generated_at": "2026-05-01T19:34:54.746294+00:00",
+    "phase": "Phase 43 Document Type and Language-Aware Routing",
+    "summary": {
+      "total_files": 8,
+      "accepted": 2,
+      "review": 6,
+      "review_ocr_quality": 3,
+      "empty": 2,
+      "review_ocr_quality_decreased_from_phase42": false,
+      "accepted_safe": true,
+      "document_type_distribution": {
+        "lab_report": 2,
+        "unknown_medical": 2,
+        "microbiology_pcr_report": 3,
+        "prescription": 1
+      }
+    },
+    "safety": {
+      "false_accept_on_bad_ocr": false,
+      "poor_ocr_auto_accepted": false,
+      "lab_parser_bypassed_unsafely": false,
+      "accepted_count_increased_without_gate_support": false,
+      "safety_regression": false
+    }
+  },
+  "phase44_clean_commit_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase44_cyrillic_ocr\\phase44_cyrillic_ocr_report.json",
+    "generated_at": "2026-05-01T22:55:06.658839+00:00",
+    "phase": "Phase 44 Cyrillic OCR Candidate Generation",
+    "summary": {
+      "total_files": 8,
+      "accepted": 2,
+      "review": 6,
+      "review_ocr_quality": 2,
+      "empty": 2,
+      "review_ocr_quality_decreased_from_phase43": true,
+      "accepted_safe": true,
+      "cyrillic_ocr_attempts": 2,
+      "cyrillic_ocr_succeeded": 2
+    },
+    "safety": {
+      "false_accept_on_bad_ocr": false,
+      "poor_ocr_auto_accepted": false,
+      "accepted_count_increased_without_gate_support": false,
+      "cyrillic_ocr_failure_crashed_pipeline": false,
+      "safety_regression": false
+    }
+  },
+  "phase45_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase45_cyrillic_nonlab_review\\phase45_cyrillic_nonlab_review_report.json",
+    "generated_at": "2026-05-01T22:56:18.268190+00:00",
+    "phase": "Phase 45 Cyrillic Non-Lab Review Classification Refinement",
+    "summary": {
+      "total_files": 8,
+      "accepted": 2,
+      "review": 6,
+      "review_ocr_quality": 2,
+      "empty": 2,
+      "review_ocr_quality_decreased_from_phase44_frozen": true,
+      "accepted_stayed_at_phase44_frozen": true,
+      "phase45_moved_files_to_review": [
+        "Test Results 6.pdf"
+      ],
+      "status_taxonomy_changed": false
+    },
+    "safety": {
+      "false_accept_on_poor_ocr": false,
+      "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+      "empty_extraction_leakage": false,
+      "phase37_gate_bypassed": false,
+      "phi_commit_artifacts_tracked": false,
+      "report_archive_or_review_paths_tracked": false,
+      "accepted_count_stayed_at_phase44_frozen_baseline": true,
+      "safety_regression": false
+    }
+  },
+  "phase46_frozen_baseline_result": {
+    "available": true,
+    "path": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase46_validation_drift_lock\\phase46_validation_drift_lock_report.json",
+    "generated_at": "2026-05-01T22:56:28.236806+00:00",
+    "phase": "Phase 46 Validation Drift Stabilization / Deterministic Benchmark Lock",
+    "summary": {},
+    "safety": {
+      "poor_ocr_became_accepted": false,
+      "empty_extraction_became_accepted": false,
+      "review_ocr_quality_became_accepted_without_approved_phase_reason": false,
+      "confidence_gate_bypass_detected": false,
+      "accepted_count_increased_unapproved": false,
+      "phi_report_archive_or_review_paths_tracked": false,
+      "tracked_phi_report_files": [],
+      "safety_regression": false
+    }
+  },
+  "phase47_current_result": {
+    "total_files": 8,
+    "accepted": 2,
+    "review": 6,
+    "review_ocr_quality": 2,
+    "empty": 2,
+    "frozen_baseline_comparison_conclusion": "deterministic_lock_ready"
+  },
+  "frozen_baseline_comparison": {
+    "frozen_baseline": {
+      "baseline_name": "holdout_phase45_baseline",
+      "phase": "Phase 45 Cyrillic Non-Lab Review Classification Refinement",
+      "commit": "e6e437d",
+      "timestamp": "2026-05-01T22:15:52.450925+00:00",
+      "total_files": 8,
+      "expected_counts": {
+        "accepted": 2,
+        "review": 6,
+        "review_ocr_quality": 2,
+        "empty": 2
+      },
+      "files": {
+        "Results 1.pdf": {
+          "expected_status": "review",
+          "expected_empty_extraction_flag": false,
+          "drift_sensitive": true,
+          "drift_reason": "near_threshold_upstream_extractor_variability",
+          "acceptable_drift_statuses": [
+            "review",
+            "accepted"
+          ],
+          "reason_codes": [
+            "low_text_density",
+            "table_structure_loss",
+            "extraction_low_coverage",
+            "extraction_low_confidence",
+            "safety_gate_low_confidence",
+            "lab_report_detected"
+          ]
+        },
+        "Results 2.pdf": {
+          "expected_status": "review",
+          "expected_empty_extraction_flag": false,
+          "drift_sensitive": false,
+          "reason_codes": [
+            "low_text_density",
+            "table_structure_loss",
+            "extraction_low_coverage",
+            "extraction_low_confidence",
+            "safety_gate_low_confidence",
+            "extraction_sparse_entities"
+          ]
+        },
+        "Test Results 2.pdf": {
+          "expected_status": "review_ocr_quality",
+          "expected_empty_extraction_flag": false,
+          "drift_sensitive": false,
+          "reason_codes": [
+            "table_structure_loss",
+            "extraction_low_coverage",
+            "extraction_low_confidence",
+            "safety_gate_low_confidence",
+            "classifier_legacy_ocr_flag",
+            "legacy_normalized_low_coverage"
+          ]
+        },
+        "Test Results 3.pdf": {
+          "expected_status": "review",
+          "expected_empty_extraction_flag": true,
+          "drift_sensitive": false,
+          "reason_codes": [
+            "table_structure_loss",
+            "extraction_low_coverage",
+            "extraction_low_confidence",
+            "safety_gate_low_confidence",
+            "extraction_sparse_entities",
+            "non_lab_document_skipped_lab_normalization",
+            "microbiology_pcr_report_detected",
+            "language_aware_ocr_required"
+          ]
+        },
+        "Test Results 4.pdf": {
+          "expected_status": "accepted",
+          "expected_empty_extraction_flag": false,
+          "drift_sensitive": false,
+          "reason_codes": [
+            "low_text_density",
+            "table_structure_loss",
+            "accepted_clean_input"
+          ]
+        },
+        "Test Results 5.pdf": {
+          "expected_status": "review_ocr_quality",
+          "expected_empty_extraction_flag": false,
+          "drift_sensitive": false,
+          "reason_codes": [
+            "table_structure_loss",
+            "extraction_low_coverage",
+            "extraction_low_confidence",
+            "safety_gate_low_confidence",
+            "classifier_legacy_ocr_flag",
+            "legacy_normalized_low_coverage"
+          ]
+        },
+        "Test Results 6.pdf": {
+          "expected_status": "review",
+          "expected_empty_extraction_flag": true,
+          "drift_sensitive": false,
+          "reason_codes": [
+            "table_structure_loss",
+            "extraction_low_coverage",
+            "extraction_low_confidence",
+            "safety_gate_low_confidence",
+            "extraction_sparse_entities",
+            "classifier_legacy_ocr_flag",
+            "legacy_normalized_low_coverage",
+            "non_lab_document_skipped_lab_normalization",
+            "document_type_prescription_not_lab",
+            "language_aware_ocr_required",
+            "cyrillic_non_lab_document_review",
+            "ocr_quality_recovered_non_lab",
+            "prescription_or_medication_instruction_detected"
+          ]
+        },
+        "Urinalysis, Routine.pdf": {
+          "expected_status": "accepted",
+          "expected_empty_extraction_flag": false,
+          "drift_sensitive": false,
+          "reason_codes": [
+            "accepted_clean_input",
+            "lab_report_detected"
+          ]
+        }
+      }
+    },
+    "live_counts": {
+      "total_files": 8,
+      "accepted": 2,
+      "review": 6,
+      "review_ocr_quality": 2,
+      "empty": 2
+    },
+    "count_comparison": {
+      "total_files": {
+        "expected": 8,
+        "live": 8,
+        "delta": 0
+      },
+      "accepted": {
+        "expected": 2,
+        "live": 2,
+        "delta": 0
+      },
+      "review": {
+        "expected": 6,
+        "live": 6,
+        "delta": 0
+      },
+      "review_ocr_quality": {
+        "expected": 2,
+        "live": 2,
+        "delta": 0
+      },
+      "empty": {
+        "expected": 2,
+        "live": 2,
+        "delta": 0
+      }
+    },
+    "per_file_comparison": [
+      {
+        "filename": "Results 1.pdf",
+        "expected_status": "review",
+        "live_status": "review",
+        "classification": "expected_match",
+        "drift_sensitive": true,
+        "drift_reason": "near_threshold_upstream_extractor_variability",
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "usable_with_review",
+        "empty_extraction_flag": false,
+        "expected_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "lab_report_detected"
+        ],
+        "live_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "lab_report_detected"
+        ]
+      },
+      {
+        "filename": "Results 2.pdf",
+        "expected_status": "review",
+        "live_status": "review",
+        "classification": "expected_match",
+        "drift_sensitive": false,
+        "drift_reason": null,
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "usable_with_review",
+        "empty_extraction_flag": false,
+        "expected_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities"
+        ],
+        "live_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities"
+        ]
+      },
+      {
+        "filename": "Test Results 2.pdf",
+        "expected_status": "review_ocr_quality",
+        "live_status": "review_ocr_quality",
+        "classification": "expected_match",
+        "drift_sensitive": false,
+        "drift_reason": null,
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "good",
+        "empty_extraction_flag": false,
+        "expected_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage"
+        ],
+        "live_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage"
+        ]
+      },
+      {
+        "filename": "Test Results 3.pdf",
+        "expected_status": "review",
+        "live_status": "review",
+        "classification": "expected_match",
+        "drift_sensitive": false,
+        "drift_reason": null,
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "good",
+        "empty_extraction_flag": true,
+        "expected_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities",
+          "non_lab_document_skipped_lab_normalization",
+          "microbiology_pcr_report_detected",
+          "language_aware_ocr_required"
+        ],
+        "live_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities",
+          "non_lab_document_skipped_lab_normalization",
+          "microbiology_pcr_report_detected",
+          "language_aware_ocr_required"
+        ]
+      },
+      {
+        "filename": "Test Results 4.pdf",
+        "expected_status": "accepted",
+        "live_status": "accepted",
+        "classification": "expected_match",
+        "drift_sensitive": false,
+        "drift_reason": null,
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "good",
+        "empty_extraction_flag": false,
+        "expected_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "accepted_clean_input"
+        ],
+        "live_reason_codes": [
+          "low_text_density",
+          "table_structure_loss",
+          "accepted_clean_input"
+        ]
+      },
+      {
+        "filename": "Test Results 5.pdf",
+        "expected_status": "review_ocr_quality",
+        "live_status": "review_ocr_quality",
+        "classification": "expected_match",
+        "drift_sensitive": false,
+        "drift_reason": null,
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "usable_with_review",
+        "empty_extraction_flag": false,
+        "expected_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage"
+        ],
+        "live_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage"
+        ]
+      },
+      {
+        "filename": "Test Results 6.pdf",
+        "expected_status": "review",
+        "live_status": "review",
+        "classification": "expected_match",
+        "drift_sensitive": false,
+        "drift_reason": null,
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "good",
+        "empty_extraction_flag": true,
+        "expected_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage",
+          "non_lab_document_skipped_lab_normalization",
+          "document_type_prescription_not_lab",
+          "language_aware_ocr_required",
+          "cyrillic_non_lab_document_review",
+          "ocr_quality_recovered_non_lab",
+          "prescription_or_medication_instruction_detected"
+        ],
+        "live_reason_codes": [
+          "table_structure_loss",
+          "extraction_low_coverage",
+          "extraction_low_confidence",
+          "safety_gate_low_confidence",
+          "extraction_sparse_entities",
+          "classifier_legacy_ocr_flag",
+          "legacy_normalized_low_coverage",
+          "non_lab_document_skipped_lab_normalization",
+          "document_type_prescription_not_lab",
+          "language_aware_ocr_required",
+          "cyrillic_non_lab_document_review",
+          "ocr_quality_recovered_non_lab",
+          "prescription_or_medication_instruction_detected"
+        ]
+      },
+      {
+        "filename": "Urinalysis, Routine.pdf",
+        "expected_status": "accepted",
+        "live_status": "accepted",
+        "classification": "expected_match",
+        "drift_sensitive": false,
+        "drift_reason": null,
+        "safety_regression": false,
+        "reason": "status_matches_frozen_baseline",
+        "quality_band": "usable_with_review",
+        "empty_extraction_flag": false,
+        "expected_reason_codes": [
+          "accepted_clean_input",
+          "lab_report_detected"
+        ],
+        "live_reason_codes": [
+          "accepted_clean_input",
+          "lab_report_detected"
+        ]
+      }
+    ],
+    "runtime_drift_detected": false,
+    "runtime_drift_files": [],
+    "safety_regression_against_frozen_baseline": false,
+    "unexpected_status_changes": [],
+    "accepted_due_to_current_phase": [],
+    "tracked_phi_report_files": [],
+    "report_archive_or_review_paths_tracked": false,
+    "conclusion": "deterministic_lock_ready"
+  },
+  "safety": {
+    "false_accept_on_poor_ocr": false,
+    "empty_extraction_leakage": false,
+    "accepted_due_to_lab_normalizer": false,
+    "accepted_due_to_cyrillic_nonlab_reconciliation": false,
+    "phase37_gate_bypassed": false,
+    "status_taxonomy_changed": false,
+    "unexpected_accepted_increase": false,
+    "runtime_drift_unclassified": false,
+    "phi_report_artifacts_tracked": false,
+    "phi_report_artifacts": [],
+    "report_archive_or_review_paths_tracked": false,
+    "report_archive_or_review_paths": [],
+    "phase46_safety_regression": false,
+    "safety_regression": false
+  },
+  "count_reporting": {
+    "count_convention": "overlapping_review_total_with_review_ocr_quality_and_empty_subsets",
+    "count_consistency_passed": true,
+    "checks": {
+      "accepted_plus_review_equals_total": true,
+      "review_ocr_quality_is_review_subset": true,
+      "empty_is_review_subset_or_zero": true
+    },
+    "explanation": "accepted and review are mutually exclusive top-level buckets; review includes review_ocr_quality, while empty is an extraction flag subset that can overlap with review. Therefore total == accepted + review, review_ocr_quality <= review, and empty <= review."
+  },
+  "status_taxonomy": {
+    "known_statuses": [
+      "accepted",
+      "review",
+      "review_ocr_quality",
+      "empty",
+      "error"
+    ],
+    "observed_statuses": [
+      "accepted",
+      "review",
+      "review_ocr_quality"
+    ],
+    "unexpected_statuses": [],
+    "status_taxonomy_changed": false
+  },
+  "conclusion": "release_candidate_ready",
+  "release_candidate_ready": true
+}
