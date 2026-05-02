@@ -3,6 +3,7 @@
 - Release name: MedAI v2 OCR/Layout HITL Release
 - Validated source commit: `31024c7f18b65144addf0141876b040fbf92eaaf`
 - Phase47 commit: `31024c7f18b65144addf0141876b040fbf92eaaf`
+- Phase48 package commit: `020375413ff7c455c86adfdf362880bd8c4ad9c2`
 - Completed phases: 37 through 48
 
 ## Final Metrics

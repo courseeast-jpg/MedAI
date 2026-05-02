@@ -3,6 +3,7 @@
   "release_name": "MedAI v2 OCR/Layout HITL Release",
   "validated_source_commit": "31024c7f18b65144addf0141876b040fbf92eaaf",
   "phase47_commit": "31024c7f18b65144addf0141876b040fbf92eaaf",
+  "phase48_package_commit": "020375413ff7c455c86adfdf362880bd8c4ad9c2",
   "completed_phases": [
     37,
     38,

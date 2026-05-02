@@ -15,6 +15,13 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
+from app.operator_safety import (
+    RELEASE_NAME,
+    SNAPSHOT_ID,
+    build_result_summary,
+    current_commit,
+    privacy_mode_labels,
+)
 from app.schemas import MKBRecord, SystemState, UnifiedResponse
 from app.test_launcher import (
     LATEST_MD_REPORT,
@@ -104,6 +111,24 @@ def render_system_status(state: SystemState) -> None:
         st.warning("Claude API not configured. Add ANTHROPIC_API_KEY to .env")
     else:
         st.success(f"System ready. Active connectors: {', '.join(state.active_connectors)}")
+
+
+def render_operator_safety_panel() -> None:
+    labels = privacy_mode_labels()
+    st.subheader("Operator Safety")
+    cols = st.columns(3)
+    cols[0].metric("Mode", "HITL")
+    cols[1].metric("Local-only", labels.local_only)
+    cols[2].metric("External APIs", labels.external_apis)
+    st.caption(f"Snapshot: {SNAPSHOT_ID}")
+    st.caption(f"Release: {RELEASE_NAME}")
+    st.caption(f"Commit: {current_commit()}")
+    st.caption(f"PII scrub required: {labels.pii_scrub_required}")
+    if labels.external_apis == "ENABLED":
+        st.warning(labels.warning)
+    else:
+        st.info(labels.warning)
+    st.caption("Not production autonomous. Human review remains required. This is not a medical device and not clinical diagnosis.")
 
 
 def render_mkb_record(record: MKBRecord, show_hypothesis_warning: bool = True) -> None:
@@ -222,6 +247,7 @@ def render_query_tab(sys_components: dict) -> None:
 
 def render_upload_tab(sys_components: dict) -> None:
     st.subheader("Upload Medical Document")
+    st.caption("Process one document through the HITL pipeline. Review all non-accepted outputs before use.")
     specialty = st.selectbox("Specialty", ["neurology", "epilepsy", "gastroenterology", "urology", "general"])
     uploaded = st.file_uploader("Upload PDF", type=["pdf"])
 
@@ -242,6 +268,7 @@ def render_upload_tab(sys_components: dict) -> None:
             f"Confidence: {result.audit.get('confidence', 0):.2f} | "
             f"Validation: {result.validation_status}"
         )
+        render_operator_result_panel(result)
         if result.validation_errors:
             st.caption(f"Validation issues: {', '.join(error['code'] for error in result.validation_errors)}")
 
@@ -260,6 +287,41 @@ def render_upload_tab(sys_components: dict) -> None:
                 render_mkb_record(record, show_hypothesis_warning=False)
         else:
             st.error(f"Unexpected execution outcome: {result.outcome}")
+
+
+def render_operator_result_panel(result) -> None:
+    summary = build_result_summary(result)
+    st.markdown("**Operator Review Summary**")
+    status = summary["final_status"]
+    if status == "accepted":
+        st.success(f"{status}: {summary['operator_next_action']}")
+    elif status == "review_ocr_quality" or status == "empty":
+        st.error(f"{status}: {summary['operator_next_action']}")
+    else:
+        st.warning(f"{status}: {summary['operator_next_action']}")
+
+    cols = st.columns(4)
+    cols[0].metric("OCR/Layout", summary["ocr_layout_quality_band"])
+    cols[1].metric("OCR engine", summary["selected_ocr_engine"])
+    cols[2].metric("Lab rows", summary["parsed_lab_row_count"])
+    cols[3].metric("Privacy gate", summary["privacy_gate_status"])
+    st.caption(f"Reason codes: {', '.join(summary['reason_codes']) or 'none'}")
+    st.caption(
+        " | ".join(
+            [
+                f"Document type: {summary['document_type']}",
+                f"Cyrillic ratio: {summary['cyrillic_ratio'] if summary['cyrillic_ratio'] is not None else 'unknown'}",
+                f"Lab table detected: {'yes' if summary['lab_table_detected'] else 'no'}",
+                f"Lab coverage: {summary['lab_coverage_band']}",
+            ]
+        )
+    )
+    st.caption(
+        f"External API used: {'yes' if summary['external_api_used'] else 'no'} | "
+        f"Payload redacted: {'yes' if summary['payload_redacted'] else 'no'}"
+    )
+    if summary["external_api_used"] and not summary["payload_redacted"]:
+        st.error("Not safe for cloud processing: external use requires a redacted payload.")
 
 
 def render_mkb_tab(sys_components: dict) -> None:
@@ -365,9 +427,10 @@ def render_test_launcher_tab(sys_components: dict) -> None:
 
 def main() -> None:
     sys_components = load_system()
-    st.title("MedAI v1.1")
+    st.title("MedAI v2 OCR/Layout HITL")
     st.caption("Personal medical intelligence. Local-first. Decision support only.")
 
+    render_operator_safety_panel()
     render_system_status(sys_components["state"])
     render_conflicts(sys_components)
 

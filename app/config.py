@@ -9,6 +9,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+def _env_bool(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
 # ── Feature Flags ─────────────────────────────────────────────────────────────
 # Progressive activation model: all layers present, controlled by flags
 
@@ -26,6 +33,12 @@ ENABLE_ENRICHMENT     = True    # Enrichment engine — hypothesis tier only
 # Active connectors — only listed connectors make real API calls
 # Others are present as stubs returning structured empty responses
 ACTIVE_CONNECTORS     = ["dxgpt"]  # Expand in Phase 2
+
+# Phase 49 privacy gate defaults. External APIs fail closed unless explicitly enabled.
+MEDAI_LOCAL_ONLY        = _env_bool("MEDAI_LOCAL_ONLY", True)
+MEDAI_ALLOW_EXTERNAL_API = _env_bool("MEDAI_ALLOW_EXTERNAL_API", False)
+MEDAI_REQUIRE_PII_SCRUB = _env_bool("MEDAI_REQUIRE_PII_SCRUB", True)
+MEDAI_PRIVACY_AUDIT     = _env_bool("MEDAI_PRIVACY_AUDIT", True)
 
 # Confidence thresholds
 SAFE_MODE_THRESHOLD       = 0.40   # Below this → safe mode

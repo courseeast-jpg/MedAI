@@ -42,6 +42,7 @@ from app.schemas import (
     ExtractionOutput, ExtractedDiagnosis, ExtractedMedication, ExtractedTestResult,
     FoodEntry, FoodGuideOutput,
 )
+from privacy.outbound_gate import guard_external_payload
 
 
 EXTRACTION_PROMPT = """You are a medical entity extractor. Read the following medical or dietary text and extract all clinically relevant facts.
@@ -189,10 +190,16 @@ class Extractor:
     def _extract_gemini(self, text: str, specialty: str) -> ExtractionOutput:
         import json
 
-        prompt = EXTRACTION_PROMPT.format(text=text[:8000])
+        gate = guard_external_payload(provider="gemini", text=text[:8000])
+        if not gate.allowed:
+            raise RuntimeError(f"Gemini blocked by privacy gate: {gate.mode}")
+        prompt = EXTRACTION_PROMPT.format(text=gate.payload_text)
 
-        logger.info(f"[DIAG] Gemini clinical input: {len(text)} chars, truncated to {len(text[:8000])}")
-        logger.debug(f"[DIAG] First 500 chars: {text[:500]}")
+        logger.info(
+            "[DIAG] Gemini clinical input: {} chars, redacted_payload_hash={}",
+            len(text),
+            gate.payload_hash,
+        )
 
         raw = self._call_gemini(prompt, _CLINICAL_SCHEMA)
 
@@ -236,9 +243,16 @@ class Extractor:
         import json
 
         # Food tables are dense; allow more input than clinical text
-        prompt = FOOD_GUIDE_PROMPT.format(text=text[:12000])
+        gate = guard_external_payload(provider="gemini", text=text[:12000])
+        if not gate.allowed:
+            raise RuntimeError(f"Gemini food guide blocked by privacy gate: {gate.mode}")
+        prompt = FOOD_GUIDE_PROMPT.format(text=gate.payload_text)
 
-        logger.info(f"[DIAG] Gemini food guide input: {len(text)} chars, truncated to {len(text[:12000])}")
+        logger.info(
+            "[DIAG] Gemini food guide input: {} chars, redacted_payload_hash={}",
+            len(text),
+            gate.payload_hash,
+        )
 
         raw = self._call_gemini(prompt, _FOOD_GUIDE_SCHEMA)
 

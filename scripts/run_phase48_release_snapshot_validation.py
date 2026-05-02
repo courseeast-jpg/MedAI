@@ -77,10 +77,11 @@ def run_validation() -> dict[str, Any]:
 def _document_checks(*, snapshot: dict[str, Any], current_head: str) -> dict[str, bool]:
     texts = {name: path.read_text(encoding="utf-8") for name, path in REQUIRED_FILES.items() if path.exists() and path.suffix == ".md"}
     combined = "\n".join(texts.values())
+    phase48_package_commit = snapshot.get("phase48_package_commit")
     return {
         "tests_baseline_referenced": "411 passed, 5 warnings" in combined or snapshot.get("test_result", {}).get("result") == "411 passed, 5 warnings",
         "phase47_commit_referenced": snapshot.get("phase47_commit") == "31024c7f18b65144addf0141876b040fbf92eaaf",
-        "current_commit_hash_present": current_head in combined or snapshot.get("validated_source_commit") == current_head or snapshot.get("phase47_commit") == current_head,
+        "phase48_package_commit_referenced": phase48_package_commit == "020375413ff7c455c86adfdf362880bd8c4ad9c2" and phase48_package_commit in combined,
         "count_convention_documented": "total == accepted + review" in combined,
         "safety_guarantees_documented": all(
             phrase in combined

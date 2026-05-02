@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-05-01T23:07:37.599120+00:00",
+  "generated_at": "2026-05-02T00:15:42.545260+00:00",
   "phase": "Phase 48 Operator Review Package + Release Snapshot",
   "snapshot_id": "MedAI_Snapshot_Phase48_2026-05-01",
-  "current_head": "31024c7f18b65144addf0141876b040fbf92eaaf",
+  "current_head": "020375413ff7c455c86adfdf362880bd8c4ad9c2",
   "validated_source_commit": "31024c7f18b65144addf0141876b040fbf92eaaf",
   "phase47_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase47_final_regression_hardening\\phase47_final_regression_hardening_report.json",
   "phase47_release_candidate_ready": true,
@@ -17,7 +17,7 @@
   "doc_checks": {
     "tests_baseline_referenced": true,
     "phase47_commit_referenced": true,
-    "current_commit_hash_present": true,
+    "phase48_package_commit_referenced": true,
     "count_convention_documented": true,
     "safety_guarantees_documented": true,
     "not_medical_device_documented": true

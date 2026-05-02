@@ -11,6 +11,7 @@ from loguru import logger
 
 from app.schemas import AnonymizedPayload, ConnectorResponse, DDIFinding
 from app.config import CONNECTOR_TIMEOUT_SEC
+from privacy.outbound_gate import guard_external_payload
 
 
 # ── Base Interface ─────────────────────────────────────────────────────────────
@@ -31,11 +32,18 @@ class DxGPTConnector(BaseConnector):
 
     async def query(self, payload: AnonymizedPayload) -> ConnectorResponse:
         prompt = self._build_prompt(payload)
+        gate = guard_external_payload(provider=self.name, text=prompt)
+        if not gate.allowed:
+            return ConnectorResponse(
+                connector_name=self.name,
+                status="error",
+                raw_response={"privacy_gate": gate.to_safe_dict()},
+            )
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     f"{self.BASE_URL}/diagnose",
-                    json={"query": prompt, "specialty": payload.specialty},
+                    json={"query": gate.payload_text, "specialty": payload.specialty},
                     timeout=aiohttp.ClientTimeout(total=CONNECTOR_TIMEOUT_SEC),
                 ) as resp:
                     if resp.status == 200:
@@ -103,10 +111,14 @@ class PatientNotesDDIConnector(BaseConnector):
     ) -> List[DDIFinding]:
         """Synchronous DDI check. Returns list of findings."""
         import requests
+        gate = guard_external_payload(provider=self.name, text="\n".join(new_meds + active_meds))
+        if not gate.allowed:
+            logger.warning("PatientNotes DDI external call blocked by privacy gate: {}", gate.mode)
+            return []
         try:
             resp = requests.post(
                 self.BASE_URL,
-                json={"drugs": new_meds + active_meds},
+                json={"drugs": [item.strip() for item in gate.payload_text.splitlines() if item.strip()]},
                 timeout=10,
             )
             if resp.status_code == 200:
@@ -159,7 +171,6 @@ class ClaudeSynthesizer:
 
     def synthesize(self, query: str, scored_responses, mkb_context) -> str:
         import anthropic
-        client = anthropic.Anthropic(api_key=self.api_key)
 
         ctx_facts = "\n".join(f"- [{r.tier.upper()}] {r.content}"
                                for r in mkb_context.structured_facts[:8])
@@ -182,10 +193,16 @@ Provide a clear, evidence-grounded response. Note the source of each key claim.
 Clearly distinguish between: (1) what the patient's records show, (2) what external AI suggests.
 End with: 'This is decision support, not a diagnosis. Consult your physician.'"""
 
+        gate = guard_external_payload(provider="claude", text=prompt)
+        if not gate.allowed:
+            logger.warning("Claude synthesis blocked by privacy gate: {}", gate.mode)
+            return "External synthesis blocked by privacy gate. Use local MKB review only."
+
+        client = anthropic.Anthropic(api_key=self.api_key)
         response = client.messages.create(
             model=self.model,
             max_tokens=1000,
-            messages=[{"role": "user", "content": prompt}]
+            messages=[{"role": "user", "content": gate.payload_text}]
         )
         return response.content[0].text
 

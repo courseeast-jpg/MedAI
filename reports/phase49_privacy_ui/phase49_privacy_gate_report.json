@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-05-02T00:15:42.801235+00:00",
+  "phase": "Phase 49 Privacy Gate + Operator UI Safety Panel",
+  "local_only_default": true,
+  "external_api_default_allowed": false,
+  "pii_scrub_required": true,
+  "privacy_audit_enabled": true,
+  "pii_detection_tests": {
+    "english_synthetic_pii_detected": true,
+    "russian_cyrillic_synthetic_pii_detected": true,
+    "mrn_insurance_like_ids_detected": true,
+    "english_counts_by_type": {
+      "PERSON": 1,
+      "DOB": 1,
+      "MRN": 1,
+      "PHONE": 1,
+      "EMAIL": 1
+    },
+    "russian_counts_by_type": {
+      "RU_PERSON": 1,
+      "RU_DOB": 1,
+      "RU_INSURANCE_ID": 1,
+      "RU_PHONE": 1,
+      "RU_ADDRESS": 1
+    },
+    "id_counts_by_type": {
+      "INSURANCE_ID": 1,
+      "SSN": 1
+    }
+  },
+  "pii_redaction_tests": {
+    "redaction_passed": true,
+    "redaction_counts": {
+      "ID": 1,
+      "INSURANCE_ID": 2,
+      "ADDRESS": 1,
+      "PHONE": 2,
+      "DOB": 2,
+      "RU_PERSON": 1,
+      "EMAIL": 1,
+      "MRN": 1,
+      "PERSON": 1
+    },
+    "redacted_payload_has_raw_samples": false
+  },
+  "outbound_gate_tests": {
+    "raw_pii_blocked": true,
+    "redacted_payload_allowed_when_external_enabled": true,
+    "local_only_blocks_external": true,
+    "redaction_failure_blocks_external": true,
+    "allowed_payload_hash": "6ed95d26222d96e9"
+  },
+  "ui_safety_panel": {
+    "accepted_guidance": "Spot-check against source before use.",
+    "review_guidance": "Manual review required before relying on output.",
+    "review_ocr_quality_guidance": "Do not trust extraction. OCR/input quality is insufficient.",
+    "empty_guidance": "No usable extraction. Check document quality or format.",
+    "local_only_label": "ON",
+    "external_apis_label": "DISABLED",
+    "pii_scrub_required_label": "YES",
+    "privacy_warning": "Local-only mode active. External APIs blocked."
+  },
+  "cloud_payload_contains_raw_pii": false,
+  "raw_phi_logged_in_reports": false,
+  "phi_report_artifacts_tracked": false,
+  "phi_artifact_check": {
+    "tracked_report_phi_files": [],
+    "tracked_report_archive_or_review_files": [],
+    "passed": true
+  },
+  "conclusion": "privacy_gate_ready"
+}

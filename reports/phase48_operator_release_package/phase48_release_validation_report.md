@@ -1,8 +1,8 @@
 # Phase 48 Release Snapshot Validation
 
-- Generated at: `2026-05-01T23:07:37.599120+00:00`
+- Generated at: `2026-05-02T00:15:42.545260+00:00`
 - Snapshot ID: `MedAI_Snapshot_Phase48_2026-05-01`
-- Current HEAD: `31024c7f18b65144addf0141876b040fbf92eaaf`
+- Current HEAD: `020375413ff7c455c86adfdf362880bd8c4ad9c2`
 - Validated source commit: `31024c7f18b65144addf0141876b040fbf92eaaf`
 - Phase47 release_candidate_ready: `True`
 - Conclusion: `release_snapshot_ready`
@@ -19,7 +19,7 @@
 
 - tests_baseline_referenced: `True`
 - phase47_commit_referenced: `True`
-- current_commit_hash_present: `True`
+- phase48_package_commit_referenced: `True`
 - count_convention_documented: `True`
 - safety_guarantees_documented: `True`
 - not_medical_device_documented: `True`

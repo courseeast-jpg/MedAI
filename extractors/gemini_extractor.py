@@ -10,6 +10,25 @@ from app.config import GEMINI_API_KEY
 from extractors.base_extractor import BaseExtractor
 
 
+def _is_quota_or_rate_limit(message: str | None) -> bool:
+    lowered = str(message or "").lower()
+    return any(
+        marker in lowered
+        for marker in (
+            "429",
+            "quota exceeded",
+            "current quota",
+            "rate limit",
+            "retry_delay",
+            "generate_content_free_tier_requests",
+        )
+    )
+
+
+def _is_privacy_gate_block(message: str | None) -> bool:
+    return "privacy gate" in str(message or "").lower()
+
+
 class GeminiExtractor(BaseExtractor):
     """Wraps extraction.extractor.Extractor in the Phase 1 return schema."""
 
@@ -70,10 +89,42 @@ class GeminiExtractor(BaseExtractor):
         if not self.gemini_available:
             notes.append("gemini_unavailable=missing_api_key")
         if method != "gemini":
+            root_cause = getattr(self.legacy_extractor, "last_gemini_error_message", None)
+            if self.gemini_available and _is_quota_or_rate_limit(root_cause):
+                fallback_method = "spacy" if method == "rules_based" else method
+                from execution.connectors.phi3_connector import Phi3Connector
+
+                phi3_result = Phi3Connector().extract(text)
+                phi3_entities = list(phi3_result.get("entities", []))
+                if len(phi3_entities) > len(entities):
+                    entities = phi3_entities
+                    fallback_method = str(phi3_result.get("actual_extractor", "phi3"))
+                notes.extend([
+                    "router_fallback=gemini:gemini_quota_or_rate_limit",
+                    "gemini_configured_fallback=true",
+                    "fallback_reason=gemini_quota_or_rate_limit",
+                ])
+                return {
+                    "extractor": "gemini",
+                    "actual_extractor": fallback_method,
+                    "primary_extractor": "gemini",
+                    "fallback_extractor": fallback_method,
+                    "fallback_reason": "gemini_quota_or_rate_limit",
+                    "terminal_empty_prevented": bool(entities),
+                    "entities": entities,
+                    "confidence": float(output.confidence),
+                    "latency_ms": latency_ms,
+                    "raw_text": text,
+                    "notes": notes,
+                }
             logger.warning("Gemini route did not execute real Gemini; actual extractor={}", method)
-            if self.gemini_available:
+            if self.gemini_available and _is_privacy_gate_block(root_cause):
+                notes.extend([
+                    "router_fallback=gemini:privacy_gate_blocked",
+                    "privacy_gate_blocked=true",
+                ])
+            elif self.gemini_available:
                 logger.error("Gemini route fallback occurred despite configured GEMINI_API_KEY")
-                root_cause = getattr(self.legacy_extractor, "last_gemini_error_message", None)
                 if root_cause:
                     raise RuntimeError(
                         f"Gemini route fallback occurred despite configured key: {method}; root_cause={root_cause}"
