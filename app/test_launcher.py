@@ -7,6 +7,7 @@ extraction, validation, routing, or MKB write behavior.
 from __future__ import annotations
 
 import json
+import re
 import shutil
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -26,6 +27,7 @@ LATEST_MD_REPORT = TEST_RUN_REPORT_DIR / "latest_test_run.md"
 
 SUPPORTED_TEST_EXTENSIONS = {".pdf", ".txt"}
 ACCEPTED_OUTCOMES = {"written"}
+SAFE_FILENAME_RE = re.compile(r"[^A-Za-z0-9._ -]+")
 
 
 @dataclass
@@ -80,15 +82,91 @@ def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
 
 
 def list_test_input_files(input_dir: Path = TEST_INPUT_DIR) -> list[Path]:
-    ensure_test_launcher_dirs()
+    input_dir.mkdir(parents=True, exist_ok=True)
     return sorted(path for path in input_dir.iterdir() if path.is_file() and path.suffix.lower() in SUPPORTED_TEST_EXTENSIONS)
 
 
 def save_uploaded_test_file(uploaded_file, input_dir: Path = TEST_INPUT_DIR) -> Path:
-    ensure_test_launcher_dirs()
-    destination = _unique_destination(input_dir / uploaded_file.name)
-    destination.write_bytes(uploaded_file.getbuffer())
+    input_dir.mkdir(parents=True, exist_ok=True)
+    destination = _unique_destination(input_dir / safe_test_filename(uploaded_file.name))
+    destination.write_bytes(_uploaded_file_bytes(uploaded_file))
     return destination
+
+
+def safe_test_filename(filename: str) -> str:
+    original_name = Path(filename or "").name
+    safe_name = SAFE_FILENAME_RE.sub("_", original_name).strip(" .")
+    if not safe_name:
+        raise ValueError("Uploaded test file has no usable filename.")
+    suffix = Path(safe_name).suffix.lower()
+    if suffix not in SUPPORTED_TEST_EXTENSIONS:
+        raise ValueError(f"Unsupported test file type: {suffix or 'none'}")
+    return safe_name
+
+
+def clear_test_input(input_dir: Path = TEST_INPUT_DIR) -> list[Path]:
+    input_dir.mkdir(parents=True, exist_ok=True)
+    removed: list[Path] = []
+    for path in list_test_input_files(input_dir):
+        path.unlink()
+        removed.append(path)
+    gitkeep = input_dir / ".gitkeep"
+    gitkeep.touch(exist_ok=True)
+    return removed
+
+
+def clear_latest_test_reports(report_dir: Path = TEST_RUN_REPORT_DIR) -> list[Path]:
+    report_dir.mkdir(parents=True, exist_ok=True)
+    removed: list[Path] = []
+    for filename in ("latest_test_run.md", "latest_test_run.json"):
+        path = report_dir / filename
+        if path.exists():
+            path.unlink()
+            removed.append(path)
+    return removed
+
+
+def build_test_launcher_display_state(
+    queued_files: list[Path],
+    latest: dict[str, Any] | None,
+    current_run: TestRunSummary | None = None,
+) -> dict[str, Any]:
+    queued_names = [path.name for path in queued_files]
+    if current_run is not None:
+        return {
+            "run_status": "Current run complete",
+            "counter_source": "current run",
+            "queued_count": len(queued_names),
+            "queued_files": queued_names,
+            "accepted": current_run.accepted_count,
+            "review": current_run.review_count,
+            "errors": current_run.error_count,
+            "latest_report_timestamp": current_run.timestamp,
+            "show_no_supported_files": not queued_names,
+        }
+    if not queued_names:
+        return {
+            "run_status": "No current run",
+            "counter_source": "no current run",
+            "queued_count": 0,
+            "queued_files": [],
+            "accepted": 0,
+            "review": 0,
+            "errors": 0,
+            "latest_report_timestamp": (latest or {}).get("timestamp"),
+            "show_no_supported_files": True,
+        }
+    return {
+        "run_status": "Queued files ready",
+        "counter_source": "previous report" if latest else "no previous report",
+        "queued_count": len(queued_names),
+        "queued_files": queued_names,
+        "accepted": int((latest or {}).get("accepted_count", 0)),
+        "review": int((latest or {}).get("review_count", 0)),
+        "errors": int((latest or {}).get("error_count", 0)),
+        "latest_report_timestamp": (latest or {}).get("timestamp"),
+        "show_no_supported_files": False,
+    }
 
 
 def run_medai_test_batch(execution_pipeline, *, specialty: str = "general") -> TestRunSummary:
@@ -238,3 +316,10 @@ def _unique_destination(path: Path) -> Path:
             return candidate
     raise RuntimeError(f"Could not allocate unique path for {path}")
 
+
+def _uploaded_file_bytes(uploaded_file) -> bytes:
+    if hasattr(uploaded_file, "getbuffer"):
+        return bytes(uploaded_file.getbuffer())
+    if hasattr(uploaded_file, "read"):
+        return bytes(uploaded_file.read())
+    raise TypeError("Uploaded file object does not expose getbuffer() or read().")

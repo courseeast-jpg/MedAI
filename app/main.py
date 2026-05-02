@@ -25,6 +25,10 @@ from app.operator_safety import (
 from app.schemas import MKBRecord, SystemState, UnifiedResponse
 from app.test_launcher import (
     LATEST_MD_REPORT,
+    TEST_INPUT_DIR,
+    build_test_launcher_display_state,
+    clear_latest_test_reports,
+    clear_test_input,
     ensure_test_launcher_dirs,
     list_test_input_files,
     load_latest_test_run,
@@ -379,49 +383,83 @@ def render_test_launcher_tab(sys_components: dict) -> None:
         help="The current local test launcher supports PDF and TXT inputs.",
     )
     if uploaded_files:
-        saved_uploads = st.session_state.setdefault("test_launcher_saved_uploads", set())
+        saved_uploads = st.session_state.get("test_launcher_saved_uploads", {})
+        if not isinstance(saved_uploads, dict):
+            saved_uploads = {}
+            st.session_state["test_launcher_saved_uploads"] = saved_uploads
         saved = []
         for uploaded_file in uploaded_files:
             upload_key = f"{uploaded_file.name}:{uploaded_file.size}"
-            if upload_key in saved_uploads:
+            prior_path = Path(saved_uploads.get(upload_key, ""))
+            if prior_path.exists() and prior_path.parent == TEST_INPUT_DIR:
                 continue
-            saved.append(save_uploaded_test_file(uploaded_file))
-            saved_uploads.add(upload_key)
+            destination = save_uploaded_test_file(uploaded_file)
+            saved.append(destination)
+            saved_uploads[upload_key] = str(destination.resolve())
         if saved:
             st.success(f"Added {len(saved)} file(s) to test_input/.")
 
     files = list_test_input_files()
+    latest = load_latest_test_run()
+    current_run = None
+
+    clear_cols = st.columns(2)
+    if clear_cols[0].button("Clear test_input/"):
+        removed = clear_test_input()
+        st.session_state["test_launcher_saved_uploads"] = {}
+        st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
+        st.rerun()
+    if clear_cols[1].button("Clear latest report display"):
+        removed = clear_latest_test_reports()
+        st.success(f"Cleared {len(removed)} latest report file(s).")
+        st.rerun()
+
+    if st.button("Start MedAI Test Run", type="primary"):
+        if not files:
+            st.warning("No supported files waiting in test_input/.")
+        else:
+            with st.spinner("Running MedAI local test batch..."):
+                current_run = run_medai_test_batch(sys_components["execution"], specialty=specialty)
+            st.success(
+                f"Run complete: {current_run.accepted_count} accepted, "
+                f"{current_run.review_count} review, {current_run.error_count} errors."
+            )
+            latest = load_latest_test_run()
+            files = list_test_input_files()
+
     st.markdown("**Files currently in test_input/**")
     if files:
+        st.caption(f"Queued files count: {len(files)}")
         for path in files:
             st.caption(path.name)
     else:
         st.caption("No supported files waiting.")
 
-    latest = load_latest_test_run()
+    display_state = build_test_launcher_display_state(files, latest, current_run=current_run)
     status_cols = st.columns(4)
-    status_cols[0].metric("Run status", "Ready")
-    status_cols[1].metric("Accepted", int((latest or {}).get("accepted_count", 0)))
-    status_cols[2].metric("Review", int((latest or {}).get("review_count", 0)))
-    status_cols[3].metric("Errors", int((latest or {}).get("error_count", 0)))
-
-    if st.button("Start MedAI Test Run", type="primary"):
-        with st.spinner("Running MedAI local test batch..."):
-            summary = run_medai_test_batch(sys_components["execution"], specialty=specialty)
-        st.success(
-            f"Run complete: {summary.accepted_count} accepted, "
-            f"{summary.review_count} review, {summary.error_count} errors."
-        )
-        latest = load_latest_test_run()
+    status_cols[0].metric("Queued files", display_state["queued_count"])
+    status_cols[1].metric("Accepted", display_state["accepted"])
+    status_cols[2].metric("Review", display_state["review"])
+    status_cols[3].metric("Errors", display_state["errors"])
+    st.caption(f"Run state: {display_state['run_status']}")
+    st.caption(f"Counter source: {display_state['counter_source']}")
+    if display_state["latest_report_timestamp"]:
+        st.caption(f"Last report timestamp: {display_state['latest_report_timestamp']}")
 
     st.markdown("**Latest report**")
-    if LATEST_MD_REPORT.exists():
+    if LATEST_MD_REPORT.exists() and display_state["counter_source"] != "no current run":
+        st.code(str(LATEST_MD_REPORT))
+    elif LATEST_MD_REPORT.exists():
+        st.caption("Previous report exists, but no supported files are queued for the current run.")
         st.code(str(LATEST_MD_REPORT))
     else:
         st.caption("No test run report has been written yet.")
 
-    if latest:
+    if latest and display_state["counter_source"] != "no current run":
         with st.expander("Latest run details", expanded=False):
+            st.json(latest)
+    elif latest:
+        with st.expander("Previous run details", expanded=False):
             st.json(latest)
 
 
