@@ -21,3 +21,9 @@ artifacts/
 # contain PHI and must not be committed.
 reports/**/archive/
 reports/**/review/
+reports/**/*.pdf
+reports/**/local_filename_mapping_PRIVATE.json
+
+# Real operator validation inputs may contain PHI. Keep only the placeholder.
+real_validation_input/*
+!real_validation_input/.gitkeep

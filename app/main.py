@@ -462,6 +462,29 @@ def render_test_launcher_tab(sys_components: dict) -> None:
         with st.expander("Previous run details", expanded=False):
             st.json(latest)
 
+    st.divider()
+    st.markdown("**Blind Generalization Audit**")
+    try:
+        from scripts.run_phase51_blind_pdf_generalization_audit import (
+            INPUT_DIR as BLIND_AUDIT_INPUT_DIR,
+            OPERATOR_SUMMARY as BLIND_AUDIT_OPERATOR_SUMMARY,
+            run_audit as run_blind_audit,
+            supported_input_files as blind_audit_input_files,
+        )
+
+        blind_files = blind_audit_input_files(BLIND_AUDIT_INPUT_DIR)
+        st.caption(f"Files found in real_validation_input/: {len(blind_files)}")
+        if st.button("Run Blind Audit from real_validation_input/"):
+            with st.spinner("Running local-only blind audit..."):
+                report = run_blind_audit(pipeline=sys_components["execution"])
+            st.success(
+                f"Blind audit complete: {report['accepted_count']} accepted, "
+                f"{report['review_count']} review, {report['error_count']} errors."
+            )
+            st.caption(f"Operator summary: {BLIND_AUDIT_OPERATOR_SUMMARY}")
+    except Exception as exc:
+        st.warning(f"Blind audit launcher unavailable: {exc}")
+
 
 def main() -> None:
     sys_components = load_system()
