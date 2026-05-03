@@ -1,0 +1,15 @@
+Start MedAI
+===========
+
+Double-click Start_MedAI_UI.bat.
+
+The browser opens automatically at:
+http://localhost:8501
+
+If the browser does not open, go to:
+http://localhost:8501
+
+To stop MedAI, close the terminal window or press Ctrl+C.
+
+Local-only mode is ON by default.
+External APIs are disabled by the privacy gate.
