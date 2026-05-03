@@ -4,12 +4,318 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from collections import Counter, defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
+
+
+# ---------------------------------------------------------------------------
+# Phase 57A — Filesystem reconciliation helpers
+#
+# Phase 57's earlier discovery silently dropped files starting with "." and
+# files named ".gitkeep", which left a gap between the public report's
+# `total_discovered` and the host filesystem's true count. Phase 57A adds a
+# parallel enumerator that walks every regular file and every folder without
+# any filtering, then classifies each file into one of seven accounting
+# categories so the reconciliation block can prove that
+# `total_filesystem_files == accounted_total`.
+# ---------------------------------------------------------------------------
+
+# Names that are unambiguously OS / VCS metadata, not corpus content.
+_IGNORED_SYSTEM_FILE_NAMES = frozenset({
+    ".gitkeep",
+    ".gitignore",
+    ".gitattributes",
+    ".DS_Store",
+    "._.DS_Store",
+    "desktop.ini",
+    "Desktop.ini",
+    "DESKTOP.INI",
+    "Thumbs.db",
+    "thumbs.db",
+    "ehthumbs.db",
+    "ehthumbs_vista.db",
+    ".Spotlight-V100",
+    ".Trashes",
+    ".fseventsd",
+    ".AppleDouble",
+    ".LSOverride",
+    ".VolumeIcon.icns",
+})
+
+# Patterns for OS / app temporary or lock files (not corpus content).
+_IGNORED_SYSTEM_FILE_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"^~\$"),         # Office temporary lock files
+    re.compile(r"^\.~lock\."),   # LibreOffice lock files
+    re.compile(r"^\._"),         # macOS resource-fork metadata
+    re.compile(r"\.tmp$", re.I),
+    re.compile(r"\.bak$", re.I),
+    re.compile(r"\.swp$", re.I),
+    re.compile(r"~$"),           # Editor backup files (must follow .swp)
+)
+
+ACCOUNTING_CATEGORIES: tuple[str, ...] = (
+    "supported_processed",
+    "unsupported_extension",
+    "ignored_system_file",
+    "skipped_policy",
+    "processing_error",
+    "inaccessible_file",
+    "unknown_unclassified",
+)
+
+
+def is_ignored_system_file(path: Path) -> bool:
+    name = path.name
+    if name in _IGNORED_SYSTEM_FILE_NAMES:
+        return True
+    for pattern in _IGNORED_SYSTEM_FILE_PATTERNS:
+        if pattern.search(name):
+            return True
+    return False
+
+
+def enumerate_filesystem_inventory(input_dir: Path) -> dict[str, Any]:
+    """Walk ``input_dir`` recursively and account for every regular file and
+    folder. No filtering. Folders are counted as the number of subdirectories
+    inside ``input_dir`` (not including the root itself), matching the
+    Windows folder-properties convention.
+    """
+    total_files = 0
+    total_folders = 0
+    total_bytes = 0
+    files: list[Path] = []
+    inaccessible_paths: list[dict[str, str]] = []
+    if not input_dir.exists():
+        return {
+            "total_filesystem_files": 0,
+            "total_filesystem_folders": 0,
+            "total_filesystem_bytes": 0,
+            "files": [],
+            "inaccessible_paths": [],
+        }
+    for root, dirs, names in os.walk(str(input_dir)):
+        root_path = Path(root)
+        for _ in dirs:
+            total_folders += 1
+        for name in names:
+            path = root_path / name
+            try:
+                if path.is_file():
+                    total_files += 1
+                    files.append(path)
+                    try:
+                        total_bytes += path.stat().st_size
+                    except OSError as exc:
+                        inaccessible_paths.append({
+                            "filename_hash": _safe_filename_hash(name),
+                            "reason": f"stat_failed:{exc.__class__.__name__}",
+                        })
+            except OSError as exc:
+                inaccessible_paths.append({
+                    "filename_hash": _safe_filename_hash(name),
+                    "reason": f"is_file_failed:{exc.__class__.__name__}",
+                })
+    files.sort(key=lambda item: str(item).lower())
+    return {
+        "total_filesystem_files": total_files,
+        "total_filesystem_folders": total_folders,
+        "total_filesystem_bytes": total_bytes,
+        "files": files,
+        "inaccessible_paths": inaccessible_paths,
+    }
+
+
+def _safe_filename_hash(name: str) -> str:
+    # Lazy import to avoid binding at module load if hashing helper changes.
+    return hash_filename(name)
+
+
+def _safe_size_or_none(path: Path) -> int | None:
+    try:
+        return path.stat().st_size
+    except OSError:
+        return None
+
+
+def ignored_system_file_result(
+    source_path: Path,
+    safe_id: str,
+    filename_hash: str,
+    content_hash: str | None,
+) -> dict[str, Any]:
+    try:
+        size = source_path.stat().st_size
+    except OSError:
+        size = None
+    return {
+        "safe_file_id": safe_id,
+        "file_id": safe_id,
+        "original_filename_redacted": "[REDACTED]",
+        "filename_hash": filename_hash,
+        "content_hash": content_hash,
+        "extension": source_path.suffix.lower(),
+        "file_extension": source_path.suffix.lower(),
+        "file_type": "ignored_system_file",
+        "file_size_bytes": size,
+        "processed": False,
+        "status": "ignored",
+        "outcome": None,
+        "selected_extractor": None,
+        "actual_extractor": None,
+        "confidence": None,
+        "validation_status": None,
+        "document_classification": None,
+        "document_type": None,
+        "language_hint": None,
+        "ocr_status": None,
+        "image_extension": None,
+        "ocr_engine": None,
+        "classification_reason_codes": ["ignored_system_file"],
+        "review_reason_codes": [],
+        "reason_codes": ["ignored_system_file"],
+        "external_api_used": False,
+        "error_category": None,
+        "error": None,
+        "skip_reason": "ignored_system_file",
+        "accounting_category": "ignored_system_file",
+    }
+
+
+def inaccessible_file_result(
+    source_path: Path,
+    safe_id: str,
+    filename_hash: str,
+    content_hash: str | None,
+    exc: BaseException,
+) -> dict[str, Any]:
+    return {
+        "safe_file_id": safe_id,
+        "file_id": safe_id,
+        "original_filename_redacted": "[REDACTED]",
+        "filename_hash": filename_hash,
+        "content_hash": content_hash,
+        "extension": source_path.suffix.lower(),
+        "file_extension": source_path.suffix.lower(),
+        "file_type": "inaccessible",
+        "file_size_bytes": None,
+        "processed": False,
+        "status": "error",
+        "outcome": None,
+        "selected_extractor": None,
+        "actual_extractor": None,
+        "confidence": None,
+        "validation_status": None,
+        "document_classification": None,
+        "document_type": None,
+        "language_hint": None,
+        "ocr_status": None,
+        "image_extension": None,
+        "ocr_engine": None,
+        "classification_reason_codes": ["inaccessible_file"],
+        "review_reason_codes": ["inaccessible_file"],
+        "reason_codes": ["inaccessible_file"],
+        "external_api_used": False,
+        "error_category": "inaccessible_file",
+        "error": f"inaccessible_file:{exc.__class__.__name__}",
+        "skip_reason": "inaccessible_file",
+        "accounting_category": "inaccessible_file",
+    }
+
+
+def assign_accounting_category(item: dict[str, Any]) -> str:
+    """Decide the accounting category for a processed item.
+
+    ``item`` may already have ``accounting_category`` set by the helpers above
+    (ignored / inaccessible). Otherwise classify based on file_type and status.
+    """
+    existing = item.get("accounting_category")
+    if existing in ACCOUNTING_CATEGORIES:
+        return existing
+    if item.get("file_type") == "unsupported":
+        return "unsupported_extension"
+    if item.get("file_type") == "ignored_system_file":
+        return "ignored_system_file"
+    if item.get("file_type") == "inaccessible":
+        return "inaccessible_file"
+    if item.get("status") == "error":
+        return "processing_error"
+    if item.get("skip_reason") == "skipped_policy":
+        return "skipped_policy"
+    if item.get("processed"):
+        return "supported_processed"
+    return "unknown_unclassified"
+
+
+def compute_filesystem_reconciliation(
+    fs_inventory: dict[str, Any],
+    inventory_entries: list[dict[str, Any]],
+) -> dict[str, Any]:
+    counts = Counter(str(item.get("accounting_category") or "unknown_unclassified") for item in inventory_entries)
+    supported_processed = counts.get("supported_processed", 0)
+    unsupported_extension = counts.get("unsupported_extension", 0)
+    ignored_system_files = counts.get("ignored_system_file", 0)
+    skipped_policy = counts.get("skipped_policy", 0)
+    processing_errors = counts.get("processing_error", 0)
+    inaccessible_files = counts.get("inaccessible_file", 0)
+    unknown_unclassified = counts.get("unknown_unclassified", 0)
+    accounted_total = (
+        supported_processed
+        + unsupported_extension
+        + ignored_system_files
+        + skipped_policy
+        + processing_errors
+        + inaccessible_files
+        + unknown_unclassified
+    )
+    total_filesystem_files = int(fs_inventory.get("total_filesystem_files") or 0)
+    unexplained_count = total_filesystem_files - accounted_total
+    reconciliation_passed = unexplained_count == 0 and unknown_unclassified == 0
+    return {
+        "total_filesystem_files": total_filesystem_files,
+        "total_filesystem_folders": int(fs_inventory.get("total_filesystem_folders") or 0),
+        "total_filesystem_bytes": int(fs_inventory.get("total_filesystem_bytes") or 0),
+        "total_supported_files": supported_processed + processing_errors,
+        "total_supported_processed": supported_processed,
+        "total_unsupported_extension": unsupported_extension,
+        "total_ignored_system_files": ignored_system_files,
+        "total_skipped_policy": skipped_policy,
+        "total_processing_errors": processing_errors,
+        "total_inaccessible_files": inaccessible_files,
+        "total_unknown_unclassified": unknown_unclassified,
+        "accounted_total": accounted_total,
+        "unexplained_count": unexplained_count,
+        "reconciliation_passed": reconciliation_passed,
+        "inaccessible_paths_during_walk": list(fs_inventory.get("inaccessible_paths") or []),
+    }
+
+
+def build_extension_distribution(inventory_entries: list[dict[str, Any]]) -> dict[str, int]:
+    counter: Counter[str] = Counter()
+    for item in inventory_entries:
+        ext = str(item.get("extension") or "").strip().lower()
+        if not ext:
+            counter["no_extension"] += 1
+        else:
+            counter[ext] += 1
+    return dict(sorted(counter.items()))
+
+
+def build_unsupported_extension_distribution(inventory_entries: list[dict[str, Any]]) -> dict[str, int]:
+    counter: Counter[str] = Counter()
+    for item in inventory_entries:
+        if item.get("accounting_category") != "unsupported_extension":
+            continue
+        ext = str(item.get("extension") or "").strip().lower()
+        if not ext:
+            counter["no_extension"] += 1
+        else:
+            counter[ext] += 1
+    return dict(sorted(counter.items()))
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -76,26 +382,69 @@ def run_inventory_audit(
     force_local_only_runtime()
     ensure_full_corpus_input(input_dir)
     report_dir.mkdir(parents=True, exist_ok=True)
-    all_files = discover_corpus_files(input_dir, recursive=recursive)
+
+    # Phase 57A: enumerate every regular file and folder first, no filter.
+    fs_inventory = enumerate_filesystem_inventory(input_dir)
+    all_filesystem_files: list[Path] = list(fs_inventory["files"])
+
+    # Split into ignored-system entries (counted but not processed) and the
+    # processable subset (which preserves Phase 57's existing semantics for
+    # `total_discovered`, `results[0]`, etc.).
+    processable: list[Path] = []
+    ignored_paths: list[Path] = []
+    for path in all_filesystem_files:
+        if is_ignored_system_file(path):
+            ignored_paths.append(path)
+        else:
+            processable.append(path)
+    processable.sort(
+        key=lambda item: safe_relative_path(item, input_dir).lower()
+    )
+    ignored_paths.sort(
+        key=lambda item: safe_relative_path(item, input_dir).lower()
+    )
+
     run_id = str(uuid4())
     active_pipeline = pipeline or ExecutionPipeline()
     if hasattr(active_pipeline, "router"):
         active_pipeline.router.gemini_quota_blocked = True
 
     results: list[dict[str, Any]] = []
+    inventory_entries: list[dict[str, Any]] = []
     private_mapping: dict[str, dict[str, Any]] = {}
-    for index, source_path in enumerate(all_files, start=1):
+    for index, source_path in enumerate(processable, start=1):
         safe_id = f"corpus_file_{index:06d}"
         filename_hash = hash_filename(source_path.name)
-        content_hash = hash_file_content(source_path)
+        try:
+            content_hash = hash_file_content(source_path)
+        except OSError as exc:
+            # Treat unreadable supported/unsupported files as inaccessible.
+            private_mapping[safe_id] = {
+                "original_filename": source_path.name,
+                "original_relative_path": safe_relative_path(source_path, input_dir),
+                "filename_hash": filename_hash,
+                "content_hash": None,
+                "file_size_bytes": None,
+                "accounting_category": "inaccessible_file",
+            }
+            item = inaccessible_file_result(source_path, safe_id, filename_hash, None, exc)
+            results.append(item)
+            inventory_entries.append(item)
+            write_safe_checkpoint(report_dir, run_id, results)
+            continue
+
+        try:
+            file_size = source_path.stat().st_size
+        except OSError:
+            file_size = None
         private_mapping[safe_id] = {
             "original_filename": source_path.name,
             "original_relative_path": safe_relative_path(source_path, input_dir),
             "filename_hash": filename_hash,
             "content_hash": content_hash,
-            "file_size_bytes": source_path.stat().st_size,
+            "file_size_bytes": file_size,
         }
-        print(f"Processing {index}/{len(all_files)}: {safe_id}")
+        print(f"Processing {index}/{len(processable)}: {safe_id}")
         if source_path.suffix.lower() not in SUPPORTED_EXTENSIONS:
             item = unsupported_file_result(source_path, safe_id, filename_hash, content_hash)
         else:
@@ -110,8 +459,33 @@ def run_inventory_audit(
             item["error_category"] = "processing_error" if item.get("status") == "error" else None
             if source_path.suffix.lower() == ".pdf":
                 item = apply_pdf_inventory_metadata(source_path, item)
+        item["accounting_category"] = assign_accounting_category(item)
         results.append(item)
+        inventory_entries.append(item)
         write_safe_checkpoint(report_dir, run_id, results)
+        private_mapping[safe_id]["accounting_category"] = item["accounting_category"]
+
+    # Phase 57A: include ignored system files in inventory_entries (and the
+    # private mapping) but not in `results` so the existing test contract for
+    # `results[0].safe_file_id == corpus_file_000001` is preserved.
+    for offset, source_path in enumerate(ignored_paths, start=1):
+        safe_id = f"corpus_system_{offset:06d}"
+        filename_hash = hash_filename(source_path.name)
+        try:
+            content_hash = hash_file_content(source_path)
+        except OSError:
+            content_hash = None
+        private_mapping[safe_id] = {
+            "original_filename": source_path.name,
+            "original_relative_path": safe_relative_path(source_path, input_dir),
+            "filename_hash": filename_hash,
+            "content_hash": content_hash,
+            "file_size_bytes": _safe_size_or_none(source_path),
+            "accounting_category": "ignored_system_file",
+        }
+        inventory_entries.append(
+            ignored_system_file_result(source_path, safe_id, filename_hash, content_hash)
+        )
 
     public_report_names = [
         JSON_REPORT.name,
@@ -125,6 +499,9 @@ def run_inventory_audit(
     distributions = build_distributions(results)
     clusters = build_problem_clusters(results)
     counts = count_inventory_results(results)
+    filesystem_reconciliation = compute_filesystem_reconciliation(fs_inventory, inventory_entries)
+    extension_distribution = build_extension_distribution(inventory_entries)
+    unsupported_extension_distribution = build_unsupported_extension_distribution(inventory_entries)
     report: dict[str, Any] = {
         "timestamp": datetime.now(UTC).isoformat(),
         "phase": "Phase57 Full Corpus Local Inventory Audit",
@@ -132,7 +509,7 @@ def run_inventory_audit(
         "input_folder": "full_corpus_input",
         "recursive": recursive,
         "supported_extensions": sorted(SUPPORTED_EXTENSIONS),
-        "total_discovered": len(all_files),
+        "total_discovered": len(processable),
         "total_supported": sum(1 for item in results if item.get("file_type") != "unsupported"),
         "total_processed": counts["processed"],
         "unsupported_count": counts["unsupported"],
@@ -159,6 +536,10 @@ def run_inventory_audit(
         "problem_clusters": clusters,
         "recommendations": next_action_recommendations(clusters, counts),
         "results": results,
+        "filesystem_reconciliation": filesystem_reconciliation,
+        "extension_distribution": extension_distribution,
+        "unsupported_extension_distribution": unsupported_extension_distribution,
+        "filesystem_inventory_entries": inventory_entries,
     }
     report["conclusion"] = conclusion_for(report)
 
@@ -460,6 +841,9 @@ def next_action_recommendations(clusters: dict[str, list[str]], counts: dict[str
 def conclusion_for(report: dict[str, Any]) -> str:
     if report["external_api_used"] or report["raw_phi_logged_in_public_reports"] or report["report_pdf_artifacts_tracked"]:
         return "BLOCKED_PRIVACY_RISK"
+    reconciliation = report.get("filesystem_reconciliation") or {}
+    if reconciliation and not reconciliation.get("reconciliation_passed", True):
+        return "BLOCKED_RECONCILIATION_GAP"
     if report["total_discovered"] == 0:
         return "no_input_files"
     if report["errors"] > 0 and report["unsupported_count"] != report["errors"]:
@@ -480,6 +864,7 @@ def write_public_reports(report_dir: Path, report: dict[str, Any], clusters: dic
 
 
 def render_markdown(report: dict[str, Any]) -> str:
+    reconciliation = report.get("filesystem_reconciliation") or {}
     lines = [
         "# Phase57 Full Corpus Inventory Audit",
         "",
@@ -498,6 +883,28 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- Raw PHI logged in public reports: `{report['raw_phi_logged_in_public_reports']}`",
         f"- Report PDF/image artifacts tracked: `{report['report_pdf_artifacts_tracked']}`",
         f"- Conclusion: `{report['conclusion']}`",
+        "",
+        "## Filesystem Reconciliation (Phase 57A)",
+        "",
+        f"- total_filesystem_files: `{reconciliation.get('total_filesystem_files', 0)}`",
+        f"- total_filesystem_folders: `{reconciliation.get('total_filesystem_folders', 0)}`",
+        f"- total_filesystem_bytes: `{reconciliation.get('total_filesystem_bytes', 0)}`",
+        f"- total_supported_files: `{reconciliation.get('total_supported_files', 0)}`",
+        f"- total_supported_processed: `{reconciliation.get('total_supported_processed', 0)}`",
+        f"- total_unsupported_extension: `{reconciliation.get('total_unsupported_extension', 0)}`",
+        f"- total_ignored_system_files: `{reconciliation.get('total_ignored_system_files', 0)}`",
+        f"- total_skipped_policy: `{reconciliation.get('total_skipped_policy', 0)}`",
+        f"- total_processing_errors: `{reconciliation.get('total_processing_errors', 0)}`",
+        f"- total_inaccessible_files: `{reconciliation.get('total_inaccessible_files', 0)}`",
+        f"- total_unknown_unclassified: `{reconciliation.get('total_unknown_unclassified', 0)}`",
+        f"- accounted_total: `{reconciliation.get('accounted_total', 0)}`",
+        f"- unexplained_count: `{reconciliation.get('unexplained_count', 0)}`",
+        f"- reconciliation_passed: `{reconciliation.get('reconciliation_passed', False)}`",
+        "",
+        "## Extension Distribution",
+        "",
+        f"- extension_distribution: `{json.dumps(report.get('extension_distribution', {}), sort_keys=True)}`",
+        f"- unsupported_extension_distribution: `{json.dumps(report.get('unsupported_extension_distribution', {}), sort_keys=True)}`",
         "",
         "## Distributions",
         "",
@@ -563,6 +970,7 @@ def render_markdown(report: dict[str, Any]) -> str:
 
 
 def render_operator_summary(report: dict[str, Any]) -> str:
+    reconciliation = report.get("filesystem_reconciliation") or {}
     lines = [
         "# Phase57 Full Corpus Operator Summary",
         "",
@@ -576,6 +984,14 @@ def render_operator_summary(report: dict[str, Any]) -> str:
         f"- Errors: `{report['errors']}`",
         f"- External API used: `{report['external_api_used']}`",
         f"- Raw PHI logged in public reports: `{report['raw_phi_logged_in_public_reports']}`",
+        "",
+        "## Filesystem Reconciliation",
+        "",
+        f"- total_filesystem_files: `{reconciliation.get('total_filesystem_files', 0)}`",
+        f"- total_filesystem_folders: `{reconciliation.get('total_filesystem_folders', 0)}`",
+        f"- accounted_total: `{reconciliation.get('accounted_total', 0)}`",
+        f"- unexplained_count: `{reconciliation.get('unexplained_count', 0)}`",
+        f"- reconciliation_passed: `{reconciliation.get('reconciliation_passed', False)}`",
         "",
         "## Problem Clusters",
         "",
@@ -629,6 +1045,7 @@ def public_reports_contain_private_names(report_dir: Path, private_mapping: dict
 
 def main() -> int:
     report = run_inventory_audit()
+    reconciliation = report.get("filesystem_reconciliation") or {}
     print("MedAI Phase57 full corpus inventory audit complete.")
     print(f"total_discovered: {report['total_discovered']}")
     print(f"total_supported: {report['total_supported']}")
@@ -641,9 +1058,18 @@ def main() -> int:
     print(f"external_api_used: {report['external_api_used']}")
     print(f"raw_phi_logged_in_public_reports: {report['raw_phi_logged_in_public_reports']}")
     print(f"conclusion: {report['conclusion']}")
+    print(f"total_filesystem_files: {reconciliation.get('total_filesystem_files', 0)}")
+    print(f"total_filesystem_folders: {reconciliation.get('total_filesystem_folders', 0)}")
+    print(f"accounted_total: {reconciliation.get('accounted_total', 0)}")
+    print(f"unexplained_count: {reconciliation.get('unexplained_count', 0)}")
+    print(f"reconciliation_passed: {reconciliation.get('reconciliation_passed', False)}")
     print(f"json_report: {JSON_REPORT}")
     print(f"operator_summary: {OPERATOR_SUMMARY}")
-    return 1 if report["conclusion"] in {"BLOCKED_ERRORS", "BLOCKED_PRIVACY_RISK"} else 0
+    return 1 if report["conclusion"] in {
+        "BLOCKED_ERRORS",
+        "BLOCKED_PRIVACY_RISK",
+        "BLOCKED_RECONCILIATION_GAP",
+    } else 0
 
 
 if __name__ == "__main__":

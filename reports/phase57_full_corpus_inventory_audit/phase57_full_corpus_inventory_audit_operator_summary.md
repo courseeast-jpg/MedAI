@@ -1,29 +1,37 @@
 # Phase57 Full Corpus Operator Summary
 
 - Conclusion: `PASS_SAFETY_WEAK_AUTOMATION`
-- Total discovered: `546`
-- Total supported: `536`
-- Accepted: `91`
-- Review: `445`
-- Review OCR quality: `11`
-- Empty: `357`
-- Errors: `10`
+- Total discovered: `614`
+- Total supported: `603`
+- Accepted: `88`
+- Review: `515`
+- Review OCR quality: `15`
+- Empty: `438`
+- Errors: `11`
 - External API used: `False`
 - Raw PHI logged in public reports: `False`
 
+## Filesystem Reconciliation
+
+- total_filesystem_files: `615`
+- total_filesystem_folders: `109`
+- accounted_total: `615`
+- unexplained_count: `0`
+- reconciliation_passed: `True`
+
 ## Problem Clusters
 
-- `empty_extraction`: `357`
-- `image_ocr_low_quality`: `2`
-- `pdf_ocr_low_quality`: `5`
+- `empty_extraction`: `438`
+- `image_ocr_low_quality`: `5`
+- `pdf_ocr_low_quality`: `7`
 - `possible_ecg_class`: `0`
-- `possible_lab_table_failure`: `524`
+- `possible_lab_table_failure`: `578`
 - `possible_microbiology_pcr_class`: `0`
 - `possible_prescription_class`: `0`
 - `possible_russian_cyrillic_class`: `0`
-- `rules_based_low_confidence`: `440`
-- `unknown_other`: `1`
-- `unsupported_format`: `10`
+- `rules_based_low_confidence`: `511`
+- `unknown_other`: `0`
+- `unsupported_format`: `11`
 
 ## Next Action
 
