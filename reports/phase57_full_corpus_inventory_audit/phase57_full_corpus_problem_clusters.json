@@ -1,0 +1,13 @@
+{
+  "empty_extraction": [],
+  "image_ocr_low_quality": [],
+  "pdf_ocr_low_quality": [],
+  "possible_ecg_class": [],
+  "possible_lab_table_failure": [],
+  "possible_microbiology_pcr_class": [],
+  "possible_prescription_class": [],
+  "possible_russian_cyrillic_class": [],
+  "rules_based_low_confidence": [],
+  "unknown_other": [],
+  "unsupported_format": []
+}

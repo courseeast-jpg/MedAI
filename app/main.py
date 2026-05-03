@@ -678,8 +678,62 @@ def render_blind_audit_tab(sys_components: dict) -> None:
             attention = [item["file_id"] for item in report.get("results", []) if item.get("status") != "accepted"]
             st.write(attention or "None")
             render_phase54_review_section()
+        render_phase57_full_corpus_section()
     except Exception as exc:
         st.error(f"Blind audit unavailable: {exc}")
+
+
+def render_phase57_full_corpus_section() -> None:
+    st.divider()
+    st.subheader("Phase57 Full Corpus Inventory Audit")
+    st.caption("Folder: full_corpus_input/")
+    st.caption("Supported formats: PDF, TXT, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP.")
+    st.caption("Inventory/discovery only. Public reports use safe IDs and hashes, not raw filenames.")
+    try:
+        from scripts.run_phase57_full_corpus_inventory_audit import (
+            CLUSTERS_MD as PHASE57_CLUSTERS_MD,
+            JSON_REPORT as PHASE57_JSON_REPORT,
+            MD_REPORT as PHASE57_MD_REPORT,
+            OPERATOR_SUMMARY as PHASE57_OPERATOR_SUMMARY,
+            INPUT_DIR as PHASE57_INPUT_DIR,
+            discover_corpus_files,
+            run_inventory_audit,
+        )
+
+        corpus_files = discover_corpus_files(PHASE57_INPUT_DIR)
+        st.metric("Corpus files found", len(corpus_files))
+        if st.button("Run Phase57 Full Corpus Inventory Audit", type="primary"):
+            with st.spinner("Running local-only full corpus inventory audit..."):
+                report = run_inventory_audit()
+            st.session_state["phase57_full_corpus_inventory"] = report
+            st.success(
+                f"Phase57 complete: {report['total_discovered']} discovered, "
+                f"{report['total_processed']} supported processed, {report['errors']} errors."
+            )
+        report = st.session_state.get("phase57_full_corpus_inventory") or load_json_file(PHASE57_JSON_REPORT)
+        if report:
+            render_phase57_summary(report)
+            st.caption(f"Operator summary: {PHASE57_OPERATOR_SUMMARY}")
+            st.caption(f"Markdown report: {PHASE57_MD_REPORT}")
+            st.caption(f"JSON report: {PHASE57_JSON_REPORT}")
+            st.caption(f"Problem clusters: {PHASE57_CLUSTERS_MD}")
+    except Exception as exc:
+        st.error(f"Phase57 full corpus audit unavailable: {exc}")
+
+
+def render_phase57_summary(report: dict) -> None:
+    cols = st.columns(5)
+    cols[0].metric("Accepted", int(report.get("accepted", 0)))
+    cols[1].metric("Review", int(report.get("review", 0)))
+    cols[2].metric("OCR Review", int(report.get("review_ocr_quality", 0)))
+    cols[3].metric("Empty", int(report.get("empty", 0)))
+    cols[4].metric("Errors", int(report.get("errors", 0)))
+    st.caption(f"Conclusion: {report.get('conclusion', 'unknown')}")
+    st.caption(f"External API used: {'Yes' if report.get('external_api_used') else 'No'}")
+    clusters = report.get("problem_clusters") or {}
+    if clusters:
+        st.markdown("**Problem clusters**")
+        st.json({name: len(ids) for name, ids in clusters.items()}, expanded=False)
 
 
 def render_blind_audit_summary(report: dict) -> None:

@@ -22,6 +22,13 @@ artifacts/
 reports/**/archive/
 reports/**/review/
 reports/**/*.pdf
+reports/**/*.png
+reports/**/*.jpg
+reports/**/*.jpeg
+reports/**/*.tif
+reports/**/*.tiff
+reports/**/*.bmp
+reports/**/*.webp
 reports/**/local_filename_mapping_PRIVATE.json
 reports/phase54_operator_review_feedback/operator_feedback_PRIVATE.json
 reports/phase54_operator_review_feedback/*raw*notes*
@@ -29,3 +36,10 @@ reports/phase54_operator_review_feedback/*raw*notes*
 # Real operator validation inputs may contain PHI. Keep only the placeholder.
 real_validation_input/*
 !real_validation_input/.gitkeep
+
+# Full corpus inventory inputs may contain PHI. Keep only the placeholder.
+full_corpus_input/*
+!full_corpus_input/.gitkeep
+reports/phase57_full_corpus_inventory_audit/local_filename_mapping_PRIVATE.json
+reports/phase57_full_corpus_inventory_audit/operator_notes_PRIVATE.json
+reports/phase57_full_corpus_inventory_audit/phase57_safe_progress_checkpoint.json
