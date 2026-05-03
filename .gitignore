@@ -23,6 +23,8 @@ reports/**/archive/
 reports/**/review/
 reports/**/*.pdf
 reports/**/local_filename_mapping_PRIVATE.json
+reports/phase54_operator_review_feedback/operator_feedback_PRIVATE.json
+reports/phase54_operator_review_feedback/*raw*notes*
 
 # Real operator validation inputs may contain PHI. Keep only the placeholder.
 real_validation_input/*

@@ -1,0 +1,216 @@
+{
+  "class_summary": {
+    "unknown_other": {
+      "accepted": 12,
+      "correct_count": 0,
+      "empty": 0,
+      "errors": 0,
+      "false_accept_count": 0,
+      "false_review_count": 0,
+      "incorrect_count": 0,
+      "not_reviewed_count": 15,
+      "ocr_quality_issue_count": 0,
+      "review": 3,
+      "review_ocr_quality": 1,
+      "total": 15,
+      "uncertain_count": 0
+    }
+  },
+  "conclusion": "review_feedback_incomplete",
+  "external_api_used": false,
+  "global_summary": {
+    "classes_seen": [
+      "unknown_other"
+    ],
+    "correct_count": 0,
+    "false_accept_count": 0,
+    "false_review_count": 0,
+    "incorrect_count": 0,
+    "not_reviewed_files": 15,
+    "reviewed_files": 0,
+    "total_files": 15,
+    "uncertain_count": 0
+  },
+  "local_only_mode": true,
+  "phase": "Phase 54 Operator Review Feedback Capture + Class-Level Audit Summary",
+  "phase53_report_modified": false,
+  "phase53_run_id": "57870f4d-af34-4b06-a1d2-11f1bf0e3728",
+  "phase53_total_files": 15,
+  "private_feedback_file": "reports/phase54_operator_review_feedback/operator_feedback_PRIVATE.json",
+  "private_feedback_loaded": false,
+  "public_report_contains_operator_notes": false,
+  "raw_filenames_in_public_report": false,
+  "recommendations": [
+    "Consider document classification expansion because many files remain `unknown_other`.",
+    "Complete operator review before parser tuning or class-specific changes."
+  ],
+  "records": [
+    {
+      "filename_hash": "e11cbfc531a99905",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_001",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "111dae5cbe3d92db",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_002",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "02da9a637b4afc60",
+      "ocr_status": "usable_with_review",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_003",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "8bca6acbe5829fbe",
+      "ocr_status": "poor_ocr",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_004",
+      "status": "review_ocr_quality",
+      "validation_status": "rejected"
+    },
+    {
+      "filename_hash": "651d7154030f7d51",
+      "ocr_status": "usable_with_review",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_005",
+      "status": "review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename_hash": "c354c20c9ad30f13",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_006",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "28fd4495f6687ae0",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_007",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "8a25bbaf71f5c62f",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_008",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "135075b739b67c18",
+      "ocr_status": "usable_with_review",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_009",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "7173c4713359ce65",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_010",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "df6b0747949611fb",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_011",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "f6894f2ce0e360c4",
+      "ocr_status": "good",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_012",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "991607489f76fee7",
+      "ocr_status": "usable_with_review",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_013",
+      "status": "review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename_hash": "b2d437eb93736785",
+      "ocr_status": "usable_with_review",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_014",
+      "status": "accepted",
+      "validation_status": "accepted"
+    },
+    {
+      "filename_hash": "d2a2b96645ec5636",
+      "ocr_status": "usable_with_review",
+      "operator_document_class": "unknown_other",
+      "operator_reason": "other",
+      "operator_verdict": "not_reviewed",
+      "reviewed_at": null,
+      "safe_file_id": "file_015",
+      "status": "accepted",
+      "validation_status": "accepted"
+    }
+  ],
+  "source_phase53_report": "reports/phase53_blind_generalization_audit/phase53_blind_generalization_audit_report.json",
+  "timestamp": "2026-05-03T04:02:51.758604+00:00"
+}

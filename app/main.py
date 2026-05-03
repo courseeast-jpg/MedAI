@@ -9,6 +9,7 @@ import re
 import shutil
 import sys
 import tempfile
+from datetime import UTC, datetime
 from pathlib import Path
 
 import streamlit as st
@@ -675,6 +676,7 @@ def render_blind_audit_tab(sys_components: dict) -> None:
             st.markdown("**Safe file IDs requiring attention**")
             attention = [item["file_id"] for item in report.get("results", []) if item.get("status") != "accepted"]
             st.write(attention or "None")
+            render_phase54_review_section()
     except Exception as exc:
         st.error(f"Blind audit unavailable: {exc}")
 
@@ -690,6 +692,97 @@ def render_blind_audit_summary(report: dict) -> None:
     st.caption(f"External API used: {'Yes' if report.get('external_api_used') else 'No'}")
 
 
+def render_phase54_review_section() -> None:
+    st.divider()
+    st.subheader("Phase54 Operator Review Feedback")
+    st.caption("Capture correct/incorrect/uncertain review feedback using safe file IDs only. Notes are private and ignored by Git.")
+    try:
+        from scripts.run_phase54_operator_review_feedback_summary import (
+            DOCUMENT_CLASSES,
+            JSON_REPORT as PHASE54_JSON_REPORT,
+            MD_REPORT as PHASE54_MD_REPORT,
+            PHASE53_REPORT,
+            PRIVATE_FEEDBACK,
+            REASONS,
+            REPORT_DIR as PHASE54_REPORT_DIR,
+            VERDICTS,
+            run_summary as run_phase54_summary,
+        )
+
+        phase53_report = load_json_file(PHASE53_REPORT)
+        if not phase53_report:
+            st.warning("Phase53 public report is missing. Run Phase53 before capturing Phase54 feedback.")
+            return
+        feedback_path = PHASE54_REPORT_DIR / PRIVATE_FEEDBACK.name
+        st.caption("Private feedback path: reports/phase54_operator_review_feedback/operator_feedback_PRIVATE.json")
+        feedback_payload = load_json_file(feedback_path) or {"feedback": []}
+        feedback_by_id = {row.get("safe_file_id"): row for row in feedback_payload.get("feedback", [])}
+        updated_feedback = []
+        for item in phase53_report.get("results", []):
+            safe_id = item.get("file_id")
+            filename_hash = item.get("filename_hash")
+            existing = feedback_by_id.get(safe_id, {})
+            with st.expander(f"Review {safe_id} · {filename_hash}", expanded=False):
+                cols = st.columns(4)
+                verdict = cols[0].selectbox(
+                    "operator_verdict",
+                    sorted(VERDICTS),
+                    index=sorted(VERDICTS).index(existing.get("operator_verdict", "not_reviewed"))
+                    if existing.get("operator_verdict", "not_reviewed") in sorted(VERDICTS)
+                    else sorted(VERDICTS).index("not_reviewed"),
+                    key=f"phase54_verdict_{safe_id}",
+                )
+                doc_class = cols[1].selectbox(
+                    "operator_document_class",
+                    sorted(DOCUMENT_CLASSES),
+                    index=sorted(DOCUMENT_CLASSES).index(existing.get("operator_document_class", "unknown_other"))
+                    if existing.get("operator_document_class", "unknown_other") in sorted(DOCUMENT_CLASSES)
+                    else sorted(DOCUMENT_CLASSES).index("unknown_other"),
+                    key=f"phase54_class_{safe_id}",
+                )
+                reason = cols[2].selectbox(
+                    "operator_reason",
+                    sorted(REASONS),
+                    index=sorted(REASONS).index(existing.get("operator_reason", "other"))
+                    if existing.get("operator_reason", "other") in sorted(REASONS)
+                    else sorted(REASONS).index("other"),
+                    key=f"phase54_reason_{safe_id}",
+                )
+                cols[3].caption(f"Status: {item.get('status')}")
+                note = st.text_area(
+                    "operator_note_PRIVATE",
+                    value=existing.get("operator_note", ""),
+                    help="Private local note. Do not enter text that should appear in public reports.",
+                    key=f"phase54_note_{safe_id}",
+                )
+                updated_feedback.append(
+                    {
+                        "safe_file_id": safe_id,
+                        "filename_hash": filename_hash,
+                        "operator_verdict": verdict,
+                        "operator_document_class": doc_class,
+                        "operator_reason": reason,
+                        "operator_note": note,
+                        "reviewed_at": existing.get("reviewed_at") if verdict == "not_reviewed" else datetime.now(UTC).isoformat(),
+                    }
+                )
+        if st.button("Save Phase54 Private Feedback"):
+            feedback_path.parent.mkdir(parents=True, exist_ok=True)
+            feedback_path.write_text(json.dumps({"feedback": updated_feedback}, indent=2), encoding="utf-8")
+            st.success("Saved private feedback locally. This file is ignored by Git.")
+        if st.button("Generate Phase54 Class-Level Review Summary", type="primary"):
+            report = run_phase54_summary()
+            st.success(f"Phase54 summary generated: {report['conclusion']}")
+            st.caption(f"Markdown report: {PHASE54_MD_REPORT}")
+            st.caption(f"JSON report: {PHASE54_JSON_REPORT}")
+        phase54_report = load_json_file(PHASE54_JSON_REPORT)
+        if phase54_report:
+            st.markdown("**Phase54 class-level summary**")
+            st.json(phase54_report.get("class_summary", {}), expanded=False)
+    except Exception as exc:
+        st.error(f"Phase54 feedback summary unavailable: {exc}")
+
+
 def render_report_archive_tab() -> None:
     st.subheader("Report Archive")
     st.caption("Previous reports live here so current-run counters stay separate from historical output.")
@@ -699,6 +792,11 @@ def render_report_archive_tab() -> None:
             "phase53 blind audit",
             Path("reports/phase53_blind_generalization_audit/phase53_blind_generalization_audit_report.md"),
             Path("reports/phase53_blind_generalization_audit/phase53_blind_generalization_audit_report.json"),
+        ),
+        (
+            "phase54 operator review feedback",
+            Path("reports/phase54_operator_review_feedback/phase54_operator_review_feedback_report.md"),
+            Path("reports/phase54_operator_review_feedback/phase54_operator_review_feedback_report.json"),
         ),
     ]
     for label, md_path, json_path in archives:

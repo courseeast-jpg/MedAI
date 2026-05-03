@@ -1,0 +1,17 @@
+{
+  "unknown_other": {
+    "accepted": 12,
+    "correct_count": 0,
+    "empty": 0,
+    "errors": 0,
+    "false_accept_count": 0,
+    "false_review_count": 0,
+    "incorrect_count": 0,
+    "not_reviewed_count": 15,
+    "ocr_quality_issue_count": 0,
+    "review": 3,
+    "review_ocr_quality": 1,
+    "total": 15,
+    "uncertain_count": 0
+  }
+}
