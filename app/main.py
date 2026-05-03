@@ -642,9 +642,10 @@ def render_operator_guidance_panel() -> None:
 def render_blind_audit_tab(sys_components: dict) -> None:
     st.subheader("Blind Audit")
     st.caption("Put many PDFs into real_validation_input/")
+    st.caption("Run Blind Audit workflow: Phase53 local-only processing with PHI-safe public reports.")
     st.warning("Do not tune parsers during blind audit. Run first, review report second, change code only after audit is complete.")
     try:
-        from scripts.run_phase51_blind_pdf_generalization_audit import (
+        from scripts.run_phase53_blind_pdf_generalization_audit import (
             INPUT_DIR as BLIND_AUDIT_INPUT_DIR,
             JSON_REPORT as BLIND_AUDIT_JSON_REPORT,
             MD_REPORT as BLIND_AUDIT_MD_REPORT,
@@ -656,16 +657,16 @@ def render_blind_audit_tab(sys_components: dict) -> None:
         blind_files = blind_audit_input_files(BLIND_AUDIT_INPUT_DIR)
         st.caption("Folder: real_validation_input/")
         st.metric("Files found", len(blind_files))
-        if st.button("Run Blind Audit", type="primary"):
+        if st.button("Run Phase53 Blind Audit from real_validation_input/", type="primary"):
             with st.spinner("Running local-only blind audit..."):
                 report = run_blind_audit(pipeline=sys_components["execution"])
-            st.session_state["phase52_blind_audit"] = report
+            st.session_state["phase53_blind_audit"] = report
             st.success(
                 f"Blind audit complete: {report['accepted_count']} accepted, "
                 f"{report['review_count']} review, {report['error_count']} errors."
             )
 
-        report = st.session_state.get("phase52_blind_audit") or load_json_file(BLIND_AUDIT_JSON_REPORT)
+        report = st.session_state.get("phase53_blind_audit") or load_json_file(BLIND_AUDIT_JSON_REPORT)
         if report:
             render_blind_audit_summary(report)
             st.caption(f"Operator summary: {BLIND_AUDIT_OPERATOR_SUMMARY}")
@@ -695,9 +696,9 @@ def render_report_archive_tab() -> None:
     archives = [
         ("latest test run", LATEST_MD_REPORT, LATEST_MD_REPORT.with_suffix(".json")),
         (
-            "phase51 blind audit",
-            Path("reports/phase51_blind_generalization_audit/phase51_blind_generalization_audit_report.md"),
-            Path("reports/phase51_blind_generalization_audit/phase51_blind_generalization_audit_report.json"),
+            "phase53 blind audit",
+            Path("reports/phase53_blind_generalization_audit/phase53_blind_generalization_audit_report.md"),
+            Path("reports/phase53_blind_generalization_audit/phase53_blind_generalization_audit_report.json"),
         ),
     ]
     for label, md_path, json_path in archives:
