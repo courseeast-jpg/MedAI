@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import re
 import shutil
@@ -16,22 +17,26 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
 from app.operator_safety import (
+    PHASE52_SAFETY_WARNING,
+    PRIVACY_INVARIANT_GUIDANCE,
     RELEASE_NAME,
     SNAPSHOT_ID,
     build_result_summary,
     current_commit,
+    detailed_operator_guidance,
+    operator_guidance_catalog,
     privacy_mode_labels,
+    status_badge,
 )
 from app.schemas import MKBRecord, SystemState, UnifiedResponse
 from app.test_launcher import (
     LATEST_MD_REPORT,
     TEST_INPUT_DIR,
-    build_test_launcher_display_state,
     clear_latest_test_reports,
     clear_test_input,
     ensure_test_launcher_dirs,
     list_test_input_files,
-    load_latest_test_run,
+    remove_test_input_file,
     run_medai_test_batch,
     save_uploaded_test_file,
 )
@@ -47,6 +52,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+
+PHASE52_OPERATOR_TABS = ["Current Run", "Blind Audit", "Report Archive"]
 
 
 def display_content(record: MKBRecord) -> tuple[str, bool]:
@@ -117,22 +125,103 @@ def render_system_status(state: SystemState) -> None:
         st.success(f"System ready. Active connectors: {', '.join(state.active_connectors)}")
 
 
-def render_operator_safety_panel() -> None:
+def inject_phase52_styles() -> None:
+    st.markdown(
+        """
+        <style>
+        .stApp { background: #faf9f7; color: #1f2933; }
+        .medai-card {
+            border: 1px solid #d8dee5;
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 1rem;
+            margin-bottom: .75rem;
+        }
+        .medai-header {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 1rem 1.1rem;
+            margin-bottom: .75rem;
+        }
+        .safety-strip {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: .65rem;
+            margin: .75rem 0;
+        }
+        .safety-cell {
+            border: 1px solid #d8dee5;
+            border-radius: 8px;
+            background: #f8fafc;
+            padding: .7rem .8rem;
+        }
+        .safety-cell span { color: #64748b; font-size: .78rem; }
+        .safety-cell strong { display: block; font-size: 1rem; margin-top: .15rem; }
+        .warning-banner {
+            border-left: 4px solid #d97706;
+            background: #fff7ed;
+            color: #7c2d12;
+            padding: .75rem .9rem;
+            border-radius: 8px;
+            margin: .75rem 0 1rem 0;
+        }
+        .badge {
+            display: inline-block;
+            border-radius: 999px;
+            padding: .25rem .65rem;
+            font-size: .8rem;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+        .badge-accepted { background: #dcfce7; color: #166534; border-color: #86efac; }
+        .badge-review { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+        .badge-ocr { background: #ffedd5; color: #9a3412; border-color: #fdba74; }
+        .badge-empty { background: #f1f5f9; color: #475569; border-color: #cbd5e1; }
+        .badge-error { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+        .badge-privacy { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+        .reason-chip {
+            display: inline-block;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            border-radius: 999px;
+            padding: .16rem .5rem;
+            margin: .12rem .18rem .12rem 0;
+            font-size: .78rem;
+        }
+        .muted-label { color: #64748b; font-size: .84rem; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_operator_safety_panel(run_id: str | None = None, timestamp: str | None = None) -> None:
     labels = privacy_mode_labels()
-    st.subheader("Operator Safety")
-    cols = st.columns(3)
-    cols[0].metric("Mode", "HITL")
-    cols[1].metric("Local-only", labels.local_only)
-    cols[2].metric("External APIs", labels.external_apis)
-    st.caption(f"Snapshot: {SNAPSHOT_ID}")
-    st.caption(f"Release: {RELEASE_NAME}")
-    st.caption(f"Commit: {current_commit()}")
-    st.caption(f"PII scrub required: {labels.pii_scrub_required}")
-    if labels.external_apis == "ENABLED":
-        st.warning(labels.warning)
-    else:
-        st.info(labels.warning)
-    st.caption("Not production autonomous. Human review remains required. This is not a medical device and not clinical diagnosis.")
+    st.markdown(
+        f"""
+        <div class="medai-header">
+          <div style="display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;">
+            <div>
+              <div class="muted-label">MedAI v2 · OCR / Layout HITL</div>
+              <h2 style="margin:.15rem 0 .25rem 0;">Operator @local</h2>
+              <div class="muted-label">Snapshot: {SNAPSHOT_ID} · Commit: {current_commit()}</div>
+              <div class="muted-label">Run ID: {run_id or "not started"} · Timestamp: {timestamp or "not available"}</div>
+            </div>
+            <div><span class="badge badge-privacy">SAFE LOCAL MODE</span></div>
+          </div>
+          <div class="safety-strip">
+            <div class="safety-cell"><span>Mode</span><strong>HITL</strong></div>
+            <div class="safety-cell"><span>Local-only</span><strong>{labels.local_only}</strong></div>
+            <div class="safety-cell"><span>External APIs</span><strong>{labels.external_apis}</strong></div>
+            <div class="safety-cell"><span>PII scrub required</span><strong>{labels.pii_scrub_required}</strong></div>
+          </div>
+        </div>
+        <div class="warning-banner">{PHASE52_SAFETY_WARNING}</div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_mkb_record(record: MKBRecord, show_hypothesis_warning: bool = True) -> None:
@@ -366,10 +455,10 @@ def render_conflict_tab(sys_components: dict) -> None:
         st.error(f"Conflict review unavailable: {exc}")
 
 
-def render_test_launcher_tab(sys_components: dict) -> None:
+def render_current_run_tab(sys_components: dict) -> None:
     ensure_test_launcher_dirs()
-    st.subheader("Local Test Launcher")
-    st.caption("Processes supported files from test_input/ through the current MedAI pipeline.")
+    st.subheader("Current Run")
+    st.caption("Upload PDF/TXT files into `test_input/`, review the active queue, then start a new local run.")
 
     specialty = st.selectbox(
         "Test specialty",
@@ -377,10 +466,10 @@ def render_test_launcher_tab(sys_components: dict) -> None:
         key="test_launcher_specialty",
     )
     uploaded_files = st.file_uploader(
-        "Add test files",
+        "Add PDF/TXT files",
         type=["pdf", "txt"],
         accept_multiple_files=True,
-        help="The current local test launcher supports PDF and TXT inputs.",
+        help="Supported files are persisted into test_input/ for local processing.",
     )
     if uploaded_files:
         saved_uploads = st.session_state.get("test_launcher_saved_uploads", {})
@@ -400,100 +489,281 @@ def render_test_launcher_tab(sys_components: dict) -> None:
             st.success(f"Added {len(saved)} file(s) to test_input/.")
 
     files = list_test_input_files()
-    latest = load_latest_test_run()
-    current_run = None
+    active_run = st.session_state.get("phase52_current_run")
+    run_state = "Idle"
+    if active_run:
+        run_state = "Complete" if not active_run.get("failed") else "Failed"
 
-    clear_cols = st.columns(2)
-    if clear_cols[0].button("Clear test_input/"):
+    control_cols = st.columns([1, 1, 1])
+    if control_cols[0].button("Clear queue"):
         removed = clear_test_input()
         st.session_state["test_launcher_saved_uploads"] = {}
+        st.session_state.pop("phase52_current_run", None)
         st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
         st.rerun()
-    if clear_cols[1].button("Clear latest report display"):
+    if control_cols[1].button("Clear latest report"):
         removed = clear_latest_test_reports()
+        st.session_state.pop("phase52_current_run", None)
         st.success(f"Cleared {len(removed)} latest report file(s).")
         st.rerun()
-
-    if st.button("Start MedAI Test Run", type="primary"):
+    if control_cols[2].button("Start new run", type="primary"):
         if not files:
             st.warning("No supported files waiting in test_input/.")
         else:
             with st.spinner("Running MedAI local test batch..."):
-                current_run = run_medai_test_batch(sys_components["execution"], specialty=specialty)
+                summary = run_medai_test_batch(sys_components["execution"], specialty=specialty)
+            st.session_state["phase52_current_run"] = {
+                "timestamp": summary.timestamp,
+                "run_id": summary.run_id,
+                "accepted_count": summary.accepted_count,
+                "review_count": summary.review_count,
+                "error_count": summary.error_count,
+                "results": summary.results,
+                "failed": summary.error_count > 0,
+            }
             st.success(
-                f"Run complete: {current_run.accepted_count} accepted, "
-                f"{current_run.review_count} review, {current_run.error_count} errors."
+                f"Run complete: {summary.accepted_count} accepted, "
+                f"{summary.review_count} review, {summary.error_count} errors."
             )
-            latest = load_latest_test_run()
-            files = list_test_input_files()
+            st.rerun()
 
-    st.markdown("**Files currently in test_input/**")
-    if files:
-        st.caption(f"Queued files count: {len(files)}")
-        for path in files:
-            st.caption(path.name)
+    render_queue_panel(files)
+    active_run = st.session_state.get("phase52_current_run")
+    render_run_status_panel(active_run, run_state="Complete" if active_run else run_state)
+    render_operator_guidance_panel()
+    if active_run:
+        st.markdown("**Per-file results**")
+        for result in active_run.get("results", []):
+            render_run_result_card(result)
     else:
+        st.caption("No current run results. Previous reports are available in Report Archive.")
+
+
+def render_queue_panel(files: list[Path]) -> None:
+    st.markdown("**Active upload queue**")
+    st.metric("Queue count", len(files))
+    if not files:
         st.caption("No supported files waiting.")
+        return
+    header = st.columns([4, 2, 2, 1])
+    header[0].caption("Filename")
+    header[1].caption("Size")
+    header[2].caption("Status")
+    header[3].caption("Remove")
+    for path in files:
+        row = st.columns([4, 2, 2, 1])
+        row[0].caption(path.name)
+        row[1].caption(format_bytes(path.stat().st_size))
+        row[2].caption("queued")
+        if row[3].button("Remove", key=f"remove_queued_{path.name}"):
+            remove_test_input_file(path.name)
+            st.rerun()
 
-    display_state = build_test_launcher_display_state(files, latest, current_run=current_run)
-    status_cols = st.columns(4)
-    status_cols[0].metric("Queued files", display_state["queued_count"])
-    status_cols[1].metric("Accepted", display_state["accepted"])
-    status_cols[2].metric("Review", display_state["review"])
-    status_cols[3].metric("Errors", display_state["errors"])
-    st.caption(f"Run state: {display_state['run_status']}")
-    st.caption(f"Counter source: {display_state['counter_source']}")
-    if display_state["latest_report_timestamp"]:
-        st.caption(f"Last report timestamp: {display_state['latest_report_timestamp']}")
 
-    st.markdown("**Latest report**")
-    if LATEST_MD_REPORT.exists() and display_state["counter_source"] != "no current run":
-        st.code(str(LATEST_MD_REPORT))
-    elif LATEST_MD_REPORT.exists():
-        st.caption("Previous report exists, but no supported files are queued for the current run.")
-        st.code(str(LATEST_MD_REPORT))
-    else:
-        st.caption("No test run report has been written yet.")
+def render_run_status_panel(active_run: dict | None, *, run_state: str) -> None:
+    counts = current_run_counts(active_run)
+    st.markdown("**Run status**")
+    st.markdown(f"<span class='badge badge-privacy'>{run_state}</span>", unsafe_allow_html=True)
+    cols = st.columns(5)
+    metric_specs = [
+        ("Accepted", counts["accepted"], "passed all gates · spot-check"),
+        ("Review", counts["review"], "manual reconciliation"),
+        ("OCR Review", counts["ocr_review"], "do not trust extraction"),
+        ("Empty", counts["empty"], "no usable extraction"),
+        ("Errors", counts["errors"], "processing failed"),
+    ]
+    for col, (label, value, help_text) in zip(cols, metric_specs):
+        col.metric(label, value, help=help_text)
 
-    if latest and display_state["counter_source"] != "no current run":
-        with st.expander("Latest run details", expanded=False):
-            st.json(latest)
-    elif latest:
-        with st.expander("Previous run details", expanded=False):
-            st.json(latest)
 
-    st.divider()
-    st.markdown("**Blind Generalization Audit**")
+def current_run_counts(active_run: dict | None) -> dict[str, int]:
+    if not active_run:
+        return {"accepted": 0, "review": 0, "ocr_review": 0, "empty": 0, "errors": 0}
+    results = list(active_run.get("results") or [])
+    return {
+        "accepted": sum(1 for item in results if item_status(item) == "accepted"),
+        "review": sum(1 for item in results if item_status(item) == "review"),
+        "ocr_review": sum(1 for item in results if item_status(item) == "review_ocr_quality"),
+        "empty": sum(1 for item in results if item_status(item) == "empty"),
+        "errors": sum(1 for item in results if item_status(item) == "error"),
+    }
+
+
+def item_status(item: dict) -> str:
+    if item.get("status") == "error":
+        return "error"
+    if item.get("empty_extraction_flag") or item.get("validation_status") == "empty":
+        return "empty"
+    if item.get("status") == "review_ocr_quality":
+        return "review_ocr_quality"
+    return str(item.get("status") or "review")
+
+
+def render_run_result_card(item: dict) -> None:
+    status = item_status(item)
+    badge = status_badge(status)
+    reason_codes = item.get("reason_codes") or item.get("classification_reason_codes") or []
+    if not reason_codes and item.get("error"):
+        reason_codes = ["processing_error"]
+    if not reason_codes and item.get("validation_status"):
+        reason_codes = [str(item.get("validation_status"))]
+    st.markdown("<div class='medai-card'>", unsafe_allow_html=True)
+    st.markdown(
+        f"### {safe_display_name(item)} &nbsp; <span class='badge {badge['class']}'>{badge['label']}</span>",
+        unsafe_allow_html=True,
+    )
+    cols = st.columns(4)
+    cols[0].metric("Confidence", value_or_unknown(item.get("confidence")))
+    cols[1].metric("Extractor", value_or_unknown(item.get("selected_extractor")))
+    cols[2].metric("Document type", value_or_unknown(item.get("document_type")))
+    cols[3].metric("OCR quality", value_or_unknown(item.get("ocr_quality_band") or item.get("input_quality_band")))
+    details = st.columns(4)
+    details[0].caption(f"Document ID: {item.get('file_id') or item.get('file_name') or 'unknown'}")
+    details[1].caption(f"File size: {format_bytes(int(item.get('file_size_bytes') or 0)) if item.get('file_size_bytes') else 'unknown'}")
+    details[2].caption(f"Privacy mode: {item.get('privacy_gate_mode') or 'local_only'}")
+    details[3].caption(f"External API used: {'Yes' if item.get('external_api_used') else 'No'}")
+    st.caption(f"PII scrub: {pii_scrub_label(item)}")
+    st.caption(f"Processed time: {item.get('processed_time') or item.get('timestamp') or 'unknown'}")
+    st.info(detailed_operator_guidance(status))
+    if reason_codes:
+        chips = " ".join(f"<span class='reason-chip'>{code}</span>" for code in reason_codes)
+        st.markdown(chips, unsafe_allow_html=True)
+    with st.expander("Show raw run record", expanded=False):
+        st.json(item)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_operator_guidance_panel() -> None:
+    with st.expander("Operator guidance", expanded=True):
+        for title, guidance in operator_guidance_catalog().items():
+            st.markdown(f"**{title}:** {guidance}")
+
+
+def render_blind_audit_tab(sys_components: dict) -> None:
+    st.subheader("Blind Audit")
+    st.caption("Put many PDFs into real_validation_input/")
+    st.warning("Do not tune parsers during blind audit. Run first, review report second, change code only after audit is complete.")
     try:
         from scripts.run_phase51_blind_pdf_generalization_audit import (
             INPUT_DIR as BLIND_AUDIT_INPUT_DIR,
+            JSON_REPORT as BLIND_AUDIT_JSON_REPORT,
+            MD_REPORT as BLIND_AUDIT_MD_REPORT,
             OPERATOR_SUMMARY as BLIND_AUDIT_OPERATOR_SUMMARY,
             run_audit as run_blind_audit,
             supported_input_files as blind_audit_input_files,
         )
 
         blind_files = blind_audit_input_files(BLIND_AUDIT_INPUT_DIR)
-        st.caption(f"Files found in real_validation_input/: {len(blind_files)}")
-        if st.button("Run Blind Audit from real_validation_input/"):
+        st.caption("Folder: real_validation_input/")
+        st.metric("Files found", len(blind_files))
+        if st.button("Run Blind Audit", type="primary"):
             with st.spinner("Running local-only blind audit..."):
                 report = run_blind_audit(pipeline=sys_components["execution"])
+            st.session_state["phase52_blind_audit"] = report
             st.success(
                 f"Blind audit complete: {report['accepted_count']} accepted, "
                 f"{report['review_count']} review, {report['error_count']} errors."
             )
+
+        report = st.session_state.get("phase52_blind_audit") or load_json_file(BLIND_AUDIT_JSON_REPORT)
+        if report:
+            render_blind_audit_summary(report)
             st.caption(f"Operator summary: {BLIND_AUDIT_OPERATOR_SUMMARY}")
+            st.caption(f"Markdown report: {BLIND_AUDIT_MD_REPORT}")
+            st.caption(f"JSON report: {BLIND_AUDIT_JSON_REPORT}")
+            st.markdown("**Safe file IDs requiring attention**")
+            attention = [item["file_id"] for item in report.get("results", []) if item.get("status") != "accepted"]
+            st.write(attention or "None")
     except Exception as exc:
-        st.warning(f"Blind audit launcher unavailable: {exc}")
+        st.error(f"Blind audit unavailable: {exc}")
+
+
+def render_blind_audit_summary(report: dict) -> None:
+    cols = st.columns(5)
+    cols[0].metric("Accepted", int(report.get("accepted_count", 0)))
+    cols[1].metric("Review", int(report.get("review_count", 0)))
+    cols[2].metric("OCR Review", int(report.get("review_ocr_quality_count", 0)))
+    cols[3].metric("Empty", int(report.get("empty_count", 0)))
+    cols[4].metric("Errors", int(report.get("error_count", 0)))
+    st.caption(f"Conclusion: {report.get('conclusion', 'unknown')}")
+    st.caption(f"External API used: {'Yes' if report.get('external_api_used') else 'No'}")
+
+
+def render_report_archive_tab() -> None:
+    st.subheader("Report Archive")
+    st.caption("Previous reports live here so current-run counters stay separate from historical output.")
+    archives = [
+        ("latest test run", LATEST_MD_REPORT, LATEST_MD_REPORT.with_suffix(".json")),
+        (
+            "phase51 blind audit",
+            Path("reports/phase51_blind_generalization_audit/phase51_blind_generalization_audit_report.md"),
+            Path("reports/phase51_blind_generalization_audit/phase51_blind_generalization_audit_report.json"),
+        ),
+    ]
+    for label, md_path, json_path in archives:
+        render_archive_card(label, md_path, json_path)
+
+
+def render_archive_card(label: str, md_path: Path, json_path: Path) -> None:
+    payload = load_json_file(json_path)
+    st.markdown("<div class='medai-card'>", unsafe_allow_html=True)
+    st.markdown(f"**{label.title()}**")
+    st.caption(f"Markdown: {md_path}")
+    st.caption(f"JSON: {json_path}")
+    if payload:
+        st.caption(f"Generated timestamp: {payload.get('timestamp') or payload.get('generated_at') or 'unknown'}")
+        st.caption(f"Status/conclusion: {payload.get('conclusion') or payload.get('run_status') or 'available'}")
+    else:
+        st.caption("No report found.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def load_json_file(path: Path) -> dict | None:
+    try:
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    return None
+
+
+def safe_display_name(item: dict) -> str:
+    if item.get("original_filename_redacted"):
+        return str(item["original_filename_redacted"])
+    return str(item.get("file_name") or item.get("filename") or item.get("file_id") or "document")
+
+
+def pii_scrub_label(item: dict) -> str:
+    if item.get("payload_redacted") or item.get("pii_scrub_passed"):
+        return "Passed"
+    if item.get("pii_scrub_failed"):
+        return "Failed"
+    return "Unknown"
+
+
+def value_or_unknown(value) -> str:
+    if value is None or value == "":
+        return "unknown"
+    return str(value)
+
+
+def format_bytes(size: int) -> str:
+    if size <= 0:
+        return "0 B"
+    units = ["B", "KB", "MB", "GB"]
+    value = float(size)
+    for unit in units:
+        if value < 1024 or unit == units[-1]:
+            return f"{value:.1f} {unit}" if unit != "B" else f"{int(value)} B"
+        value /= 1024
+    return f"{size} B"
 
 
 def main() -> None:
+    inject_phase52_styles()
     sys_components = load_system()
-    st.title("MedAI v2 OCR/Layout HITL")
-    st.caption("Personal medical intelligence. Local-first. Decision support only.")
-
     render_operator_safety_panel()
     render_system_status(sys_components["state"])
-    render_conflicts(sys_components)
 
     with st.sidebar:
         st.header("MKB Status")
@@ -506,22 +776,16 @@ def main() -> None:
         st.caption(f"Connectors: {', '.join(ACTIVE_CONNECTORS)}")
         st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
 
-    tab_query, tab_upload, tab_mkb, tab_conflicts, tab_test_launcher = st.tabs(
-        ["Query", "Upload Document", "MKB Explorer", "Conflict Review", "Local Test Launcher"]
-    )
-    with tab_query:
-        render_query_tab(sys_components)
-    with tab_upload:
-        render_upload_tab(sys_components)
-    with tab_mkb:
-        render_mkb_tab(sys_components)
-    with tab_conflicts:
-        render_conflict_tab(sys_components)
-    with tab_test_launcher:
-        render_test_launcher_tab(sys_components)
+    tab_current, tab_blind, tab_archive = st.tabs(PHASE52_OPERATOR_TABS)
+    with tab_current:
+        render_current_run_tab(sys_components)
+    with tab_blind:
+        render_blind_audit_tab(sys_components)
+    with tab_archive:
+        render_report_archive_tab()
 
     st.divider()
-    st.caption("MedAI v1.1. Decision support only. Not a medical device. All outputs require clinical verification.")
+    st.caption(PRIVACY_INVARIANT_GUIDANCE)
 
 
 if __name__ == "__main__":

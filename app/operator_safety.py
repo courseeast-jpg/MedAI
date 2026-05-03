@@ -12,6 +12,14 @@ from app.config import MEDAI_ALLOW_EXTERNAL_API, MEDAI_LOCAL_ONLY, MEDAI_REQUIRE
 
 SNAPSHOT_ID = "MedAI_Snapshot_Phase49_2026-05-01"
 RELEASE_NAME = "MedAI v2 OCR/Layout HITL Release"
+PHASE52_SAFETY_WARNING = (
+    "Not production-autonomous. Human review is required before any extracted fact is used downstream. "
+    "This is not a medical device and does not provide clinical diagnosis."
+)
+PRIVACY_INVARIANT_GUIDANCE = (
+    "Local-only mode, empty extraction, and poor OCR cannot become accepted. "
+    "Cyrillic non-lab routing cannot bypass review."
+)
 
 
 STATUS_GUIDANCE = {
@@ -19,6 +27,57 @@ STATUS_GUIDANCE = {
     "review": "Manual review required before relying on output.",
     "review_ocr_quality": "Do not trust extraction. OCR/input quality is insufficient.",
     "empty": "No usable extraction. Check document quality or format.",
+    "error": "Processing failed.",
+}
+
+DETAILED_STATUS_GUIDANCE = {
+    "accepted": (
+        "Confidence and safety gates passed. Spot-check the labeled values against the source PDF before downstream use. "
+        "The system never auto-promotes lab normalizations."
+    ),
+    "review": (
+        "Manual review required. The extractor produced output below the acceptance gate or matched a non-acceptable "
+        "routing rule. Open side-by-side and reconcile."
+    ),
+    "review_ocr_quality": (
+        "Do not trust the extraction. The OCR/input quality was too low to be reliable. Re-scan, rekey, or request "
+        "a typed copy from the source system."
+    ),
+    "empty": (
+        "No usable extraction. The page contained too little recognizable text to process. Verify the file is a real "
+        "medical document before re-uploading."
+    ),
+    "error": (
+        "Processing failed before extraction could complete. Review the reason codes, resolve the underlying file issue, "
+        "and re-run."
+    ),
+}
+
+STATUS_LABELS = {
+    "accepted": "Accepted",
+    "review": "Review",
+    "review_ocr_quality": "OCR Review",
+    "ocr_review": "OCR Review",
+    "empty": "Empty",
+    "error": "Error",
+}
+
+STATUS_BADGE_STYLES = {
+    "accepted": {"label": "Accepted", "class": "badge-accepted", "color": "green"},
+    "review": {"label": "Review", "class": "badge-review", "color": "amber"},
+    "review_ocr_quality": {"label": "OCR Review", "class": "badge-ocr", "color": "orange"},
+    "ocr_review": {"label": "OCR Review", "class": "badge-ocr", "color": "orange"},
+    "empty": {"label": "Empty", "class": "badge-empty", "color": "gray"},
+    "error": {"label": "Error", "class": "badge-error", "color": "red"},
+    "privacy_local_only": {"label": "SAFE LOCAL MODE", "class": "badge-privacy", "color": "blue"},
+}
+
+STATUS_SUBLABELS = {
+    "accepted": "passed all gates · spot-check",
+    "review": "manual reconciliation",
+    "review_ocr_quality": "do not trust extraction",
+    "empty": "no usable extraction",
+    "error": "processing failed",
 }
 
 
@@ -31,7 +90,38 @@ class PrivacyModeLabels:
 
 
 def operator_guidance(status: str) -> str:
-    return STATUS_GUIDANCE.get(status, "Manual review required before relying on output.")
+    return STATUS_GUIDANCE.get(normalize_status(status), STATUS_GUIDANCE["review"])
+
+
+def detailed_operator_guidance(status: str) -> str:
+    return DETAILED_STATUS_GUIDANCE.get(normalize_status(status), DETAILED_STATUS_GUIDANCE["review"])
+
+
+def normalize_status(status: str | None) -> str:
+    value = str(status or "review").strip().lower()
+    if value in {"ocr_review", "review_ocr", "ocr quality", "ocr review"}:
+        return "review_ocr_quality"
+    return value if value in STATUS_LABELS else "review"
+
+
+def status_label(status: str | None) -> str:
+    return STATUS_LABELS.get(normalize_status(status), "Review")
+
+
+def status_badge(status: str | None) -> dict[str, str]:
+    normalized = normalize_status(status)
+    return dict(STATUS_BADGE_STYLES.get(normalized, STATUS_BADGE_STYLES["review"]))
+
+
+def operator_guidance_catalog() -> dict[str, str]:
+    return {
+        "Accepted": DETAILED_STATUS_GUIDANCE["accepted"],
+        "Review": DETAILED_STATUS_GUIDANCE["review"],
+        "OCR Review": DETAILED_STATUS_GUIDANCE["review_ocr_quality"],
+        "Empty": DETAILED_STATUS_GUIDANCE["empty"],
+        "Error": DETAILED_STATUS_GUIDANCE["error"],
+        "Privacy invariant": PRIVACY_INVARIANT_GUIDANCE,
+    }
 
 
 def privacy_mode_labels(

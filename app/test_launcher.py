@@ -115,6 +115,17 @@ def clear_test_input(input_dir: Path = TEST_INPUT_DIR) -> list[Path]:
     return removed
 
 
+def remove_test_input_file(filename: str, input_dir: Path = TEST_INPUT_DIR) -> Path | None:
+    input_dir.mkdir(parents=True, exist_ok=True)
+    requested = Path(filename or "").name
+    target = input_dir / requested
+    if not target.exists() or not target.is_file() or target.suffix.lower() not in SUPPORTED_TEST_EXTENSIONS:
+        return None
+    target.unlink()
+    (input_dir / ".gitkeep").touch(exist_ok=True)
+    return target
+
+
 def clear_latest_test_reports(report_dir: Path = TEST_RUN_REPORT_DIR) -> list[Path]:
     report_dir.mkdir(parents=True, exist_ok=True)
     removed: list[Path] = []
