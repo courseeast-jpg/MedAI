@@ -49,7 +49,7 @@ def ensure_full_corpus_input(input_dir: Path = INPUT_DIR) -> None:
     (input_dir / ".gitkeep").touch(exist_ok=True)
 
 
-def discover_corpus_files(input_dir: Path = INPUT_DIR, *, recursive: bool = False) -> list[Path]:
+def discover_corpus_files(input_dir: Path = INPUT_DIR, *, recursive: bool = True) -> list[Path]:
     ensure_full_corpus_input(input_dir)
     iterator = input_dir.rglob("*") if recursive else input_dir.iterdir()
     files: list[Path] = []
@@ -59,10 +59,10 @@ def discover_corpus_files(input_dir: Path = INPUT_DIR, *, recursive: bool = Fals
         if path.name == ".gitkeep" or path.name.startswith("."):
             continue
         files.append(path)
-    return sorted(files, key=lambda item: item.name.lower())
+    return sorted(files, key=lambda item: safe_relative_path(item, input_dir).lower())
 
 
-def supported_corpus_files(input_dir: Path = INPUT_DIR, *, recursive: bool = False) -> list[Path]:
+def supported_corpus_files(input_dir: Path = INPUT_DIR, *, recursive: bool = True) -> list[Path]:
     return [path for path in discover_corpus_files(input_dir, recursive=recursive) if path.suffix.lower() in SUPPORTED_EXTENSIONS]
 
 
@@ -71,7 +71,7 @@ def run_inventory_audit(
     input_dir: Path = INPUT_DIR,
     report_dir: Path = REPORT_DIR,
     pipeline: ExecutionPipeline | None = None,
-    recursive: bool = False,
+    recursive: bool = True,
 ) -> dict[str, Any]:
     force_local_only_runtime()
     ensure_full_corpus_input(input_dir)
@@ -108,6 +108,8 @@ def run_inventory_audit(
             item["actual_extractor"] = item.get("actual_extractor") or item.get("selected_extractor")
             item["extension"] = source_path.suffix.lower()
             item["error_category"] = "processing_error" if item.get("status") == "error" else None
+            if source_path.suffix.lower() == ".pdf":
+                item = apply_pdf_inventory_metadata(source_path, item)
         results.append(item)
         write_safe_checkpoint(report_dir, run_id, results)
 
@@ -239,6 +241,113 @@ def processing_error_result(
         "error_category": "processing_error",
         "error": "processing_error",
     }
+
+
+def apply_pdf_inventory_metadata(source_path: Path, item: dict[str, Any]) -> dict[str, Any]:
+    metadata = inspect_pdf_inventory_metadata(source_path)
+    item["page_count"] = metadata["page_count"]
+    item["pdf_embedded_files_detected"] = metadata["embedded_files_detected"]
+    item["pdf_embedded_file_count"] = metadata["embedded_file_count"]
+    item["possible_multi_document_pdf"] = metadata["possible_multi_document_pdf"]
+    item["pdf_document_class_signals"] = metadata["document_class_signals"]
+    reason_codes = list(item.get("reason_codes") or item.get("classification_reason_codes") or [])
+    if metadata["embedded_files_detected"]:
+        reason_codes.append("pdf_portfolio_or_embedded_files_detected")
+    if metadata["possible_multi_document_pdf"]:
+        reason_codes.append("possible_multi_document_pdf")
+    reason_codes = sorted(set(reason_codes))
+    item["reason_codes"] = reason_codes
+    item["classification_reason_codes"] = reason_codes
+    item["review_reason_codes"] = sorted(
+        set(list(item.get("review_reason_codes") or []) + [code for code in reason_codes if "pdf" in code or "review" in code])
+    )
+    if metadata["embedded_files_detected"] or metadata["possible_multi_document_pdf"]:
+        item["status"] = "review"
+        item["outcome"] = item.get("outcome") or "queued_for_review"
+        item["validation_status"] = item.get("validation_status") or "needs_review"
+        item["processed"] = True
+        item["error_category"] = None
+        item["error"] = None
+    return item
+
+
+def inspect_pdf_inventory_metadata(source_path: Path) -> dict[str, Any]:
+    metadata = {
+        "page_count": None,
+        "embedded_files_detected": False,
+        "embedded_file_count": 0,
+        "possible_multi_document_pdf": False,
+        "document_class_signals": [],
+    }
+    try:
+        from PyPDF2 import PdfReader
+
+        reader = PdfReader(str(source_path))
+        pages = list(reader.pages)
+        metadata["page_count"] = len(pages)
+        embedded_count = embedded_file_count_from_reader(reader)
+        metadata["embedded_file_count"] = embedded_count
+        metadata["embedded_files_detected"] = embedded_count > 0
+        class_signals: set[str] = set()
+        for page in pages[:20]:
+            try:
+                class_signals.update(detect_document_class_signals(page.extract_text() or ""))
+            except Exception:
+                continue
+        metadata["document_class_signals"] = sorted(class_signals)
+        metadata["possible_multi_document_pdf"] = len(class_signals) >= 2
+    except Exception:
+        pass
+    return metadata
+
+
+def embedded_file_count_from_reader(reader: Any) -> int:
+    count = 0
+    try:
+        attachments = getattr(reader, "attachments", None)
+        if isinstance(attachments, dict):
+            count += len(attachments)
+    except Exception:
+        pass
+    try:
+        catalog = resolve_pdf_object(reader.trailer.get("/Root", {}))
+        names = catalog.get("/Names") if hasattr(catalog, "get") else None
+        names = resolve_pdf_object(names)
+        embedded = names.get("/EmbeddedFiles") if hasattr(names, "get") else None
+        embedded = resolve_pdf_object(embedded)
+        embedded_names = embedded.get("/Names") if hasattr(embedded, "get") else None
+        if embedded_names:
+            count = max(count, len(embedded_names) // 2)
+    except Exception:
+        pass
+    return count
+
+
+def resolve_pdf_object(value: Any) -> Any:
+    try:
+        return value.get_object() if hasattr(value, "get_object") else value
+    except Exception:
+        return value
+
+
+def detect_document_class_signals(text: str) -> set[str]:
+    lowered = text.lower()
+    signals: set[str] = set()
+    if any(token in lowered for token in ["glucose", "cbc", "wbc", "hemoglobin", "reference range", "lipid panel"]):
+        signals.add("lab_report")
+    if any(token in lowered for token in ["ecg", "ekg", "12-lead", "ventricular rate", "qt interval"]):
+        signals.add("ecg")
+    if any(token in lowered for token in ["rx", "prescription", "sig:", "dispense", "refills"]):
+        signals.add("prescription")
+    if any(token in lowered for token in ["pcr", "culture", "microbiology", "organism", "antibiotic susceptibility"]):
+        signals.add("microbiology_pcr")
+    if any(token in lowered for token in ["x-ray", "mri", "ct scan", "ultrasound", "impression:"]):
+        signals.add("imaging")
+    if any(token in lowered for token in ["assessment", "plan", "chief complaint", "history of present illness"]):
+        signals.add("visit_note")
+    if any(token in lowered for token in ["insurance", "policy", "claim", "member id"]):
+        signals.add("insurance_admin")
+    return signals
 
 
 def write_safe_checkpoint(report_dir: Path, run_id: str, results: list[dict[str, Any]]) -> None:
@@ -422,8 +531,8 @@ def render_markdown(report: dict[str, Any]) -> str:
             "",
             "## Per-File Inventory",
             "",
-            "| Safe File ID | Filename Hash | Content Hash | Extension | Type | Size | Status | Extractor | Confidence | OCR Status | Reason Codes | Error Category |",
-            "| --- | --- | --- | --- | --- | ---: | --- | --- | ---: | --- | --- | --- |",
+            "| Safe File ID | Filename Hash | Content Hash | Extension | Type | Size | Pages | Status | Extractor | Confidence | OCR Status | PDF Flags | Reason Codes | Error Category |",
+            "| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | ---: | --- | --- | --- | --- |",
         ]
     )
     for item in report["results"]:
@@ -436,10 +545,12 @@ def render_markdown(report: dict[str, Any]) -> str:
                     f"`{item.get('extension') or item.get('file_extension')}`",
                     f"`{item.get('file_type')}`",
                     f"`{item.get('file_size_bytes')}`",
+                    f"`{item.get('page_count') or ''}`",
                     f"`{item.get('status')}`",
                     f"`{item.get('selected_extractor')}`",
                     "" if item.get("confidence") is None else f"`{item.get('confidence')}`",
                     f"`{item.get('ocr_status')}`",
+                    f"`{pdf_flags_for(item)}`",
                     f"`{', '.join(item.get('reason_codes') or item.get('classification_reason_codes') or [])}`",
                     f"`{item.get('error_category') or ''}` |",
                 ]
@@ -486,6 +597,15 @@ def render_clusters_markdown(clusters: dict[str, list[str]]) -> str:
             lines.append("- None.")
         lines.append("")
     return "\n".join(lines)
+
+
+def pdf_flags_for(item: dict[str, Any]) -> str:
+    flags: list[str] = []
+    if item.get("pdf_embedded_files_detected"):
+        flags.append("embedded_files")
+    if item.get("possible_multi_document_pdf"):
+        flags.append("possible_multi_document")
+    return ", ".join(flags)
 
 
 def safe_relative_path(path: Path, root: Path) -> str:

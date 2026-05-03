@@ -5,6 +5,8 @@ import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
+from PyPDF2 import PdfWriter
+
 from scripts import run_phase53_blind_pdf_generalization_audit as phase53
 from scripts import run_phase54_operator_review_feedback_summary as phase54
 from scripts import run_phase57_full_corpus_inventory_audit as phase57
@@ -103,6 +105,27 @@ def test_phase57_synthetic_files_use_safe_ids_and_hashes(tmp_path: Path):
     assert "MRN 12345" not in public_md
 
 
+def test_phase57_recursive_subfolder_files_are_included_without_public_folder_paths(tmp_path: Path):
+    input_dir = tmp_path / "full_corpus_input"
+    report_dir = tmp_path / "reports" / "phase57"
+    private_folder = input_dir / "Private Patient Folder"
+    private_folder.mkdir(parents=True)
+    raw_filename = "Secret Folder Name Labs.txt"
+    (private_folder / raw_filename).write_text("Glucose 103 mg/dL", encoding="utf-8")
+
+    report = phase57.run_inventory_audit(input_dir=input_dir, report_dir=report_dir, pipeline=FakeCorpusPipeline())
+    public_json = (report_dir / phase57.JSON_REPORT.name).read_text(encoding="utf-8")
+    public_md = (report_dir / phase57.MD_REPORT.name).read_text(encoding="utf-8")
+    mapping = json.loads((report_dir / phase57.PRIVATE_MAPPING.name).read_text(encoding="utf-8"))
+
+    assert report["total_discovered"] == 1
+    assert report["results"][0]["safe_file_id"] == "corpus_file_000001"
+    assert "Private Patient Folder" not in public_json
+    assert "Private Patient Folder" not in public_md
+    assert raw_filename not in public_json
+    assert mapping["files"]["corpus_file_000001"]["original_relative_path"].replace("\\", "/") == "Private Patient Folder/Secret Folder Name Labs.txt"
+
+
 def test_phase57_private_mapping_created_and_ignored(tmp_path: Path):
     input_dir = tmp_path / "full_corpus_input"
     report_dir = tmp_path / "reports" / "phase57"
@@ -121,6 +144,75 @@ def test_phase57_private_mapping_created_and_ignored(tmp_path: Path):
         capture_output=True,
     )
     assert result.returncode == 0
+
+
+def test_phase57_pdf_page_count_is_recorded_when_available(tmp_path: Path):
+    input_dir = tmp_path / "full_corpus_input"
+    report_dir = tmp_path / "reports" / "phase57"
+    input_dir.mkdir()
+    writer = PdfWriter()
+    writer.add_blank_page(width=72, height=72)
+    writer.add_blank_page(width=72, height=72)
+    with (input_dir / "two-page.pdf").open("wb") as handle:
+        writer.write(handle)
+
+    report = phase57.run_inventory_audit(input_dir=input_dir, report_dir=report_dir, pipeline=FakeCorpusPipeline())
+
+    assert report["results"][0]["page_count"] == 2
+
+
+def test_phase57_pdf_embedded_files_are_flagged_without_public_embedded_names(tmp_path: Path):
+    input_dir = tmp_path / "full_corpus_input"
+    report_dir = tmp_path / "reports" / "phase57"
+    input_dir.mkdir()
+    writer = PdfWriter()
+    writer.add_blank_page(width=72, height=72)
+    writer.add_attachment("private-embedded-name.txt", b"Glucose 103")
+    with (input_dir / "portfolio.pdf").open("wb") as handle:
+        writer.write(handle)
+
+    report = phase57.run_inventory_audit(input_dir=input_dir, report_dir=report_dir, pipeline=FakeCorpusPipeline())
+    item = report["results"][0]
+    public_json = (report_dir / phase57.JSON_REPORT.name).read_text(encoding="utf-8")
+
+    assert item["pdf_embedded_files_detected"] is True
+    assert "pdf_portfolio_or_embedded_files_detected" in item["reason_codes"]
+    assert item["status"] == "review"
+    assert "private-embedded-name.txt" not in public_json
+
+
+def test_phase57_multi_document_pdf_signal_is_flagged_without_splitting(tmp_path: Path, monkeypatch):
+    input_dir = tmp_path / "full_corpus_input"
+    report_dir = tmp_path / "reports" / "phase57"
+    input_dir.mkdir()
+    writer = PdfWriter()
+    writer.add_blank_page(width=72, height=72)
+    with (input_dir / "combined.pdf").open("wb") as handle:
+        writer.write(handle)
+
+    monkeypatch.setattr(
+        phase57,
+        "inspect_pdf_inventory_metadata",
+        lambda path: {
+            "page_count": 4,
+            "embedded_files_detected": False,
+            "embedded_file_count": 0,
+            "possible_multi_document_pdf": True,
+            "document_class_signals": ["ecg", "lab_report"],
+        },
+    )
+    report = phase57.run_inventory_audit(input_dir=input_dir, report_dir=report_dir, pipeline=FakeCorpusPipeline())
+    item = report["results"][0]
+
+    assert item["possible_multi_document_pdf"] is True
+    assert "possible_multi_document_pdf" in item["reason_codes"]
+    assert item["status"] == "review"
+
+
+def test_phase57_document_class_signal_detector_identifies_multiple_classes():
+    text = "CBC Glucose reference range\nECG 12-lead ventricular rate"
+
+    assert phase57.detect_document_class_signals(text) == {"lab_report", "ecg"}
 
 
 def test_phase57_external_apis_blocked_and_local_only_forced(tmp_path: Path):
