@@ -25,6 +25,8 @@ import app.config as app_config
 from execution.jobs import ExecutionJob
 from execution.pipeline import ExecutionPipeline
 import privacy.outbound_gate as outbound_gate
+from ocr_layout.image_ocr import SUPPORTED_IMAGE_EXTENSIONS, extract_image_text
+from ocr_layout.text_quality import assess_text_quality
 from privacy.outbound_gate import guard_external_payload
 from privacy.privacy_audit import phi_artifact_tracking_status, write_json
 from scripts.run_batch_validation import (
@@ -54,7 +56,7 @@ JSON_REPORT = REPORT_DIR / "phase53_blind_generalization_audit_report.json"
 MD_REPORT = REPORT_DIR / "phase53_blind_generalization_audit_report.md"
 OPERATOR_SUMMARY = REPORT_DIR / "phase53_blind_generalization_audit_operator_summary.md"
 PRIVATE_MAPPING = REPORT_DIR / "local_filename_mapping_PRIVATE.json"
-SUPPORTED_EXTENSIONS = {".pdf", ".txt"}
+SUPPORTED_EXTENSIONS = {".pdf", ".txt", *SUPPORTED_IMAGE_EXTENSIONS}
 EXTERNAL_EXTRACTORS = {"gemini", "claude", "openai", "deepl", "dxgpt", "patientnotes_ddi", "anthropic"}
 
 
@@ -167,6 +169,32 @@ def process_one_blind_file(pipeline: ExecutionPipeline, source_path: Path, *, fi
             }
             result = pipeline.run(ExecutionJob(text=selected_text, specialty="general", source_name=file_id, session_id=run_id))
             text_diagnostics = diagnostics_from_result(source_path, dict(result.extractor_result or {}), text_diagnostics)
+        elif source_path.suffix.lower() in SUPPORTED_IMAGE_EXTENSIONS:
+            image_ocr = extract_image_text(source_path)
+            selected_text = image_ocr.text
+            quality = assess_text_quality(selected_text)
+            route_decision = "empty" if quality.band == "empty" else ("poor_ocr" if quality.band == "poor_ocr" else "scanned_or_low_text")
+            ocr_layout = {
+                "selected_text": selected_text,
+                "selected_engine": "image_ocr_tesseract",
+                "input_quality_score": quality.score,
+                "input_quality_band": quality.band,
+                "input_quality_warnings": list(quality.warnings) + list(image_ocr.warnings),
+                "route_decision": route_decision,
+                "ocr_layout_profile": {
+                    "document_type": "image_ocr",
+                    "input_type": "image_ocr",
+                    "image_extension": source_path.suffix.lower(),
+                    "ocr_engine": image_ocr.ocr_engine,
+                    "language_hint": image_ocr.language_hint,
+                    "frame_count": image_ocr.frame_count,
+                    "page_count": image_ocr.page_count,
+                    "ocr_error": image_ocr.error,
+                    "ocr_warnings": image_ocr.warnings,
+                },
+            }
+            result = pipeline.run(ExecutionJob(text=selected_text, specialty="general", source_name=file_id, session_id=run_id))
+            text_diagnostics = diagnostics_from_ocr_layout(ocr_layout, analyze_text(selected_text, method="image_ocr_tesseract"))
         else:
             raise ValueError(f"Unsupported file extension: {source_path.suffix}")
 
@@ -294,7 +322,8 @@ def public_file_result(
         "filename_hash": hash_filename(source_path.name),
         "content_hash": hash_file_content(source_path),
         "file_extension": source_path.suffix.lower(),
-        "file_type": source_path.suffix.lower(),
+        "file_type": file_type_for(source_path),
+        "image_extension": source_path.suffix.lower() if source_path.suffix.lower() in SUPPORTED_IMAGE_EXTENSIONS else None,
         "file_size_bytes": source_path.stat().st_size,
         "status": status,
         "outcome": outcome,
@@ -310,6 +339,7 @@ def public_file_result(
         "ocr_quality_score": ocr_layout.get("input_quality_score"),
         "ocr_layout_route": ocr_layout.get("route_decision"),
         "selected_ocr_engine": ocr_layout.get("selected_engine"),
+        "ocr_engine": profile.get("ocr_engine") or ocr_layout.get("selected_engine"),
         "document_type": profile.get("document_type") or profile.get("input_type"),
         "document_classification": profile.get("document_type") or profile.get("input_type"),
         "privacy_gate_mode": privacy_gate_mode,
@@ -396,7 +426,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         )
     if not report["results"]:
         lines.append("")
-        lines.append("No supported PDF/TXT files were found in `real_validation_input/`.")
+        lines.append("No supported PDF/TXT/image files were found in `real_validation_input/`.")
     return "\n".join(lines) + "\n"
 
 
@@ -440,6 +470,17 @@ def hash_file_identifier(path: Path) -> str:
     digest.update(path.name.encode("utf-8", errors="replace"))
     digest.update(str(path.stat().st_size).encode("ascii"))
     return digest.hexdigest()[:12]
+
+
+def file_type_for(path: Path) -> str:
+    suffix = path.suffix.lower()
+    if suffix in SUPPORTED_IMAGE_EXTENSIONS:
+        return "image"
+    if suffix == ".pdf":
+        return "pdf"
+    if suffix == ".txt":
+        return "txt"
+    return suffix.lstrip(".") or "unknown"
 
 
 def hash_filename(filename: str) -> str:

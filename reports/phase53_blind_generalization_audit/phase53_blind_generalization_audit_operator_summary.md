@@ -1,19 +1,31 @@
 # Phase53 Operator Summary
 
-- Conclusion: `PASS_SAFETY_ACCEPTABLE_AUTOMATION`
-- Accepted: `12`
-- Requires review: `3`
+- Conclusion: `PASS_SAFETY_WEAK_AUTOMATION`
+- Accepted: `0`
+- Requires review: `15`
 - Review OCR quality: `1`
-- Empty: `2`
+- Empty: `11`
 - Errors: `0`
 - External API used: `False`
 - Raw PHI logged: `False`
 
 ## Files Requiring Attention
 
+- `file_001`
+- `file_002`
+- `file_003`
 - `file_004`
 - `file_005`
+- `file_006`
+- `file_007`
+- `file_008`
+- `file_009`
+- `file_010`
+- `file_011`
+- `file_012`
 - `file_013`
+- `file_014`
+- `file_015`
 
 ## Next Action
 

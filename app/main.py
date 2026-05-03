@@ -643,6 +643,7 @@ def render_operator_guidance_panel() -> None:
 def render_blind_audit_tab(sys_components: dict) -> None:
     st.subheader("Blind Audit")
     st.caption("Put many PDFs into real_validation_input/")
+    st.caption("Supported formats: PDF, TXT, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP.")
     st.caption("Run Blind Audit workflow: Phase53 local-only processing with PHI-safe public reports.")
     st.warning("Do not tune parsers during blind audit. Run first, review report second, change code only after audit is complete.")
     try:
