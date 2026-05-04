@@ -1,0 +1,230 @@
+{
+  "generated_at": "2026-05-04T23:56:18.278524+00:00",
+  "phase": "Phase68 Image OCR Low-Quality Diagnostic",
+  "source_phase57_report": "reports/phase57_full_corpus_inventory_audit/phase57_full_corpus_inventory_audit_report.json",
+  "source_phase57_clusters": "reports/phase57_full_corpus_inventory_audit/phase57_full_corpus_problem_clusters.json",
+  "target_cluster": "image_ocr_low_quality",
+  "target_count": 5,
+  "diagnosed_count": 5,
+  "missing_target_ids": [],
+  "root_cause_buckets": {
+    "image_ocr_empty_output": 5
+  },
+  "per_file_diagnostics": [
+    {
+      "safe_file_id": "corpus_file_000145",
+      "file_type": "image",
+      "status": "review_ocr_quality",
+      "ocr_quality_band": "poor_ocr",
+      "ocr_quality_score_bucket": "weak",
+      "selected_ocr_engine": "image_ocr_tesseract",
+      "confidence_bucket": "weak",
+      "empty_extraction_flag": true,
+      "local_image_metadata_available": true,
+      "dimension_bucket": "standard",
+      "contrast_bucket": "moderate",
+      "brightness_bucket": "normal",
+      "frame_count_bucket": "single_frame",
+      "root_cause_bucket": "image_ocr_empty_output",
+      "root_cause_reason_code": "image_ocr_empty_output_without_obvious_metadata_fix",
+      "recommended_operator_action": "Manual review boundary; re-scan/re-capture before relying on extraction.",
+      "prototype_signal": false,
+      "classification_reason_codes": [
+        "classifier_legacy_ocr_flag",
+        "extraction_low_confidence",
+        "extraction_low_coverage",
+        "extraction_sparse_entities",
+        "legacy_suspicious_ocr_context",
+        "poor_input_ocr",
+        "safety_gate_low_confidence",
+        "table_structure_loss"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "external_api_used": false
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "file_type": "image",
+      "status": "review_ocr_quality",
+      "ocr_quality_band": "empty",
+      "ocr_quality_score_bucket": "empty_or_zero",
+      "selected_ocr_engine": "image_ocr_tesseract",
+      "confidence_bucket": "weak",
+      "empty_extraction_flag": true,
+      "local_image_metadata_available": true,
+      "dimension_bucket": "standard",
+      "contrast_bucket": "high_contrast",
+      "brightness_bucket": "normal",
+      "frame_count_bucket": "single_frame",
+      "root_cause_bucket": "image_ocr_empty_output",
+      "root_cause_reason_code": "image_ocr_empty_output_without_obvious_metadata_fix",
+      "recommended_operator_action": "Manual review boundary; re-scan/re-capture before relying on extraction.",
+      "prototype_signal": true,
+      "classification_reason_codes": [
+        "classifier_legacy_ocr_flag",
+        "empty_or_near_empty_text",
+        "extraction_low_confidence",
+        "extraction_low_coverage",
+        "extraction_sparse_entities",
+        "legacy_excessive_ocr_noise",
+        "legacy_suspicious_ocr_context",
+        "safety_gate_low_confidence",
+        "table_structure_loss"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "external_api_used": false
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "file_type": "image",
+      "status": "review_ocr_quality",
+      "ocr_quality_band": "empty",
+      "ocr_quality_score_bucket": "empty_or_zero",
+      "selected_ocr_engine": "image_ocr_tesseract",
+      "confidence_bucket": "weak",
+      "empty_extraction_flag": true,
+      "local_image_metadata_available": true,
+      "dimension_bucket": "standard",
+      "contrast_bucket": "high_contrast",
+      "brightness_bucket": "normal",
+      "frame_count_bucket": "single_frame",
+      "root_cause_bucket": "image_ocr_empty_output",
+      "root_cause_reason_code": "image_ocr_empty_output_without_obvious_metadata_fix",
+      "recommended_operator_action": "Manual review boundary; re-scan/re-capture before relying on extraction.",
+      "prototype_signal": true,
+      "classification_reason_codes": [
+        "classifier_legacy_ocr_flag",
+        "empty_or_near_empty_text",
+        "extraction_low_confidence",
+        "extraction_low_coverage",
+        "extraction_sparse_entities",
+        "legacy_excessive_ocr_noise",
+        "legacy_suspicious_ocr_context",
+        "safety_gate_low_confidence",
+        "table_structure_loss"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "external_api_used": false
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "file_type": "image",
+      "status": "review_ocr_quality",
+      "ocr_quality_band": "poor_ocr",
+      "ocr_quality_score_bucket": "weak",
+      "selected_ocr_engine": "image_ocr_tesseract",
+      "confidence_bucket": "weak",
+      "empty_extraction_flag": true,
+      "local_image_metadata_available": true,
+      "dimension_bucket": "standard",
+      "contrast_bucket": "high_contrast",
+      "brightness_bucket": "normal",
+      "frame_count_bucket": "single_frame",
+      "root_cause_bucket": "image_ocr_empty_output",
+      "root_cause_reason_code": "image_ocr_empty_output_without_obvious_metadata_fix",
+      "recommended_operator_action": "Manual review boundary; re-scan/re-capture before relying on extraction.",
+      "prototype_signal": true,
+      "classification_reason_codes": [
+        "classifier_legacy_ocr_flag",
+        "extraction_low_confidence",
+        "extraction_low_coverage",
+        "extraction_sparse_entities",
+        "legacy_suspicious_ocr_context",
+        "poor_input_ocr",
+        "safety_gate_low_confidence",
+        "table_structure_loss"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "external_api_used": false
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "file_type": "image",
+      "status": "review_ocr_quality",
+      "ocr_quality_band": "poor_ocr",
+      "ocr_quality_score_bucket": "weak",
+      "selected_ocr_engine": "image_ocr_tesseract",
+      "confidence_bucket": "weak",
+      "empty_extraction_flag": true,
+      "local_image_metadata_available": true,
+      "dimension_bucket": "large",
+      "contrast_bucket": "high_contrast",
+      "brightness_bucket": "normal",
+      "frame_count_bucket": "single_frame",
+      "root_cause_bucket": "image_ocr_empty_output",
+      "root_cause_reason_code": "image_ocr_empty_output_without_obvious_metadata_fix",
+      "recommended_operator_action": "Manual review boundary; re-scan/re-capture before relying on extraction.",
+      "prototype_signal": true,
+      "classification_reason_codes": [
+        "classifier_legacy_ocr_flag",
+        "extraction_low_confidence",
+        "extraction_low_coverage",
+        "extraction_sparse_entities",
+        "legacy_suspicious_ocr_context",
+        "poor_input_ocr",
+        "safety_gate_low_confidence",
+        "table_structure_loss"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "external_api_used": false
+    }
+  ],
+  "ocr_quality_band_distribution": {
+    "poor_ocr": 3,
+    "empty": 2
+  },
+  "narrow_image_preprocessing_prototype_justified": true,
+  "prototype_recommendation": {
+    "justified": true,
+    "strong_improvement_path_exists": true,
+    "candidate_count": 4,
+    "candidate_safe_file_ids": [
+      "corpus_file_000204",
+      "corpus_file_000205",
+      "corpus_file_000206",
+      "corpus_file_000573"
+    ],
+    "scope": "diagnostic_only_local_image_preprocessing_comparison",
+    "rationale": "Some image OCR low-quality files have safe metadata consistent with local contrast/brightness or capture-quality preprocessing candidates. A future prototype may compare local image preprocessing variants, but production OCR remains unchanged."
+  },
+  "manual_review_boundary_preserved": true,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "production_ocr_routing_changed": false,
+  "production_extraction_logic_changed": false,
+  "thresholds_changed": false,
+  "safety_gates_changed": false,
+  "local_only_forced": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "images_written_to_public_reports": false,
+  "ocr_text_written_to_public_reports": false,
+  "private_mapping_used_locally": true,
+  "private_mapping_path_public": "[PRIVATE_MAPPING_REDACTED]",
+  "phi_artifact_check": {
+    "tracked_report_phi_files": [],
+    "tracked_report_archive_or_review_files": [],
+    "passed": true
+  },
+  "conclusion": "image_preprocessing_prototype_justified"
+}
