@@ -1,0 +1,50 @@
+{
+  "snapshot_id": "MedAI_Snapshot_Phase62_2026-05-04",
+  "timestamp": "2026-05-04T20:21:55.337531+00:00",
+  "git_commit": "f8eb971a802be4c4448f6af1f046565e3d89b891",
+  "git_status_summary": {
+    "head_matches_requested_commit": true,
+    "requested_commit_prefix": "f8eb971",
+    "worktree_state": "dirty_with_pre_existing_unrelated_changes",
+    "snapshot_scope": "snapshot_docs_only_no_medical_inputs"
+  },
+  "current_phase": "Phase62 - Table Geometry Header Inference Prototype Diagnostic",
+  "validation_status": {
+    "state": "validated_diagnostic_snapshot",
+    "release_mode": "HITL_not_production_autonomous",
+    "production_extractor_should_change_yet": false,
+    "safety_regression_known": false
+  },
+  "local_only_default": true,
+  "external_api_default": false,
+  "total_tests": 506,
+  "skipped_tests": 0,
+  "corpus_totals": {
+    "total_filesystem_files": 615,
+    "total_filesystem_folders": 109,
+    "total_supported_processed": 603,
+    "accepted": 88,
+    "review": 515,
+    "review_ocr_quality": 15,
+    "empty": 438,
+    "unsupported_extension_or_errors": 11,
+    "reconciliation_passed": true
+  },
+  "current_decision": {
+    "phase58_first_class": "empty_extraction",
+    "phase59_dominant_root_cause": "pdf_text_extraction_gap",
+    "phase60_dominant_gap": "numeric_table_without_labels",
+    "phase61_recommended_strategy": "table_geometry_header_inference",
+    "phase61_recommended_strategy_count": "38/38",
+    "phase62_geometry_signal": "medium 20/20",
+    "phase62_recoverable_table_candidate": "0/20",
+    "phase62_max_block_depth": "<= 2",
+    "phase62_safe_next_action": "manual_review_boundary",
+    "production_extractor_should_change_yet": false
+  },
+  "next_valid_options": [
+    "Phase63 PDF Layout Block-Depth Diagnostic",
+    "Return to Phase58 queue: unsupported_extension or OCR-quality follow-up",
+    "Operator review workflow/manual validation"
+  ]
+}
