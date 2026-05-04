@@ -347,7 +347,7 @@ CLUSTERS_JSON = REPORT_DIR / "phase57_full_corpus_problem_clusters.json"
 CLUSTERS_MD = REPORT_DIR / "phase57_full_corpus_problem_clusters.md"
 PRIVATE_MAPPING = REPORT_DIR / "local_filename_mapping_PRIVATE.json"
 CHECKPOINT = REPORT_DIR / "phase57_safe_progress_checkpoint.json"
-SUPPORTED_EXTENSIONS_DISPLAY = ["PDF", "TXT", "TIF", "TIFF", "PNG", "JPG", "JPEG", "BMP", "WEBP"]
+SUPPORTED_EXTENSIONS_DISPLAY = ["PDF", "TXT", "RTF", "TIF", "TIFF", "PNG", "JPG", "JPEG", "BMP", "WEBP"]
 
 
 def ensure_full_corpus_input(input_dir: Path = INPUT_DIR) -> None:

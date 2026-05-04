@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-05-04T22:03:07.944696+00:00",
+  "phase": "Phase64 RTF Local Text Parser Prototype",
+  "source_phase57_report": "reports/phase57_full_corpus_inventory_audit/phase57_full_corpus_inventory_audit_report.json",
+  "source_phase63_report": "reports/phase63_unsupported_extension_triage/phase63_unsupported_extension_triage_report.json",
+  "rtf_supported_extension_registered": true,
+  "supported_extensions": [
+    ".bmp",
+    ".jpeg",
+    ".jpg",
+    ".pdf",
+    ".png",
+    ".rtf",
+    ".tif",
+    ".tiff",
+    ".txt",
+    ".webp"
+  ],
+  "rtf_file_count": 3,
+  "rtf_counts": {
+    "total": 3,
+    "supported_processed": 3,
+    "processing_error": 0,
+    "unsupported_extension": 0,
+    "accepted": 0,
+    "review": 3,
+    "review_ocr_quality": 0,
+    "empty": 0,
+    "errors": 0
+  },
+  "rtf_files": [
+    {
+      "safe_file_id": "corpus_file_000153",
+      "filename_hash": "4f53f7f17f5d2c9f",
+      "content_hash": "31691fdce27ff72e",
+      "extension": ".rtf",
+      "file_type": "rtf_text",
+      "status": "review",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "selected_extractor": "phi3",
+      "confidence": 0.422,
+      "ocr_quality_band": "good",
+      "ocr_layout_route": "digital_clean_text",
+      "selected_ocr_engine": "local_rtf_text_parser",
+      "document_type": "rtf_text",
+      "classification_reason_codes": [
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "review_reason_codes": [
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "error_category": null,
+      "external_api_used": false,
+      "processed": true,
+      "accounting_category": "supported_processed"
+    },
+    {
+      "safe_file_id": "corpus_file_000155",
+      "filename_hash": "4a8c737641146134",
+      "content_hash": "520c7c496a20b8ce",
+      "extension": ".rtf",
+      "file_type": "rtf_text",
+      "status": "review",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "selected_extractor": "rules_based",
+      "confidence": 0.45,
+      "ocr_quality_band": "good",
+      "ocr_layout_route": "digital_clean_text",
+      "selected_ocr_engine": "local_rtf_text_parser",
+      "document_type": "rtf_text",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "error_category": null,
+      "external_api_used": false,
+      "processed": true,
+      "accounting_category": "supported_processed"
+    },
+    {
+      "safe_file_id": "corpus_file_000156",
+      "filename_hash": "9458e54263b281e8",
+      "content_hash": "11fa1fffc429bdba",
+      "extension": ".rtf",
+      "file_type": "rtf_text",
+      "status": "review",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected",
+      "selected_extractor": "rules_based",
+      "confidence": 0.45,
+      "ocr_quality_band": "good",
+      "ocr_layout_route": "digital_clean_text",
+      "selected_ocr_engine": "local_rtf_text_parser",
+      "document_type": "rtf_text",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "error_category": null,
+      "external_api_used": false,
+      "processed": true,
+      "accounting_category": "supported_processed"
+    }
+  ],
+  "non_rtf_extensions_left_unsupported": {
+    ".docx": 3,
+    ".mp3": 3,
+    ".msg": 1,
+    ".ogg": 1
+  },
+  "phase63_prior_rtf_action": {},
+  "rtf_moved_from_unsupported_to_supported_or_safe_error": true,
+  "docx_msg_mp3_ogg_remain_unsupported_or_excluded": true,
+  "external_api_used": false,
+  "local_only_forced": true,
+  "raw_phi_logged_in_public_reports": false,
+  "reconciliation_passed": true,
+  "production_safety_regression": false,
+  "production_extractor_thresholds_changed": false,
+  "public_report_uses_safe_ids_only": true,
+  "private_mapping_used_for_leak_check_only": true,
+  "private_mapping_path_public": "[PRIVATE_MAPPING_REDACTED]",
+  "phi_artifact_check": {
+    "tracked_report_phi_files": [],
+    "tracked_report_archive_or_review_files": [],
+    "passed": true
+  },
+  "conclusion": "rtf_local_parser_prototype_ready"
+}

@@ -29,6 +29,7 @@ from ocr_layout.image_ocr import SUPPORTED_IMAGE_EXTENSIONS, extract_image_text
 from ocr_layout.text_quality import assess_text_quality
 from privacy.outbound_gate import guard_external_payload
 from privacy.privacy_audit import phi_artifact_tracking_status, write_json
+from text_extraction.rtf_text import SUPPORTED_RTF_EXTENSIONS, extract_rtf_text
 from scripts.run_batch_validation import (
     ACCEPTED_OUTCOMES,
     analyze_text,
@@ -56,7 +57,7 @@ JSON_REPORT = REPORT_DIR / "phase53_blind_generalization_audit_report.json"
 MD_REPORT = REPORT_DIR / "phase53_blind_generalization_audit_report.md"
 OPERATOR_SUMMARY = REPORT_DIR / "phase53_blind_generalization_audit_operator_summary.md"
 PRIVATE_MAPPING = REPORT_DIR / "local_filename_mapping_PRIVATE.json"
-SUPPORTED_EXTENSIONS = {".pdf", ".txt", *SUPPORTED_IMAGE_EXTENSIONS}
+SUPPORTED_EXTENSIONS = {".pdf", ".txt", *SUPPORTED_IMAGE_EXTENSIONS, *SUPPORTED_RTF_EXTENSIONS}
 EXTERNAL_EXTRACTORS = {"gemini", "claude", "openai", "deepl", "dxgpt", "patientnotes_ddi", "anthropic"}
 
 
@@ -169,6 +170,29 @@ def process_one_blind_file(pipeline: ExecutionPipeline, source_path: Path, *, fi
             }
             result = pipeline.run(ExecutionJob(text=selected_text, specialty="general", source_name=file_id, session_id=run_id))
             text_diagnostics = diagnostics_from_result(source_path, dict(result.extractor_result or {}), text_diagnostics)
+        elif source_path.suffix.lower() in SUPPORTED_RTF_EXTENSIONS:
+            rtf_result = extract_rtf_text(source_path)
+            selected_text = rtf_result.text
+            quality = assess_text_quality(selected_text)
+            route_decision = "empty" if quality.band == "empty" else ("poor_ocr" if quality.band == "poor_ocr" else "digital_clean_text")
+            ocr_layout = {
+                "selected_text": selected_text,
+                "selected_engine": rtf_result.parser_name,
+                "input_quality_score": quality.score,
+                "input_quality_band": quality.band,
+                "input_quality_warnings": list(quality.warnings) + list(rtf_result.warnings or []),
+                "route_decision": route_decision,
+                "ocr_layout_profile": {
+                    "document_type": "rtf_text",
+                    "input_type": "rtf_text",
+                    "rtf_parser": rtf_result.parser_name,
+                    "rtf_error": rtf_result.error,
+                    "rtf_warnings": list(rtf_result.warnings or []),
+                    "rtf_metadata": dict(rtf_result.metadata or {}),
+                },
+            }
+            result = pipeline.run(ExecutionJob(text=selected_text, specialty="general", source_name=file_id, session_id=run_id))
+            text_diagnostics = diagnostics_from_ocr_layout(ocr_layout, analyze_text(selected_text, method=rtf_result.parser_name))
         elif source_path.suffix.lower() in SUPPORTED_IMAGE_EXTENSIONS:
             image_ocr = extract_image_text(source_path)
             selected_text = image_ocr.text
@@ -480,6 +504,8 @@ def file_type_for(path: Path) -> str:
         return "pdf"
     if suffix == ".txt":
         return "txt"
+    if suffix in SUPPORTED_RTF_EXTENSIONS:
+        return "rtf_text"
     return suffix.lstrip(".") or "unknown"
 
 

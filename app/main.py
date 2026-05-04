@@ -643,7 +643,7 @@ def render_operator_guidance_panel() -> None:
 def render_blind_audit_tab(sys_components: dict) -> None:
     st.subheader("Blind Audit")
     st.caption("Put many PDFs into real_validation_input/")
-    st.caption("Supported formats: PDF, TXT, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP.")
+    st.caption("Supported formats: PDF, TXT, RTF, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP.")
     st.caption("Run Blind Audit workflow: Phase53 local-only processing with PHI-safe public reports.")
     st.warning("Do not tune parsers during blind audit. Run first, review report second, change code only after audit is complete.")
     try:
@@ -687,7 +687,7 @@ def render_phase57_full_corpus_section() -> None:
     st.divider()
     st.subheader("Phase57 Full Corpus Inventory Audit")
     st.caption("Folder: full_corpus_input/")
-    st.caption("Supported formats: PDF, TXT, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP.")
+    st.caption("Supported formats: PDF, TXT, RTF, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP.")
     st.caption("Inventory/discovery only. Public reports use safe IDs and hashes, not raw filenames.")
     try:
         from scripts.run_phase57_full_corpus_inventory_audit import (

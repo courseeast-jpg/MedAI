@@ -152,7 +152,7 @@ def test_phase56_private_mapping_remains_ignored_by_git():
 def test_phase56_ui_mentions_supported_image_formats():
     source = (Path(__file__).resolve().parents[1] / "app" / "main.py").read_text(encoding="utf-8")
 
-    assert "Supported formats: PDF, TXT, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP." in source
+    assert "Supported formats: PDF, TXT, RTF, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP." in source
 
 
 def test_phase56_no_external_api_flags_are_enabled():
