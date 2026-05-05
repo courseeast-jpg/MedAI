@@ -1,0 +1,636 @@
+{
+  "generated_at": "2026-05-05T00:10:47.223905+00:00",
+  "phase": "Phase69 Image OCR Preprocessing Comparison Prototype",
+  "candidate_source": "Phase68 per_file_diagnostics where root_cause_bucket=image_ocr_empty_output",
+  "candidate_count": 5,
+  "candidate_safe_file_ids": [
+    "corpus_file_000145",
+    "corpus_file_000204",
+    "corpus_file_000205",
+    "corpus_file_000206",
+    "corpus_file_000573"
+  ],
+  "variant_names": [
+    "baseline",
+    "grayscale",
+    "contrast_enhancement",
+    "sharpening",
+    "threshold_binarization",
+    "resize_upscale",
+    "rotate_90",
+    "rotate_180",
+    "rotate_270"
+  ],
+  "variant_metrics": [
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "baseline",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "grayscale",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "contrast_enhancement",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "sharpening",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length",
+        "low_medical_token_density"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "threshold_binarization",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length",
+        "low_medical_token_density"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "resize_upscale",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "rotate_90",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "poor",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "rotate_180",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000145",
+      "variant_name": "rotate_270",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "baseline",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "grayscale",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "strong",
+      "recommended_next_action": "candidate_for_phase70_sandbox",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "contrast_enhancement",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "sharpening",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "strong",
+      "recommended_next_action": "candidate_for_phase70_sandbox",
+      "warnings": [
+        "low_text_length",
+        "repeated_symbol_noise"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "threshold_binarization",
+      "text_length_bucket": "short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "strong",
+      "recommended_next_action": "candidate_for_phase70_sandbox",
+      "warnings": [
+        "low_medical_token_density"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "resize_upscale",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "poor",
+      "improvement_bucket": "strong",
+      "recommended_next_action": "candidate_for_phase70_sandbox",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "rotate_90",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "rotate_180",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "variant_name": "rotate_270",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "strong",
+      "recommended_next_action": "candidate_for_phase70_sandbox",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "baseline",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "grayscale",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "contrast_enhancement",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "sharpening",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "threshold_binarization",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "resize_upscale",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "rotate_90",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "rotate_180",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "variant_name": "rotate_270",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "baseline",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "poor",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text",
+        "low_alphabetic_ratio"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "grayscale",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "contrast_enhancement",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "sharpening",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "threshold_binarization",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "meaningful",
+      "recommended_next_action": "candidate_for_phase70_sandbox",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "resize_upscale",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "rotate_90",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "rotate_180",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "variant_name": "rotate_270",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "baseline",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "grayscale",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "contrast_enhancement",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "sharpening",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "threshold_binarization",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "resize_upscale",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "rotate_90",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "rotate_180",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "variant_name": "rotate_270",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    }
+  ],
+  "per_file_summary": [
+    {
+      "safe_file_id": "corpus_file_000145",
+      "best_variant": "baseline",
+      "best_text_length_bucket": "very_short",
+      "best_ocr_quality_bucket": "weak",
+      "best_improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary"
+    },
+    {
+      "safe_file_id": "corpus_file_000204",
+      "best_variant": "grayscale",
+      "best_text_length_bucket": "very_short",
+      "best_ocr_quality_bucket": "weak",
+      "best_improvement_bucket": "strong",
+      "recommended_next_action": "candidate_for_phase70_sandbox"
+    },
+    {
+      "safe_file_id": "corpus_file_000205",
+      "best_variant": "baseline",
+      "best_text_length_bucket": "empty",
+      "best_ocr_quality_bucket": "empty",
+      "best_improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary"
+    },
+    {
+      "safe_file_id": "corpus_file_000206",
+      "best_variant": "threshold_binarization",
+      "best_text_length_bucket": "very_short",
+      "best_ocr_quality_bucket": "weak",
+      "best_improvement_bucket": "meaningful",
+      "recommended_next_action": "candidate_for_phase70_sandbox"
+    },
+    {
+      "safe_file_id": "corpus_file_000573",
+      "best_variant": "baseline",
+      "best_text_length_bucket": "very_short",
+      "best_ocr_quality_bucket": "weak",
+      "best_improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary"
+    }
+  ],
+  "meaningful_improvement_file_count": 2,
+  "meaningful_improvement_safe_file_ids": [
+    "corpus_file_000204",
+    "corpus_file_000206"
+  ],
+  "phase70_controlled_image_ocr_fallback_sandbox_recommended": false,
+  "recommended_next_action": "keep_manual_review_boundary",
+  "manual_review_boundary_preserved": true,
+  "production_ocr_routing_changed": false,
+  "production_extraction_logic_changed": false,
+  "thresholds_changed": false,
+  "safety_gates_changed": false,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "local_only_forced": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "processed_images_written_to_reports": false,
+  "ocr_text_written_to_public_reports": false,
+  "private_mapping_used_locally": true,
+  "private_mapping_path_public": "[PRIVATE_MAPPING_REDACTED]",
+  "tesseract_available": true,
+  "phi_artifact_check_passed": true,
+  "conclusion": "manual_review_boundary_retained"
+}
