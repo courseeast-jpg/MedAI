@@ -1,0 +1,65 @@
+{
+  "block_id": "CKA-B04",
+  "conclusion": "cka_b04_truth_resolution_ready",
+  "synthetic_cases_run": 9,
+  "cases_passed": 9,
+  "all_cases_passed": true,
+  "truth_resolution_ready": true,
+  "quarantine_ready": true,
+  "ordered_rules_enforced": true,
+  "conflict_detection_ready": true,
+  "active_retrieval_excludes_quarantined": true,
+  "active_retrieval_excludes_superseded": true,
+  "medication_dose_conflict_quarantines_only": true,
+  "ddi_layer2_write_gate_implemented": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "replacement_map_written_to_public_reports": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B05 Medication Safety / DDI Dual-Layer Gate",
+  "case_results": {
+    "A": {
+      "passed": true,
+      "description": "Clinical supremacy: trust_level=1 wins"
+    },
+    "B": {
+      "passed": true,
+      "description": "Peer review beats AI-derived record"
+    },
+    "C": {
+      "passed": true,
+      "description": "Recency: newer record supersedes older by >90 days"
+    },
+    "D": {
+      "passed": true,
+      "description": "Source agreement: more sources wins"
+    },
+    "E": {
+      "passed": true,
+      "description": "Value range merge produces merged record"
+    },
+    "F": {
+      "passed": true,
+      "description": "Medication dose conflict quarantines both, no dose advice"
+    },
+    "G": {
+      "passed": true,
+      "description": "Unresolvable conflict quarantines candidate only"
+    },
+    "H": {
+      "passed": true,
+      "description": "Retrieval safety: quarantined/superseded excluded from active"
+    },
+    "I": {
+      "passed": true,
+      "description": "Public privacy audit: report contains no raw PHI or private refs"
+    }
+  }
+}

@@ -73,8 +73,6 @@ class LedgerEventType(str, Enum):
 
 
 _RESERVED_EVENT_TYPES = {
-    LedgerEventType.TRUTH_RESOLUTION,
-    LedgerEventType.QUARANTINE,
     LedgerEventType.DDI_BLOCK,
     LedgerEventType.DDI_WARNING,
     LedgerEventType.ENRICHMENT_WRITE,

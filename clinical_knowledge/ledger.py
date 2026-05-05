@@ -155,6 +155,76 @@ def make_response_discarded_event(
     )
 
 
+def make_truth_resolution_event(
+    record_id: str,
+    safe_record_id: str,
+    rule_applied: str,
+    resolution: str,
+    winner_safe_id: str,
+    loser_safe_id: str,
+    confidence: float,
+    requires_review: bool,
+    explanation: str,
+    actor: str = "truth_resolution_engine",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.TRUTH_RESOLUTION,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"truth_resolution:{rule_applied}",
+        details={
+            "rule_applied": rule_applied,
+            "resolution": resolution,
+            "winner_safe_id": winner_safe_id,
+            "loser_safe_id": loser_safe_id,
+            "confidence": confidence,
+            "requires_review": requires_review,
+            "explanation": explanation,
+        },
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "rule_applied": rule_applied,
+            "resolution": resolution,
+            "winner_safe_id": winner_safe_id,
+            "loser_safe_id": loser_safe_id,
+            "confidence": confidence,
+            "requires_review": requires_review,
+        },
+    )
+
+
+def make_quarantine_event(
+    record_id: str,
+    safe_record_id: str,
+    quarantined_safe_ids: list,
+    conflict_type: str,
+    explanation: str,
+    actor: str = "truth_resolution_engine",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.QUARANTINE,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"quarantine:{conflict_type}",
+        details={
+            "quarantined_safe_ids": quarantined_safe_ids,
+            "conflict_type": conflict_type,
+            "explanation": explanation,
+            "requires_review": True,
+        },
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "quarantined_safe_ids": quarantined_safe_ids,
+            "conflict_type": conflict_type,
+            "requires_review": True,
+        },
+    )
+
+
 def make_validation_event(
     record_id: str,
     safe_record_id: str,
