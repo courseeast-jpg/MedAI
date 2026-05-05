@@ -1,0 +1,242 @@
+{
+  "phase": 74,
+  "phase_name": "Manual Review Package Auto-Improvement",
+  "generated_at": "2026-05-05T02:31:35.520233+00:00",
+  "conclusion": "manual_review_package_auto_improvement_ready",
+  "recommended_next_phase": "Phase75 Review Package UI/Launcher Integration",
+  "recommended_next_action": "Expose the improved safe review package in the local UI or launcher so future review decisions are understandable without manual file-by-file labeling.",
+  "operator_feedback_required": false,
+  "labels_fabricated": false,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "safety_gates_should_change_yet": false,
+  "manual_review_boundary_retained": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "reports_read": [
+    "phase57_full_corpus_inventory_audit",
+    "phase58_stratified_problem_fix_plan",
+    "phase71_operator_feedback_prioritization",
+    "phase72_operator_feedback_collection",
+    "phase72b_operator_review_console",
+    "phase73_operator_feedback_bypass_decision"
+  ],
+  "reports_missing": [],
+  "review_package_item_count": 1489,
+  "bucket_count": 6,
+  "bucket_distribution": {
+    "ocr_quality_review": 12,
+    "empty_extraction_review": 382,
+    "unknown_document_class_review": 509,
+    "possible_multi_document_pdf_review": 578,
+    "unsupported_or_deferred_format_review": 8,
+    "completed_manual_boundary_branches": 0
+  },
+  "high_priority_bucket_count": 1,
+  "safe_review_buckets": [
+    {
+      "bucket_id": "ocr_quality_review",
+      "bucket_name": "OCR Quality Review",
+      "priority": 1,
+      "suspected_problem_classes": [
+        "ocr_quality_gate_trigger",
+        "borderline_ocr_quality",
+        "review_ocr_quality",
+        "pdf_ocr_low_quality",
+        "image_ocr_low_quality"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase66",
+        "phase68",
+        "phase71"
+      ],
+      "aggregate_count": 12,
+      "high_priority_item_count": 3,
+      "pending_safe_ids_sample": [
+        "file_001",
+        "file_011",
+        "file_014"
+      ],
+      "why_it_is_in_review": "OCR quality gate triggered or borderline OCR detected. These files may have degraded text recognition that could lead to missed lab values or mis-classified document class.",
+      "what_the_system_knows": "OCR quality metrics flagged (SSIM/MSE/line-count drop). Safety gate retained \u2014 files are not accepted without operator review.",
+      "what_the_system_does_not_know": "Whether the degradation affects clinically meaningful content. Operator would need to open the original file to confirm.",
+      "safest_next_action": "Defer until operator reviews. Do not lower quality threshold. Consider improving the review UI to surface OCR confidence details.",
+      "whether_operator_action_is_required": true,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "empty_extraction_review",
+      "bucket_name": "Empty Extraction Review",
+      "priority": 2,
+      "suspected_problem_classes": [
+        "empty_extraction",
+        "flagged_needs_review"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase59",
+        "phase60",
+        "phase71"
+      ],
+      "aggregate_count": 382,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "Extraction produced zero structured results. Root cause varies: vocabulary gap, lab table layout failure, sparse rules, or the file genuinely contains no extractable medical data.",
+      "what_the_system_knows": "File text was obtained (or OCR succeeded). Parser returned empty output. Forensic diagnostics (Phase59/60) identified top root causes at aggregate level.",
+      "what_the_system_does_not_know": "Per-file root cause. Whether the document genuinely has no lab data, or if a parser rule gap is responsible.",
+      "safest_next_action": "Improve empty-extraction summary explanation in review package. Show per-item reason codes in the operator UI. Do not change parser rules or confidence thresholds without validated evidence.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "unknown_document_class_review",
+      "bucket_name": "Unknown Document Class Review",
+      "priority": 3,
+      "suspected_problem_classes": [
+        "unknown_document_class",
+        "rules_based_low_confidence",
+        "unknown_other"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase71"
+      ],
+      "aggregate_count": 509,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [
+        "file_002",
+        "file_003",
+        "file_004",
+        "file_005",
+        "file_006",
+        "file_007",
+        "file_008",
+        "file_009",
+        "file_010",
+        "file_012"
+      ],
+      "why_it_is_in_review": "Document class could not be reliably identified by the rule-based classifier. Low-confidence documents are routed to review rather than accepted or rejected.",
+      "what_the_system_knows": "Rule-based classification confidence below threshold. No specific alternative class was detected with sufficient confidence.",
+      "what_the_system_does_not_know": "True document class. Whether the file contains extractable medical data at all. Requires operator judgment to classify.",
+      "safest_next_action": "Improve class-confidence explanations in the review package. Aggregate by likely super-class (lab/ECG/prescription/other) where possible. Do not change classification thresholds without validated operator labels.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "possible_multi_document_pdf_review",
+      "bucket_name": "Possible Multi-Document PDF Review",
+      "priority": 4,
+      "suspected_problem_classes": [
+        "possible_lab_table_failure",
+        "duplicate_or_bundle"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase58",
+        "phase61",
+        "phase62"
+      ],
+      "aggregate_count": 578,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "Document may be a multi-page bundle or contain a complex lab table layout that the extractor cannot reliably split or parse.",
+      "what_the_system_knows": "Phase61/62 geometry diagnostics found column-count signals consistent with bundled reports. Max block depth too shallow for confident header inference.",
+      "what_the_system_does_not_know": "Whether pages represent distinct encounters or a single continuous report. Splitting logic would require validated examples.",
+      "safest_next_action": "Surface geometry signal in the review package so operator can confirm whether splitting is appropriate. Do not implement splitting logic without validated examples.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "unsupported_or_deferred_format_review",
+      "bucket_name": "Unsupported or Deferred Format Review",
+      "priority": 5,
+      "suspected_problem_classes": [
+        "unsupported_extension",
+        "unsupported_format"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase63",
+        "phase64",
+        "phase65"
+      ],
+      "aggregate_count": 8,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "File extension is not supported by the current extraction pipeline (.docx, .msg, .mp3, etc.) or was deferred in Phase63/64/65.",
+      "what_the_system_knows": "Phase64/65 completed RTF support without safety regression. Phase63 triaged remaining unsupported formats. DOCX remains deferred \u2014 no evidence shows it outranks higher-priority work.",
+      "what_the_system_does_not_know": "Whether the unsupported files contain clinically important data. DOCX parsing has not been validated on this corpus.",
+      "safest_next_action": "List unsupported files in the review package by extension. No production format support change without a scoped forensics phase.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "completed_manual_boundary_branches",
+      "bucket_name": "Completed Manual Boundary Branches",
+      "priority": 6,
+      "suspected_problem_classes": [],
+      "source_phases": [
+        "phase62",
+        "phase64",
+        "phase65",
+        "phase67",
+        "phase69",
+        "phase70"
+      ],
+      "aggregate_count": 0,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "Diagnostic branches that were fully investigated and closed at the manual-review boundary. No production change was warranted.",
+      "what_the_system_knows": "Phase62: geometry header prototype \u2014 signal found but insufficient for production. Phase64/65: RTF text parser completed, no safety regression. Phase67: PDF OCR preprocessing comparison \u2014 retained manual-review boundary. Phase69: image OCR preprocessing comparison \u2014 retained manual-review boundary.",
+      "what_the_system_does_not_know": "Nothing material \u2014 these branches are closed.",
+      "safest_next_action": "No action required. Keep closed. Surface in review package as evidence that multiple diagnostic paths have been safely exhausted.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    }
+  ],
+  "next_action_by_bucket": {
+    "ocr_quality_review": "Defer until operator reviews. Do not lower quality threshold. Consider improving the review UI to surface OCR confidence details.",
+    "empty_extraction_review": "Improve empty-extraction summary explanation in review package. Show per-item reason codes in the operator UI. Do not change parser rules or confidence thresholds without validated evidence.",
+    "unknown_document_class_review": "Improve class-confidence explanations in the review package. Aggregate by likely super-class (lab/ECG/prescription/other) where possible. Do not change classification thresholds without validated operator labels.",
+    "possible_multi_document_pdf_review": "Surface geometry signal in the review package so operator can confirm whether splitting is appropriate. Do not implement splitting logic without validated examples.",
+    "unsupported_or_deferred_format_review": "List unsupported files in the review package by extension. No production format support change without a scoped forensics phase.",
+    "completed_manual_boundary_branches": "No action required. Keep closed. Surface in review package as evidence that multiple diagnostic paths have been safely exhausted."
+  },
+  "deferred_branches": [
+    {
+      "branch": "docx_support_triage_or_prototype",
+      "status": "deferred",
+      "evidence": "Phase63/65 leave DOCX as later narrow format work; no evidence shows it outranks operator feedback."
+    },
+    {
+      "branch": "another_ocr_sandbox",
+      "status": "deferred",
+      "evidence": "Phase67 and Phase69 both retained manual-review boundary."
+    },
+    {
+      "branch": "production_ocr_or_extractor_change",
+      "status": "deferred_blocked_by_evidence",
+      "evidence": "No completed diagnostic justifies changing OCR routing, extraction logic, thresholds, or safety gates."
+    }
+  ],
+  "validation_commands": [
+    "python -m pytest tests/test_phase74_manual_review_package_auto_improvement.py",
+    "python scripts/run_phase74_manual_review_package_auto_improvement.py",
+    "python scripts/run_phase47_final_regression_hardening.py",
+    "python scripts/run_phase48_release_snapshot_validation.py",
+    "python scripts/run_phase49_privacy_gate_validation.py",
+    "python -m pytest tests"
+  ],
+  "privacy_self_check": {
+    "raw_filenames_written": false,
+    "raw_paths_written": false,
+    "ocr_text_written": false,
+    "extracted_text_written": false,
+    "phi_written": false,
+    "private_notes_in_public_report": false,
+    "public_report_identifiers": "safe_file_id_samples_and_aggregate_counts_only",
+    "phi_artifact_check_passed": true
+  }
+}

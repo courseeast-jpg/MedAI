@@ -1,0 +1,166 @@
+{
+  "generated_at": "2026-05-05T02:31:35.521233+00:00",
+  "description": "Safe manual review package \u2014 aggregate buckets only. No PHI, no raw filenames, no raw paths.",
+  "buckets": [
+    {
+      "bucket_id": "ocr_quality_review",
+      "bucket_name": "OCR Quality Review",
+      "priority": 1,
+      "suspected_problem_classes": [
+        "ocr_quality_gate_trigger",
+        "borderline_ocr_quality",
+        "review_ocr_quality",
+        "pdf_ocr_low_quality",
+        "image_ocr_low_quality"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase66",
+        "phase68",
+        "phase71"
+      ],
+      "aggregate_count": 12,
+      "high_priority_item_count": 3,
+      "pending_safe_ids_sample": [
+        "file_001",
+        "file_011",
+        "file_014"
+      ],
+      "why_it_is_in_review": "OCR quality gate triggered or borderline OCR detected. These files may have degraded text recognition that could lead to missed lab values or mis-classified document class.",
+      "what_the_system_knows": "OCR quality metrics flagged (SSIM/MSE/line-count drop). Safety gate retained \u2014 files are not accepted without operator review.",
+      "what_the_system_does_not_know": "Whether the degradation affects clinically meaningful content. Operator would need to open the original file to confirm.",
+      "safest_next_action": "Defer until operator reviews. Do not lower quality threshold. Consider improving the review UI to surface OCR confidence details.",
+      "whether_operator_action_is_required": true,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "empty_extraction_review",
+      "bucket_name": "Empty Extraction Review",
+      "priority": 2,
+      "suspected_problem_classes": [
+        "empty_extraction",
+        "flagged_needs_review"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase59",
+        "phase60",
+        "phase71"
+      ],
+      "aggregate_count": 382,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "Extraction produced zero structured results. Root cause varies: vocabulary gap, lab table layout failure, sparse rules, or the file genuinely contains no extractable medical data.",
+      "what_the_system_knows": "File text was obtained (or OCR succeeded). Parser returned empty output. Forensic diagnostics (Phase59/60) identified top root causes at aggregate level.",
+      "what_the_system_does_not_know": "Per-file root cause. Whether the document genuinely has no lab data, or if a parser rule gap is responsible.",
+      "safest_next_action": "Improve empty-extraction summary explanation in review package. Show per-item reason codes in the operator UI. Do not change parser rules or confidence thresholds without validated evidence.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "unknown_document_class_review",
+      "bucket_name": "Unknown Document Class Review",
+      "priority": 3,
+      "suspected_problem_classes": [
+        "unknown_document_class",
+        "rules_based_low_confidence",
+        "unknown_other"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase71"
+      ],
+      "aggregate_count": 509,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [
+        "file_002",
+        "file_003",
+        "file_004",
+        "file_005",
+        "file_006",
+        "file_007",
+        "file_008",
+        "file_009",
+        "file_010",
+        "file_012"
+      ],
+      "why_it_is_in_review": "Document class could not be reliably identified by the rule-based classifier. Low-confidence documents are routed to review rather than accepted or rejected.",
+      "what_the_system_knows": "Rule-based classification confidence below threshold. No specific alternative class was detected with sufficient confidence.",
+      "what_the_system_does_not_know": "True document class. Whether the file contains extractable medical data at all. Requires operator judgment to classify.",
+      "safest_next_action": "Improve class-confidence explanations in the review package. Aggregate by likely super-class (lab/ECG/prescription/other) where possible. Do not change classification thresholds without validated operator labels.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "possible_multi_document_pdf_review",
+      "bucket_name": "Possible Multi-Document PDF Review",
+      "priority": 4,
+      "suspected_problem_classes": [
+        "possible_lab_table_failure",
+        "duplicate_or_bundle"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase58",
+        "phase61",
+        "phase62"
+      ],
+      "aggregate_count": 578,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "Document may be a multi-page bundle or contain a complex lab table layout that the extractor cannot reliably split or parse.",
+      "what_the_system_knows": "Phase61/62 geometry diagnostics found column-count signals consistent with bundled reports. Max block depth too shallow for confident header inference.",
+      "what_the_system_does_not_know": "Whether pages represent distinct encounters or a single continuous report. Splitting logic would require validated examples.",
+      "safest_next_action": "Surface geometry signal in the review package so operator can confirm whether splitting is appropriate. Do not implement splitting logic without validated examples.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "unsupported_or_deferred_format_review",
+      "bucket_name": "Unsupported or Deferred Format Review",
+      "priority": 5,
+      "suspected_problem_classes": [
+        "unsupported_extension",
+        "unsupported_format"
+      ],
+      "source_phases": [
+        "phase57",
+        "phase63",
+        "phase64",
+        "phase65"
+      ],
+      "aggregate_count": 8,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "File extension is not supported by the current extraction pipeline (.docx, .msg, .mp3, etc.) or was deferred in Phase63/64/65.",
+      "what_the_system_knows": "Phase64/65 completed RTF support without safety regression. Phase63 triaged remaining unsupported formats. DOCX remains deferred \u2014 no evidence shows it outranks higher-priority work.",
+      "what_the_system_does_not_know": "Whether the unsupported files contain clinically important data. DOCX parsing has not been validated on this corpus.",
+      "safest_next_action": "List unsupported files in the review package by extension. No production format support change without a scoped forensics phase.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    },
+    {
+      "bucket_id": "completed_manual_boundary_branches",
+      "bucket_name": "Completed Manual Boundary Branches",
+      "priority": 6,
+      "suspected_problem_classes": [],
+      "source_phases": [
+        "phase62",
+        "phase64",
+        "phase65",
+        "phase67",
+        "phase69",
+        "phase70"
+      ],
+      "aggregate_count": 0,
+      "high_priority_item_count": 0,
+      "pending_safe_ids_sample": [],
+      "why_it_is_in_review": "Diagnostic branches that were fully investigated and closed at the manual-review boundary. No production change was warranted.",
+      "what_the_system_knows": "Phase62: geometry header prototype \u2014 signal found but insufficient for production. Phase64/65: RTF text parser completed, no safety regression. Phase67: PDF OCR preprocessing comparison \u2014 retained manual-review boundary. Phase69: image OCR preprocessing comparison \u2014 retained manual-review boundary.",
+      "what_the_system_does_not_know": "Nothing material \u2014 these branches are closed.",
+      "safest_next_action": "No action required. Keep closed. Surface in review package as evidence that multiple diagnostic paths have been safely exhausted.",
+      "whether_operator_action_is_required": false,
+      "whether_production_change_is_allowed": false
+    }
+  ]
+}
