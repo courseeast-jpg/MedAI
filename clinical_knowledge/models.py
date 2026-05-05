@@ -78,8 +78,6 @@ _RESERVED_EVENT_TYPES = {
     LedgerEventType.DDI_BLOCK,
     LedgerEventType.DDI_WARNING,
     LedgerEventType.ENRICHMENT_WRITE,
-    LedgerEventType.SAFE_MODE_ENTRY,
-    LedgerEventType.RESPONSE_DISCARDED,
 }
 
 

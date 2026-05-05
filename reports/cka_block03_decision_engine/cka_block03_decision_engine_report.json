@@ -1,0 +1,50 @@
+{
+  "block_id": "CKA-B03",
+  "conclusion": "cka_b03_decision_engine_ready",
+  "synthetic_cases_run": 8,
+  "all_cases_passed": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "safe_mode_tested": true,
+  "refusal_tested": true,
+  "ddi_layer1_placeholder": true,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B04 Truth Resolution + Quarantine",
+  "case_results": {
+    "A": {
+      "passed": true,
+      "description": "Clean epilepsy query \u2014 normal flow"
+    },
+    "B": {
+      "passed": true,
+      "description": "Medication DDI check flagged correctly"
+    },
+    "C": {
+      "passed": true,
+      "description": "Prescription dosing query refused"
+    },
+    "D": {
+      "passed": true,
+      "description": "All connectors fail triggers safe mode"
+    },
+    "E": {
+      "passed": true,
+      "description": "Low aggregate confidence triggers safe mode"
+    },
+    "F": {
+      "passed": true,
+      "description": "Manual safe mode flag activates prefix"
+    },
+    "G": {
+      "passed": true,
+      "description": "PHI in query detected and sanitized before connectors"
+    },
+    "H": {
+      "passed": true,
+      "description": "Unknown specialty triggers clarification_required flag"
+    }
+  }
+}

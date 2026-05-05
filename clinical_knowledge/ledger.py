@@ -118,6 +118,43 @@ def make_privacy_audit_event(
     )
 
 
+def make_safe_mode_entry_event(
+    record_id: str,
+    safe_record_id: str,
+    reason: str,
+    actor: str = "decision_engine",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.SAFE_MODE_ENTRY,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=reason,
+        details={"safe_mode_reason": reason},
+        safe_public_details={"safe_record_id": safe_record_id, "safe_mode_reason": reason},
+    )
+
+
+def make_response_discarded_event(
+    record_id: str,
+    safe_record_id: str,
+    score: float,
+    reason: str,
+    actor: str = "decision_engine",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.RESPONSE_DISCARDED,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=reason,
+        details={"score": score, "discard_reason": reason},
+        safe_public_details={"safe_record_id": safe_record_id, "score": score},
+    )
+
+
 def make_validation_event(
     record_id: str,
     safe_record_id: str,
