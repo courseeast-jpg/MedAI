@@ -1,0 +1,76 @@
+{
+  "block_id": "CKA-B01",
+  "conclusion": "cka_b01_mkb_foundation_ready",
+  "records_inserted": 11,
+  "ledger_events_written": 12,
+  "active_records_count": 4,
+  "hypothesis_records_count": 4,
+  "quarantined_records_count": 2,
+  "superseded_records_count": 1,
+  "feature_flags": {
+    "ENABLE_GRAPH": false,
+    "ENABLE_LOCAL_LLM": false,
+    "ENRICH_PROMOTE": false,
+    "ACTIVE_CONNECTORS": [
+      "dxgpt_stub"
+    ],
+    "ENABLE_WEB_INGESTION": false,
+    "ENABLE_EPUB": false,
+    "ENABLE_YOUTUBE": false,
+    "SAFE_MODE_THRESHOLD": 0.4,
+    "MEDAI_LOCAL_ONLY": true,
+    "EXTERNAL_APIS_ENABLED": false
+  },
+  "sqlcipher_encryption_active": false,
+  "encryption_boundary_ready": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "privacy_leak_details": [],
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "public_records_sample": [
+    {
+      "safe_record_id": "cka_rec_683dc7f82e4ee8db",
+      "fact_type": "lab_reference_range",
+      "tier": "active",
+      "trust_level": 1,
+      "confidence": 0.95,
+      "requires_review": false
+    },
+    {
+      "safe_record_id": "cka_rec_e9c5cd024f5e211b",
+      "fact_type": "drug_interaction_rule",
+      "tier": "active",
+      "trust_level": 2,
+      "confidence": 0.9,
+      "requires_review": false
+    },
+    {
+      "safe_record_id": "cka_rec_59eb4214d9cb47f5",
+      "fact_type": "diagnostic_criteria",
+      "tier": "active",
+      "trust_level": 2,
+      "confidence": 0.88,
+      "requires_review": false
+    },
+    {
+      "safe_record_id": "cka_rec_43ca6fed9bb3a823",
+      "fact_type": "lab_reference_range",
+      "tier": "active",
+      "trust_level": 1,
+      "confidence": 0.93,
+      "requires_review": false
+    },
+    {
+      "safe_record_id": "cka_rec_1db4f1d16bb58548",
+      "fact_type": "symptom_association",
+      "tier": "hypothesis",
+      "trust_level": 3,
+      "confidence": 0.6,
+      "requires_review": false
+    }
+  ]
+}
