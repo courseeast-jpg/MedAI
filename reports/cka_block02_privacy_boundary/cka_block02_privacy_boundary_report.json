@@ -1,0 +1,48 @@
+{
+  "block_id": "CKA-B02",
+  "conclusion": "cka_b02_privacy_boundary_ready",
+  "synthetic_cases_run": 6,
+  "sanitizer_cases_passed": 5,
+  "outbound_audit_cases_passed": 2,
+  "report_privacy_cases_passed": 3,
+  "all_cases_passed": true,
+  "private_mapping_file_created": true,
+  "private_mapping_gitignored": true,
+  "private_mapping_tracked": false,
+  "replacement_map_written_to_public_reports": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B03 Decision Engine + Safe Mode + Response Scoring",
+  "case_results": {
+    "A": {
+      "passed": true,
+      "description": "clean payload blocked/allowed by allow_external flag"
+    },
+    "B": {
+      "passed": true,
+      "description": "PHI detected, sanitized, private mapping gitignored"
+    },
+    "C": {
+      "passed": true,
+      "description": "Windows/Unix paths and medical filenames detected and removed"
+    },
+    "D": {
+      "passed": true,
+      "description": "API-key-like secrets always block outbound"
+    },
+    "E": {
+      "passed": true,
+      "description": "Nested dict/list recursive sanitization works"
+    },
+    "F": {
+      "passed": true,
+      "description": "Pre-write report check catches raw PHI; sanitization clears it"
+    }
+  }
+}

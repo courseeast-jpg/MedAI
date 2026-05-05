@@ -44,3 +44,7 @@ reports/phase57_full_corpus_inventory_audit/local_filename_mapping_PRIVATE.json
 reports/phase57_full_corpus_inventory_audit/operator_notes_PRIVATE.json
 reports/phase57_full_corpus_inventory_audit/phase57_safe_progress_checkpoint.json
 reports/phase72_operator_feedback_collection/operator_feedback_PRIVATE.json
+
+# CKA private sanitization/mapping files — never tracked
+reports/**/*_PRIVATE.json
+reports/**/private_*_PRIVATE.json

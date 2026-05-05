@@ -61,6 +61,7 @@ class LedgerEventType(str, Enum):
     TIER_CHANGED = "tier_changed"
     STATUS_CHANGED = "status_changed"
     VALIDATION_RUN = "validation_run"
+    PRIVACY_AUDIT = "privacy_audit"     # CKA-B02: privacy boundary audit event
     # Reserved — not active behavior in B01:
     TRUTH_RESOLUTION = "truth_resolution"
     QUARANTINE = "quarantine"

@@ -95,6 +95,29 @@ def make_status_changed_event(
     )
 
 
+def make_privacy_audit_event(
+    record_id: str,
+    safe_record_id: str,
+    findings_summary: Dict[str, Any],
+    passed: bool,
+    actor: str = "privacy_boundary",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.PRIVACY_AUDIT,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason="privacy audit",
+        details={"findings_summary": findings_summary, "passed": passed},
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "passed": passed,
+            "finding_categories": list(findings_summary.keys()),
+        },
+    )
+
+
 def make_validation_event(
     record_id: str,
     safe_record_id: str,
