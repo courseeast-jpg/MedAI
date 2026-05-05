@@ -1,0 +1,21 @@
+{
+  "_comment": "PRIVATE feedback file \u2014 do not commit or share. Replace placeholder IDs with real safe_file_ids from the review queue. Do not add raw filenames, raw paths, or PHI.",
+  "reviewer_id": "operator_1",
+  "review_session": "phase72_session_001",
+  "feedback": [
+    {
+      "safe_file_id": "PLACEHOLDER_file_001",
+      "operator_verdict": "correct_review",
+      "operator_document_class": "lab_report",
+      "operator_notes": "",
+      "reviewed_at": "YYYY-MM-DDTHH:MM:SSZ"
+    },
+    {
+      "safe_file_id": "PLACEHOLDER_file_002",
+      "operator_verdict": "not_medical",
+      "operator_document_class": "admin_or_billing",
+      "operator_notes": "",
+      "reviewed_at": "YYYY-MM-DDTHH:MM:SSZ"
+    }
+  ]
+}

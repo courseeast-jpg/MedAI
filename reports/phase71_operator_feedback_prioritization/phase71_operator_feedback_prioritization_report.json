@@ -1,0 +1,91 @@
+{
+  "phase": 71,
+  "phase_name": "Operator Feedback Completion and Review Prioritization",
+  "generated_at": "2026-05-05T00:58:40.813521+00:00",
+  "conclusion": "operator_feedback_prioritization_ready",
+  "recommended_next_phase": "Phase72 Operator Feedback Collection Pass",
+  "recommended_next_action": "Run operator review on the prioritized safe queue before more extractor/OCR work.",
+  "external_api_used": false,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "safety_gates_should_change_yet": false,
+  "manual_review_boundary_retained": true,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "reports_read": [
+    "phase70_post_diagnostics_decision_audit",
+    "phase54_operator_review_feedback",
+    "phase53_blind_generalization_audit",
+    "phase57_full_corpus_inventory_audit",
+    "phase58_stratified_problem_fix_plan"
+  ],
+  "reports_missing": [],
+  "open_branches": [
+    {
+      "branch": "operator_feedback_completion",
+      "status": "open",
+      "evidence": "Phase54 reviewed_files=0; not_reviewed_files=15."
+    },
+    {
+      "branch": "manual_review_package_improvement",
+      "status": "open",
+      "evidence": "Diagnostics repeatedly retain review/manual-review boundaries; operator workflow quality now limits useful next decisions."
+    },
+    {
+      "branch": "document_class_classifier_improvement",
+      "status": "open",
+      "evidence": "Full-corpus diagnostics still leave broad empty-extraction/document-class ambiguity unresolved."
+    }
+  ],
+  "deferred_branches": [
+    {
+      "branch": "docx_support_triage_or_prototype",
+      "status": "deferred",
+      "evidence": "Phase63/65 leave DOCX as later narrow format work; no evidence shows it outranks operator feedback."
+    },
+    {
+      "branch": "another_ocr_sandbox",
+      "status": "deferred",
+      "evidence": "Phase67 and Phase69 both retained manual-review boundary."
+    },
+    {
+      "branch": "production_ocr_or_extractor_change",
+      "status": "deferred_blocked_by_evidence",
+      "evidence": "No completed diagnostic justifies changing OCR routing, extraction logic, thresholds, or safety gates."
+    }
+  ],
+  "review_queue_count": 15,
+  "priority_distribution": {
+    "tier_1": 3,
+    "tier_2": 12
+  },
+  "problem_class_distribution": {
+    "unknown_document_class": 12,
+    "borderline_ocr_quality": 1,
+    "flagged_needs_review": 1,
+    "ocr_quality_gate_trigger": 1
+  },
+  "top_review_goals": [
+    "Determine whether this OCR-quality-flagged file contains usable medical data or whether the OCR safety gate correctly deferred it.",
+    "Determine whether OCR quality is genuinely marginal or whether the document is structurally unusual \u2014 informs manual-review-package improvement.",
+    "Validation system flagged this file as requiring human review. Confirm whether the routing decision was correct."
+  ],
+  "ocr_sandbox_recommended": false,
+  "production_change_recommended": false,
+  "validation_commands": [
+    "python -m pytest tests",
+    "python scripts/run_phase71_operator_feedback_prioritization.py",
+    "python scripts/run_phase47_final_regression_hardening.py",
+    "python scripts/run_phase48_release_snapshot_validation.py",
+    "python scripts/run_phase49_privacy_gate_validation.py"
+  ],
+  "privacy_self_check": {
+    "raw_filenames_written": false,
+    "raw_paths_written": false,
+    "ocr_text_written": false,
+    "extracted_text_written": false,
+    "phi_written": false,
+    "public_report_identifiers": "safe_file_ids_only",
+    "phi_artifact_check_passed": true
+  }
+}
