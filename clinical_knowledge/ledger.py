@@ -287,6 +287,51 @@ def make_ddi_warning_event(
     )
 
 
+def make_enrichment_write_event(
+    record_id: str,
+    safe_record_id: str,
+    tier: str,
+    trust_level: int,
+    safe_candidate_id: str,
+    actor: str = "enrichment_writer",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.ENRICHMENT_WRITE,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason="enrichment hypothesis write",
+        details={"tier": tier, "trust_level": trust_level, "safe_candidate_id": safe_candidate_id},
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "safe_candidate_id": safe_candidate_id,
+            "tier": tier,
+        },
+    )
+
+
+def make_hypothesis_promoted_event(
+    record_id: str,
+    safe_record_id: str,
+    promotion_mode: str,
+    actor: str = "enrichment_promotion",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.HYPOTHESIS_PROMOTED,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"hypothesis_promotion:{promotion_mode}",
+        details={"promotion_mode": promotion_mode},
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "promotion_mode": promotion_mode,
+        },
+    )
+
+
 def make_validation_event(
     record_id: str,
     safe_record_id: str,

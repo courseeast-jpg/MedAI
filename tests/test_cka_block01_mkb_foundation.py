@@ -357,15 +357,20 @@ def test_ledger_event_appended_on_tier_change():
     assert LedgerEventType.TIER_CHANGED.value in types
 
 
-def test_reserved_event_type_raises():
+def test_all_event_types_active_in_b06():
+    # CKA-B06 activates ENRICHMENT_WRITE and HYPOTHESIS_PROMOTED.
+    # _RESERVED_EVENT_TYPES is now empty — all types may be created.
+    from clinical_knowledge.models import _RESERVED_EVENT_TYPES, LedgerEventType
+    assert len(_RESERVED_EVENT_TYPES) == 0
     r = _make_record()
-    with pytest.raises(ValueError, match="reserved"):
-        LedgerEvent(
-            event_id="x",
-            event_type=LedgerEventType.ENRICHMENT_WRITE,
-            record_id=r.record_id,
-            timestamp="2026-01-01T00:00:00+00:00",
-        )
+    # Should NOT raise any more
+    evt = LedgerEvent(
+        event_id="x",
+        event_type=LedgerEventType.ENRICHMENT_WRITE,
+        record_id=r.record_id,
+        timestamp="2026-01-01T00:00:00+00:00",
+    )
+    assert evt.event_type == LedgerEventType.ENRICHMENT_WRITE
 
 
 def test_ledger_count():

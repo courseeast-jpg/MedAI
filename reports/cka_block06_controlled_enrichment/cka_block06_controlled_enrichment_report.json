@@ -1,0 +1,82 @@
+{
+  "block_id": "CKA-B06",
+  "conclusion": "cka_b06_controlled_enrichment_ready",
+  "synthetic_cases_run": 11,
+  "cases_passed": 11,
+  "all_cases_passed": true,
+  "controlled_enrichment_ready": true,
+  "candidate_extractor_ready": true,
+  "hypothesis_writer_ready": true,
+  "enrichment_queue_ready": true,
+  "promotion_preparation_ready": true,
+  "all_ai_facts_written_as_hypothesis": true,
+  "ai_facts_written_active": false,
+  "enrich_promote_default": false,
+  "auto_promotion_blocked": true,
+  "medication_candidates_pass_through_ddi_gate": true,
+  "high_ddi_blocks_hypothesis_write": true,
+  "ddi_unavailable_queues_pending": true,
+  "truth_resolution_handoff_ready": true,
+  "safe_mode_disables_enrichment": true,
+  "real_external_connectors_implemented": false,
+  "real_llm_enrichment_used": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "replacement_map_written_to_public_reports": false,
+  "source_response_text_written_to_public_reports": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B07 Medical Coding / SNOMED-UMLS Interface",
+  "case_results": {
+    "A": {
+      "passed": true,
+      "description": "AI diagnosis candidate written as hypothesis, trust_level=3, not active"
+    },
+    "B": {
+      "passed": true,
+      "description": "Web-unverified candidate written as hypothesis, trust_level=4/5, not active"
+    },
+    "C": {
+      "passed": true,
+      "description": "Duplicate candidate discarded, no second record written"
+    },
+    "D": {
+      "passed": true,
+      "description": "Conflict routes to Truth Resolution; no unsafe active write"
+    },
+    "E": {
+      "passed": true,
+      "description": "Medication LOW/NONE DDI \u2014 hypothesis write allowed"
+    },
+    "F": {
+      "passed": true,
+      "description": "HIGH DDI blocks hypothesis write; ddi_block event written; no advice"
+    },
+    "G": {
+      "passed": true,
+      "description": "DDI unavailable \u2014 queued_pending_safety, no silent write"
+    },
+    "H": {
+      "passed": true,
+      "description": "Safe mode active \u2014 enrichment disabled, queued with safe_mode_enrichment_disabled"
+    },
+    "I": {
+      "passed": true,
+      "description": "ENRICH_PROMOTE=False blocks auto-promotion; no active write"
+    },
+    "J": {
+      "passed": true,
+      "description": "Manual promotion prepared only; no auto-promotion; record stays hypothesis"
+    },
+    "K": {
+      "passed": true,
+      "description": "Privacy audit: no raw PHI in public report"
+    }
+  }
+}

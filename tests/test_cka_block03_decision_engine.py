@@ -591,9 +591,10 @@ class TestLedgerIntegration:
         assert LedgerEventType.SAFE_MODE_ENTRY not in _RESERVED_EVENT_TYPES
         assert LedgerEventType.RESPONSE_DISCARDED not in _RESERVED_EVENT_TYPES
 
-    def test_enrichment_write_still_reserved(self):
+    def test_enrichment_write_now_active_in_b06(self):
         from clinical_knowledge.models import _RESERVED_EVENT_TYPES, LedgerEventType
-        assert LedgerEventType.ENRICHMENT_WRITE in _RESERVED_EVENT_TYPES
+        assert LedgerEventType.ENRICHMENT_WRITE not in _RESERVED_EVENT_TYPES
+        assert len(_RESERVED_EVENT_TYPES) == 0
 
     def test_engine_writes_privacy_audit_to_ledger(self, populated_store, default_config):
         from clinical_knowledge.models import LedgerEventType

@@ -68,13 +68,12 @@ class LedgerEventType(str, Enum):
     DDI_BLOCK = "ddi_block"
     DDI_WARNING = "ddi_warning"
     ENRICHMENT_WRITE = "enrichment_write"
+    HYPOTHESIS_PROMOTED = "hypothesis_promoted"
     SAFE_MODE_ENTRY = "safe_mode_entry"
     RESPONSE_DISCARDED = "response_discarded"
 
 
-_RESERVED_EVENT_TYPES = {
-    LedgerEventType.ENRICHMENT_WRITE,
-}
+_RESERVED_EVENT_TYPES: set = set()  # All event types activated through CKA-B06
 
 
 def _default_tier_for_trust(trust_level: TrustLevel) -> KnowledgeTier:

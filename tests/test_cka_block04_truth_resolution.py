@@ -657,12 +657,13 @@ class TestSafetyBoundaries:
         assert "1000" not in expl
         assert "500" not in expl
 
-    def test_ddi_layer2_now_active_in_b05(self):
-        # B05 activates DDI_BLOCK and DDI_WARNING; ENRICHMENT_WRITE remains reserved
+    def test_all_ledger_types_active_in_b06(self):
+        # B05 activated DDI_BLOCK/DDI_WARNING; B06 activates ENRICHMENT_WRITE/HYPOTHESIS_PROMOTED
         from clinical_knowledge.models import _RESERVED_EVENT_TYPES, LedgerEventType
         assert LedgerEventType.DDI_BLOCK not in _RESERVED_EVENT_TYPES
         assert LedgerEventType.DDI_WARNING not in _RESERVED_EVENT_TYPES
-        assert LedgerEventType.ENRICHMENT_WRITE in _RESERVED_EVENT_TYPES
+        assert LedgerEventType.ENRICHMENT_WRITE not in _RESERVED_EVENT_TYPES
+        assert len(_RESERVED_EVENT_TYPES) == 0
 
     def test_public_summary_no_raw_refs(self):
         cand = _rec(
