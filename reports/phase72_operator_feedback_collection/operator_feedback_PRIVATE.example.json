@@ -1,0 +1,32 @@
+{
+  "_comment": "PRIVATE feedback file \u2014 do not commit or share. Replace PLACEHOLDER IDs with real safe_file_ids from the review queue. Do not add raw filenames, raw paths, or PHI.",
+  "phase": 72,
+  "initialized_at": "YYYY-MM-DDTHH:MM:SSZ",
+  "queue_source": "phase71_operator_review_queue_SAFE.json",
+  "feedback": [
+    {
+      "safe_file_id": "PLACEHOLDER_file_001",
+      "priority_rank": 1,
+      "priority_tier": 1,
+      "suspected_problem_class": "ocr_quality_gate_trigger",
+      "review_goal": "Determine whether OCR safety gate was correct.",
+      "operator_question": "Is this a real medical document?",
+      "status": "reviewed",
+      "answer": "correct_review",
+      "private_note": "",
+      "reviewed_at": "YYYY-MM-DDTHH:MM:SSZ"
+    },
+    {
+      "safe_file_id": "PLACEHOLDER_file_002",
+      "priority_rank": 4,
+      "priority_tier": 2,
+      "suspected_problem_class": "unknown_document_class",
+      "review_goal": "Determine true document class.",
+      "operator_question": "What kind of document is this?",
+      "status": "pending",
+      "answer": null,
+      "private_note": null,
+      "reviewed_at": null
+    }
+  ]
+}
