@@ -1,0 +1,153 @@
+{
+  "generated_at": "2026-05-04T22:47:20.975819+00:00",
+  "phase": "Phase65 Full Corpus Delta Audit After RTF Support",
+  "source_phase57_report": "reports/phase57_full_corpus_inventory_audit/phase57_full_corpus_inventory_audit_report.json",
+  "source_phase63_report": "reports/phase63_unsupported_extension_triage/phase63_unsupported_extension_triage_report.json",
+  "source_phase64_report": "reports/phase64_rtf_local_text_parser/phase64_rtf_local_text_parser_report.json",
+  "before": {
+    "unsupported_extension_count": 11,
+    "unsupported_extension_distribution": {
+      ".docx": 3,
+      ".mp3": 3,
+      ".msg": 1,
+      ".ogg": 1,
+      ".rtf": 3
+    }
+  },
+  "after": {
+    "unsupported_extension_count": 8,
+    "unsupported_extension_distribution": {
+      ".docx": 3,
+      ".mp3": 3,
+      ".msg": 1,
+      ".ogg": 1
+    },
+    "total_supported": 606,
+    "total_processed": 606,
+    "accepted": 93,
+    "review": 513,
+    "review_ocr_quality": 16,
+    "empty": 382,
+    "errors": 8
+  },
+  "delta": {
+    "unsupported_extension_count": -3,
+    "accepted": 0,
+    "review": 3,
+    "review_ocr_quality": 0,
+    "empty": 0,
+    "errors": -3,
+    "supported_processed": 3
+  },
+  "rtf_moved_from_unsupported_to_supported_processed": true,
+  "rtf_file_count": 3,
+  "rtf_files": [
+    {
+      "safe_file_id": "corpus_file_000153",
+      "filename_hash": "4f53f7f17f5d2c9f",
+      "content_hash": "31691fdce27ff72e",
+      "extension": ".rtf",
+      "file_type": "rtf_text",
+      "status": "review",
+      "selected_extractor": "phi3",
+      "confidence": 0.422,
+      "classification_reason_codes": [
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "review_reason_codes": [
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "accounting_category": "supported_processed",
+      "external_api_used": false
+    },
+    {
+      "safe_file_id": "corpus_file_000155",
+      "filename_hash": "4a8c737641146134",
+      "content_hash": "520c7c496a20b8ce",
+      "extension": ".rtf",
+      "file_type": "rtf_text",
+      "status": "review",
+      "selected_extractor": "rules_based",
+      "confidence": 0.45,
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "accounting_category": "supported_processed",
+      "external_api_used": false
+    },
+    {
+      "safe_file_id": "corpus_file_000156",
+      "filename_hash": "9458e54263b281e8",
+      "content_hash": "11fa1fffc429bdba",
+      "extension": ".rtf",
+      "file_type": "rtf_text",
+      "status": "review",
+      "selected_extractor": "rules_based",
+      "confidence": 0.45,
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "review_reason_codes": [
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "accounting_category": "supported_processed",
+      "external_api_used": false
+    }
+  ],
+  "docx_mp3_msg_ogg_remain_unsupported_or_excluded": true,
+  "non_rtf_extensions_left_unsupported": {
+    ".docx": 3,
+    ".mp3": 3,
+    ".msg": 1,
+    ".ogg": 1
+  },
+  "safety_delta": {
+    "external_api_used": false,
+    "raw_phi_logged": false,
+    "safety_regression": false,
+    "reconciliation_passed": true,
+    "phi_report_artifacts_tracked": false
+  },
+  "local_only_forced": true,
+  "external_api_used": false,
+  "raw_phi_logged": false,
+  "raw_phi_logged_in_public_reports": false,
+  "reconciliation_passed": true,
+  "safety_regression": false,
+  "production_extractor_should_change_yet": false,
+  "recommendation": {
+    "summary": "RTF impact measured. Do not add more formats without prioritization evidence.",
+    "docx": "Support later only if operator review shows DOCX is important.",
+    "msg_audio": "Keep MSG/audio explicitly excluded until a separate privacy-safe conversion/transcription phase is justified.",
+    "next_problem_class_options": [
+      "pdf_ocr_low_quality",
+      "image_ocr_low_quality"
+    ],
+    "recommended_next_class": "pdf_ocr_low_quality"
+  },
+  "private_mapping_used_for_leak_check_only": true,
+  "private_mapping_path_public": "[PRIVATE_MAPPING_REDACTED]",
+  "phi_artifact_check": {
+    "tracked_report_phi_files": [],
+    "tracked_report_archive_or_review_files": [],
+    "passed": true
+  },
+  "conclusion": "rtf_delta_measured_no_safety_regression"
+}

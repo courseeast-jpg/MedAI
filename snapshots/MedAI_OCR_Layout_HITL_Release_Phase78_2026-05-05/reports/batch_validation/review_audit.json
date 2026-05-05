@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-04-30T22:50:41.861986+00:00",
+  "source_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\batch_validation\\latest_batch_validation.json",
+  "source_timestamp": "2026-04-30T22:49:55.927200+00:00",
+  "total_reviewed": 4,
+  "review_fix_breakdown": {
+    "no_entities": 1,
+    "low_entity_count": 2,
+    "low_confidence": 1,
+    "low_coverage": 0,
+    "low_diversity": 0,
+    "extractor_issue": 0
+  },
+  "files": [
+    {
+      "filename": "22.pdf",
+      "entity_count": 0,
+      "entities": [],
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count_score": 0.0,
+        "coverage_score": 0.0,
+        "diversity_score": 0.0,
+        "extractor_weight": 0.8,
+        "calibrated_weight": 0.8
+      },
+      "why_reviewed": [
+        "empty_extraction",
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_diversity"
+      ],
+      "text_preview": "[Page 1] Each time divisiot ach time 2 , ie so 10 20 aa <a > =a _ ine 1 i 7 .",
+      "text_length": 77,
+      "extraction_method": "tesseract fallback",
+      "recommended_fix_category": "no_entities"
+    },
+    {
+      "filename": "23.pdf",
+      "entity_count": 1,
+      "entities": [
+        {
+          "type": "diagnosis",
+          "text": "INNGE EE",
+          "negated": true,
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count_score": 0.3,
+        "coverage_score": 0.75,
+        "diversity_score": 0.6,
+        "extractor_weight": 0.6,
+        "calibrated_weight": 0.6
+      },
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_extractor_weight"
+      ],
+      "text_preview": "[Page 1] Each thee diviel\u201d \u201ca o 2 m0 iH \u2014\u2014\u2014T . Total volume: \u20ac25 mi Poa time a ae Tiverosl ease ss io 2 ww No INNGE EE Woe",
+      "text_length": 122,
+      "extraction_method": "tesseract fallback",
+      "recommended_fix_category": "low_entity_count"
+    },
+    {
+      "filename": "8-1.pdf",
+      "entity_count": 1,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urine Cytology",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count_score": 0.3,
+        "coverage_score": 1.0,
+        "diversity_score": 0.6,
+        "extractor_weight": 0.6,
+        "calibrated_weight": 0.6
+      },
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_extractor_weight"
+      ],
+      "text_preview": "[Page 1] CYTOLOGY, URINE Collected on [DATE] Results",
+      "text_length": 52,
+      "extraction_method": "tesseract fallback",
+      "recommended_fix_category": "low_entity_count"
+    },
+    {
+      "filename": "9.pdf",
+      "entity_count": 2,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "note",
+          "text": "Final Report",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count_score": 0.3,
+        "coverage_score": 1.0,
+        "diversity_score": 0.9,
+        "extractor_weight": 0.6,
+        "calibrated_weight": 0.6
+      },
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_extractor_weight"
+      ],
+      "text_preview": "[Page 1] Urine Culture, Routine Value Final report",
+      "text_length": 50,
+      "extraction_method": "tesseract fallback",
+      "recommended_fix_category": "low_confidence"
+    }
+  ]
+}

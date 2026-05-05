@@ -1,0 +1,49 @@
+specialty: neurology
+display_name: Neurology
+description: Neurological conditions including stroke, dementia, MS, migraine, movement disorders
+
+external_apis:
+  primary: dxgpt
+  secondary: claude_synthesis
+  drug_check: patientnotes_ddi
+
+task_types:
+  - differential_diagnosis
+  - medication_check
+  - evidence_lookup
+  - symptom_tracking
+  - general_query
+
+keywords:
+  - neuro
+  - brain
+  - stroke
+  - headache
+  - migraine
+  - dementia
+  - alzheimer
+  - parkinson
+  - ms
+  - multiple sclerosis
+  - neuropathy
+  - vertigo
+  - tremor
+  - ataxia
+
+curated_sources:
+  - name: PubMed Neurology
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=neurology
+    trust_level: 2
+  - name: AAN Guidelines
+    url: https://www.aan.com/Guidelines/
+    trust_level: 2
+  - name: MedlinePlus Neurological Disorders
+    url: https://medlineplus.gov/neurologicdiseases.html
+    trust_level: 4
+
+extraction_prompt: |
+  Extract all neurological facts from the following medical text.
+  Focus on: diagnoses (with ICD codes if present), medications and doses,
+  EEG findings, MRI/CT results, cognitive assessments, motor symptoms,
+  specialist notes, treatment changes, referrals.
+  Return structured JSON. Do not invent information.

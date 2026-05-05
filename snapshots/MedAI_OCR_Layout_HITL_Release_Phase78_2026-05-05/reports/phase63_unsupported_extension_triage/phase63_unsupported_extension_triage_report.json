@@ -1,0 +1,162 @@
+{
+  "generated_at": "2026-05-04T22:47:19.647033+00:00",
+  "phase": "Phase63 Unsupported Extension Triage and Narrow Format Support Decision",
+  "source_phase57_report": "reports\\phase57_full_corpus_inventory_audit\\phase57_full_corpus_inventory_audit_report.json",
+  "unsupported_count": 8,
+  "extension_distribution": {
+    ".docx": 3,
+    ".mp3": 3,
+    ".msg": 1,
+    ".ogg": 1
+  },
+  "recommended_action_by_extension": {
+    ".docx": {
+      "extension": ".docx",
+      "file_count": 3,
+      "safe_file_ids": [
+        "corpus_file_000118",
+        "corpus_file_000140",
+        "corpus_file_000162"
+      ],
+      "production_extractor_should_change_yet": false,
+      "classification": "support_later",
+      "recommended_action": "future_privacy_safe_document_conversion_phase",
+      "operator_guidance": "Convert manually to PDF/TXT for now, or queue a future local-only office-document conversion phase.",
+      "rationale": "Office documents are containers and may contain metadata/embedded media. Add support only in a separate privacy-reviewed phase."
+    },
+    ".mp3": {
+      "extension": ".mp3",
+      "file_count": 3,
+      "safe_file_ids": [
+        "corpus_file_000154",
+        "corpus_file_000571",
+        "corpus_file_000606"
+      ],
+      "production_extractor_should_change_yet": false,
+      "classification": "explicit_exclusion",
+      "recommended_action": "exclude_audio_video_from_medai_document_ingest",
+      "operator_guidance": "Audio/video transcription is out of scope for the current document OCR/Layout release.",
+      "rationale": "Audio/video requires a separate local transcription pipeline and different privacy controls."
+    },
+    ".msg": {
+      "extension": ".msg",
+      "file_count": 1,
+      "safe_file_ids": [
+        "corpus_file_000159"
+      ],
+      "production_extractor_should_change_yet": false,
+      "classification": "explicit_exclusion",
+      "recommended_action": "exclude_container_format_from_medai_ingest",
+      "operator_guidance": "Do not process this container directly. Export the relevant medical document to PDF/TXT/image first.",
+      "rationale": "Container/email/archive formats can hide filenames, attachments, metadata, and nested PHI."
+    },
+    ".ogg": {
+      "extension": ".ogg",
+      "file_count": 1,
+      "safe_file_ids": [
+        "corpus_file_000163"
+      ],
+      "production_extractor_should_change_yet": false,
+      "classification": "explicit_exclusion",
+      "recommended_action": "exclude_audio_video_from_medai_document_ingest",
+      "operator_guidance": "Audio/video transcription is out of scope for the current document OCR/Layout release.",
+      "rationale": "Audio/video requires a separate local transcription pipeline and different privacy controls."
+    }
+  },
+  "unsupported_files": [
+    {
+      "safe_file_id": "corpus_file_000118",
+      "filename_hash": "51dd528d1c9ed01a",
+      "content_hash": "cf082bb5427571dd",
+      "extension": ".docx",
+      "file_size_bytes": 14489,
+      "accounting_category": "unsupported_extension"
+    },
+    {
+      "safe_file_id": "corpus_file_000140",
+      "filename_hash": "2d09c8e08333f62c",
+      "content_hash": "60156823f3bb0b96",
+      "extension": ".docx",
+      "file_size_bytes": 2036329,
+      "accounting_category": "unsupported_extension"
+    },
+    {
+      "safe_file_id": "corpus_file_000154",
+      "filename_hash": "5ecffe05c774c200",
+      "content_hash": "4baee25c5093bbc6",
+      "extension": ".mp3",
+      "file_size_bytes": 27238817,
+      "accounting_category": "unsupported_extension"
+    },
+    {
+      "safe_file_id": "corpus_file_000159",
+      "filename_hash": "085e5586e54b1b3c",
+      "content_hash": "c43532b73b5f501f",
+      "extension": ".msg",
+      "file_size_bytes": 735232,
+      "accounting_category": "unsupported_extension"
+    },
+    {
+      "safe_file_id": "corpus_file_000162",
+      "filename_hash": "bf1d53c7844fe77d",
+      "content_hash": "e8d31a40ab5ab73b",
+      "extension": ".docx",
+      "file_size_bytes": 15050,
+      "accounting_category": "unsupported_extension"
+    },
+    {
+      "safe_file_id": "corpus_file_000163",
+      "filename_hash": "f58797a08a2e0a65",
+      "content_hash": "e551909c8abf77a4",
+      "extension": ".ogg",
+      "file_size_bytes": 85829,
+      "accounting_category": "unsupported_extension"
+    },
+    {
+      "safe_file_id": "corpus_file_000571",
+      "filename_hash": "32003e3ce34f9cf4",
+      "content_hash": "06af6e47559b51a7",
+      "extension": ".mp3",
+      "file_size_bytes": 16720456,
+      "accounting_category": "unsupported_extension"
+    },
+    {
+      "safe_file_id": "corpus_file_000606",
+      "filename_hash": "3c5be31c540d831e",
+      "content_hash": "15687cac1ec8a8ad",
+      "extension": ".mp3",
+      "file_size_bytes": 30799976,
+      "accounting_category": "unsupported_extension"
+    }
+  ],
+  "phase64_recommendation": {
+    "recommended_next_phase": "No immediate format-support implementation",
+    "target_extensions": [],
+    "production_extractor_should_change_yet": false,
+    "reason": "No unsupported extension is simple enough for safe immediate support."
+  },
+  "production_extractor_should_change_yet": false,
+  "local_only_forced": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_mapping_used_locally": true,
+  "private_mapping_path_public": "[PRIVATE_MAPPING_REDACTED]",
+  "supported_formats_unchanged": [
+    ".bmp",
+    ".jpeg",
+    ".jpg",
+    ".pdf",
+    ".png",
+    ".rtf",
+    ".tif",
+    ".tiff",
+    ".txt",
+    ".webp"
+  ],
+  "phi_artifact_check": {
+    "tracked_report_phi_files": [],
+    "tracked_report_archive_or_review_files": [],
+    "passed": true
+  },
+  "conclusion": "triage_complete_manual_or_later_only"
+}

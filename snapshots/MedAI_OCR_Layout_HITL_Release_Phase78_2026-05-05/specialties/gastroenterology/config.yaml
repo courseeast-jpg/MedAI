@@ -1,0 +1,32 @@
+specialty: gastroenterology
+display_name: Gastroenterology
+description: IBD, Crohn's disease, ulcerative colitis, IBS, GERD, liver conditions
+status: stub  # activate in Phase 2
+
+external_apis:
+  primary: dxgpt
+  secondary: doctronic
+  drug_check: patientnotes_ddi
+
+keywords:
+  - gastro
+  - bowel
+  - crohn
+  - colitis
+  - ibs
+  - gerd
+  - reflux
+  - liver
+  - colon
+  - intestin
+  - inflammatory bowel
+  - uc
+  - ulcerative
+
+curated_sources:
+  - name: AGA Guidelines
+    url: https://gastro.org/guidelines
+    trust_level: 2
+  - name: Crohn's and Colitis Foundation
+    url: https://www.crohnscolitisfoundation.org
+    trust_level: 4

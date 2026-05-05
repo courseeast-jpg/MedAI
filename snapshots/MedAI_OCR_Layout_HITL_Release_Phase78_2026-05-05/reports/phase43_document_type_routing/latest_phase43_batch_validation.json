@@ -1,0 +1,2664 @@
+{
+  "timestamp": "2026-05-01T19:33:32.923831+00:00",
+  "run_id": "602770b0-6d4c-4fde-b665-28b4156741b9",
+  "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
+  "total_files": 8,
+  "accepted_count": 2,
+  "review_count": 6,
+  "error_count": 0,
+  "empty_extraction_count": 2,
+  "fallback_count": 7,
+  "low_text_quality_count": 0,
+  "ocr_low_quality_count": 3,
+  "ocr_layout_route_summary": {
+    "scanned_or_low_text": 3,
+    "digital_clean_text": 5
+  },
+  "ocr_layout_quality_summary": {
+    "usable_with_review": 4,
+    "good": 4
+  },
+  "avg_text_length": 1901.62,
+  "review_reason_summary": {
+    "empty_extraction": 2,
+    "confidence_below_threshold": 6,
+    "low_entity_count": 3,
+    "low_coverage": 6,
+    "low_diversity": 2,
+    "low_extractor_weight": 4
+  },
+  "results": [
+    {
+      "filename": "Results 1.pdf",
+      "status": "review",
+      "entity_count": 2,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.2,
+        "diversity": 0.9,
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 2,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage",
+        "low_extractor_weight"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 1030,
+        "preview": "[Page 1] ee ee * . . e \u00e9 * \u2019 ~~ 2 . \u2019 - . \u2019 \u2019 - . 4 - ; . BIO MED LABORATOR MIKROBIOLOGJIK \u2018 \u00e9 EMRI \u2014 STEPAN\u2019 FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 : \u00b0 eae \u2019 # Se URINE KOMPLET # KARAKTERISTIKAT FIZIKE : \u00a5 . \u2019 * NGJYRA.......%eeeeee0ee006eE VERDHE \u2019 a * \u2019 ae PAMIAS . See cas ce en's\u00bb o'siee e's E",
+        "method": "existing_pdf_pipeline",
+        "suspicious": false,
+        "non_alnum_ratio": 0.319,
+        "input_quality_score": 0.745,
+        "input_quality_band": "usable_with_review",
+        "route_decision": "scanned_or_low_text"
+      },
+      "normalization_applied": false,
+      "normalized_text_preview": null,
+      "is_ocr_low_quality": false,
+      "review_type": "confidence",
+      "selected_text": "[Page 1]\nee ee\n* . .\ne \u00e9 * \u2019\n~~ 2 . \u2019\n- . \u2019 \u2019\n- . 4\n- ; . BIO MED LABORATOR MIKROBIOLOGJIK \u2018\n\u00e9 EMRI \u2014 STEPAN\u2019 FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 :\n\u00b0 eae \u2019\n# Se URINE KOMPLET\n# KARAKTERISTIKAT FIZIKE :\n\u00a5 . \u2019\n* NGJYRA.......%eeeeee0ee006eE VERDHE \u2019\na * \u2019\nae PAMIAS . See cas ce en's\u00bb o'siee e's E QARTE\nPo) .e \u2019 ;\n# DENSITETI<.. ye... 0.008% 1020 :\n|. Soe ee oe es - \u2019\n. : EGZAMINIMI. KIMIK\n\u00a7 GLUKOZE eee eee eee ee sNEGATIV :\n# + \u2018\n# PROTEINURIA. ..............NEGATIV :\n* BILIRUBIN.................NEGATIV :\n* + x\ntp KETONE. .2.....0...0....oNEGATLV\n* UROBILINOGEN..............0.2 E.U\\d1 ;\n* NITRITE...........2.2....~NEGATIV \u2018\n3 : EGZAMINIMI MIMROSKOPIK :\n* . .\ngj UEUKOCITE#.2., .......26.02+-+2 _ 3 PER FUSHE :\n* . '\n# ERITROCITE...4............1 _ 2 PER FUSHE :\naa * .\nEPITELE 68s 8 aes ors coe :\ne MRISHAMGIIRS oe... AE i\n\u201c . ar. Ress: ey eps \u2019\n@ BAKTERIE.....0.2+eeee++++-+NEGATIV /\n* CTLINDRASS 2.45 ..s 000.050. :\nfy MUKOZITER Est oc Suess \\ :\n- ; Dr.MANUELA LI\nPy : \u2019 r. \\ 4\n* Be \u2019 gt) \u2018\nFa . gee yok i\nr \u2019 .\n. * ,\n",
+      "selected_engine": "existing_pdf_pipeline",
+      "input_quality_score": 0.745,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density",
+        "repeated_symbol_noise"
+      ],
+      "route_decision": "scanned_or_low_text",
+      "ocr_layout_profile": {
+        "input_type": "mixed_pdf",
+        "language": "en",
+        "low_text_density": false,
+        "table_layout_heavy": true,
+        "empty_or_near_empty": false,
+        "page_count": 1,
+        "text_length": 1030,
+        "warnings": [
+          "low_medical_token_density",
+          "repeated_symbol_noise",
+          "layout_or_table_heavy"
+        ],
+        "metrics": {
+          "text_length": 1030,
+          "garbage_character_ratio": 0.0,
+          "alphabetic_ratio": 0.6123,
+          "numeric_table_ratio": 0.3153,
+          "medical_token_density": 0.0208,
+          "repeated_symbol_ratio": 0.1126,
+          "latin_ratio": 0.6098,
+          "cyrillic_ratio": 0.0,
+          "script": "en",
+          "quality_score": 0.745,
+          "quality_band": "usable_with_review",
+          "layout_marker_count": 22
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.745,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density",
+            "repeated_symbol_noise"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "ocr_fallback_applied",
+            "text_quality_score": 0.764,
+            "ocr_fallback_used": true,
+            "ocr_engine": "tesseract_cli",
+            "quality_metrics": {
+              "text_length": 1030,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.6123,
+              "numeric_table_ratio": 0.3153,
+              "medical_token_density": 0.0208,
+              "repeated_symbol_ratio": 0.1126,
+              "latin_ratio": 0.6098,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 1030
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.605,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "repeated_symbol_noise"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 1131,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.4304,
+              "numeric_table_ratio": 0.4057,
+              "medical_token_density": 0.0364,
+              "repeated_symbol_ratio": 0.2423,
+              "latin_ratio": 0.4304,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 1131
+        }
+      ],
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "low_text_density,table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,lab_report_detected",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "lab_report_detected"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "final_status_before_lab_normalization": "review",
+      "final_status_after_lab_normalization": "review",
+      "original_classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [],
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.0,
+        "lab_coverage_band": "none",
+        "lab_reason_codes": [
+          "lab_table_not_recovered",
+          "lab_table_detected",
+          "lab_report_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [
+            "cmp",
+            "urinalysis"
+          ],
+          "table_confidence": 0.75,
+          "warnings": [
+            "flattened_table_markers"
+          ],
+          "metadata": {
+            "line_count": 46,
+            "row_signal_count": 4,
+            "numeric_unit_count": 0,
+            "qualitative_count": 0,
+            "microbiology_count": 0,
+            "table_marker_count": 22
+          }
+        },
+        "coverage": {
+          "raw_candidate_line_count": 46,
+          "parsed_lab_row_count": 0,
+          "coverage_ratio": 0.0,
+          "coverage_band": "none",
+          "reason_codes": [
+            "lab_table_not_recovered"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": false,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": true
+        },
+        "document_classification": {
+          "document_type": "lab_report",
+          "confidence": 0.69,
+          "language_hint": "en",
+          "should_run_lab_normalization": true,
+          "should_run_prescription_path": false,
+          "should_recommend_language_aware_ocr": false,
+          "review_reason": "lab_report_detected",
+          "evidence": [
+            "lab_tokens_en=2"
+          ],
+          "warnings": [],
+          "metadata": {
+            "cyrillic_ratio": 0.0,
+            "latin_ratio": 1.0,
+            "lab_token_count_en": 2,
+            "lab_indicator_count": 0,
+            "microbiology_token_count_en": 0,
+            "microbiology_token_count_ru": 0,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 0,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 0,
+            "micro_signal_total": 0,
+            "lab_signal_total": 2,
+            "text_length": 1030,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": false
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Results 1_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "Results 2.pdf",
+      "status": "review",
+      "entity_count": 1,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.2,
+        "diversity": 0.6,
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 1,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_extractor_weight"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 953,
+        "preview": "[Page 1] s . . a Y, \u2019 \u2018 : BIO MED LABORATOR MIKROBIOLOGIIK i . \\ J EMRI \u2014 STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 11 2022 * > \u2018 a : 3 = \u2019 * i UROKULTURE Y * ie = 1 NGA KULTIVIMI\u2019 PER 24h REZULTOI NEGATIV i * * . 2 ae ANTIBIOGRAME \u00ab CIPROFLOXACINI......... LEVOFLOXACINI........... ' * . * \u2019 MPMPE TR",
+        "method": "existing_pdf_pipeline",
+        "suspicious": false,
+        "non_alnum_ratio": 0.3121,
+        "input_quality_score": 0.735,
+        "input_quality_band": "usable_with_review",
+        "route_decision": "scanned_or_low_text"
+      },
+      "normalization_applied": false,
+      "normalized_text_preview": null,
+      "is_ocr_low_quality": false,
+      "review_type": "confidence",
+      "selected_text": "[Page 1]\ns . .\na\nY, \u2019 \u2018\n: BIO MED LABORATOR MIKROBIOLOGIIK\ni . \\\nJ EMRI \u2014 STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 11 2022\n* > \u2018\na : 3 = \u2019\n* i UROKULTURE\nY * ie = 1\nNGA KULTIVIMI\u2019 PER 24h REZULTOI NEGATIV i\n* * .\n2 ae ANTIBIOGRAME\n\u00ab CIPROFLOXACINI......... LEVOFLOXACINI........... '\n* . * \u2019\nMPMPE TRIMS 2, 0% 1 20ST NITROFURANTOINI.........\n* : z * x\nHAGEFACUOR: 0 views oe cgire es CEFTAZIDIMI.......00000. '\n* . \u00b0 \u2019\n\u2019 :\n@# CEFUROXIME...%........6. DOXYCICLINI..........055\nLa * \u2019\no * \u2018\n\u00a5 * .\n@ CLINDAMYCIN..,......00. AMPICIUUIN: \u00ab1. \u00abesheets :\n* . .\n* CLARITHROMYCIN. ........ AUGMENTIN. ..........0005\n2\n| CEFPROZIL Ss .ay sce. ERYTHROMYCIN. .........0% :\n+ AZITHROMYCIN........04. CEFTRIAXION. 1.0 seis ers \u2019\nww * 4\n$ VANCOMYCIN. 0/0... 0.0. GENTAMVCING\u00a7. 5. JiSiieeeee 6s |\n* : + \u2019\n* . .\n\u00ab S SENSIBEL . R REZISTENT | MS MESATARISHT SENSIBEL\n* , - \u2018\n. om Dr.MANUELA XHULI\n* . |\n* . . :\n: . mane X8oL)\n, eer:\nad . *\n. ne\n* ba *\n* ; Fs\n\u00a5 :\n* .\n* 7 \u2018\n",
+      "selected_engine": "existing_pdf_pipeline",
+      "input_quality_score": 0.735,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density",
+        "repeated_symbol_noise"
+      ],
+      "route_decision": "scanned_or_low_text",
+      "ocr_layout_profile": {
+        "input_type": "mixed_pdf",
+        "language": "en",
+        "low_text_density": false,
+        "table_layout_heavy": true,
+        "empty_or_near_empty": false,
+        "page_count": 1,
+        "text_length": 953,
+        "warnings": [
+          "low_medical_token_density",
+          "repeated_symbol_noise",
+          "layout_or_table_heavy"
+        ],
+        "metrics": {
+          "text_length": 953,
+          "garbage_character_ratio": 0.0,
+          "alphabetic_ratio": 0.6215,
+          "numeric_table_ratio": 0.2948,
+          "medical_token_density": 0.0,
+          "repeated_symbol_ratio": 0.106,
+          "latin_ratio": 0.6215,
+          "cyrillic_ratio": 0.0,
+          "script": "en",
+          "quality_score": 0.735,
+          "quality_band": "usable_with_review",
+          "layout_marker_count": 24
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.735,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density",
+            "repeated_symbol_noise"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "ocr_fallback_applied",
+            "text_quality_score": 0.684,
+            "ocr_fallback_used": true,
+            "ocr_engine": "tesseract_cli",
+            "quality_metrics": {
+              "text_length": 953,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.6215,
+              "numeric_table_ratio": 0.2948,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.106,
+              "latin_ratio": 0.6215,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 953
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.645,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density",
+            "repeated_symbol_noise"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 974,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.5083,
+              "numeric_table_ratio": 0.4102,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.1982,
+              "latin_ratio": 0.5083,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 974
+        }
+      ],
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "low_text_density,table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,extraction_sparse_entities",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "final_status_before_lab_normalization": "review",
+      "final_status_after_lab_normalization": "review",
+      "original_classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [],
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.0,
+        "lab_coverage_band": "none",
+        "lab_reason_codes": [
+          "lab_table_not_recovered",
+          "lab_table_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [],
+          "table_confidence": 0.45,
+          "warnings": [
+            "flattened_table_markers"
+          ],
+          "metadata": {
+            "line_count": 49,
+            "row_signal_count": 4,
+            "numeric_unit_count": 0,
+            "qualitative_count": 0,
+            "microbiology_count": 0,
+            "table_marker_count": 24
+          }
+        },
+        "coverage": {
+          "raw_candidate_line_count": 48,
+          "parsed_lab_row_count": 0,
+          "coverage_ratio": 0.0,
+          "coverage_band": "none",
+          "reason_codes": [
+            "lab_table_not_recovered"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": false,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": true
+        },
+        "document_classification": {
+          "document_type": "unknown_medical",
+          "confidence": 0.3,
+          "language_hint": "en",
+          "should_run_lab_normalization": true,
+          "should_run_prescription_path": false,
+          "should_recommend_language_aware_ocr": false,
+          "review_reason": "unknown_document_type",
+          "evidence": [
+            "no_strong_signals"
+          ],
+          "warnings": [
+            "low_confidence_document_type"
+          ],
+          "metadata": {
+            "cyrillic_ratio": 0.0,
+            "latin_ratio": 1.0,
+            "lab_token_count_en": 0,
+            "lab_indicator_count": 0,
+            "microbiology_token_count_en": 0,
+            "microbiology_token_count_ru": 0,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 0,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 0,
+            "micro_signal_total": 0,
+            "lab_signal_total": 0,
+            "text_length": 953,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": false
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Results 2_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "Test Results 2.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 5,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "CKOH",
+          "value": "51",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "He BbiHBneHO",
+          "value": "4",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "BneHO",
+          "value": "9",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "IIr",
+          "value": "5.7",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "HBneHO",
+          "value": "22",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.63,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.2,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 5,
+      "review_reason": "confidence_below_accept_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 2732,
+        "preview": "[Page 1] N2 ):lara HoMep npo6>1pK>1 <!>.1.1.0. na1..1>1eHra non BoJpacr OpraHL'IJai..\\L'IH Bpa4 np>1Me4aH>1e lo1ccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>KI.fl'IH MeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l 16 AeKa6pb 2021, 12:35:49 101462359601 <lleAeHYeHKO CrenaH MYlf<CKOH 51 HaJ",
+        "method": "existing_pdf_pipeline",
+        "suspicious": false,
+        "non_alnum_ratio": 0.1752,
+        "input_quality_score": 0.818,
+        "input_quality_band": "good",
+        "route_decision": "digital_clean_text"
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] N2 ):[PERSON] npo6>IpK>1 <!>.1.1.0. naI..1>IeHra non BoJpacr OpraHL'IJai..\\L'IH Bpa4 np>IMe4aH>Ie loIccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>KI.fl'IH MeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l 16 AeKa6pb [DATE], 12:35:49 101462359601 <lleAeHYeHKO CrenaH MYlf<CKOH 51 HaJ",
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "selected_text": "[Page 1]\nN2 \n):lara \nHoMep npo6>1pK>1 \n<!>.1.1.0. na1..1>1eHra \nnon \nBoJpacr \nOpraHL'IJai..\\L'IH \nBpa4 \nnp>1Me4aH>1e \nlo1ccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>KI.fl'IH \nMeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l \n16 AeKa6pb 2021, 12:35:49 \n101462359601 \n<lleAeHYeHKO CrenaH \nMYlf<CKOH \n51 \nHaJBaHHe HCCileAoBaHHst \nAHAPOcPnop\u00ae _A \n129281, PoccL'IH, r. MocKsa \nyn.EH;,celitcKaH,A.37 crp.1 \nOn;,Mn;,LitcKaH AepeBHfl, A\u00b7 4, crp. 2 \n6onbWOLit ):\\pOBf!HOLit nep,A8, CTp.1 \nTenl\u00a2aKc: + 7 495 640-0-64, \ne-mail:info@kdl-test.ru \nPeJynbrar \n0THOC>1TenbHblH \nKomiYecrseHHbllit \nLg(X/CBMO) \n'};, OT CBMO \nreHOMHaf! AHK YenoseKa \n10 4.8 \n1 \n06UjaH 6aKTep;,anbHal'l Macca \n10 5.7 \nTpaHJ\"TOpHa\u2022 M\"Kpo<j>nopa \n2 \nLactobacillus spp. \nHe Bblf!BneHo \nHopMo<j>nopa \n3 \nStaphylococcus spp. \nHe BbiHBneHO \n4 \nStreptococcus spp. \nf \nHe BbiHBneHO \n5 \nCorynebacterium spp. \n10 3.6 \nCyMMa:HopMo\u00a2nopa \n10 3.6 \nYnM, acCOL.IL-11o1posaHHble c 6aKean.1H030M \n/ \n6 \nGardnerella vaginalis \nAe Bblf!BneHO \n7 \nMegasphaera spp. I Veillonella spp. I Dialister spp. \n10 3.9 \n8 \nSneathia spp. I Leptotrichia spp. I Fusobacterium spp. \nI \nHe Bblf!BneHO \n9 \nUreaplasma urealyticum * \nI \nHe Bblf!BneHo \n10 \nUreaplasma parvum * \nI \nHe Bblf!BneHO \n11 \nMycoplasma hominis * \n\\ \nHe BbiHBneHO \n12 \nAtopobium cluster \n\\ \n10 4.7 \nCyMMa: YnM, acCOI..\\L-~1!1posaHHble c 6aKsar;,HoJoM \n\"\\. \n10 4.7 \nYnM aHaapo6bt \n\"\"-\n..--\n~ \n13 \nBacteroides spp. I Porphyromonas spp. I Prevotella spp. \n/\n11r 5.7 \n14 \nAnaerococcus spp. \nI \n10 3.3 \nI \n10 3.9 \n15 \nPeptostreptococcus spp. I Parvimonas spp. \n' \n16 \nEubacterium spp. \nI \n10 4.3 \nCyMMa: YnM aHaapo6bt \n\\ \n10 5.7 \nYnM Haemophilus spp. \n\"\"'-. \n17 \nHaemophilus spp. \nHe Bblf!BneHO \nYnM Pseudomonas aeruginosa I Ralstonia spp. I Burkholderia spp. \n18 \nPseudomonas aeruginosa I Ralstonia spp. I Burkholderia spp \nHe Bblf!BneHO \nYnM Enterobacteriaceae spp. I Enterococcus spp. ~ \n19 \nEnterobacteriaceae spp. I Enterococcus spp. \n( 10 4.0 \n)::\\po>10KenoA06Hble rp~6bl \n\"-------\" \n20 \nCandida spp. * \nHe BbiHBneHO \nnaTOreHbl \n21 \nMycoplasma genitalium ** \nHe Bb!HBneHO \n22 \nTrichomonas vaginalis ** \nHe BbiHBneHO \n23 \nNeisseria gonorrhoeae ** \nHe Bblf!BneHO \n24 \nChlamydia trachomatis ** \nHe Bblf!BneHO \nA6comoTHbiY1 aH8IlY13 Lg(X) \n** KaYecreeHHbti'i aHailY13 \n* \n-\n0 \n1 \n10 \n100 \n' \n' \n0 \n' \n' \n' \n0 \n' \n' \n' \n' \n0 \n' \n0 \n: \n-2.2 (0.6-0.8%) 0 --\n' \n: \n-2.2 (0.6-0.8%) \u2022 \n~ \n' \n' ' \n' \n' \n0 \n' \n0 -\n' \n-1.9 (1 .1-1 .5%) \n-\n: \n: \n\\ \n0 \n0 \nI \n0 \nI \n: \n' ' \n0 \n: \n: \n-1.1(6-8%) \n0 \n' ' \n-1.1 ( 7-10%) \n0 \n: \n' \n-0.1 (72-97%) \u2022 \n0 \n~ : \n' \n-2.4 (0.3-0.4%) \n0 \n' \n-1.9 (1.2-1.6%) \n-1.5 ( 3- 3%) \n0 \n: \n0.0 (76-100%) \u2022 \n' \n' \n0 \n' \n' \n0 \n\\ \n' \n' \n-1.8 (1.3-1.7%) 0 \u2022 \u2022 \n' \n' \n' \n0 \n' \n0 \n' \n' \n' \n' \n0 \n0 \n' \n0 \n' \n4 \n5 \n8 \nLg \n",
+      "selected_engine": "existing_pdf_pipeline",
+      "input_quality_score": 0.818,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "low_medical_token_density"
+      ],
+      "route_decision": "digital_clean_text",
+      "ocr_layout_profile": {
+        "input_type": "digital_pdf",
+        "language": "en",
+        "low_text_density": false,
+        "table_layout_heavy": false,
+        "empty_or_near_empty": false,
+        "page_count": 1,
+        "text_length": 2732,
+        "warnings": [
+          "low_medical_token_density"
+        ],
+        "metrics": {
+          "text_length": 2732,
+          "garbage_character_ratio": 0.0,
+          "alphabetic_ratio": 0.6882,
+          "numeric_table_ratio": 0.2344,
+          "medical_token_density": 0.0,
+          "repeated_symbol_ratio": 0.0026,
+          "latin_ratio": 0.6882,
+          "cyrillic_ratio": 0.0,
+          "script": "en",
+          "quality_score": 0.818,
+          "quality_band": "good",
+          "layout_marker_count": 1
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.818,
+          "quality_band": "good",
+          "language": "en",
+          "warnings": [
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "readable",
+            "text_quality_score": 0.715,
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2732,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.6882,
+              "numeric_table_ratio": 0.2344,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0026,
+              "latin_ratio": 0.6882,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2732
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.818,
+          "quality_band": "good",
+          "language": "en",
+          "warnings": [
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2732,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.6882,
+              "numeric_table_ratio": 0.2344,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0026,
+              "latin_ratio": 0.6882,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2732
+        }
+      ],
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "final_status_before_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review_ocr_quality",
+      "original_classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [
+          {
+            "test_name": "Streptococcus spp",
+            "value": "10^3.6",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Streptococcus spp.",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "Gardnerella vaginalis",
+            "value": "10^3.9",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Gardnerella vaginalis",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "Megasphaera spp. I Veillonella spp. I Dialister spp",
+            "value": "10^3.9",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Megasphaera spp. I Veillonella spp. I Dialister spp.",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "Mycoplasma hominis *",
+            "value": "10^4.7",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Mycoplasma hominis *",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "Bacteroides spp. I Porphyromonas spp. I Prevotella spp",
+            "value": "10^3.3",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Bacteroides spp. I Porphyromonas spp. I Prevotella spp.",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "Anaerococcus spp",
+            "value": "10^3.3",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Anaerococcus spp.",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "Peptostreptococcus spp. I Parvimonas spp",
+            "value": "10^4.3",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Peptostreptococcus spp. I Parvimonas spp.",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "YnM Enterobacteriaceae spp. I Enterococcus spp. ~",
+            "value": "10^4.0",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "YnM Enterobacteriaceae spp. I Enterococcus spp. ~",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "Enterobacteriaceae spp. I Enterococcus spp",
+            "value": "10^4.0",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Enterobacteriaceae spp. I Enterococcus spp.",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          }
+        ],
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.077,
+        "lab_coverage_band": "weak",
+        "lab_reason_codes": [
+          "lab_table_recovered",
+          "lab_table_weak_coverage",
+          "lab_table_low_ratio",
+          "lab_rows_minimum_met",
+          "lab_table_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [
+            "microbiology_pcr"
+          ],
+          "table_confidence": 0.625,
+          "warnings": [],
+          "metadata": {
+            "line_count": 237,
+            "row_signal_count": 2,
+            "numeric_unit_count": 0,
+            "qualitative_count": 0,
+            "microbiology_count": 17,
+            "table_marker_count": 1
+          }
+        },
+        "coverage": {
+          "raw_candidate_line_count": 117,
+          "parsed_lab_row_count": 9,
+          "coverage_ratio": 0.077,
+          "coverage_band": "weak",
+          "reason_codes": [
+            "lab_table_recovered",
+            "lab_table_weak_coverage",
+            "lab_table_low_ratio",
+            "lab_rows_minimum_met"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": true,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": true,
+          "document_type_eligible_for_lab_recovery": true
+        },
+        "document_classification": {
+          "document_type": "microbiology_pcr_report",
+          "confidence": 0.92,
+          "language_hint": "en",
+          "should_run_lab_normalization": true,
+          "should_run_prescription_path": false,
+          "should_recommend_language_aware_ocr": false,
+          "review_reason": "microbiology_pcr_report_detected",
+          "evidence": [
+            "microbiology_terms=12"
+          ],
+          "warnings": [],
+          "metadata": {
+            "cyrillic_ratio": 0.0,
+            "latin_ratio": 1.0,
+            "lab_token_count_en": 0,
+            "lab_indicator_count": 0,
+            "microbiology_token_count_en": 12,
+            "microbiology_token_count_ru": 0,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 0,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 0,
+            "micro_signal_total": 12,
+            "lab_signal_total": 0,
+            "text_length": 2732,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": false
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 2_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "Test Results 3.pdf",
+      "status": "review",
+      "entity_count": 0,
+      "entities": [],
+      "selected_extractor": "phi3",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.09,
+      "confidence_breakdown": {
+        "entity_count": 0.0,
+        "coverage": 0.0,
+        "diversity": 0.0,
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 0,
+      "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "why_reviewed": [
+        "empty_extraction",
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_diversity",
+        "low_extractor_weight"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 3215,
+        "preview": "[Page 1] \u0418\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u043c\u0438\u043a\u0440\u043e\u0444\u043b\u043e\u0440\u044b \u0443\u0440\u043e\u0433\u0435\u043d\u0438\u0442\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0442\u0440\u0430\u043a\u0442\u0430 \u043c\u0443\u0436\u0447\u0438\u043d \u043c\u0435\u0442\u043e\u0434\u043e\u043c \u041f\u0426\u0420 \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438 \u0410\u043d\u0434\u0440\u043e\u0444\u043b\u043e\u0440\u00ae, \u0410\u043d\u0434\u0440\u043e\u0444\u043b\u043e\u0440\u00ae\u0421\u043a\u0440\u0438\u043d \u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0431\u043b\u0430\u043d\u043a\u0430 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432 \u0418\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0432\u043e\u0434\u0438\u0442\u0441\u044f \u043c\u0435\u0442\u043e\u0434\u043e\u043c \u043f\u043e\u043b\u0438\u043c\u0435\u0440\u0430\u0437\u043d\u043e\u0439 \u0446\u0435\u043f\u043d\u043e\u0439 \u0440\u0435\u0430\u043a\u0446\u0438\u0438 \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438. \u0421 \u0446\u0435\u043b\u044c\u044e \u044d\u0442\u0438\u043e\u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0434\u0438\u0430\u0433\u043d\u043e\u0441\u0442\u0438\u043a\u0438 \u0438\u043d\u0444\u0435\u043a\u0446\u0438\u043e\u043d\u043d\u043e-\u0432\u043e\u0441\u043f\u0430\u043b\u0438",
+        "method": "tesseract_rus_eng",
+        "suspicious": false,
+        "non_alnum_ratio": 0.0461,
+        "input_quality_score": 0.82,
+        "input_quality_band": "good",
+        "route_decision": "digital_clean_text"
+      },
+      "normalization_applied": false,
+      "normalized_text_preview": "[Page 1] [PERSON] \u043c\u0438\u043a\u0440\u043e\u0444\u043b\u043e\u0440\u044b \u0443\u0440\u043e\u0433\u0435\u043d\u0438\u0442\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0442\u0440\u0430\u043a\u0442\u0430 \u043c\u0443\u0436\u0447\u0438\u043d \u043c\u0435\u0442\u043e\u0434\u043e\u043c \u041f\u0426\u0420 \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438 \u0410\u043d\u0434\u0440\u043e\u0444\u043b\u043e\u0440\u00ae, \u0410\u043d\u0434\u0440\u043e\u0444\u043b\u043e\u0440\u00ae[PERSON] [PERSON] \u043c\u0435\u0442\u043e\u0434\u043e\u043c \u043f\u043e\u043b\u0438\u043c\u0435\u0440\u0430\u0437\u043d\u043e\u0439 \u0446\u0435\u043f\u043d\u043e\u0439 \u0440\u0435\u0430\u043a\u0446\u0438\u0438 \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438. \u0421 \u0446\u0435\u043b\u044c\u044e [PERSON] \u043c\u043e\u0447\u0435\u043f\u043e\u043b\u043e\u0432\u043e\u0439 \u0441\u0438\u0441\u0442\u0435\u043c\u044b \u043c\u0443\u0436\u0447\u0438\u043d \u0432 \u0430\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u0443\u0435\u043c\u043e\u043c [PERSON] \u043d\u0430\u043b\u0438\u0447\u0438\u044f/\u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u044f \u043f\u0430\u0442\u043e\u0433\u0435\u043d\u043e\u0432:",
+      "is_ocr_low_quality": false,
+      "review_type": "confidence",
+      "selected_text": "[Page 1]\n\u0418\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u043c\u0438\u043a\u0440\u043e\u0444\u043b\u043e\u0440\u044b \u0443\u0440\u043e\u0433\u0435\u043d\u0438\u0442\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0442\u0440\u0430\u043a\u0442\u0430 \u043c\u0443\u0436\u0447\u0438\u043d\n\u043c\u0435\u0442\u043e\u0434\u043e\u043c \u041f\u0426\u0420 \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438\n\u0410\u043d\u0434\u0440\u043e\u0444\u043b\u043e\u0440\u00ae, \u0410\u043d\u0434\u0440\u043e\u0444\u043b\u043e\u0440\u00ae\u0421\u043a\u0440\u0438\u043d\n\n\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0431\u043b\u0430\u043d\u043a\u0430 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432\n\n\u0418\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0432\u043e\u0434\u0438\u0442\u0441\u044f \u043c\u0435\u0442\u043e\u0434\u043e\u043c \u043f\u043e\u043b\u0438\u043c\u0435\u0440\u0430\u0437\u043d\u043e\u0439 \u0446\u0435\u043f\u043d\u043e\u0439 \u0440\u0435\u0430\u043a\u0446\u0438\u0438 \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438.\n\u0421 \u0446\u0435\u043b\u044c\u044e \u044d\u0442\u0438\u043e\u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0434\u0438\u0430\u0433\u043d\u043e\u0441\u0442\u0438\u043a\u0438 \u0438\u043d\u0444\u0435\u043a\u0446\u0438\u043e\u043d\u043d\u043e-\u0432\u043e\u0441\u043f\u0430\u043b\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0445 \u0437\u0430\u0431\u043e\u043b\u0435\u0432\u0430\u043d\u0438\u0439 \u043c\u043e\u0447\u0435\u043f\u043e\u043b\u043e\u0432\u043e\u0439\n\u0441\u0438\u0441\u0442\u0435\u043c\u044b \u043c\u0443\u0436\u0447\u0438\u043d \u0432 \u0430\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u0443\u0435\u043c\u043e\u043c \u0431\u0438\u043e\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0435 \u043e\u0434\u043d\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u044f\u044e\u0442:\n\n- \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u043d\u0430\u043b\u0438\u0447\u0438\u044f/\u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u044f \u043f\u0430\u0442\u043e\u0433\u0435\u043d\u043e\u0432: Neisseria gonorrhoeae, Chlamydia trachomatis,\nMycoplasma genitalium, Trichomonas vaginalis;\n\n- \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u0443\u044e \u043e\u0446\u0435\u043d\u043a\u0443 \u0432\u0441\u0435\u0445 \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0439 (\u043e\u0431\u0449\u0430\u044f \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043c\u0430\u0441\u0441\u0430 - OBM), \u043d\u043e\u0440\u043c\u043e\u0444\u043b\u043e\u0440\u044b \u0438\n\u0443\u0441\u043b\u043e\u0432\u043d\u043e-\u043f\u0430\u0442\u043e\u0433\u0435\u043d\u043d\u044b\u0445 \u043c\u0438\u043a\u0440\u043e\u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043c\u043e\u0432; \u0422\u0435\u0440\u043c\u0438\u043d \"\u0423\u041f\u041c, \u0430\u0441\u0441\u043e\u0446\u0438\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0441 \u0431\u0430\u043a\u0432\u0430\u0433\u0438\u043d\u043e\u0437\u043e\u043c\" \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044e\u0442\n\u0434\u043b\u044f \u043e\u0431\u043e\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0433\u0440\u0443\u043f\u043f\u044b \u043c\u0438\u043a\u0440\u043e\u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043c\u043e\u0432, \u0432\u043f\u0435\u0440\u0432\u044b\u0435 \u0432\u044b\u044f\u0432\u043b\u0435\u043d\u043d\u044b\u0445 \u0443 \u0436\u0435\u043d\u0449\u0438\u043d. \u0412 \u043d\u0430\u0441\u0442\u043e\u044f\u0449\u0435\u0435 \u0432\u0440\u0435\u043c\u044f\n\u0434\u043e\u043a\u0430\u0437\u0430\u043d\u0430 \u0440\u043e\u043b\u044c \u044d\u0442\u0438\u0445 \u043c\u0438\u043a\u0440\u043e\u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043c\u043e\u0432 \u0432 \u0440\u0430\u0437\u0432\u0438\u0442\u0438\u0438 \u0443\u0440\u043e\u0433\u0435\u043d\u0438\u0442\u0430\u043b\u044c\u043d\u044b\u0445 \u0437\u0430\u0431\u043e\u043b\u0435\u0432\u0430\u043d\u0438\u0439 \u0443 \u043c\u0443\u0436\u0447\u0438\u043d*.\n\n- \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u0443\u044e \u043e\u0446\u0435\u043d\u043a\u0443 \u0433\u0440\u0438\u0431\u043e\u0432 \u0440\u043e\u0434\u0430 Candida.\n\n\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0435 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u044b \u0432 \u0433\u0435\u043d\u043e\u043c-\u044d\u043a\u0432\u0438\u0432\u0430\u043b\u0435\u043d\u0442\u0430\u0445 (\u0413\u042d), \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f\n\u043a\u043e\u0442\u043e\u0440\u044b\u0445 \u043f\u0440\u043e\u043f\u043e\u0440\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b \u043c\u0438\u043a\u0440\u043e\u0431\u043d\u043e\u0439 \u043e\u0431\u0441\u0435\u043c\u0435\u043d\u0435\u043d\u043d\u043e\u0441\u0442\u0438 \u0443\u0440\u043e\u0433\u0435\u043d\u0438\u0442\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0431\u0438\u043e\u0442\u043e\u043f\u0430. \u0410\u0431\u0441\u043e\u043b\u044e\u0442\u043d\u044b\u0435\n\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0413\u042d \u043f\u0440\u0438\u0432\u043e\u0434\u044f\u0442\u0441\u044f \u0432 \u0441\u0442\u043e\u043b\u0431\u0446\u0435 \u0431\u043b\u0430\u043d\u043a\u0430 \u00ab\u0420\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b. \u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439\u00bb.\n\n\u041e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u0438 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u044b \u0432 \u0441\u0442\u043e\u043b\u0431\u0446\u0435 \u0431\u043b\u0430\u043d\u043a\u0430 \u00ab\u0420\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b. \u041e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439\u00bb \u0432 \u0434\u0432\u0443\u0445\n\u0444\u043e\u0440\u043c\u0430\u0442\u0430\u0445: \u0432 \u0432\u0438\u0434\u0435 \u0440\u0430\u0437\u043d\u0438\u0446\u044b \u0430\u0431\u0441\u043e\u043b\u044e\u0442\u043d\u044b\u0445 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439 \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u0438\u0437 \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u0435\u0439 \u0438 \u041e\u0411\u041c (1910) \u0438 \u0432 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\u0445\n(%) \u043e\u0442 \u041e\u0411\u041c. \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u0435\u0439 \u0432 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\u0445 (%), \u0442\u0440\u0430\u0434\u0438\u0446\u0438\u043e\u043d\u043d\u043e\u043c \u0444\u043e\u0440\u043c\u0430\u0442\u0435 \u0434\u043b\u044f \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0445\n\u0434\u0430\u043d\u043d\u044b\u0445, \u043f\u0440\u0438\u0432\u0435\u0434\u0435\u043d\u044b \u0441\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u043e, \u043e\u0434\u043d\u0430\u043a\u043e \u0432 \u0440\u0430\u0441\u0447\u0435\u0442\u043d\u043e\u043c \u0430\u043b\u0433\u043e\u0440\u0438\u0442\u043c\u0435 \u0437\u0430\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u044f \u043e\u043d\u0438 \u043d\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044e\u0442\u0441\u044f,\n\u0441\u0443\u043c\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u044b (%) \u043d\u0435\u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u043e.\n\n\u0414\u043b\u044f \u0434\u0440\u043e\u0436\u0436\u0435\u043f\u043e\u0434\u043e\u0431\u043d\u044b\u0445 \u0433\u0440\u0438\u0431\u043e\u0432 \u0438 \u043c\u0438\u043a\u043e\u043f\u043b\u0430\u0437\u043c (Ureaplasma urealyticum, Ureaplasma parvum,\nMycoplasma hominis) \u0432\u044b\u0434\u0430\u044e\u0442\u0441\u044f \u0442\u043e\u043b\u044c\u043a\u043e \u0430\u0431\u0441\u043e\u043b\u044e\u0442\u043d\u044b\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f.\n\n\u041f\u0440\u0438 \u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0438 \u0437\u0430\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u044f \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044e\u0442\u0441\u044f \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u0438 \u0441\u043e\u043e\u0442\u043d\u043e\u0448\u0435\u043d\u0438\u0439 \u0440\u0430\u0437\u043d\u044b\u0445\n\u043c\u0438\u043a\u0440\u043e\u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043c\u043e\u0432/\u0433\u0440\u0443\u043f\u043f \u043c\u0438\u043a\u0440\u043e\u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043c\u043e\u0432 \u0441 \u041e\u0411\u041c \u0438 \u043c\u0435\u0436\u0434\u0443 \u0441\u043e\u0431\u043e\u0439, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u0445\u0430\u0440\u0430\u043a\u0442\u0435\u0440\u0438\u0437\u0443\u044e\u0442 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435\n\u0431\u0438\u043e\u0446\u0435\u043d\u043e\u0437\u0430. \u0421\u0442\u0435\u043f\u0435\u043d\u044c \u0434\u0438\u0441\u0431\u0438\u043e\u0437\u0430 \u043e\u0446\u0435\u043d\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u0442\u043e\u043b\u044c\u043a\u043e \u043f\u0440\u0438 OBM>109.\n\n\u0414\u043b\u044f \u0443\u0434\u043e\u0431\u0441\u0442\u0432\u0430 \u0442\u0440\u0430\u043a\u0442\u043e\u0432\u043a\u0438 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432** \u0432 \u0442\u0430\u0431\u043b\u0438\u0446\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0430 \u0446\u0432\u0435\u0442\u043e\u0432\u0430\u044f \u043c\u0430\u0440\u043a\u0438\u0440\u043e\u0432\u043a\u0430. \u0412\n\u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0438 \u043e\u0442 \u0438\u0437\u043c\u0435\u0440\u044f\u0435\u043c\u043e\u0433\u043e \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u0430 \u043c\u0430\u0440\u043a\u0435\u0440\u044b \u043e\u0431\u043e\u0437\u043d\u0430\u0447\u0430\u044e\u0442 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0435\u0435:\n\n\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u0438 (\u0433\u0435\u043d\u043e\u043c\u043d\u0430\u044f \u0414\u041d\u041a \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0430, \u043e\u0431\u0449\u0430\u044f \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043c\u0430\u0441\u0441\u0430, \u0442\u0440\u0430\u043d\u0437\u0438\u0442\u043e\u0440\u043d\u0430\u044f \u043c\u0438\u043a\u0440\u043e\u0444\u043b\u043e\u0440\u0430):\n\nL] - \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u044f\u043c\n- \u043d\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u044f\u043c\n\n\u041d\u043e\u0440\u043c\u043e\u0444\u043b\u043e\u0440\u0430:\nO - \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u044f\u043c \u043d\u043e\u0440\u043c\u044b\nie] - \u0443\u043c\u0435\u0440\u0435\u043d\u043d\u043e\u0435 \u043e\u0442\u043a\u043b\u043e\u043d\u0435\u043d\u0438\u0435 \u043e\u0442 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u0435\u0432 \u043d\u043e\u0440\u043c\u044b\n\n- \u0432\u044b\u0440\u0430\u0436\u0435\u043d\u043d\u043e\u0435 \u043e\u0442\u043a\u043b\u043e\u043d\u0435\u043d\u0438\u0435 \u043e\u0442 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u0435\u0432 \u043d\u043e\u0440\u043c\u044b\n\n\u0423\u041f\u041c \u0438 \u0434\u0440\u043e\u0436\u0436\u0435\u043f\u043e\u0434\u043e\u0431\u043d\u044b\u0435 \u0433\u0440\u0438\u0431\u044b:\n\n[7 - \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u044f\u043c \u043d\u043e\u0440\u043c\u044b\nil - \u0443\u043c\u0435\u0440\u0435\u043d\u043d\u043e\u0435 \u043e\u0442\u043a\u043b\u043e\u043d\u0435\u043d\u0438\u0435 \u043e\u0442 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u0435\u0432 \u043d\u043e\u0440\u043c\u044b\nEg - \u0432\u044b\u0440\u0430\u0436\u0435\u043d\u043d\u043e\u0435 \u043e\u0442\u043a\u043b\u043e\u043d\u0435\u043d\u0438\u0435 \u043e\u0442 \u043a\u0440\u0438\u0442\u0435\u0440\u0438\u0435\u0432 \u043d\u043e\u0440\u043c\u044b\n\u041f\u0430\u0442\u043e\u0433\u0435\u043d\u044b:\nL] - \u043d\u0435 \u0432\u044b\u044f\u0432\u043b\u0435\u043d\u043e\n- \u043e\u0431\u043d\u0430\u0440\u0443\u0436\u0435\u043d\u043e\n\n\u0420\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442, \u0432 \u043a\u043e\u0442\u043e\u0440\u043e\u043c \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044f \u041e\u0411\u041c \u043d\u0438\u0436\u0435 \u043f\u043e\u0440\u043e\u0433\u043e\u0432\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0441\u043e\u0447\u0435\u0442\u0430\u0435\u0442\u0441\u044f \u0441\u043e\n\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435\u043c \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044f \u00ab\u0413\u0435\u043d\u043e\u043c\u043d\u0430\u044f \u0414\u041d\u041a \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0430\u00bb \u0432\u044b\u0448\u0435 \u043f\u043e\u0440\u043e\u0433\u043e\u0432\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f, \u0442\u0440\u0430\u043a\u0442\u0443\u0435\u0442\u0441\u044f \u043a\u0430\u043a\n\u00ab\u041d\u043e\u0440\u043c\u043e\u0446\u0435\u043d\u043e\u0437\u00bb \u0431\u0435\u0437 \u043e\u0446\u0435\u043d\u043a\u0438 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b \u043c\u0438\u043a\u0440\u043e\u0431\u0438\u043e\u043c\u0430. \u0412 \u044d\u0442\u043e\u043c \u0441\u043b\u0443\u0447\u0430\u0435 \u0446\u0432\u0435\u0442\u043e\u0432\u0430\u044f \u043c\u0430\u0440\u043a\u0438\u0440\u043e\u0432\u043a\u0430 \u0432 \u0431\u043b\u0430\u043d\u043a\u0435\n\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442.\n\n\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0441 \u0446\u0435\u043b\u044c\u044e \u0432\u0438\u0437\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438, \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u044b \u043d\u0430 \u0433\u0438\u0441\u0442\u043e\u0433\u0440\u0430\u043c\u043c\u0435 \u0432\n\u043f\u0440\u043e\u0446\u0435\u043d\u0442\u043d\u043e\u043c/\u043b\u043e\u0433\u0430\u0440\u0438\u0444\u043c\u0438\u0447\u0435\u0441\u043a\u043e\u043c \u0444\u043e\u0440\u043c\u0430\u0442\u0430\u0445.\n\n* Horner PJ et al. 2016 European guideline \u043e\u043f the management of \u043f\u043e\u043f-\u0434\u043e\u043f\u043e\u0441\u043e\u0441\u0441\u0430! urethritis. Int J STD AIDS, 2016 Oct;27(11):928-37.\n\n** \u0431\u043e\u043b\u0435\u0435 \u043f\u043e\u0434\u0440\u043e\u0431\u043d\u043e \u0430\u043b\u0433\u043e\u0440\u0438\u0442\u043c \u0442\u0440\u0430\u043a\u0442\u043e\u0432\u043a\u0438 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432 \u2014 \u043d\u0430 http://www.dna-technology.ru.",
+      "selected_engine": "tesseract_rus_eng",
+      "input_quality_score": 0.82,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "low_medical_token_density"
+      ],
+      "route_decision": "digital_clean_text",
+      "ocr_layout_profile": {
+        "input_type": "digital_pdf",
+        "language": "ru",
+        "low_text_density": false,
+        "table_layout_heavy": false,
+        "empty_or_near_empty": false,
+        "page_count": null,
+        "text_length": 3215,
+        "warnings": [
+          "low_medical_token_density"
+        ],
+        "metrics": {
+          "text_length": 3215,
+          "garbage_character_ratio": 0.0,
+          "alphabetic_ratio": 0.9447,
+          "numeric_table_ratio": 0.0393,
+          "medical_token_density": 0.0,
+          "repeated_symbol_ratio": 0.0,
+          "latin_ratio": 0.0886,
+          "cyrillic_ratio": 0.8561,
+          "script": "ru",
+          "quality_score": 0.82,
+          "quality_band": "good",
+          "layout_marker_count": 0
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.811,
+          "quality_band": "good",
+          "language": "en",
+          "warnings": [
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "readable",
+            "text_quality_score": 0.731,
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 3900,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.7772,
+              "numeric_table_ratio": 0.1929,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0108,
+              "latin_ratio": 0.7772,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 3900
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.811,
+          "quality_band": "good",
+          "language": "en",
+          "warnings": [
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 3900,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.7772,
+              "numeric_table_ratio": 0.1929,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0108,
+              "latin_ratio": 0.7772,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 3900
+        },
+        {
+          "engine_name": "tesseract_rus_eng",
+          "quality_score": 0.82,
+          "quality_band": "good",
+          "language": "ru",
+          "warnings": [
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "trigger_reason": "language_aware_ocr_required",
+            "source": "cyrillic_ocr_candidate",
+            "pages_processed": 1,
+            "pages_skipped": 0,
+            "ocr_attempted": true,
+            "candidate_warnings": [],
+            "quality_metrics": {
+              "text_length": 3215,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.9447,
+              "numeric_table_ratio": 0.0393,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0,
+              "latin_ratio": 0.0886,
+              "cyrillic_ratio": 0.8561,
+              "script": "ru"
+            }
+          },
+          "text_length": 3215
+        }
+      ],
+      "downstream_classifier_status": "review",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,extraction_sparse_entities,non_lab_document_skipped_lab_normalization,microbiology_pcr_report_detected,language_aware_ocr_required",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "non_lab_document_skipped_lab_normalization",
+        "microbiology_pcr_report_detected",
+        "language_aware_ocr_required"
+      ],
+      "empty_extraction_flag": true,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "final_status_before_lab_normalization": "review",
+      "final_status_after_lab_normalization": "review",
+      "original_classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [],
+        "lab_table_detected": false,
+        "lab_coverage_ratio": 0.0,
+        "lab_coverage_band": "none",
+        "lab_reason_codes": [
+          "non_lab_document_skipped_lab_normalization",
+          "microbiology_pcr_report_detected",
+          "language_aware_ocr_required"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "skipped_for_document_type": "microbiology_pcr_report",
+          "language_hint": "ru"
+        },
+        "coverage": {
+          "raw_candidate_line_count": 0,
+          "parsed_lab_row_count": 0,
+          "coverage_ratio": 0.0,
+          "coverage_band": "none",
+          "reason_codes": [
+            "non_lab_document_skipped_lab_normalization",
+            "microbiology_pcr_report_detected",
+            "language_aware_ocr_required"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": false,
+          "lab_table_detected": false,
+          "parsed_lab_row_minimum_met": false,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": false,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": false
+        },
+        "document_classification": {
+          "document_type": "microbiology_pcr_report",
+          "confidence": 0.92,
+          "language_hint": "ru",
+          "should_run_lab_normalization": false,
+          "should_run_prescription_path": false,
+          "should_recommend_language_aware_ocr": true,
+          "review_reason": "microbiology_pcr_report_detected",
+          "evidence": [
+            "microbiology_terms=29",
+            "russian_or_pseudo_russian_pcr_markers"
+          ],
+          "warnings": [
+            "non_english_source"
+          ],
+          "metadata": {
+            "cyrillic_ratio": 0.906,
+            "latin_ratio": 0.094,
+            "lab_token_count_en": 0,
+            "lab_indicator_count": 0,
+            "microbiology_token_count_en": 8,
+            "microbiology_token_count_ru": 21,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 0,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 0,
+            "micro_signal_total": 29,
+            "lab_signal_total": 0,
+            "text_length": 3215,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": true
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 3_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "Test Results 4.pdf",
+      "status": "accepted",
+      "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "MHKpOdopy",
+          "value": "43",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "HeGoupiioe KonMUeCTBO",
+          "value": "1",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "See Ee",
+          "value": "25",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.693,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.45,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
+      "error": null,
+      "text_diagnostics": {
+        "length": 1035,
+        "preview": "[Page 1] fe | ein ee erat. wean rie ean RE Mis eee i CETb KJIVHMK Ma30x Ha MHKpOdopy 43 yperpbres\u00b0 @U.0. Wegengenxo CJI. 5i roy om = Bpau: Xa3uaxmeros A.C. Bosboyqures eh. eee We ce a Onurennii \u2014 HeGoupiioe KonMUeCTBO 1 JlevixoyHTbt a eo. ee 8 Seals jana: Sie mk ct Tf Be Cim3p TicGonbiioe KouecTBO. ",
+        "method": "existing_pdf_pipeline",
+        "suspicious": false,
+        "non_alnum_ratio": 0.0929,
+        "input_quality_score": 0.816,
+        "input_quality_band": "good",
+        "route_decision": "scanned_or_low_text"
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] fe | ein [LOCATION]. wean [PERSON]CETb KJIVHMK [PERSON] MHKpOdopy 43 yperpbres\u00b0 @U.0. Wegengenxo CJI. 5i [PERSON] Bpau: [PERSON] eh. eee We ce a Onurennii \u2014 HeGoupiioe KonMUeCTBO 1 [LOCATION] a eo. ee 8 Seals [PERSON]: Sie mk ct Tf Be Cim3p TicGonbiioe KouecTBO. [PERSON] gonorrhoeae Ca SS s",
+      "is_ocr_low_quality": false,
+      "review_type": "other",
+      "selected_text": "[Page 1]\nfe | ein\nee erat.\nwean rie ean RE Mis eee i\nCETb KJIVHMK Ma30x Ha MHKpOdopy 43 yperpbres\u00b0\n@U.0. Wegengenxo CJI. 5i roy om =\nBpau: Xa3uaxmeros A.C.\nBosboyqures eh. eee We ce a\nOnurennii \u2014 HeGoupiioe KonMUeCTBO 1\nJlevixoyHTbt a eo. ee 8 Seals jana: Sie mk ct Tf Be\nCim3p TicGonbiioe KouecTBO.\nNeisseria gonorrhoeae Ca SS sania ~~ PY\nTrichomonas vaginalis | = Heoonapyxeno\nMuxpodyopa TlaioukH, KOKKH YMePCHHOe K-BO i\nGardnerella vaginalis * Ie obHapyxKeno i\nCandida ST ae ek | Ae Detape k\nMobyluncusst\u2014i\u2018(\u2018s\u00e9dl\u00e9s\u00e9*!;*#*;!!!!!\u201dCUM Onapycno|)|0))OOO\u2122~\u2014\nLeptotryx He 061 lapy2KCHO- 5, 5\nAHAJIV3 CEKPETA FIPOCTAT DSI\nCiMi3b HeOoupuioe K-BO _\nOnUTeIM ROOMemCH CEOs, Gam ee) See Ee\n25\u2014 350m oe\nMaxpoparw | OO TAyKCHO\nJleywtMvopble sepa | eG ovtboe K-BO\nAMHMOWAHDIC TOMA at OGhapyAene\nCnepmaro30H/Ibl | He oOnapyaKero tes.\nTpuxomona/bl HIG COA WKENO = Sse ee\nOHORORKU ye Se | ero Sap ken a eee el\n[pouan diopa_ Uli ee tales | Kokxu Goubitoe BO\n\u00abKyuouenbie werkKH | He 8 tapyrKenio\nAjara: 15.12.2021. Uccnegosanne mpoBelt: | HY \u00aboe } bet\n",
+      "selected_engine": "existing_pdf_pipeline",
+      "input_quality_score": 0.816,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density"
+      ],
+      "route_decision": "scanned_or_low_text",
+      "ocr_layout_profile": {
+        "input_type": "mixed_pdf",
+        "language": "en",
+        "low_text_density": false,
+        "table_layout_heavy": true,
+        "empty_or_near_empty": false,
+        "page_count": 1,
+        "text_length": 1035,
+        "warnings": [
+          "low_medical_token_density",
+          "layout_or_table_heavy"
+        ],
+        "metrics": {
+          "text_length": 1035,
+          "garbage_character_ratio": 0.0,
+          "alphabetic_ratio": 0.8653,
+          "numeric_table_ratio": 0.0906,
+          "medical_token_density": 0.0,
+          "repeated_symbol_ratio": 0.0048,
+          "latin_ratio": 0.8618,
+          "cyrillic_ratio": 0.0,
+          "script": "en",
+          "quality_score": 0.816,
+          "quality_band": "good",
+          "layout_marker_count": 12
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.816,
+          "quality_band": "good",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "ocr_fallback_applied",
+            "text_quality_score": 0.731,
+            "ocr_fallback_used": true,
+            "ocr_engine": "tesseract_cli",
+            "quality_metrics": {
+              "text_length": 1035,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.8653,
+              "numeric_table_ratio": 0.0906,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0048,
+              "latin_ratio": 0.8618,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 1035
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.572,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density",
+            "repeated_symbol_noise"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 1678,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.4217,
+              "numeric_table_ratio": 0.4672,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.242,
+              "latin_ratio": 0.4217,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 1678
+        }
+      ],
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "final_status_before_lab_normalization": "accepted",
+      "final_status_after_lab_normalization": "accepted",
+      "original_classification_reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [
+          {
+            "test_name": "Leptotryx He 061 lapy2KCHO- 5,",
+            "value": "5",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Leptotryx He 061 lapy2KCHO- 5, 5",
+            "parser_confidence": 0.72,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          }
+        ],
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.024,
+        "lab_coverage_band": "weak",
+        "lab_reason_codes": [
+          "lab_table_recovered",
+          "lab_table_weak_coverage",
+          "lab_table_low_ratio",
+          "lab_table_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [
+            "microbiology_pcr"
+          ],
+          "table_confidence": 0.65,
+          "warnings": [
+            "flattened_table_markers"
+          ],
+          "metadata": {
+            "line_count": 31,
+            "row_signal_count": 6,
+            "numeric_unit_count": 0,
+            "qualitative_count": 0,
+            "microbiology_count": 1,
+            "table_marker_count": 12
+          }
+        },
+        "coverage": {
+          "raw_candidate_line_count": 41,
+          "parsed_lab_row_count": 1,
+          "coverage_ratio": 0.024,
+          "coverage_band": "weak",
+          "reason_codes": [
+            "lab_table_recovered",
+            "lab_table_weak_coverage",
+            "lab_table_low_ratio"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": false,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": true
+        },
+        "document_classification": {
+          "document_type": "microbiology_pcr_report",
+          "confidence": 0.79,
+          "language_hint": "en",
+          "should_run_lab_normalization": true,
+          "should_run_prescription_path": false,
+          "should_recommend_language_aware_ocr": false,
+          "review_reason": "microbiology_pcr_report_detected",
+          "evidence": [
+            "microbiology_terms=3"
+          ],
+          "warnings": [],
+          "metadata": {
+            "cyrillic_ratio": 0.0,
+            "latin_ratio": 1.0,
+            "lab_token_count_en": 0,
+            "lab_indicator_count": 0,
+            "microbiology_token_count_en": 3,
+            "microbiology_token_count_ru": 0,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 0,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 0,
+            "micro_signal_total": 3,
+            "lab_signal_total": 0,
+            "text_length": 1035,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": false
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\archive\\Test Results 4_1.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "Test Results 5.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "LlnY",
+          "value": "000",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "JleHIIIHrpaACKIII",
+          "value": "111",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "OCHOBax oxpaHbl",
+          "value": "31",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.63,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.2,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "confidence_below_accept_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 2500,
+        "preview": "[Page 1] fi;KDL www.kdl.ru I'!HTIIflll'!poBIIHHfUII OCI\"EIMI!. Mfl~ c:>epT$1,Uo1pc:la!IHil Hil OOOTMTC1'1l ~8 'Tplil\u2022 ISc:oaH.,._, rOCT P lt10CHl00'1\u00b720Hi, r OOT P IIK:O , 51 89-~015. roor P 11100 14001\u00b7 2019, rOOT F' I'IOO/M3K 27001\u00b72006, OHSo\\S 1 OCKJ1 ::<D07. SAl SA BCXXJ:2014 ~:; ro~a ~,. CepBHC",
+        "method": "existing_pdf_pipeline",
+        "suspicious": false,
+        "non_alnum_ratio": 0.1842,
+        "input_quality_score": 0.796,
+        "input_quality_band": "usable_with_review",
+        "route_decision": "digital_clean_text"
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] [LOCATION] [URL_REMOVED] I'!HTIIflll'!poBIIHHfUII OCI\"EIMI!. Mfl~ c:>epT$1,UoIpc:la!IHil Hil OOOTMTCI'Il ~8 'Tplil\u2022 ISc:oaH.,._, rOCT P ltIOCHlOO'1\u00b72OHi, r OOT P IIK:O , [DATE]. roor P 11100 14001\u00b7 [DATE], rOOT F' I'IOO/M3K 27001\u00b72006, OHSo\\S 1 OCKJI ::<DO7. SAl SA BCXXJ:2014 ~:; ro~a ~,. C",
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "selected_text": "[Page 1]\nfi;KDL \nwww.kdl.ru \nI'!HTIIflll'!poBIIHHfUII OCI\"EIMI!. Mfl~ \nc:>epT$1,Uo1pc:la!IHil Hil OOOTMTC1'1l ~8 'Tplil\u2022 \nISc:oaH.,._, rOCT P lt10CHl00'1\u00b720Hi, r OOT \nP IIK:O , 51 89-~015. roor P 11100 14001\u00b7 \n2019, rOOT F' I'IOO/M3K 27001\u00b72006, \nOHSo\\S 1 OCKJ1 ::<D07. SAl SA BCXXJ:2014 \n~:; ro~a \n~,. CepBHC \n-\u00b7 \nwww.medcentra@rvia.ru \n+7 (495) 125-32-60 \nrvtHEKOJlOriiiSI \n\u2022 \nYPOnOrV1 ~ \nUEPMATOBEHEPOflOrV1SI \u2022 Yavt \nBbi30B HA JlOM \u2022 TE:PAmts~ \nBbiE:3.0 ME1lCECTPbl \nN2 HanpasneHM>l: 1014623596 \nt:\\aTa: 15.12.2021 \nLlnY: 000 Met:~l..leHTP \u00abl1111Ha-K n[ltOC>>, r. MocKBa, JleHII1HrpaACKII1 \n111 np-T, A\u00b7 67, Kopn. \n(77MS6687J \nct>E,L:\\EHLJEHKO \nCTenaH JleOHV1AOBV14 \nOrt:teneH~1e: \nBpa4: Xa3111axMeTos A.C. \nA):lpec na1..1weHTa: \n,[laTa pmt<.aeHII151 : 31.08.1970 \nnon: \nMy>KCKO~ \nHaii1MeHosaH!I1e !11ccne,QosaHII15l \nPe3ynbrar \nnocesbl yporeH~t~TanbHoro rpaKTa MY}f{41!1H Ha MI!IKpocj:>nopy: \n5111oMarep~t~an: CeKpeT npocTaTbl (M~t~Kpocpnopa) \nnoceB Ha MI!IKpOcpilOpy OTAens:~eMOro \npoeT \nyporeHI!ITanbHoro TpaKTa MY}f{'-II!IHbl c \nonpeAeneHI!IeM '-IYBCTBI!ITeilbHOCTI!I K \npaCWI!IpeHHOMy cneKTpy aHTI!I6I!IOTI!IKOB Iii \n6aKTepltlocparaM, B T.'-1. KaHAI!IAa \nMIIIKpoopraHIII3MOB \no6Hapy>t<eH \nM~t~KpoopraHI!I3Mbl poAa Candida He Bbls:!BneHbl. \nBblfiBneHbl MIIIKpoopraHIII3Mbr: \nE,Ll.ii13M. \nW N!11 Klebsiella oxytoca 102 KOE!Mn \n~------------------~------~------------~----~~---------------,-----\u00b7------.----------. \nYyscTBI!ITenbHOCTb K aHTiil6liloTIIIKaM (aHTI!IMI!IKOTI!IKaM) \nNQ1 \nAM~t~Kal..IIIIH \nS \nAMOKCI!Il..\\I!IIlili!IH-KnasynaHosas:~ KltlcnoTa \nS \nL\\ecpTa3111A111M \nS \nleHT8MI!ILII!IH \nS \nL\\ecpTpltlaKCOH \nS \nL\\ecpoTaKCI!IM \nS \nL\\ecpeni!IM \nS \nV1M~t~neHeM \nS \nJlesocpnoKCal..\\I!IH \nS \nHopcpnoKCal..\\I!IH \nS \nT~t~Kapl..\\I!IIlni!IH+ KnasynaHosas:~ KltlcnoTa \nS \nAMnltll..\\I!IIlili!IH \nR \nn~t~o6aKTepltlocpar KOMnneKCHblill c.H177 \nR \nn~t~o6aKrepltlocpar noni!IBaneHTHblill c.Y95 \nR \n5aKTep~t~ocpar Kne6c~t~ene3Hblil1 non~t~saneHTHblill c.Y02 \nR \nYcnoBHble o6o3Ha'-leH~t~s:~ \nS - YyscTB~t~TeilbHblill R - YcToill'-II!IBblill \nPe3ynbTaT na6opmopHoro VICcnegosaH~151 HE ~Bn 51 ETO:I AV1AIH0301\\1. \nCornaCHO \u00a2eAepa n bH0~1Y 3ilKOHY N\\1323-<.1)3 OT 21 .. 11.2011 \u00ab06 OCHOBax oxpaHbl 31:\\0POBb>l rpa)Kf\\aH B POCG1WCKOM llleAepai~ V1VI\u00bb /\\f1iliH03 \nyCTaHaBm1BaeT neYa ll~ I!IH Bpa'<, 1!1CnOnb3Y5l nonHyfO 1-1 BCeCTOpOHHfOfO l<lHcPOpMaql!l fO 0 naqHe HTe: {1ilHHble OC~10Tpa, aHaMHe3a, ll.PYIVIX \nna6o paTOpHbiX VI I!IHCTpyMeHTililbHbiX VICCneaosa HVIW. \nHane'-1. 19.12.2021 10:32 \nCTP. 2 1113 2 \n",
+      "selected_engine": "existing_pdf_pipeline",
+      "input_quality_score": 0.796,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density",
+        "repeated_symbol_noise"
+      ],
+      "route_decision": "digital_clean_text",
+      "ocr_layout_profile": {
+        "input_type": "digital_pdf",
+        "language": "en",
+        "low_text_density": false,
+        "table_layout_heavy": true,
+        "empty_or_near_empty": false,
+        "page_count": 1,
+        "text_length": 2500,
+        "warnings": [
+          "low_medical_token_density",
+          "repeated_symbol_noise",
+          "layout_or_table_heavy"
+        ],
+        "metrics": {
+          "text_length": 2500,
+          "garbage_character_ratio": 0.0,
+          "alphabetic_ratio": 0.6965,
+          "numeric_table_ratio": 0.2265,
+          "medical_token_density": 0.0,
+          "repeated_symbol_ratio": 0.0304,
+          "latin_ratio": 0.6965,
+          "cyrillic_ratio": 0.0,
+          "script": "en",
+          "quality_score": 0.796,
+          "quality_band": "usable_with_review",
+          "layout_marker_count": 16
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.796,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density",
+            "repeated_symbol_noise"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "readable",
+            "text_quality_score": 0.713,
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2500,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.6965,
+              "numeric_table_ratio": 0.2265,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0304,
+              "latin_ratio": 0.6965,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2500
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.796,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density",
+            "repeated_symbol_noise"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2500,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.6965,
+              "numeric_table_ratio": 0.2265,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0304,
+              "latin_ratio": 0.6965,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2500
+        }
+      ],
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,classifier_legacy_ocr_flag,legacy_normalized_low_coverage",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "final_status_before_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review_ocr_quality",
+      "original_classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [
+          {
+            "test_name": "CTP. 2 1113",
+            "value": "2",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "CTP. 2 1113 2",
+            "parser_confidence": 0.72,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "M~t~KpoopraHI!I3Mbl poAa Candida He Bbls:!BneHbl",
+            "value": "102",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "M~t~KpoopraHI!I3Mbl poAa Candida He Bbls:!BneHbl.",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          },
+          {
+            "test_name": "W N!11 Klebsiella oxytoca 102 KOE!Mn",
+            "value": "102",
+            "unit": "Lg",
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "W N!11 Klebsiella oxytoca 102 KOE!Mn",
+            "parser_confidence": 0.74,
+            "warnings": [
+              "paired_microbiology_row"
+            ]
+          }
+        ],
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.041,
+        "lab_coverage_band": "weak",
+        "lab_reason_codes": [
+          "lab_table_recovered",
+          "lab_table_weak_coverage",
+          "lab_table_low_ratio",
+          "lab_rows_minimum_met",
+          "lab_table_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [
+            "microbiology_pcr"
+          ],
+          "table_confidence": 0.65,
+          "warnings": [
+            "flattened_table_markers"
+          ],
+          "metadata": {
+            "line_count": 90,
+            "row_signal_count": 7,
+            "numeric_unit_count": 0,
+            "qualitative_count": 0,
+            "microbiology_count": 1,
+            "table_marker_count": 16
+          }
+        },
+        "coverage": {
+          "raw_candidate_line_count": 73,
+          "parsed_lab_row_count": 3,
+          "coverage_ratio": 0.041,
+          "coverage_band": "weak",
+          "reason_codes": [
+            "lab_table_recovered",
+            "lab_table_weak_coverage",
+            "lab_table_low_ratio",
+            "lab_rows_minimum_met"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": true,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": true,
+          "document_type_eligible_for_lab_recovery": true
+        },
+        "document_classification": {
+          "document_type": "unknown_medical",
+          "confidence": 0.3,
+          "language_hint": "en",
+          "should_run_lab_normalization": true,
+          "should_run_prescription_path": false,
+          "should_recommend_language_aware_ocr": false,
+          "review_reason": "unknown_document_type",
+          "evidence": [
+            "no_strong_signals"
+          ],
+          "warnings": [
+            "low_confidence_document_type"
+          ],
+          "metadata": {
+            "cyrillic_ratio": 0.0,
+            "latin_ratio": 1.0,
+            "lab_token_count_en": 0,
+            "lab_indicator_count": 0,
+            "microbiology_token_count_en": 1,
+            "microbiology_token_count_ru": 0,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 0,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 0,
+            "micro_signal_total": 1,
+            "lab_signal_total": 0,
+            "text_length": 2500,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": false
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 5_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "Test Results 6.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 0,
+      "entities": [],
+      "selected_extractor": "phi3",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.09,
+      "confidence_breakdown": {
+        "entity_count": 0.0,
+        "coverage": 0.0,
+        "diversity": 0.0,
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 0,
+      "review_reason": "empty_extraction, confidence_below_reject_threshold",
+      "why_reviewed": [
+        "empty_extraction",
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_diversity",
+        "low_extractor_weight"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 1383,
+        "preview": "[Page 1] \u0424.\u0418.\u041e. \u043f\u0430\u0446\u0438\u0435\u043d\u0442\u0430 \u0424\u0435\u0434\u0435\u043d\u0447\u0435\u043d\u043a\u043e \u0421\u0442\u0435\u043f\u0430\u043d \u041b\u0435\u043e\u043d\u0438\u0434\u043e\u0432\u0438\u0447 \u2116 \u043a\u0430\u0440\u0442\u044b 720862 \u0424.\u0418.\u041e. \u0432\u0440\u0430\u0447\u0430 \u0425\u0430\u0437\u0438\u0430\u0445\u043c\u0435\u0442\u043e\u0432 \u0410.\u0421. \u0441 Ad \u042f. \u043c\u0435\u0441\u044f\u0446 \u0414\u0438\u0430\u0433\u043d\u043e\u0437 \u0425\u0440\u043e\u043d\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0430\u043b\u044c\u043d\u044b\u0439 \u0443\u0440\u0435\u0442\u0440\u043e\u043f\u0440\u043e\u0441\u0442\u0430\u0442\u0438\u0442. 89152224504 / tye \u0432 ) \u041f\u0420\u0415\u041f\u0410\u0420\u0410\u0422\u042b / \u0414\u0410\u0422\u0410 1 |213 141516 |718 |9 | 10] \u043f | 12} 13| 14| 15| 16 | 17| 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | ",
+        "method": "tesseract_rus_eng",
+        "suspicious": false,
+        "non_alnum_ratio": 0.1105,
+        "input_quality_score": 0.82,
+        "input_quality_band": "good",
+        "route_decision": "digital_clean_text"
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] \u0424.\u0418.\u041e. \u043f\u0430\u0446\u0438\u0435\u043d\u0442\u0430 \u0424\u0435\u0434\u0435\u043d\u0447\u0435\u043d\u043a\u043e \u0421\u0442\u0435\u043f\u0430\u043d \u041b\u0435\u043e\u043d\u0438\u0434\u043e\u0432\u0438\u0447 \u2116 \u043a\u0430\u0440\u0442\u044b 720862 \u0424.\u0418.\u041e. \u0432\u0440\u0430\u0447\u0430 [PERSON] \u0441 Ad \u042f. \u043c\u0435\u0441\u044f\u0446 [PERSON] \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0430\u043b\u044c\u043d\u044b\u0439 \u0443\u0440\u0435\u0442\u0440\u043e\u043f\u0440\u043e\u0441\u0442\u0430\u0442\u0438\u0442. 89152224504 / tye \u0432 ) \u041f\u0420\u0415\u041f\u0410\u0420\u0410\u0422\u042b / \u0414\u0410\u0422\u0410 1 |213 141516 |718 |9 | 10] \u043f | 12} 13| 14| 15| 16 | 17| [DATE] [PERSON]\u043c\u0433 | y | 2 \u043f\u043e 1 \u0441\u0432\u0435\u0447\u0435 \u043d\u0430 \u043d\u043e\u0447\u044c \u0421\u0432\u0435\u0447\u0438 \u0432\u0438\u0442\u0430\u043f\u0440\u043e\u0441",
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "selected_text": "[Page 1]\n\u0424.\u0418.\u041e. \u043f\u0430\u0446\u0438\u0435\u043d\u0442\u0430 \u0424\u0435\u0434\u0435\u043d\u0447\u0435\u043d\u043a\u043e \u0421\u0442\u0435\u043f\u0430\u043d \u041b\u0435\u043e\u043d\u0438\u0434\u043e\u0432\u0438\u0447 \u2116 \u043a\u0430\u0440\u0442\u044b 720862 \u0424.\u0418.\u041e. \u0432\u0440\u0430\u0447\u0430 \u0425\u0430\u0437\u0438\u0430\u0445\u043c\u0435\u0442\u043e\u0432 \u0410.\u0421.\n\n\u0441 Ad \u042f. \u043c\u0435\u0441\u044f\u0446 \u0414\u0438\u0430\u0433\u043d\u043e\u0437 \u0425\u0440\u043e\u043d\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0431\u0430\u043a\u0442\u0435\u0440\u0438\u0430\u043b\u044c\u043d\u044b\u0439 \u0443\u0440\u0435\u0442\u0440\u043e\u043f\u0440\u043e\u0441\u0442\u0430\u0442\u0438\u0442. 89152224504 / tye \u0432 )\n\u041f\u0420\u0415\u041f\u0410\u0420\u0410\u0422\u042b / \u0414\u0410\u0422\u0410 1 |213 141516 |718 |9 | 10] \u043f | 12} 13| 14| 15| 16 | 17| 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31\n\n\u0421\u0432\u0435\u0447\u0438 \u0434\u0438\u043a\u043b\u043e\u0444\u0435\u043d\u0430\u043a 100\u043c\u0433 | y | 2\n\u043f\u043e 1 \u0441\u0432\u0435\u0447\u0435 \u043d\u0430 \u043d\u043e\u0447\u044c\n\u0421\u0432\u0435\u0447\u0438 \u0432\u0438\u0442\u0430\u043f\u0440\u043e\u0441\u0442 \u0444\u043e\u0440\u0442\u044d \u043f\u043e diel elelel\u00a2 le lele te\n1 \u0441\u0432\u0435\u0447\u0435 \u043d\u0430 \u043d\u043e\u0447\u044c\n\u041c\u0435\u0442\u0440\u043e\u043d\u0438\u0434\u0430\u0437\u043e\u043b \u043f\u043e 500\u043c\u0433 2 \u0430\u044f | el ene\n\u0440 \u0432 \u0434\u0435\u043d\u044c \u043f\u043e\u0441\u043b\u0435 \u0435\u0434\u044b\n\u041b\u0435\u0432\u043e\u0444\u043b\u043e\u043a\u0441\u0430\u0446\u0438\u043d \u043f\u043e 500\u043c\u0433 fe alee \u0435\u0435 | \u044f \u044b\u044b\n1 p3a 1 \u0447\u0430\u0441 \u0434\u043e \u043e\u0431\u0435\u0434\u0430 \u041c\u0415 `\n\u0424\u043b\u0443\u043a\u043e\u043d\u0430\u0437\u043e\u043b \u043f\u043e 150 mr 1 \u0440 2 4 \u00a2 \u00a2 3) +\n\u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\u041b\u0438\u043d\u0435\u043a\u0441 \u0444\u043e\u0440\u0442\u044d \u043f\u043e \u043a\u0430\u043f\u0441\u0443\u043b\u0435 i\n1 \u0440 \u0434\u043e \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\u0422\u0430\u043c\u0441\u0443\u043b\u043e\u0437\u0438\u043d \u043f\u043e 0.4\u043c\u0433 \u0440]; | 2] 7\n\u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\u041c\u0438\u043b\u0434\u0440\u043e\u043d\u0430\u0442 \u043f\u043e 500 mr 1 \u0440\u0430\u0437\u0430\n\u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u0432\u0442\u0440\u0430\u043a\u0430\n\n\u041f\u0440\u043e\u0441\u0442\u0430\u043a\u043e\u0440 \u043f\u043e 1 MI} cg] el gl al alelele 9\n\u0432\u043d\u0443\u0442\u0440\u0438\u043c\u044b\u0448\u0435\u0447\u043d\u043e :\n\n\\>\nA\n~\n\n\u00bb\n\nAL,\n<\n\n8\n\na\n\n\u043a\n\n\\\n\nu\n~\naL\n\u2014\n`\n<.\n5.\n+\nay\nas\nnn\noa\ni\n4\n3.\n\n\u041c\u0435\u043a\u0441\u0438\u0434\u043e\u043b \u043f\u043e 2 mom} 4\n\u0432\u043d\u0443\u0442\u0440\u0438\u043c\u044b\u0448\u0435\u0447\u043d\u043e\n\u0424\u0418\u0417\u0418\u041e\u041f\u0420\u041e\u0426\u0415\u0414\u0423\u0420\u042b\n\na\nay\n9.\n\u0421\n\u0417-\n\\\n3\n=\n\n\u041b\u0430\u0437\u0435\u0440\u043e\u0442\u0435\u0440\u0430\u043f\u0438\u044f, \u2014 \u043c\u0430\u0441\u0441\u0430\u0436 \u043f\u0435 rake b\n\u043f\u0440\u043e\u0441\u0442\u0430\u0442\u044b ; \u0415 '\n\n\u2116\nBS\nxX\nNS\n5\n&\n25%.\n:\n&\n&\nWw\n>\n\n\u0414\u0438\u0435\u0442\u0430: \u0438\u0441\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u0437 \u0440\u0430\u0446\u0438\u043e\u043d\u0430 \u043f\u0438\u0442\u0430\u043d\u0438\u044f (\u0430\u043b\u043a\u043e\u0433\u043e\u043b\u044c, \u043e\u0441\u0442\u0440\u044b\u0435 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u044b, \u0441\u043e\u043b\u0435\u043d\u044b\u0435, \u043a\u043e\u043f\u0447\u0435\u043d\u044b\u0435, \u0436\u0438\u0440\u043d\u0443\u044e \u043f\u0438\u0449\u0443. \u041f\u0438\u0442\u044c\u0435\u0432\u043e\u0439 \u0440\u0435\u0436\u0438\u043c: \u043f\u0438\u0442\u044c \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 2-- $\n\u043b\u0438\u0442\u0440\u043e\u0432 \u0436\u0438\u0434\u043a\u043e\u0441\u0442\u0438 \u0432 \u0434\u0435\u043d\u044c (\u0432\u043e\u0434\u0430) \u043f\u043b\u044e\u0441 \u0441\u043e\u043a\u0438, \u0431\u0443\u043b\u044c\u043e\u043d\u044b. \u041d\u0435 \u043f\u043e\u0441\u0435\u0449\u0430\u0442\u044c: \u0431\u0430\u043d\u044e, \u0441\u0430\u0443\u043d\u0443, \u0431\u0430\u0441\u0441\u0435\u0439\u043d, \u0441\u043e\u043b\u044f\u0440\u0438\u0439 \u0438 \u043d\u0435 \u0437\u0430\u0433\u043e\u0440\u0430\u0442\u044c \u043d\u0430 \u043e\u0442\u043a\u0440\u044b\u0442\u043e\u043c \u0441\u043e\u043b\u043d\u0446\u0435. \u041e\u0433\u0440\u0430\u043d\u0438\u0447\u0438\u0442\u044c\n\u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u0443\u044e \u043d\u0430\u0433\u0440\u0443\u0437\u043a\u0443. \u041f\u043e\u043b\u043e\u0432\u043e\u0439 \u0436\u0438\u0437\u043d\u044c\u044e/\u0436\u0438\u0442\u044c.\n\n\u041e\u0437\u043d\u0430\u043a\u043e\u043c\u043b\u0435\u043d: \u201c  ~ \u0415\u0415\u041e ) \u0414\u0430\u0442\u0430 \u0430\n\n7\n\n\u041e \u0432\u0442",
+      "selected_engine": "tesseract_rus_eng",
+      "input_quality_score": 0.82,
+      "input_quality_band": "good",
+      "input_quality_warnings": [
+        "layout_or_table_heavy",
+        "low_medical_token_density"
+      ],
+      "route_decision": "digital_clean_text",
+      "ocr_layout_profile": {
+        "input_type": "digital_pdf",
+        "language": "ru",
+        "low_text_density": false,
+        "table_layout_heavy": true,
+        "empty_or_near_empty": false,
+        "page_count": null,
+        "text_length": 1383,
+        "warnings": [
+          "low_medical_token_density",
+          "layout_or_table_heavy"
+        ],
+        "metrics": {
+          "text_length": 1383,
+          "garbage_character_ratio": 0.0,
+          "alphabetic_ratio": 0.7762,
+          "numeric_table_ratio": 0.1873,
+          "medical_token_density": 0.0,
+          "repeated_symbol_ratio": 0.0,
+          "latin_ratio": 0.0918,
+          "cyrillic_ratio": 0.6845,
+          "script": "ru",
+          "quality_score": 0.82,
+          "quality_band": "good",
+          "layout_marker_count": 28
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.809,
+          "quality_band": "good",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "readable",
+            "text_quality_score": 0.846,
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2305,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.5586,
+              "numeric_table_ratio": 0.3549,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0139,
+              "latin_ratio": 0.5586,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2305
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.809,
+          "quality_band": "good",
+          "language": "en",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2305,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.5586,
+              "numeric_table_ratio": 0.3549,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0139,
+              "latin_ratio": 0.5586,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2305
+        },
+        {
+          "engine_name": "tesseract_rus_eng",
+          "quality_score": 0.82,
+          "quality_band": "good",
+          "language": "ru",
+          "warnings": [
+            "layout_or_table_heavy",
+            "low_medical_token_density"
+          ],
+          "metadata": {
+            "trigger_reason": "language_aware_ocr_required",
+            "source": "cyrillic_ocr_candidate",
+            "pages_processed": 1,
+            "pages_skipped": 0,
+            "ocr_attempted": true,
+            "candidate_warnings": [],
+            "quality_metrics": {
+              "text_length": 1383,
+              "garbage_character_ratio": 0.0,
+              "alphabetic_ratio": 0.7762,
+              "numeric_table_ratio": 0.1873,
+              "medical_token_density": 0.0,
+              "repeated_symbol_ratio": 0.0,
+              "latin_ratio": 0.0918,
+              "cyrillic_ratio": 0.6845,
+              "script": "ru"
+            }
+          },
+          "text_length": 1383
+        }
+      ],
+      "downstream_classifier_status": "review_ocr_quality",
+      "downstream_classifier_reason": "table_structure_loss,extraction_low_coverage,extraction_low_confidence,safety_gate_low_confidence,extraction_sparse_entities,classifier_legacy_ocr_flag,legacy_normalized_low_coverage,non_lab_document_skipped_lab_normalization,document_type_prescription_not_lab,language_aware_ocr_required",
+      "classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage",
+        "non_lab_document_skipped_lab_normalization",
+        "document_type_prescription_not_lab",
+        "language_aware_ocr_required"
+      ],
+      "empty_extraction_flag": true,
+      "table_layout_warning": true,
+      "ocr_status_mismatch": true,
+      "mismatch_type": "good_input_but_downstream_ocr_review",
+      "final_status_before_lab_normalization": "review_ocr_quality",
+      "final_status_after_lab_normalization": "review_ocr_quality",
+      "original_classification_reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [],
+        "lab_table_detected": false,
+        "lab_coverage_ratio": 0.0,
+        "lab_coverage_band": "none",
+        "lab_reason_codes": [
+          "non_lab_document_skipped_lab_normalization",
+          "document_type_prescription_not_lab",
+          "language_aware_ocr_required"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "skipped_for_document_type": "prescription",
+          "language_hint": "ru"
+        },
+        "coverage": {
+          "raw_candidate_line_count": 0,
+          "parsed_lab_row_count": 0,
+          "coverage_ratio": 0.0,
+          "coverage_band": "none",
+          "reason_codes": [
+            "non_lab_document_skipped_lab_normalization",
+            "document_type_prescription_not_lab",
+            "language_aware_ocr_required"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": false,
+          "lab_table_detected": false,
+          "parsed_lab_row_minimum_met": false,
+          "coverage_recovered": false,
+          "no_empty_extraction_leakage": false,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": false
+        },
+        "document_classification": {
+          "document_type": "prescription",
+          "confidence": 0.95,
+          "language_hint": "ru",
+          "should_run_lab_normalization": false,
+          "should_run_prescription_path": true,
+          "should_recommend_language_aware_ocr": true,
+          "review_reason": "document_type_prescription_not_lab",
+          "evidence": [
+            "prescription_terms=17",
+            "russian_or_pseudo_russian_prescription_markers"
+          ],
+          "warnings": [
+            "non_english_source"
+          ],
+          "metadata": {
+            "cyrillic_ratio": 0.882,
+            "latin_ratio": 0.118,
+            "lab_token_count_en": 0,
+            "lab_indicator_count": 0,
+            "microbiology_token_count_en": 0,
+            "microbiology_token_count_ru": 1,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 17,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 17,
+            "micro_signal_total": 1,
+            "lab_signal_total": 0,
+            "text_length": 1383,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": true
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\review\\Test Results 6_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "Urinalysis, Routine.pdf",
+      "status": "accepted",
+      "entity_count": 11,
+      "entities": [
+        {
+          "type": "medication",
+          "text": "Semi-Qn",
+          "dose": "1.0mg",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "diagnosis",
+          "text": "growth in",
+          "negated": true,
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "No Growth",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "note",
+          "text": "Final Report",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Microscopic Examination",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Protein",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Glucose",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Blood",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.792,
+      "confidence_breakdown": {
+        "entity_count": 0.8,
+        "coverage": 0.45,
+        "diversity": 1.0,
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 11,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
+      "error": null,
+      "text_diagnostics": {
+        "length": 2365,
+        "preview": "[Page 1] 1 Patient Report Specimen ID: 262-425-2765-0 Acct #: 29451145 Phone: (732) 972-9000 Rte: TF Control ID: L97 Urology Care Alliance 2 Hospital Plz Ste 110 Old Bridge NJ 08857 FEDENCHENKO, STEPAN 206 MILLBURN AVENUE APT 1-A MILLBURN NJ 07041 (973) 957-3939 Patient Details DOB: 08/31/1970 Age(y",
+        "method": "existing_pdf_pipeline",
+        "suspicious": false,
+        "non_alnum_ratio": 0.1006,
+        "input_quality_score": 0.925,
+        "input_quality_band": "usable_with_review",
+        "route_decision": "digital_clean_text"
+      },
+      "normalization_applied": false,
+      "normalized_text_preview": null,
+      "is_ocr_low_quality": false,
+      "review_type": "other",
+      "selected_text": "[Page 1]\n \n1\nPatient Report\u00a0\u00a0\u00a0\nSpecimen ID:  262-425-2765-0\nAcct #: 29451145\nPhone: (732) 972-9000\nRte: TF\nControl ID: L97\nUrology Care Alliance\n2 Hospital Plz Ste 110\nOld Bridge NJ 08857\nFEDENCHENKO, STEPAN\n206 MILLBURN AVENUE APT 1-A\nMILLBURN NJ  07041\n(973) 957-3939\nPatient Details\nDOB: 08/31/1970\nAge(y/m/d): 050/00/18\nGender:  M\nPatient ID: 181651-0\nSpecimen Details\nDate collected: 09/18/2020  1525 Local\nDate received: 09/19/2020\nDate entered:\n09/19/2020\nDate reported: 09/22/2020  1606 ET\nPhysician Details\nOrdering: E  RIZKALA\nReferring:\nID:\nNPI:  1255637146\n\u0004\u0004\u0002\u0003\u0002\u0004\u0004\u0004\u0001\u0001\u0001\u0001\u0001\u0004\u0002\u0003\u0004\u0002\u0002\u0002\u0001\u0001\u0001\u0003\u0003\u0003\u0004\u0001\u0003\u0002\u0004\u0002\u0004\u0002\u0002\u0001\u0004\u0001\u0001\u0003\u0002\u0001\u0002\u0004\u0001\u0002\u0004\u0002\u0001\u0002\u0001\u0002\u0001\u0004\u0002\u0002\u0003\u0002\u0004\u0003\u0001\u0002\u0002\u0002\u0002\nDate Issued: 09/22/20 1606 ET\n FINAL REPORT\nPage 1 of 1\nThis document contains private and confidential health information protected by state and federal law.\nIf you have received this document in error, please call 800-631-5250\n\u00a9 1995-2020 Laboratory Corporation of America\u00ae Holdings\nAll Rights Reserved - Enterprise Report Version: \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\nGeneral Comments & Additional Information\nClinical Info: SRC:VOIDED\nAlternate Control Number: 550131\nAlternate Patient ID: 181651-0\nOrdered Items\nUrinalysis, Routine; Urine Culture,Comprehensive\n           TESTS              RESULT     FLAG      UNITS  REFERENCE INTERVAL  LAB\nUrinalysis, Routine\n  Urinalysis Gross Exam\n01\n  Specific Gravity                   1.024\n  1.005-1.030\n01\n  pH                                   6.5\n    5.0-7.5\n01\n  Urine-Color                       Yellow\n    Yellow\n01\n  Appearance                         Clear\n     Clear\n01\n  WBC Esterase                    Negative\n   Negative\n01\n  Protein                         Negative\nNegative/Trace\n01\n  Glucose                         Negative\n   Negative\n01\n  Ketones                         Negative\n   Negative\n01\n  Occult Blood                    Negative\n   Negative\n01\n  Bilirubin                       Negative\n   Negative\n01\n  Urobilinogen,Semi-Qn                 1.0\nmg/dL\n    0.2-1.0\n01\n  Nitrite, Urine                  Negative\n   Negative\n01\n Microscopic Examination\nMicroscopic follows if indicated.\n01\nUrine Culture,Comprehensive\n Urine Culture,Comprehensive\n     Final report\n01\n Result 1\n     No growth in 36 - 48 hours.\n01\n01\nRN\nLabCorp Raritan\n69 First Avenue, Raritan, NJ 08869-1800\nDir: Araceli B Reyes, MD\nFor inquiries, the physician may contact Branch: 800-631-5250 Lab: 800-631-5250\n1.00\n",
+      "selected_engine": "existing_pdf_pipeline",
+      "input_quality_score": 0.925,
+      "input_quality_band": "usable_with_review",
+      "input_quality_warnings": [
+        "garbage_characters"
+      ],
+      "route_decision": "digital_clean_text",
+      "ocr_layout_profile": {
+        "input_type": "digital_pdf",
+        "language": "en",
+        "low_text_density": false,
+        "table_layout_heavy": false,
+        "empty_or_near_empty": false,
+        "page_count": 1,
+        "text_length": 2365,
+        "warnings": [
+          "garbage_characters"
+        ],
+        "metrics": {
+          "text_length": 2365,
+          "garbage_character_ratio": 0.0383,
+          "alphabetic_ratio": 0.7387,
+          "numeric_table_ratio": 0.216,
+          "medical_token_density": 0.1931,
+          "repeated_symbol_ratio": 0.0089,
+          "latin_ratio": 0.7387,
+          "cyrillic_ratio": 0.0,
+          "script": "en",
+          "quality_score": 0.925,
+          "quality_band": "usable_with_review",
+          "layout_marker_count": 0
+        }
+      },
+      "ocr_layout_candidates": [
+        {
+          "engine_name": "existing_pdf_pipeline",
+          "quality_score": 0.925,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "garbage_characters"
+          ],
+          "metadata": {
+            "source": "PDFPipeline.extract_text_with_audit",
+            "text_quality_status": "readable",
+            "text_quality_score": 0.952,
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2365,
+              "garbage_character_ratio": 0.0383,
+              "alphabetic_ratio": 0.7387,
+              "numeric_table_ratio": 0.216,
+              "medical_token_density": 0.1931,
+              "repeated_symbol_ratio": 0.0089,
+              "latin_ratio": 0.7387,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2365
+        },
+        {
+          "engine_name": "pymupdf_native_text",
+          "quality_score": 0.925,
+          "quality_band": "usable_with_review",
+          "language": "en",
+          "warnings": [
+            "garbage_characters"
+          ],
+          "metadata": {
+            "source": "pymupdf_native_text",
+            "ocr_fallback_used": false,
+            "ocr_engine": null,
+            "quality_metrics": {
+              "text_length": 2365,
+              "garbage_character_ratio": 0.0383,
+              "alphabetic_ratio": 0.7387,
+              "numeric_table_ratio": 0.216,
+              "medical_token_density": 0.1931,
+              "repeated_symbol_ratio": 0.0089,
+              "latin_ratio": 0.7387,
+              "cyrillic_ratio": 0.0,
+              "script": "en"
+            }
+          },
+          "text_length": 2365
+        }
+      ],
+      "downstream_classifier_status": "accepted",
+      "downstream_classifier_reason": "accepted_clean_input",
+      "classification_reason_codes": [
+        "accepted_clean_input",
+        "lab_report_detected"
+      ],
+      "empty_extraction_flag": false,
+      "table_layout_warning": false,
+      "ocr_status_mismatch": false,
+      "mismatch_type": null,
+      "final_status_before_lab_normalization": "accepted",
+      "final_status_after_lab_normalization": "accepted",
+      "original_classification_reason_codes": [
+        "accepted_clean_input"
+      ],
+      "lab_normalization": {
+        "normalized_lab_rows": [
+          {
+            "test_name": "Old Bridge NJ",
+            "value": "08857",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Old Bridge NJ 08857",
+            "parser_confidence": 0.72,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "MILLBURN NJ",
+            "value": "07041",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "MILLBURN NJ  07041",
+            "parser_confidence": 0.72,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Page 1 of",
+            "value": "1",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Page 1 of 1",
+            "parser_confidence": 0.72,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Specific Gravity",
+            "value": "1.024",
+            "unit": null,
+            "reference_range": "1.005-1.030",
+            "abnormal_flag": null,
+            "raw_line": "Specific Gravity                   1.024",
+            "parser_confidence": 0.82,
+            "warnings": [
+              "split_range_row"
+            ]
+          },
+          {
+            "test_name": "pH",
+            "value": "6.5",
+            "unit": null,
+            "reference_range": "5.0-7.5",
+            "abnormal_flag": null,
+            "raw_line": "pH                                   6.5",
+            "parser_confidence": 0.82,
+            "warnings": [
+              "split_range_row"
+            ]
+          },
+          {
+            "test_name": "WBC Esterase",
+            "value": "Negative",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "WBC Esterase                    Negative",
+            "parser_confidence": 0.78,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Protein",
+            "value": "Negative",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Protein                         Negative",
+            "parser_confidence": 0.78,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Glucose",
+            "value": "Negative",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Glucose                         Negative",
+            "parser_confidence": 0.78,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Ketones",
+            "value": "Negative",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Ketones                         Negative",
+            "parser_confidence": 0.78,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Occult Blood",
+            "value": "Negative",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Occult Blood                    Negative",
+            "parser_confidence": 0.78,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Bilirubin",
+            "value": "Negative",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Bilirubin                       Negative",
+            "parser_confidence": 0.78,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Urobilinogen,Semi-Qn",
+            "value": "1.0",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Urobilinogen,Semi-Qn                 1.0",
+            "parser_confidence": 0.72,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Nitrite, Urine",
+            "value": "Negative",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Nitrite, Urine                  Negative",
+            "parser_confidence": 0.78,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          },
+          {
+            "test_name": "Result",
+            "value": "1",
+            "unit": null,
+            "reference_range": null,
+            "abnormal_flag": null,
+            "raw_line": "Result 1",
+            "parser_confidence": 0.72,
+            "warnings": [
+              "qualitative_or_sparse_row"
+            ]
+          }
+        ],
+        "lab_table_detected": true,
+        "lab_coverage_ratio": 0.167,
+        "lab_coverage_band": "partial",
+        "lab_reason_codes": [
+          "lab_table_recovered",
+          "lab_table_partial_coverage",
+          "lab_rows_minimum_met",
+          "lab_table_detected",
+          "lab_report_detected"
+        ],
+        "should_upgrade_from_ocr_review_to_review": false,
+        "detection": {
+          "has_lab_table": true,
+          "detected_sections": [
+            "cbc",
+            "cmp",
+            "urinalysis",
+            "blood_test"
+          ],
+          "table_confidence": 1.0,
+          "warnings": [
+            "flattened_table_markers"
+          ],
+          "metadata": {
+            "line_count": 103,
+            "row_signal_count": 20,
+            "numeric_unit_count": 0,
+            "qualitative_count": 14,
+            "microbiology_count": 0,
+            "table_marker_count": 191
+          }
+        },
+        "coverage": {
+          "raw_candidate_line_count": 84,
+          "parsed_lab_row_count": 14,
+          "coverage_ratio": 0.167,
+          "coverage_band": "partial",
+          "reason_codes": [
+            "lab_table_recovered",
+            "lab_table_partial_coverage",
+            "lab_rows_minimum_met"
+          ]
+        },
+        "safety_checks": {
+          "ocr_layout_quality_safe": true,
+          "lab_table_detected": true,
+          "parsed_lab_row_minimum_met": true,
+          "coverage_recovered": true,
+          "no_empty_extraction_leakage": true,
+          "not_poor_ocr_band": true,
+          "no_safety_gate_block": true,
+          "current_status_review_ocr_quality": false,
+          "document_type_eligible_for_lab_recovery": true
+        },
+        "document_classification": {
+          "document_type": "lab_report",
+          "confidence": 0.95,
+          "language_hint": "en",
+          "should_run_lab_normalization": true,
+          "should_run_prescription_path": false,
+          "should_recommend_language_aware_ocr": false,
+          "review_reason": "lab_report_detected",
+          "evidence": [
+            "lab_tokens_en=11",
+            "lab_indicators=5"
+          ],
+          "warnings": [],
+          "metadata": {
+            "cyrillic_ratio": 0.0,
+            "latin_ratio": 1.0,
+            "lab_token_count_en": 11,
+            "lab_indicator_count": 5,
+            "microbiology_token_count_en": 0,
+            "microbiology_token_count_ru": 0,
+            "microbiology_pseudo_count": 0,
+            "prescription_token_count_en": 0,
+            "prescription_token_count_ru": 0,
+            "prescription_pseudo_count": 0,
+            "rx_signal_total": 0,
+            "micro_signal_total": 0,
+            "lab_signal_total": 16,
+            "text_length": 2365,
+            "ocr_metadata": {}
+          }
+        },
+        "skipped_for_document_type": false
+      },
+      "lab_normalizer_changed_status": false,
+      "accepted_due_to_lab_normalizer": false,
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\archive\\Urinalysis, Routine_1.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "accepted"
+    }
+  ],
+  "files_needing_review": [
+    "Results 1.pdf",
+    "Results 2.pdf",
+    "Test Results 2.pdf",
+    "Test Results 3.pdf",
+    "Test Results 5.pdf",
+    "Test Results 6.pdf"
+  ],
+  "errors": []
+}

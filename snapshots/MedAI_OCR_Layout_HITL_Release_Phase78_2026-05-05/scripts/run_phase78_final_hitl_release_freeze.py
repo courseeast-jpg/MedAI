@@ -295,7 +295,6 @@ def run_freeze(
     # Create snapshot directory (use extended-path walk for Windows deep trees)
     if snapshot_dir.exists():
         _rmtree_safe(snapshot_dir)
-    snapshot_dir.mkdir(parents=True, exist_ok=True)
     included_files = _copy_snapshot(root, snapshot_dir)
 
     # Write snapshot metadata

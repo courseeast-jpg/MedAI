@@ -1,0 +1,105 @@
+# Phase 18 Full Cycle Summary
+
+- Generated at: `2026-04-26T16:08:12.622894+00:00`
+- Commit hash: `f05128f129a3e27050b3ce8ef19561f8f54d6f64`
+- Git status: `dirty`
+- Success: `True`
+- Failed step: `None`
+- Test result: `unknown`
+- Phase 11 audit result: `passed`
+- Validation attempted: `50`
+- Validation processed: `46`
+- Validation written: `45`
+- Validation queued_for_review: `1`
+- Validation external_quota_blocked: `4`
+- Validation hard_failures: `0`
+- Validation avg_confidence: `0.692`
+- Validation review_queue_items: `31`
+- Validation review_queue_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase12_real_world_validation\runtime\review_queue.jsonl`
+- Observability route_mismatch_count: `1`
+- Observability low_confidence_count: `1`
+- Observability quota_safe_block_count: `4`
+- Observability metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase21\observability_metrics.json`
+- Observability report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase21\observability_report.md`
+- Calibration average_raw_confidence: `0.692`
+- Calibration average_calibrated_confidence: `0.692`
+- Calibration confidence_band_counts: `{'acceptable': 45, 'reject': 1}`
+- Calibration review_recommendation_counts: `{'accept': 44, 'accept_with_route_audit': 1, 'reject_do_not_write': 1}`
+- Calibration route_mismatch_count: `1`
+- Calibration metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase22\confidence_calibration.json`
+- Calibration report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase22\accuracy_calibration_report.md`
+- Routing efficiency intended_route_counts: `{'gemini': 1, 'phi3': 1, 'spacy': 44}`
+- Routing efficiency actual_route_counts: `{'phi3': 1, 'spacy': 45}`
+- Routing efficiency route_mismatch_count: `1`
+- Routing efficiency quota_block_avoided_count: `1`
+- Routing efficiency total_estimated_cost_units: `0.005`
+- Routing efficiency total_saved_cost_units: `0.02`
+- Routing efficiency metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase23\routing_efficiency.json`
+- Routing efficiency report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase23\routing_efficiency_report.md`
+- Semantic enrichment applied_count: `45`
+- Semantic enrichment negation_detected_count: `0`
+- Semantic enrichment temporal_detected_count: `0`
+- Semantic enrichment relationships_detected_count: `0`
+- Semantic enrichment metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase24\semantic_enrichment.json`
+- Semantic enrichment report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase24\semantic_enrichment_report.md`
+- Medical coding attempted_count: `82`
+- Medical coding success_count: `8`
+- Medical coding unmapped_count: `74`
+- Medical coding ambiguous_count: `0`
+- Medical coding skipped_count: `29`
+- Medical coding status_counts: `{'coded': 8, 'skipped': 29, 'unmapped': 74}`
+- Medical coding metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase25\medical_coding.json`
+- Medical coding report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase25\medical_coding_report.md`
+- Language support detected_counts: `{'english': 46}`
+- Language support cyrillic_detected_count: `0`
+- Language support mixed_language_count: `0`
+- Language support pending_translation_count: `0`
+- Language support requires_ocr_count: `0`
+- Language support language_unknown_count: `0`
+- Language support metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase26\language_support.json`
+- Language support report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase26\language_support_report.md`
+- Runtime controls run_lock_acquired: `True`
+- Runtime controls run_lock_released: `True`
+- Runtime controls stale_lock_recovered: `False`
+- Runtime controls retry_eligible_count: `4`
+- Runtime controls non_retryable_failure_count: `1`
+- Runtime controls timeout_count: `0`
+- Runtime controls cleanup_completed: `False`
+- Runtime controls failure_category_counts: `{'external_quota_block': 4, 'none': 45, 'operator_review_required': 1}`
+- Runtime controls metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase27\runtime_controls.json`
+- Runtime controls report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase27\production_hardening_report.md`
+- Production mode: `OFF`
+- Production gate passed: `True`
+- Production gate failed reason: `None`
+- Dry run executed: `False`
+- Controlled run limit applied: `False`
+- Run blocked by gate: `False`
+- Production metrics_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\artifacts\phase28\production_mode.json`
+- Production report_path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase28\production_readiness_report.md`
+- Baseline reconciled: `True`
+- Baseline source snapshot: `C:\Users\S1\Documents\Codex\phase27_continuation_20260424`
+- Reconciliation scope: `reporting_and_artifact_reconciliation_only`
+- Reconciliation reason: `observed_validation_drift`
+- Dashboard export path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase17\dashboard_latest.md`
+- Stability report path: `C:\Users\S1\Documents\Codex\2026-04-22-connect-github\reports\phase19\stability_report.md`
+- Duration seconds: `308.84`
+
+## Observed Run
+
+- Observed attempted: `50`
+- Observed processed: `49`
+- Observed written: `45`
+- Observed queued_for_review: `4`
+- Observed external_quota_blocked: `1`
+- Observed hard_failures: `0`
+- Observed route_mismatch_count: `8`
+- Observed intended_route_counts: `{'gemini': 8, 'spacy': 41}`
+- Observed actual_route_counts: `{'phi3': 4, 'spacy': 45}`
+
+## Steps
+
+- `tests` -> returncode=0 command=C:\Program Files\Python311\python.exe -m pytest tests
+- `phase11_audit` -> returncode=0 command=C:\Program Files\Python311\python.exe scripts\run_phase11_integration_audit.py
+- `validation` -> returncode=0 command=C:\Program Files\Python311\python.exe scripts\run_phase12_real_world_validation.py --dataset-dir test_data\final_batch_50 --quota-safe
+- `dashboard_latest` -> returncode=0 command=C:\Program Files\Python311\python.exe scripts\run_phase17_dashboard.py --latest
+- `dashboard_export` -> returncode=0 command=C:\Program Files\Python311\python.exe scripts\run_phase17_dashboard.py --export

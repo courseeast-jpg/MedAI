@@ -1,0 +1,123 @@
+{
+  "baseline_name": "holdout_phase45_baseline",
+  "phase": "Phase 45 Cyrillic Non-Lab Review Classification Refinement",
+  "commit": "e6e437d",
+  "timestamp": "2026-05-01T22:15:52.450925+00:00",
+  "total_files": 8,
+  "expected_counts": {
+    "accepted": 2,
+    "review": 6,
+    "review_ocr_quality": 2,
+    "empty": 2
+  },
+  "files": {
+    "Results 1.pdf": {
+      "expected_status": "review",
+      "expected_empty_extraction_flag": false,
+      "drift_sensitive": true,
+      "drift_reason": "near_threshold_upstream_extractor_variability",
+      "acceptable_drift_statuses": ["review", "accepted"],
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "lab_report_detected"
+      ]
+    },
+    "Results 2.pdf": {
+      "expected_status": "review",
+      "expected_empty_extraction_flag": false,
+      "drift_sensitive": false,
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ]
+    },
+    "Test Results 2.pdf": {
+      "expected_status": "review_ocr_quality",
+      "expected_empty_extraction_flag": false,
+      "drift_sensitive": false,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ]
+    },
+    "Test Results 3.pdf": {
+      "expected_status": "review",
+      "expected_empty_extraction_flag": true,
+      "drift_sensitive": false,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "non_lab_document_skipped_lab_normalization",
+        "microbiology_pcr_report_detected",
+        "language_aware_ocr_required"
+      ]
+    },
+    "Test Results 4.pdf": {
+      "expected_status": "accepted",
+      "expected_empty_extraction_flag": false,
+      "drift_sensitive": false,
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ]
+    },
+    "Test Results 5.pdf": {
+      "expected_status": "review_ocr_quality",
+      "expected_empty_extraction_flag": false,
+      "drift_sensitive": false,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ]
+    },
+    "Test Results 6.pdf": {
+      "expected_status": "review",
+      "expected_empty_extraction_flag": true,
+      "drift_sensitive": false,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage",
+        "non_lab_document_skipped_lab_normalization",
+        "document_type_prescription_not_lab",
+        "language_aware_ocr_required",
+        "cyrillic_non_lab_document_review",
+        "ocr_quality_recovered_non_lab",
+        "prescription_or_medication_instruction_detected"
+      ]
+    },
+    "Urinalysis, Routine.pdf": {
+      "expected_status": "accepted",
+      "expected_empty_extraction_flag": false,
+      "drift_sensitive": false,
+      "reason_codes": [
+        "accepted_clean_input",
+        "lab_report_detected"
+      ]
+    }
+  }
+}

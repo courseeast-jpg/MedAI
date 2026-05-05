@@ -1,0 +1,252 @@
+{
+  "generated_at": "2026-05-01T19:34:54.746294+00:00",
+  "phase": "Phase 43 Document Type and Language-Aware Routing",
+  "phase42_baseline": {
+    "total_files": 8,
+    "accepted": 2,
+    "review_ocr_quality": 3,
+    "safety_regression": false
+  },
+  "phase43_result": {
+    "total_files": 8,
+    "accepted": 2,
+    "review": 6,
+    "review_ocr_quality": 3,
+    "empty": 2,
+    "review_ocr_quality_decreased_from_phase42": false,
+    "accepted_safe": true,
+    "document_type_distribution": {
+      "lab_report": 2,
+      "unknown_medical": 2,
+      "microbiology_pcr_report": 3,
+      "prescription": 1
+    }
+  },
+  "safety": {
+    "false_accept_on_bad_ocr": false,
+    "poor_ocr_auto_accepted": false,
+    "lab_parser_bypassed_unsafely": false,
+    "accepted_count_increased_without_gate_support": false,
+    "safety_regression": false
+  },
+  "difficult_files": {
+    "Test Results 3.pdf": {
+      "filename": "Test Results 3.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status": "review",
+      "document_type": "microbiology_pcr_report",
+      "document_type_confidence": 0.92,
+      "language_hint": "ru",
+      "should_run_lab_normalization": false,
+      "should_recommend_language_aware_ocr": true,
+      "review_reason_doc_type": "microbiology_pcr_report_detected",
+      "lab_parser_skipped": true,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "non_lab_document_skipped_lab_normalization",
+        "microbiology_pcr_report_detected",
+        "language_aware_ocr_required"
+      ],
+      "empty_extraction_flag": true
+    },
+    "Test Results 6.pdf": {
+      "filename": "Test Results 6.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status": "review_ocr_quality",
+      "document_type": "prescription",
+      "document_type_confidence": 0.95,
+      "language_hint": "ru",
+      "should_run_lab_normalization": false,
+      "should_recommend_language_aware_ocr": true,
+      "review_reason_doc_type": "document_type_prescription_not_lab",
+      "lab_parser_skipped": true,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage",
+        "non_lab_document_skipped_lab_normalization",
+        "document_type_prescription_not_lab",
+        "language_aware_ocr_required"
+      ],
+      "empty_extraction_flag": true
+    }
+  },
+  "results": [
+    {
+      "filename": "Results 1.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status": "review",
+      "document_type": "lab_report",
+      "document_type_confidence": 0.69,
+      "language_hint": "en",
+      "should_run_lab_normalization": true,
+      "should_recommend_language_aware_ocr": false,
+      "review_reason_doc_type": "lab_report_detected",
+      "lab_parser_skipped": false,
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "lab_report_detected"
+      ],
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Results 2.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status": "review",
+      "document_type": "unknown_medical",
+      "document_type_confidence": 0.3,
+      "language_hint": "en",
+      "should_run_lab_normalization": true,
+      "should_recommend_language_aware_ocr": false,
+      "review_reason_doc_type": "unknown_document_type",
+      "lab_parser_skipped": false,
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities"
+      ],
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 2.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status": "review_ocr_quality",
+      "document_type": "microbiology_pcr_report",
+      "document_type_confidence": 0.92,
+      "language_hint": "en",
+      "should_run_lab_normalization": true,
+      "should_recommend_language_aware_ocr": false,
+      "review_reason_doc_type": "microbiology_pcr_report_detected",
+      "lab_parser_skipped": false,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 3.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status": "review",
+      "document_type": "microbiology_pcr_report",
+      "document_type_confidence": 0.92,
+      "language_hint": "ru",
+      "should_run_lab_normalization": false,
+      "should_recommend_language_aware_ocr": true,
+      "review_reason_doc_type": "microbiology_pcr_report_detected",
+      "lab_parser_skipped": true,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "non_lab_document_skipped_lab_normalization",
+        "microbiology_pcr_report_detected",
+        "language_aware_ocr_required"
+      ],
+      "empty_extraction_flag": true
+    },
+    {
+      "filename": "Test Results 4.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status": "accepted",
+      "document_type": "microbiology_pcr_report",
+      "document_type_confidence": 0.79,
+      "language_hint": "en",
+      "should_run_lab_normalization": true,
+      "should_recommend_language_aware_ocr": false,
+      "review_reason_doc_type": "microbiology_pcr_report_detected",
+      "lab_parser_skipped": false,
+      "reason_codes": [
+        "low_text_density",
+        "table_structure_loss",
+        "accepted_clean_input"
+      ],
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 5.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status": "review_ocr_quality",
+      "document_type": "unknown_medical",
+      "document_type_confidence": 0.3,
+      "language_hint": "en",
+      "should_run_lab_normalization": true,
+      "should_recommend_language_aware_ocr": false,
+      "review_reason_doc_type": "unknown_document_type",
+      "lab_parser_skipped": false,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage"
+      ],
+      "empty_extraction_flag": false
+    },
+    {
+      "filename": "Test Results 6.pdf",
+      "ocr_layout_quality_band": "good",
+      "final_status": "review_ocr_quality",
+      "document_type": "prescription",
+      "document_type_confidence": 0.95,
+      "language_hint": "ru",
+      "should_run_lab_normalization": false,
+      "should_recommend_language_aware_ocr": true,
+      "review_reason_doc_type": "document_type_prescription_not_lab",
+      "lab_parser_skipped": true,
+      "reason_codes": [
+        "table_structure_loss",
+        "extraction_low_coverage",
+        "extraction_low_confidence",
+        "safety_gate_low_confidence",
+        "extraction_sparse_entities",
+        "classifier_legacy_ocr_flag",
+        "legacy_normalized_low_coverage",
+        "non_lab_document_skipped_lab_normalization",
+        "document_type_prescription_not_lab",
+        "language_aware_ocr_required"
+      ],
+      "empty_extraction_flag": true
+    },
+    {
+      "filename": "Urinalysis, Routine.pdf",
+      "ocr_layout_quality_band": "usable_with_review",
+      "final_status": "accepted",
+      "document_type": "lab_report",
+      "document_type_confidence": 0.95,
+      "language_hint": "en",
+      "should_run_lab_normalization": true,
+      "should_recommend_language_aware_ocr": false,
+      "review_reason_doc_type": "lab_report_detected",
+      "lab_parser_skipped": false,
+      "reason_codes": [
+        "accepted_clean_input",
+        "lab_report_detected"
+      ],
+      "empty_extraction_flag": false
+    }
+  ],
+  "raw_batch_report": "G:\\Codex\\2026-04-22-connect-github\\reports\\phase43_document_type_routing\\latest_phase43_batch_validation.json"
+}

@@ -1,0 +1,382 @@
+{
+  "generated_at": "2026-04-26T16:08:12.622894+00:00",
+  "started_at": "2026-04-26T16:03:03.782640+00:00",
+  "ended_at": "2026-04-26T16:08:12.622894+00:00",
+  "duration_seconds": 308.84,
+  "dataset_dir": "test_data\\final_batch_50",
+  "determinism": {
+    "mode": "deterministic_path",
+    "seed": null,
+    "ordering": "sorted_pdf_listing"
+  },
+  "commit_hash": "f05128f129a3e27050b3ce8ef19561f8f54d6f64",
+  "git_status": "dirty",
+  "steps": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "phase11_audit",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase11_integration_audit.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "validation",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase12_real_world_validation.py",
+        "--dataset-dir",
+        "test_data\\final_batch_50",
+        "--quota-safe"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "dashboard_latest",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase17_dashboard.py",
+        "--latest"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "dashboard_export",
+      "command": [
+        "C:\\Program Files\\Python311\\python.exe",
+        "scripts\\run_phase17_dashboard.py",
+        "--export"
+      ],
+      "returncode": 0
+    }
+  ],
+  "success": true,
+  "failed_step": null,
+  "test_result": "unknown",
+  "phase11_audit_result": "passed",
+  "validation_result": {
+    "attempted": 50,
+    "processed": 46,
+    "written": 45,
+    "queued_for_review": 1,
+    "external_quota_blocked": 4,
+    "hard_failures": 0,
+    "avg_confidence": 0.692,
+    "review_queue_items": 31,
+    "review_queue_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl"
+  },
+  "observability_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase21\\observability_metrics.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase21\\observability_report.md",
+    "route_mismatch_count": 1,
+    "low_confidence_count": 1,
+    "quota_safe_block_count": 4,
+    "extractor_route_counts": {
+      "phi3": 1,
+      "spacy": 45
+    },
+    "extractor_actual_counts": {
+      "phi3": 1,
+      "spacy": 45
+    },
+    "per_stage_duration_ms": {
+      "consensus": {
+        "records": 46,
+        "events": 46,
+        "total_duration_ms": 0.0,
+        "avg_duration_ms": 0.0,
+        "max_duration_ms": 0.0
+      },
+      "extraction": {
+        "records": 50,
+        "events": 96,
+        "total_duration_ms": 4157.541,
+        "avg_duration_ms": 83.151,
+        "max_duration_ms": 2764.078
+      },
+      "final_write": {
+        "records": 39,
+        "events": 124,
+        "total_duration_ms": 32929.676,
+        "avg_duration_ms": 844.351,
+        "max_duration_ms": 4873.473
+      },
+      "language_support": {
+        "records": 50,
+        "events": 50,
+        "total_duration_ms": 0.0,
+        "avg_duration_ms": 0.0,
+        "max_duration_ms": 0.0
+      },
+      "medical_coding": {
+        "records": 46,
+        "events": 46,
+        "total_duration_ms": 0.0,
+        "avg_duration_ms": 0.0,
+        "max_duration_ms": 0.0
+      },
+      "safety_gate": {
+        "records": 26,
+        "events": 98,
+        "total_duration_ms": 29302.352,
+        "avg_duration_ms": 1127.014,
+        "max_duration_ms": 4453.65
+      },
+      "semantic_enrichment": {
+        "records": 46,
+        "events": 46,
+        "total_duration_ms": 0.0,
+        "avg_duration_ms": 0.0,
+        "max_duration_ms": 0.0
+      },
+      "truth_resolution": {
+        "records": 39,
+        "events": 124,
+        "total_duration_ms": 32963.77,
+        "avg_duration_ms": 845.225,
+        "max_duration_ms": 4884.746
+      },
+      "validation": {
+        "records": 46,
+        "events": 46,
+        "total_duration_ms": 0.0,
+        "avg_duration_ms": 0.0,
+        "max_duration_ms": 0.0
+      }
+    }
+  },
+  "calibration_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase22\\confidence_calibration.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase22\\accuracy_calibration_report.md",
+    "average_raw_confidence": 0.692,
+    "average_calibrated_confidence": 0.692,
+    "confidence_band_counts": {
+      "acceptable": 45,
+      "reject": 1
+    },
+    "review_recommendation_counts": {
+      "accept": 44,
+      "accept_with_route_audit": 1,
+      "reject_do_not_write": 1
+    },
+    "route_mismatch_count": 1
+  },
+  "routing_efficiency_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase23\\routing_efficiency.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase23\\routing_efficiency_report.md",
+    "intended_route_counts": {
+      "gemini": 1,
+      "phi3": 1,
+      "spacy": 44
+    },
+    "actual_route_counts": {
+      "phi3": 1,
+      "spacy": 45
+    },
+    "route_mismatch_count": 1,
+    "quota_block_avoided_count": 1,
+    "total_estimated_cost_units": 0.005,
+    "total_saved_cost_units": 0.02
+  },
+  "semantic_enrichment_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase24\\semantic_enrichment.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase24\\semantic_enrichment_report.md",
+    "enrichment_applied_count": 45,
+    "negation_detected_count": 0,
+    "temporal_detected_count": 0,
+    "relationships_detected_count": 0
+  },
+  "medical_coding_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase25\\medical_coding.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase25\\medical_coding_report.md",
+    "coding_attempted_count": 82,
+    "coding_success_count": 8,
+    "coding_unmapped_count": 74,
+    "coding_ambiguous_count": 0,
+    "coding_skipped_count": 29,
+    "coding_status_counts": {
+      "coded": 8,
+      "skipped": 29,
+      "unmapped": 74
+    }
+  },
+  "language_support_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase26\\language_support.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase26\\language_support_report.md",
+    "language_detected_counts": {
+      "english": 46
+    },
+    "cyrillic_detected_count": 0,
+    "mixed_language_count": 0,
+    "pending_translation_count": 0,
+    "requires_ocr_count": 0,
+    "language_unknown_count": 0
+  },
+  "runtime_controls_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase27\\runtime_controls.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase27\\production_hardening_report.md",
+    "run_lock_acquired": true,
+    "run_lock_released": true,
+    "stale_lock_recovered": false,
+    "retry_eligible_count": 4,
+    "non_retryable_failure_count": 1,
+    "timeout_count": 0,
+    "cleanup_completed": false,
+    "failure_category_counts": {
+      "external_quota_block": 4,
+      "none": 45,
+      "operator_review_required": 1
+    }
+  },
+  "production_mode_result": {
+    "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase28\\production_mode.json",
+    "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase28\\production_readiness_report.md",
+    "production_mode": "OFF",
+    "production_gate_passed": true,
+    "production_gate_failed_reason": null,
+    "dry_run_executed": false,
+    "controlled_run_limit_applied": false,
+    "run_blocked_by_gate": false
+  },
+  "observed_run_result": {
+    "validation_result": {
+      "attempted": 50,
+      "processed": 49,
+      "written": 45,
+      "queued_for_review": 4,
+      "external_quota_blocked": 1,
+      "hard_failures": 0,
+      "avg_confidence": 0.698,
+      "review_queue_items": 31,
+      "review_queue_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase12_real_world_validation\\runtime\\review_queue.jsonl"
+    },
+    "observability_result": {
+      "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase21\\observability_metrics.json",
+      "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase21\\observability_report.md",
+      "route_mismatch_count": 8,
+      "low_confidence_count": 4,
+      "quota_safe_block_count": 1,
+      "extractor_route_counts": {
+        "phi3": 4,
+        "spacy": 45
+      },
+      "extractor_actual_counts": {
+        "phi3": 4,
+        "spacy": 45
+      },
+      "per_stage_duration_ms": {
+        "consensus": {
+          "records": 49,
+          "events": 49,
+          "total_duration_ms": 0.0,
+          "avg_duration_ms": 0.0,
+          "max_duration_ms": 0.0
+        },
+        "extraction": {
+          "records": 50,
+          "events": 99,
+          "total_duration_ms": 28572.001,
+          "avg_duration_ms": 571.44,
+          "max_duration_ms": 5043.557
+        },
+        "final_write": {
+          "records": 47,
+          "events": 132,
+          "total_duration_ms": 117844.453,
+          "avg_duration_ms": 2507.329,
+          "max_duration_ms": 28218.613
+        },
+        "language_support": {
+          "records": 50,
+          "events": 50,
+          "total_duration_ms": 0.0,
+          "avg_duration_ms": 0.0,
+          "max_duration_ms": 0.0
+        },
+        "medical_coding": {
+          "records": 49,
+          "events": 49,
+          "total_duration_ms": 0.0,
+          "avg_duration_ms": 0.0,
+          "max_duration_ms": 0.0
+        },
+        "safety_gate": {
+          "records": 26,
+          "events": 98,
+          "total_duration_ms": 111739.085,
+          "avg_duration_ms": 4297.657,
+          "max_duration_ms": 25169.79
+        },
+        "semantic_enrichment": {
+          "records": 49,
+          "events": 49,
+          "total_duration_ms": 0.0,
+          "avg_duration_ms": 0.0,
+          "max_duration_ms": 0.0
+        },
+        "truth_resolution": {
+          "records": 39,
+          "events": 124,
+          "total_duration_ms": 117897.769,
+          "avg_duration_ms": 3023.02,
+          "max_duration_ms": 28229.424
+        },
+        "validation": {
+          "records": 49,
+          "events": 49,
+          "total_duration_ms": 0.0,
+          "avg_duration_ms": 0.0,
+          "max_duration_ms": 0.0
+        }
+      }
+    },
+    "calibration_result": {
+      "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase22\\confidence_calibration.json",
+      "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase22\\accuracy_calibration_report.md",
+      "average_raw_confidence": 0.698,
+      "average_calibrated_confidence": 0.698,
+      "confidence_band_counts": {
+        "acceptable": 45,
+        "review": 4
+      },
+      "review_recommendation_counts": {
+        "accept": 41,
+        "accept_with_route_audit": 4,
+        "operator_review": 4
+      },
+      "route_mismatch_count": 8
+    },
+    "routing_efficiency_result": {
+      "metrics_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\artifacts\\phase23\\routing_efficiency.json",
+      "report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase23\\routing_efficiency_report.md",
+      "intended_route_counts": {
+        "gemini": 8,
+        "spacy": 41
+      },
+      "actual_route_counts": {
+        "phi3": 4,
+        "spacy": 45
+      },
+      "route_mismatch_count": 8,
+      "quota_block_avoided_count": 0,
+      "total_estimated_cost_units": 0.02,
+      "total_saved_cost_units": 0.14
+    }
+  },
+  "baseline_reconciled": true,
+  "baseline_source_snapshot": "C:\\Users\\S1\\Documents\\Codex\\phase27_continuation_20260424",
+  "reconciliation_scope": "reporting_and_artifact_reconciliation_only",
+  "reconciliation_reason": "observed_validation_drift",
+  "dashboard_export_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase17\\dashboard_latest.md",
+  "stability_report_path": "C:\\Users\\S1\\Documents\\Codex\\2026-04-22-connect-github\\reports\\phase19\\stability_report.md"
+}

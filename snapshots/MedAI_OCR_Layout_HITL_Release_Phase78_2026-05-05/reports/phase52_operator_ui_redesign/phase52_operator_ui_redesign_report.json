@@ -1,0 +1,74 @@
+{
+  "phase": "Phase 52 Operator UI Redesign",
+  "baseline_commit": "fbc30e304ffad49624a96dc84bdd520ff894bb3c",
+  "generated_at": "2026-05-02T23:10:00-04:00",
+  "ui_only": true,
+  "files_changed": [
+    "app/main.py",
+    "app/operator_safety.py",
+    "app/test_launcher.py",
+    "tests/test_phase52_operator_ui_redesign.py",
+    "reports/phase52_operator_ui_redesign/phase52_operator_ui_redesign_report.json",
+    "reports/phase52_operator_ui_redesign/phase52_operator_ui_redesign_report.md"
+  ],
+  "tests_run": {
+    "python -m pytest tests": {
+      "result": "passed",
+      "summary": "456 passed, 18 warnings"
+    }
+  },
+  "validation_results": {
+    "python scripts/run_phase47_final_regression_hardening.py": {
+      "result": "passed",
+      "conclusion": "release_candidate_ready",
+      "safety_regression": false
+    },
+    "python scripts/run_phase48_release_snapshot_validation.py": {
+      "result": "passed",
+      "conclusion": "release_snapshot_ready",
+      "phi_artifact_check_passed": true
+    },
+    "python scripts/run_phase49_privacy_gate_validation.py": {
+      "result": "passed",
+      "conclusion": "privacy_gate_ready",
+      "local_only_default": true,
+      "external_api_default_allowed": false,
+      "cloud_payload_contains_raw_pii": false,
+      "raw_phi_logged_in_reports": false,
+      "phi_report_artifacts_tracked": false
+    },
+    "python scripts/run_phase51_blind_pdf_generalization_audit.py": {
+      "result": "passed",
+      "conclusion": "PASS_SAFETY_WEAK_AUTOMATION",
+      "total_files": 15,
+      "accepted": 12,
+      "review": 3,
+      "review_ocr_quality": 1,
+      "empty": 2,
+      "errors": 0,
+      "external_api_used": false,
+      "raw_phi_logged": false,
+      "report_pdf_artifacts_tracked": false
+    }
+  },
+  "streamlit_startup": {
+    "command": "python -m streamlit run app/main.py --server.port 8511 --server.headless true --browser.gatherUsageStats false",
+    "http_status": 200,
+    "result": "passed"
+  },
+  "phi_git_safety_verification": {
+    "no_pdfs_tracked_under_reports": true,
+    "no_private_filename_mapping_tracked": true,
+    "no_raw_medical_files_copied_into_reports": true,
+    "real_validation_inputs_ignored": true
+  },
+  "unchanged_safety_boundaries": {
+    "extraction_logic_changed": false,
+    "ocr_routing_changed": false,
+    "confidence_thresholds_changed": false,
+    "privacy_gate_changed": false,
+    "blind_audit_logic_changed": false,
+    "validation_semantics_changed": false
+  },
+  "phase51_blind_audit_behavior_remains_intact": true
+}

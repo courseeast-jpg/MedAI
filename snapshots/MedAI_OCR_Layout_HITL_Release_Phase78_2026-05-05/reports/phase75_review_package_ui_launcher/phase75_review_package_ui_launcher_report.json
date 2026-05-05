@@ -1,0 +1,58 @@
+{
+  "phase": 75,
+  "phase_name": "Review Package UI / Launcher Integration",
+  "generated_at": "2026-05-05T03:23:45.631778+00:00",
+  "conclusion": "review_package_ui_launcher_ready",
+  "recommended_next_phase": "Phase76 One-Click Final Validation / Release Check",
+  "recommended_next_action": "Create a single final validation command/button that runs release checks and verifies privacy/artifact safety before release freeze.",
+  "review_package_loaded": true,
+  "review_package_item_count": 1489,
+  "bucket_count": 6,
+  "bucket_distribution": {
+    "ocr_quality_review": 12,
+    "empty_extraction_review": 382,
+    "unknown_document_class_review": 509,
+    "possible_multi_document_pdf_review": 578,
+    "unsupported_or_deferred_format_review": 8,
+    "completed_manual_boundary_branches": 0
+  },
+  "ui_integration_ready": true,
+  "launcher_ready": true,
+  "operator_feedback_required": false,
+  "labels_fabricated": false,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "safety_gates_should_change_yet": false,
+  "manual_review_boundary_retained": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "phase74_conclusion": "manual_review_package_auto_improvement_ready",
+  "ui_launch_commands": [
+    "streamlit run app/review_package_viewer.py",
+    "streamlit run app/main.py"
+  ],
+  "reports_read": [
+    "phase74_manual_review_package_SAFE.json",
+    "phase74_report.json"
+  ],
+  "reports_missing": [],
+  "validation_commands": [
+    "python -m pytest tests/test_phase75_review_package_ui_launcher.py",
+    "python scripts/run_phase75_review_package_ui_launcher.py",
+    "python scripts/run_phase47_final_regression_hardening.py",
+    "python scripts/run_phase48_release_snapshot_validation.py",
+    "python scripts/run_phase49_privacy_gate_validation.py",
+    "python -m pytest tests"
+  ],
+  "privacy_self_check": {
+    "raw_filenames_written": false,
+    "raw_paths_written": false,
+    "ocr_text_written": false,
+    "extracted_text_written": false,
+    "phi_written": false,
+    "private_notes_in_public_report": false,
+    "public_report_identifiers": "safe_bucket_ids_and_aggregate_counts_only",
+    "phi_artifact_check_passed": true
+  }
+}

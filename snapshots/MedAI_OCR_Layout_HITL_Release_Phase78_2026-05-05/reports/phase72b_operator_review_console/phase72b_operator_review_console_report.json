@@ -1,0 +1,50 @@
+{
+  "phase": "72B",
+  "phase_name": "Human-Minimized Operator Review Console",
+  "generated_at": "2026-05-05T01:26:10.318046+00:00",
+  "conclusion": "operator_review_console_ready",
+  "recommended_next_phase": "Phase72C Tier-1 Operator Review Execution",
+  "recommended_next_action": "Run the one-command operator review console for the 3 tier-1 pending item(s) first.",
+  "external_api_used": false,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "safety_gates_should_change_yet": false,
+  "manual_review_boundary_retained": true,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "review_queue_count": 15,
+  "reviewed_count": 0,
+  "pending_count": 15,
+  "unresolved_high_priority_count": 3,
+  "tier_1_pending_count": 3,
+  "tier_1_reviewed_count": 0,
+  "tier_2_pending_count": 12,
+  "tier_2_reviewed_count": 0,
+  "console_default_scope": "tier_1_only",
+  "answer_distribution": {},
+  "feedback_private_file_present": true,
+  "private_feedback_file_gitignored": true,
+  "one_command_usage": "python scripts/run_phase72b_operator_review_console.py --tier 1",
+  "reports_read": [
+    "phase71_operator_review_queue_SAFE",
+    "phase72_operator_feedback_PRIVATE"
+  ],
+  "reports_missing": [],
+  "validation_commands": [
+    "python -m pytest tests",
+    "python scripts/run_phase72b_operator_review_console.py --summary",
+    "python scripts/run_phase47_final_regression_hardening.py",
+    "python scripts/run_phase48_release_snapshot_validation.py",
+    "python scripts/run_phase49_privacy_gate_validation.py"
+  ],
+  "privacy_self_check": {
+    "raw_filenames_written": false,
+    "raw_paths_written": false,
+    "ocr_text_written": false,
+    "extracted_text_written": false,
+    "phi_written": false,
+    "private_notes_in_public_report": false,
+    "public_report_identifiers": "safe_file_ids_and_aggregates_only",
+    "phi_artifact_check_passed": true
+  }
+}

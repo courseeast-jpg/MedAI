@@ -1,0 +1,737 @@
+{
+  "timestamp": "2026-05-01T02:00:24.223552+00:00",
+  "run_id": "1d0145e1-3a87-4801-9706-256486a92263",
+  "input_dir": "G:\\Codex\\2026-04-22-connect-github\\holdout_validation_input",
+  "total_files": 8,
+  "accepted_count": 2,
+  "review_count": 6,
+  "error_count": 0,
+  "empty_extraction_count": 0,
+  "fallback_count": 7,
+  "low_text_quality_count": 2,
+  "ocr_low_quality_count": 6,
+  "avg_text_length": 2040.0,
+  "review_reason_summary": {
+    "empty_extraction": 0,
+    "confidence_below_threshold": 5,
+    "low_entity_count": 1,
+    "low_coverage": 6,
+    "low_diversity": 0,
+    "low_extractor_weight": 2
+  },
+  "results": [
+    {
+      "filename": "Results 1.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 2,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.2,
+        "diversity": 0.9,
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 2,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage",
+        "low_extractor_weight"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 1007,
+        "preview": "[Page 1] ee ee * . . e \u00e9 * \u2019 ~~ 2 . \u2019 - . \u2019 \u2019 - . 4 - ; . BIO MED LABORATOR MIKROBIOLOGJIK \u2018 \u00e9 EMRI \u2014 STEPAN\u2019 FEDECHENKO ADRESA UKRAINE DATA 9 11 2022 : \u00b0 eae \u2019 # Se URINE KOMPLET # KARAKTERISTIKAT FIZIKE : \u00a5 . \u2019 * NGJYRA.......%eeeeee0ee006eE VERDHE \u2019 a * \u2019 ae PAMIAS . See cas ce en's\u00bb o'siee e's E",
+        "method": "tesseract fallback",
+        "suspicious": true,
+        "non_alnum_ratio": 0.2941
+      },
+      "normalization_applied": false,
+      "normalized_text_preview": null,
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\review\\Results 1_6.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "Results 2.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 1,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.45,
+      "confidence_breakdown": {
+        "entity_count": 0.3,
+        "coverage": 0.2,
+        "diversity": 0.6,
+        "extractor_weight": 0.6,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 0.6,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 1,
+      "review_reason": "confidence_below_reject_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_entity_count",
+        "low_coverage",
+        "low_extractor_weight"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 939,
+        "preview": "[Page 1] s . . a Y, \u2019 \u2018 : BIO MED LABORATOR MIKROBIOLOGIIK i . \\ [PERSON] \u2014 STEPAN FEDECHENKO ADRESA UKRAINE DATA @9 [DATE] * > \u2018 a : 3 = \u2019 * i UROKULTURE Y * ie = 1 NGA KULTIVIMI\u2019 PER 24h REZULTOI NEGATIV i * * . 2 ae ANTIBIOGRAME \u00ab CIPROFLOXACINI......... LEVOFLOXACINI........... ' * . * \u2019 MPMPE T",
+        "method": "tesseract fallback",
+        "suspicious": true,
+        "non_alnum_ratio": 0.3369
+      },
+      "normalization_applied": false,
+      "normalized_text_preview": null,
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\review\\Results 2_7.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "rejected"
+    },
+    {
+      "filename": "Test Results 2.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 6,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "CKOH",
+          "value": "51",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Macca",
+          "value": "10",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "He BbiHBneHO",
+          "value": "4",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "BneHO",
+          "value": "7",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "IIr",
+          "value": "5.7",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "HBneHO",
+          "value": "22",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": null,
+      "terminal_empty_prevented": false,
+      "confidence": 0.7,
+      "confidence_breakdown": {
+        "entity_count": 0.8,
+        "coverage": 0.2,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 6,
+      "review_reason": "accept",
+      "why_reviewed": [
+        "low_coverage"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 2689,
+        "preview": "[Page 1] N2 ):[PERSON] npo6>IpK>1 <!>.1.1.0. naI..1>IeHra non BoJpacr OpraHL'IJai..\\L'IH Bpa4 np>IMe4aH>Ie loIccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>[ID_REMOVED] MeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l [DATE], [DATE] 101462359601 <lleAeHYeHKO CrenaH MYlf<CKOH 51 HaJBaHHe HCC",
+        "method": "unknown",
+        "suspicious": false,
+        "non_alnum_ratio": 0.189
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] N2 ):[PERSON] npo6>IpK>1 <!>.1.1.0. naI..1>IeHra non BoJpacr OpraHL'IJai..\\L'IH Bpa4 np>IMe4aH>Ie loIccneAOBaHl'!e Ml'IKpocjlnopbl yporeHl'!TanbHoro TpaKTa MY>[ID_REMOVED] MeTO,QOM ni.-IP B pe>KHMe peanbHOrO BpeMeHl'l [DATE], [DATE] 101462359601 <lleAeHYeHKO CrenaH MYlf<CKOH 51 HaJBaHHe HCC",
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\review\\Test Results 2_1.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "Test Results 3.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 4,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "QcrasneHbl",
+          "value": "8",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "QCTaBileHbl",
+          "value": "8",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "QHaKO",
+          "value": "8",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Ha fltiCTOrpaMMe",
+          "value": "8",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.63,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.2,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 4,
+      "review_reason": "confidence_below_accept_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 3723,
+        "preview": "[Page 1] LllccneAoBaHHe MHKpocpnopbl yporeHHTailbHoro TpaKTa MY>KliHH MeTOAOM [URL_REMOVED] B pe>KHMe peailbHOrO [ID_REMOVED] AHApocpnop\u00ae,AHApOcpnop\u00aeCKpHH OnHcaHHe 6naHKa peJynbTaToB VICCile,QO8aHIIIe [LOCATION],[PERSON]...\\enHOVl peaKl...\\111111 8 pe)KII!Me peailbHOrO 8peMeHIII. C 1...\\eilbiO :[DAT",
+        "method": "unknown",
+        "suspicious": false,
+        "non_alnum_ratio": 0.1148
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] LllccneAoBaHHe MHKpocpnopbl yporeHHTailbHoro TpaKTa MY>KliHH MeTOAOM [URL_REMOVED] B pe>KHMe peailbHOrO [ID_REMOVED] AHApocpnop\u00ae,AHApOcpnop\u00aeCKpHH OnHcaHHe 6naHKa peJynbTaToB VICCile,QO8aHIIIe [LOCATION],[PERSON]...\\enHOVl peaKl...\\111111 8 pe)KII!Me peailbHOrO 8peMeHIII. C 1...\\eilbiO :[DAT",
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\review\\Test Results 3_7.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "Test Results 4.pdf",
+      "status": "accepted",
+      "entity_count": 4,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "Ha MHKpOdopy",
+          "value": "43",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "HeGoupiioe KonMUeCTBO",
+          "value": "1",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Leptotryx He",
+          "value": "061",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "See Ee",
+          "value": "25",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.693,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.45,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 4,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
+      "error": null,
+      "text_diagnostics": {
+        "length": 997,
+        "preview": "[Page 1] fe | ein ee erat. wean [PERSON] i CETb KJIVHMK Ma3Ox Ha MHKpOdopy 43 yperpbres\u00b0 @U.0. [PERSON]. 5i [PERSON] Bpau: Xa3uaxmeros A.C. Bosboyqures eh. eee We ce a [PERSON] \u2014 HeGoupiioe KonMUeCTBO 1 JlevixoyHTbt a eo. ee 8 Seals jana: [PERSON] Be Cim3p TicGonbiioe KouecTBO. [PERSON] gonorrhoeae ",
+        "method": "tesseract fallback",
+        "suspicious": false,
+        "non_alnum_ratio": 0.139
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] fe | ein ee erat. wean [PERSON] i CETb KJIVHMK Ma3Ox Ha MHKpOdopy 43 yperpbres\u00b0 @U.0. [PERSON]. 5i [PERSON] Bpau: Xa3uaxmeros A.C. Bosboyqures eh. eee We ce a [PERSON] \u2014 HeGoupiioe KonMUeCTBO 1 JlevixoyHTbt a eo. ee 8 Seals jana: [PERSON] Be Cim3p TicGonbiioe KouecTBO. [PERSON] gonorrhoeae ",
+      "is_ocr_low_quality": false,
+      "review_type": "other",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\archive\\Test Results 4_7.pdf",
+      "outcome": "written",
+      "validation_status": "accepted"
+    },
+    {
+      "filename": "Test Results 5.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "LlnY",
+          "value": "000",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "JleHIIIHrpaACKIII",
+          "value": "111",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Klebsiella oxytoca",
+          "value": "102",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.63,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.2,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "confidence_below_accept_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 2312,
+        "preview": "[Page 1] fi;KDL [URL_REMOVED] I'!HTIIflll'!poBIIHHfUII OCI\"EIMI!. Mfl~ c:>epT$1,UoIpc:la!IHil [PERSON] OOOTMTCI'Il ~8 'Tplil\u2022 ISc:oaH.,._, rOCT P ltIOCHlOO'1\u00b72OHi, r OOT P IIK:O , 51 89-~015. roor P 11100 14001\u00b7 [DATE], rOOT F' I'IOO/M3K 27001\u00b72006, OHSo\\S 1 OCKJI ::<DO7. SAl SA BCXXJ:2014 ~:; ro~a ",
+        "method": "unknown",
+        "suspicious": false,
+        "non_alnum_ratio": 0.1694
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] fi;KDL [URL_REMOVED] I'!HTIIflll'!poBIIHHfUII OCI\"EIMI!. Mfl~ c:>epT$1,UoIpc:la!IHil [PERSON] OOOTMTCI'Il ~8 'Tplil\u2022 ISc:oaH.,._, rOCT P ltIOCHlOO'1\u00b72OHi, r OOT P IIK:O , 51 89-~015. roor P 11100 14001\u00b7 [DATE], rOOT F' I'IOO/M3K 27001\u00b72006, OHSo\\S 1 OCKJI ::<DO7. SAl SA BCXXJ:2014 ~:; ro~a ",
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\review\\Test Results 5_7.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "Test Results 6.pdf",
+      "status": "review_ocr_quality",
+      "entity_count": 3,
+      "entities": [
+        {
+          "type": "test_result",
+          "text": "ATA",
+          "value": "1",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "HTb",
+          "value": "113",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "He MCBee",
+          "value": "2",
+          "unit": null,
+          "consensus_support": [
+            "spacy"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "spacy",
+      "primary_extractor": null,
+      "fallback_extractor": null,
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": false,
+      "confidence": 0.63,
+      "confidence_breakdown": {
+        "entity_count": 0.6,
+        "coverage": 0.2,
+        "diversity": 1.0,
+        "extractor_weight": 0.8,
+        "base_extractor_weight": 0.8,
+        "calibrated_extractor_weight": 0.8,
+        "calibration_reason": "none"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 3,
+      "review_reason": "confidence_below_accept_threshold",
+      "why_reviewed": [
+        "confidence_below_threshold",
+        "low_coverage"
+      ],
+      "error": null,
+      "text_diagnostics": {
+        "length": 2325,
+        "preview": "[Page 1] <D.II.Q. na:qHeHTa <l>e,n:eHLJ:eHKO CTenaH JIeoHH,ll;OBHLJ: N2 KapTbr [DATE] ., l ,rf . / )' l [ \u00b7.:.c .,_, ~ t:71,. J\u00ab MeC5II.J. )J,HarHO3 XpoHHLJ:eCKHH 6aKTepHanbHhiH ypeTponpoCTaTHT. ~ ~ ~-- lIPEIIAPATII I L(ATA 1 2 3 4 5 6 7 8 9 lO 11 12 l3 14 15 16 17 CseLJ:H ,IUIKJio\u00a2eHaK IOOMr ,f }--",
+        "method": "unknown",
+        "suspicious": false,
+        "non_alnum_ratio": 0.312
+      },
+      "normalization_applied": true,
+      "normalized_text_preview": "[Page 1] <D.II.Q. na:qHeHTa <l>e,n:eHLJ:eHKO CTenaH JIeoHH,ll;OBHLJ: N2 KapTbr [DATE] ., l ,rf . / )' l [ \u00b7.:.c .,_, ~ t:71,. J\u00ab MeC5II.J. )J,HarHO3 XpoHHLJ:eCKHH 6aKTepHanbHhiH ypeTponpoCTaTHT. ~ ~ ~-- lIPEIIAPATII I L(ATA 1 2 3 4 5 6 7 8 9 lO 11 12 l3 14 15 16 17 CseLJ:H ,IUIKJio\u00a2eHaK IOOMr ,f }--",
+      "is_ocr_low_quality": true,
+      "review_type": "ocr_quality",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\review\\Test Results 6_7.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "needs_review"
+    },
+    {
+      "filename": "Urinalysis, Routine.pdf",
+      "status": "accepted",
+      "entity_count": 12,
+      "entities": [
+        {
+          "type": "medication",
+          "text": "Semi-Qn",
+          "dose": "1.0mg",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "diagnosis",
+          "text": "growth in",
+          "negated": true,
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Urine Culture",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "No Growth",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "note",
+          "text": "Final Report",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Microscopic Examination",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Nitrite",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Ketones",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Protein",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Glucose",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "Blood",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        },
+        {
+          "type": "test_result",
+          "text": "WBC",
+          "source": "supplemental_lab_rules",
+          "rule_pack": "urology_cytology_culture",
+          "consensus_support": [
+            "phi3"
+          ],
+          "consensus_support_count": 1
+        }
+      ],
+      "selected_extractor": "phi3",
+      "primary_extractor": "gemini",
+      "fallback_extractor": "phi3",
+      "fallback_reason": "gemini_quota_or_rate_limit",
+      "terminal_empty_prevented": true,
+      "confidence": 0.792,
+      "confidence_breakdown": {
+        "entity_count": 0.8,
+        "coverage": 0.45,
+        "diversity": 1.0,
+        "extractor_weight": 1.0,
+        "base_extractor_weight": 0.6,
+        "calibrated_extractor_weight": 1.0,
+        "calibration_reason": "phi3_diverse_entities"
+      },
+      "supplemental_rules_applied": false,
+      "supplemental_entity_count": 0,
+      "final_entity_count_after_supplement": 12,
+      "review_reason": "accept_with_route_audit",
+      "why_reviewed": [],
+      "error": null,
+      "text_diagnostics": {
+        "length": 2328,
+        "preview": "[Page 1] 1 Patient Report Specimen ID: [CONTACT_REMOVED]-0 Acct #: 29451145 Phone: [CONTACT_REMOVED] Rte: TF Control ID: L97 Urology Care Alliance 2 Hospital [PERSON] 110 Old Bridge NJ 08857 FEDENCHENKO, STEPAN 206 [LOCATION] APT 1-A [LOCATION] NJ [DATE] [CONTACT_REMOVED] Patient Details DOB: [DATE]",
+        "method": "unknown",
+        "suspicious": false,
+        "non_alnum_ratio": 0.1186
+      },
+      "normalization_applied": false,
+      "normalized_text_preview": null,
+      "is_ocr_low_quality": false,
+      "review_type": "other",
+      "copied_to": "G:\\Codex\\2026-04-22-connect-github\\reports\\holdout_validation\\archive\\Urinalysis, Routine_7.pdf",
+      "outcome": "queued_for_review",
+      "validation_status": "accepted"
+    }
+  ],
+  "files_needing_review": [
+    "Results 1.pdf",
+    "Results 2.pdf",
+    "Test Results 2.pdf",
+    "Test Results 3.pdf",
+    "Test Results 5.pdf",
+    "Test Results 6.pdf"
+  ],
+  "errors": []
+}

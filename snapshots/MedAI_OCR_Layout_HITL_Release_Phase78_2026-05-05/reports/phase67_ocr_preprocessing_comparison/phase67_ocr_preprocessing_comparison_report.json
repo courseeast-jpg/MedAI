@@ -1,0 +1,182 @@
+{
+  "generated_at": "2026-05-04T23:37:11.787821+00:00",
+  "phase": "Phase67 OCR Preprocessing Comparison Prototype",
+  "source_phase66_report": "reports/phase66_pdf_ocr_low_quality_diagnostic/phase66_pdf_ocr_low_quality_diagnostic_report.json",
+  "candidate_source": "Phase66 prototype_recommendation.candidate_safe_file_ids",
+  "candidate_count": 2,
+  "candidate_safe_file_ids": [
+    "corpus_file_000537",
+    "corpus_file_000601"
+  ],
+  "variant_names": [
+    "baseline_render_150dpi",
+    "higher_dpi_250dpi",
+    "grayscale",
+    "contrast_sharpen",
+    "threshold_binarization"
+  ],
+  "variant_metrics": [
+    {
+      "safe_file_id": "corpus_file_000537",
+      "variant_name": "baseline_render_150dpi",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000537",
+      "variant_name": "higher_dpi_250dpi",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000537",
+      "variant_name": "grayscale",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000537",
+      "variant_name": "contrast_sharpen",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000537",
+      "variant_name": "threshold_binarization",
+      "text_length_bucket": "empty",
+      "ocr_quality_bucket": "empty",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "empty_or_near_empty_text"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000601",
+      "variant_name": "baseline_render_150dpi",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000601",
+      "variant_name": "higher_dpi_250dpi",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000601",
+      "variant_name": "grayscale",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000601",
+      "variant_name": "contrast_sharpen",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    },
+    {
+      "safe_file_id": "corpus_file_000601",
+      "variant_name": "threshold_binarization",
+      "text_length_bucket": "very_short",
+      "ocr_quality_bucket": "weak",
+      "improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary",
+      "warnings": [
+        "low_text_length"
+      ],
+      "error_category": null
+    }
+  ],
+  "per_file_summary": [
+    {
+      "safe_file_id": "corpus_file_000537",
+      "best_variant": "baseline_render_150dpi",
+      "best_text_length_bucket": "empty",
+      "best_ocr_quality_bucket": "empty",
+      "best_improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary"
+    },
+    {
+      "safe_file_id": "corpus_file_000601",
+      "best_variant": "baseline_render_150dpi",
+      "best_text_length_bucket": "very_short",
+      "best_ocr_quality_bucket": "weak",
+      "best_improvement_bucket": "none",
+      "recommended_next_action": "keep_manual_review_boundary"
+    }
+  ],
+  "meaningful_improvement_file_count": 0,
+  "meaningful_improvement_safe_file_ids": [],
+  "phase68_controlled_ocr_fallback_sandbox_recommended": false,
+  "recommended_next_action": "keep_manual_review_boundary",
+  "production_ocr_routing_changed": false,
+  "production_extraction_logic_changed": false,
+  "thresholds_changed": false,
+  "safety_gates_changed": false,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "local_only_forced": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "rendered_images_written_to_reports": false,
+  "ocr_text_written_to_public_reports": false,
+  "private_mapping_used_locally": true,
+  "private_mapping_path_public": "[PRIVATE_MAPPING_REDACTED]",
+  "tesseract_available": true,
+  "phi_artifact_check": {
+    "tracked_report_phi_files": [],
+    "tracked_report_archive_or_review_files": [],
+    "passed": true
+  },
+  "conclusion": "manual_review_boundary_retained"
+}

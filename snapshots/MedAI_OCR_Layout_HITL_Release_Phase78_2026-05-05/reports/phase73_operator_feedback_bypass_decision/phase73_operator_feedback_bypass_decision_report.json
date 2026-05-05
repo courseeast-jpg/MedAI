@@ -1,0 +1,178 @@
+{
+  "phase": 73,
+  "phase_name": "Operator Feedback Bypass + Autonomous Next-Action Selection",
+  "generated_at": "2026-05-05T03:23:45.201923+00:00",
+  "conclusion": "operator_feedback_bypass_ready",
+  "recommended_next_phase": "Phase74 Manual Review Package Auto-Improvement",
+  "recommended_next_action": "Improve review packaging and decision support automatically; do not require operator truth-labeling before continuing.",
+  "operator_feedback_status": "deferred_by_user",
+  "operator_feedback_required_for_next_phase": false,
+  "pending_operator_review_count": 15,
+  "unresolved_high_priority_count": 3,
+  "labels_fabricated": false,
+  "private_feedback_file_modified": false,
+  "production_extractor_should_change_yet": false,
+  "production_ocr_should_change_yet": false,
+  "safety_gates_should_change_yet": false,
+  "manual_review_boundary_retained": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "reports_read": [
+    "phase70_post_diagnostics_decision_audit",
+    "phase72_operator_feedback_collection",
+    "phase71_operator_feedback_prioritization",
+    "phase72b_operator_review_console"
+  ],
+  "reports_missing": [],
+  "closed_branches": [
+    {
+      "branch": "pdf_geometry_header_inference",
+      "status": "closed_to_manual_review_boundary",
+      "evidence": "Phase62 prototype did not justify production extractor changes."
+    },
+    {
+      "branch": "pdf_ocr_preprocessing",
+      "status": "closed_to_manual_review_boundary",
+      "evidence": "Phase67 comparison retained manual-review boundary."
+    },
+    {
+      "branch": "image_ocr_preprocessing",
+      "status": "closed_to_manual_review_boundary",
+      "evidence": "Phase69 found improvement in too few files to justify a controlled fallback sandbox."
+    },
+    {
+      "branch": "rtf_narrow_format_support",
+      "status": "completed_no_safety_regression",
+      "evidence": "Phase64/65 completed RTF local support measurement without production safety regression."
+    }
+  ],
+  "open_branches": [
+    {
+      "branch": "operator_feedback_completion",
+      "status": "open",
+      "evidence": "Phase54 reviewed_files=0; not_reviewed_files=15."
+    },
+    {
+      "branch": "manual_review_package_improvement",
+      "status": "open",
+      "evidence": "Diagnostics repeatedly retain review/manual-review boundaries; operator workflow quality now limits useful next decisions."
+    },
+    {
+      "branch": "document_class_classifier_improvement",
+      "status": "open",
+      "evidence": "Full-corpus diagnostics still leave broad empty-extraction/document-class ambiguity unresolved."
+    }
+  ],
+  "deferred_branches": [
+    {
+      "branch": "docx_support_triage_or_prototype",
+      "status": "deferred",
+      "evidence": "Phase63/65 leave DOCX as later narrow format work; no evidence shows it outranks operator feedback."
+    },
+    {
+      "branch": "another_ocr_sandbox",
+      "status": "deferred",
+      "evidence": "Phase67 and Phase69 both retained manual-review boundary."
+    },
+    {
+      "branch": "production_ocr_or_extractor_change",
+      "status": "deferred_blocked_by_evidence",
+      "evidence": "No completed diagnostic justifies changing OCR routing, extraction logic, thresholds, or safety gates."
+    }
+  ],
+  "autonomous_decision_matrix": [
+    {
+      "branch": "manual_review_package_auto_improvement",
+      "display": "Phase74 Manual Review Package Auto-Improvement",
+      "score": 90,
+      "rationale": "Open branch from Phase70. Safe workflow/reporting/UI improvement that reduces future human work without changing extraction behavior. Completable from existing safe reports and aggregate diagnostics only.",
+      "requires_operator_labels": false,
+      "changes_production": false,
+      "penalty_reasons": [],
+      "selected": true
+    },
+    {
+      "branch": "document_class_classifier_diagnostic",
+      "display": "Document-class classifier diagnostic without operator labels",
+      "score": 55,
+      "rationale": "Open branch from Phase70, but depends on aggregate diagnostics only \u2014 no operator truth labels needed. Lower priority than review packaging because it does not directly reduce operator workload.",
+      "requires_operator_labels": false,
+      "changes_production": false,
+      "penalty_reasons": [
+        "lower_immediate_operator_value"
+      ],
+      "selected": false
+    },
+    {
+      "branch": "docx_support_triage",
+      "display": "DOCX triage / prototype",
+      "score": 30,
+      "rationale": "Deferred by Phase70: no evidence it outranks operator feedback. Penalized for being deferred without new evidence.",
+      "requires_operator_labels": false,
+      "changes_production": false,
+      "penalty_reasons": [
+        "deferred_by_phase70_without_new_evidence"
+      ],
+      "selected": false
+    },
+    {
+      "branch": "another_ocr_sandbox",
+      "display": "Another OCR sandbox",
+      "score": 10,
+      "rationale": "Phase67 and Phase69 both retained the manual-review boundary. A further OCR sandbox produces the same result without new signal.",
+      "requires_operator_labels": false,
+      "changes_production": false,
+      "penalty_reasons": [
+        "phase67_already_retained_manual_review_boundary",
+        "phase69_already_retained_manual_review_boundary"
+      ],
+      "selected": false
+    },
+    {
+      "branch": "resume_operator_review",
+      "display": "Resume operator review",
+      "score": 5,
+      "rationale": "User explicitly deferred operator feedback. Penalized for requiring manual document-by-document truth labeling.",
+      "requires_operator_labels": true,
+      "changes_production": false,
+      "penalty_reasons": [
+        "requires_manual_operator_review",
+        "deferred_by_user"
+      ],
+      "selected": false
+    },
+    {
+      "branch": "production_ocr_or_extractor_change",
+      "display": "Production OCR/extractor change",
+      "score": 0,
+      "rationale": "No completed diagnostic justifies changing OCR routing, extraction logic, thresholds, or safety gates. Blocked by evidence.",
+      "requires_operator_labels": false,
+      "changes_production": true,
+      "penalty_reasons": [
+        "no_diagnostic_evidence_supports_change",
+        "blocked_by_safety_gate"
+      ],
+      "selected": false
+    }
+  ],
+  "rationale": "Phase72 shows 15 operator feedback items remain unreviewed (3 high-priority). The user has explicitly deferred operator review to avoid manual document-by-document labeling. Operator feedback is marked deferred_by_user and is NOT required to continue. No diagnostic evidence (Phase67/69/62) supports production OCR or extractor changes. The highest-scoring safe branch is manual_review_package_auto_improvement, which improves review outputs and operator-facing summaries without changing extraction behavior or requiring truth labels.",
+  "validation_commands": [
+    "python -m pytest tests/test_phase73_operator_feedback_bypass_decision.py",
+    "python scripts/run_phase73_operator_feedback_bypass_decision.py",
+    "python scripts/run_phase47_final_regression_hardening.py",
+    "python scripts/run_phase48_release_snapshot_validation.py",
+    "python scripts/run_phase49_privacy_gate_validation.py",
+    "python -m pytest tests"
+  ],
+  "privacy_self_check": {
+    "raw_filenames_written": false,
+    "raw_paths_written": false,
+    "ocr_text_written": false,
+    "extracted_text_written": false,
+    "phi_written": false,
+    "private_notes_in_public_report": false,
+    "public_report_identifiers": "aggregates_and_safe_branch_names_only",
+    "phi_artifact_check_passed": true
+  }
+}

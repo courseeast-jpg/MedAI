@@ -1,0 +1,55 @@
+specialty: epilepsy
+display_name: Epilepsy
+description: Epilepsy management, seizure disorders, AED monitoring, EEG interpretation
+
+external_apis:
+  primary: sage
+  secondary: dxgpt
+  drug_check: patientnotes_ddi
+
+task_types:
+  - differential_diagnosis
+  - medication_check
+  - evidence_lookup
+  - symptom_tracking
+  - general_query
+
+keywords:
+  - epilep
+  - seizure
+  - convuls
+  - anticonvulsant
+  - antiepileptic
+  - aed
+  - eeg
+  - levetiracetam
+  - valproate
+  - lamotrigine
+  - carbamazepine
+  - phenytoin
+  - topiramate
+  - brivaracetam
+  - ictal
+  - postictal
+  - status epilepticus
+  - absence
+  - tonic clonic
+  - focal onset
+
+curated_sources:
+  - name: Epilepsy Foundation
+    url: https://www.epilepsy.com
+    trust_level: 4
+  - name: ILAE Guidelines
+    url: https://www.ilae.org/guidelines
+    trust_level: 2
+  - name: PubMed Epilepsy
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=epilepsy
+    trust_level: 2
+
+extraction_prompt: |
+  Extract all epilepsy-related facts from the following medical text.
+  Focus on: seizure type and frequency, EEG findings, MRI findings,
+  antiepileptic drug names and doses, side effects, seizure triggers,
+  last seizure date, seizure freedom duration, surgical candidacy notes.
+  Return structured JSON. Do not invent information.

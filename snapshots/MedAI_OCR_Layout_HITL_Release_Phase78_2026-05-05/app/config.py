@@ -1,0 +1,101 @@
+"""
+MedAI Platform v1.1 — Global Configuration
+All feature flags default to MVP activation state.
+"""
+import os
+from pathlib import Path
+from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+# ── Feature Flags ─────────────────────────────────────────────────────────────
+# Progressive activation model: all layers present, controlled by flags
+
+ENABLE_GRAPH          = False   # NetworkX knowledge graph (Phase 3)
+ENABLE_LOCAL_LLM      = False   # Ollama local model (Phase 4)
+ENRICH_PROMOTE        = False   # Auto-promote hypothesis→active (Phase 2)
+ENABLE_EPUB           = False   # ePub ingestion (Phase 2)
+ENABLE_YOUTUBE        = False   # YouTube transcripts (Phase 2)
+ENABLE_WEB_INGESTION  = True    # HTML + PDF web fetch (MVP)
+ENABLE_TRUTH_RESOLUTION = True  # Phase 11 governance truth resolution overlay
+ENABLE_HYPOTHESIS_TIER  = True  # Phase 11 governance hypothesis-tier enforcement
+ENABLE_DECISION_SCORING = True  # Phase 11 governance decision-scoring wrapper
+ENABLE_ENRICHMENT     = True    # Enrichment engine — hypothesis tier only
+
+# Active connectors — only listed connectors make real API calls
+# Others are present as stubs returning structured empty responses
+ACTIVE_CONNECTORS     = ["dxgpt"]  # Expand in Phase 2
+
+# Phase 49 privacy gate defaults. External APIs fail closed unless explicitly enabled.
+MEDAI_LOCAL_ONLY        = _env_bool("MEDAI_LOCAL_ONLY", True)
+MEDAI_ALLOW_EXTERNAL_API = _env_bool("MEDAI_ALLOW_EXTERNAL_API", False)
+MEDAI_REQUIRE_PII_SCRUB = _env_bool("MEDAI_REQUIRE_PII_SCRUB", True)
+MEDAI_PRIVACY_AUDIT     = _env_bool("MEDAI_PRIVACY_AUDIT", True)
+
+# Confidence thresholds
+SAFE_MODE_THRESHOLD       = 0.40   # Below this → safe mode
+RESPONSE_DISCARD_THRESHOLD = 0.30  # Below this → discard response
+DEDUP_SIMILARITY_THRESHOLD = 0.92  # ChromaDB cosine → deduplicate
+MIN_CONFIDENCE_CLAUDE     = 0.35   # Min confidence for Claude extraction
+MIN_CONFIDENCE_RULES      = 0.35   # Min confidence for rules-based extraction
+EXTRACTION_ACCEPT_THRESHOLD = 0.65 # Phase 26: accepted extraction threshold
+EXTRACTION_REVIEW_THRESHOLD = 0.50 # Phase 2: needs_review threshold; below this reject
+CONSENSUS_ACCEPT_THRESHOLD = 0.60  # Phase 2.1: accepted agreement threshold
+CONSENSUS_REVIEW_THRESHOLD = 0.25  # Phase 2.1: review agreement threshold; below this reject
+
+# Connector timeouts
+CONNECTOR_TIMEOUT_SEC = 12
+CLAUDE_HEALTH_CHECK_INTERVAL_SEC = 60
+CLAUDE_TIMEOUT_SEC = 30
+
+# Trust levels
+TRUST_CLINICAL    = 1
+TRUST_PEER_REVIEW = 2
+TRUST_AI          = 3
+TRUST_REPUTABLE   = 4
+TRUST_UNVERIFIED  = 5
+
+# Tiers
+TIER_ACTIVE      = "active"
+TIER_HYPOTHESIS  = "hypothesis"
+TIER_QUARANTINED = "quarantined"
+TIER_SUPERSEDED  = "superseded"
+
+# DDI severity
+DDI_HIGH   = "HIGH"
+DDI_MEDIUM = "MEDIUM"
+DDI_LOW    = "LOW"
+DDI_NONE   = "NONE"
+
+# Paths
+BASE_DIR              = Path(__file__).parent
+DB_PATH               = Path(os.getenv("DB_PATH", "data/mkb.db"))
+CHROMA_PATH           = Path(os.getenv("CHROMA_PATH", "data/chroma"))
+PDF_STORAGE_PATH      = Path(os.getenv("PDF_STORAGE_PATH", "data/pdfs"))
+PENDING_QUEUE_PATH    = Path(os.getenv("PENDING_QUEUE_PATH", "data/pending/enrichment_queue.jsonl"))
+REVIEW_QUEUE_PATH     = Path(os.getenv("REVIEW_QUEUE_PATH", "data/review/review_queue.jsonl"))
+SPECIALTIES_DIR       = BASE_DIR / "specialties"
+
+# API
+ANTHROPIC_API_KEY     = os.getenv("ANTHROPIC_API_KEY", "")
+GEMINI_API_KEY        = os.getenv("GEMINI_API_KEY", "")
+CLAUDE_MODEL          = "claude-sonnet-4-20250514"
+GEMINI_MODEL          = "gemini-2.5-flash"
+CLAUDE_MAX_TOKENS     = 2000
+GEMINI_MAX_TOKENS     = 8192
+
+# Embedding model (runs locally, no external calls)
+EMBEDDING_MODEL       = "all-MiniLM-L6-v2"
+
+# Allowed specialties
+ALLOWED_SPECIALTIES   = ["neurology", "epilepsy", "gastroenterology", "urology", "general"]
+ALLOWED_TASK_TYPES    = ["differential_diagnosis", "medication_check", "evidence_lookup", "symptom_tracking", "general_query"]
+ALLOWED_FACT_TYPES    = ["diagnosis", "medication", "test_result", "symptom", "note", "recommendation", "relationship", "event"]
