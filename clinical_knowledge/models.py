@@ -73,8 +73,6 @@ class LedgerEventType(str, Enum):
 
 
 _RESERVED_EVENT_TYPES = {
-    LedgerEventType.DDI_BLOCK,
-    LedgerEventType.DDI_WARNING,
     LedgerEventType.ENRICHMENT_WRITE,
 }
 

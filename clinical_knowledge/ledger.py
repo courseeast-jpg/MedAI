@@ -225,6 +225,68 @@ def make_quarantine_event(
     )
 
 
+def make_ddi_block_event(
+    record_id: str,
+    safe_record_id: str,
+    severity: str,
+    action: str,
+    safe_ddi_summary: dict,
+    explanation: str,
+    actor: str = "medication_safety_gate",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.DDI_BLOCK,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"ddi_block:severity={severity}",
+        details={
+            "severity": severity,
+            "action": action,
+            "explanation": explanation,
+            "safe_ddi_summary": safe_ddi_summary,
+        },
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "severity": severity,
+            "action": action,
+            "safe_ddi_summary": safe_ddi_summary,
+        },
+    )
+
+
+def make_ddi_warning_event(
+    record_id: str,
+    safe_record_id: str,
+    severity: str,
+    action: str,
+    safe_ddi_summary: dict,
+    explanation: str,
+    actor: str = "medication_safety_gate",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.DDI_WARNING,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"ddi_warning:severity={severity}",
+        details={
+            "severity": severity,
+            "action": action,
+            "explanation": explanation,
+            "safe_ddi_summary": safe_ddi_summary,
+        },
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "severity": severity,
+            "action": action,
+            "safe_ddi_summary": safe_ddi_summary,
+        },
+    )
+
+
 def make_validation_event(
     record_id: str,
     safe_record_id: str,

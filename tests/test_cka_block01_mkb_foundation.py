@@ -362,7 +362,7 @@ def test_reserved_event_type_raises():
     with pytest.raises(ValueError, match="reserved"):
         LedgerEvent(
             event_id="x",
-            event_type=LedgerEventType.DDI_BLOCK,
+            event_type=LedgerEventType.ENRICHMENT_WRITE,
             record_id=r.record_id,
             timestamp="2026-01-01T00:00:00+00:00",
         )

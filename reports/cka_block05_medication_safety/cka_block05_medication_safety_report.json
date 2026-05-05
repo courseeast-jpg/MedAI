@@ -1,0 +1,72 @@
+{
+  "block_id": "CKA-B05",
+  "conclusion": "cka_b05_medication_safety_ready",
+  "synthetic_cases_run": 10,
+  "cases_passed": 10,
+  "all_cases_passed": true,
+  "ddi_stub_ready": true,
+  "ddi_layer1_evidence_modifier_ready": true,
+  "ddi_layer2_write_gate_ready": true,
+  "high_interaction_blocks_without_confirmation": true,
+  "medium_interaction_requires_acknowledgment": true,
+  "low_interaction_allows_with_note": true,
+  "ddi_unavailable_queues_pending": true,
+  "medication_dose_conflict_still_quarantines_only": true,
+  "truth_resolution_invokes_ddi": false,
+  "real_patientnotes_api_used": false,
+  "real_external_connectors_implemented": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "replacement_map_written_to_public_reports": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B06 Controlled Enrichment + Hypothesis Tier",
+  "case_results": {
+    "A": {
+      "passed": true,
+      "description": "No interaction \u2014 write allowed"
+    },
+    "B": {
+      "passed": true,
+      "description": "LOW interaction \u2014 allow_with_note, no confirmation"
+    },
+    "C": {
+      "passed": true,
+      "description": "MEDIUM without ack \u2014 blocked, ddi_warning written"
+    },
+    "D": {
+      "passed": true,
+      "description": "MEDIUM with ack \u2014 write allowed, requires_review=True"
+    },
+    "E": {
+      "passed": true,
+      "description": "HIGH without confirmation \u2014 blocked, ddi_block written"
+    },
+    "F": {
+      "passed": true,
+      "description": "HIGH with confirmation \u2014 write allowed, requires_review=True"
+    },
+    "G": {
+      "passed": true,
+      "description": "DDI unavailable \u2014 queued, not written"
+    },
+    "H": {
+      "passed": true,
+      "description": "Layer 1 modifier: exact penalties applied, no write block"
+    },
+    "I": {
+      "passed": true,
+      "description": "Truth Resolution: dose conflict quarantines only, no DDI invoked"
+    },
+    "J": {
+      "passed": true,
+      "description": "Privacy audit: no raw PHI in public report"
+    }
+  }
+}
