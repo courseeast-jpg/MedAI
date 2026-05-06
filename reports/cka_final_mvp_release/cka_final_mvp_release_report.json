@@ -1,0 +1,256 @@
+{
+  "block_id": "CKA-B11",
+  "conclusion": "cka_mvp_release_package_ready",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "27d940e",
+  "completed_blocks": [
+    "CKA-B01",
+    "CKA-B02",
+    "CKA-B03",
+    "CKA-B04",
+    "CKA-B05",
+    "CKA-B06",
+    "CKA-B07",
+    "CKA-B08",
+    "CKA-B09",
+    "CKA-B10"
+  ],
+  "block_commits": [
+    {
+      "block": "CKA-B01",
+      "sha": "04477ca"
+    },
+    {
+      "block": "CKA-B02",
+      "sha": "f42be80"
+    },
+    {
+      "block": "CKA-B03",
+      "sha": "da45b71"
+    },
+    {
+      "block": "CKA-B04",
+      "sha": "7011079"
+    },
+    {
+      "block": "CKA-B05",
+      "sha": "398568e"
+    },
+    {
+      "block": "CKA-B06",
+      "sha": "02b7955"
+    },
+    {
+      "block": "CKA-B07",
+      "sha": "0ad2815"
+    },
+    {
+      "block": "CKA-B08",
+      "sha": "65aa131"
+    },
+    {
+      "block": "CKA-B09",
+      "sha": "ff0adf2"
+    },
+    {
+      "block": "CKA-B10",
+      "sha": "27d940e"
+    }
+  ],
+  "all_tests_passed": true,
+  "total_tests_passed": 680,
+  "preflight_checks_passed": 26,
+  "validation_scripts_passed": 2,
+  "final_release_docs_created": [
+    "CKA_OPERATOR_GUIDE.md",
+    "CKA_LIMITATIONS_AND_SAFETY.md",
+    "CKA_ARCHITECTURE_MANIFEST.md",
+    "CKA_CONTINUATION_SNAPSHOT.md"
+  ],
+  "continuation_snapshot_created": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "production_autonomous": false,
+  "cka_ready_for_real_connector_activation": false,
+  "cka_ready_for_operator_review": true,
+  "next_recommended_decision": "Choose: stop at MVP scaffold, or activate real connectors, real terminology, SQLCipher, multilingual support, or local LLM under a separately scoped roadmap track. Default recommendation: stop at MVP scaffold.",
+  "synthetic_cases_run": 12,
+  "cases_passed": 12,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Branch is clinical-knowledge-architecture",
+      "passed": true,
+      "details": {
+        "branch": "clinical-knowledge-architecture"
+      }
+    },
+    {
+      "case": "B",
+      "description": "B01-B10 commits exist",
+      "passed": true,
+      "details": {
+        "block_commits": [
+          {
+            "block": "CKA-B01",
+            "sha": "04477ca"
+          },
+          {
+            "block": "CKA-B02",
+            "sha": "f42be80"
+          },
+          {
+            "block": "CKA-B03",
+            "sha": "da45b71"
+          },
+          {
+            "block": "CKA-B04",
+            "sha": "7011079"
+          },
+          {
+            "block": "CKA-B05",
+            "sha": "398568e"
+          },
+          {
+            "block": "CKA-B06",
+            "sha": "02b7955"
+          },
+          {
+            "block": "CKA-B07",
+            "sha": "0ad2815"
+          },
+          {
+            "block": "CKA-B08",
+            "sha": "65aa131"
+          },
+          {
+            "block": "CKA-B09",
+            "sha": "ff0adf2"
+          },
+          {
+            "block": "CKA-B10",
+            "sha": "27d940e"
+          }
+        ]
+      }
+    },
+    {
+      "case": "C",
+      "description": "Preflight passes",
+      "passed": true,
+      "details": {
+        "checks_total": 26,
+        "checks_passed": 26
+      }
+    },
+    {
+      "case": "D",
+      "description": "Scaffold invariants",
+      "passed": true,
+      "details": {
+        "production_autonomous": false,
+        "allow_active_write": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "E",
+      "description": "Consensus safety",
+      "passed": true,
+      "details": {
+        "hypothesis_only": true,
+        "active_write_blocked": true
+      }
+    },
+    {
+      "case": "F",
+      "description": "Connector registry safe",
+      "passed": true,
+      "details": {
+        "total_connectors": 4,
+        "enabled_connectors": 3
+      }
+    },
+    {
+      "case": "G",
+      "description": "Release docs present",
+      "passed": true,
+      "details": {
+        "docs": [
+          "CKA_OPERATOR_GUIDE.md",
+          "CKA_LIMITATIONS_AND_SAFETY.md",
+          "CKA_ARCHITECTURE_MANIFEST.md",
+          "CKA_CONTINUATION_SNAPSHOT.md"
+        ]
+      }
+    },
+    {
+      "case": "H",
+      "description": "Release docs safe text",
+      "passed": true,
+      "details": {
+        "docs_checked": 4
+      }
+    },
+    {
+      "case": "I",
+      "description": "No private files in release dir",
+      "passed": true,
+      "details": {
+        "files_checked": true
+      }
+    },
+    {
+      "case": "J",
+      "description": "Full CKA B01-B10 test suite",
+      "passed": true,
+      "details": {
+        "tests_passed": 680,
+        "files_run": 10,
+        "summary_line": "============================= 680 passed in 6.01s ============================="
+      }
+    },
+    {
+      "case": "K",
+      "description": "B10 validation passes",
+      "passed": true,
+      "details": {
+        "cases": 12,
+        "passed": 12
+      }
+    },
+    {
+      "case": "L",
+      "description": "Safety flags summary",
+      "passed": true,
+      "details": {
+        "external_api_used": false,
+        "real_external_connectors_implemented": false,
+        "real_patientnotes_api_used": false,
+        "real_dxgpt_api_used": false,
+        "real_sage_api_used": false,
+        "real_llm_api_used": false,
+        "real_umls_api_used": false,
+        "real_snomed_download_used": false,
+        "real_scispacy_linker_required": false,
+        "production_ocr_changed": false,
+        "production_extractor_changed": false,
+        "safety_gate_changed": false,
+        "frozen_hitl_release_reopened": false,
+        "production_autonomous": false,
+        "external_apis_enabled": false,
+        "enrich_promote": false
+      }
+    }
+  ],
+  "generated_at": "2026-05-06T16:12:59.510653+00:00"
+}
