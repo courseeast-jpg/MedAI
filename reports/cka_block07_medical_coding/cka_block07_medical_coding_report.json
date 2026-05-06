@@ -1,0 +1,80 @@
+{
+  "block_id": "CKA-B07",
+  "conclusion": "cka_b07_medical_coding_ready",
+  "synthetic_cases_run": 11,
+  "cases_passed": 11,
+  "all_cases_passed": true,
+  "medical_coding_interface_ready": true,
+  "terminology_source_abstraction_ready": true,
+  "synthetic_mapper_ready": true,
+  "local_lookup_loader_ready": true,
+  "coding_validator_ready": true,
+  "coding_integration_ready": true,
+  "no_code_hallucinated": true,
+  "unknown_entities_remain_unmapped": true,
+  "external_terminology_api_used": false,
+  "real_umls_api_used": false,
+  "real_snomed_download_used": false,
+  "real_scispacy_linker_required": false,
+  "coding_does_not_promote_hypothesis": true,
+  "coding_does_not_clear_ddi_status": true,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "replacement_map_written_to_public_reports": false,
+  "private_lookup_path_written_to_public_reports": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B08 Multi-Connector Execution + Consensus",
+  "case_results": {
+    "A": {
+      "passed": true,
+      "description": "Synthetic diagnosis maps to SYN-DX-001 with synthetic=True"
+    },
+    "B": {
+      "passed": true,
+      "description": "Unknown entity unmapped, codes=[], no hallucinated code"
+    },
+    "C": {
+      "passed": true,
+      "description": "Local lookup maps synthetic SNOMED-like code, synthetic=True, version=test-only"
+    },
+    "D": {
+      "passed": true,
+      "description": "Ambiguous local lookup returns ambiguous, no unsafe preferred_code"
+    },
+    "E": {
+      "passed": true,
+      "description": "Missing lookup file \u2192 coding_unavailable or source_unavailable, no crash"
+    },
+    "F": {
+      "passed": true,
+      "description": "Invalid codes rejected: empty code, unknown system, synthetic=False on synthetic system"
+    },
+    "G": {
+      "passed": true,
+      "description": "Active record coded; tier/status unchanged; medical_coding ledger event written"
+    },
+    "H": {
+      "passed": true,
+      "description": "Hypothesis record coded; tier=hypothesis preserved; no promotion"
+    },
+    "I": {
+      "passed": true,
+      "description": "Medication record with DDI blocked: coding applied, DDI status unchanged, no safety clearance implied"
+    },
+    "J": {
+      "passed": true,
+      "description": "Enrichment candidate coded after hypothesis write; AI-derived fact stays hypothesis"
+    },
+    "K": {
+      "passed": true,
+      "description": "Privacy audit: no raw PHI/path/secret in public report"
+    }
+  }
+}

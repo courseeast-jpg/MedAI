@@ -287,6 +287,35 @@ def make_ddi_warning_event(
     )
 
 
+def make_medical_coding_event(
+    record_id: str,
+    safe_record_id: str,
+    coding_status: str,
+    systems_attempted: list,
+    preferred_code_summary: Optional[Dict[str, Any]],
+    actor: str = "medical_coding_service",
+) -> LedgerEvent:
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.MEDICAL_CODING,
+        record_id=record_id,
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"medical_coding:{coding_status}",
+        details={
+            "coding_status": coding_status,
+            "systems_attempted": systems_attempted,
+            "preferred_code_summary": preferred_code_summary or {},
+        },
+        safe_public_details={
+            "safe_record_id": safe_record_id,
+            "coding_status": coding_status,
+            "systems_attempted": systems_attempted,
+            "preferred_code_summary": preferred_code_summary or {},
+        },
+    )
+
+
 def make_enrichment_write_event(
     record_id: str,
     safe_record_id: str,
