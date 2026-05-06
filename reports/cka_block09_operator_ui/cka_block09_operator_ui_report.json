@@ -1,0 +1,175 @@
+{
+  "block_id": "CKA-B09",
+  "conclusion": "cka_b09_operator_ui_ready",
+  "synthetic_cases_run": 14,
+  "cases_passed": 14,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Snapshot loads public reports only",
+      "passed": true,
+      "details": {
+        "blocks_loaded": [
+          "CKA-B01",
+          "CKA-B02",
+          "CKA-B03",
+          "CKA-B04",
+          "CKA-B05",
+          "CKA-B06",
+          "CKA-B07",
+          "CKA-B08"
+        ],
+        "private_files_read": false,
+        "replacement_map_loaded": false,
+        "source_response_raw_loaded": false
+      }
+    },
+    {
+      "case": "B",
+      "description": "Snapshot loader skips private files",
+      "passed": true,
+      "details": {
+        "private_file_loaded": false
+      }
+    },
+    {
+      "case": "C",
+      "description": "Graceful empty state when reports missing",
+      "passed": true,
+      "details": {
+        "has_state": true,
+        "private_files_read": false
+      }
+    },
+    {
+      "case": "D",
+      "description": "Block status summary aggregates flags",
+      "passed": true,
+      "details": {
+        "has_b01_key": true,
+        "has_count": true,
+        "blocks_loaded_count": 8
+      }
+    },
+    {
+      "case": "E",
+      "description": "Safety flags correctly extracted",
+      "passed": true,
+      "details": {
+        "has_required_keys": true,
+        "all_clear": true
+      }
+    },
+    {
+      "case": "F",
+      "description": "All render helpers callable and safe",
+      "passed": true,
+      "details": {
+        "issues": [],
+        "panels_tested": 9
+      }
+    },
+    {
+      "case": "G",
+      "description": "Privacy panel flags unsafe state as BLOCKED/REVIEW REQUIRED",
+      "passed": true,
+      "details": {
+        "blocked_text_present": true,
+        "output_snippet": "## Privacy Audit Panel\n[BLOCKED / REVIEW REQUIRED] -- privacy flags raised.\nraw_phi_logged: True\npri"
+      }
+    },
+    {
+      "case": "H",
+      "description": "Medication panel \u2014 no medication advice wording",
+      "passed": true,
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "case": "I",
+      "description": "Coding panel does not claim real UMLS/SNOMED active",
+      "passed": true,
+      "details": {
+        "forbidden_phrases_found": []
+      }
+    },
+    {
+      "case": "J",
+      "description": "Consensus panel shows no active auto-write claim",
+      "passed": true,
+      "details": {
+        "forbidden_phrases_found": []
+      }
+    },
+    {
+      "case": "K",
+      "description": "Release readiness states: not production autonomous, not medical device",
+      "passed": true,
+      "details": {
+        "has_not_autonomous": true,
+        "has_not_device": true,
+        "output_snippet": "## CKA Release Readiness\nCKA architecture blocks completed: B01\u2013B08 (8/8)\nUI block B09: in progress / ready\nNext: CKA-B10 Final CKA Validation / MVP Release Package\n\n\u26a0\ufe0f  MedAI is NOT production-autono"
+      }
+    },
+    {
+      "case": "L",
+      "description": "get_cka_operator_panels has all required panel keys",
+      "passed": true,
+      "details": {
+        "missing_keys": [],
+        "panels_count": 9
+      }
+    },
+    {
+      "case": "M",
+      "description": "app/main.py Streamlit integration present",
+      "passed": true,
+      "details": {
+        "has_tab": true,
+        "has_import": true,
+        "has_try_except": true
+      }
+    },
+    {
+      "case": "N",
+      "description": "Public report payload passes B02 privacy checker",
+      "passed": true,
+      "details": {
+        "privacy_check_passed": true,
+        "secret_leaks": 0,
+        "raw_phi_logged": false,
+        "private_filename_path_leaks": 0
+      }
+    }
+  ],
+  "panels_ready": true,
+  "panels_count": 9,
+  "mkb_status_panel_ready": true,
+  "decision_engine_panel_ready": true,
+  "privacy_panel_ready": true,
+  "truth_resolution_panel_ready": true,
+  "medication_safety_panel_ready": true,
+  "enrichment_panel_ready": true,
+  "medical_coding_panel_ready": true,
+  "consensus_panel_ready": true,
+  "release_readiness_panel_ready": true,
+  "streamlit_integration_ready": true,
+  "private_files_read": false,
+  "replacement_map_loaded": false,
+  "source_response_raw_loaded": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "real_external_connectors_implemented": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B10 Final CKA Validation / MVP Release Package",
+  "generated_at": "2026-05-06T03:45:47.064963+00:00"
+}

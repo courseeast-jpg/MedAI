@@ -55,7 +55,7 @@ st.set_page_config(
 )
 
 
-PHASE52_OPERATOR_TABS = ["Current Run", "Blind Audit", "Report Archive", "Review Package"]
+PHASE52_OPERATOR_TABS = ["Current Run", "Blind Audit", "Report Archive", "Review Package", "Clinical Knowledge Safety"]
 
 
 def display_content(record: MKBRecord) -> tuple[str, bool]:
@@ -930,7 +930,7 @@ def main() -> None:
         st.caption(f"Connectors: {', '.join(ACTIVE_CONNECTORS)}")
         st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
 
-    tab_current, tab_blind, tab_archive, tab_review = st.tabs(PHASE52_OPERATOR_TABS)
+    tab_current, tab_blind, tab_archive, tab_review, tab_cka = st.tabs(PHASE52_OPERATOR_TABS)
     with tab_current:
         render_current_run_tab(sys_components)
     with tab_blind:
@@ -943,6 +943,16 @@ def main() -> None:
             render_review_package_panel()
         except Exception as _exc:
             st.error(f"Review Package panel unavailable: {_exc}")
+    with tab_cka:
+        try:
+            from app.clinical_knowledge_safety_viewer import (
+                load_cka_safety_snapshot,
+                render_clinical_knowledge_safety_dashboard,
+            )
+            _cka_snapshot = load_cka_safety_snapshot()
+            render_clinical_knowledge_safety_dashboard(_cka_snapshot)
+        except Exception as _exc:
+            st.error(f"Clinical Knowledge Safety panel unavailable: {_exc}")
 
     st.divider()
     st.caption(PRIVACY_INVARIANT_GUIDANCE)
