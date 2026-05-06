@@ -60,6 +60,23 @@ from clinical_knowledge.security.empty_store_initializer import (
     initialize_empty_encrypted_store,
     initializer_will_create_real_store,
 )
+from clinical_knowledge.security.runtime_config import (
+    EncryptedRuntimeConfig,
+)
+from clinical_knowledge.security.runtime_factory import (
+    RuntimeBuildResult,
+    RuntimeFactoryError,
+    build_cka_runtime_store,
+)
+from clinical_knowledge.security.runtime_preflight import (
+    RuntimePreflightResult,
+    run_encrypted_runtime_preflight,
+)
+from clinical_knowledge.security.runtime_rollback import (
+    RuntimeRollbackPlan,
+    get_runtime_rollback_plan,
+    rollback_plan_ready as runtime_rollback_plan_ready,
+)
 
 __all__ = [
     # SEC-01
@@ -97,4 +114,14 @@ __all__ = [
     "InitializationResult",
     "initialize_empty_encrypted_store",
     "initializer_will_create_real_store",
+    # SEC-04 — encrypted runtime activation guard
+    "EncryptedRuntimeConfig",
+    "RuntimeBuildResult",
+    "RuntimeFactoryError",
+    "build_cka_runtime_store",
+    "RuntimePreflightResult",
+    "run_encrypted_runtime_preflight",
+    "RuntimeRollbackPlan",
+    "get_runtime_rollback_plan",
+    "runtime_rollback_plan_ready",
 ]

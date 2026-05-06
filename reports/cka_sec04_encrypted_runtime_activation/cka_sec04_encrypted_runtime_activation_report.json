@@ -1,0 +1,174 @@
+{
+  "block_id": "CKA-SEC-04",
+  "conclusion": "cka_sec04_encrypted_runtime_activation_ready",
+  "sqlcipher_provider_available": true,
+  "sqlcipher_provider_name": "sqlcipher3",
+  "cipher_version_available": true,
+  "default_runtime_encryption_active": false,
+  "encrypted_runtime_flag_supported": true,
+  "encrypted_runtime_blocks_without_key": true,
+  "wrong_key_failure_passed": true,
+  "test_mode_encrypted_runtime_opened": true,
+  "test_mode_records_count_zero": true,
+  "create_if_missing_requires_explicit_flag": true,
+  "rollback_plan_ready": true,
+  "main_store_migration_performed": false,
+  "real_data_migrated": false,
+  "existing_store_migrated": false,
+  "real_empty_store_created_by_default": false,
+  "db_file_staged": false,
+  "key_stored_in_repo": false,
+  "encryption_key_logged": false,
+  "runtime_activation_default_off": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-SEC-05 Operator Runtime Launch Script, only if operator wants one-click encrypted-runtime startup",
+  "case_e_summary": {
+    "passed": true,
+    "runtime_encryption_active": true,
+    "encrypted_store_opened": true,
+    "encrypted_store_created": false,
+    "correct_key_read_passed": true,
+    "wrong_key_failure_passed": true,
+    "plaintext_absence_verified": true,
+    "records_count": 0,
+    "migration_performed": false,
+    "real_data_migrated": false,
+    "rollback_plan_available": true,
+    "blocked_reason": null
+  },
+  "synthetic_cases_run": 10,
+  "cases_passed": 10,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Baseline SEC-03A confirmed",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "provider_available": true,
+        "sec03a_conclusion": "cka_sec03a_empty_encrypted_future_store_ready"
+      }
+    },
+    {
+      "case": "B",
+      "description": "Default runtime unencrypted",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "runtime_encryption_active": false,
+        "encrypted_store_opened": false,
+        "encrypted_store_created": false,
+        "fallback_to_mkbstore": false,
+        "main_store_migration_performed": false,
+        "real_data_migrated": false,
+        "store_kind": "mkbstore_unencrypted_default"
+      }
+    },
+    {
+      "case": "C",
+      "description": "Runtime flag without key blocks",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "encrypted_runtime_blocked_missing_key"
+      }
+    },
+    {
+      "case": "D",
+      "description": "Runtime wrong key fails",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "encrypted_runtime_open_failed_DatabaseError"
+      }
+    },
+    {
+      "case": "E",
+      "description": "Test-mode encrypted runtime",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "passed": true,
+        "runtime_encryption_active": true,
+        "encrypted_store_opened": true,
+        "encrypted_store_created": false,
+        "correct_key_read_passed": true,
+        "wrong_key_failure_passed": true,
+        "plaintext_absence_verified": true,
+        "records_count": 0,
+        "migration_performed": false,
+        "real_data_migrated": false,
+        "rollback_plan_available": true,
+        "blocked_reason": null
+      }
+    },
+    {
+      "case": "F",
+      "description": "create_if_missing false blocks missing store",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "encrypted_target_missing_create_if_missing_false"
+      }
+    },
+    {
+      "case": "G",
+      "description": "Rollback plan ready",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "rollback_state": {
+          "steps_count": 7,
+          "no_destructive_action_on_rollback": true,
+          "no_data_migration_in_sec04": true,
+          "do_not_delete_encrypted_store": true,
+          "do_not_delete_unencrypted_store": true,
+          "operator_verifies_ui_after_rollback": true
+        },
+        "steps_count": 7
+      }
+    },
+    {
+      "case": "H",
+      "description": "Main store untouched",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "main_store_migration_performed": false,
+        "real_data_migrated": false,
+        "default_factory_kind": "mkbstore_unencrypted_default"
+      }
+    },
+    {
+      "case": "I",
+      "description": "Final CKA validation invocable",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "subprocess_exit_code": 0,
+        "pass_marker_seen": true
+      }
+    },
+    {
+      "case": "J",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encryption_key_logged": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-06T22:32:34.928424+00:00"
+}
