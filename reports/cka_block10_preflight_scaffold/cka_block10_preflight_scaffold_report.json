@@ -1,0 +1,306 @@
+{
+  "block_id": "CKA-B10",
+  "conclusion": "cka_b10_preflight_scaffold_ready",
+  "synthetic_cases_run": 12,
+  "cases_passed": 12,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "All CKA modules import",
+      "passed": true,
+      "details": {
+        "modules_checked": 19
+      }
+    },
+    {
+      "case": "B",
+      "description": "Preflight passes",
+      "passed": true,
+      "details": {
+        "checks_total": 26,
+        "checks_passed": 26
+      }
+    },
+    {
+      "case": "C",
+      "description": "External API blocked confirmed",
+      "passed": true,
+      "details": {
+        "external_api_blocked": true
+      }
+    },
+    {
+      "case": "D",
+      "description": "HITL freeze document present",
+      "passed": true,
+      "details": {
+        "hitl_freeze_confirmed": true
+      }
+    },
+    {
+      "case": "E",
+      "description": "MKBStore + ledger functional",
+      "passed": true,
+      "details": {
+        "insert_ok": true,
+        "fetch_ok": true,
+        "ledger_events": 1
+      }
+    },
+    {
+      "case": "F",
+      "description": "Privacy gate blocks SECRET",
+      "passed": true,
+      "details": {
+        "secret_detected": true,
+        "findings_count": 1
+      }
+    },
+    {
+      "case": "G",
+      "description": "Registry rejects external=True",
+      "passed": true,
+      "details": {
+        "error_type": "ConnectorRegistryError"
+      }
+    },
+    {
+      "case": "H",
+      "description": "Consensus engine instantiable",
+      "passed": true,
+      "details": {
+        "status": "all_responses_discarded"
+      }
+    },
+    {
+      "case": "I",
+      "description": "Operator UI loads public only",
+      "passed": true,
+      "details": {
+        "private_files_read": false,
+        "replacement_map_loaded": false,
+        "blocks_loaded": [
+          "CKA-B01",
+          "CKA-B02",
+          "CKA-B03",
+          "CKA-B04",
+          "CKA-B05",
+          "CKA-B06",
+          "CKA-B07",
+          "CKA-B08"
+        ]
+      }
+    },
+    {
+      "case": "J",
+      "description": "Scaffold builds with safe defaults",
+      "passed": true,
+      "details": {
+        "scaffold_version": "CKA-B10",
+        "safe_mode": true,
+        "allow_active_write": false,
+        "production_autonomous": false,
+        "external_api_used": false,
+        "store_initialized": true,
+        "registry_total_connectors": 4,
+        "registry_enabled_connectors": 3,
+        "config_external_apis_enabled": false,
+        "config_enrich_promote": false,
+        "preflight_run": false,
+        "preflight_passed": null
+      }
+    },
+    {
+      "case": "K",
+      "description": "Scaffold is_ready returns True",
+      "passed": true,
+      "details": {
+        "is_ready": true,
+        "preflight_passed": true
+      }
+    },
+    {
+      "case": "L",
+      "description": "Scaffold raises on allow_active_write=True",
+      "passed": true,
+      "details": {
+        "error_type": "ValueError"
+      }
+    }
+  ],
+  "preflight_summary": {
+    "overall_status": "pass",
+    "passed": true,
+    "checks_total": 26,
+    "checks_passed": 26,
+    "checks_failed": 0,
+    "checks_warned": 0,
+    "hitl_freeze_confirmed": true,
+    "external_api_blocked": true,
+    "safe_mode_active": true,
+    "check_summaries": [
+      {
+        "name": "b01_import_models",
+        "status": "pass",
+        "block_id": "CKA-B01",
+        "detail_ok": true
+      },
+      {
+        "name": "b01_import_store",
+        "status": "pass",
+        "block_id": "CKA-B01",
+        "detail_ok": true
+      },
+      {
+        "name": "b01_store_init",
+        "status": "pass",
+        "block_id": "CKA-B01",
+        "detail_ok": true
+      },
+      {
+        "name": "b02_import_sanitizer",
+        "status": "pass",
+        "block_id": "CKA-B02",
+        "detail_ok": true
+      },
+      {
+        "name": "b02_import_outbound",
+        "status": "pass",
+        "block_id": "CKA-B02",
+        "detail_ok": true
+      },
+      {
+        "name": "b02_secret_blocked",
+        "status": "pass",
+        "block_id": "CKA-B02",
+        "detail_ok": true
+      },
+      {
+        "name": "b03_import_engine",
+        "status": "pass",
+        "block_id": "CKA-B03",
+        "detail_ok": true
+      },
+      {
+        "name": "b03_import_safe_mode",
+        "status": "pass",
+        "block_id": "CKA-B03",
+        "detail_ok": true
+      },
+      {
+        "name": "b04_import_engine",
+        "status": "pass",
+        "block_id": "CKA-B04",
+        "detail_ok": true
+      },
+      {
+        "name": "b04_import_quarantine",
+        "status": "pass",
+        "block_id": "CKA-B04",
+        "detail_ok": true
+      },
+      {
+        "name": "b05_import_models",
+        "status": "pass",
+        "block_id": "CKA-B05",
+        "detail_ok": true
+      },
+      {
+        "name": "b05_import_ddi",
+        "status": "pass",
+        "block_id": "CKA-B05",
+        "detail_ok": true
+      },
+      {
+        "name": "b05_write_gate_import",
+        "status": "pass",
+        "block_id": "CKA-B05",
+        "detail_ok": true
+      },
+      {
+        "name": "b06_import_models",
+        "status": "pass",
+        "block_id": "CKA-B06",
+        "detail_ok": true
+      },
+      {
+        "name": "b06_import_integration",
+        "status": "pass",
+        "block_id": "CKA-B06",
+        "detail_ok": true
+      },
+      {
+        "name": "b06_active_write_blocked",
+        "status": "pass",
+        "block_id": "CKA-B06",
+        "detail_ok": true
+      },
+      {
+        "name": "b07_import_models",
+        "status": "pass",
+        "block_id": "CKA-B07",
+        "detail_ok": true
+      },
+      {
+        "name": "b07_import_mapper",
+        "status": "pass",
+        "block_id": "CKA-B07",
+        "detail_ok": true
+      },
+      {
+        "name": "b08_import_registry",
+        "status": "pass",
+        "block_id": "CKA-B08",
+        "detail_ok": true
+      },
+      {
+        "name": "b08_import_consensus",
+        "status": "pass",
+        "block_id": "CKA-B08",
+        "detail_ok": true
+      },
+      {
+        "name": "b08_registry_rejects_external",
+        "status": "pass",
+        "block_id": "CKA-B08",
+        "detail_ok": true
+      },
+      {
+        "name": "b09_import_viewer",
+        "status": "pass",
+        "block_id": "CKA-B09",
+        "detail_ok": true
+      },
+      {
+        "name": "b09_snapshot_no_private",
+        "status": "pass",
+        "block_id": "CKA-B09",
+        "detail_ok": true
+      },
+      {
+        "name": "external_api_blocked",
+        "status": "pass",
+        "block_id": null,
+        "detail_ok": true
+      },
+      {
+        "name": "hitl_freeze_present",
+        "status": "pass",
+        "block_id": null,
+        "detail_ok": true
+      },
+      {
+        "name": "config_safe_defaults",
+        "status": "pass",
+        "block_id": null,
+        "detail_ok": true
+      }
+    ]
+  },
+  "external_api_used": false,
+  "production_autonomous": false,
+  "allow_active_write": false,
+  "hitl_freeze_confirmed": true,
+  "generated_at": "2026-05-06T12:28:46.415481+00:00"
+}
