@@ -1,0 +1,225 @@
+{
+  "block_id": "CKA-SEC-02",
+  "conclusion": "cka_sec02_main_store_migration_plan_ready",
+  "sqlcipher_provider_available": true,
+  "sqlcipher_provider_name": "sqlcipher3",
+  "cipher_version_available": true,
+  "synthetic_migration_rehearsal_passed": true,
+  "correct_key_read_passed": true,
+  "wrong_key_failure_passed": true,
+  "plaintext_absence_verified": true,
+  "source_unchanged": true,
+  "records_copied": 3,
+  "key_management_policy_ready": true,
+  "backup_policy_ready": true,
+  "rollback_policy_ready": true,
+  "operator_approval_checklist_created": true,
+  "real_migration_approved": false,
+  "main_store_migration_performed": false,
+  "real_data_migrated": false,
+  "sqlcipher_encryption_active_for_main_store": false,
+  "temp_db_files_staged": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "encryption_key_logged": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-SEC-03 Main Store Migration Execution, only after explicit operator approval (see CKA_SEC02_OPERATOR_MIGRATION_APPROVAL_CHECKLIST.md)",
+  "plan_summary": {
+    "plan_id": "cka_sec02_plan_03f3fc0d7b7e",
+    "created_at": "2026-05-06T18:53:22.235444+00:00",
+    "source_store_safe_id": "cka_db_3b136c1e57f76b54",
+    "target_store_safe_id": "cka_db_synthetic_target",
+    "sqlcipher_provider": "sqlcipher3",
+    "provider_version": "4.12.0 community",
+    "migration_mode": "rehearsal_only",
+    "real_migration_approved": false,
+    "backup_required": true,
+    "rollback_required": true,
+    "operator_approval_required": true,
+    "main_store_migration_performed": false,
+    "real_data_migrated": false
+  },
+  "inventory_summary": {
+    "candidate_db_count": 2,
+    "candidate_db_safe_hashes": [
+      "cka_db_3b136c1e57f76b54",
+      "cka_db_c283408f2bf26bea"
+    ],
+    "likely_main_store_found": true,
+    "real_main_store_touched": false,
+    "raw_paths_written_to_public_report": false,
+    "scan_dirs_relative": [
+      "data",
+      "clinical_knowledge",
+      "reports"
+    ]
+  },
+  "key_policy_summary": {
+    "no_hardcoded_key_in_code": true,
+    "operator_provided_key_required": true,
+    "key_logged_in_reports": false,
+    "key_committed_to_git": false,
+    "key_in_environment_dump": false,
+    "confirm_twice_required_in_sec03": true,
+    "recovery_warning_documented": true,
+    "rotation_out_of_scope_for_sec02": true
+  },
+  "backup_rollback_summary": {
+    "timestamped_backup_required": true,
+    "checksum_before_migration_required": true,
+    "checksum_after_backup_required": true,
+    "restore_test_on_backup_copy_required": true,
+    "rollback_instructions_required": true,
+    "no_deletion_of_original_until_verified": true,
+    "migration_lock_file_required": true,
+    "real_backup_performed": false,
+    "real_restore_performed": false,
+    "real_db_deleted": false,
+    "rollback_steps_count": 7
+  },
+  "rehearsal_summary": {
+    "rehearsal_performed": true,
+    "synthetic_source_created": true,
+    "encrypted_target_created": true,
+    "records_copied": 3,
+    "correct_key_read_passed": true,
+    "wrong_key_failed": true,
+    "plaintext_absence_verified": true,
+    "source_unchanged": true,
+    "temp_files_staged": false
+  },
+  "synthetic_cases_run": 8,
+  "cases_passed": 8,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "SEC-01A baseline confirmed",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "provider_name": "sqlcipher3",
+        "cipher_version_available": true
+      }
+    },
+    {
+      "case": "B",
+      "description": "Inventory read-only",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "candidate_db_count": 2,
+        "candidate_db_safe_hashes": [
+          "cka_db_3b136c1e57f76b54",
+          "cka_db_c283408f2bf26bea"
+        ],
+        "likely_main_store_found": true,
+        "real_main_store_touched": false,
+        "raw_paths_written_to_public_report": false,
+        "scan_dirs_relative": [
+          "data",
+          "clinical_knowledge",
+          "reports"
+        ]
+      }
+    },
+    {
+      "case": "C",
+      "description": "Key handling readiness",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "handling_state": {
+          "no_hardcoded_key_in_code": true,
+          "operator_provided_key_required": true,
+          "key_logged_in_reports": false,
+          "key_committed_to_git": false,
+          "key_in_environment_dump": false,
+          "confirm_twice_required_in_sec03": true,
+          "recovery_warning_documented": true,
+          "rotation_out_of_scope_for_sec02": true
+        },
+        "refusal_markers_count": 7
+      }
+    },
+    {
+      "case": "D",
+      "description": "Backup and rollback readiness",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "backup_rollback_state": {
+          "timestamped_backup_required": true,
+          "checksum_before_migration_required": true,
+          "checksum_after_backup_required": true,
+          "restore_test_on_backup_copy_required": true,
+          "rollback_instructions_required": true,
+          "no_deletion_of_original_until_verified": true,
+          "migration_lock_file_required": true,
+          "real_backup_performed": false,
+          "real_restore_performed": false,
+          "real_db_deleted": false,
+          "rollback_steps_count": 7
+        },
+        "checklist_present": true,
+        "checklist_items": 6
+      }
+    },
+    {
+      "case": "E",
+      "description": "Synthetic migration rehearsal",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "rehearsal_performed": true,
+        "synthetic_source_created": true,
+        "encrypted_target_created": true,
+        "records_copied": 3,
+        "correct_key_read_passed": true,
+        "wrong_key_failed": true,
+        "plaintext_absence_verified": true,
+        "source_unchanged": true,
+        "temp_files_staged": false
+      }
+    },
+    {
+      "case": "F",
+      "description": "Main store untouched",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "main_store_migration_performed": false,
+        "real_data_migrated": false,
+        "sqlcipher_encryption_active_for_main_store": false
+      }
+    },
+    {
+      "case": "G",
+      "description": "Final CKA validation invocable",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "subprocess_exit_code": 0,
+        "pass_marker_seen": true
+      }
+    },
+    {
+      "case": "H",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encryption_key_logged": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-06T18:53:22.235444+00:00"
+}
