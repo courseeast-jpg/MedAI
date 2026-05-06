@@ -1,0 +1,221 @@
+{
+  "block_id": "CKA-SEC-03A",
+  "conclusion": "cka_sec03a_empty_encrypted_future_store_ready",
+  "sqlcipher_provider_available": true,
+  "sqlcipher_provider_name": "sqlcipher3",
+  "cipher_version_available": true,
+  "synthetic_empty_store_created": true,
+  "correct_key_read_passed": true,
+  "wrong_key_failure_passed": true,
+  "plaintext_absence_verified": true,
+  "overwrite_protection_ready": true,
+  "lock_file_guard_ready": true,
+  "manifest_ready": true,
+  "empty_future_store_runtime_active": false,
+  "main_store_migration_performed": false,
+  "real_data_migrated": false,
+  "real_existing_store_migrated": false,
+  "real_empty_store_created": false,
+  "real_empty_store_created_only_if_operator_approved": true,
+  "encryption_key_logged": false,
+  "key_stored_in_repo": false,
+  "db_file_staged": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-SEC-04 Encrypted Store Runtime Activation, only after explicit operator approval",
+  "case_c_summary": {
+    "success": true,
+    "target_safe_hash": "cka_db_0366405dcde15933",
+    "schema_created": true,
+    "records_count": 0,
+    "ledger_events_count": 1,
+    "correct_key_read_passed": true,
+    "wrong_key_failure_passed": true,
+    "plaintext_absence_verified": true,
+    "runtime_active": false,
+    "main_store_migration_performed": false,
+    "real_data_migrated": false,
+    "operator_approved_creation": false,
+    "overwrite_used": false,
+    "lock_file_used": true,
+    "lock_file_left_behind": false,
+    "manifest_written": true,
+    "db_file_staged": false
+  },
+  "case_h_summary": {
+    "success": true,
+    "target_safe_hash": "cka_db_b9691b4d61fef331",
+    "schema_created": true,
+    "records_count": 0,
+    "ledger_events_count": 1,
+    "correct_key_read_passed": true,
+    "wrong_key_failure_passed": true,
+    "plaintext_absence_verified": true,
+    "runtime_active": false,
+    "main_store_migration_performed": false,
+    "real_data_migrated": false,
+    "operator_approved_creation": true,
+    "overwrite_used": false,
+    "lock_file_used": true,
+    "lock_file_left_behind": false,
+    "manifest_written": true,
+    "db_file_staged": false
+  },
+  "synthetic_cases_run": 10,
+  "cases_passed": 10,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Baseline SEC-02 confirmed",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "provider_available": true,
+        "sec02_conclusion": "cka_sec02_main_store_migration_plan_ready"
+      }
+    },
+    {
+      "case": "B",
+      "description": "Empty key refused",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "key_policy_empty_key_refused"
+      }
+    },
+    {
+      "case": "C",
+      "description": "Synthetic temp empty store",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "success": true,
+        "target_safe_hash": "cka_db_0366405dcde15933",
+        "schema_created": true,
+        "records_count": 0,
+        "ledger_events_count": 1,
+        "correct_key_read_passed": true,
+        "wrong_key_failure_passed": true,
+        "plaintext_absence_verified": true,
+        "runtime_active": false,
+        "main_store_migration_performed": false,
+        "real_data_migrated": false,
+        "operator_approved_creation": false,
+        "overwrite_used": false,
+        "lock_file_used": true,
+        "lock_file_left_behind": false,
+        "manifest_written": true,
+        "db_file_staged": false
+      }
+    },
+    {
+      "case": "D",
+      "description": "Overwrite protection",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "refused_marker": "target_exists_overwrite_required"
+      }
+    },
+    {
+      "case": "E",
+      "description": "Lock-file guard",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "stale_lock_blocks_init": true,
+        "lock_removed_after_normal_run": true
+      }
+    },
+    {
+      "case": "F",
+      "description": "Manifest safe",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "manifest_id": "cka_sec03a_manifest_1067a57fdf2b",
+        "created_at": "2026-05-06T19:15:40.227346+00:00",
+        "store_safe_id": "cka_db_fbb8b2eb69caba0c",
+        "store_kind": "encrypted_empty_future_store",
+        "db_file_safe_hash": "cka_db_fbb8b2eb69caba0c",
+        "schema_version": 1,
+        "provider_name": "sqlcipher3",
+        "cipher_version": "4.12.0 community",
+        "empty_store_created": false,
+        "records_count": 0,
+        "ledger_events_count": 0,
+        "runtime_active": false,
+        "main_store_migration_performed": false,
+        "real_data_migrated": false,
+        "operator_approved_creation": false,
+        "key_stored_in_repo": false,
+        "encryption_key_logged": false
+      }
+    },
+    {
+      "case": "G",
+      "description": "Real store not created by default",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "real_target_present": false,
+        "inspection_blocks_no_approval": true
+      }
+    },
+    {
+      "case": "H",
+      "description": "Test-mode approved temp creation",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "success": true,
+        "target_safe_hash": "cka_db_b9691b4d61fef331",
+        "schema_created": true,
+        "records_count": 0,
+        "ledger_events_count": 1,
+        "correct_key_read_passed": true,
+        "wrong_key_failure_passed": true,
+        "plaintext_absence_verified": true,
+        "runtime_active": false,
+        "main_store_migration_performed": false,
+        "real_data_migrated": false,
+        "operator_approved_creation": true,
+        "overwrite_used": false,
+        "lock_file_used": true,
+        "lock_file_left_behind": false,
+        "manifest_written": true,
+        "db_file_staged": false
+      }
+    },
+    {
+      "case": "I",
+      "description": "Final CKA validation invocable",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "subprocess_exit_code": 0,
+        "pass_marker_seen": true
+      }
+    },
+    {
+      "case": "J",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encryption_key_logged": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-06T19:15:50.408561+00:00"
+}

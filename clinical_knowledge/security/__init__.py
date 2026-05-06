@@ -49,6 +49,17 @@ from clinical_knowledge.security.migration_rehearsal import (
     rehearse_synthetic_migration,
     rehearsal_passed,
 )
+from clinical_knowledge.security.encrypted_store_manifest import (
+    EncryptedStoreManifest,
+    safe_db_file_hash,
+    write_manifest_alongside_db,
+)
+from clinical_knowledge.security.empty_store_initializer import (
+    EmptyStoreInitError,
+    InitializationResult,
+    initialize_empty_encrypted_store,
+    initializer_will_create_real_store,
+)
 
 __all__ = [
     # SEC-01
@@ -78,4 +89,12 @@ __all__ = [
     "inventory_candidate_db_files",
     "rehearse_synthetic_migration",
     "rehearsal_passed",
+    # SEC-03A — encrypted empty future store
+    "EncryptedStoreManifest",
+    "safe_db_file_hash",
+    "write_manifest_alongside_db",
+    "EmptyStoreInitError",
+    "InitializationResult",
+    "initialize_empty_encrypted_store",
+    "initializer_will_create_real_store",
 ]
