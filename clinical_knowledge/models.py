@@ -72,9 +72,11 @@ class LedgerEventType(str, Enum):
     MEDICAL_CODING = "medical_coding"
     SAFE_MODE_ENTRY = "safe_mode_entry"
     RESPONSE_DISCARDED = "response_discarded"
+    CONNECTOR_EXECUTION = "connector_execution"   # CKA-B08
+    CONSENSUS_RESULT = "consensus_result"         # CKA-B08
 
 
-_RESERVED_EVENT_TYPES: set = set()  # All event types activated through CKA-B07
+_RESERVED_EVENT_TYPES: set = set()  # All event types activated through CKA-B08
 
 
 def _default_tier_for_trust(trust_level: TrustLevel) -> KnowledgeTier:

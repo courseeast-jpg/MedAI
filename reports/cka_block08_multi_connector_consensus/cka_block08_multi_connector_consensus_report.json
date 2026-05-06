@@ -1,0 +1,184 @@
+{
+  "block_id": "CKA-B08",
+  "conclusion": "cka_b08_multi_connector_consensus_ready",
+  "synthetic_cases_run": 12,
+  "cases_passed": 12,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Multi-connector agreement",
+      "passed": true,
+      "details": {
+        "success_count": 2,
+        "agreed_fact_count": 1,
+        "contradiction_count": 0,
+        "external_api_used": false,
+        "consensus_status": "consensus_ready"
+      }
+    },
+    {
+      "case": "B",
+      "description": "Single successful connector \u2014 confidence penalty",
+      "passed": true,
+      "details": {
+        "single_source_penalized_count": 1,
+        "consensus_status": "consensus_ready",
+        "no_active_write": true,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "C",
+      "description": "All connectors fail/timeout \u2014 safe escalation",
+      "passed": true,
+      "details": {
+        "all_failed": true,
+        "escalation_required": true,
+        "consensus_status": "all_responses_discarded",
+        "no_synthesis": true,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "D",
+      "description": "Privacy-blocked connector request",
+      "passed": true,
+      "details": {
+        "blocked_count": 2,
+        "total_requests": 2,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "E",
+      "description": "Malformed response excluded \u2014 no crash",
+      "passed": true,
+      "details": {
+        "malformed_count": 2,
+        "consensus_status": "all_responses_discarded",
+        "discarded_response_count": 2,
+        "no_crash": true,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "F",
+      "description": "Low-scoring response discarded before consensus",
+      "passed": true,
+      "details": {
+        "success_count": 2,
+        "low_conf_in_success": 2,
+        "discarded_response_count": 2,
+        "consensus_status": "all_responses_discarded",
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "G",
+      "description": "Contradiction detected \u2014 no synthesis",
+      "passed": true,
+      "details": {
+        "contradiction_count": 1,
+        "consensus_status": "contradiction_detected",
+        "no_synthesis": true,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "H",
+      "description": "Medication dose contradiction \u2014 quarantine-only, no DDI",
+      "passed": true,
+      "details": {
+        "tr_result_count": 1,
+        "ddi_invoked": false,
+        "quarantine_only": true,
+        "active_write": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "I",
+      "description": "DDI connector stub \u2014 synthetic structured facts, no real API",
+      "passed": true,
+      "details": {
+        "has_facts": true,
+        "fact_count": 1,
+        "no_real_api": true,
+        "no_medical_advice": true,
+        "synthetic": true,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "J",
+      "description": "Consensus-to-enrichment \u2014 hypothesis-only, no auto-write",
+      "passed": true,
+      "details": {
+        "candidate_count": 2,
+        "all_hypothesis": true,
+        "no_active_write": true,
+        "requires_enrichment_review": true,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "K",
+      "description": "Unknown consensus entity remains unmapped \u2014 no hallucinated code",
+      "passed": true,
+      "details": {
+        "coding_status": "unmapped",
+        "code_count": 0,
+        "no_code_hallucinated": true,
+        "preferred_code": null
+      }
+    },
+    {
+      "case": "L",
+      "description": "Public report privacy safety",
+      "passed": true,
+      "details": {
+        "privacy_check_passed": true,
+        "secret_leaks": 0,
+        "raw_phi_logged": false,
+        "private_filename_path_leaks": 0,
+        "external_api_used": false
+      }
+    }
+  ],
+  "connector_registry_ready": true,
+  "connector_executor_ready": true,
+  "privacy_gated_requests_ready": true,
+  "connector_stubs_ready": true,
+  "response_normalizer_ready": true,
+  "consensus_engine_ready": true,
+  "agreement_scoring_ready": true,
+  "contradiction_detection_ready": true,
+  "truth_resolution_handoff_ready": true,
+  "decision_engine_integration_ready": true,
+  "real_external_connectors_implemented": false,
+  "external_api_used": false,
+  "real_dxgpt_api_used": false,
+  "real_sage_api_used": false,
+  "real_patientnotes_api_used": false,
+  "real_llm_api_used": false,
+  "consensus_does_not_synthesize_over_contradiction": true,
+  "consensus_does_not_auto_write_active": true,
+  "consensus_to_enrichment_remains_hypothesis": true,
+  "medication_dose_contradiction_quarantines_only": true,
+  "truth_resolution_invokes_ddi": false,
+  "no_code_hallucinated": true,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "replacement_map_written_to_public_reports": false,
+  "source_response_raw_written_to_public_reports": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-B09 Operator UI for Clinical Knowledge Safety Panels",
+  "generated_at": "2026-05-06T03:33:50.139734+00:00"
+}

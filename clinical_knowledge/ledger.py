@@ -377,3 +377,66 @@ def make_validation_event(
         details=validation_summary,
         safe_public_details={"safe_record_id": safe_record_id, **validation_summary},
     )
+
+
+# ---------------------------------------------------------------------------
+# CKA-B08 ledger helpers
+# ---------------------------------------------------------------------------
+
+def make_connector_execution_event(
+    connector_name_hash: str,
+    status: str,
+    external_api_used: bool,
+    actor: str = "connector_executor",
+) -> LedgerEvent:
+    """Write a CONNECTOR_EXECUTION ledger event (safe hashes only)."""
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.CONNECTOR_EXECUTION,
+        record_id="",
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"connector_execution:{status}",
+        details={
+            "connector_name_hash": connector_name_hash,
+            "status": status,
+            "external_api_used": external_api_used,
+        },
+        safe_public_details={
+            "connector_name_hash": connector_name_hash,
+            "status": status,
+            "external_api_used": external_api_used,
+        },
+    )
+
+
+def make_consensus_result_event(
+    consensus_status: str,
+    fact_count: int,
+    contradiction_count: int,
+    confidence_aggregate: float,
+    discarded_count: int,
+    escalation_required: bool,
+    actor: str = "consensus_engine",
+) -> LedgerEvent:
+    """Write a CONSENSUS_RESULT ledger event."""
+    details = {
+        "consensus_status": consensus_status,
+        "fact_count": fact_count,
+        "contradiction_count": contradiction_count,
+        "confidence_aggregate": confidence_aggregate,
+        "discarded_count": discarded_count,
+        "escalation_required": escalation_required,
+        "external_api_used": False,
+        "active_write": False,
+    }
+    return LedgerEvent(
+        event_id=new_event_id(),
+        event_type=LedgerEventType.CONSENSUS_RESULT,
+        record_id="",
+        timestamp=_now_utc(),
+        actor=actor,
+        reason=f"consensus_result:{consensus_status}",
+        details=details,
+        safe_public_details=details,
+    )
