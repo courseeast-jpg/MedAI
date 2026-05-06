@@ -77,6 +77,18 @@ from clinical_knowledge.security.runtime_rollback import (
     get_runtime_rollback_plan,
     rollback_plan_ready as runtime_rollback_plan_ready,
 )
+from clinical_knowledge.security.runtime_launcher import (
+    LauncherError,
+    SelfTestResult,
+    build_arg_parser,
+    build_child_env,
+    build_streamlit_command,
+    child_env_keys_for_encrypted_runtime,
+    prompt_key_twice,
+    reject_command_line_key,
+    resolve_key,
+    run_self_test,
+)
 
 __all__ = [
     # SEC-01
@@ -124,4 +136,15 @@ __all__ = [
     "RuntimeRollbackPlan",
     "get_runtime_rollback_plan",
     "runtime_rollback_plan_ready",
+    # SEC-05 — operator runtime launcher helpers
+    "LauncherError",
+    "SelfTestResult",
+    "build_arg_parser",
+    "build_child_env",
+    "build_streamlit_command",
+    "child_env_keys_for_encrypted_runtime",
+    "prompt_key_twice",
+    "reject_command_line_key",
+    "resolve_key",
+    "run_self_test",
 ]

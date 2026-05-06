@@ -1,0 +1,141 @@
+{
+  "block_id": "CKA-SEC-05",
+  "conclusion": "cka_sec05_operator_runtime_launcher_ready",
+  "sqlcipher_provider_available": true,
+  "sqlcipher_provider_name": "sqlcipher3",
+  "default_launcher_unchanged": true,
+  "encrypted_launcher_created": true,
+  "encrypted_launcher_contains_key": false,
+  "python_launcher_created": true,
+  "command_line_key_rejected": true,
+  "key_prompt_twice_required": true,
+  "key_mismatch_refused": true,
+  "empty_key_refused": true,
+  "dry_run_supported": true,
+  "self_test_supported": true,
+  "create_if_missing_gated": true,
+  "encrypted_runtime_default_off": true,
+  "encrypted_runtime_only_child_process_env": true,
+  "real_empty_store_created_by_default": false,
+  "existing_data_migrated": false,
+  "main_store_migration_performed": false,
+  "db_file_staged": false,
+  "key_stored_in_repo": false,
+  "encryption_key_logged": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_action": "stop; use encrypted launcher only when operator needs encrypted runtime",
+  "synthetic_cases_run": 10,
+  "cases_passed": 10,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Baseline SEC-04 + final CKA confirmed",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "sec04_pass_marker": true,
+        "b11_pass_marker": true
+      }
+    },
+    {
+      "case": "B",
+      "description": "Default launcher unchanged",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "default_launcher_present": true,
+        "encrypted_env_absent_from_default": true
+      }
+    },
+    {
+      "case": "C",
+      "description": "Encrypted wrapper safe",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encrypted_bat_calls_python_launcher": true,
+        "encrypted_bat_contains_no_key_assignment": true,
+        "default_launcher_still_present": true
+      }
+    },
+    {
+      "case": "D",
+      "description": "CLI rejects key args",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "argvs_tested": 4
+      }
+    },
+    {
+      "case": "E",
+      "description": "Key mismatch refused",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "key_confirmation_mismatch"
+      }
+    },
+    {
+      "case": "F",
+      "description": "Empty key refused",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "empty_key_refused"
+      }
+    },
+    {
+      "case": "G",
+      "description": "Dry-run / self-test",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "dry_run_ok": true,
+        "self_test_ok": true,
+        "real_db_created": false
+      }
+    },
+    {
+      "case": "H",
+      "description": "Missing store without create-if-missing blocks",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "real_db_created_during_dry_run": false,
+        "dry_run_exit_code": 0
+      }
+    },
+    {
+      "case": "I",
+      "description": "create-if-missing gated",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "flag_exposed": true,
+        "real_target_present": false
+      }
+    },
+    {
+      "case": "J",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encryption_key_logged": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-06T22:49:25.796984+00:00"
+}
