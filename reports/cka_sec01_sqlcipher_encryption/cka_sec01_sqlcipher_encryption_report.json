@@ -1,0 +1,109 @@
+{
+  "block_id": "CKA-SEC-01",
+  "conclusion": "cka_sec01_sqlcipher_provider_required",
+  "provider_name": null,
+  "provider_available": false,
+  "cipher_version_available": false,
+  "synthetic_encrypted_store_created": false,
+  "correct_key_read_passed": false,
+  "wrong_key_read_failed": false,
+  "plaintext_absence_verified": false,
+  "sqlcipher_encryption_active_for_main_store": false,
+  "main_store_migration_performed": false,
+  "real_data_migrated": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "encryption_key_logged": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_block": "CKA-SEC-02 Main Store Migration Plan, only after provider is available and SEC-01 encrypted synthetic validation passes",
+  "synthetic_cases_run": 8,
+  "cases_passed": 5,
+  "cases_skipped": 3,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Provider detection",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "provider_available": false,
+        "provider_name": null,
+        "cipher_version_available": false,
+        "notes": "no_sqlcipher_provider_present"
+      }
+    },
+    {
+      "case": "B",
+      "description": "Empty key refused",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "empty_encryption_key_refused"
+      }
+    },
+    {
+      "case": "C",
+      "description": "Synthetic encrypted DB create",
+      "passed": true,
+      "skipped": true,
+      "skip_reason": "skipped_provider_unavailable",
+      "details": {}
+    },
+    {
+      "case": "D",
+      "description": "Wrong key fails",
+      "passed": true,
+      "skipped": true,
+      "skip_reason": "skipped_provider_unavailable",
+      "details": {}
+    },
+    {
+      "case": "E",
+      "description": "Plaintext absent",
+      "passed": true,
+      "skipped": true,
+      "skip_reason": "skipped_provider_unavailable",
+      "details": {}
+    },
+    {
+      "case": "F",
+      "description": "Main store untouched",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "main_store_migration_performed": false,
+        "real_data_migrated": false,
+        "sqlcipher_encryption_active_for_main_store": false
+      }
+    },
+    {
+      "case": "G",
+      "description": "Final CKA validation invocable",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "subprocess_exit_code": 0,
+        "pass_marker_seen": true
+      }
+    },
+    {
+      "case": "H",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encryption_key_logged": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-06T18:24:30.697840+00:00"
+}
