@@ -1,13 +1,13 @@
 {
   "block_id": "CKA-SEC-01",
-  "conclusion": "cka_sec01_sqlcipher_provider_required",
-  "provider_name": null,
-  "provider_available": false,
-  "cipher_version_available": false,
-  "synthetic_encrypted_store_created": false,
-  "correct_key_read_passed": false,
-  "wrong_key_read_failed": false,
-  "plaintext_absence_verified": false,
+  "conclusion": "cka_sec01_sqlcipher_encrypted_store_ready",
+  "provider_name": "sqlcipher3",
+  "provider_available": true,
+  "cipher_version_available": true,
+  "synthetic_encrypted_store_created": true,
+  "correct_key_read_passed": true,
+  "wrong_key_read_failed": true,
+  "plaintext_absence_verified": true,
   "sqlcipher_encryption_active_for_main_store": false,
   "main_store_migration_performed": false,
   "real_data_migrated": false,
@@ -24,8 +24,8 @@
   "frozen_hitl_release_reopened": false,
   "next_recommended_block": "CKA-SEC-02 Main Store Migration Plan, only after provider is available and SEC-01 encrypted synthetic validation passes",
   "synthetic_cases_run": 8,
-  "cases_passed": 5,
-  "cases_skipped": 3,
+  "cases_passed": 8,
+  "cases_skipped": 0,
   "all_passed": true,
   "case_results": [
     {
@@ -34,10 +34,10 @@
       "passed": true,
       "skipped": false,
       "details": {
-        "provider_available": false,
-        "provider_name": null,
-        "cipher_version_available": false,
-        "notes": "no_sqlcipher_provider_present"
+        "provider_available": true,
+        "provider_name": "sqlcipher3",
+        "cipher_version_available": true,
+        "notes": "dedicated_sqlcipher_provider"
       }
     },
     {
@@ -53,25 +53,29 @@
       "case": "C",
       "description": "Synthetic encrypted DB create",
       "passed": true,
-      "skipped": true,
-      "skip_reason": "skipped_provider_unavailable",
-      "details": {}
+      "skipped": false,
+      "details": {
+        "rows_inserted": 2,
+        "correct_key_read_passed": true
+      }
     },
     {
       "case": "D",
       "description": "Wrong key fails",
       "passed": true,
-      "skipped": true,
-      "skip_reason": "skipped_provider_unavailable",
-      "details": {}
+      "skipped": false,
+      "details": {
+        "wrong_key_read_failed": true
+      }
     },
     {
       "case": "E",
       "description": "Plaintext absent",
       "passed": true,
-      "skipped": true,
-      "skip_reason": "skipped_provider_unavailable",
-      "details": {}
+      "skipped": false,
+      "details": {
+        "plaintext_absence_verified": true
+      }
     },
     {
       "case": "F",
@@ -105,5 +109,5 @@
       }
     }
   ],
-  "generated_at": "2026-05-06T18:24:30.697840+00:00"
+  "generated_at": "2026-05-06T18:29:41.154701+00:00"
 }
