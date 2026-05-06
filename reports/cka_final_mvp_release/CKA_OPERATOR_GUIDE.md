@@ -29,10 +29,19 @@ All connectors are local synthetic stubs. No real external APIs are called.
 
 ---
 
-## 2. How to run preflight
+## 2. How to run preflight and final release validation
+
+Preflight (B01-B09 module + invariant check):
 
 ```bash
 python -m clinical_knowledge.preflight
+```
+
+Final MVP release validation (12 cases, includes preflight, scaffold
+invariants, B01-B10 test suite, doc presence, privacy check):
+
+```bash
+python scripts/run_cka_final_mvp_release_validation.py
 ```
 
 Or programmatically:
@@ -58,15 +67,27 @@ A passing preflight confirms:
 
 ## 3. How to view the Clinical Knowledge Safety UI tab
 
-Launch the operator app:
+Launch the operator app.
+
+**Windows (recommended):**
+
+```bat
+Start_MedAI_UI.bat
+```
+
+This launcher sets `MEDAI_LOCAL_ONLY=1`, `MEDAI_ALLOW_EXTERNAL_API=0`,
+`MEDAI_REQUIRE_PII_SCRUB=1`, `MEDAI_PRIVACY_AUDIT=1`, then starts
+Streamlit on `http://localhost:8501` and opens the browser.
+
+**Direct invocation (any platform):**
 
 ```bash
-streamlit run app/main.py
+python -m streamlit run app/main.py --server.port 8501
 ```
 
 Switch to the **Clinical Knowledge Safety** tab. It loads only public
-CKA reports from `reports/cka_block01_*` through `reports/cka_block10_*`
-and displays nine read-only safety panels:
+CKA reports for **B01-B10** (`reports/cka_block01_*` through
+`reports/cka_block10_*`) and displays nine read-only safety panels:
 
 1. MKB Status
 2. Decision Engine

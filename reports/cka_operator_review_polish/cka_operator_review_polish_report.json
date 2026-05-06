@@ -1,0 +1,31 @@
+{
+  "block_id": "CKA-OPR-01",
+  "conclusion": "cka_operator_review_polish_ready",
+  "b09_b10_reports_loaded_by_viewer": true,
+  "stale_head_wording_fixed": true,
+  "summary_key_drift_fixed": true,
+  "operator_guide_launcher_added": true,
+  "final_validation_command_added": true,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "scope": "polish_only",
+  "no_new_architecture_introduced": true,
+  "no_real_connectors_activated": true,
+  "no_real_terminology_integration": true,
+  "files_touched": [
+    "app/clinical_knowledge_safety_viewer.py",
+    "reports/cka_final_mvp_release/CKA_CONTINUATION_SNAPSHOT.md",
+    "reports/cka_final_mvp_release/CKA_ARCHITECTURE_MANIFEST.md",
+    "reports/cka_final_mvp_release/CKA_OPERATOR_GUIDE.md",
+    "tests/test_cka_block09_operator_ui.py",
+    "tests/test_cka_final_mvp_release.py"
+  ]
+}

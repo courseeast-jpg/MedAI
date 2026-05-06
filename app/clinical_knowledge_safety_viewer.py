@@ -37,6 +37,8 @@ _CKA_REPORT_PATHS: Dict[str, Path] = {
     "CKA-B06": _PROJECT_ROOT / "reports" / "cka_block06_controlled_enrichment" / "cka_block06_controlled_enrichment_report.json",
     "CKA-B07": _PROJECT_ROOT / "reports" / "cka_block07_medical_coding" / "cka_block07_medical_coding_report.json",
     "CKA-B08": _PROJECT_ROOT / "reports" / "cka_block08_multi_connector_consensus" / "cka_block08_multi_connector_consensus_report.json",
+    "CKA-B09": _PROJECT_ROOT / "reports" / "cka_block09_operator_ui" / "cka_block09_operator_ui_report.json",
+    "CKA-B10": _PROJECT_ROOT / "reports" / "cka_block10_preflight_scaffold" / "cka_block10_preflight_scaffold_report.json",
 }
 
 _UNSAFE_KEYS = frozenset({
@@ -126,6 +128,16 @@ def get_cka_block_status_summary(snapshot: Dict[str, Any]) -> Dict[str, Any]:
     def _flag(block: str, key: str, default: bool = False) -> bool:
         return bool(reports.get(block, {}).get(key, default))
 
+    # B05 medication-safety readiness is composed of the three actual flags
+    # carried in the public B05 report. We keep this conjunctive so a single
+    # missing layer does not falsely report "ready".
+    b05 = reports.get("CKA-B05", {})
+    medication_safety_ready = bool(
+        b05.get("ddi_stub_ready", False)
+        and b05.get("ddi_layer1_evidence_modifier_ready", False)
+        and b05.get("ddi_layer2_write_gate_ready", False)
+    ) if b05 else False
+
     return {
         "CKA-B01_ready": "CKA-B01" in reports,
         "CKA-B02_ready": "CKA-B02" in reports,
@@ -135,16 +147,22 @@ def get_cka_block_status_summary(snapshot: Dict[str, Any]) -> Dict[str, Any]:
         "CKA-B06_ready": "CKA-B06" in reports,
         "CKA-B07_ready": "CKA-B07" in reports,
         "CKA-B08_ready": "CKA-B08" in reports,
+        "CKA-B09_ready": "CKA-B09" in reports,
+        "CKA-B10_ready": "CKA-B10" in reports,
         "blocks_loaded_count": len(reports),
         "blocks_missing": snapshot.get("blocks_missing", []),
-        # Selected readiness flags from individual reports
-        "safe_mode_ready": _flag("CKA-B03", "safe_mode_ready"),
+        # Selected readiness flags from individual reports.
+        # NOTE: keys below match what each block's public report actually
+        # carries; if a key is missing the flag stays False (no claim made).
+        "safe_mode_ready": _flag("CKA-B03", "safe_mode_tested"),
         "truth_resolution_ready": _flag("CKA-B04", "truth_resolution_ready"),
         "quarantine_ready": _flag("CKA-B04", "quarantine_ready"),
-        "medication_safety_ready": _flag("CKA-B05", "medication_safety_ready"),
-        "enrichment_ready": _flag("CKA-B06", "enrichment_ready"),
+        "medication_safety_ready": medication_safety_ready,
+        "enrichment_ready": _flag("CKA-B06", "controlled_enrichment_ready"),
         "medical_coding_ready": _flag("CKA-B07", "medical_coding_interface_ready"),
         "consensus_ready": _flag("CKA-B08", "consensus_engine_ready"),
+        "operator_ui_ready": _flag("CKA-B09", "streamlit_integration_ready"),
+        "preflight_scaffold_ready": _flag("CKA-B10", "all_passed"),
     }
 
 

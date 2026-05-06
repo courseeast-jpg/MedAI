@@ -577,3 +577,125 @@ class TestValidationScript:
         from scripts.run_cka_block09_operator_ui_validation import run_validation
         report = run_validation()
         assert report["streamlit_integration_ready"] is True
+
+
+# ---------------------------------------------------------------------------
+# TestOperatorReviewPolish (CKA-OPR-01)
+# ---------------------------------------------------------------------------
+
+
+class TestOperatorReviewPolish:
+    """Verifies the CKA-OPR-01 polish: B09/B10 path coverage + key-drift fix."""
+
+    def test_viewer_paths_include_b09_b10(self):
+        from app.clinical_knowledge_safety_viewer import _CKA_REPORT_PATHS
+        assert "CKA-B09" in _CKA_REPORT_PATHS
+        assert "CKA-B10" in _CKA_REPORT_PATHS
+
+    def test_snapshot_loads_b09_b10(self, snapshot):
+        loaded = snapshot.get("blocks_loaded", [])
+        assert "CKA-B09" in loaded, f"B09 not in {loaded}"
+        assert "CKA-B10" in loaded, f"B10 not in {loaded}"
+
+    def test_snapshot_blocks_loaded_can_reach_ten(self, snapshot):
+        assert len(snapshot.get("blocks_loaded", [])) >= 10
+
+    def test_summary_count_can_reach_ten(self, snapshot):
+        summary = get_cka_block_status_summary(snapshot)
+        assert summary["blocks_loaded_count"] >= 10
+
+    def test_summary_b09_ready_key_present(self, snapshot):
+        summary = get_cka_block_status_summary(snapshot)
+        assert "CKA-B09_ready" in summary
+        assert summary["CKA-B09_ready"] is True
+
+    def test_summary_b10_ready_key_present(self, snapshot):
+        summary = get_cka_block_status_summary(snapshot)
+        assert "CKA-B10_ready" in summary
+        assert summary["CKA-B10_ready"] is True
+
+    def test_safe_mode_ready_maps_correctly(self, snapshot):
+        summary = get_cka_block_status_summary(snapshot)
+        # B03 carries safe_mode_tested=True; the summary key safe_mode_ready
+        # must reflect that, not a stale False from a missing key.
+        b03 = snapshot["reports"].get("CKA-B03", {})
+        if b03.get("safe_mode_tested") is True:
+            assert summary["safe_mode_ready"] is True
+
+    def test_medication_safety_ready_maps_correctly(self, snapshot):
+        summary = get_cka_block_status_summary(snapshot)
+        b05 = snapshot["reports"].get("CKA-B05", {})
+        expected = bool(
+            b05.get("ddi_stub_ready", False)
+            and b05.get("ddi_layer1_evidence_modifier_ready", False)
+            and b05.get("ddi_layer2_write_gate_ready", False)
+        )
+        assert summary["medication_safety_ready"] is expected
+
+    def test_enrichment_ready_maps_correctly(self, snapshot):
+        summary = get_cka_block_status_summary(snapshot)
+        b06 = snapshot["reports"].get("CKA-B06", {})
+        if b06.get("controlled_enrichment_ready") is True:
+            assert summary["enrichment_ready"] is True
+
+    def test_summary_no_unsupported_claim_when_key_missing(self):
+        # When a block's report does NOT carry the expected key, the
+        # summary must remain False rather than fabricating a True claim.
+        empty = {
+            "reports": {
+                "CKA-B03": {"block_id": "CKA-B03"},   # no safe_mode_tested
+                "CKA-B05": {"block_id": "CKA-B05"},   # no ddi_*_ready
+                "CKA-B06": {"block_id": "CKA-B06"},   # no controlled_enrichment_ready
+            },
+            "blocks_loaded": ["CKA-B03", "CKA-B05", "CKA-B06"],
+            "blocks_missing": [],
+        }
+        summary = get_cka_block_status_summary(empty)
+        assert summary["safe_mode_ready"] is False
+        assert summary["medication_safety_ready"] is False
+        assert summary["enrichment_ready"] is False
+
+    def test_opr_report_exists(self):
+        path = (
+            Path(__file__).parent.parent
+            / "reports"
+            / "cka_operator_review_polish"
+            / "cka_operator_review_polish_report.json"
+        )
+        assert path.exists()
+
+    def test_opr_report_privacy_clean(self):
+        path = (
+            Path(__file__).parent.parent
+            / "reports"
+            / "cka_operator_review_polish"
+            / "cka_operator_review_polish_report.json"
+        )
+        if not path.exists():
+            pytest.skip("OPR-01 report not generated")
+        data = json.loads(path.read_text(encoding="utf-8"))
+        result = check_public_report_payload(data)
+        assert result.passed, f"Privacy check failed: {result.leak_examples_redacted}"
+
+    def test_opr_report_safety_flags(self):
+        path = (
+            Path(__file__).parent.parent
+            / "reports"
+            / "cka_operator_review_polish"
+            / "cka_operator_review_polish_report.json"
+        )
+        if not path.exists():
+            pytest.skip("OPR-01 report not generated")
+        data = json.loads(path.read_text(encoding="utf-8"))
+        assert data["block_id"] == "CKA-OPR-01"
+        assert data["conclusion"] == "cka_operator_review_polish_ready"
+        assert data["external_api_used"] is False
+        assert data["raw_phi_logged_in_public_reports"] is False
+        assert data["private_filename_path_leaks"] == 0
+        assert data["secret_leaks"] == 0
+        assert data["clinical_recommendations_generated"] is False
+        assert data["prescription_dosing_advice_generated"] is False
+        assert data["frozen_hitl_release_reopened"] is False
+        assert data["b09_b10_reports_loaded_by_viewer"] is True
+        assert data["stale_head_wording_fixed"] is True
+        assert data["summary_key_drift_fixed"] is True

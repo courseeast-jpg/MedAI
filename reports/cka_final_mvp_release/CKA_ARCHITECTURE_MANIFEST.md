@@ -21,7 +21,7 @@ Branch: `clinical-knowledge-architecture`
 | CKA-B08 | `65aa131` | Multi-connector execution and consensus engine |
 | CKA-B09 | `ff0adf2` | Operator UI clinical knowledge safety panels |
 | CKA-B10 | `27d940e` | System preflight and scaffold |
-| CKA-B11 | (this commit) | Final clinical knowledge MVP release package |
+| CKA-B11 | `07860eb` | Final clinical knowledge MVP release package |
 
 ---
 

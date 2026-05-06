@@ -433,3 +433,43 @@ class TestValidationScript:
 
     def test_validation_12_cases(self, release_report):
         assert release_report["synthetic_cases_run"] == 12
+
+
+# ---------------------------------------------------------------------------
+# TestDocFreshnessAfterPolish (CKA-OPR-01)
+# ---------------------------------------------------------------------------
+
+
+class TestDocFreshnessAfterPolish:
+    """Verifies the CKA-OPR-01 doc-drift fixes are applied."""
+
+    def test_continuation_snapshot_lists_b11_commit(self):
+        snap = (RELEASE_DIR / "CKA_CONTINUATION_SNAPSHOT.md").read_text(encoding="utf-8")
+        assert "07860eb" in snap, "B11 commit hash missing from continuation snapshot"
+
+    def test_continuation_snapshot_no_stale_head_claim(self):
+        snap = (RELEASE_DIR / "CKA_CONTINUATION_SNAPSHOT.md").read_text(encoding="utf-8")
+        assert "Until that commit is" not in snap, (
+            "Stale 'until that commit is created' wording still present"
+        )
+        assert "HEAD is `27d940e`" not in snap, (
+            "Stale 'HEAD is 27d940e' claim still present"
+        )
+
+    def test_manifest_b11_has_concrete_hash(self):
+        man = (RELEASE_DIR / "CKA_ARCHITECTURE_MANIFEST.md").read_text(encoding="utf-8")
+        assert "(this commit)" not in man
+        assert "07860eb" in man
+
+    def test_operator_guide_mentions_windows_launcher(self):
+        guide = (RELEASE_DIR / "CKA_OPERATOR_GUIDE.md").read_text(encoding="utf-8")
+        assert "Start_MedAI_UI.bat" in guide
+
+    def test_operator_guide_mentions_final_validation_command(self):
+        guide = (RELEASE_DIR / "CKA_OPERATOR_GUIDE.md").read_text(encoding="utf-8")
+        assert "run_cka_final_mvp_release_validation.py" in guide
+
+    def test_operator_guide_states_b01_b10_panel_coverage(self):
+        guide = (RELEASE_DIR / "CKA_OPERATOR_GUIDE.md").read_text(encoding="utf-8")
+        # Either explicit "B01-B10" wording or the path range must appear
+        assert "B01-B10" in guide or "block01" in guide and "block10" in guide

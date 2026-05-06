@@ -16,12 +16,10 @@ picks up the CKA roadmap should read this first.
 
 ## Current HEAD
 
-The CKA-B11 release commit becomes the new HEAD. Until that commit is
-created, HEAD is `27d940e` (CKA-B10).
+`07860eb` — CKA-B11 final clinical knowledge MVP release package.
 
-After CKA-B11 commit, the architecture manifest entry is updated to
-include the new commit hash; this snapshot is the same text, just
-re-anchored to the new HEAD.
+(For reference, the immediately preceding CKA commit was `27d940e`,
+CKA-B10 system preflight and scaffold.)
 
 ---
 
@@ -39,6 +37,7 @@ re-anchored to the new HEAD.
 | CKA-B08 | `65aa131` |
 | CKA-B09 | `ff0adf2` |
 | CKA-B10 | `27d940e` |
+| CKA-B11 | `07860eb` |
 
 Frozen HITL release commit (untouched): `3c0c869`.
 
