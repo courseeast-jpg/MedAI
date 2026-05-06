@@ -1,0 +1,175 @@
+{
+  "block_id": "CKA-SEC-07",
+  "conclusion": "cka_sec07_encrypted_backup_restore_ready",
+  "backup_tool_ready": true,
+  "restore_tool_ready": true,
+  "dry_run_supported": true,
+  "synthetic_backup_restore_passed": true,
+  "correct_key_restore_passed": true,
+  "wrong_key_restore_failed": true,
+  "checksum_verified": true,
+  "plaintext_absence_verified": true,
+  "real_data_touched": false,
+  "real_store_modified": false,
+  "db_file_staged": false,
+  "key_stored_in_repo": false,
+  "encryption_key_logged": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_action": "stop, then consider key rotation plan",
+  "synthetic_cases_run": 12,
+  "cases_passed": 12,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Baseline SEC-05 + final CKA confirmed",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "sec05_pass_marker": true,
+        "b11_pass_marker": true
+      }
+    },
+    {
+      "case": "B",
+      "description": "Synthetic source DB created",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "record_count": 3
+      }
+    },
+    {
+      "case": "C",
+      "description": "Encrypted backup created",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "success": true,
+        "source_safe_hash": "cka_db_f67d7a6a00e0268b",
+        "backup_safe_hash": "cka_db_fb6561672023796e",
+        "source_record_count": 3,
+        "backup_sha256_prefix": "93a3670b423b23cd",
+        "plaintext_absence_verified": true,
+        "manifest_written": true,
+        "overwrite_used": false,
+        "real_data_touched": false,
+        "encryption_key_logged": false,
+        "db_file_staged": false,
+        "blocked_reason": null
+      }
+    },
+    {
+      "case": "D",
+      "description": "Backup checksum verified",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "sha256_match": true,
+        "checksum_length": 16
+      }
+    },
+    {
+      "case": "E",
+      "description": "Restored backup to temp target",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "success": true,
+        "backup_safe_hash": "cka_db_fb6561672023796e",
+        "target_safe_hash": "cka_db_a378547a1fb17b00",
+        "expected_sha256_prefix": "93a3670b423b23cd",
+        "actual_sha256_prefix": "93a3670b423b23cd",
+        "sha256_match": true,
+        "correct_key_read_passed": true,
+        "expected_record_count": 3,
+        "restored_record_count": 3,
+        "record_count_match": true,
+        "plaintext_absence_verified": true,
+        "overwrite_used": false,
+        "real_data_touched": false,
+        "encryption_key_logged": false,
+        "db_file_staged": false,
+        "blocked_reason": null
+      }
+    },
+    {
+      "case": "F",
+      "description": "Correct key opens restored DB",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "correct_key_read_passed": true
+      }
+    },
+    {
+      "case": "G",
+      "description": "Wrong key fails on restored DB",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "wrong_key_failed": true
+      }
+    },
+    {
+      "case": "H",
+      "description": "Restored record count matches",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "expected_record_count": 3,
+        "restored_record_count": 3
+      }
+    },
+    {
+      "case": "I",
+      "description": "Plaintext absent in backup bytes",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "plaintext_absence_verified": true
+      }
+    },
+    {
+      "case": "J",
+      "description": "No DB/key/private files staged",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "real_target_present": false,
+        "no_db_in_security_package": true,
+        "no_db_in_report_dir": true
+      }
+    },
+    {
+      "case": "K",
+      "description": "Final CKA validation invocable",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "subprocess_exit_code": 0,
+        "pass_marker_seen": true
+      }
+    },
+    {
+      "case": "L",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encryption_key_logged": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-06T23:55:29.591175+00:00"
+}

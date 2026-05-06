@@ -89,6 +89,26 @@ from clinical_knowledge.security.runtime_launcher import (
     resolve_key,
     run_self_test,
 )
+from clinical_knowledge.security.backup_manifest import (
+    BackupManifest,
+    file_sha256,
+    file_sha256_prefix,
+    manifest_path_for,
+    read_backup_manifest,
+    safe_db_hash as backup_safe_db_hash,
+    write_backup_manifest,
+)
+from clinical_knowledge.security.encrypted_backup import (
+    BackupResult,
+    EncryptedBackupError,
+    create_encrypted_backup,
+)
+from clinical_knowledge.security.encrypted_restore import (
+    EncryptedRestoreError,
+    RestoreResult,
+    restore_encrypted_backup,
+    verify_restored_wrong_key_fails,
+)
 
 __all__ = [
     # SEC-01
@@ -147,4 +167,19 @@ __all__ = [
     "reject_command_line_key",
     "resolve_key",
     "run_self_test",
+    # SEC-07 — encrypted backup / restore tooling
+    "BackupManifest",
+    "file_sha256",
+    "file_sha256_prefix",
+    "manifest_path_for",
+    "read_backup_manifest",
+    "backup_safe_db_hash",
+    "write_backup_manifest",
+    "BackupResult",
+    "EncryptedBackupError",
+    "create_encrypted_backup",
+    "EncryptedRestoreError",
+    "RestoreResult",
+    "restore_encrypted_backup",
+    "verify_restored_wrong_key_fails",
 ]
