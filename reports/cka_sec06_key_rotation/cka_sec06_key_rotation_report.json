@@ -1,0 +1,175 @@
+{
+  "block_id": "CKA-SEC-06",
+  "conclusion": "cka_sec06_key_rotation_plan_ready",
+  "key_rotation_tool_ready": true,
+  "synthetic_rotation_rehearsal_passed": true,
+  "backup_before_rotation_required": true,
+  "backup_checksum_verified": true,
+  "new_key_open_after_rotation_passed": true,
+  "old_key_rejected_after_rotation": true,
+  "record_count_preserved": true,
+  "rollback_restore_verified": true,
+  "plaintext_absence_verified": true,
+  "command_line_keys_rejected": true,
+  "empty_key_refused": true,
+  "key_mismatch_refused": true,
+  "same_old_new_key_refused": true,
+  "real_rotation_blocked_by_default": true,
+  "real_rotation_performed": false,
+  "real_store_touched": false,
+  "real_data_touched": false,
+  "db_file_staged": false,
+  "key_stored_in_repo": false,
+  "encryption_key_logged": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_action": "stop; key rotation execution on a real store requires separate explicit operator approval",
+  "rotation_summary": {
+    "rotation_performed": true,
+    "source_records_before": 3,
+    "source_records_after": 3,
+    "record_count_preserved": true,
+    "old_key_open_before_passed": true,
+    "new_key_open_after_passed": true,
+    "old_key_rejected_after_rotation": true,
+    "backup_created_before_rotation": true,
+    "backup_checksum_verified": true,
+    "rollback_restore_verified": true,
+    "plaintext_absence_verified": true,
+    "real_store_touched": false,
+    "db_file_staged": false,
+    "key_logged": false,
+    "blocked_reason": null,
+    "source_safe_hash": "cka_db_e166fd01b567d94a",
+    "backup_safe_hash": "cka_db_b797cb15d52370dd",
+    "backup_sha256_prefix": "19e7b519516ddfe7"
+  },
+  "rollback_steps_count": 7,
+  "synthetic_cases_run": 10,
+  "cases_passed": 10,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Baseline SEC-07/SEC-05/final-CKA confirmed",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "all_three_passed": true
+      }
+    },
+    {
+      "case": "B",
+      "description": "CLI rejects key args",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "argvs_tested": 6
+      }
+    },
+    {
+      "case": "C",
+      "description": "Key mismatch refused",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "new_key_confirmation_mismatch"
+      }
+    },
+    {
+      "case": "D",
+      "description": "Empty key refused",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "old_empty_refused": true,
+        "new_empty_refused": true
+      }
+    },
+    {
+      "case": "E",
+      "description": "Same old/new key refused",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "error_marker": "same_old_new_key_refused"
+      }
+    },
+    {
+      "case": "F",
+      "description": "Synthetic rotation rehearsal",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "rotation_performed": true,
+        "source_records_before": 3,
+        "source_records_after": 3,
+        "record_count_preserved": true,
+        "old_key_open_before_passed": true,
+        "new_key_open_after_passed": true,
+        "old_key_rejected_after_rotation": true,
+        "backup_created_before_rotation": true,
+        "backup_checksum_verified": true,
+        "rollback_restore_verified": true,
+        "plaintext_absence_verified": true,
+        "real_store_touched": false,
+        "db_file_staged": false,
+        "key_logged": false,
+        "blocked_reason": null,
+        "source_safe_hash": "cka_db_e166fd01b567d94a",
+        "backup_safe_hash": "cka_db_b797cb15d52370dd",
+        "backup_sha256_prefix": "19e7b519516ddfe7"
+      }
+    },
+    {
+      "case": "G",
+      "description": "Rollback restore verified",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "rollback_restore_verified": true,
+        "source_records_before": 3
+      }
+    },
+    {
+      "case": "H",
+      "description": "Real rotation blocked by default",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "blocked_reason": "real_rotation_not_approved",
+        "sentinel_unchanged": true
+      }
+    },
+    {
+      "case": "I",
+      "description": "No DB/key/private files staged",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "real_target_present": false,
+        "no_db_in_security_package": true,
+        "no_db_in_report_dir": true
+      }
+    },
+    {
+      "case": "J",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "encryption_key_logged": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-07T00:11:07.697776+00:00"
+}

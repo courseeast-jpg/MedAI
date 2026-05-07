@@ -109,6 +109,17 @@ from clinical_knowledge.security.encrypted_restore import (
     restore_encrypted_backup,
     verify_restored_wrong_key_fails,
 )
+from clinical_knowledge.security.key_rotation_plan import (
+    KeyRotationPlan,
+    KeyRotationResult,
+    rollback_steps as key_rotation_rollback_steps,
+    rotation_passed,
+)
+from clinical_knowledge.security.key_rotation import (
+    KeyRotationError,
+    rotate_sqlcipher_key,
+    run_synthetic_rotation_rehearsal,
+)
 
 __all__ = [
     # SEC-01
@@ -182,4 +193,12 @@ __all__ = [
     "RestoreResult",
     "restore_encrypted_backup",
     "verify_restored_wrong_key_fails",
+    # SEC-06 — operator key rotation
+    "KeyRotationPlan",
+    "KeyRotationResult",
+    "key_rotation_rollback_steps",
+    "rotation_passed",
+    "KeyRotationError",
+    "rotate_sqlcipher_key",
+    "run_synthetic_rotation_rehearsal",
 ]
