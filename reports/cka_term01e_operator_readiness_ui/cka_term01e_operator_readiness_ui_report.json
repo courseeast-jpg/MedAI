@@ -1,0 +1,133 @@
+{
+  "block_id": "CKA-TERM-01E",
+  "case_results": [
+    {
+      "case": "A_viewer_imports",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "B_missing_reports_handled",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "C_public_reports_loaded",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "D_no_private_files_read",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "E_no_terminology_data_files_read",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "F_status_summary_correct",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "G_render_helpers_non_empty",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "H_existing_app_ui_imports",
+      "details": {},
+      "passed": true
+    },
+    {
+      "case": "I_final_cka_validation_passes",
+      "details": {
+        "returncode": 0
+      },
+      "passed": true
+    },
+    {
+      "case": "J_privacy_report_clean",
+      "details": {},
+      "passed": true
+    }
+  ],
+  "clinical_recommendations_generated": false,
+  "conclusion": "cka_term01e_operator_readiness_ui_ready",
+  "external_api_used": false,
+  "final_cka_validation": {
+    "passed": true,
+    "returncode": 0
+  },
+  "next_manual_action": "operator downloads licensed files and creates private license ack",
+  "phase_statuses": [
+    {
+      "conclusion": "cka_term01_local_terminology_files_required",
+      "label": "Readiness",
+      "phase": "TERM-01",
+      "report_loaded": true,
+      "status": "ready"
+    },
+    {
+      "conclusion": "cka_term01a_operator_intake_automation_ready",
+      "label": "Intake automation",
+      "phase": "TERM-01A",
+      "report_loaded": true,
+      "status": "ready"
+    },
+    {
+      "conclusion": "cka_term01b_import_planner_ready",
+      "label": "Import planner",
+      "phase": "TERM-01B",
+      "report_loaded": true,
+      "status": "ready"
+    },
+    {
+      "conclusion": "cka_term01c_synthetic_import_executor_ready",
+      "label": "Synthetic import executor",
+      "phase": "TERM-01C",
+      "report_loaded": true,
+      "status": "ready"
+    },
+    {
+      "conclusion": "cka_term01d_terminology_qa_ready",
+      "label": "Golden lookup QA",
+      "phase": "TERM-01D",
+      "report_loaded": true,
+      "status": "ready"
+    }
+  ],
+  "prescription_dosing_advice_generated": false,
+  "privacy_report_clean": true,
+  "private_ack_file_loaded": false,
+  "public_reports_only": true,
+  "raw_paths_displayed": false,
+  "real_import_performed": false,
+  "reports_missing": [],
+  "reports_read": [
+    "TERM-01",
+    "TERM-01A",
+    "TERM-01B",
+    "TERM-01C",
+    "TERM-01D"
+  ],
+  "systems_import_ready": [],
+  "systems_missing": [
+    "loinc",
+    "rxnorm",
+    "snomed_ct",
+    "umls"
+  ],
+  "systems_requiring_private_license_ack": [],
+  "systems_with_files_present": [],
+  "terminology_data_files_read": false,
+  "terminology_readiness_viewer_ready": true,
+  "timestamp": "2026-05-07T16:35:50.471783+00:00",
+  "validation_commands": [
+    "python -m pytest tests/test_cka_term01e_operator_readiness_ui.py",
+    "python scripts/run_cka_term01e_operator_readiness_ui_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ]
+}

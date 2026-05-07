@@ -55,7 +55,14 @@ st.set_page_config(
 )
 
 
-PHASE52_OPERATOR_TABS = ["Current Run", "Blind Audit", "Report Archive", "Review Package", "Clinical Knowledge Safety"]
+PHASE52_OPERATOR_TABS = [
+    "Current Run",
+    "Blind Audit",
+    "Report Archive",
+    "Review Package",
+    "Clinical Knowledge Safety",
+    "Terminology Readiness",
+]
 
 
 def display_content(record: MKBRecord) -> tuple[str, bool]:
@@ -930,7 +937,7 @@ def main() -> None:
         st.caption(f"Connectors: {', '.join(ACTIVE_CONNECTORS)}")
         st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
 
-    tab_current, tab_blind, tab_archive, tab_review, tab_cka = st.tabs(PHASE52_OPERATOR_TABS)
+    tab_current, tab_blind, tab_archive, tab_review, tab_cka, tab_terms = st.tabs(PHASE52_OPERATOR_TABS)
     with tab_current:
         render_current_run_tab(sys_components)
     with tab_blind:
@@ -953,6 +960,13 @@ def main() -> None:
             render_clinical_knowledge_safety_dashboard(_cka_snapshot)
         except Exception as _exc:
             st.error(f"Clinical Knowledge Safety panel unavailable: {_exc}")
+    with tab_terms:
+        try:
+            from app.terminology_readiness_viewer import render_terminology_readiness_panel
+
+            render_terminology_readiness_panel()
+        except Exception as _exc:
+            st.error(f"Terminology Readiness panel unavailable: {_exc}")
 
     st.divider()
     st.caption(PRIVACY_INVARIANT_GUIDANCE)
