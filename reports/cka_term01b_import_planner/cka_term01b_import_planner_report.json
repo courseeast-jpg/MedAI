@@ -1,0 +1,204 @@
+{
+  "block_id": "CKA-TERM-01B",
+  "conclusion": "cka_term01b_import_planner_ready",
+  "dry_run_planner_ready": true,
+  "import_limits_ready": true,
+  "checkpoint_model_ready": true,
+  "chunking_plan_ready": true,
+  "row_caps_ready": true,
+  "synthetic_large_fixture_dry_run_passed": true,
+  "no_real_import_performed": true,
+  "real_terminology_files_committed": false,
+  "terminology_data_staged": false,
+  "license_gate_bypassed": false,
+  "external_api_used": false,
+  "external_terminology_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "license_text_written_to_public_reports": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_manual_action": "operator downloads licensed files and creates private license ack",
+  "next_code_action_after_manual_files": "CKA-TERM-02 controlled local terminology import",
+  "case_results": [
+    {
+      "case": "A",
+      "description": "No files plan",
+      "passed": true,
+      "details": {
+        "plan_id": "term_plan_ebf0bead4c28",
+        "systems_seen": [],
+        "systems_import_ready": [],
+        "systems_blocked_license": [],
+        "systems_missing": [
+          "umls",
+          "snomed_ct",
+          "rxnorm",
+          "loinc"
+        ],
+        "estimated_files": 0,
+        "estimated_rows_safe": 0,
+        "estimated_chunks": 0,
+        "row_caps_applied": {
+          "umls": false,
+          "snomed_ct": false,
+          "rxnorm": false,
+          "loinc": false
+        },
+        "import_allowed": false,
+        "dry_run": true,
+        "real_files_imported": false
+      }
+    },
+    {
+      "case": "B",
+      "description": "Files without ack blocked",
+      "passed": true,
+      "details": {
+        "plan_id": "term_plan_118700867693",
+        "systems_seen": [
+          "umls"
+        ],
+        "systems_import_ready": [],
+        "systems_blocked_license": [
+          "umls"
+        ],
+        "systems_missing": [
+          "snomed_ct",
+          "rxnorm",
+          "loinc"
+        ],
+        "estimated_files": 1,
+        "estimated_rows_safe": 250000,
+        "estimated_chunks": 25,
+        "row_caps_applied": {
+          "umls": false,
+          "snomed_ct": false,
+          "rxnorm": false,
+          "loinc": false
+        },
+        "import_allowed": false,
+        "dry_run": true,
+        "real_files_imported": false
+      }
+    },
+    {
+      "case": "C",
+      "description": "Files with test ack ready",
+      "passed": true,
+      "details": {
+        "plan_id": "term_plan_4ce7548d9a96",
+        "systems_seen": [
+          "rxnorm"
+        ],
+        "systems_import_ready": [
+          "rxnorm"
+        ],
+        "systems_blocked_license": [],
+        "systems_missing": [
+          "umls",
+          "snomed_ct",
+          "loinc"
+        ],
+        "estimated_files": 1,
+        "estimated_rows_safe": 250000,
+        "estimated_chunks": 25,
+        "row_caps_applied": {
+          "umls": false,
+          "snomed_ct": false,
+          "rxnorm": false,
+          "loinc": false
+        },
+        "import_allowed": false,
+        "dry_run": true,
+        "real_files_imported": false
+      }
+    },
+    {
+      "case": "D",
+      "description": "Row caps and chunking",
+      "passed": true,
+      "details": {
+        "plan_id": "term_plan_8c3de5b49c30",
+        "systems_seen": [
+          "snomed_ct"
+        ],
+        "systems_import_ready": [
+          "snomed_ct"
+        ],
+        "systems_blocked_license": [],
+        "systems_missing": [
+          "umls",
+          "rxnorm",
+          "loinc"
+        ],
+        "estimated_files": 2,
+        "estimated_rows_safe": 1500,
+        "estimated_chunks": 4,
+        "row_caps_applied": {
+          "umls": false,
+          "snomed_ct": true,
+          "rxnorm": false,
+          "loinc": false
+        },
+        "import_allowed": false,
+        "dry_run": true,
+        "real_files_imported": false
+      }
+    },
+    {
+      "case": "E",
+      "description": "Checkpoint resume model",
+      "passed": true,
+      "details": {
+        "checkpoint_id": "term_ckpt_c8ccbb90fa28",
+        "system": "loinc",
+        "source_safe_id": "source_safe_001",
+        "file_safe_id": "file_safe_001",
+        "rows_seen": 150,
+        "rows_imported": 125,
+        "chunk_index": 3,
+        "completed": false,
+        "failed": false
+      }
+    },
+    {
+      "case": "F",
+      "description": "CLI no import no index",
+      "passed": true,
+      "details": {
+        "message": "systems needing acknowledgment: loinc",
+        "real_files_imported": false,
+        "production_index_created": false
+      }
+    },
+    {
+      "case": "G",
+      "description": "Git boundary",
+      "passed": true,
+      "details": {
+        "terminology_data_staged": false
+      }
+    },
+    {
+      "case": "H",
+      "description": "Report safety",
+      "passed": true,
+      "details": {
+        "privacy_checker_passed": true,
+        "raw_phi_logged_in_public_reports": false,
+        "private_filename_path_leaks": 0,
+        "secret_leaks": 0
+      }
+    }
+  ],
+  "synthetic_cases_run": 8,
+  "cases_passed": 8,
+  "all_passed": true,
+  "generated_at": "2026-05-07T14:00:15.590108+00:00"
+}

@@ -72,6 +72,21 @@ from clinical_knowledge.terminology.intake_automation import (
     prepare_intake_folders,
     safe_extract_zip,
 )
+from clinical_knowledge.terminology.import_limits import (
+    TerminologyImportLimits,
+    build_import_limits,
+)
+from clinical_knowledge.terminology.import_checkpoint import (
+    TerminologyImportCheckpoint,
+    simulate_checkpoint_resume,
+)
+from clinical_knowledge.terminology.import_planner import (
+    TerminologyImportPlan,
+    plan_terminology_import,
+)
+from clinical_knowledge.terminology.import_dry_run import (
+    run_terminology_import_dry_run,
+)
 
 
 __all__ = [
@@ -117,4 +132,12 @@ __all__ = [
     "optional_local_scan",
     "prepare_intake_folders",
     "safe_extract_zip",
+    # TERM-01B dry-run import planner
+    "TerminologyImportLimits",
+    "build_import_limits",
+    "TerminologyImportCheckpoint",
+    "simulate_checkpoint_resume",
+    "TerminologyImportPlan",
+    "plan_terminology_import",
+    "run_terminology_import_dry_run",
 ]
