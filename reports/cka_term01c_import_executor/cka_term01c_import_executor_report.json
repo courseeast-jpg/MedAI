@@ -1,0 +1,396 @@
+{
+  "block_id": "CKA-TERM-01C",
+  "conclusion": "cka_term01c_synthetic_import_executor_ready",
+  "synthetic_transactional_import_passed": true,
+  "rollback_on_failure_passed": true,
+  "row_caps_enforced": true,
+  "checkpoint_simulation_ready": true,
+  "real_import_performed": false,
+  "real_terminology_files_committed": false,
+  "terminology_data_staged": false,
+  "external_api_used": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "coding_does_not_promote_hypothesis": true,
+  "coding_does_not_clear_ddi_status": true,
+  "no_code_hallucinated": true,
+  "next_manual_action": "operator downloads licensed files and creates private license ack",
+  "next_code_action_after_manual_files": "CKA-TERM-02 controlled local terminology import",
+  "case_results": [
+    {
+      "case": "A",
+      "description": "TERM-01B baseline validation",
+      "passed": true,
+      "details": {
+        "passed": true
+      }
+    },
+    {
+      "case": "B",
+      "description": "Synthetic UMLS transactional import",
+      "passed": true,
+      "details": {
+        "audit": {
+          "audit_id": "term_audit_f3c152d31052",
+          "system": "umls",
+          "source_safe_id": "term_src_safe_umls",
+          "records_seen": 3,
+          "records_imported": 2,
+          "records_skipped": 0,
+          "chunks_processed": 1,
+          "checkpoint_count": 1,
+          "rollback_performed": false,
+          "import_completed": true,
+          "import_mode": "execute_synthetic",
+          "warnings": []
+        },
+        "checkpoints": [
+          {
+            "checkpoint_id": "term_ckpt_9e5d3d8a4c66",
+            "system": "umls",
+            "source_safe_id": "term_src_safe_umls",
+            "file_safe_id": "term_file_safe_0001",
+            "rows_seen": 3,
+            "rows_imported": 2,
+            "chunk_index": 0,
+            "completed": true,
+            "failed": false
+          }
+        ],
+        "store_summary": {
+          "in_memory": true,
+          "sources_count": 1,
+          "concepts_count": 2,
+          "synonyms_count": 1,
+          "import_events_count": 1
+        },
+        "real_import_performed": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "C",
+      "description": "Synthetic SNOMED transactional import",
+      "passed": true,
+      "details": {
+        "audit": {
+          "audit_id": "term_audit_efc204c4f746",
+          "system": "snomed_ct",
+          "source_safe_id": "term_src_safe_snomed",
+          "records_seen": 5,
+          "records_imported": 2,
+          "records_skipped": 0,
+          "chunks_processed": 1,
+          "checkpoint_count": 1,
+          "rollback_performed": false,
+          "import_completed": true,
+          "import_mode": "execute_synthetic",
+          "warnings": []
+        },
+        "checkpoints": [
+          {
+            "checkpoint_id": "term_ckpt_6d96e964d10b",
+            "system": "snomed_ct",
+            "source_safe_id": "term_src_safe_snomed",
+            "file_safe_id": "term_file_safe_0001",
+            "rows_seen": 5,
+            "rows_imported": 2,
+            "chunk_index": 0,
+            "completed": true,
+            "failed": false
+          }
+        ],
+        "store_summary": {
+          "in_memory": true,
+          "sources_count": 1,
+          "concepts_count": 2,
+          "synonyms_count": 1,
+          "import_events_count": 1
+        },
+        "real_import_performed": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "D",
+      "description": "Synthetic RxNorm transactional import",
+      "passed": true,
+      "details": {
+        "audit": {
+          "audit_id": "term_audit_806672a8c203",
+          "system": "rxnorm",
+          "source_safe_id": "term_src_safe_rxnorm",
+          "records_seen": 2,
+          "records_imported": 2,
+          "records_skipped": 0,
+          "chunks_processed": 1,
+          "checkpoint_count": 1,
+          "rollback_performed": false,
+          "import_completed": true,
+          "import_mode": "execute_synthetic",
+          "warnings": []
+        },
+        "checkpoints": [
+          {
+            "checkpoint_id": "term_ckpt_c519f605afe7",
+            "system": "rxnorm",
+            "source_safe_id": "term_src_safe_rxnorm",
+            "file_safe_id": "term_file_safe_0001",
+            "rows_seen": 2,
+            "rows_imported": 2,
+            "chunk_index": 0,
+            "completed": true,
+            "failed": false
+          }
+        ],
+        "store_summary": {
+          "in_memory": true,
+          "sources_count": 1,
+          "concepts_count": 2,
+          "synonyms_count": 0,
+          "import_events_count": 1
+        },
+        "real_import_performed": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "E",
+      "description": "Synthetic LOINC transactional import",
+      "passed": true,
+      "details": {
+        "audit": {
+          "audit_id": "term_audit_274b8cdfa784",
+          "system": "loinc",
+          "source_safe_id": "term_src_safe_loinc",
+          "records_seen": 2,
+          "records_imported": 2,
+          "records_skipped": 0,
+          "chunks_processed": 1,
+          "checkpoint_count": 1,
+          "rollback_performed": false,
+          "import_completed": true,
+          "import_mode": "execute_synthetic",
+          "warnings": []
+        },
+        "checkpoints": [
+          {
+            "checkpoint_id": "term_ckpt_2f268bc1af90",
+            "system": "loinc",
+            "source_safe_id": "term_src_safe_loinc",
+            "file_safe_id": "term_file_safe_0001",
+            "rows_seen": 2,
+            "rows_imported": 2,
+            "chunk_index": 0,
+            "completed": true,
+            "failed": false
+          }
+        ],
+        "store_summary": {
+          "in_memory": true,
+          "sources_count": 1,
+          "concepts_count": 2,
+          "synonyms_count": 0,
+          "import_events_count": 1
+        },
+        "real_import_performed": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "F",
+      "description": "Row cap stops import safely",
+      "passed": true,
+      "details": {
+        "audit": {
+          "audit_id": "term_audit_0b0de64c0a1e",
+          "system": "loinc",
+          "source_safe_id": "term_src_safe_loinc",
+          "records_seen": 2,
+          "records_imported": 1,
+          "records_skipped": 1,
+          "chunks_processed": 1,
+          "checkpoint_count": 2,
+          "rollback_performed": false,
+          "import_completed": true,
+          "import_mode": "execute_synthetic",
+          "warnings": []
+        },
+        "checkpoints": [
+          {
+            "checkpoint_id": "term_ckpt_09e368367ae9",
+            "system": "loinc",
+            "source_safe_id": "term_src_safe_loinc",
+            "file_safe_id": "term_file_safe_0001",
+            "rows_seen": 1,
+            "rows_imported": 1,
+            "chunk_index": 0,
+            "completed": false,
+            "failed": false
+          },
+          {
+            "checkpoint_id": "term_ckpt_fcd98bc80e25",
+            "system": "loinc",
+            "source_safe_id": "term_src_safe_loinc",
+            "file_safe_id": "term_file_safe_0002",
+            "rows_seen": 2,
+            "rows_imported": 1,
+            "chunk_index": 1,
+            "completed": true,
+            "failed": false
+          }
+        ],
+        "store_summary": {
+          "in_memory": true,
+          "sources_count": 1,
+          "concepts_count": 1,
+          "synonyms_count": 0,
+          "import_events_count": 1
+        },
+        "real_import_performed": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "G",
+      "description": "Simulated failure rolls back",
+      "passed": true,
+      "details": {
+        "audit": {
+          "audit_id": "term_audit_437296ff9413",
+          "system": "rxnorm",
+          "source_safe_id": "term_src_safe_rxnorm",
+          "records_seen": 2,
+          "records_imported": 0,
+          "records_skipped": 0,
+          "chunks_processed": 1,
+          "checkpoint_count": 1,
+          "rollback_performed": true,
+          "import_completed": false,
+          "import_mode": "execute_synthetic",
+          "warnings": []
+        },
+        "checkpoints": [
+          {
+            "checkpoint_id": "term_ckpt_4ff2ade0b140",
+            "system": "rxnorm",
+            "source_safe_id": "term_src_safe_rxnorm",
+            "file_safe_id": "term_file_safe_0001",
+            "rows_seen": 2,
+            "rows_imported": 2,
+            "chunk_index": 0,
+            "completed": true,
+            "failed": false
+          }
+        ],
+        "store_summary": {
+          "in_memory": true,
+          "sources_count": 0,
+          "concepts_count": 0,
+          "synonyms_count": 0,
+          "import_events_count": 0
+        },
+        "real_import_performed": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "H",
+      "description": "Checkpoint simulation records progress",
+      "passed": true,
+      "details": {
+        "audit": {
+          "audit_id": "term_audit_082913284083",
+          "system": "umls",
+          "source_safe_id": "term_src_safe_umls",
+          "records_seen": 3,
+          "records_imported": 2,
+          "records_skipped": 0,
+          "chunks_processed": 2,
+          "checkpoint_count": 3,
+          "rollback_performed": false,
+          "import_completed": true,
+          "import_mode": "execute_synthetic",
+          "warnings": []
+        },
+        "checkpoints": [
+          {
+            "checkpoint_id": "term_ckpt_21168d03c69e",
+            "system": "umls",
+            "source_safe_id": "term_src_safe_umls",
+            "file_safe_id": "term_file_safe_0001",
+            "rows_seen": 1,
+            "rows_imported": 1,
+            "chunk_index": 0,
+            "completed": false,
+            "failed": false
+          },
+          {
+            "checkpoint_id": "term_ckpt_56e263151dc8",
+            "system": "umls",
+            "source_safe_id": "term_src_safe_umls",
+            "file_safe_id": "term_file_safe_0002",
+            "rows_seen": 2,
+            "rows_imported": 2,
+            "chunk_index": 1,
+            "completed": false,
+            "failed": false
+          },
+          {
+            "checkpoint_id": "term_ckpt_92227c42dfed",
+            "system": "umls",
+            "source_safe_id": "term_src_safe_umls",
+            "file_safe_id": "term_file_safe_0003",
+            "rows_seen": 3,
+            "rows_imported": 2,
+            "chunk_index": 2,
+            "completed": true,
+            "failed": false
+          }
+        ],
+        "store_summary": {
+          "in_memory": true,
+          "sources_count": 1,
+          "concepts_count": 2,
+          "synonyms_count": 1,
+          "import_events_count": 1
+        },
+        "real_import_performed": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "I",
+      "description": "Real import blocked by default",
+      "passed": true,
+      "details": {
+        "real_import_performed": false
+      }
+    },
+    {
+      "case": "J",
+      "description": "B07 boundary unchanged",
+      "passed": true,
+      "details": {
+        "default_b07_behavior_unchanged": true,
+        "coding_promotes_hypothesis": false,
+        "coding_clears_ddi_status": false,
+        "no_code_hallucinated": true,
+        "unknown_terms_unmapped": true,
+        "synthetic_mapper_still_present": true
+      }
+    },
+    {
+      "case": "K",
+      "description": "Report privacy clean",
+      "passed": true,
+      "details": {
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "synthetic_cases_run": 11,
+  "cases_passed": 11,
+  "all_passed": true,
+  "generated_at": "2026-05-07T15:07:54.012845+00:00"
+}

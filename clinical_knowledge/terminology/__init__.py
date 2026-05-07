@@ -87,6 +87,17 @@ from clinical_knowledge.terminology.import_planner import (
 from clinical_knowledge.terminology.import_dry_run import (
     run_terminology_import_dry_run,
 )
+from clinical_knowledge.terminology.import_audit import (
+    TerminologyImportAuditSummary,
+)
+from clinical_knowledge.terminology.import_transaction import (
+    TerminologyImportTransaction,
+)
+from clinical_knowledge.terminology.import_executor import (
+    RealTerminologyImportBlocked,
+    TerminologyImportExecutionResult,
+    TerminologyImportExecutor,
+)
 
 
 __all__ = [
@@ -140,4 +151,10 @@ __all__ = [
     "TerminologyImportPlan",
     "plan_terminology_import",
     "run_terminology_import_dry_run",
+    # TERM-01C synthetic import executor scaffold
+    "TerminologyImportAuditSummary",
+    "TerminologyImportTransaction",
+    "RealTerminologyImportBlocked",
+    "TerminologyImportExecutionResult",
+    "TerminologyImportExecutor",
 ]
