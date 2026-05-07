@@ -125,6 +125,22 @@ from clinical_knowledge.terminology.term02_preflight_gate import (
     Term02PreflightResult,
     run_term02_preflight_gate,
 )
+from clinical_knowledge.terminology.import_scale import (
+    SyntheticScaleFixture,
+    build_scale_fixtures,
+    generate_synthetic_loinc_csv,
+    generate_synthetic_rxnorm_rrf,
+    generate_synthetic_snomed_rf2,
+    generate_synthetic_umls_rrf,
+    parse_scale_fixture,
+)
+from clinical_knowledge.terminology.import_resume import (
+    ScaleResumeMetrics,
+    simulate_chunked_import_with_resume,
+)
+from clinical_knowledge.terminology.import_performance import (
+    elapsed_seconds_safe_bucket,
+)
 
 
 __all__ = [
@@ -201,4 +217,15 @@ __all__ = [
     "run_synthetic_intake_rehearsal",
     "Term02PreflightResult",
     "run_term02_preflight_gate",
+    # TERM-01G synthetic scale and resume harness
+    "SyntheticScaleFixture",
+    "build_scale_fixtures",
+    "generate_synthetic_loinc_csv",
+    "generate_synthetic_rxnorm_rrf",
+    "generate_synthetic_snomed_rf2",
+    "generate_synthetic_umls_rrf",
+    "parse_scale_fixture",
+    "ScaleResumeMetrics",
+    "simulate_chunked_import_with_resume",
+    "elapsed_seconds_safe_bucket",
 ]

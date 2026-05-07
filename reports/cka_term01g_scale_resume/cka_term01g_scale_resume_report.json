@@ -1,0 +1,127 @@
+{
+  "baseline_validations": {
+    "TERM-01B": {
+      "passed": true,
+      "returncode": 0
+    },
+    "TERM-01C": {
+      "passed": true,
+      "returncode": 0
+    },
+    "TERM-01D": {
+      "passed": true,
+      "returncode": 0
+    },
+    "TERM-01E": {
+      "passed": true,
+      "returncode": 0
+    }
+  },
+  "block_id": "CKA-TERM-01G",
+  "checkpoint_resume_verified": true,
+  "chunking_verified": true,
+  "clinical_recommendations_generated": false,
+  "conclusion": "cka_term01g_scale_resume_ready",
+  "data_terminology_staged": false,
+  "duplicate_prevention_verified": true,
+  "external_api_used": false,
+  "external_terminology_api_used": false,
+  "fixture_summaries": [
+    {
+      "file_count": 1,
+      "row_count": 120,
+      "safe_fixture_id": "scale_umls",
+      "system": "umls"
+    },
+    {
+      "file_count": 1,
+      "row_count": 120,
+      "safe_fixture_id": "scale_rxnorm",
+      "system": "rxnorm"
+    },
+    {
+      "file_count": 2,
+      "row_count": 120,
+      "safe_fixture_id": "scale_snomed",
+      "system": "snomed_ct"
+    },
+    {
+      "file_count": 1,
+      "row_count": 120,
+      "safe_fixture_id": "scale_loinc",
+      "system": "loinc"
+    }
+  ],
+  "next_code_action_after_manual_files": "CKA-TERM-02 controlled local terminology import",
+  "next_manual_action": "operator downloads licensed terminology files and creates private LICENSE_ACK_PRIVATE.json",
+  "no_real_terminology_files_used": true,
+  "no_real_terminology_import_performed": true,
+  "passed": true,
+  "performance_metrics": [
+    {
+      "checkpoints_written": 5,
+      "chunking_verified": true,
+      "chunks_processed": 5,
+      "duplicate_prevention_passed": true,
+      "elapsed_seconds_safe_bucket": "lt_250ms",
+      "resume_performed": true,
+      "row_cap_enforced": true,
+      "rows_imported": 50,
+      "rows_seen": 50,
+      "streaming_parser_guard_passed": true,
+      "system": "umls",
+      "warnings": []
+    },
+    {
+      "checkpoints_written": 5,
+      "chunking_verified": true,
+      "chunks_processed": 5,
+      "duplicate_prevention_passed": true,
+      "elapsed_seconds_safe_bucket": "lt_250ms",
+      "resume_performed": true,
+      "row_cap_enforced": true,
+      "rows_imported": 50,
+      "rows_seen": 50,
+      "streaming_parser_guard_passed": true,
+      "system": "rxnorm",
+      "warnings": []
+    },
+    {
+      "checkpoints_written": 5,
+      "chunking_verified": true,
+      "chunks_processed": 5,
+      "duplicate_prevention_passed": true,
+      "elapsed_seconds_safe_bucket": "lt_250ms",
+      "resume_performed": true,
+      "row_cap_enforced": true,
+      "rows_imported": 50,
+      "rows_seen": 100,
+      "streaming_parser_guard_passed": true,
+      "system": "snomed_ct",
+      "warnings": []
+    },
+    {
+      "checkpoints_written": 5,
+      "chunking_verified": true,
+      "chunks_processed": 5,
+      "duplicate_prevention_passed": true,
+      "elapsed_seconds_safe_bucket": "lt_250ms",
+      "resume_performed": true,
+      "row_cap_enforced": true,
+      "rows_imported": 50,
+      "rows_seen": 50,
+      "streaming_parser_guard_passed": true,
+      "system": "loinc",
+      "warnings": []
+    }
+  ],
+  "prescription_dosing_advice_generated": false,
+  "private_filename_path_leaks": 0,
+  "raw_phi_logged_in_public_reports": false,
+  "row_cap_enforced": true,
+  "secret_leaks": 0,
+  "streaming_parser_guard_ready": true,
+  "synthetic_scale_fixtures_ready": true,
+  "terminology_data_staged": false,
+  "timestamp": "2026-05-07T19:52:06.744569+00:00"
+}
