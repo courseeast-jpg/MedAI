@@ -1,0 +1,263 @@
+{
+  "block_id": "CKA-TERM-01D",
+  "conclusion": "cka_term01d_terminology_qa_ready",
+  "synthetic_golden_cases_ready": true,
+  "exact_match_validation_ready": true,
+  "synonym_match_validation_ready": true,
+  "ambiguity_validation_ready": true,
+  "unmapped_no_hallucination_ready": true,
+  "b07_boundary_preserved": true,
+  "real_terminology_imported": false,
+  "external_api_used": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "next_manual_action": "operator downloads licensed terminology files",
+  "next_code_action_after_manual_files": "CKA-TERM-02 controlled local terminology import",
+  "qa_summary": {
+    "metrics": {
+      "total_cases": 7,
+      "passed_cases": 7,
+      "failed_cases": 0,
+      "exact_match_passed": true,
+      "synonym_match_passed": true,
+      "ambiguous_flag_passed": true,
+      "unmapped_no_hallucination_passed": true,
+      "b07_boundary_passed": true,
+      "external_api_used": false,
+      "real_terminology_imported": false,
+      "failed_case_ids": []
+    },
+    "case_results": [
+      {
+        "case_id": "exact_umls_hypertension",
+        "passed": true,
+        "expected_status": "exact",
+        "actual_status": "exact",
+        "expected_codes_count": 1,
+        "actual_codes_count": 1,
+        "no_code_hallucinated": true,
+        "tags": [
+          "exact_match",
+          "umls"
+        ]
+      },
+      {
+        "case_id": "synonym_umls_high_bp",
+        "passed": true,
+        "expected_status": "synonym",
+        "actual_status": "synonym",
+        "expected_codes_count": 1,
+        "actual_codes_count": 1,
+        "no_code_hallucinated": true,
+        "tags": [
+          "synonym_match",
+          "umls"
+        ]
+      },
+      {
+        "case_id": "ambiguous_aspirin_cross_system",
+        "passed": true,
+        "expected_status": "ambiguous",
+        "actual_status": "ambiguous",
+        "expected_codes_count": 2,
+        "actual_codes_count": 2,
+        "no_code_hallucinated": true,
+        "tags": [
+          "ambiguous_match",
+          "multi_system_duplicate"
+        ]
+      },
+      {
+        "case_id": "unmapped_unknown_no_code",
+        "passed": true,
+        "expected_status": "unmapped",
+        "actual_status": "unmapped",
+        "expected_codes_count": 0,
+        "actual_codes_count": 0,
+        "no_code_hallucinated": true,
+        "tags": [
+          "unmapped_term"
+        ]
+      },
+      {
+        "case_id": "duplicate_term_multi_system",
+        "passed": true,
+        "expected_status": "ambiguous",
+        "actual_status": "ambiguous",
+        "expected_codes_count": 2,
+        "actual_codes_count": 2,
+        "no_code_hallucinated": true,
+        "tags": [
+          "multi_system_duplicate",
+          "ambiguous_match"
+        ]
+      },
+      {
+        "case_id": "malformed_code_skipped",
+        "passed": true,
+        "expected_status": "unmapped",
+        "actual_status": "unmapped",
+        "expected_codes_count": 0,
+        "actual_codes_count": 0,
+        "no_code_hallucinated": true,
+        "tags": [
+          "malformed_code_skipped",
+          "unmapped_term"
+        ]
+      },
+      {
+        "case_id": "inactive_concept_excluded",
+        "passed": true,
+        "expected_status": "unmapped",
+        "actual_status": "unmapped",
+        "expected_codes_count": 0,
+        "actual_codes_count": 0,
+        "no_code_hallucinated": true,
+        "tags": [
+          "inactive_concept_excluded",
+          "unmapped_term"
+        ]
+      }
+    ],
+    "fixture_metadata": {
+      "systems_loaded": [
+        "umls",
+        "snomed_ct",
+        "rxnorm",
+        "loinc"
+      ],
+      "concepts_loaded": 7,
+      "malformed_codes_skipped": 1,
+      "inactive_concepts_loaded": 1,
+      "real_terminology_imported": false,
+      "external_api_used": false
+    },
+    "b07_boundary": {
+      "default_b07_behavior_unchanged": true,
+      "coding_promotes_hypothesis": false,
+      "coding_clears_ddi_status": false,
+      "no_code_hallucinated": true,
+      "unknown_terms_unmapped": true,
+      "synthetic_mapper_still_present": true
+    }
+  },
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Synthetic QA fixtures load",
+      "passed": true,
+      "details": {
+        "systems_loaded": [
+          "umls",
+          "snomed_ct",
+          "rxnorm",
+          "loinc"
+        ],
+        "concepts_loaded": 7,
+        "malformed_codes_skipped": 1,
+        "inactive_concepts_loaded": 1,
+        "real_terminology_imported": false,
+        "external_api_used": false
+      }
+    },
+    {
+      "case": "B",
+      "description": "Exact match passes",
+      "passed": true,
+      "details": {
+        "exact_match_passed": true
+      }
+    },
+    {
+      "case": "C",
+      "description": "Synonym match passes",
+      "passed": true,
+      "details": {
+        "synonym_match_passed": true
+      }
+    },
+    {
+      "case": "D",
+      "description": "Ambiguous term is flagged",
+      "passed": true,
+      "details": {
+        "ambiguous_flag_passed": true
+      }
+    },
+    {
+      "case": "E",
+      "description": "Unknown term is unmapped",
+      "passed": true,
+      "details": {
+        "unmapped_no_hallucination_passed": true
+      }
+    },
+    {
+      "case": "F",
+      "description": "No hallucinated code",
+      "passed": true,
+      "details": {
+        "unmapped_no_hallucination_passed": true
+      }
+    },
+    {
+      "case": "G",
+      "description": "B07 opt-in helper preserves boundary",
+      "passed": true,
+      "details": {
+        "b07_boundary_passed": true
+      }
+    },
+    {
+      "case": "H",
+      "description": "No external API",
+      "passed": true,
+      "details": {
+        "external_api_used": false,
+        "real_terminology_imported": false
+      }
+    },
+    {
+      "case": "I",
+      "description": "Privacy report clean",
+      "passed": true,
+      "details": {
+        "privacy_checker_passed": true
+      }
+    },
+    {
+      "case": "J",
+      "description": "TERM-01/01A/01B validations still pass",
+      "passed": true,
+      "details": {
+        "outcomes": [
+          {
+            "script": "run_cka_term01b_import_planner_validation.py",
+            "returncode": 0
+          },
+          {
+            "script": "run_cka_term01a_intake_automation_validation.py",
+            "returncode": 0
+          },
+          {
+            "script": "run_cka_term01_real_terminology_readiness_validation.py",
+            "returncode": 0
+          }
+        ]
+      }
+    },
+    {
+      "case": "K",
+      "description": "Final CKA validation still passes",
+      "passed": true,
+      "details": {
+        "script": "run_cka_final_mvp_release_validation.py",
+        "returncode": 0
+      }
+    }
+  ],
+  "validation_cases_run": 11,
+  "validation_cases_passed": 11,
+  "all_passed": true,
+  "generated_at": "2026-05-07T15:50:10.399847+00:00"
+}

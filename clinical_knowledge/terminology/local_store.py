@@ -235,7 +235,11 @@ class LocalTerminologyStore:
         sys_filter = [s.value for s in (systems or [])]
         out: List[TerminologyConcept] = []
         with self._conn() as con:
-            where = "(c.display_norm = ? OR c.concept_id IN (SELECT concept_id FROM terminology_synonyms WHERE synonym_norm = ?))"
+            where = (
+                "c.active = 1 AND "
+                "(c.display_norm = ? OR c.concept_id IN "
+                "(SELECT concept_id FROM terminology_synonyms WHERE synonym_norm = ?))"
+            )
             params: List = [norm, norm]
             if sys_filter:
                 placeholders = ",".join("?" * len(sys_filter))

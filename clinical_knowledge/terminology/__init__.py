@@ -98,6 +98,19 @@ from clinical_knowledge.terminology.import_executor import (
     TerminologyImportExecutionResult,
     TerminologyImportExecutor,
 )
+from clinical_knowledge.terminology.qa_golden import (
+    TerminologyGoldenCase,
+    build_synthetic_qa_store,
+    synthetic_golden_cases,
+)
+from clinical_knowledge.terminology.qa_metrics import (
+    TerminologyQAMetrics,
+)
+from clinical_knowledge.terminology.qa_runner import (
+    TerminologyQACaseResult,
+    TerminologyQAReport,
+    run_synthetic_terminology_qa,
+)
 
 
 __all__ = [
@@ -157,4 +170,12 @@ __all__ = [
     "RealTerminologyImportBlocked",
     "TerminologyImportExecutionResult",
     "TerminologyImportExecutor",
+    # TERM-01D terminology QA golden lookup harness
+    "TerminologyGoldenCase",
+    "build_synthetic_qa_store",
+    "synthetic_golden_cases",
+    "TerminologyQAMetrics",
+    "TerminologyQACaseResult",
+    "TerminologyQAReport",
+    "run_synthetic_terminology_qa",
 ]
