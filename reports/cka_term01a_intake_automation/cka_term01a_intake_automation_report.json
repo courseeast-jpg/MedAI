@@ -1,0 +1,213 @@
+{
+  "block_id": "CKA-TERM-01A",
+  "conclusion": "cka_term01a_operator_intake_automation_ready",
+  "folders_prepared": true,
+  "ack_template_ready": true,
+  "real_ack_created": false,
+  "file_classifier_ready": true,
+  "zip_slip_protection_ready": true,
+  "inventory_runner_ready": true,
+  "local_scan_default_off": true,
+  "real_terminology_downloaded": false,
+  "real_terminology_imported": false,
+  "real_terminology_files_committed": false,
+  "license_gate_bypassed": false,
+  "external_api_used": false,
+  "external_terminology_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "license_text_written_to_public_reports": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_manual_action": "operator downloads licensed files and creates private license ack",
+  "next_code_action_after_manual_files": "CKA-TERM-02 controlled local terminology import",
+  "synthetic_cases_run": 12,
+  "cases_passed": 12,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Folder preparation",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "root_present": true,
+        "root_safe_hash": "term_root_fbea56c716ca3466",
+        "subdirs_created": [
+          "loinc",
+          "rxnorm",
+          "umls",
+          "snomed_ct"
+        ],
+        "subdirs_already_present": [],
+        "template": {
+          "template_created": true,
+          "template_already_present": false,
+          "real_ack_present": false,
+          "real_ack_created": false
+        }
+      }
+    },
+    {
+      "case": "B",
+      "description": "Template no real ack",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "template_ack_flag_is_false": true,
+        "template_ack_systems_is_empty_list": true,
+        "template_has_notes_field": true
+      }
+    },
+    {
+      "case": "C",
+      "description": "Classifier LOINC/RxNorm/UMLS/SNOMED",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "checked": 13
+      }
+    },
+    {
+      "case": "D",
+      "description": "Classifier unknown",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "unknown_inputs_tested": 5
+      }
+    },
+    {
+      "case": "E",
+      "description": "No raw path in summary",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "counts_by_system": {
+          "umls": 1,
+          "loinc": 1,
+          "rxnorm": 1
+        },
+        "zip_counts_by_system": {},
+        "unknown_count": 0,
+        "total": 3
+      }
+    },
+    {
+      "case": "F",
+      "description": "Scan default off",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "scanned": false,
+        "scan_root_safe_hash": null,
+        "files_seen": 0,
+        "summary": {
+          "counts_by_system": {},
+          "zip_counts_by_system": {},
+          "unknown_count": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "case": "G",
+      "description": "Scan bounded",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "top_level_count": 1,
+        "recursive_count": 2
+      }
+    },
+    {
+      "case": "H",
+      "description": "Copy requires approval",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "off_files_copied": 0,
+        "on_files_copied": 1
+      }
+    },
+    {
+      "case": "I",
+      "description": "Zip-slip blocked",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "extract_approved": true,
+        "archives_attempted": 1,
+        "archives_extracted": 1,
+        "entries_extracted": 1,
+        "entries_blocked_zip_slip": 3,
+        "entries_blocked_outside_terminology_data": 0,
+        "archives_blocked_unknown_system": 0
+      }
+    },
+    {
+      "case": "J",
+      "description": "Readiness states",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "no_files_state": {
+          "systems_present": [],
+          "systems_acknowledged": [],
+          "systems_import_ready": [],
+          "systems_license_required": [],
+          "systems_missing": [
+            "umls",
+            "snomed_ct",
+            "rxnorm",
+            "loinc"
+          ],
+          "pending_acknowledgments": []
+        },
+        "file_no_ack_state": {
+          "systems_present": [
+            "umls"
+          ],
+          "systems_acknowledged": [],
+          "systems_import_ready": [],
+          "systems_license_required": [
+            "umls"
+          ],
+          "systems_missing": [
+            "snomed_ct",
+            "rxnorm",
+            "loinc"
+          ],
+          "pending_acknowledgments": [
+            "umls"
+          ]
+        }
+      }
+    },
+    {
+      "case": "K",
+      "description": "TERM-01 validation still passes",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "pass_marker": true
+      }
+    },
+    {
+      "case": "L",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "license_text_written_to_public_reports": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-07T02:10:40.854782+00:00"
+}

@@ -47,6 +47,31 @@ from clinical_knowledge.terminology.integration import (
     code_entity_via_local_terminology,
     safe_b07_boundary_summary,
 )
+from clinical_knowledge.terminology.file_classifier import (
+    ClassificationSummary,
+    FileClassification,
+    classify_filename,
+    classify_filenames,
+)
+from clinical_knowledge.terminology.ack_template import (
+    TemplateWriteResult,
+    real_ack_filename,
+    template_filename,
+    template_payload,
+    write_ack_template,
+)
+from clinical_knowledge.terminology.intake_automation import (
+    CopyResult,
+    ExtractResult,
+    FolderPreparationResult,
+    LocalScanResult,
+    ReadinessReport,
+    compute_readiness,
+    copy_classified_files,
+    optional_local_scan,
+    prepare_intake_folders,
+    safe_extract_zip,
+)
 
 
 __all__ = [
@@ -72,4 +97,24 @@ __all__ = [
     "TerminologyLookupService",
     "code_entity_via_local_terminology",
     "safe_b07_boundary_summary",
+    # TERM-01A — operator intake automation
+    "ClassificationSummary",
+    "FileClassification",
+    "classify_filename",
+    "classify_filenames",
+    "TemplateWriteResult",
+    "real_ack_filename",
+    "template_filename",
+    "template_payload",
+    "write_ack_template",
+    "CopyResult",
+    "ExtractResult",
+    "FolderPreparationResult",
+    "LocalScanResult",
+    "ReadinessReport",
+    "compute_readiness",
+    "copy_classified_files",
+    "optional_local_scan",
+    "prepare_intake_folders",
+    "safe_extract_zip",
 ]
