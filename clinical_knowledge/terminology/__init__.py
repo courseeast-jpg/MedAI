@@ -111,6 +111,20 @@ from clinical_knowledge.terminology.qa_runner import (
     TerminologyQAReport,
     run_synthetic_terminology_qa,
 )
+from clinical_knowledge.terminology.manual_return_pack import (
+    ManualReturnPackResult,
+    build_manual_return_guide_text,
+    build_term02_preflight_checklist_text,
+    run_manual_return_pack,
+)
+from clinical_knowledge.terminology.synthetic_intake_rehearsal import (
+    SyntheticIntakeRehearsalResult,
+    run_synthetic_intake_rehearsal,
+)
+from clinical_knowledge.terminology.term02_preflight_gate import (
+    Term02PreflightResult,
+    run_term02_preflight_gate,
+)
 
 
 __all__ = [
@@ -178,4 +192,13 @@ __all__ = [
     "TerminologyQACaseResult",
     "TerminologyQAReport",
     "run_synthetic_terminology_qa",
+    # TERM-01F manual return pack and TERM-02 preflight gate
+    "ManualReturnPackResult",
+    "build_manual_return_guide_text",
+    "build_term02_preflight_checklist_text",
+    "run_manual_return_pack",
+    "SyntheticIntakeRehearsalResult",
+    "run_synthetic_intake_rehearsal",
+    "Term02PreflightResult",
+    "run_term02_preflight_gate",
 ]
