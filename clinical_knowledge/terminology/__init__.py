@@ -141,6 +141,20 @@ from clinical_knowledge.terminology.import_resume import (
 from clinical_knowledge.terminology.import_performance import (
     elapsed_seconds_safe_bucket,
 )
+from clinical_knowledge.terminology.staging_guard import (
+    TerminologyStagingGuardResult,
+    check_terminology_staging,
+)
+from clinical_knowledge.terminology.privacy_regression import (
+    TerminologyPrivacyRegressionResult,
+    assert_public_report_safe,
+    run_privacy_regression_checks,
+    sanitize_formula_cell_for_public,
+)
+from clinical_knowledge.terminology.safety_redteam import (
+    TerminologySafetyRedTeamResult,
+    run_terminology_safety_redteam,
+)
 
 
 __all__ = [
@@ -228,4 +242,13 @@ __all__ = [
     "ScaleResumeMetrics",
     "simulate_chunked_import_with_resume",
     "elapsed_seconds_safe_bucket",
+    # TERM-01H terminology safety red-team pack
+    "TerminologyStagingGuardResult",
+    "check_terminology_staging",
+    "TerminologyPrivacyRegressionResult",
+    "assert_public_report_safe",
+    "run_privacy_regression_checks",
+    "sanitize_formula_cell_for_public",
+    "TerminologySafetyRedTeamResult",
+    "run_terminology_safety_redteam",
 ]

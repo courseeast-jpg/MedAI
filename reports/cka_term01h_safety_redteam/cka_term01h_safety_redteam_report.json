@@ -1,0 +1,78 @@
+{
+  "ack_mismatch_blocked": true,
+  "ambiguity_not_silently_resolved": true,
+  "b07_ddi_clear_blocked": true,
+  "b07_hypothesis_promotion_blocked": true,
+  "baseline_validations": {
+    "FINAL_CKA": {
+      "passed": true,
+      "returncode": 0
+    },
+    "TERM-01": {
+      "passed": true,
+      "returncode": 0
+    },
+    "TERM-01F": {
+      "passed": true,
+      "returncode": 0
+    },
+    "TERM-01G": {
+      "passed": true,
+      "returncode": 0
+    }
+  },
+  "block_id": "CKA-TERM-01H",
+  "clinical_advice_absent": true,
+  "clinical_recommendations_generated": false,
+  "conclusion": "cka_term01h_safety_redteam_ready",
+  "csv_formula_injection_neutralized": true,
+  "data_terminology_staging_detected": true,
+  "external_api_blocked": true,
+  "external_api_used": false,
+  "fake_ack_blocked": true,
+  "license_text_leak_blocked": true,
+  "license_text_written_to_public_reports": false,
+  "malformed_rows_skipped": true,
+  "no_real_import_performed": true,
+  "passed": true,
+  "prescription_dosing_advice_generated": false,
+  "private_filename_path_leaks": 0,
+  "raw_path_leak_blocked": true,
+  "raw_phi_logged_in_public_reports": false,
+  "real_terminology_files_committed": false,
+  "scenario_results": [
+    {
+      "blocked": true,
+      "scenario": "license_ack"
+    },
+    {
+      "blocked": true,
+      "scenario": "staging_guard"
+    },
+    {
+      "blocked": true,
+      "scenario": "zip_slip"
+    },
+    {
+      "blocked": true,
+      "scenario": "lookup_safety"
+    },
+    {
+      "blocked": true,
+      "scenario": "b07_boundary"
+    }
+  ],
+  "secret_leaks": 0,
+  "terminology_data_staging_detected": true,
+  "timestamp": "2026-05-07T23:04:01.265280+00:00",
+  "unknown_code_not_hallucinated": true,
+  "validation_commands": [
+    "python -m pytest tests/test_cka_term01h_safety_redteam.py",
+    "python scripts/run_cka_term01h_safety_redteam_validation.py",
+    "python scripts/run_cka_term01g_scale_resume_validation.py",
+    "python scripts/run_cka_term01f_manual_return_pack_validation.py",
+    "python scripts/run_cka_term01_real_terminology_readiness_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ],
+  "zip_slip_blocked": true
+}
