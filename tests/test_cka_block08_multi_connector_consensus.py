@@ -20,6 +20,7 @@ Covers:
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
@@ -787,10 +788,37 @@ class TestConsensusToEnrichment:
 
 class TestSafetyBoundaries:
     def test_no_scispacy_dependency(self):
-        """Importing B08 modules must not require scispaCy."""
-        import sys
-        assert "scispacy" not in sys.modules
-        assert "spacy" not in sys.modules
+        """Importing B08 modules must not require scispaCy/spaCy.
+
+        This must be checked in a fresh interpreter. Other MedAI tests
+        legitimately import spaCy-backed OCR/extraction modules earlier in the
+        full suite, so asserting against this process' global sys.modules is
+        order-sensitive and does not prove the B08 boundary.
+        """
+        code = """
+import sys
+from clinical_knowledge.connectors.executor import execute_connectors
+from clinical_knowledge.connectors.models import ConnectorKind, SimulationMode
+from clinical_knowledge.connectors.normalizer import normalize_connector_response
+from clinical_knowledge.connectors.registry import ConnectorRegistry
+from clinical_knowledge.connectors.request_builder import build_connector_request
+from clinical_knowledge.consensus.engine import run_consensus
+from clinical_knowledge.consensus.fact_extractor import extract_consensus_facts
+from clinical_knowledge.consensus.integration import consensus_facts_to_enrichment_candidates
+assert 'scispacy' not in sys.modules
+assert 'spacy' not in sys.modules
+print('ok')
+"""
+        result = subprocess.run(
+            [sys.executable, "-c", code],
+            cwd=Path(__file__).parent.parent,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=60,
+        )
+        assert result.returncode == 0, result.stderr
+        assert result.stdout.strip() == "ok"
 
     def test_no_external_api_calls(self, dxgpt_sage_registry):
         """Confirm external_api_used is always False."""
