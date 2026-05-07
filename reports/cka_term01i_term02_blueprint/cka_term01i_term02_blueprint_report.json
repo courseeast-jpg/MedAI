@@ -1,0 +1,33 @@
+{
+  "block_id": "CKA-TERM-01I",
+  "clinical_advice_or_dosing_present": false,
+  "clinical_recommendations_generated": false,
+  "commit_policy_preserved": true,
+  "conclusion": "cka_term01i_term02_blueprint_ready",
+  "data_terminology_staged": false,
+  "docs_validated": true,
+  "external_api_used": false,
+  "final_cka_validation": {
+    "passed": true,
+    "returncode": 0
+  },
+  "license_gate_preserved": true,
+  "next_code_action_after_manual_files": "CKA-TERM-02 controlled local terminology import",
+  "next_manual_action": "operator downloads licensed terminology files and creates private LICENSE_ACK_PRIVATE.json",
+  "no_real_import_performed": true,
+  "operator_commands_present": true,
+  "operator_runbook_created": true,
+  "prescription_dosing_advice_generated": false,
+  "privacy_report_clean": true,
+  "private_filename_path_leaks": 0,
+  "raw_phi_logged_in_public_reports": false,
+  "raw_private_paths_present": false,
+  "secret_leaks": 0,
+  "stop_matrix_complete": true,
+  "stop_on_failure_matrix_created": true,
+  "term01_through_term01h_mentioned": true,
+  "term02_blueprint_created": true,
+  "term02_phases_defined": true,
+  "terminology_data_staged": false,
+  "timestamp": "2026-05-07T23:43:25.637126+00:00"
+}
