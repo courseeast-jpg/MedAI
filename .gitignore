@@ -48,3 +48,10 @@ reports/phase72_operator_feedback_collection/operator_feedback_PRIVATE.json
 # CKA private sanitization/mapping files — never tracked
 reports/**/*_PRIVATE.json
 reports/**/private_*_PRIVATE.json
+
+# CKA-TERM-01 — local-only, license-gated terminology data.
+# Operator-supplied licensed terminology files MUST NOT be committed.
+terminology_data/
+data/terminology/
+**/LICENSE_ACK_PRIVATE*
+**/*TERMINOLOGY_PRIVATE*

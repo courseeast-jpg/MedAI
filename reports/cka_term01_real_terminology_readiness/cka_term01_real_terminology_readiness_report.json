@@ -1,0 +1,241 @@
+{
+  "block_id": "CKA-TERM-01",
+  "conclusion": "cka_term01_local_terminology_files_required",
+  "license_gate_ready": true,
+  "local_inventory_ready": true,
+  "synthetic_umls_parse_passed": true,
+  "synthetic_snomed_parse_passed": true,
+  "synthetic_rxnorm_parse_passed": true,
+  "synthetic_loinc_parse_passed": true,
+  "lookup_service_ready": true,
+  "no_code_hallucinated": true,
+  "unknown_terms_unmapped": true,
+  "ambiguous_terms_flagged": true,
+  "b07_integration_boundary_preserved": true,
+  "coding_does_not_promote_hypothesis": true,
+  "coding_does_not_clear_ddi_status": true,
+  "real_terminology_files_committed": false,
+  "external_terminology_api_used": false,
+  "real_umls_api_used": false,
+  "real_snomed_download_used": false,
+  "real_rxnorm_api_used": false,
+  "real_loinc_api_used": false,
+  "external_api_used": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "license_text_written_to_public_reports": false,
+  "clinical_recommendations_generated": false,
+  "prescription_dosing_advice_generated": false,
+  "production_ocr_changed": false,
+  "production_extractor_changed": false,
+  "safety_gate_changed": false,
+  "frozen_hitl_release_reopened": false,
+  "next_recommended_action": "provide licensed local terminology files, then run CKA-TERM-02 controlled local import",
+  "inventory_summary": {
+    "terminology_root_present": false,
+    "terminology_root_safe_hash": "term_root_72e235da38401a14",
+    "files_seen_total": 0,
+    "no_real_data_committed": true,
+    "raw_paths_written_to_public_report": false,
+    "sources": [
+      {
+        "source_id": "term_src_fb81bdf82341",
+        "safe_source_id": "term_src_33e25672ae39fa55",
+        "system": "umls",
+        "source_label": "umls_local_root",
+        "version": null,
+        "release_date": null,
+        "local_path_hash": "term_path_33e25672ae39fa55",
+        "file_count": 0,
+        "expected_files_present": [],
+        "license_confirmed": false,
+        "import_mode": "inventory_only",
+        "status": "missing",
+        "records_seen": 0,
+        "records_imported": 0
+      },
+      {
+        "source_id": "term_src_66eac9bac13f",
+        "safe_source_id": "term_src_bfa74c86e527dbdb",
+        "system": "snomed_ct",
+        "source_label": "snomed_ct_local_root",
+        "version": null,
+        "release_date": null,
+        "local_path_hash": "term_path_bfa74c86e527dbdb",
+        "file_count": 0,
+        "expected_files_present": [],
+        "license_confirmed": false,
+        "import_mode": "inventory_only",
+        "status": "missing",
+        "records_seen": 0,
+        "records_imported": 0
+      },
+      {
+        "source_id": "term_src_60a8fe78727b",
+        "safe_source_id": "term_src_b72760acd0ddcd77",
+        "system": "rxnorm",
+        "source_label": "rxnorm_local_root",
+        "version": null,
+        "release_date": null,
+        "local_path_hash": "term_path_b72760acd0ddcd77",
+        "file_count": 0,
+        "expected_files_present": [],
+        "license_confirmed": false,
+        "import_mode": "inventory_only",
+        "status": "missing",
+        "records_seen": 0,
+        "records_imported": 0
+      },
+      {
+        "source_id": "term_src_afd7d4d22b44",
+        "safe_source_id": "term_src_652fce94ac53f607",
+        "system": "loinc",
+        "source_label": "loinc_local_root",
+        "version": null,
+        "release_date": null,
+        "local_path_hash": "term_path_652fce94ac53f607",
+        "file_count": 0,
+        "expected_files_present": [],
+        "license_confirmed": false,
+        "import_mode": "inventory_only",
+        "status": "missing",
+        "records_seen": 0,
+        "records_imported": 0
+      }
+    ],
+    "sources_count": 4
+  },
+  "synthetic_cases_run": 11,
+  "cases_passed": 11,
+  "all_passed": true,
+  "case_results": [
+    {
+      "case": "A",
+      "description": "Baseline parked state confirmed",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "all_three_passed": true
+      }
+    },
+    {
+      "case": "B",
+      "description": "License gate blocks real import",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "blocked_systems": [
+          "umls",
+          "snomed_ct",
+          "rxnorm",
+          "loinc"
+        ],
+        "synthetic_test_allowed": true
+      }
+    },
+    {
+      "case": "C",
+      "description": "Inventory handles missing safely",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "sources_count": 4,
+        "files_seen_total": 0,
+        "no_raw_paths": true
+      }
+    },
+    {
+      "case": "D",
+      "description": "Synthetic UMLS parse",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "concepts_emitted": 2,
+        "exact_or_synonym_match_for_hypertension": "exact",
+        "unknown_term_unmapped": true
+      }
+    },
+    {
+      "case": "E",
+      "description": "Synthetic SNOMED parse",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "concepts_emitted": 3,
+        "synthetic_marker_present": true
+      }
+    },
+    {
+      "case": "F",
+      "description": "Synthetic RxNorm parse",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "concepts_emitted": 2,
+        "synthetic_marker_present": true
+      }
+    },
+    {
+      "case": "G",
+      "description": "Synthetic LOINC parse",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "concepts_emitted": 2,
+        "synthetic_marker_present": true
+      }
+    },
+    {
+      "case": "H",
+      "description": "Ambiguity behavior",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "ambiguous": true,
+        "match_count": 2
+      }
+    },
+    {
+      "case": "I",
+      "description": "B07 integration boundary",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "known_term_mapped": true,
+        "unknown_term_unmapped": true,
+        "no_code_hallucinated": true,
+        "boundary_summary": {
+          "default_b07_behavior_unchanged": true,
+          "coding_promotes_hypothesis": false,
+          "coding_clears_ddi_status": false,
+          "no_code_hallucinated": true,
+          "unknown_terms_unmapped": true,
+          "synthetic_mapper_still_present": true
+        }
+      }
+    },
+    {
+      "case": "J",
+      "description": "Real files present but no license ack",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "status": "license_required",
+        "license_confirmed": false,
+        "import_mode": "inventory_only"
+      }
+    },
+    {
+      "case": "K",
+      "description": "Report safety",
+      "passed": true,
+      "skipped": false,
+      "details": {
+        "license_text_written_to_public_reports": false,
+        "privacy_checker_passed": true
+      }
+    }
+  ],
+  "generated_at": "2026-05-07T01:10:07.307463+00:00"
+}
