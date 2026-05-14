@@ -62,6 +62,7 @@ PHASE52_OPERATOR_TABS = [
     "Review Package",
     "Clinical Knowledge Safety",
     "Terminology Readiness",
+    "MedAI Operator Control Panel",
 ]
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
@@ -952,7 +953,7 @@ def main() -> None:
         st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
 
     tabs = st.tabs(operator_tabs())
-    tab_current, tab_blind, tab_archive, tab_review, tab_cka, tab_terms = tabs[:6]
+    tab_current, tab_blind, tab_archive, tab_review, tab_cka, tab_terms, tab_ops = tabs[:7]
     with tab_current:
         render_current_run_tab(sys_components)
     with tab_blind:
@@ -982,8 +983,15 @@ def main() -> None:
             render_terminology_readiness_panel()
         except Exception as _exc:
             st.error(f"Terminology Readiness panel unavailable: {_exc}")
-    if len(tabs) > 6:
-        with tabs[6]:
+    with tab_ops:
+        try:
+            from app.operator_control_panel import render_operator_control_panel
+
+            render_operator_control_panel()
+        except Exception as _exc:
+            st.error(f"Operator Control Panel unavailable: {_exc}")
+    if len(tabs) > 7:
+        with tabs[7]:
             try:
                 from app.clinical_knowledge_terminology_lookup_viewer import render_terminology_lookup_panel
 

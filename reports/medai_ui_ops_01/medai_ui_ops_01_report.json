@@ -1,0 +1,188 @@
+{
+  "allowlist_command_count": 12,
+  "block_id": "MEDAI-UI-OPS-01",
+  "commands": [
+    {
+      "argv": [
+        "python",
+        "scripts/run_cka_final_mvp_release_validation.py"
+      ],
+      "command_id": "quick_health_check",
+      "group": "System Health",
+      "label": "Run Quick Health Check",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "python",
+        "scripts/run_cka_final_mvp_release_validation.py"
+      ],
+      "command_id": "final_mvp_validation",
+      "group": "System Health",
+      "label": "Run Final MVP Validation",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "python",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "command_id": "full_test_suite",
+      "group": "System Health",
+      "label": "Run Full Test Suite",
+      "requires_confirmation": true,
+      "timeout_seconds": 3600
+    },
+    {
+      "argv": [
+        "python",
+        "scripts/run_medai_terminology_sources_preflight.py"
+      ],
+      "command_id": "terminology_source_preflight",
+      "group": "Terminology",
+      "label": "Run Terminology Source Preflight",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "python",
+        "scripts/run_medai_terminology_inventory.py",
+        "--terminology-root",
+        "terminology_data"
+      ],
+      "command_id": "terminology_inventory",
+      "group": "Terminology",
+      "label": "Run Terminology Inventory",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "python",
+        "scripts/run_b07_term01_opt_in_integration_validation.py"
+      ],
+      "command_id": "b07_term_validation",
+      "group": "Terminology",
+      "label": "Run B07-TERM Validation",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "python",
+        "scripts/run_medai_route_fix01_validation.py"
+      ],
+      "command_id": "route_fix_validation",
+      "group": "Routing / Extraction",
+      "label": "Run ROUTE-FIX Validation",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "python",
+        "-m",
+        "pytest",
+        "tests/test_phase23_routing_efficiency.py",
+        "tests/test_connector_orchestration.py",
+        "tests/test_phase10_hardening.py",
+        "-q"
+      ],
+      "command_id": "focused_routing_tests",
+      "group": "Routing / Extraction",
+      "label": "Run Focused Routing Tests",
+      "requires_confirmation": false,
+      "timeout_seconds": 300
+    },
+    {
+      "argv": [
+        "__internal_git_safety_check__"
+      ],
+      "command_id": "git_safety_check",
+      "group": "Git / Safety",
+      "label": "Run Git Safety Check",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "__internal_show_reports__"
+      ],
+      "command_id": "show_last_validation_reports",
+      "group": "Git / Safety",
+      "label": "Show Last Validation Reports",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "git",
+        "tag",
+        "--list",
+        "medai-*2026-05-14"
+      ],
+      "command_id": "show_release_tags",
+      "group": "Recovery",
+      "label": "Show Release Tags",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "git",
+        "bundle",
+        "verify",
+        "backups/medai_final_release_2026-05-14.bundle"
+      ],
+      "command_id": "verify_final_bundle",
+      "group": "Recovery",
+      "label": "Verify Final Release Bundle",
+      "requires_confirmation": false,
+      "timeout_seconds": 120
+    }
+  ],
+  "conclusion": "medai_ui_ops_panel_ready",
+  "free_form_shell_enabled": false,
+  "full_test_suite_requires_confirmation": true,
+  "generated_at_utc": "2026-05-14T20:03:20.602974+00:00",
+  "internal_validation_results": {
+    "git_safety_check": {
+      "exit_code": 0,
+      "status": "passed"
+    },
+    "show_last_validation_reports": {
+      "exit_code": 0,
+      "status": "passed"
+    }
+  },
+  "next_recommended_action": "Use the panel for fixed local validation and maintenance commands only; keep full-suite execution confirmation enabled.",
+  "operator_control_panel_ready": true,
+  "safety_privacy": {
+    "b07_terminology_behavior_changed": false,
+    "clinical_logic_changed": false,
+    "external_api_used": false,
+    "free_form_shell_input_available": false,
+    "import_performed": false,
+    "license_ack_contents_read": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "public_report_privacy_clean": true,
+    "routing_fallback_behavior_changed": false,
+    "runtime_db_or_index_created": false,
+    "source_terminology_rows_printed": false
+  },
+  "unknown_command_rejected": true,
+  "validation_commands": [
+    "python -m pytest tests/test_medai_ui_ops_panel.py -vv",
+    "python scripts/run_medai_ui_ops_panel_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py",
+    "python scripts/run_medai_route_fix01_validation.py",
+    "python scripts/run_medai_terminology_sources_preflight.py",
+    "python scripts/run_medai_terminology_inventory.py --terminology-root terminology_data"
+  ]
+}
