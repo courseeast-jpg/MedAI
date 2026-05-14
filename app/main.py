@@ -42,6 +42,7 @@ from app.test_launcher import (
     save_uploaded_test_file,
 )
 from execution.pipeline import ExecutionPipeline
+from app.startup_preflight import StartupState, initialize_startup_state
 
 
 PLACEHOLDER_RE = re.compile(r"\[(?:PERSON|LOCATION|DATE|CONTACT_REMOVED|ID_REMOVED|URL_REMOVED|PHYSICIAN)\]")
@@ -146,6 +147,23 @@ def render_system_status(state: SystemState) -> None:
         st.warning("Claude API not configured. Add ANTHROPIC_API_KEY to .env")
     else:
         st.success(f"System ready. Active connectors: {', '.join(state.active_connectors)}")
+
+
+def render_degraded_startup_panel(startup: StartupState) -> None:
+    diagnostics = startup.diagnostics.safe_public_summary()
+    st.error("MKB initialization failed. MedAI started in diagnostics-only mode.")
+    st.warning("No clinical processing started. Avoid manual database deletion.")
+    st.markdown("### Startup Diagnostics")
+    st.json(diagnostics)
+    st.markdown("### Safe Operator Actions")
+    for item in diagnostics.get("safe_operator_guidance", []):
+        st.write(f"- {item}")
+    try:
+        from app.operator_control_panel import render_operator_control_panel
+
+        render_operator_control_panel()
+    except Exception as _exc:
+        st.error(f"Operator Control Panel unavailable: {_exc}")
 
 
 def inject_phase52_styles() -> None:
@@ -937,8 +955,18 @@ def format_bytes(size: int) -> str:
 
 def main() -> None:
     inject_phase52_styles()
-    sys_components = load_system()
     render_operator_safety_panel()
+    startup = initialize_startup_state(load_system)
+    if not startup.ok:
+        render_degraded_startup_panel(startup)
+        st.divider()
+        st.caption(PRIVACY_INVARIANT_GUIDANCE)
+        return
+
+    sys_components = startup.components
+    if sys_components is None:
+        st.error("Startup failed without component details.")
+        return
     render_system_status(sys_components["state"])
 
     with st.sidebar:

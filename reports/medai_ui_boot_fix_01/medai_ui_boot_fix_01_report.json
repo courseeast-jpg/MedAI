@@ -1,0 +1,66 @@
+{
+  "block_id": "MEDAI-UI-BOOT-FIX-01",
+  "conclusion": "medai_ui_boot_fix_startup_resilience_ready",
+  "degraded_startup_state": {
+    "clinical_processing_started": false,
+    "memory_error_returns_degraded_state": true,
+    "operator_panel_available_in_degraded_mode": true
+  },
+  "diagnostics": {
+    "db_file_exists": true,
+    "db_file_size_bucket": "small_under_1mb",
+    "db_parent_exists": true,
+    "db_path_label": "data/mkb.db",
+    "db_schema_length": 1987,
+    "db_schema_sha256_12": "533ad38e02df",
+    "exception_category": "sqlite_init_memory_error",
+    "exception_class": "MemoryError",
+    "safe_operator_guidance": [
+      "MKB initialization failed.",
+      "No clinical processing started.",
+      "Run Git Safety Check or startup diagnostics.",
+      "Avoid manual DB deletion.",
+      "Use a Codex repair block if database quarantine or restore is needed."
+    ],
+    "sqlite_connect_result": "connect_ok_read_only",
+    "sqlite_quick_check_result": "ok"
+  },
+  "generated_at_utc": "2026-05-14T20:21:47.079253+00:00",
+  "next_recommended_action": "Launch Streamlit and confirm the UI renders; if DB initialization still fails, use the diagnostics panel and a separate repair block.",
+  "root_cause_classification": {
+    "launcher_specific": false,
+    "likely_cause": "SQLite initialization failed before Streamlit UI render; exact local DB cause requires operator repair block if repeated.",
+    "observed_failure": "MemoryError during SQLite schema initialization",
+    "operator_control_panel_button_related": false
+  },
+  "safety_privacy": {
+    "b07_terminology_behavior_changed": false,
+    "backup_created": false,
+    "clinical_logic_changed": false,
+    "db_contents_printed": false,
+    "db_deleted": false,
+    "db_overwritten": false,
+    "external_api_used": false,
+    "import_performed": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "raw_private_paths_in_public_report": false,
+    "route_fix_behavior_changed": false,
+    "runtime_db_or_index_created": false
+  },
+  "streamlit_smoke_test": {
+    "isolated_port": 8502,
+    "http_status": 200,
+    "process_stayed_alive": true,
+    "logs_written_to_repo": false
+  },
+  "validation_commands": [
+    "python -m pytest tests/test_medai_ui_boot_fix.py -vv",
+    "python scripts/run_medai_ui_boot_fix_validation.py",
+    "python -m pytest tests/test_medai_ui_ops_panel.py -vv",
+    "python scripts/run_medai_ui_ops_panel_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py",
+    "python scripts/run_medai_route_fix01_validation.py",
+    "isolated Streamlit smoke test on localhost"
+  ]
+}
