@@ -1,0 +1,199 @@
+{
+  "ambiguous_manual_review_passed": true,
+  "block_id": "CKA-TERM-03",
+  "clinical_recommendations_generated": false,
+  "code_lookup_passed": true,
+  "coding_clears_ddi_status": false,
+  "coding_promotes_hypothesis": false,
+  "conclusion": "cka_term03_local_terminology_qa_ready",
+  "data_terminology_staged": false,
+  "determinism_passed": true,
+  "external_api_used": false,
+  "license_ack_private_staged": false,
+  "license_text_written_to_public_reports": false,
+  "no_code_hallucinated": true,
+  "phase_name": "Local Terminology QA / Lookup Regression Expansion",
+  "prescription_dosing_advice_generated": false,
+  "privacy_report_clean": true,
+  "private_filename_path_leaks": 0,
+  "qa_case_counts": {
+    "failed": 0,
+    "passed": 9,
+    "skipped": 1,
+    "total": 10
+  },
+  "qa_case_results": [
+    {
+      "ambiguous": false,
+      "case_id": "term03_rxnorm_exact",
+      "case_type": "exact_lookup",
+      "expected_status": "exact",
+      "matches_count": 2,
+      "no_code_hallucinated": true,
+      "observed_status": "exact",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": [
+        "rxnorm"
+      ]
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_loinc_exact",
+      "case_type": "exact_lookup",
+      "expected_status": "exact",
+      "matches_count": 1,
+      "no_code_hallucinated": true,
+      "observed_status": "exact",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": [
+        "loinc"
+      ]
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_rxnorm_code_to_display",
+      "case_type": "code_to_display_lookup",
+      "expected_status": "found",
+      "matches_count": 5,
+      "no_code_hallucinated": true,
+      "observed_status": "found",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": [
+        "rxnorm"
+      ]
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_loinc_code_to_display",
+      "case_type": "code_to_display_lookup",
+      "expected_status": "found",
+      "matches_count": 1,
+      "no_code_hallucinated": true,
+      "observed_status": "found",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": [
+        "loinc"
+      ]
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_unknown_unmapped",
+      "case_type": "unknown_lookup",
+      "expected_status": "unmapped",
+      "matches_count": 0,
+      "no_code_hallucinated": true,
+      "observed_status": "unmapped",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": []
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_rxnorm_filter_isolation",
+      "case_type": "source_filter_isolation",
+      "expected_status": "unmapped",
+      "matches_count": 0,
+      "no_code_hallucinated": true,
+      "observed_status": "unmapped",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": [
+        "loinc"
+      ]
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_loinc_filter_isolation",
+      "case_type": "source_filter_isolation",
+      "expected_status": "unmapped",
+      "matches_count": 0,
+      "no_code_hallucinated": true,
+      "observed_status": "unmapped",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": [
+        "rxnorm"
+      ]
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_deterministic_normalization",
+      "case_type": "determinism",
+      "expected_status": "exact",
+      "matches_count": 2,
+      "no_code_hallucinated": true,
+      "observed_status": "exact",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": [
+        "rxnorm"
+      ]
+    },
+    {
+      "ambiguous": true,
+      "case_id": "term03_ambiguous_manual_review",
+      "case_type": "ambiguous_lookup",
+      "expected_status": "ambiguous",
+      "matches_count": 2,
+      "no_code_hallucinated": true,
+      "observed_status": "ambiguous",
+      "passed": true,
+      "skip_reason": null,
+      "skipped": false,
+      "system_filter": []
+    },
+    {
+      "ambiguous": false,
+      "case_id": "term03_synonym_alias_lookup",
+      "case_type": "synonym_alias_lookup",
+      "expected_status": "synonym",
+      "matches_count": 0,
+      "no_code_hallucinated": true,
+      "observed_status": "not_supported",
+      "passed": true,
+      "skip_reason": "no_synonym_alias_fields_imported",
+      "skipped": true,
+      "system_filter": []
+    }
+  ],
+  "raw_phi_logged_in_public_reports": false,
+  "read_only_mode": true,
+  "recommended_next_action": "Use TERM-03 QA as a regression gate before any terminology-backed clinical integration.",
+  "secret_leaks": 0,
+  "source_filter_isolation_passed": true,
+  "source_systems_detected": [
+    "loinc",
+    "rxnorm"
+  ],
+  "store_available": true,
+  "store_summary": {
+    "concepts_count": 353854,
+    "import_events_count": 2,
+    "in_memory": false,
+    "sources_count": 2,
+    "synonyms_count": 0
+  },
+  "synonym_alias_supported": false,
+  "terminology_data_staged": false,
+  "timestamp": "2026-05-14T01:41:05.310027+00:00",
+  "unknown_unmapped_passed": true,
+  "validation_commands": [
+    "python -m pytest tests/test_cka_term03_local_terminology_qa.py",
+    "python scripts/run_cka_term03_local_terminology_qa_validation.py",
+    "python scripts/run_cka_term02_controlled_local_import_validation.py",
+    "python scripts/cka_term02_preflight_gate.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ]
+}

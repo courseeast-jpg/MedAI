@@ -162,6 +162,12 @@ from clinical_knowledge.terminology.term02_controlled_import import (
     Term02LookupValidation,
     run_controlled_local_import,
 )
+from clinical_knowledge.terminology.term03_local_qa import (
+    Term03LocalTerminologyQAResult,
+    Term03QABlocked,
+    Term03QACaseResult,
+    run_local_terminology_qa,
+)
 
 
 __all__ = [
@@ -264,4 +270,9 @@ __all__ = [
     "Term02ImportBlocked",
     "Term02LookupValidation",
     "run_controlled_local_import",
+    # TERM-03 read-only local QA
+    "Term03LocalTerminologyQAResult",
+    "Term03QABlocked",
+    "Term03QACaseResult",
+    "run_local_terminology_qa",
 ]

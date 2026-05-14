@@ -101,7 +101,7 @@ class LocalTerminologyStore:
             yield self._mem_con
             self._mem_con.commit()
             return
-        con = sqlite3.connect(self.db_path)
+        con = sqlite3.connect(self.db_path, uri=bool(getattr(self, "_uri", False)))
         con.row_factory = sqlite3.Row
         try:
             yield con
