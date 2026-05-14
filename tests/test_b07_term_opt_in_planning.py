@@ -29,9 +29,19 @@ def test_planning_files_and_prompt_exist() -> None:
     assert "Start B07-TERM-01" in (REPORT_DIR / "B07_TERM_IMPLEMENTATION_PROMPT.md").read_text(encoding="utf-8")
 
 
-def test_no_runtime_implementation_file_created() -> None:
+def test_no_unapproved_runtime_implementation_file_created() -> None:
     assert not (ROOT / "clinical_knowledge" / "terminology" / "b07_term_integration.py").exists()
-    assert not (ROOT / "clinical_knowledge" / "terminology" / "b07_term_opt_in.py").exists()
+    # B07-TERM-PLAN-01 was design-only when created. B07-TERM-01 was
+    # later explicitly approved and introduced the opt-in/default-off shim.
+    opt_in_file = ROOT / "clinical_knowledge" / "terminology" / "b07_term_opt_in.py"
+    assert opt_in_file.exists()
+    term01_report = ROOT / "reports" / "b07_term01_opt_in_integration" / "b07_term01_opt_in_integration_report.json"
+    payload = json.loads(term01_report.read_text(encoding="utf-8"))
+    assert payload["conclusion"] == "b07_term01_opt_in_integration_ready"
+    assert payload["feature_flags_default_off"] is True
+    assert payload["writes_active_fact"] is False
+    assert payload["promotes_hypothesis"] is False
+    assert payload["clears_ddi_status"] is False
 
 
 def test_forbidden_behaviors_and_feature_flags_are_listed() -> None:

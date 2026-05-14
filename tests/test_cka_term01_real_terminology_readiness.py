@@ -185,11 +185,13 @@ class TestLicenseGate:
         TerminologySystem.UMLS, TerminologySystem.SNOMED_CT,
         TerminologySystem.RXNORM, TerminologySystem.LOINC,
     ])
-    def test_real_systems_blocked_without_ack(self, sys_):
-        # Empty env, no ack file.
-        assert license_acknowledged_for(sys_, env={}) is False
+    def test_real_systems_blocked_without_ack(self, sys_, tmp_path):
+        # Use an explicit temp no-ack path so the test is isolated from
+        # any real local operator acknowledgment in the repository root.
+        missing_ack = tmp_path / "missing_ack.json"
+        assert license_acknowledged_for(sys_, local_ack_file=missing_ack, env={}) is False
         with pytest.raises(LicenseGateError):
-            require_license_acknowledgment(sys_, env={})
+            require_license_acknowledgment(sys_, local_ack_file=missing_ack, env={})
 
     def test_test_mode_env_works(self):
         assert license_acknowledged_for(
@@ -198,10 +200,12 @@ class TestLicenseGate:
             test_mode=True,
         ) is True
 
-    def test_test_mode_env_ignored_outside_test_mode(self):
+    def test_test_mode_env_ignored_outside_test_mode(self, tmp_path):
         # Even with the env var set, real-mode (test_mode=False) ignores it.
+        missing_ack = tmp_path / "missing_ack.json"
         assert license_acknowledged_for(
             TerminologySystem.UMLS,
+            local_ack_file=missing_ack,
             env={"CKA_TERM01_TEST_LICENSE_ACK": "1"},
             test_mode=False,
         ) is False

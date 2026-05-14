@@ -36,8 +36,9 @@ REQUIRED_PHRASES = [
 ]
 FORBIDDEN_IMPLEMENTATION_FILES = [
     ROOT / "clinical_knowledge" / "terminology" / "b07_term_integration.py",
-    ROOT / "clinical_knowledge" / "terminology" / "b07_term_opt_in.py",
 ]
+APPROVED_B07_TERM01_FILE = ROOT / "clinical_knowledge" / "terminology" / "b07_term_opt_in.py"
+TERM01_REPORT_JSON = ROOT / "reports" / "b07_term01_opt_in_integration" / "b07_term01_opt_in_integration_report.json"
 
 
 def main() -> int:
@@ -51,6 +52,7 @@ def main() -> int:
     )
     missing_phrases = [phrase for phrase in REQUIRED_PHRASES if phrase not in combined]
     implementation_files_created = [str(path.relative_to(ROOT)).replace("\\", "/") for path in FORBIDDEN_IMPLEMENTATION_FILES if path.exists()]
+    approved_term01_present = _approved_b07_term01_present()
     payload = json.loads(REPORT_JSON.read_text(encoding="utf-8")) if REPORT_JSON.exists() else {}
     privacy_checks = []
     for name in REQUIRED_FILES:
@@ -88,6 +90,7 @@ def main() -> int:
         not missing_files
         and not missing_phrases
         and not implementation_files_created
+        and approved_term01_present
         and privacy_passed
         and not blocked_staged
         and not flag_failures
@@ -98,6 +101,7 @@ def main() -> int:
         "missing_files": missing_files,
         "missing_phrases": missing_phrases,
         "implementation_files_created": implementation_files_created,
+        "approved_b07_term01_opt_in_present": approved_term01_present,
         "privacy_report_clean": privacy_passed,
         "blocked_staged_files": blocked_staged,
         "flag_failures": flag_failures,
@@ -113,6 +117,23 @@ def _git_staged_paths() -> list[str]:
     if proc.returncode != 0:
         return []
     return [line.strip().replace("\\", "/") for line in proc.stdout.splitlines() if line.strip()]
+
+
+def _approved_b07_term01_present() -> bool:
+    if not APPROVED_B07_TERM01_FILE.exists() or not TERM01_REPORT_JSON.exists():
+        return False
+    try:
+        payload = json.loads(TERM01_REPORT_JSON.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    return (
+        payload.get("conclusion") == "b07_term01_opt_in_integration_ready"
+        and payload.get("feature_flags_default_off") is True
+        and payload.get("writes_active_fact") is False
+        and payload.get("promotes_hypothesis") is False
+        and payload.get("clears_ddi_status") is False
+        and payload.get("external_api_used") is False
+    )
 
 
 if __name__ == "__main__":

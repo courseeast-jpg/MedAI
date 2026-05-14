@@ -343,7 +343,7 @@ class TestReadinessChecker:
         finally:
             _rmtree(ws)
 
-    def test_template_does_not_count_as_ack(self):
+    def test_template_does_not_count_as_ack(self, monkeypatch):
         ws = _ws()
         try:
             prepare_intake_folders(repo_root=ws)
@@ -351,6 +351,10 @@ class TestReadinessChecker:
             # The template file (operator_acknowledged=False) was created
             # by prepare_intake_folders. compute_readiness must NOT treat
             # it as a real acknowledgment.
+            monkeypatch.setattr(
+                "clinical_knowledge.terminology.intake_automation.license_acknowledged_for",
+                lambda *args, **kwargs: False,
+            )
             rd = compute_readiness(repo_root=ws)
             s = rd.safe_public_summary()
             assert "loinc" not in s["systems_acknowledged"]

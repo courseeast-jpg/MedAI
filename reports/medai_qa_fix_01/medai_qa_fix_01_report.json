@@ -1,0 +1,98 @@
+{
+  "block_id": "MEDAI-QA-FIX-01",
+  "conclusion": "full_suite_drift_isolated",
+  "timestamp": "2026-05-14T11:04:24.0842745-04:00",
+  "branch": "clinical-knowledge-architecture",
+  "starting_head": "a077b1c",
+  "runtime_behavior_changed": false,
+  "route_fix01_behavior_changed": false,
+  "b07_term01_runtime_behavior_changed": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_safety_gates_changed": false,
+  "imports_run": false,
+  "external_api_used": false,
+  "failing_tests_addressed": [
+    {
+      "test": "tests/test_b07_term_opt_in_planning.py::test_no_runtime_implementation_file_created",
+      "root_cause": "stale_pre_implementation_expectation_after_approved_b07_term01",
+      "fix": "renamed_and_updated_test_to_verify_no_unapproved_runtime_file_and_safe_approved_b07_term01_state"
+    },
+    {
+      "test": "tests/test_b07_term_opt_in_planning.py::test_validation_script_runs",
+      "root_cause": "planning_validation_script_treated_approved_b07_term01_file_as_forbidden",
+      "fix": "validation_script_now_accepts_approved_default_off_hypothesis_only_b07_term01_report"
+    },
+    {
+      "test": "tests/test_cka_term01_real_terminology_readiness.py::TestLicenseGate::test_real_systems_blocked_without_ack[rxnorm]",
+      "root_cause": "negative_test_consulted_real_local_acknowledgment_state",
+      "fix": "test_uses_explicit_temp_missing_ack_file"
+    },
+    {
+      "test": "tests/test_cka_term01_real_terminology_readiness.py::TestLicenseGate::test_real_systems_blocked_without_ack[loinc]",
+      "root_cause": "negative_test_consulted_real_local_acknowledgment_state",
+      "fix": "test_uses_explicit_temp_missing_ack_file"
+    },
+    {
+      "test": "tests/test_cka_term01a_intake_automation.py::TestReadinessChecker::test_template_does_not_count_as_ack",
+      "root_cause": "negative_test_readiness_summary_was_sensitive_to_real_local_operator_acknowledgment",
+      "fix": "test_monkeypatches_readiness_license_gate_to_no_ack_for_temp_template_fixture"
+    }
+  ],
+  "files_changed": [
+    "tests/test_b07_term_opt_in_planning.py",
+    "scripts/run_b07_term_opt_in_planning_validation.py",
+    "tests/test_cka_term01_real_terminology_readiness.py",
+    "tests/test_cka_term01a_intake_automation.py"
+  ],
+  "validations": [
+    {
+      "command": "python -m pytest tests/test_b07_term_opt_in_planning.py -vv",
+      "result": "passed",
+      "tests_passed": 8
+    },
+    {
+      "command": "python -m pytest tests/test_cka_term01_real_terminology_readiness.py tests/test_cka_term01a_intake_automation.py -vv",
+      "result": "passed",
+      "tests_passed": 102
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "tests_passed": 2210,
+      "tests_skipped": 4,
+      "warnings": 22
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "cases_passed": 6,
+      "cases_total": 6
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "conclusion": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "cases_passed": 12,
+      "cases_total": 12,
+      "tests_reported": 693
+    }
+  ],
+  "privacy_safety": {
+    "public_reports_privacy_clean": true,
+    "raw_phi_logged_in_public_reports": false,
+    "private_filename_path_leaks": 0,
+    "secret_leaks": 0,
+    "source_terminology_rows_logged": false,
+    "license_text_logged": false,
+    "terminology_data_staged": false,
+    "data_terminology_staged": false,
+    "private_license_ack_staged": false,
+    "source_terminology_files_staged": false,
+    "db_key_private_pdf_image_archive_staged": false
+  },
+  "recommended_next_action": "create_parking_snapshot_for_clean_full_suite_state"
+}
