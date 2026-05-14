@@ -1,0 +1,71 @@
+{
+  "block_id": "MEDAI-PARK-12",
+  "conclusion": "medai_post_qa_fix_full_suite_clean_parked",
+  "timestamp": "2026-05-14T11:42:31.1295022-04:00",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "718e79f",
+  "park11_commit": "2c3126a",
+  "validate01_commit": "a077b1c",
+  "qa_fix01_commit": "718e79f",
+  "new_behavior_implemented_in_park12": false,
+  "runtime_code_changed_in_park12": false,
+  "route_fix_behavior_changed": false,
+  "b07_terminology_behavior_changed": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_safety_gates_changed": false,
+  "imports_run": false,
+  "external_api_used": false,
+  "qa_fix01_summary": {
+    "stale_b07_planning_tests_isolated": true,
+    "manual_license_state_sensitive_tests_isolated": true,
+    "runtime_behavior_changed": false,
+    "route_fix_behavior_unchanged": true,
+    "b07_behavior_unchanged": true
+  },
+  "validations": [
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "tests_passed": 2210,
+      "tests_skipped": 4,
+      "warnings": 22
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "cases_passed": 6,
+      "cases_total": 6
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "conclusion": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "cases_passed": 12,
+      "cases_total": 12,
+      "tests_reported": 693
+    }
+  ],
+  "privacy_safety": {
+    "public_reports_privacy_clean": true,
+    "raw_phi_logged_in_public_reports": false,
+    "private_filename_path_leaks": 0,
+    "secret_leaks": 0,
+    "source_terminology_rows_logged": false,
+    "license_text_logged": false,
+    "terminology_data_staged": false,
+    "data_terminology_staged": false,
+    "private_license_ack_staged": false,
+    "source_terminology_files_staged": false,
+    "db_key_private_pdf_image_archive_staged": false
+  },
+  "worktree": {
+    "remaining_dirty_entry_count_before_park12_reports": 202,
+    "unrelated_dirty_files_remain_unstaged": true,
+    "only_park12_report_files_should_be_staged": true
+  },
+  "next_recommended_action": "stop_unless_new_approval_gated_block_is_opened"
+}
