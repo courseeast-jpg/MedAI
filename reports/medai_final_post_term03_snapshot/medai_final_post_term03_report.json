@@ -1,0 +1,124 @@
+{
+  "aggregate_counts": {
+    "concepts_count": 353854,
+    "import_events_count": 2,
+    "loinc_rows_imported": 109325,
+    "rxnorm_rows_imported": 244529,
+    "sources_count": 2
+  },
+  "block_id": "MEDAI-PARK-07",
+  "branch": "clinical-knowledge-architecture",
+  "conclusion": "medai_post_term03_terminology_import_qa_parked",
+  "git_status_summary": {
+    "dirty_line_count_before_snapshot_commit": 196,
+    "note": "Pre-existing dirty/generated files are intentionally not listed in public snapshot to avoid private path leakage."
+  },
+  "head_commit": "906f526",
+  "head_commit_short": "906f526",
+  "imported_systems": [
+    "rxnorm",
+    "loinc"
+  ],
+  "next_recommended_action": "Keep the imported local terminology DB private and gitignored; use TERM-03 QA as the regression gate before any terminology-backed clinical integration or B07 opt-in work.",
+  "non_commit_boundaries": {
+    "data_terminology_db_index_staged_or_committed": false,
+    "db_key_private_pdf_image_archive_staged_or_committed": false,
+    "license_ack_private_staged_or_committed": false,
+    "source_rrf_csv_zip_staged_or_committed": false,
+    "terminology_data_staged_or_committed": false
+  },
+  "privacy_safety_status": {
+    "b07_hypothesis_promotion": false,
+    "clinical_recommendations_generated": false,
+    "ddi_status_clearing": false,
+    "external_api_used": false,
+    "license_text_written_to_public_reports": false,
+    "prescription_dosing_advice_generated": false,
+    "private_filename_path_leaks": 0,
+    "production_extractor_changed": false,
+    "production_ocr_changed": false,
+    "public_reports_privacy_clean": true,
+    "raw_phi_logged_in_public_reports": false,
+    "safety_gate_changed": false,
+    "secret_leaks": 0
+  },
+  "provenance_note": "Commit identifiers are stored as short hashes in this public report to avoid secret-pattern false positives.",
+  "term02": {
+    "commit": "e2ce45f",
+    "conclusion": "cka_term02_controlled_local_import_ready",
+    "external_api_used": false,
+    "file_summaries": [
+      {
+        "checkpoint_count": 5,
+        "chunks_processed": 25,
+        "content_hash": "term02_hash_85f0b3eece59dec6",
+        "file_safe_id": "term02_file_2c553e66ebcb56b0",
+        "records_imported": 244529,
+        "records_skipped": 0,
+        "row_cap_applied": false,
+        "rows_seen": 244529,
+        "system": "rxnorm"
+      },
+      {
+        "checkpoint_count": 3,
+        "chunks_processed": 11,
+        "content_hash": "term02_hash_6187d5b2fcd89398",
+        "file_safe_id": "term02_file_680cdb8692eeffff",
+        "records_imported": 109325,
+        "records_skipped": 0,
+        "row_cap_applied": false,
+        "rows_seen": 109325,
+        "system": "loinc"
+      }
+    ],
+    "imported_systems": [
+      "rxnorm",
+      "loinc"
+    ],
+    "privacy_report_clean": true,
+    "store_summary": {
+      "concepts_count": 353854,
+      "import_events_count": 2,
+      "in_memory": false,
+      "sources_count": 2,
+      "synonyms_count": 0
+    }
+  },
+  "term03": {
+    "ambiguous_manual_review_passed": true,
+    "code_lookup_passed": true,
+    "commit": "906f526",
+    "conclusion": "cka_term03_local_terminology_qa_ready",
+    "determinism_passed": true,
+    "external_api_used": false,
+    "privacy_report_clean": true,
+    "qa_case_counts": {
+      "failed": 0,
+      "passed": 9,
+      "skipped": 1,
+      "total": 10
+    },
+    "source_filter_isolation_passed": true,
+    "source_systems_detected": [
+      "loinc",
+      "rxnorm"
+    ],
+    "store_summary": {
+      "concepts_count": 353854,
+      "import_events_count": 2,
+      "in_memory": false,
+      "sources_count": 2,
+      "synonyms_count": 0
+    },
+    "synonym_alias_supported": false,
+    "unknown_unmapped_passed": true
+  },
+  "timestamp": "2026-05-14T01:59:17.331902+00:00",
+  "validation_results": {
+    "final_mvp_release_validation": "passed",
+    "term01h_safety_redteam": "passed",
+    "term02_controlled_local_import": "passed",
+    "term02_preflight_gate": "passed",
+    "term03_local_qa": "passed"
+  }
+}
