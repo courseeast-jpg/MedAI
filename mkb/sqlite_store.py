@@ -77,6 +77,17 @@ CREATE INDEX IF NOT EXISTS idx_ledger_record_id ON ledger(record_id);
 """
 
 
+def dict_row_factory(cursor, row):
+    """Return backend-neutral dict rows for sqlite3 and sqlcipher3 cursors."""
+    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+
+
+def first_column_value(row):
+    if isinstance(row, dict):
+        return next(iter(row.values()))
+    return row[0]
+
+
 class SQLiteStore:
     def __init__(self, db_path: Path = DB_PATH, encryption_key: str = ""):
         self.db_path = db_path
@@ -88,7 +99,7 @@ class SQLiteStore:
         conn = sqlite_backend.connect(str(self.db_path))
         if ENCRYPTED and self.encryption_key:
             conn.execute(f"PRAGMA key='{self.encryption_key}'")
-        conn.row_factory = sqlite3.Row
+        conn.row_factory = dict_row_factory
         return conn
 
     def _init_db(self):
@@ -226,10 +237,16 @@ class SQLiteStore:
 
     def count_records(self) -> dict:
         with self._get_conn() as conn:
-            total = conn.execute("SELECT COUNT(*) FROM records").fetchone()[0]
-            active = conn.execute("SELECT COUNT(*) FROM records WHERE tier='active'").fetchone()[0]
-            hyp = conn.execute("SELECT COUNT(*) FROM records WHERE tier='hypothesis'").fetchone()[0]
-            quar = conn.execute("SELECT COUNT(*) FROM records WHERE tier='quarantined'").fetchone()[0]
+            total = first_column_value(conn.execute("SELECT COUNT(*) AS count FROM records").fetchone())
+            active = first_column_value(
+                conn.execute("SELECT COUNT(*) AS count FROM records WHERE tier='active'").fetchone()
+            )
+            hyp = first_column_value(
+                conn.execute("SELECT COUNT(*) AS count FROM records WHERE tier='hypothesis'").fetchone()
+            )
+            quar = first_column_value(
+                conn.execute("SELECT COUNT(*) AS count FROM records WHERE tier='quarantined'").fetchone()
+            )
         return {"total": total, "active": active, "hypothesis": hyp, "quarantined": quar}
 
     # ── HELPERS ────────────────────────────────────────────────────────────

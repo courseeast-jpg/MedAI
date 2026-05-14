@@ -1,0 +1,71 @@
+{
+  "active_local_db_count_records_required": false,
+  "active_local_db_count_records_result": "failed",
+  "b07_terminology_behavior_changed": false,
+  "block_id": "MEDAI-DB-REPAIR-02",
+  "clinical_logic_changed": false,
+  "conclusion": "medai_db_repair02_row_factory_ready",
+  "db_key_printed": false,
+  "db_rows_printed": false,
+  "diagnosis": {
+    "active_store_count_records": {
+      "db_label": "data/mkb.db",
+      "exception_category": "row_factory_or_backend_error",
+      "exception_class": "MemoryError",
+      "result": "failed"
+    },
+    "active_store_open_required_for_row_factory_diagnosis": false,
+    "backend_module": "sqlcipher3.dbapi2",
+    "backend_neutral_helper_check": {
+      "dict_row_factory_result_type": "dict",
+      "first_column_value": 3,
+      "passed": true
+    },
+    "block_id": "MEDAI-DB-REPAIR-02",
+    "conclusion": "medai_sqlcipher_row_factory_diagnosis_ready",
+    "db_key_printed": false,
+    "db_rows_printed": false,
+    "diagnosis_category": "row_factory_backend_compatible",
+    "external_api_used": false,
+    "generated_at_utc": "2026-05-14T21:53:44.924733+00:00",
+    "import_performed": false,
+    "source_inspection": {
+      "dict_row_factory_present": true,
+      "sqlite3_row_direct_assignment_present": false
+    },
+    "sqlcipher_available": true,
+    "sqlite3_row_incompatibility_simulation": {
+      "exception_class": "TypeError",
+      "sqlite3_row_rejects_fake_sqlcipher_cursor": true
+    },
+    "temp_store_count_records": {
+      "backend_module": "sqlcipher3.dbapi2",
+      "counts_keys": [
+        "active",
+        "hypothesis",
+        "quarantined",
+        "total"
+      ],
+      "counts_total": 0,
+      "result": "ok"
+    }
+  },
+  "diagnosis_category": "row_factory_backend_compatible",
+  "external_api_used": false,
+  "fix_summary": "SQLiteStore now uses a backend-neutral dictionary row factory and aggregate count helper.",
+  "generated_at_utc": "2026-05-14T21:53:45.259034+00:00",
+  "helper_validation": {
+    "dict_row_factory_passed": true,
+    "first_column_value_passed": true
+  },
+  "import_performed": false,
+  "next_manual_launch_step": "Run scripts/run_medai_mkb_db_quarantine_recreate.py with explicit confirmation, then run Start_MedAI_UI.bat.",
+  "ocr_extractor_safety_gates_changed": false,
+  "real_db_modified": false,
+  "root_cause": "sqlite3.Row is incompatible with sqlcipher3 cursor objects when SQLCipher is the active backend.",
+  "route_fix_behavior_changed": false,
+  "temp_store_validation": {
+    "temp_store_count_records_passed": true,
+    "temp_store_total": 0
+  }
+}
