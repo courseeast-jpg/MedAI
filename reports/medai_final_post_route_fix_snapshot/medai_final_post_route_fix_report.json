@@ -1,0 +1,72 @@
+{
+  "block_id": "MEDAI-PARK-11",
+  "conclusion": "medai_post_route_fix_parked",
+  "timestamp": "2026-05-14T09:31:20.7849854-04:00",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "97a5770",
+  "park10_commit": "44db358",
+  "hygiene01_commit": "6ba33ef",
+  "route_audit01_commit": "c984c35",
+  "route_fix01_commit": "97a5770",
+  "new_behavior_implemented_in_park11": false,
+  "routing_fallback_logic_changed_in_park11": false,
+  "b07_terminology_behavior_changed": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_safety_gates_changed_after_route_fix": false,
+  "imports_run": false,
+  "external_api_used": false,
+  "route_fix01_summary": {
+    "non_empty_local_result_beats_empty_phi3_fallback": true,
+    "gemini_quota_rate_limit_preserves_safe_local_result": true,
+    "selected_extractor_metadata_present": true,
+    "discarded_empty_fallback_metadata_present": true,
+    "fallback_selection_reason_present": true,
+    "terminal_empty_prevented_present": true,
+    "pdf_text_quality_audit_metadata_present": true,
+    "pii_audit_metadata_boundary_present": true,
+    "long_noisy_03_canary_passed": true,
+    "b07_validation_unaffected": true
+  },
+  "validations": [
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "conclusion": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests/test_phase23_routing_efficiency.py tests/test_connector_orchestration.py tests/test_phase10_hardening.py -q",
+      "result": "passed",
+      "tests_passed": 33,
+      "warnings": 7
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "cases_passed": 6,
+      "cases_total": 6
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "cases_passed": 12,
+      "cases_total": 12,
+      "tests_reported": 693
+    }
+  ],
+  "privacy_safety": {
+    "public_reports_privacy_clean": true,
+    "raw_phi_logged_in_public_reports": false,
+    "private_filename_path_leaks": 0,
+    "secret_leaks": 0,
+    "source_terminology_rows_logged": false,
+    "license_text_logged": false,
+    "private_terminology_artifacts_staged": false,
+    "db_key_private_pdf_image_archive_staged": false
+  },
+  "worktree": {
+    "remaining_dirty_entry_count_before_park11_reports": 201,
+    "unrelated_dirty_files_remain_unstaged": true,
+    "only_park11_report_files_should_be_staged": true
+  },
+  "next_recommended_action": "stop_unless_new_approval_gated_block_is_opened"
+}
