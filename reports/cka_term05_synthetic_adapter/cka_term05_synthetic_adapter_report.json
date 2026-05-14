@@ -1,0 +1,144 @@
+{
+  "ambiguous_manual_review_passed": true,
+  "b07_integrated": false,
+  "block_id": "CKA-TERM-05",
+  "case_results": [
+    {
+      "case_id": "exact_rxnorm_lookup",
+      "matches_count": 1,
+      "passed": true,
+      "reason_codes": [
+        "exact_lookup_match",
+        "synthetic_fixture"
+      ],
+      "status": "exact"
+    },
+    {
+      "case_id": "exact_loinc_lookup",
+      "matches_count": 1,
+      "passed": true,
+      "reason_codes": [
+        "exact_lookup_match",
+        "synthetic_fixture"
+      ],
+      "status": "exact"
+    },
+    {
+      "case_id": "code_lookup",
+      "matches_count": 1,
+      "passed": true,
+      "reason_codes": [
+        "code_exact_match",
+        "synthetic_fixture"
+      ],
+      "status": "exact"
+    },
+    {
+      "case_id": "source_filter_isolation",
+      "matches_count": 0,
+      "passed": true,
+      "reason_codes": [
+        "unmapped_lookup",
+        "no_code_hallucinated"
+      ],
+      "status": "unmapped"
+    },
+    {
+      "case_id": "unknown_unmapped",
+      "matches_count": 0,
+      "passed": true,
+      "reason_codes": [
+        "unmapped_lookup",
+        "no_code_hallucinated"
+      ],
+      "status": "unmapped"
+    },
+    {
+      "case_id": "ambiguous_manual_review",
+      "matches_count": 2,
+      "passed": true,
+      "reason_codes": [
+        "ambiguous_lookup",
+        "manual_review_required"
+      ],
+      "status": "ambiguous"
+    },
+    {
+      "case_id": "determinism",
+      "matches_count": 1,
+      "passed": true,
+      "reason_codes": [
+        "exact_lookup_match",
+        "synthetic_fixture"
+      ],
+      "status": "exact"
+    },
+    {
+      "case_id": "normalization",
+      "matches_count": 1,
+      "passed": true,
+      "reason_codes": [
+        "exact_lookup_match",
+        "synthetic_fixture"
+      ],
+      "status": "exact"
+    }
+  ],
+  "cases_failed": 0,
+  "cases_passed": 8,
+  "cases_total": 8,
+  "clinical_advice_generated": false,
+  "clinical_logic_changed": false,
+  "code_lookup_passed": true,
+  "conclusion": "cka_term05_synthetic_adapter_ready",
+  "data_terminology_accessed": false,
+  "data_terminology_staged": false,
+  "ddi_status_cleared": false,
+  "determinism_passed": true,
+  "dosing_advice_generated": false,
+  "exact_loinc_passed": true,
+  "exact_rxnorm_passed": true,
+  "external_api_used": false,
+  "fixture_metadata": {
+    "concepts_loaded": 7,
+    "external_api_used": false,
+    "inactive_concepts_loaded": 1,
+    "malformed_codes_skipped": 1,
+    "real_terminology_imported": false,
+    "systems_loaded": [
+      "umls",
+      "snomed_ct",
+      "rxnorm",
+      "loinc"
+    ]
+  },
+  "hypothesis_promoted": false,
+  "license_ack_private_staged": false,
+  "mkb_write_performed": false,
+  "no_code_hallucinated": true,
+  "normalization_passed": true,
+  "ocr_extractor_safety_gates_changed": false,
+  "phase_name": "Synthetic Read-Only Terminology Adapter",
+  "privacy_report_clean": true,
+  "private_filename_path_leaks": 0,
+  "private_store_accessed": false,
+  "raw_phi_logged_in_public_reports": false,
+  "read_only": true,
+  "recommended_next_action": "Proceed to TERM-06 private-store read-only adapter validation only after explicit approval.",
+  "secret_leaks": 0,
+  "source_filter_isolation_passed": true,
+  "source_terminology_files_staged": false,
+  "synthetic_only": true,
+  "terminology_data_accessed": false,
+  "terminology_data_staged": false,
+  "timestamp": "2026-05-14T02:22:27.520240+00:00",
+  "unknown_unmapped_passed": true,
+  "validation_commands": [
+    "python -m pytest tests/test_cka_term05_synthetic_adapter.py -vv",
+    "python scripts/run_cka_term05_synthetic_adapter_validation.py",
+    "python scripts/run_cka_term04_integration_readiness_validation.py",
+    "python scripts/run_cka_term03_local_terminology_qa_validation.py",
+    "python scripts/run_cka_term01h_safety_redteam_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ]
+}

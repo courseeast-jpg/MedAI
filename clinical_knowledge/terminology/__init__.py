@@ -168,6 +168,14 @@ from clinical_knowledge.terminology.term03_local_qa import (
     Term03QACaseResult,
     run_local_terminology_qa,
 )
+from clinical_knowledge.terminology.term05_read_only_adapter import (
+    SyntheticReadOnlyTerminologyAdapter,
+    Term05AdapterMatch,
+    Term05AdapterResult,
+    Term05AdapterValidationResult,
+    build_synthetic_read_only_adapter,
+    run_term05_synthetic_adapter_validation,
+)
 
 
 __all__ = [
@@ -275,4 +283,11 @@ __all__ = [
     "Term03QABlocked",
     "Term03QACaseResult",
     "run_local_terminology_qa",
+    # TERM-05 synthetic read-only adapter
+    "SyntheticReadOnlyTerminologyAdapter",
+    "Term05AdapterMatch",
+    "Term05AdapterResult",
+    "Term05AdapterValidationResult",
+    "build_synthetic_read_only_adapter",
+    "run_term05_synthetic_adapter_validation",
 ]
