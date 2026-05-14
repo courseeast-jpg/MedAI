@@ -1,0 +1,86 @@
+{
+  "block_id": "MEDAI-PARK-08",
+  "conclusion": "medai_post_term08_terminology_adapter_snapshot_parked",
+  "timestamp": "2026-05-14T07:22:00Z",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "73fa5204dff9",
+  "term05": {
+    "commit": "2a0b038bdc6f",
+    "summary": "Synthetic read-only terminology adapter ready; exact, unknown, ambiguous, source-filter, code, and deterministic lookup behavior validated."
+  },
+  "term06": {
+    "commit": "f8fe25855018",
+    "summary": "Private-store read-only adapter validation ready; local store opened read-only only, with 9 validation cases passed."
+  },
+  "term07": {
+    "commit": "51a80d5fb51a",
+    "summary": "UI-only terminology lookup panel ready and hidden by default behind MEDAI_TERMINOLOGY_LOOKUP_UI=1."
+  },
+  "term08": {
+    "commit": "73fa5204dff9",
+    "summary": "Hypothesis-only coding annotation pilot ready; feature flag default off, 4 validation cases passed, no active clinical writes."
+  },
+  "feature_flags": {
+    "MEDAI_TERMINOLOGY_LOOKUP_UI": "default_off",
+    "MEDAI_TERMINOLOGY_HYPOTHESIS_ANNOTATION": "default_off"
+  },
+  "local_terminology_store_status": {
+    "private_store_exists_locally": true,
+    "systems": [
+      "loinc",
+      "rxnorm"
+    ],
+    "concepts_count": 353854,
+    "sources_count": 2,
+    "import_events_count": 2,
+    "rxnorm_rows_imported": 244529,
+    "loinc_rows_imported": 109325,
+    "private_store_committed": false
+  },
+  "qa_validation_summary": {
+    "term03_qa_cases_total": 10,
+    "term03_qa_cases_passed": 9,
+    "term03_qa_cases_failed": 0,
+    "term03_qa_cases_skipped": 1,
+    "term08_cases_total": 4,
+    "term08_cases_passed": 4,
+    "term08_cases_failed": 0
+  },
+  "safety_privacy_status": {
+    "external_api_used": false,
+    "clinical_recommendations_generated": false,
+    "prescription_dosing_advice_generated": false,
+    "runtime_clinical_writes_created": false,
+    "automatic_annotations_created": false,
+    "writes_active_fact": false,
+    "promotes_hypothesis": false,
+    "clears_ddi_status": false,
+    "b07_integration_active": false,
+    "b07_behavior_changed": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "raw_phi_logged_in_public_reports": false,
+    "private_filename_path_leaks": 0,
+    "secret_leaks": 0,
+    "license_text_written_to_public_reports": false,
+    "privacy_report_clean": true
+  },
+  "non_commit_boundaries": {
+    "terminology_data_committed": false,
+    "data_terminology_db_index_committed": false,
+    "license_ack_private_committed": false,
+    "source_rrf_csv_zip_committed": false,
+    "db_key_private_pdf_image_archive_committed": false
+  },
+  "validations_run": [
+    "python scripts/run_cka_term08_hypothesis_annotation_validation.py",
+    "python scripts/run_cka_term07_ui_lookup_panel_validation.py",
+    "python scripts/run_cka_term06_private_store_adapter_validation.py",
+    "python scripts/run_cka_term05_synthetic_adapter_validation.py",
+    "python scripts/run_cka_term04_integration_readiness_validation.py",
+    "python scripts/run_cka_term03_local_terminology_qa_validation.py",
+    "python scripts/run_cka_term02_controlled_local_import_validation.py",
+    "python scripts/run_cka_term01h_safety_redteam_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ],
+  "next_recommended_action": "Stop here unless explicitly approved to begin B07-TERM opt-in integration planning."
+}
