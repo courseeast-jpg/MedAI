@@ -1,0 +1,155 @@
+{
+  "block_id": "MEDAI-ROUTE-AUDIT-01",
+  "conclusion": "pending_route_runtime_changes_need_operator_decision",
+  "timestamp": "2026-05-14T09:21:16.8380710-04:00",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "6ba33ef",
+  "hygiene01_commit": "6ba33ef",
+  "park10_commit": "44db358",
+  "runtime_behavior_changed_by_this_audit": false,
+  "runtime_files_staged_by_this_audit": false,
+  "git_status_short_entry_count": 201,
+  "audited_files": [
+    {
+      "path": "execution/pipeline.py",
+      "status": "unstaged_modified",
+      "insertions": 45,
+      "deletions": 2,
+      "clusters": [
+        {
+          "name": "pdf_text_audit_state_and_stage_logging",
+          "classification": "audit_observability_only",
+          "intended_value": "make text quality and OCR fallback state visible in audit output",
+          "keep_candidate": true,
+          "revert_candidate": false,
+          "needs_test_first": true,
+          "risk": "medium",
+          "recommended_next_action": "keep_only_in_isolated_implementation_block"
+        },
+        {
+          "name": "pii_audit_state_propagation",
+          "classification": "extraction_metadata_propagation",
+          "intended_value": "preserve medical-label PII audit facts for review and debugging",
+          "keep_candidate": true,
+          "revert_candidate": false,
+          "needs_test_first": true,
+          "risk": "medium",
+          "recommended_next_action": "verify_report_schema_and_privacy_before_keep"
+        },
+        {
+          "name": "route_selection_metadata",
+          "classification": "extraction_metadata_propagation",
+          "intended_value": "preserve selected extractor and fallback selection audit trail",
+          "keep_candidate": true,
+          "revert_candidate": false,
+          "needs_test_first": true,
+          "risk": "medium",
+          "recommended_next_action": "verify_downstream_audit_and_report_compatibility"
+        }
+      ]
+    },
+    {
+      "path": "execution/router.py",
+      "status": "unstaged_modified",
+      "insertions": 287,
+      "deletions": 22,
+      "clusters": [
+        {
+          "name": "selected_terminal_result_metadata",
+          "classification": "audit_observability_only",
+          "intended_value": "show which extractor was ultimately selected and why",
+          "keep_candidate": true,
+          "revert_candidate": false,
+          "needs_test_first": true,
+          "risk": "medium",
+          "recommended_next_action": "keep_with_schema_tests"
+        },
+        {
+          "name": "non_empty_local_result_preference",
+          "classification": "routing_behavior_change",
+          "intended_value": "prevent empty fallback output from replacing usable local extraction",
+          "keep_candidate": true,
+          "revert_candidate": true,
+          "needs_test_first": true,
+          "risk": "high",
+          "recommended_next_action": "dedicated_implementation_block"
+        },
+        {
+          "name": "quota_rate_limit_local_terminal_fallback",
+          "classification": "quota_rate_limit_handling",
+          "intended_value": "retain local result when Gemini quota or rate limit blocks external route",
+          "keep_candidate": true,
+          "revert_candidate": true,
+          "needs_test_first": true,
+          "risk": "high",
+          "recommended_next_action": "dedicated_implementation_block"
+        },
+        {
+          "name": "terminal_empty_prevention_flags",
+          "classification": "terminal_empty_prevention",
+          "intended_value": "make terminal-empty avoidance explicit and testable",
+          "keep_candidate": true,
+          "revert_candidate": false,
+          "needs_test_first": true,
+          "risk": "medium",
+          "recommended_next_action": "keep_with_audit_field_tests"
+        },
+        {
+          "name": "spacy_to_phi3_fallback_expansion",
+          "classification": "fallback_behavior_change",
+          "intended_value": "allow an additional local fallback path for low-quality local results",
+          "keep_candidate": false,
+          "revert_candidate": true,
+          "needs_test_first": true,
+          "risk": "high",
+          "recommended_next_action": "operator_review_before_keep"
+        }
+      ]
+    }
+  ],
+  "likely_prior_phase_linkage": [
+    "controlled_real_use_empty_fallback_selection",
+    "phase23_routing_efficiency",
+    "phase10_hardening_audit_visibility"
+  ],
+  "validations": [
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "cases_passed": 12,
+      "cases_total": 12,
+      "tests_reported": 693,
+      "external_api_used": false
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "cases_passed": 6,
+      "cases_total": 6,
+      "external_api_used": false
+    },
+    {
+      "command": "python -m pytest tests/test_phase23_routing_efficiency.py tests/test_connector_orchestration.py tests/test_phase10_hardening.py -q",
+      "result": "passed",
+      "tests_passed": 33,
+      "warnings": 7
+    }
+  ],
+  "recommended_operator_decision": "more_tests_needed_then_keep_candidate_in_isolated_block",
+  "recommended_paths": [
+    "keep_and_complete_in_dedicated_implementation_block",
+    "targeted_revert_only_after_explicit_operator_approval",
+    "focused_tests_before_final_decision"
+  ],
+  "external_api_used": false,
+  "imports_run": false,
+  "private_terminology_artifacts_touched": false,
+  "terminology_data_staged": false,
+  "data_terminology_staged": false,
+  "private_license_ack_staged": false,
+  "source_terminology_files_staged": false,
+  "db_key_private_pdf_image_archive_staged": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0
+}
