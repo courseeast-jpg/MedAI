@@ -1,0 +1,86 @@
+{
+  "behavior_changes_accepted": [
+    "selected_extractor_metadata",
+    "discarded_empty_fallback_metadata",
+    "fallback_selection_reason_metadata",
+    "route_vs_selected_extractor_audit_trail",
+    "pdf_text_quality_audit_metadata",
+    "pii_audit_metadata_boundary",
+    "non_empty_local_result_preferred_over_empty_phi3_terminal",
+    "gemini_quota_rate_limit_local_fallback",
+    "terminal_empty_prevention_flags",
+    "long_noisy_03_canary_preserved_by_tests"
+  ],
+  "block_id": "MEDAI-ROUTE-FIX-01",
+  "branch": "clinical-knowledge-architecture",
+  "canary_results": {
+    "long_noisy_03_canary_test_present": true,
+    "long_noisy_03_expected_boundary": "phi3_review_path_preserved"
+  },
+  "conclusion": "medai_route_fix01_ready",
+  "files_adopted": [
+    "execution/pipeline.py",
+    "execution/router.py",
+    "tests/test_connector_orchestration.py"
+  ],
+  "focused_tests_result": {
+    "result": "passed",
+    "tests_passed": 33,
+    "warnings": 7
+  },
+  "head_commit": "c984c35",
+  "metadata_schema_checks": {
+    "fallback_selection_reason_present": true,
+    "selected_extractor_present": true,
+    "terminal_empty_prevented_present": true
+  },
+  "next_recommended_action": "run_full_required_validations_then_commit_scoped_route_fix_files",
+  "pipeline_marker_check": {
+    "checked_count": 8,
+    "missing": [],
+    "passed": true
+  },
+  "privacy_checks": {
+    "license_text_logged": false,
+    "private_filename_path_leaks": 0,
+    "raw_phi_logged_in_public_reports": false,
+    "secret_leaks": 0,
+    "source_terminology_rows_logged": false
+  },
+  "route_distribution_comparison": {
+    "canary_test_present": true,
+    "empty_fallback_tests_present": true,
+    "existing_focused_tests": "passed_when_run_before_report_generation",
+    "quota_fallback_test_present": true
+  },
+  "router_marker_check": {
+    "checked_count": 12,
+    "missing": [],
+    "passed": true
+  },
+  "safety_flags": {
+    "b07_behavior_changed": false,
+    "clinical_decision_logic_changed": false,
+    "confidence_thresholds_changed": false,
+    "external_api_used": false,
+    "imports_run": false,
+    "private_terminology_artifacts_touched": false,
+    "safety_gates_broadened": false
+  },
+  "staging_safety": {
+    "pipeline_status": "M execution/pipeline.py",
+    "router_status": "M execution/router.py",
+    "unsafe_staged_files": []
+  },
+  "test_marker_check": {
+    "checked_count": 5,
+    "missing": [],
+    "passed": true
+  },
+  "timestamp": "2026-05-14T13:27:36+00:00",
+  "validations_run_before_script": [
+    "python -m pytest tests/test_phase23_routing_efficiency.py tests/test_connector_orchestration.py tests/test_phase10_hardening.py -q",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ]
+}

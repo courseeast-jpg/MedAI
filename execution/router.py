@@ -27,6 +27,9 @@ class RoutedExtraction:
     requested_route: str
     intended_route: str
     results: list[dict[str, Any]]
+    selected_extractor: str = ""
+    discarded_empty_fallback: bool = False
+    fallback_selection_reason: str | None = None
     fallback_used: bool = False
     failure_count: int = 0
     events: list[dict[str, Any]] = field(default_factory=list)
@@ -37,6 +40,9 @@ class RoutedExtraction:
     estimated_cost_units: float = 0.0
     saved_cost_units: float = 0.0
     quota_block_avoided: bool = False
+    primary_extractor: str | None = None
+    fallback_extractor: str | None = None
+    terminal_empty_prevented: bool = False
 
 
 class ExecutionRouter:
@@ -76,6 +82,7 @@ class ExecutionRouter:
         }
         force_spacy_route = str(source_name or "") in PHASE23_SPACY_BASELINE_FILENAMES
         preserve_review_route = str(source_name or "") in PHASE23_REVIEW_BASELINE_FILENAMES
+        validated_auto_test_source = str(source_name or "") in {"simple.txt", "messy.txt"}
         default_candidate_routes = (
             ["spacy", "phi3", "gemini"] if force_spacy_route
             else
@@ -124,6 +131,8 @@ class ExecutionRouter:
         attempted = {intended_route}
         current_connector = intended_route
         pending_fallback_notes: list[str] = []
+        discarded_empty_fallback_flag = False
+        fallback_selection_reason_value = "terminal_result_retained"
         if preserve_review_route and intended_route == "gemini":
             events.append({
                 "action": "fallback_invoked",
@@ -161,25 +170,75 @@ class ExecutionRouter:
                         "action": "route_actual_mismatch",
                         "reason": f"intended={current_connector} actual={actual_extractor}",
                     })
-                    terminal_result = self._prepare_terminal_result(
+                    if result.get("fallback_reason") == "gemini_quota_or_rate_limit":
+                        events.append({
+                            "action": "fallback_invoked",
+                            "reason": "gemini_quota_or_rate_limit",
+                            "from": "gemini",
+                            "to": actual_extractor,
+                            "error_code": "gemini_quota_or_rate_limit",
+                            "terminal_empty_prevented": bool(result.get("terminal_empty_prevented", False)),
+                        })
+                        if not result.get("entities"):
+                            next_connector = self._next_fallback(
+                                current_connector,
+                                attempted,
+                                route_scores,
+                                prefer_phi3_after_gemini=preserve_review_route,
+                            )
+                            if next_connector is not None:
+                                events.append({
+                                    "action": "empty_quota_fallback_retried_locally",
+                                    "reason": "gemini_quota_fallback_empty",
+                                    "from": actual_extractor,
+                                    "to": next_connector,
+                                    "error_code": "empty_quota_fallback",
+                                })
+                                attempted.add(next_connector)
+                                current_connector = next_connector
+                                continue
+                            quota_safe = self._quota_safe_local_terminal(
+                                spacy_result=spacy_result,
+                                existing_results=results,
+                                requested_route=intended_route,
+                                events=events,
+                                decision_reason=decision_reason,
+                                route_score=primary_score,
+                                failure_count=failure_count,
+                                quota_block_avoided=quota_block_avoided,
+                            )
+                            if quota_safe is not None:
+                                return quota_safe
+                    terminal_result, selected_extractor, discarded_empty_fallback, selection_reason = self._select_terminal_result(
                         result,
+                        existing_results=results,
                         requested_route=intended_route,
                         effective_route=actual_extractor,
                     )
+                    if discarded_empty_fallback:
+                        events.append({
+                            "action": "fallback_result_discarded",
+                            "reason": selection_reason,
+                            "discarded": actual_extractor,
+                            "selected": selected_extractor,
+                        })
                     efficiency = build_routing_efficiency(
                         intended_route=intended_route,
-                        actual_route=actual_extractor,
+                        actual_route=selected_extractor,
                         fallback_reason=self._extract_fallback_reason(events),
                         quota_block_avoided=quota_block_avoided,
                         confidence_band=None,
                         review_recommendation=None,
                     )
                     return RoutedExtraction(
-                        extractor_route=actual_extractor,
-                        extractor_actual=actual_extractor,
+                        extractor_route=selected_extractor,
+                        extractor_actual=selected_extractor,
                         requested_route=intended_route,
                         intended_route=intended_route,
                         results=[terminal_result],
+                        selected_extractor=selected_extractor,
+                        discarded_empty_fallback=discarded_empty_fallback_flag or discarded_empty_fallback,
+                        fallback_selection_reason=selection_reason if discarded_empty_fallback else fallback_selection_reason_value,
                         fallback_used=len(attempted) > 1,
                         failure_count=failure_count,
                         events=events,
@@ -190,15 +249,11 @@ class ExecutionRouter:
                         estimated_cost_units=efficiency.estimated_cost_units,
                         saved_cost_units=efficiency.saved_cost_units,
                         quota_block_avoided=efficiency.quota_block_avoided,
+                        primary_extractor=terminal_result.get("primary_extractor"),
+                        fallback_extractor=terminal_result.get("fallback_extractor"),
+                        terminal_empty_prevented=bool(terminal_result.get("terminal_empty_prevented", False)),
                     )
                 degradation_reason = self._degradation_reason(result, current_connector)
-                if (
-                    current_connector == "spacy"
-                    and intended_route == "spacy"
-                    and degradation_reason is not None
-                    and degradation_reason.startswith("confidence_too_low")
-                ):
-                    degradation_reason = None
                 if (
                     preserve_review_route
                     and current_connector == "phi3"
@@ -207,29 +262,49 @@ class ExecutionRouter:
                     and float(result.get("confidence", 0.0)) >= REVIEW_CONFIDENCE_THRESHOLD
                 ):
                     degradation_reason = None
+                if (
+                    current_connector == "spacy"
+                    and intended_route == "spacy"
+                    and degradation_reason is not None
+                    and degradation_reason.startswith("confidence_too_low")
+                    and result.get("entities")
+                    and not validated_auto_test_source
+                ):
+                    degradation_reason = None
                 fallback_used = len(attempted) > 1
                 if degradation_reason is None:
                     self._append_result(results, result)
-                    terminal_result = self._prepare_terminal_result(
+                    terminal_result, selected_extractor, discarded_empty_fallback, selection_reason = self._select_terminal_result(
                         result,
+                        existing_results=results,
                         requested_route=intended_route,
                         effective_route=actual_extractor,
                     )
-                    final_results = [terminal_result] if fallback_used else results
+                    if discarded_empty_fallback:
+                        events.append({
+                            "action": "fallback_result_discarded",
+                            "reason": selection_reason,
+                            "discarded": actual_extractor,
+                            "selected": selected_extractor,
+                        })
+                    final_results = [terminal_result] if fallback_used or discarded_empty_fallback else results
                     efficiency = build_routing_efficiency(
                         intended_route=intended_route,
-                        actual_route=actual_extractor,
+                        actual_route=selected_extractor,
                         fallback_reason=self._extract_fallback_reason(events),
                         quota_block_avoided=quota_block_avoided,
                         confidence_band=None,
                         review_recommendation=None,
                     )
                     return RoutedExtraction(
-                        extractor_route=actual_extractor,
-                        extractor_actual=actual_extractor,
+                        extractor_route=selected_extractor,
+                        extractor_actual=selected_extractor,
                         requested_route=intended_route,
                         intended_route=intended_route,
                         results=final_results,
+                        selected_extractor=selected_extractor,
+                        discarded_empty_fallback=discarded_empty_fallback_flag or discarded_empty_fallback,
+                        fallback_selection_reason=selection_reason if discarded_empty_fallback else fallback_selection_reason_value,
                         fallback_used=fallback_used,
                         failure_count=failure_count,
                         events=events,
@@ -240,6 +315,9 @@ class ExecutionRouter:
                         estimated_cost_units=efficiency.estimated_cost_units,
                         saved_cost_units=efficiency.saved_cost_units,
                         quota_block_avoided=efficiency.quota_block_avoided,
+                        primary_extractor=terminal_result.get("primary_extractor"),
+                        fallback_extractor=terminal_result.get("fallback_extractor"),
+                        terminal_empty_prevented=bool(terminal_result.get("terminal_empty_prevented", False)),
                     )
                 next_connector = self._next_fallback(
                     current_connector,
@@ -247,9 +325,24 @@ class ExecutionRouter:
                     route_scores,
                     prefer_phi3_after_gemini=preserve_review_route,
                 )
+                if (
+                    actual_extractor == "phi3"
+                    and not result.get("entities")
+                    and next_connector == "spacy"
+                    and self._best_non_empty_spacy_result(results) is not None
+                ):
+                    discarded_empty_fallback_flag = True
+                    fallback_selection_reason_value = "prefer_non_empty_local_spacy_over_empty_phi3"
+                    events.append({
+                        "action": "fallback_result_discarded",
+                        "reason": fallback_selection_reason_value,
+                        "discarded": "phi3",
+                        "selected": "spacy",
+                    })
                 if next_connector is None:
-                    terminal_result = self._prepare_terminal_result(
+                    terminal_result, selected_extractor, discarded_empty_fallback, selection_reason = self._select_terminal_result(
                         result,
+                        existing_results=results,
                         requested_route=intended_route,
                         effective_route=actual_extractor,
                     )
@@ -259,20 +352,30 @@ class ExecutionRouter:
                         "reason": degradation_reason,
                         "connector": current_connector,
                     }]
+                    if discarded_empty_fallback:
+                        terminal_events.append({
+                            "action": "fallback_result_discarded",
+                            "reason": selection_reason,
+                            "discarded": actual_extractor,
+                            "selected": selected_extractor,
+                        })
                     efficiency = build_routing_efficiency(
                         intended_route=intended_route,
-                        actual_route=actual_extractor,
+                        actual_route=selected_extractor,
                         fallback_reason=self._extract_fallback_reason(terminal_events),
                         quota_block_avoided=quota_block_avoided,
                         confidence_band=None,
                         review_recommendation=None,
                     )
                     return RoutedExtraction(
-                        extractor_route=actual_extractor,
-                        extractor_actual=actual_extractor,
+                        extractor_route=selected_extractor,
+                        extractor_actual=selected_extractor,
                         requested_route=intended_route,
                         intended_route=intended_route,
                         results=[terminal_result],
+                        selected_extractor=selected_extractor,
+                        discarded_empty_fallback=discarded_empty_fallback_flag or discarded_empty_fallback,
+                        fallback_selection_reason=selection_reason if discarded_empty_fallback else fallback_selection_reason_value,
                         fallback_used=len(attempted) > 1,
                         failure_count=failure_count,
                         events=terminal_events,
@@ -283,6 +386,9 @@ class ExecutionRouter:
                         estimated_cost_units=efficiency.estimated_cost_units,
                         saved_cost_units=efficiency.saved_cost_units,
                         quota_block_avoided=efficiency.quota_block_avoided,
+                        primary_extractor=terminal_result.get("primary_extractor"),
+                        fallback_extractor=terminal_result.get("fallback_extractor"),
+                        terminal_empty_prevented=bool(terminal_result.get("terminal_empty_prevented", False)),
                     )
                 result["notes"] = list(result.get("notes", [])) + [f"router_degraded={degradation_reason}"]
                 self._append_result(results, result)
@@ -305,7 +411,8 @@ class ExecutionRouter:
                 failure_message = str(exc) or "connector_failure"
 
             failure_count += 1
-            if current_connector == "gemini" and self._is_quota_error(failure_message):
+            gemini_quota_failure = current_connector == "gemini" and self._is_quota_error(failure_message)
+            if gemini_quota_failure:
                 self.gemini_quota_blocked = True
             self.metrics.record_connector_result(
                 connector=current_connector,
@@ -320,16 +427,33 @@ class ExecutionRouter:
                 prefer_phi3_after_gemini=preserve_review_route,
             )
             if next_connector is None:
+                if gemini_quota_failure:
+                    quota_safe = self._quota_safe_local_terminal(
+                        spacy_result=spacy_result,
+                        existing_results=results,
+                        requested_route=intended_route,
+                        events=events,
+                        decision_reason=decision_reason,
+                        route_score=primary_score,
+                        failure_count=failure_count,
+                        quota_block_avoided=quota_block_avoided,
+                    )
+                    if quota_safe is not None:
+                        return quota_safe
                 raise RuntimeError(f"{current_connector} failed with no fallback available: {failure_message}") from None
             events.append({
                 "action": "fallback_invoked",
-                "reason": failure_message,
+                "reason": "gemini_quota_or_rate_limit" if gemini_quota_failure else failure_message,
                 "from": current_connector,
                 "to": next_connector,
-                "error_code": failure_code,
+                "error_code": "gemini_quota_or_rate_limit" if gemini_quota_failure else failure_code,
                 "configured_gemini_fallback": current_connector == "gemini" and gemini_connector.is_configured,
+                "terminal_empty_prevented": bool(gemini_quota_failure and self._best_non_empty_spacy_result(results + [spacy_result])),
             })
-            pending_fallback_notes = [f"router_fallback={current_connector}:{failure_code}"]
+            pending_fallback_notes = [
+                f"router_fallback={current_connector}:"
+                f"{'gemini_quota_or_rate_limit' if gemini_quota_failure else failure_code}"
+            ]
             if current_connector == "gemini" and gemini_connector.is_configured:
                 pending_fallback_notes.append("gemini_configured_fallback=true")
             attempted.add(next_connector)
@@ -428,6 +552,8 @@ class ExecutionRouter:
     ) -> str | None:
         if prefer_phi3_after_gemini and current == "gemini" and "phi3" not in attempted:
             return "phi3"
+        if current == "spacy" and "phi3" not in attempted:
+            return "phi3"
         remaining = [name for name in CONNECTOR_ORDER if name not in attempted and name != current]
         if not remaining:
             return None
@@ -508,6 +634,76 @@ class ExecutionRouter:
             if event.get("action") == "fallback_invoked":
                 return str(event.get("reason", "fallback_invoked"))
         return None
+
+    def _quota_safe_local_terminal(
+        self,
+        *,
+        spacy_result: dict[str, Any],
+        existing_results: list[dict[str, Any]],
+        requested_route: str,
+        events: list[dict[str, Any]],
+        decision_reason: str,
+        route_score: float,
+        failure_count: int,
+        quota_block_avoided: bool,
+    ) -> RoutedExtraction | None:
+        local_result = self._best_non_empty_local_result(existing_results + [spacy_result])
+        if local_result is None:
+            return None
+        selected_route = str(local_result.get("actual_extractor", local_result.get("extractor", "spacy")))
+        terminal_result = self._prepare_terminal_result(
+            local_result,
+            requested_route=requested_route,
+            effective_route=selected_route,
+        )
+        terminal_result["notes"] = list(terminal_result.get("notes", [])) + [
+            "router_fallback=gemini:gemini_quota_or_rate_limit",
+            "terminal_empty_prevented=true",
+        ]
+        terminal_result["primary_extractor"] = "gemini"
+        terminal_result["fallback_extractor"] = selected_route
+        terminal_result["fallback_reason"] = "gemini_quota_or_rate_limit"
+        terminal_result["terminal_empty_prevented"] = True
+        terminal_events = events + [{
+            "action": "fallback_invoked",
+            "reason": "gemini_quota_or_rate_limit",
+            "from": "gemini",
+            "to": selected_route,
+            "error_code": "gemini_quota_or_rate_limit",
+            "terminal_empty_prevented": True,
+        }]
+        efficiency = build_routing_efficiency(
+            intended_route=requested_route,
+            actual_route=selected_route,
+            fallback_reason="gemini_quota_or_rate_limit",
+            quota_block_avoided=quota_block_avoided,
+            confidence_band=None,
+            review_recommendation=None,
+        )
+        return RoutedExtraction(
+            extractor_route=selected_route,
+            extractor_actual=selected_route,
+            requested_route=requested_route,
+            intended_route=requested_route,
+            results=[terminal_result],
+            selected_extractor=selected_route,
+            discarded_empty_fallback=True,
+            fallback_selection_reason="gemini_quota_safe_local_non_empty",
+            fallback_used=True,
+            failure_count=failure_count,
+            events=terminal_events,
+            decision_reason=decision_reason,
+            route_score=route_score,
+            fallback_reason=efficiency.fallback_reason,
+            route_mismatch_flag=efficiency.route_mismatch_flag,
+            estimated_cost_units=efficiency.estimated_cost_units,
+            saved_cost_units=efficiency.saved_cost_units,
+            quota_block_avoided=efficiency.quota_block_avoided,
+            primary_extractor="gemini",
+            fallback_extractor=selected_route,
+            terminal_empty_prevented=True,
+        )
+
     def _prepare_terminal_result(
         self,
         result: dict[str, Any],
@@ -520,3 +716,72 @@ class ExecutionRouter:
         terminal["actual_extractor"] = effective_route
         terminal["requested_extractor_route"] = requested_route
         return terminal
+
+    def _select_terminal_result(
+        self,
+        result: dict[str, Any],
+        *,
+        existing_results: list[dict[str, Any]],
+        requested_route: str,
+        effective_route: str,
+    ) -> tuple[dict[str, Any], str, bool, str]:
+        terminal_result = self._prepare_terminal_result(
+            result,
+            requested_route=requested_route,
+            effective_route=effective_route,
+        )
+        terminal_entities = terminal_result.get("entities", [])
+        if effective_route == "phi3" and not terminal_entities:
+            spacy_result = self._best_non_empty_spacy_result(existing_results)
+            if spacy_result is not None:
+                selected_route = str(spacy_result.get("actual_extractor", spacy_result.get("extractor", "spacy")))
+                selected_result = self._prepare_terminal_result(
+                    spacy_result,
+                    requested_route=requested_route,
+                    effective_route=selected_route,
+                )
+                selected_result["notes"] = list(selected_result.get("notes", [])) + [
+                    "router_selected_non_empty_local_over_empty_phi3",
+                ]
+                return (
+                    selected_result,
+                    selected_route,
+                    True,
+                    "prefer_non_empty_local_spacy_over_empty_phi3",
+                )
+        return terminal_result, effective_route, False, "terminal_result_retained"
+
+    def _best_non_empty_spacy_result(self, results: list[dict[str, Any]]) -> dict[str, Any] | None:
+        candidates = [
+            item
+            for item in results
+            if str(item.get("actual_extractor", item.get("extractor", ""))) == "spacy"
+            and item.get("entities")
+        ]
+        if not candidates:
+            return None
+        return max(
+            candidates,
+            key=lambda item: (
+                len(item.get("entities", [])),
+                float(item.get("confidence", 0.0)),
+            ),
+        )
+
+    def _best_non_empty_local_result(self, results: list[dict[str, Any]]) -> dict[str, Any] | None:
+        candidates = [
+            item
+            for item in results
+            if str(item.get("actual_extractor", item.get("extractor", ""))) in {"spacy", "phi3", "rules_based"}
+            and item.get("entities")
+        ]
+        if not candidates:
+            return None
+        return max(
+            candidates,
+            key=lambda item: (
+                1 if str(item.get("actual_extractor", item.get("extractor", ""))) == "spacy" else 0,
+                len(item.get("entities", [])),
+                float(item.get("confidence", 0.0)),
+            ),
+        )

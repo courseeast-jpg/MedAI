@@ -7,6 +7,8 @@ from execution.audit import StageAuditLogger
 from execution.logging import AuditLogger
 from execution.metrics import PipelineMetrics
 from execution.pipeline import ExecutionPipeline
+from extractors.gemini_extractor import GeminiExtractor
+from app.schemas import ExtractionOutput, ExtractedDiagnosis, ExtractedMedication
 
 
 class NoopPIIStripper:
@@ -30,6 +32,19 @@ class RaisingExtractor:
 
     def extract(self, text: str) -> dict:
         raise self.exc
+
+
+class QuotaFallbackLegacyExtractor:
+    last_gemini_error_message = "429 quota exceeded for generate_content_free_tier_requests"
+
+    def extract(self, text: str, specialty: str = "general") -> ExtractionOutput:
+        del text, specialty
+        return ExtractionOutput(
+            diagnoses=[ExtractedDiagnosis(name="diabetes")],
+            medications=[ExtractedMedication(name="metformin")],
+            extraction_method="rules_based",
+            confidence=0.45,
+        )
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -378,3 +393,44 @@ def test_reliability_based_avoidance_skips_unreliable_gemini(tmp_path: Path):
     assert result.audit["extractor_actual"] == "phi3"
     extraction_events = [event for event in read_jsonl(audit_path) if event["stage"] == "extraction"]
     assert "success_rate=0.960" in extraction_events[-1]["routing_decision_reason"]
+
+
+def test_gemini_quota_fallback_uses_local_result_instead_of_empty_terminal(tmp_path: Path):
+    metrics = PipelineMetrics()
+    seed_connector_profile(metrics, connector="spacy", confidence=0.4, latency_ms=4, success_rate=1.0)
+    seed_connector_profile(metrics, connector="phi3", confidence=0.4, latency_ms=20, success_rate=0.98)
+    seed_connector_profile(metrics, connector="gemini", confidence=0.9, latency_ms=110, success_rate=0.95)
+    gemini_extractor = GeminiExtractor(
+        specialty="general",
+        legacy_extractor=QuotaFallbackLegacyExtractor(),
+    )
+    gemini_extractor.gemini_available = True
+    pipeline, _ = make_pipeline(
+        tmp_path=tmp_path,
+        spacy_extractor=StaticExtractor({
+            "extractor": "spacy",
+            "actual_extractor": "spacy",
+            "entities": [],
+            "confidence": 0.35,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        gemini_extractor=gemini_extractor,
+        phi3_extractor=StaticExtractor({
+            "extractor": "phi3",
+            "actual_extractor": "phi3",
+            "entities": [],
+            "confidence": 0.4,
+            "latency_ms": 1,
+            "notes": [],
+        }),
+        metrics=metrics,
+    )
+
+    result = pipeline.process_text("x" * 4500, specialty="general", source_name="simple.txt")
+
+    assert result.extractor_result["entities"]
+    assert result.extractor_result["primary_extractor"] == "gemini"
+    assert result.extractor_result["fallback_extractor"] == "spacy"
+    assert result.extractor_result["fallback_reason"] == "gemini_quota_or_rate_limit"
+    assert result.extractor_result["terminal_empty_prevented"] is True

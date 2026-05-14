@@ -92,15 +92,31 @@ class ExecutionPipeline:
         self.enrichment = enrichment_engine
         self.promoter = promotion_engine or HypothesisPromotion(self.existing_records_provider)
         self.router = router or self._build_router()
+        self._last_pdf_text_audit: dict | None = None
+        self._last_pii_audit: dict | None = None
 
     def run(self, job: ExecutionJob) -> ExecutionResult:
         source_text = job.text
         source_name = job.source_name
         session_id = job.session_id or str(uuid4())
+        self._last_pdf_text_audit = None
+        self._last_pii_audit = None
 
         if job.pdf_path is not None:
             source_text = self.extract_pdf_text(job.pdf_path)
             source_name = job.source_name or job.pdf_path.name
+            if self._last_pdf_text_audit is not None:
+                self._stage_log(
+                    record_id=session_id,
+                    stage="pdf_text_extraction",
+                    action="pdf_text_extracted",
+                    confidence=float(self._last_pdf_text_audit.get("text_quality_score", 0.0)),
+                    decision_reason=(
+                        f"status={self._last_pdf_text_audit.get('text_quality_status', 'unknown')} "
+                        f"ocr_fallback_used={self._last_pdf_text_audit.get('ocr_fallback_used', False)}"
+                    ),
+                    extra=dict(self._last_pdf_text_audit),
+                )
 
         language_support = detect_language_support(text=source_text).to_dict()
         self._stage_log(
@@ -165,12 +181,33 @@ class ExecutionPipeline:
         extracted["routing_route_score"] = routed.route_score
         extracted["intended_route"] = routed.intended_route
         extracted["actual_route"] = routed.extractor_actual
+        extracted["selected_extractor"] = routed.selected_extractor or routed.extractor_actual
+        extracted["discarded_empty_fallback"] = routed.discarded_empty_fallback
+        extracted["fallback_selection_reason"] = routed.fallback_selection_reason
         extracted["fallback_reason"] = routed.fallback_reason
         extracted["route_mismatch_flag"] = routed.route_mismatch_flag
         extracted["estimated_cost_units"] = routed.estimated_cost_units
         extracted["saved_cost_units"] = routed.saved_cost_units
         extracted["quota_block_avoided"] = routed.quota_block_avoided
+        extracted["primary_extractor"] = routed.primary_extractor
+        extracted["fallback_extractor"] = routed.fallback_extractor
+        extracted["terminal_empty_prevented"] = routed.terminal_empty_prevented
         extracted["language_support"] = language_support
+        if self._last_pii_audit is not None:
+            extracted.update({
+                "pii_medical_label_preserved_count": self._last_pii_audit.get("pii_medical_label_preserved_count", 0),
+                "pii_medical_label_preserved_terms": list(
+                    self._last_pii_audit.get("pii_medical_label_preserved_terms", [])
+                ),
+            })
+        if self._last_pdf_text_audit is not None:
+            extracted.update({
+                "text_quality_status": self._last_pdf_text_audit.get("text_quality_status"),
+                "text_quality_score": self._last_pdf_text_audit.get("text_quality_score"),
+                "ocr_fallback_used": self._last_pdf_text_audit.get("ocr_fallback_used", False),
+                "ocr_engine": self._last_pdf_text_audit.get("ocr_engine"),
+                "ocr_text_length": self._last_pdf_text_audit.get("ocr_text_length", 0),
+            })
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
@@ -648,7 +685,9 @@ class ExecutionPipeline:
         from ingestion.pdf_pipeline import PDFPipeline
 
         pdf_pipeline = PDFPipeline(Extractor(), self.pii_stripper)
-        return pdf_pipeline._extract_text(pdf_path)
+        text, audit = pdf_pipeline.extract_text_with_audit(pdf_path)
+        self._last_pdf_text_audit = dict(audit)
+        return text
 
     def _select_extractor_route(self, text: str) -> str:
         return self.router.select_route(text)
@@ -678,8 +717,12 @@ class ExecutionPipeline:
 
     def _strip_pii(self, text: str) -> tuple[str, str]:
         if not text:
+            self._last_pii_audit = None
             return "", "none"
-        return self.pii_stripper.strip(text)
+        stripped_text, method = self.pii_stripper.strip(text)
+        pii_audit = getattr(self.pii_stripper, "last_audit", None)
+        self._last_pii_audit = dict(pii_audit) if isinstance(pii_audit, dict) else None
+        return stripped_text, method
 
     def _has_ocr_artifacts(self, text: str) -> bool:
         if OCR_ARTIFACT_RE.search(text):
