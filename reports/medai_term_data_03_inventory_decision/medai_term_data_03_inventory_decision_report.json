@@ -1,0 +1,37 @@
+{
+  "block_id": "MEDAI-TERM-DATA-03",
+  "conclusion": "inventory_utility_committed_as_safe_report_only_tool",
+  "decision": "commit_inventory_utility",
+  "prior_untracked_artifacts_safe": true,
+  "inventory_tool_committed": true,
+  "classification": {
+    "inventory_reports": "safe_to_commit",
+    "inventory_script": "safe_to_commit"
+  },
+  "files_to_commit": [
+    "inventory_script",
+    "inventory_tests",
+    "public_inventory_reports",
+    "decision_reports"
+  ],
+  "validation_results": {
+    "python -m pytest tests/test_medai_terminology_inventory.py -vv": "8 passed",
+    "python scripts/run_medai_terminology_inventory.py --terminology-root terminology_data": "terminology_data_inventory_report_ready",
+    "python scripts/run_medai_terminology_sources_preflight.py": "terminology_sources_preflight_ready",
+    "python -m pytest tests/test_medai_terminology_sources_preflight.py -vv": "9 passed",
+    "python scripts/run_cka_final_mvp_release_validation.py": "PASS; 12/12 cases; 693 tests reported"
+  },
+  "safety_privacy": {
+    "import_performed": false,
+    "runtime_db_or_index_created": false,
+    "license_ack_contents_read": false,
+    "licensed_rows_printed": false,
+    "absolute_paths_in_public_reports": false,
+    "private_licensed_files_staged": false,
+    "external_api_used": false,
+    "clinical_logic_changed": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "b07_terminology_behavior_changed": false
+  },
+  "next_recommended_action": "Keep the inventory utility report-only; use TERM-DATA-02 preflight before any future import or adapter expansion."
+}
