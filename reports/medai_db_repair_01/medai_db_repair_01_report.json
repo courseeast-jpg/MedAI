@@ -1,0 +1,43 @@
+{
+  "app_db_key_configured": true,
+  "backup_or_quarantine_created": false,
+  "block_id": "MEDAI-DB-REPAIR-01",
+  "conclusion": "medai_mkb_db_diagnostics_ready",
+  "db_category": "valid_plain_sqlite_but_sqlcipher_keyed_init_mismatch",
+  "db_file_exists": true,
+  "db_file_size_bucket": "small_under_1mb",
+  "db_header_category": "sqlite_header",
+  "db_key_value_printed": false,
+  "db_modified": false,
+  "db_parent_exists": true,
+  "db_path_label": "data/mkb.db",
+  "db_schema_length": 1987,
+  "db_schema_sha256_12": "533ad38e02df",
+  "external_api_used": false,
+  "generated_at_utc": "2026-05-14T20:35:42.683693+00:00",
+  "import_performed": false,
+  "plain_sqlite_probe": {
+    "connect": "ok",
+    "quick_check": "ok",
+    "table_count": 5
+  },
+  "privacy_safety": {
+    "db_contents_printed": false,
+    "license_text_printed": false,
+    "phi_printed": false,
+    "raw_private_paths_in_report": false,
+    "source_terminology_rows_printed": false
+  },
+  "quarantine_recreate_available": true,
+  "quarantine_recreate_recommended": true,
+  "rows_printed": false,
+  "safe_next_action": "Use the confirmation-gated quarantine/recreate command only after operator approval.",
+  "sqlcipher_available": true,
+  "sqlcipher_probe": {
+    "attempted": true,
+    "available": true,
+    "exception_category": "unexpected_error",
+    "exception_class": "DatabaseError",
+    "result": "failed_with_configured_key"
+  }
+}
