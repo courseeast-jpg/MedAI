@@ -1,0 +1,89 @@
+{
+  "block_id": "MEDAI-RELEASE-VALIDATE-01",
+  "conclusion": "release_validation_ready",
+  "branch": "clinical-knowledge-architecture",
+  "current_head": "760e802",
+  "park13_commit": "760e802",
+  "validation_report_only": true,
+  "validations": {
+    "python -m pytest tests": {
+      "result": "passed",
+      "passed": 2227,
+      "skipped": 4,
+      "warnings": 22
+    },
+    "python scripts/run_cka_final_mvp_release_validation.py": {
+      "result": "PASS",
+      "cases_passed": 12,
+      "cases_total": 12,
+      "tests_reported": 693
+    },
+    "python scripts/run_b07_term01_opt_in_integration_validation.py": {
+      "result": "b07_term01_opt_in_integration_ready",
+      "cases_passed": 6,
+      "cases_total": 6,
+      "external_api_used": false
+    },
+    "python scripts/run_medai_route_fix01_validation.py": {
+      "result": "medai_route_fix01_ready",
+      "external_api_used": false
+    },
+    "python scripts/run_medai_terminology_sources_preflight.py": {
+      "result": "terminology_sources_preflight_ready",
+      "import_performed": false,
+      "duplicate_warning_count": 1
+    },
+    "python scripts/run_medai_terminology_inventory.py --terminology-root terminology_data": {
+      "result": "terminology_data_inventory_report_ready",
+      "terminology_import_performed": false,
+      "license_ack_contents_read": false,
+      "absolute_paths_in_report": false
+    },
+    "python -m pytest tests/test_phase23_routing_efficiency.py tests/test_connector_orchestration.py tests/test_phase10_hardening.py -q": {
+      "result": "passed",
+      "passed": 33,
+      "warnings": 7
+    },
+    "python -m pytest tests/test_cka_block07_medical_coding.py -vv": {
+      "result": "passed",
+      "passed": 66
+    },
+    "python scripts/run_cka_term08_hypothesis_annotation_validation.py": {
+      "result": "cka_term08_hypothesis_annotation_ready",
+      "cases_passed": 4,
+      "cases_total": 4,
+      "feature_flag_default_enabled": false
+    }
+  },
+  "failures": [],
+  "failure_classification": "none",
+  "safety_privacy_status": {
+    "new_behavior_implemented": false,
+    "runtime_code_edited": false,
+    "route_fix_behavior_changed": false,
+    "b07_terminology_behavior_changed": false,
+    "clinical_logic_changed": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "import_performed": false,
+    "external_api_used": false,
+    "runtime_db_or_index_created": false,
+    "terminology_data_staged": false,
+    "data_terminology_staged": false,
+    "license_ack_private_staged": false,
+    "source_terminology_files_staged": false,
+    "db_key_private_pdf_image_archive_staged": false,
+    "public_report_privacy_clean": true
+  },
+  "dirty_worktree_summary": {
+    "dirty_entry_count_before_report_creation": 204,
+    "known_generated_reports_modified_by_validation": [
+      "final_mvp_release_report",
+      "term08_hypothesis_annotation_report",
+      "terminology_inventory_report",
+      "terminology_sources_preflight_report"
+    ],
+    "generated_reports_outside_commit_boundary": true
+  },
+  "release_readiness_conclusion": "release_validation_ready",
+  "recommended_next_action": "Commit only RELEASE-VALIDATE-01 public report artifacts; then stop unless a new approval-gated release or packaging block is opened."
+}
