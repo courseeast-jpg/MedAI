@@ -64,6 +64,20 @@ PHASE52_OPERATOR_TABS = [
     "Terminology Readiness",
 ]
 
+TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
+
+
+def operator_tabs() -> list[str]:
+    tabs = list(PHASE52_OPERATOR_TABS)
+    try:
+        from app.clinical_knowledge_terminology_lookup_viewer import terminology_lookup_panel_enabled
+
+        if terminology_lookup_panel_enabled():
+            tabs.append(TERMINOLOGY_LOOKUP_TAB)
+    except Exception:
+        pass
+    return tabs
+
 
 def display_content(record: MKBRecord) -> tuple[str, bool]:
     if not PLACEHOLDER_RE.search(record.content):
@@ -937,7 +951,8 @@ def main() -> None:
         st.caption(f"Connectors: {', '.join(ACTIVE_CONNECTORS)}")
         st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
 
-    tab_current, tab_blind, tab_archive, tab_review, tab_cka, tab_terms = st.tabs(PHASE52_OPERATOR_TABS)
+    tabs = st.tabs(operator_tabs())
+    tab_current, tab_blind, tab_archive, tab_review, tab_cka, tab_terms = tabs[:6]
     with tab_current:
         render_current_run_tab(sys_components)
     with tab_blind:
@@ -967,6 +982,14 @@ def main() -> None:
             render_terminology_readiness_panel()
         except Exception as _exc:
             st.error(f"Terminology Readiness panel unavailable: {_exc}")
+    if len(tabs) > 6:
+        with tabs[6]:
+            try:
+                from app.clinical_knowledge_terminology_lookup_viewer import render_terminology_lookup_panel
+
+                render_terminology_lookup_panel()
+            except Exception as _exc:
+                st.error(f"Terminology Lookup panel unavailable: {_exc}")
 
     st.divider()
     st.caption(PRIVACY_INVARIANT_GUIDANCE)
