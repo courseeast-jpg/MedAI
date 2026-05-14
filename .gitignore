@@ -53,5 +53,13 @@ reports/**/private_*_PRIVATE.json
 # Operator-supplied licensed terminology files MUST NOT be committed.
 terminology_data/
 data/terminology/
+config/terminology_sources.local.json
+LICENSE_ACK_PRIVATE.json
+*.RRF
+*.rrf
+*.nlm
+*.zip
+*.sqlite
+*.sqlite3
 **/LICENSE_ACK_PRIVATE*
 **/*TERMINOLOGY_PRIVATE*

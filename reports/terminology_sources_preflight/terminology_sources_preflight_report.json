@@ -1,0 +1,357 @@
+{
+  "absolute_paths_in_report": false,
+  "b07_behavior_changed": false,
+  "canonical_sources": [
+    {
+      "canonical_exists": true,
+      "canonical_path": "terminology_data/Loinc_2.82",
+      "contents_read": false,
+      "detected_metadata_samples": [
+        {
+          "relative_path": "terminology_data/Loinc_2.82/AccessoryFiles/PanelsAndForms/Loinc.csv",
+          "size_bytes": 82244517
+        },
+        {
+          "relative_path": "terminology_data/Loinc_2.82/LoincTable/Loinc.csv",
+          "size_bytes": 82244517
+        }
+      ],
+      "missing_requirements": [],
+      "presence_only": false,
+      "ready": true,
+      "required_checks": [
+        {
+          "match_count": 2,
+          "type": "file_name",
+          "value": "Loinc.csv"
+        }
+      ],
+      "role": "primary",
+      "source": "loinc",
+      "status": "local_private_required"
+    },
+    {
+      "canonical_exists": true,
+      "canonical_path": "terminology_data/RxNorm_full_05042026",
+      "contents_read": false,
+      "detected_metadata_samples": [
+        {
+          "relative_path": "terminology_data/RxNorm_full_05042026/prescribe/rrf/RXNCONSO.RRF",
+          "size_bytes": 30399618
+        },
+        {
+          "relative_path": "terminology_data/RxNorm_full_05042026/rrf/RXNCONSO.RRF",
+          "size_bytes": 131233924
+        },
+        {
+          "relative_path": "terminology_data/RxNorm_full_05042026/prescribe/rrf/RXNREL.RRF",
+          "size_bytes": 195321387
+        },
+        {
+          "relative_path": "terminology_data/RxNorm_full_05042026/rrf/RXNREL.RRF",
+          "size_bytes": 524768977
+        },
+        {
+          "relative_path": "terminology_data/RxNorm_full_05042026/prescribe/rrf/RXNSAT.RRF",
+          "size_bytes": 278178572
+        },
+        {
+          "relative_path": "terminology_data/RxNorm_full_05042026/rrf/RXNSAT.RRF",
+          "size_bytes": 553691082
+        }
+      ],
+      "missing_requirements": [],
+      "presence_only": false,
+      "ready": true,
+      "required_checks": [
+        {
+          "match_count": 2,
+          "type": "file_name",
+          "value": "RXNCONSO.RRF"
+        },
+        {
+          "match_count": 2,
+          "type": "file_name",
+          "value": "RXNREL.RRF"
+        },
+        {
+          "match_count": 2,
+          "type": "file_name",
+          "value": "RXNSAT.RRF"
+        }
+      ],
+      "role": "primary",
+      "source": "rxnorm",
+      "status": "local_private_required"
+    },
+    {
+      "canonical_exists": true,
+      "canonical_path": "terminology_data/RxNorm_full_prescribe_05042026",
+      "contents_read": false,
+      "detected_metadata_samples": [
+        {
+          "relative_path": "terminology_data/RxNorm_full_prescribe_05042026/rrf/RXNCONSO.RRF",
+          "size_bytes": 30399618
+        },
+        {
+          "relative_path": "terminology_data/RxNorm_full_prescribe_05042026/rrf/RXNREL.RRF",
+          "size_bytes": 195321387
+        },
+        {
+          "relative_path": "terminology_data/RxNorm_full_prescribe_05042026/rrf/RXNSAT.RRF",
+          "size_bytes": 278178572
+        }
+      ],
+      "missing_requirements": [],
+      "presence_only": false,
+      "ready": true,
+      "required_checks": [
+        {
+          "match_count": 1,
+          "type": "file_name",
+          "value": "RXNCONSO.RRF"
+        },
+        {
+          "match_count": 1,
+          "type": "file_name",
+          "value": "RXNREL.RRF"
+        },
+        {
+          "match_count": 1,
+          "type": "file_name",
+          "value": "RXNSAT.RRF"
+        }
+      ],
+      "role": "auxiliary",
+      "source": "rxnorm_prescribable",
+      "status": "local_private_optional"
+    },
+    {
+      "canonical_exists": true,
+      "canonical_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z",
+      "contents_read": false,
+      "detected_metadata_samples": [
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Full/Terminology/sct2_Concept_Full_US1000124_20260301.txt",
+          "size_bytes": 43660109
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Snapshot/Terminology/sct2_Concept_Snapshot_US1000124_20260301.txt",
+          "size_bytes": 32364443
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Full/Terminology/sct2_Description_Full-en_US1000124_20260301.txt",
+          "size_bytes": 391315424
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Snapshot/Terminology/sct2_Description_Snapshot-en_US1000124_20260301.txt",
+          "size_bytes": 230306454
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Full/Terminology/sct2_RelationshipConcreteValues_Full_US1000124_20260301.txt",
+          "size_bytes": 4147961
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Full/Terminology/sct2_Relationship_Full_US1000124_20260301.txt",
+          "size_bytes": 759741766
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Snapshot/Terminology/sct2_RelationshipConcreteValues_Snapshot_US1000124_20260301.txt",
+          "size_bytes": 4020369
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/Snapshot/Terminology/sct2_Relationship_Snapshot_US1000124_20260301.txt",
+          "size_bytes": 404359782
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_ManagedServiceUS_PRODUCTION_US1000124_20260301T120000Z/release_package_information.json",
+          "size_bytes": 1335
+        }
+      ],
+      "missing_requirements": [],
+      "presence_only": false,
+      "ready": true,
+      "required_checks": [
+        {
+          "match_count": 2,
+          "type": "pattern",
+          "value": "sct2_Concept*.txt"
+        },
+        {
+          "match_count": 2,
+          "type": "pattern",
+          "value": "sct2_Description*.txt"
+        },
+        {
+          "match_count": 4,
+          "type": "pattern",
+          "value": "sct2_Relationship*.txt"
+        },
+        {
+          "match_count": 1,
+          "type": "pattern",
+          "value": "release_package_information.json"
+        }
+      ],
+      "role": "primary",
+      "source": "snomed_ct_us",
+      "status": "local_private_required"
+    },
+    {
+      "canonical_exists": true,
+      "canonical_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z",
+      "contents_read": false,
+      "detected_metadata_samples": [
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Full/Terminology/sct2_Concept_Full_INT_20260501.txt",
+          "size_bytes": 43096548
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Snapshot/Terminology/sct2_Concept_Snapshot_INT_20260501.txt",
+          "size_bytes": 32024268
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Full/Terminology/sct2_Description_Full-en_INT_20260501.txt",
+          "size_bytes": 389200680
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Snapshot/Terminology/sct2_Description_Snapshot-en_INT_20260501.txt",
+          "size_bytes": 228148800
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Full/Terminology/sct2_RelationshipConcreteValues_Full_INT_20260501.txt",
+          "size_bytes": 4165181
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Full/Terminology/sct2_Relationship_Full_INT_20260501.txt",
+          "size_bytes": 748219861
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Snapshot/Terminology/sct2_RelationshipConcreteValues_Snapshot_INT_20260501.txt",
+          "size_bytes": 4036733
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/Snapshot/Terminology/sct2_Relationship_Snapshot_INT_20260501.txt",
+          "size_bytes": 398369372
+        },
+        {
+          "relative_path": "terminology_data/SnomedCT_InternationalRF2_PRODUCTION_20260501T120000Z/release_package_information.json",
+          "size_bytes": 1348
+        }
+      ],
+      "missing_requirements": [],
+      "presence_only": false,
+      "ready": true,
+      "required_checks": [
+        {
+          "match_count": 2,
+          "type": "pattern",
+          "value": "sct2_Concept*.txt"
+        },
+        {
+          "match_count": 2,
+          "type": "pattern",
+          "value": "sct2_Description*.txt"
+        },
+        {
+          "match_count": 4,
+          "type": "pattern",
+          "value": "sct2_Relationship*.txt"
+        },
+        {
+          "match_count": 1,
+          "type": "pattern",
+          "value": "release_package_information.json"
+        }
+      ],
+      "role": "secondary",
+      "source": "snomed_ct_international",
+      "status": "local_private_optional"
+    },
+    {
+      "canonical_exists": true,
+      "canonical_path": "terminology_data/umls 2026AA-full",
+      "contents_read": false,
+      "detected_metadata_samples": [
+        {
+          "relative_path": "terminology_data/umls 2026AA-full/2026aa-1-meta.nlm",
+          "size_bytes": 2307964130
+        },
+        {
+          "relative_path": "terminology_data/umls 2026AA-full/2026aa-2-meta.nlm",
+          "size_bytes": 1961926823
+        },
+        {
+          "relative_path": "terminology_data/umls 2026AA-full/2026aa-otherks.nlm",
+          "size_bytes": 1065449555
+        }
+      ],
+      "missing_requirements": [],
+      "presence_only": false,
+      "ready": true,
+      "required_checks": [
+        {
+          "match_count": 3,
+          "type": "pattern",
+          "value": "*.nlm"
+        }
+      ],
+      "role": "separate_future_import",
+      "source": "umls",
+      "status": "local_private_required_future_block"
+    },
+    {
+      "canonical_exists": true,
+      "canonical_path": "terminology_data/LICENSE_ACK_PRIVATE.json",
+      "contents_read": false,
+      "missing_requirements": [],
+      "presence_only": true,
+      "ready": true,
+      "required_checks": [],
+      "role": "private_license_confirmation",
+      "source": "license_ack_private",
+      "status": "local_private_required"
+    }
+  ],
+  "clinical_logic_changed": false,
+  "conclusion": "terminology_sources_preflight_ready",
+  "duplicate_candidate_warnings": [
+    {
+      "action": "warning_only_select_canonical_before_import_changes",
+      "candidate_count": 2,
+      "candidate_paths": [
+        "terminology_data/loinc",
+        "terminology_data/Loinc_2.82"
+      ],
+      "source": "loinc"
+    }
+  ],
+  "external_api_used": false,
+  "generated_at_utc": "2026-05-14T16:18:19.593703+00:00",
+  "import_performed": false,
+  "license_ack_contents_read": false,
+  "licensed_rows_printed": false,
+  "manifest_local_used": false,
+  "manifest_source": "config/terminology_sources.example.json",
+  "missing_required_primary_sources": [],
+  "next_recommended_gated_block": "Operator approval for a separate, parser-specific import or adapter validation block; do not infer import readiness beyond this preflight.",
+  "ocr_extractor_safety_gates_changed": false,
+  "privacy_safety_assertions": {
+    "license_ack_presence_only": true,
+    "metadata_only": true,
+    "relative_paths_only": true,
+    "source_rows_not_read": true,
+    "terminology_data_not_modified": true
+  },
+  "readiness": {
+    "license_ack_present_presence_only": true,
+    "ready_for_loinc_preflight": true,
+    "ready_for_rxnorm_preflight": true,
+    "ready_for_snomed_us_preflight": true,
+    "umls_present_but_future_gated": true
+  },
+  "report_id": "medai_term_data_02_sources_preflight",
+  "runtime_db_or_index_created": false,
+  "snomed_runtime_integration_enabled": false,
+  "umls_future_gated": true
+}
