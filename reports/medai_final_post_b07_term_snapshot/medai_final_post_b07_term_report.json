@@ -1,0 +1,103 @@
+{
+  "block_id": "MEDAI-PARK-09",
+  "conclusion": "medai_post_b07_term01_snapshot_parked",
+  "timestamp": "2026-05-14T08:02:00Z",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "97c308022404",
+  "park08_commit": "7e4714743649",
+  "b07_term_plan01_commit": "8ddb7da4d006",
+  "b07_term01_commit": "97c308022404",
+  "term_summaries": {
+    "TERM-05": "Synthetic read-only terminology adapter ready.",
+    "TERM-06": "Private-store read-only adapter validation ready.",
+    "TERM-07": "UI-only terminology lookup panel ready and hidden by default.",
+    "TERM-08": "Hypothesis-only coding annotation pilot ready and feature-flagged off by default.",
+    "B07-TERM-PLAN-01": "Opt-in terminology integration plan completed.",
+    "B07-TERM-01": "Opt-in, default-off, hypothesis-only metadata integration completed."
+  },
+  "feature_flags": {
+    "MEDAI_B07_TERMINOLOGY_OPT_IN": "default_false",
+    "MEDAI_TERMINOLOGY_LOOKUP_ENABLED": "default_false",
+    "MEDAI_TERMINOLOGY_HYPOTHESIS_ANNOTATION": "default_false",
+    "MEDAI_TERMINOLOGY_READ_ONLY": "default_true",
+    "MEDAI_TERMINOLOGY_ALLOW_WRITES": "default_false"
+  },
+  "b07_term01_behavior": {
+    "default_off_behavior_preserved": true,
+    "missing_or_inconsistent_flags_fail_closed": true,
+    "rollback_off_state_restores_no_effect": true,
+    "opt_in_returns_hypothesis_metadata_only": true,
+    "unknown_input_unmapped_no_code": true,
+    "ambiguous_input_manual_review": true,
+    "b07_authority_source": false
+  },
+  "local_terminology_store_aggregate": {
+    "systems": [
+      "loinc",
+      "rxnorm"
+    ],
+    "concepts_count": 353854,
+    "sources_count": 2,
+    "import_events_count": 2,
+    "rxnorm_rows_imported": 244529,
+    "loinc_rows_imported": 109325
+  },
+  "validation_summary": {
+    "b07_term01_cases_total": 6,
+    "b07_term01_cases_passed": 6,
+    "b07_term01_cases_failed": 0,
+    "b07_term01_pytest_passed": true,
+    "b07_baseline_pytest_passed": true,
+    "term08_validation_ready": true,
+    "term07_validation_ready": true,
+    "term06_validation_ready": true,
+    "term05_validation_ready": true,
+    "term04_validation_ready": true,
+    "term03_validation_ready": true,
+    "term02_validation_ready": true,
+    "term01h_redteam_ready": true,
+    "final_mvp_validation_passed": true,
+    "final_mvp_reported_tests": 693
+  },
+  "safety_privacy_status": {
+    "external_api_used": false,
+    "clinical_recommendations_generated": false,
+    "dosing_or_prescribing_advice_generated": false,
+    "active_fact_write": false,
+    "hypothesis_promotion": false,
+    "ddi_status_clearing": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "private_filename_path_leaks": 0,
+    "secret_leaks": 0,
+    "raw_phi_logged_in_public_reports": false,
+    "license_text_written_to_public_reports": false,
+    "public_report_privacy_clean": true
+  },
+  "non_commit_boundaries": {
+    "terminology_data_committed": false,
+    "data_terminology_db_index_committed": false,
+    "license_ack_private_committed": false,
+    "source_rrf_csv_zip_committed": false,
+    "db_key_private_pdf_image_archive_committed": false,
+    "unrelated_dirty_generated_files_staged": false
+  },
+  "known_unstaged_unrelated_changes": [
+    "execution/pipeline.py",
+    "execution/router.py"
+  ],
+  "validation_commands": [
+    "python scripts/run_b07_term01_opt_in_integration_validation.py",
+    "python -m pytest tests/test_b07_term01_opt_in_integration.py -vv",
+    "python -m pytest tests/test_cka_block07_medical_coding.py -vv",
+    "python scripts/run_cka_term08_hypothesis_annotation_validation.py",
+    "python scripts/run_cka_term07_ui_lookup_panel_validation.py",
+    "python scripts/run_cka_term06_private_store_adapter_validation.py",
+    "python scripts/run_cka_term05_synthetic_adapter_validation.py",
+    "python scripts/run_cka_term04_integration_readiness_validation.py",
+    "python scripts/run_cka_term03_local_terminology_qa_validation.py",
+    "python scripts/run_cka_term02_controlled_local_import_validation.py",
+    "python scripts/run_cka_term01h_safety_redteam_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ],
+  "next_recommended_action": "Stop here or create a separate approval-gated follow-up for operator review of B07 terminology metadata; keep broader terminology-backed behavior out of this snapshot."
+}
