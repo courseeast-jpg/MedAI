@@ -1,0 +1,93 @@
+{
+  "b07_term_validation": {
+    "cases_failed": 0,
+    "cases_passed": 6,
+    "conclusion": "b07_term01_opt_in_integration_ready"
+  },
+  "block_id": "MEDAI-PARK-14",
+  "branch": "clinical-knowledge-architecture",
+  "conclusion": "medai_post_ui_db_repair_launch_parked",
+  "current_head_before_snapshot_commit": "975da63",
+  "db_repair_01_commit": "7dfa4a0",
+  "db_repair_02_commit": "975da63",
+  "db_status_summary": {
+    "db_files_staged": false,
+    "db_key_printed": false,
+    "db_rows_printed": false,
+    "manual_quarantine_recreate_completed": true,
+    "mkb_sidebar_row_type_error_resolved_by_manual_confirmation": true,
+    "public_safe_only": true
+  },
+  "dirty_worktree_count_before_staging": 211,
+  "external_api_used": false,
+  "final_mvp_validation": {
+    "cases_passed": 12,
+    "cases_total": 12,
+    "conclusion": "pass",
+    "tests_reported": 693
+  },
+  "final_release_package_commit": "ac041cf",
+  "import_performed": false,
+  "manual_ui_launch_confirmation": {
+    "current_run_tab_loads": true,
+    "diagnostics_only_mode": false,
+    "mkb_status_crash": false,
+    "operator_control_panel_visible": true,
+    "system_ready_header_seen": true
+  },
+  "next_recommended_action": "Stop unless a new approval-gated block is opened.",
+  "operator_control_panel_results": {
+    "b07_term_validation_exit_code": 0,
+    "dirty_status_count": 210,
+    "final_mvp_validation_exit_code": 0,
+    "git_safety_check_exit_code": 0,
+    "quick_health_check_exit_code": 0,
+    "route_fix_validation_exit_code": 0,
+    "staged_file_count": 0,
+    "unsafe_staged_file_count": 0
+  },
+  "privacy_safety": {
+    "clinical_logic_changed": false,
+    "data_terminology_staged": false,
+    "db_backups_staged": false,
+    "db_files_staged": false,
+    "license_ack_private_staged": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "private_files_staged": false,
+    "raw_db_contents_in_public_report": false,
+    "raw_private_paths_in_public_report": false,
+    "route_fix_behavior_changed": false,
+    "source_terminology_files_staged": false,
+    "terminology_data_staged": false
+  },
+  "route_fix_validation": {
+    "conclusion": "medai_route_fix01_ready"
+  },
+  "streamlit_smoke": {
+    "http_200": true,
+    "port_label": "isolated_unused_port",
+    "shutdown_cleanly": true
+  },
+  "ui_boot_fix_commit": "91297a4",
+  "ui_boot_fix_validation": {
+    "conclusion": "medai_ui_boot_fix_startup_resilience_ready"
+  },
+  "ui_db_repair_status": {
+    "db_repair02_validation": "medai_db_repair02_row_factory_ready",
+    "row_factory_diagnosis_category": "row_factory_backend_compatible",
+    "ui_launch_working": true
+  },
+  "ui_ops_01_commit": "a07cefd",
+  "ui_ops_panel_validation": {
+    "conclusion": "medai_ui_ops_panel_ready"
+  },
+  "validations_run": [
+    "python scripts/run_medai_ui_boot_fix_validation.py",
+    "python scripts/run_medai_db_repair02_row_factory_validation.py",
+    "python scripts/run_medai_ui_ops_panel_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py",
+    "python scripts/run_medai_route_fix01_validation.py",
+    "isolated Streamlit smoke on unused port"
+  ]
+}
