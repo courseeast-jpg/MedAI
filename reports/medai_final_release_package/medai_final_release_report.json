@@ -1,0 +1,67 @@
+{
+  "block_id": "MEDAI-RELEASE-PACK-01",
+  "conclusion": "final_release_package_ready",
+  "release_name": "MedAI Final Release 2026-05-14",
+  "release_date": "2026-05-14",
+  "branch": "clinical-knowledge-architecture",
+  "head_before_release_package_commit": "2b4d47d",
+  "final_validation_commit": "2b4d47d",
+  "final_release_package_commit": "commit_containing_this_release_package",
+  "major_capability_summary": {
+    "cka_mvp_operator_scaffold": "present_and_validated",
+    "sqlcipher_security_hardening": "present_in_project_history",
+    "terminology_import_and_qa": "completed_with_private_sources_uncommitted",
+    "source_preflight_and_inventory_utility": "present_and_validated",
+    "b07_opt_in_terminology_metadata": "default_off_hypothesis_only_validated",
+    "route_fix_empty_fallback_prevention": "present_and_validated",
+    "full_suite_qa_fix_clean_state": "2227_passed_4_skipped_22_warnings"
+  },
+  "final_tags": [
+    "medai-release-final-2026-05-14",
+    "medai-release-final-full-suite-clean-2026-05-14"
+  ],
+  "bundle_path": "backups/medai_final_release_2026-05-14.bundle",
+  "validation_results": {
+    "python scripts/run_cka_final_mvp_release_validation.py": "PASS; 12/12 cases; 693 tests reported",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py": "b07_term01_opt_in_integration_ready; 6/6 cases",
+    "python scripts/run_medai_route_fix01_validation.py": "medai_route_fix01_ready",
+    "python scripts/run_medai_terminology_sources_preflight.py": "terminology_sources_preflight_ready",
+    "python scripts/run_medai_terminology_inventory.py --terminology-root terminology_data": "terminology_data_inventory_report_ready",
+    "release_validate_01_full_pytest": "2227 passed; 4 skipped; 22 warnings"
+  },
+  "safety_privacy_status": {
+    "new_behavior_implemented": false,
+    "runtime_code_edited": false,
+    "route_fix_behavior_changed": false,
+    "b07_terminology_behavior_changed": false,
+    "clinical_logic_changed": false,
+    "ocr_extractor_safety_gates_changed": false,
+    "import_performed": false,
+    "external_api_used": false,
+    "runtime_db_or_index_created": false,
+    "terminology_data_staged": false,
+    "data_terminology_staged": false,
+    "license_ack_private_staged": false,
+    "source_terminology_files_staged": false,
+    "db_key_private_pdf_image_archive_staged": false,
+    "public_release_package_privacy_clean": true
+  },
+  "known_boundaries": [
+    "not_a_medical_device",
+    "no_autonomous_diagnosis",
+    "no_medication_dosing_or_prescribing_advice",
+    "b07_terminology_metadata_not_authority_source",
+    "unknown_terms_unmapped",
+    "ambiguous_terms_manual_review",
+    "terminology_lookup_does_not_clear_ddi_status",
+    "external_apis_off_unless_explicitly_approved",
+    "private_terminology_sources_and_runtime_stores_uncommitted"
+  ],
+  "manual_operator_review_items": [
+    "Keep private terminology source files outside git.",
+    "Keep private license acknowledgment files outside git.",
+    "Keep runtime terminology stores outside git.",
+    "Run final validations before any future approval-gated release block."
+  ],
+  "recommended_final_action": "Tag, push, create verified bundle, then stop unless a new approval-gated deployment or release block is opened."
+}
