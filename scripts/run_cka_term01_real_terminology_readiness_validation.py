@@ -14,6 +14,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -178,16 +179,19 @@ def case_a_baseline() -> dict:
 
 def case_b_license_gate_blocks_real_import() -> dict:
     """Without acknowledgment, real licensed-import is blocked."""
-    # No env, no ack file.
     blocked: List[str] = []
-    for sys_ in (TerminologySystem.UMLS, TerminologySystem.SNOMED_CT,
-                 TerminologySystem.RXNORM, TerminologySystem.LOINC):
-        try:
-            require_license_acknowledgment(sys_, env={}, test_mode=False)
-            return _fail("B", "License gate blocks real import",
-                         f"system_{sys_.value}_was_not_blocked")
-        except LicenseGateError:
-            blocked.append(sys_.value)
+    with tempfile.TemporaryDirectory(prefix="medai_term01_no_ack_") as tmp:
+        missing_ack = Path(tmp) / "LICENSE_ACK_PRIVATE.json"
+        for sys_ in (TerminologySystem.UMLS, TerminologySystem.SNOMED_CT,
+                     TerminologySystem.RXNORM, TerminologySystem.LOINC):
+            try:
+                require_license_acknowledgment(
+                    sys_, local_ack_file=missing_ack, env={}, test_mode=False,
+                )
+                return _fail("B", "License gate blocks real import",
+                             f"system_{sys_.value}_was_not_blocked")
+            except LicenseGateError:
+                blocked.append(sys_.value)
     # Synthetic system never requires ack.
     if not license_acknowledged_for(TerminologySystem.SYNTHETIC_TEST):
         return _fail("B", "License gate blocks real import",
@@ -200,7 +204,8 @@ def case_b_license_gate_blocks_real_import() -> dict:
 
 def case_c_inventory_handles_missing() -> dict:
     """Missing terminology_data/ tree must not crash; report missing safely."""
-    inv = inventory_terminology_data_dir()
+    with tempfile.TemporaryDirectory(prefix="medai_term01_missing_root_") as tmp:
+        inv = inventory_terminology_data_dir(repo_root=Path(tmp))
     summary = inv.safe_public_summary()
     if summary.get("raw_paths_written_to_public_report") is not False:
         return _fail("C", "Inventory handles missing safely",
@@ -399,15 +404,13 @@ def case_j_real_files_no_license_ack() -> dict:
     license ack, inventory must mark LICENSE_REQUIRED and refuse import.
     We simulate this with a synthetic test directory in repo-temp space.
     """
-    test_root = REPO_ROOT / "terminology_data" / "umls"
-    test_root.mkdir(parents=True, exist_ok=True)
-    sentinel = test_root / "MRCONSO.RRF"
-    if sentinel.exists():
-        return _ok("J", "Real files present but no license ack",
-                   {"skipped_reason": "operator_already_has_real_file"})
-    sentinel.write_text("placeholder", encoding="utf-8")
-    try:
-        inv = inventory_terminology_data_dir()
+    with tempfile.TemporaryDirectory(prefix="medai_term01_present_no_ack_") as tmp:
+        temp_root = Path(tmp)
+        test_root = temp_root / "terminology_data" / "umls"
+        test_root.mkdir(parents=True, exist_ok=True)
+        sentinel = test_root / "MRCONSO.RRF"
+        sentinel.write_text("placeholder", encoding="utf-8")
+        inv = inventory_terminology_data_dir(repo_root=temp_root)
         umls_manifest = next(
             (m for m in inv.sources if m.system == TerminologySystem.UMLS),
             None,
@@ -436,17 +439,6 @@ def case_j_real_files_no_license_ack() -> dict:
             "license_confirmed": False,
             "import_mode": umls_manifest.import_mode.value,
         })
-    finally:
-        sentinel.unlink(missing_ok=True)    # type: ignore[call-arg]
-        # Try to remove the empty system dir + root.
-        try:
-            test_root.rmdir()
-        except OSError:
-            pass
-        try:
-            (REPO_ROOT / "terminology_data").rmdir()
-        except OSError:
-            pass
 
 
 def case_k_report_safety(report: dict) -> dict:

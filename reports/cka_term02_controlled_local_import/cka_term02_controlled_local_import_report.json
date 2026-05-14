@@ -1,0 +1,74 @@
+{
+  "block_id": "CKA-TERM-02",
+  "clinical_recommendations_generated": false,
+  "conclusion": "cka_term02_controlled_local_import_ready",
+  "data_terminology_staged": false,
+  "db_safe_id": "term02_db_0dd1dec4513758fe",
+  "external_api_used": false,
+  "file_summaries": [
+    {
+      "checkpoint_count": 5,
+      "chunks_processed": 25,
+      "content_hash": "term02_hash_85f0b3eece59dec6",
+      "file_safe_id": "term02_file_2c553e66ebcb56b0",
+      "records_imported": 244529,
+      "records_skipped": 0,
+      "row_cap_applied": false,
+      "rows_seen": 244529,
+      "system": "rxnorm"
+    },
+    {
+      "checkpoint_count": 3,
+      "chunks_processed": 11,
+      "content_hash": "term02_hash_6187d5b2fcd89398",
+      "file_safe_id": "term02_file_680cdb8692eeffff",
+      "records_imported": 109325,
+      "records_skipped": 0,
+      "row_cap_applied": false,
+      "rows_seen": 109325,
+      "system": "loinc"
+    }
+  ],
+  "imported_systems": [
+    "rxnorm",
+    "loinc"
+  ],
+  "license_ack_private_staged": false,
+  "license_text_written_to_public_reports": false,
+  "lookup_validation": {
+    "ambiguous_flag_passed": true,
+    "b07_boundary_passed": true,
+    "exact_loinc_passed": true,
+    "exact_rxnorm_passed": true,
+    "no_code_hallucinated": true,
+    "unknown_unmapped_passed": true
+  },
+  "next_recommended_action": "Run terminology QA and keep imported DB/index private and gitignored.",
+  "phase_name": "Controlled Local Terminology Import",
+  "preflight_allowed": true,
+  "prescription_dosing_advice_generated": false,
+  "privacy_report_clean": true,
+  "private_filename_path_leaks": 0,
+  "production_extractor_changed": false,
+  "production_ocr_changed": false,
+  "raw_phi_logged_in_public_reports": false,
+  "real_import_performed": true,
+  "safety_gate_changed": false,
+  "secret_leaks": 0,
+  "store_summary": {
+    "concepts_count": 353854,
+    "import_events_count": 2,
+    "in_memory": false,
+    "sources_count": 2,
+    "synonyms_count": 0
+  },
+  "term02_completed": true,
+  "terminology_data_staged": false,
+  "timestamp": "2026-05-14T01:13:48.152131+00:00",
+  "validation_commands": [
+    "python -m pytest tests/test_cka_term02_controlled_local_import.py",
+    "python scripts/run_cka_term02_controlled_local_import_validation.py",
+    "python scripts/cka_term02_preflight_gate.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ]
+}

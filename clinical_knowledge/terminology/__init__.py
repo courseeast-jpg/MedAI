@@ -155,6 +155,13 @@ from clinical_knowledge.terminology.safety_redteam import (
     TerminologySafetyRedTeamResult,
     run_terminology_safety_redteam,
 )
+from clinical_knowledge.terminology.term02_controlled_import import (
+    Term02ControlledImportResult,
+    Term02FileImportSummary,
+    Term02ImportBlocked,
+    Term02LookupValidation,
+    run_controlled_local_import,
+)
 
 
 __all__ = [
@@ -251,4 +258,10 @@ __all__ = [
     "sanitize_formula_cell_for_public",
     "TerminologySafetyRedTeamResult",
     "run_terminology_safety_redteam",
+    # TERM-02 controlled local import
+    "Term02ControlledImportResult",
+    "Term02FileImportSummary",
+    "Term02ImportBlocked",
+    "Term02LookupValidation",
+    "run_controlled_local_import",
 ]

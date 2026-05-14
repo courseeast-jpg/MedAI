@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -52,7 +53,12 @@ def main() -> int:
     from clinical_knowledge.terminology.synthetic_intake_rehearsal import run_synthetic_intake_rehearsal
     from clinical_knowledge.terminology.term02_preflight_gate import run_term02_preflight_gate
 
-    gate_without_files = run_term02_preflight_gate(repo_root=ROOT)
+    with tempfile.TemporaryDirectory(prefix="medai_term01f_no_files_") as tmp:
+        temp_root = Path(tmp)
+        gate_without_files = run_term02_preflight_gate(
+            repo_root=temp_root,
+            terminology_root=temp_root / "terminology_data",
+        )
     rehearsal = run_synthetic_intake_rehearsal(repo_root=ROOT)
     manual_pack = run_manual_return_pack(repo_root=ROOT, run_prepare=False)
     final_validation = _run([sys.executable, "scripts/run_cka_final_mvp_release_validation.py"])
