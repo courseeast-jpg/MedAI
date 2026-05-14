@@ -1,0 +1,72 @@
+{
+  "block_id": "CKA-TERM-04",
+  "b07_integration_changed": false,
+  "b07_integration_enabled": false,
+  "b07_non_promotion_boundary_preserved": true,
+  "clinical_decision_logic_changed": false,
+  "clinical_recommendations_generated": false,
+  "conclusion": "cka_term04_integration_readiness_blueprint_ready",
+  "current_boundary": "design_only_no_runtime_integration",
+  "ddi_non_clearing_boundary_preserved": true,
+  "external_api_used": false,
+  "feature_flags_required": [
+    "MEDAI_TERMINOLOGY_LOOKUP_ENABLED",
+    "MEDAI_TERMINOLOGY_READ_ONLY",
+    "MEDAI_TERMINOLOGY_UI_PANEL_ENABLED",
+    "MEDAI_TERMINOLOGY_HYPOTHESIS_ANNOTATION_ENABLED",
+    "MEDAI_B07_TERMINOLOGY_OPT_IN",
+    "MEDAI_TERMINOLOGY_ALLOW_WRITES"
+  ],
+  "forbidden_behaviors_documented": true,
+  "future_blocks": [
+    "TERM-05 synthetic read-only terminology adapter",
+    "TERM-06 private-store read-only adapter validation",
+    "TERM-07 UI-only terminology lookup panel",
+    "TERM-08 hypothesis-only coding annotation pilot",
+    "B07-TERM opt-in integration only after explicit approval"
+  ],
+  "license_text_written_to_public_reports": false,
+  "local_db_index_committed": false,
+  "next_recommended_action": "Start TERM-05 synthetic read-only terminology adapter only when integration work is explicitly approved.",
+  "ocr_extractor_safety_gates_changed": false,
+  "phase_name": "Terminology-Backed Integration Readiness Blueprint",
+  "prescription_dosing_advice_generated": false,
+  "private_filename_path_leaks": 0,
+  "raw_phi_logged_in_public_reports": false,
+  "read_only_lookup_adapter_boundary_defined": true,
+  "regression_gates_defined": true,
+  "rollback_disable_plan_defined": true,
+  "safety_contract_created": true,
+  "secret_leaks": 0,
+  "source_terminology_rows_written_to_public_reports": false,
+  "term02": {
+    "commit": "e2ce45f",
+    "conclusion": "cka_term02_controlled_local_import_ready",
+    "external_api_used": false,
+    "loinc_rows_imported": 109325,
+    "rxnorm_rows_imported": 244529,
+    "total_local_concepts": 353854
+  },
+  "term03": {
+    "ambiguous_manual_review_passed": true,
+    "code_lookup_passed": true,
+    "commit": "906f526",
+    "conclusion": "cka_term03_local_terminology_qa_ready",
+    "determinism_passed": true,
+    "qa_cases_failed": 0,
+    "qa_cases_passed": 9,
+    "qa_cases_skipped": 1,
+    "qa_cases_total": 10,
+    "source_filter_isolation_passed": true,
+    "unknown_unmapped_passed": true
+  },
+  "terminology_data_committed": false,
+  "terminology_data_staged": false,
+  "validation_commands": [
+    "python scripts/run_cka_term03_local_terminology_qa_validation.py",
+    "python scripts/run_cka_term02_controlled_local_import_validation.py",
+    "python scripts/run_cka_term01h_safety_redteam_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py",
+    "python scripts/run_cka_term04_integration_readiness_validation.py"
+  ]
+}
