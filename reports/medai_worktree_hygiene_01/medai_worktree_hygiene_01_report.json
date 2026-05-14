@@ -1,0 +1,80 @@
+{
+  "block_id": "MEDAI-HYGIENE-01",
+  "conclusion": "worktree_hygiene_operator_decision_required",
+  "timestamp": "2026-05-14T09:14:13.9430421-04:00",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "44db358",
+  "park10_commit": "44db358",
+  "runtime_behavior_changed_by_this_audit": false,
+  "files_edited_by_this_audit_count": 3,
+  "git_status_short_entry_count": 201,
+  "audited_unstaged_files": [
+    {
+      "path": "execution/pipeline.py",
+      "status": "unstaged_modified",
+      "insertions": 45,
+      "deletions": 2,
+      "safe_diff_summary": [
+        "adds transient PDF text audit state",
+        "adds transient PII audit state",
+        "adds PDF text extraction stage-log metadata",
+        "adds routing-selection audit fields to extracted output",
+        "uses an audit-returning PDF text extraction helper",
+        "copies selected PII and text-quality audit fields into extracted metadata"
+      ],
+      "classification": "likely_intentional_pending_work",
+      "recommended_action": "investigate_before_keep_or_revert_decision"
+    },
+    {
+      "path": "execution/router.py",
+      "status": "unstaged_modified",
+      "insertions": 287,
+      "deletions": 22,
+      "safe_diff_summary": [
+        "extends routed extraction metadata",
+        "adds selected-extractor and fallback-selection fields",
+        "adds terminal-empty-prevention metadata",
+        "adds quota/rate-limit fallback handling",
+        "adds non-empty local result preference in terminal selection",
+        "adds helper methods for quota-safe local terminal selection and best non-empty local result selection"
+      ],
+      "classification": "likely_intentional_pending_work",
+      "recommended_action": "investigate_before_keep_or_revert_decision"
+    }
+  ],
+  "broader_worktree_summary": {
+    "dirty_worktree": true,
+    "safe_public_note": "Additional dirty tracked and untracked files are present. This report does not list medical-looking local filenames or private/local data paths.",
+    "non_audited_changes_were_not_inspected": true
+  },
+  "validations": [
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "cases_passed": 12,
+      "cases_total": 12,
+      "tests_reported": 693,
+      "external_api_used": false
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "cases_passed": 6,
+      "cases_total": 6,
+      "external_api_used": false
+    }
+  ],
+  "nothing_staged_before_report_commit": true,
+  "private_terminology_artifacts_touched": false,
+  "terminology_data_staged": false,
+  "data_terminology_staged": false,
+  "private_license_ack_staged": false,
+  "source_terminology_files_staged": false,
+  "db_key_private_pdf_image_archive_staged": false,
+  "external_api_used": false,
+  "imports_run": false,
+  "raw_phi_logged_in_public_reports": false,
+  "private_filename_path_leaks": 0,
+  "secret_leaks": 0,
+  "operator_decision": "keep_unstaged_pending_explicit_operator_decision"
+}
