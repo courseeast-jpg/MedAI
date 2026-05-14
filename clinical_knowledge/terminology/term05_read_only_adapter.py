@@ -189,7 +189,7 @@ class SyntheticReadOnlyTerminologyAdapter:
                 system=row["system"],
                 code=row["code"],
                 display_normalized=normalize_query(row["display"]),
-                synthetic=True,
+                synthetic=bool(row["synthetic"]),
             )
             for row in rows
         )
@@ -232,11 +232,19 @@ class SyntheticReadOnlyTerminologyAdapter:
         params.append(int(max_results))
         with self.store._conn() as con:
             rows = con.execute(
-                "SELECT system, code, display FROM terminology_concepts "
+                "SELECT system, code, display, synthetic FROM terminology_concepts "
                 f"WHERE {where} ORDER BY system, code, display_norm LIMIT ?",
                 params,
             ).fetchall()
-        return [{"system": str(row["system"]), "code": str(row["code"]), "display": str(row["display"])} for row in rows]
+        return [
+            {
+                "system": str(row["system"]),
+                "code": str(row["code"]),
+                "display": str(row["display"]),
+                "synthetic": bool(row["synthetic"]),
+            }
+            for row in rows
+        ]
 
 
 def build_synthetic_read_only_adapter() -> SyntheticReadOnlyTerminologyAdapter:

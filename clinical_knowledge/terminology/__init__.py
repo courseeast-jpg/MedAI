@@ -176,6 +176,12 @@ from clinical_knowledge.terminology.term05_read_only_adapter import (
     build_synthetic_read_only_adapter,
     run_term05_synthetic_adapter_validation,
 )
+from clinical_knowledge.terminology.term06_private_store_adapter_validation import (
+    Term06PrivateStoreCaseResult,
+    Term06PrivateStoreValidationResult,
+    Term06ValidationBlocked,
+    run_private_store_adapter_validation,
+)
 
 
 __all__ = [
@@ -290,4 +296,9 @@ __all__ = [
     "Term05AdapterValidationResult",
     "build_synthetic_read_only_adapter",
     "run_term05_synthetic_adapter_validation",
+    # TERM-06 private-store read-only adapter validation
+    "Term06PrivateStoreCaseResult",
+    "Term06PrivateStoreValidationResult",
+    "Term06ValidationBlocked",
+    "run_private_store_adapter_validation",
 ]
