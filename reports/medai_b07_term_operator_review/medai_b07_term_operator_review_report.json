@@ -1,0 +1,64 @@
+{
+  "block_id": "MEDAI-REVIEW-01",
+  "conclusion": "medai_b07_term_operator_review_ready",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit": "5f81b5feb7fd",
+  "b07_term01_commit": "97c308022404",
+  "review_document_created": true,
+  "runtime_behavior_changed": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_safety_gates_changed": false,
+  "broader_terminology_behavior_enabled": false,
+  "new_import_run": false,
+  "external_api_used": false,
+  "feature_flags": {
+    "MEDAI_B07_TERMINOLOGY_OPT_IN": "default_false",
+    "MEDAI_TERMINOLOGY_LOOKUP_ENABLED": "default_false",
+    "MEDAI_TERMINOLOGY_HYPOTHESIS_ANNOTATION": "default_false",
+    "MEDAI_TERMINOLOGY_READ_ONLY": "default_true",
+    "MEDAI_TERMINOLOGY_ALLOW_WRITES": "default_false"
+  },
+  "operator_review_topics": {
+    "what_b07_term01_does": true,
+    "what_b07_term01_does_not_do": true,
+    "default_off_behavior": true,
+    "hypothesis_only_metadata": true,
+    "unknown_unmapped_behavior": true,
+    "ambiguous_manual_review_behavior": true,
+    "terminology_not_authority_source": true,
+    "rollback_off_state_instructions": true
+  },
+  "validation_summary": {
+    "b07_term01_validation_ready": true,
+    "b07_term01_pytest_passed": true,
+    "b07_baseline_pytest_passed": true,
+    "term08_validation_ready": true,
+    "final_mvp_validation_passed": true
+  },
+  "safety_privacy_status": {
+    "terminology_data_staged": false,
+    "data_terminology_staged": false,
+    "license_ack_private_staged": false,
+    "source_terminology_files_staged": false,
+    "unrelated_dirty_generated_files_staged": false,
+    "execution_pipeline_staged": false,
+    "execution_router_staged": false,
+    "private_filename_path_leaks": 0,
+    "secret_leaks": 0,
+    "raw_phi_logged_in_public_reports": false,
+    "license_text_written_to_public_reports": false,
+    "public_report_privacy_clean": true
+  },
+  "known_unstaged_unrelated_changes": [
+    "execution/pipeline.py",
+    "execution/router.py"
+  ],
+  "validation_commands": [
+    "python scripts/run_b07_term01_opt_in_integration_validation.py",
+    "python -m pytest tests/test_b07_term01_opt_in_integration.py -vv",
+    "python -m pytest tests/test_cka_block07_medical_coding.py -vv",
+    "python scripts/run_cka_term08_hypothesis_annotation_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py"
+  ],
+  "recommended_next_action": "Operator reviews the package before any future approval-gated expansion."
+}
