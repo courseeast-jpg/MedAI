@@ -56,9 +56,10 @@ st.set_page_config(
 )
 
 
+RUN_REVIEW_TAB = "Run & Review"
+
 PRIMARY_OPERATOR_TABS = [
-    "Current Run",
-    "Review Package",
+    RUN_REVIEW_TAB,
     "Operator Control Panel",
 ]
 
@@ -541,9 +542,10 @@ def render_conflict_tab(sys_components: dict) -> None:
         st.error(f"Conflict review unavailable: {exc}")
 
 
-def render_current_run_tab(sys_components: dict) -> None:
+def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> None:
     ensure_test_launcher_dirs()
-    st.subheader("Current Run")
+    if show_title:
+        st.subheader("Current Run")
     st.caption("Add documents, then start a run.")
     st.caption("Supported files: PDF or TXT. Files stay local.")
 
@@ -633,6 +635,22 @@ def render_current_run_tab(sys_components: dict) -> None:
     else:
         st.caption("No current run results. Previous reports are available in Validation History.")
     st.caption("Bad scans and empty results go to review.")
+
+
+def render_run_review_tab(sys_components: dict) -> None:
+    st.subheader(RUN_REVIEW_TAB)
+    st.caption("Add documents, process them locally, and review anything that needs attention.")
+
+    st.markdown("### Current run")
+    render_current_run_tab(sys_components, show_title=False)
+
+    st.divider()
+    try:
+        from app.review_package_viewer import render_review_package_panel
+
+        render_review_package_panel(show_title=False)
+    except Exception as _exc:
+        st.error(f"Review summary unavailable: {_exc}")
 
 
 def render_queue_panel(files: list[Path]) -> None:
@@ -1053,15 +1071,8 @@ def main() -> None:
     tabs = st.tabs(tab_labels)
     for label, tab in zip(tab_labels, tabs):
         with tab:
-            if label == "Current Run":
-                render_current_run_tab(sys_components)
-            elif label == "Review Package":
-                try:
-                    from app.review_package_viewer import render_review_package_panel
-
-                    render_review_package_panel()
-                except Exception as _exc:
-                    st.error(f"Review Package panel unavailable: {_exc}")
+            if label == RUN_REVIEW_TAB:
+                render_run_review_tab(sys_components)
             elif label == "Operator Control Panel":
                 try:
                     from app.operator_control_panel import render_operator_control_panel

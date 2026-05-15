@@ -262,7 +262,9 @@ def test_app_main_imports_cleanly():
         mod = importlib.import_module(mod_name)
 
     assert hasattr(mod, "PHASE52_OPERATOR_TABS")
-    assert "Review Package" in mod.PHASE52_OPERATOR_TABS
+    assert "Run & Review" in mod.PHASE52_OPERATOR_TABS
+    assert callable(getattr(mod, "render_run_review_tab"))
+    assert callable(getattr(mod, "render_current_run_tab"))
 
 
 def test_review_package_viewer_importable():

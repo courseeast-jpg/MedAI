@@ -1,0 +1,99 @@
+{
+  "conclusion": "medai_ui_polish_05_run_review_consolidation_ready",
+  "changed_scope": "Run & Review UI consolidation only",
+  "primary_pages_after_change": [
+    "Run & Review",
+    "Operator Control Panel"
+  ],
+  "advanced_pages_after_change": [
+    "Validation Batch Audit",
+    "Validation History",
+    "Safety & Governance",
+    "Terminology Admin"
+  ],
+  "current_run_backend_behavior_changed": false,
+  "review_package_logic_changed": false,
+  "backend_behavior_changed": false,
+  "page_behavior_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "free_form_shell_added": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_changed": false,
+  "safety_gate_changed": false,
+  "review_bucket_logic_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "external_api_enabled": false,
+  "db_schema_changed": false,
+  "private_files_staged": false,
+  "terminology_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_05_run_review_consolidation.py",
+      "result": "passed",
+      "summary": "5 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_04_navigation_advanced_mode.py",
+      "result": "passed",
+      "summary": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_phase52_operator_ui_redesign.py tests/test_phase75_review_package_ui_launcher.py tests/test_phase77_operator_release_polish.py -q",
+      "result": "passed",
+      "summary": "44 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_03_operator_control_panel.py tests/test_medai_ui_ops_panel.py -q",
+      "result": "passed",
+      "summary": "20 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_02_review_package.py tests/test_medai_ui_polish_01_current_run.py -q",
+      "result": "passed",
+      "summary": "14 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_phase49_operator_ui.py tests/test_phase74_manual_review_package_auto_improvement.py tests/test_cka_block09_operator_ui.py tests/test_cka_term01e_operator_readiness_ui.py -q",
+      "result": "passed",
+      "summary": "110 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed, 693 tests reported"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "timeout",
+      "summary": "Timed out after 20 minutes; no full-suite pass claimed"
+    }
+  ],
+  "raw_phi_present": false,
+  "raw_filenames_present": false,
+  "private_absolute_paths_present": false,
+  "secrets_present": false
+}

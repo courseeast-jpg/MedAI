@@ -21,8 +21,7 @@ def app_source() -> str:
 
 def test_default_navigation_shows_primary_pages_only() -> None:
     assert operator_tabs(show_advanced_tools=False) == [
-        "Current Run",
-        "Review Package",
+        "Run & Review",
         "Operator Control Panel",
     ]
 
@@ -37,11 +36,11 @@ def test_default_navigation_hides_advanced_pages_and_legacy_labels() -> None:
 
 def test_advanced_navigation_labels_are_available_when_enabled() -> None:
     advanced_tabs = operator_tabs(show_advanced_tools=True)
-    for label in ["Current Run", "Review Package", "Operator Control Panel"]:
+    for label in ["Run & Review", "Operator Control Panel"]:
         assert label in advanced_tabs
     for label in ["Validation Batch Audit", "Validation History", "Safety & Governance", "Terminology Admin"]:
         assert label in advanced_tabs
-    assert PRIMARY_OPERATOR_TABS == ["Current Run", "Review Package", "Operator Control Panel"]
+    assert PRIMARY_OPERATOR_TABS == ["Run & Review", "Operator Control Panel"]
     assert ADVANCED_OPERATOR_TABS == [
         "Validation Batch Audit",
         "Validation History",
@@ -91,8 +90,9 @@ def test_old_labels_are_not_primary_navigation_or_sidebar_labels() -> None:
 
 def test_page_rendering_calls_remain_available() -> None:
     source = app_source()
-    assert "render_current_run_tab(sys_components)" in source
-    assert "render_review_package_panel()" in source
+    assert "render_run_review_tab(sys_components)" in source
+    assert "render_current_run_tab(sys_components, show_title=False)" in source
+    assert "render_review_package_panel(show_title=False)" in source
     assert "render_operator_control_panel()" in source
     assert "render_blind_audit_tab(sys_components)" in source
     assert "render_report_archive_tab()" in source

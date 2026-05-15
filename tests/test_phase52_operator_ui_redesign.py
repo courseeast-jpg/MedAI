@@ -42,8 +42,7 @@ def test_phase52_safe_local_mode_and_warning_are_present():
 
 
 def test_phase52_tabs_include_required_operator_tabs():
-    assert "Current Run" in PHASE52_OPERATOR_TABS
-    assert "Review Package" in PHASE52_OPERATOR_TABS
+    assert "Run & Review" in PHASE52_OPERATOR_TABS
     assert "Operator Control Panel" in PHASE52_OPERATOR_TABS
     assert "Validation Batch Audit" in PHASE52_OPERATOR_TABS
     assert "Validation History" in PHASE52_OPERATOR_TABS
@@ -92,7 +91,9 @@ def test_phase52_blind_audit_tab_references_real_validation_input():
 def test_phase52_report_archive_is_separate_from_current_run():
     source = app_source()
 
+    assert "render_run_review_tab" in source
     assert "render_current_run_tab" in source
+    assert "render_review_package_panel" in source
     assert "render_report_archive_tab" in source
     assert "Previous reports live here so current-run counters stay separate" in source
 

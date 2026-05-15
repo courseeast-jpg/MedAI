@@ -481,14 +481,16 @@ class TestMainPyIntegration:
         # Should have a try/except around the CKA tab
         assert "Safety & Governance" in content
         # Verify isolated from existing tabs
-        assert "Review Package" in content
+        assert "Run & Review" in content
         assert "Operator Control Panel" in content
 
     def test_main_py_preserved_existing_tabs(self):
         main_path = Path(__file__).parent.parent / "app" / "main.py"
         content = main_path.read_text(encoding="utf-8")
-        for tab in ["Current Run", "Validation Batch Audit", "Validation History", "Review Package"]:
+        for tab in ["Run & Review", "Validation Batch Audit", "Validation History"]:
             assert tab in content, f"Existing tab '{tab}' was removed"
+        assert "render_current_run_tab" in content
+        assert "render_review_package_panel" in content
 
     def test_viewer_importable_standalone(self):
         """Viewer can be imported without Streamlit session (no crash)."""

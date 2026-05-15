@@ -128,7 +128,7 @@ def test_real_docs_contain_all_required_statements():
 def test_app_imports_still_work():
     from app.review_package_viewer import get_bucket_summary, load_review_package
     from app.main import PHASE52_OPERATOR_TABS
-    assert "Review Package" in PHASE52_OPERATOR_TABS
+    assert "Run & Review" in PHASE52_OPERATOR_TABS
     assert callable(get_bucket_summary)
     assert callable(load_review_package)
 

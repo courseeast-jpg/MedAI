@@ -201,6 +201,8 @@ def review_status_summary(buckets: list[dict[str, Any]]) -> dict[str, Any]:
 def render_review_package_panel(
     package_path: Path | None = None,
     report74_path: Path | None = None,
+    *,
+    show_title: bool = True,
 ) -> None:
     """Render the Review Package panel. Safe for embedding in main.py."""
     try:
@@ -220,8 +222,9 @@ def render_review_package_panel(
     summary = review_status_summary(buckets)
     report74 = load_phase74_report(report74_path)
 
-    st.subheader("Review Package")
-    st.caption("Review items and system safety findings.")
+    if show_title:
+        st.subheader("Review Package")
+        st.caption("Review items and system safety findings.")
 
     status_col, attention_col, production_col = st.columns(3)
     status_col.success(f"Review status: {summary['review_status']}")
