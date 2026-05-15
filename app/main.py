@@ -262,6 +262,18 @@ def inject_phase52_styles() -> None:
             font-size: .78rem;
         }
         .muted-label { color: #64748b; font-size: .84rem; }
+        /* MEDAI-UI-POLISH-06: hide Streamlit framework chrome only.
+           These selectors target Streamlit's deploy/menu/footer containers,
+           not MedAI buttons, tabs, expanders, or forms. */
+        [data-testid="stToolbar"],
+        [data-testid="stDecoration"],
+        [data-testid="stStatusWidget"],
+        [data-testid="stDeployButton"],
+        #MainMenu,
+        footer {
+            display: none !important;
+            visibility: hidden !important;
+        }
         .stMarkdown h1 a, .stMarkdown h2 a, .stMarkdown h3 a,
         .stHeading a, [data-testid="stHeaderActionElements"] {
             display: none !important;
