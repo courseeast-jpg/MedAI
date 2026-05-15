@@ -236,7 +236,7 @@ def render_readiness_text(summary: TerminologyReadinessSummary) -> str:
     ]
     return "\n".join(
         [
-            "Terminology Readiness",
+            "Terminology Admin",
             *phase_lines,
             f"Systems missing: {_format_list(summary.systems_missing)}",
             f"Systems with files present: {_format_list(summary.systems_with_files_present)}",
@@ -254,7 +254,8 @@ def render_terminology_readiness_panel(summary: TerminologyReadinessSummary | No
     import streamlit as st
 
     data = summary or build_terminology_readiness_summary()
-    st.subheader("Terminology Readiness")
+    st.subheader("Terminology Admin")
+    st.caption("Check terminology files, license status, and import readiness.")
     st.caption("Public terminology readiness reports only. Real import remains blocked until licensed files and private acknowledgment are provided.")
     cols = st.columns(4)
     cols[0].metric("Missing systems", len(data.systems_missing))

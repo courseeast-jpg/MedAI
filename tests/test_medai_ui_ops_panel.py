@@ -139,7 +139,7 @@ def test_ui_import_does_not_run_commands(monkeypatch: pytest.MonkeyPatch) -> Non
 def test_app_main_includes_operator_control_panel_tab() -> None:
     main_path = Path("app/main.py")
     text = main_path.read_text(encoding="utf-8")
-    assert "MedAI Operator Control Panel" in text
+    assert "Operator Control Panel" in text
     assert "render_operator_control_panel" in text
     assert "ExecutionPipeline(" in text
 

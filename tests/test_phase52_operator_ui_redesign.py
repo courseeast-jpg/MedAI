@@ -43,9 +43,10 @@ def test_phase52_safe_local_mode_and_warning_are_present():
 
 def test_phase52_tabs_include_required_operator_tabs():
     assert "Current Run" in PHASE52_OPERATOR_TABS
-    assert "Blind Audit" in PHASE52_OPERATOR_TABS
-    assert "Report Archive" in PHASE52_OPERATOR_TABS
     assert "Review Package" in PHASE52_OPERATOR_TABS
+    assert "Operator Control Panel" in PHASE52_OPERATOR_TABS
+    assert "Validation Batch Audit" in PHASE52_OPERATOR_TABS
+    assert "Validation History" in PHASE52_OPERATOR_TABS
 
 
 def test_phase52_raw_json_hidden_by_default():
@@ -85,7 +86,7 @@ def test_phase52_blind_audit_tab_references_real_validation_input():
 
     assert "Put many PDFs into real_validation_input/" in source
     assert "real_validation_input/" in source
-    assert "Run Blind Audit" in source
+    assert "Run validation batch" in source
 
 
 def test_phase52_report_archive_is_separate_from_current_run():

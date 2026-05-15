@@ -562,8 +562,9 @@ def render_clinical_knowledge_safety_dashboard(snapshot: Optional[Dict[str, Any]
 
     st.header("🏥 Clinical Knowledge Architecture — Safety State")
     st.caption(
-        "Read-only operator panel. Displays safe public report summaries only. "
-        "No PHI, no private filenames, no private mappings, no clinical advice."
+        "Safety checks for privacy, knowledge state, and controlled clinical logic. "
+        "Displays safe public report summaries only. No PHI, no private filenames, "
+        "no private mappings, no clinical advice."
     )
 
     panels = [

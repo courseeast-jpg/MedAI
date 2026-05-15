@@ -147,7 +147,7 @@ def _app_import_check() -> bool:
     try:
         import app.main as main_app
 
-        return "Terminology Readiness" in main_app.PHASE52_OPERATOR_TABS
+        return "Terminology Admin" in main_app.PHASE52_OPERATOR_TABS
     except Exception:
         return False
 
@@ -191,7 +191,7 @@ def _markdown(payload: dict[str, Any]) -> str:
 def _guide() -> str:
     return (
         "# CKA-TERM-01E Operator Readiness UI Guide\n\n"
-        "Open the MedAI Streamlit UI and choose the Terminology Readiness tab.\n\n"
+        "Open the MedAI Streamlit UI, enable Show advanced tools, and choose the Terminology Admin tab.\n\n"
         "The panel reads public readiness reports only. It does not load private license acknowledgment files, "
         "does not read terminology data contents, does not download files, and does not run real import.\n\n"
         "Next manual action: operator downloads licensed files and creates private license ack.\n"

@@ -468,7 +468,7 @@ class TestMainPyIntegration:
         main_path = Path(__file__).parent.parent / "app" / "main.py"
         assert main_path.exists()
         content = main_path.read_text(encoding="utf-8")
-        assert "Clinical Knowledge Safety" in content
+        assert "Safety & Governance" in content
 
     def test_main_py_imports_viewer(self):
         main_path = Path(__file__).parent.parent / "app" / "main.py"
@@ -479,15 +479,15 @@ class TestMainPyIntegration:
         main_path = Path(__file__).parent.parent / "app" / "main.py"
         content = main_path.read_text(encoding="utf-8")
         # Should have a try/except around the CKA tab
-        assert "tab_cka" in content
+        assert "Safety & Governance" in content
         # Verify isolated from existing tabs
         assert "Review Package" in content
-        assert "Clinical Knowledge Safety" in content
+        assert "Operator Control Panel" in content
 
     def test_main_py_preserved_existing_tabs(self):
         main_path = Path(__file__).parent.parent / "app" / "main.py"
         content = main_path.read_text(encoding="utf-8")
-        for tab in ["Current Run", "Blind Audit", "Report Archive", "Review Package"]:
+        for tab in ["Current Run", "Validation Batch Audit", "Validation History", "Review Package"]:
             assert tab in content, f"Existing tab '{tab}' was removed"
 
     def test_viewer_importable_standalone(self):

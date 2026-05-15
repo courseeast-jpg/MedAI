@@ -79,14 +79,14 @@ def test_status_summary_correct_with_synthetic_report_data() -> None:
 def test_ui_render_helpers_return_non_empty_text() -> None:
     summary = build_terminology_readiness_summary({})
     text = render_readiness_text(summary)
-    assert "Terminology Readiness" in text
+    assert "Terminology Admin" in text
     assert "real import not run" in text.lower()
 
 
 def test_existing_app_ui_imports_and_has_tab() -> None:
     import app.main as main
 
-    assert "Terminology Readiness" in main.PHASE52_OPERATOR_TABS
+    assert "Terminology Admin" in main.PHASE52_OPERATOR_TABS
 
 
 def test_report_privacy_clean_after_validation_script() -> None:

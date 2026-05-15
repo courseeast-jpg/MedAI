@@ -145,6 +145,6 @@ def test_phase53_no_pdfs_are_tracked_under_reports():
 def test_phase53_ui_label_references_phase53_not_prior_phase_blind_audit():
     source = APP_MAIN.read_text(encoding="utf-8")
 
-    assert "Run Phase53 Blind Audit from real_validation_input/" in source
+    assert "Run validation batch" in source
     assert "run_phase53_blind_pdf_generalization_audit" in source
     assert "run_phase51_blind_pdf_generalization_audit" not in source

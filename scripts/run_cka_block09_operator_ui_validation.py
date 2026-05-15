@@ -340,7 +340,7 @@ def case_l_operator_panels_summary() -> Case:
 
 
 def case_m_main_py_integration() -> Case:
-    """Case M — app/main.py contains Clinical Knowledge Safety tab."""
+    """Case M - app/main.py exposes the safety dashboard through navigation."""
     main_path = Path(__file__).parent.parent / "app" / "main.py"
     if not main_path.exists():
         return {
@@ -350,10 +350,11 @@ def case_m_main_py_integration() -> Case:
             "details": {"error": "app/main.py not found"},
         }
     content = main_path.read_text(encoding="utf-8")
-    has_tab = "Clinical Knowledge Safety" in content
+    has_tab = "Safety & Governance" in content
     has_import = "clinical_knowledge_safety_viewer" in content
-    has_try_except = "tab_cka" in content and "except" in content
-    passed = has_tab and has_import and has_try_except
+    has_try_except = "render_clinical_knowledge_safety_dashboard" in content and "except" in content
+    has_advanced_gate = "Show advanced tools" in content and "operator_tabs(show_advanced_tools)" in content
+    passed = has_tab and has_import and has_try_except and has_advanced_gate
     return {
         "case": "M",
         "description": "app/main.py Streamlit integration present",
@@ -362,6 +363,7 @@ def case_m_main_py_integration() -> Case:
             "has_tab": has_tab,
             "has_import": has_import,
             "has_try_except": has_try_except,
+            "has_advanced_gate": has_advanced_gate,
         },
     }
 

@@ -1,0 +1,136 @@
+{
+  "block_id": "MEDAI-UI-POLISH-04",
+  "conclusion": "medai_ui_polish_04_navigation_advanced_mode_ready",
+  "cka_case_j_failure_diagnosed": true,
+  "cka_case_j_failure_classification": "stale_ui_label_expectations",
+  "failing_cka_tests_identified": [
+    "tests/test_cka_block09_operator_ui.py::TestValidationScript::test_validation_script_runs_cleanly",
+    "tests/test_cka_block09_operator_ui.py::TestValidationScript::test_validation_all_14_cases_pass"
+  ],
+  "final_mvp_validation": "passed_12_of_12",
+  "changed_scope": "navigation/sidebar UI wording and advanced-mode visibility only",
+  "backend_behavior_changed": false,
+  "page_behavior_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "free_form_shell_added": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_changed": false,
+  "safety_gate_changed": false,
+  "review_bucket_logic_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "external_api_enabled": false,
+  "db_schema_changed": false,
+  "private_files_staged": false,
+  "terminology_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "navigation": {
+    "default_pages": [
+      "Current Run",
+      "Review Package",
+      "Operator Control Panel"
+    ],
+    "advanced_toggle": "Show advanced tools",
+    "advanced_pages": [
+      "Validation Batch Audit",
+      "Validation History",
+      "Safety & Governance",
+      "Terminology Admin"
+    ],
+    "sidebar_labels": [
+      "Knowledge base",
+      "Active",
+      "Draft facts",
+      "Medical connector active",
+      "Enrichment enabled"
+    ]
+  },
+  "validations": [
+    {
+      "command": "CKA B01-B10 Case J pytest subset with -vv --tb=short",
+      "result": "passed",
+      "summary": "693 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_04_navigation_advanced_mode.py -vv",
+      "result": "passed",
+      "summary": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_03_operator_control_panel.py -vv",
+      "result": "passed",
+      "summary": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_ops_panel.py -vv",
+      "result": "passed",
+      "summary": "13 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_02_review_package.py -vv",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_01_current_run.py -vv",
+      "result": "passed",
+      "summary": "8 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_phase52_operator_ui_redesign.py -vv",
+      "result": "passed",
+      "summary": "10 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_phase49_operator_ui.py -vv",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_cka_term01e_operator_readiness_ui.py -vv",
+      "result": "passed",
+      "summary": "9 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "summary": "2297 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "privacy": {
+    "no_raw_phi": true,
+    "no_raw_filenames": true,
+    "no_private_absolute_paths": true,
+    "no_secrets": true,
+    "no_source_terminology_rows": true,
+    "no_db_rows": true
+  },
+  "next_recommended_action": "Park the UI polish state or continue only with a new approval-gated UI cleanup block."
+}

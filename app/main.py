@@ -56,29 +56,58 @@ st.set_page_config(
 )
 
 
-PHASE52_OPERATOR_TABS = [
+PRIMARY_OPERATOR_TABS = [
     "Current Run",
-    "Blind Audit",
-    "Report Archive",
     "Review Package",
-    "Clinical Knowledge Safety",
-    "Terminology Readiness",
-    "MedAI Operator Control Panel",
+    "Operator Control Panel",
+]
+
+ADVANCED_OPERATOR_TABS = [
+    "Validation Batch Audit",
+    "Validation History",
+    "Safety & Governance",
+    "Terminology Admin",
 ]
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
 
+# Backward-compatible export for older tests/importers. These are current
+# visible labels; advanced pages are shown only after the operator opts in.
+PHASE52_OPERATOR_TABS = PRIMARY_OPERATOR_TABS + ADVANCED_OPERATOR_TABS
 
-def operator_tabs() -> list[str]:
-    tabs = list(PHASE52_OPERATOR_TABS)
+
+def operator_tabs(show_advanced_tools: bool = False) -> list[str]:
+    tabs = list(PRIMARY_OPERATOR_TABS)
+    if show_advanced_tools:
+        tabs.extend(ADVANCED_OPERATOR_TABS)
     try:
         from app.clinical_knowledge_terminology_lookup_viewer import terminology_lookup_panel_enabled
 
-        if terminology_lookup_panel_enabled():
+        if show_advanced_tools and terminology_lookup_panel_enabled():
             tabs.append(TERMINOLOGY_LOOKUP_TAB)
     except Exception:
         pass
     return tabs
+
+
+def navigation_subtitle(tab_label: str) -> str:
+    subtitles = {
+        "Validation Batch Audit": "Run a controlled local test batch and review summary results.",
+        "Validation History": "Previous validation and audit reports.",
+        "Safety & Governance": "Safety checks for privacy, knowledge state, and controlled clinical logic.",
+        "Terminology Admin": "Check terminology files, license status, and import readiness.",
+    }
+    return subtitles.get(tab_label, "")
+
+
+def sidebar_status_labels(*, enrichment_enabled: bool) -> dict[str, str]:
+    return {
+        "knowledge_base": "Knowledge base",
+        "active": "Active",
+        "draft_facts": "Draft facts",
+        "connector_status": "Medical connector active",
+        "enrichment_status": "Enrichment enabled" if enrichment_enabled else "Enrichment disabled",
+    }
 
 
 def display_content(record: MKBRecord) -> tuple[str, bool]:
@@ -602,7 +631,7 @@ def render_current_run_tab(sys_components: dict) -> None:
         for result in active_run.get("results", []):
             render_run_result_card(result)
     else:
-        st.caption("No current run results. Previous reports are available in Report Archive.")
+        st.caption("No current run results. Previous reports are available in Validation History.")
     st.caption("Bad scans and empty results go to review.")
 
 
@@ -707,10 +736,11 @@ def render_operator_guidance_panel() -> None:
 
 
 def render_blind_audit_tab(sys_components: dict) -> None:
-    st.subheader("Blind Audit")
+    st.subheader("Validation Batch Audit")
+    st.caption(navigation_subtitle("Validation Batch Audit"))
     st.caption("Put many PDFs into real_validation_input/")
     st.caption("Supported formats: PDF, TXT, RTF, TIF, TIFF, PNG, JPG, JPEG, BMP, WEBP.")
-    st.caption("Run Blind Audit workflow: Phase53 local-only processing with PHI-safe public reports.")
+    st.caption("Run a local validation batch with PHI-safe public reports.")
     st.warning("Do not tune parsers during blind audit. Run first, review report second, change code only after audit is complete.")
     try:
         from scripts.run_phase53_blind_pdf_generalization_audit import (
@@ -725,12 +755,12 @@ def render_blind_audit_tab(sys_components: dict) -> None:
         blind_files = blind_audit_input_files(BLIND_AUDIT_INPUT_DIR)
         st.caption("Folder: real_validation_input/")
         st.metric("Files found", len(blind_files))
-        if st.button("Run Phase53 Blind Audit from real_validation_input/", type="primary"):
+        if st.button("Run validation batch", type="primary"):
             with st.spinner("Running local-only blind audit..."):
                 report = run_blind_audit(pipeline=sys_components["execution"])
             st.session_state["phase53_blind_audit"] = report
             st.success(
-                f"Blind audit complete: {report['accepted_count']} accepted, "
+                f"Validation batch complete: {report['accepted_count']} accepted, "
                 f"{report['review_count']} review, {report['error_count']} errors."
             )
 
@@ -746,7 +776,7 @@ def render_blind_audit_tab(sys_components: dict) -> None:
             render_phase54_review_section()
         render_phase57_full_corpus_section()
     except Exception as exc:
-        st.error(f"Blind audit unavailable: {exc}")
+        st.error(f"Validation batch audit unavailable: {exc}")
 
 
 def render_phase57_full_corpus_section() -> None:
@@ -905,7 +935,8 @@ def render_phase54_review_section() -> None:
 
 
 def render_report_archive_tab() -> None:
-    st.subheader("Report Archive")
+    st.subheader("Validation History")
+    st.caption(navigation_subtitle("Validation History"))
     st.caption("Previous reports live here so current-run counters stay separate from historical output.")
     archives = [
         ("latest test run", LATEST_MD_REPORT, LATEST_MD_REPORT.with_suffix(".json")),
@@ -995,63 +1026,79 @@ def main() -> None:
         return
     render_system_status(sys_components["state"])
 
+    show_advanced_tools = False
     with st.sidebar:
-        st.header("MKB Status")
+        sidebar_labels = sidebar_status_labels(enrichment_enabled=ENABLE_ENRICHMENT)
+        st.header(sidebar_labels["knowledge_base"])
         counts = sys_components["sql"].count_records()
-        st.metric("Active facts", counts["active"])
-        st.metric("Hypothesis", counts["hypothesis"])
+        st.metric(sidebar_labels["active"], counts["active"])
+        st.metric(sidebar_labels["draft_facts"], counts["hypothesis"])
         st.metric("Quarantined", counts["quarantined"])
         st.metric("Total", counts["total"])
         st.divider()
-        st.caption(f"Connectors: {', '.join(ACTIVE_CONNECTORS)}")
-        st.caption(f"Enrichment: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
+        st.caption(sidebar_labels["connector_status"])
+        st.caption(sidebar_labels["enrichment_status"])
+        with st.expander("Build / audit details", expanded=False):
+            st.caption(f"Internal connectors: {', '.join(ACTIVE_CONNECTORS)}")
+            st.caption(f"Enrichment raw state: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
+        st.divider()
+        show_advanced_tools = st.checkbox(
+            "Show advanced tools",
+            value=False,
+            help="Advanced tools include validation history, audit pages, safety governance, and terminology administration.",
+        )
+        st.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
 
-    tabs = st.tabs(operator_tabs())
-    tab_current, tab_blind, tab_archive, tab_review, tab_cka, tab_terms, tab_ops = tabs[:7]
-    with tab_current:
-        render_current_run_tab(sys_components)
-    with tab_blind:
-        render_blind_audit_tab(sys_components)
-    with tab_archive:
-        render_report_archive_tab()
-    with tab_review:
-        try:
-            from app.review_package_viewer import render_review_package_panel
-            render_review_package_panel()
-        except Exception as _exc:
-            st.error(f"Review Package panel unavailable: {_exc}")
-    with tab_cka:
-        try:
-            from app.clinical_knowledge_safety_viewer import (
-                load_cka_safety_snapshot,
-                render_clinical_knowledge_safety_dashboard,
-            )
-            _cka_snapshot = load_cka_safety_snapshot()
-            render_clinical_knowledge_safety_dashboard(_cka_snapshot)
-        except Exception as _exc:
-            st.error(f"Clinical Knowledge Safety panel unavailable: {_exc}")
-    with tab_terms:
-        try:
-            from app.terminology_readiness_viewer import render_terminology_readiness_panel
+    tab_labels = operator_tabs(show_advanced_tools)
+    tabs = st.tabs(tab_labels)
+    for label, tab in zip(tab_labels, tabs):
+        with tab:
+            if label == "Current Run":
+                render_current_run_tab(sys_components)
+            elif label == "Review Package":
+                try:
+                    from app.review_package_viewer import render_review_package_panel
 
-            render_terminology_readiness_panel()
-        except Exception as _exc:
-            st.error(f"Terminology Readiness panel unavailable: {_exc}")
-    with tab_ops:
-        try:
-            from app.operator_control_panel import render_operator_control_panel
+                    render_review_package_panel()
+                except Exception as _exc:
+                    st.error(f"Review Package panel unavailable: {_exc}")
+            elif label == "Operator Control Panel":
+                try:
+                    from app.operator_control_panel import render_operator_control_panel
 
-            render_operator_control_panel()
-        except Exception as _exc:
-            st.error(f"Operator Control Panel unavailable: {_exc}")
-    if len(tabs) > 7:
-        with tabs[7]:
-            try:
-                from app.clinical_knowledge_terminology_lookup_viewer import render_terminology_lookup_panel
+                    render_operator_control_panel()
+                except Exception as _exc:
+                    st.error(f"Operator Control Panel unavailable: {_exc}")
+            elif label == "Validation Batch Audit":
+                render_blind_audit_tab(sys_components)
+            elif label == "Validation History":
+                render_report_archive_tab()
+            elif label == "Safety & Governance":
+                st.caption(navigation_subtitle("Safety & Governance"))
+                try:
+                    from app.clinical_knowledge_safety_viewer import (
+                        load_cka_safety_snapshot,
+                        render_clinical_knowledge_safety_dashboard,
+                    )
+                    _cka_snapshot = load_cka_safety_snapshot()
+                    render_clinical_knowledge_safety_dashboard(_cka_snapshot)
+                except Exception as _exc:
+                    st.error(f"Safety & Governance panel unavailable: {_exc}")
+            elif label == "Terminology Admin":
+                st.caption(navigation_subtitle("Terminology Admin"))
+                try:
+                    from app.terminology_readiness_viewer import render_terminology_readiness_panel
 
-                render_terminology_lookup_panel()
-            except Exception as _exc:
-                st.error(f"Terminology Lookup panel unavailable: {_exc}")
+                    render_terminology_readiness_panel()
+                except Exception as _exc:
+                    st.error(f"Terminology Admin panel unavailable: {_exc}")
+            elif label == TERMINOLOGY_LOOKUP_TAB:
+                try:
+                    from app.clinical_knowledge_terminology_lookup_viewer import render_terminology_lookup_panel
+
+                    render_terminology_lookup_panel()
+                except Exception as _exc:
+                    st.error(f"Terminology Lookup panel unavailable: {_exc}")
 
     st.divider()
     st.caption(PRIVACY_INVARIANT_GUIDANCE)
