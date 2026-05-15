@@ -12,18 +12,18 @@ from clinical_knowledge.terminology.b07_term_opt_in import read_b07_term_flag_st
 
 def test_allowlist_contains_required_buttons() -> None:
     labels = {command.label for command in panel.COMMAND_ALLOWLIST.values()}
-    assert "Run Quick Health Check" in labels
-    assert "Run Final MVP Validation" in labels
-    assert "Run Full Test Suite" in labels
-    assert "Run Terminology Source Preflight" in labels
-    assert "Run Terminology Inventory" in labels
-    assert "Run B07-TERM Validation" in labels
-    assert "Run ROUTE-FIX Validation" in labels
-    assert "Run Focused Routing Tests" in labels
-    assert "Run Git Safety Check" in labels
-    assert "Show Last Validation Reports" in labels
-    assert "Show Release Tags" in labels
-    assert "Verify Final Release Bundle" in labels
+    assert "Quick health check" in labels
+    assert "Final MVP validation" in labels
+    assert "Full test suite" in labels
+    assert "Terminology preflight" in labels
+    assert "Terminology inventory" in labels
+    assert "B07-TERM validation" in labels
+    assert "ROUTE-FIX validation" in labels
+    assert "Focused routing tests" in labels
+    assert "Git safety check" in labels
+    assert "Last validation reports" in labels
+    assert "Release tags" in labels
+    assert "Verify release bundle" in labels
 
 
 def test_unknown_command_id_rejected() -> None:

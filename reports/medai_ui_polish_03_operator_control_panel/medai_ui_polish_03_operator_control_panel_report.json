@@ -1,0 +1,100 @@
+{
+  "block_id": "MEDAI-UI-POLISH-03",
+  "conclusion": "medai_ui_polish_03_operator_control_panel_ready",
+  "changed_scope": "Operator Control Panel UI wording/layout only",
+  "backend_behavior_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "free_form_shell_added": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_changed": false,
+  "safety_gate_changed": false,
+  "review_bucket_logic_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "external_api_enabled": false,
+  "db_schema_changed": false,
+  "private_files_staged": false,
+  "terminology_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "ui_changes": {
+    "title": "Operator Control Panel",
+    "primary_helper": "Run safe local checks and maintenance actions.",
+    "secondary_helper": "Only approved local checks are available.",
+    "primary_section": "Main checks",
+    "advanced_sections": [
+      "Advanced: terminology checks",
+      "Advanced: routing and extraction checks",
+      "Advanced: full test suite",
+      "Advanced: reports and recovery"
+    ],
+    "full_test_confirmation_preserved": true
+  },
+  "validations": [
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_03_operator_control_panel.py -vv",
+      "result": "passed",
+      "summary": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_ops_panel.py -vv",
+      "result": "passed",
+      "summary": "13 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_02_review_package.py tests/test_medai_ui_polish_01_current_run.py -vv",
+      "result": "passed",
+      "summary": "14 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_phase52_operator_ui_redesign.py -vv",
+      "result": "passed",
+      "summary": "10 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_phase49_operator_ui.py -vv",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "summary": "2290 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "privacy": {
+    "no_raw_phi": true,
+    "no_raw_filenames": true,
+    "no_private_absolute_paths": true,
+    "no_secrets": true,
+    "no_source_terminology_rows": true,
+    "no_db_rows": true
+  },
+  "next_recommended_action": "Proceed to the next approval-gated UI polish block or park the UI polish state."
+}

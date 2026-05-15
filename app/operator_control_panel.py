@@ -46,26 +46,33 @@ class CommandResult:
     report_paths: tuple[str, ...]
 
 
+COMMAND_HELP_TEXT = {
+    "quick_health_check": "Fast check that MedAI is ready.",
+    "final_mvp_validation": "Confirms the core release still passes.",
+    "git_safety_check": "Confirms no unsafe files are staged.",
+}
+
+
 COMMAND_ALLOWLIST: dict[str, OperatorCommand] = {
     "quick_health_check": OperatorCommand(
         command_id="quick_health_check",
-        label="Run Quick Health Check",
-        group="System Health",
+        label="Quick health check",
+        group="Main checks",
         argv=(sys.executable, "scripts/run_cka_final_mvp_release_validation.py"),
         report_paths=("reports/cka_final_mvp_release/cka_final_mvp_release_report.json",),
         description="Runs the fast final MVP validation.",
     ),
     "final_mvp_validation": OperatorCommand(
         command_id="final_mvp_validation",
-        label="Run Final MVP Validation",
-        group="System Health",
+        label="Final MVP validation",
+        group="Main checks",
         argv=(sys.executable, "scripts/run_cka_final_mvp_release_validation.py"),
         report_paths=("reports/cka_final_mvp_release/cka_final_mvp_release_report.json",),
     ),
     "full_test_suite": OperatorCommand(
         command_id="full_test_suite",
-        label="Run Full Test Suite",
-        group="System Health",
+        label="Full test suite",
+        group="Advanced: full test suite",
         argv=(sys.executable, "-m", "pytest", "tests"),
         timeout_seconds=FULL_TEST_TIMEOUT_SECONDS,
         requires_confirmation=True,
@@ -73,36 +80,36 @@ COMMAND_ALLOWLIST: dict[str, OperatorCommand] = {
     ),
     "terminology_source_preflight": OperatorCommand(
         command_id="terminology_source_preflight",
-        label="Run Terminology Source Preflight",
-        group="Terminology",
+        label="Terminology preflight",
+        group="Advanced: terminology checks",
         argv=(sys.executable, "scripts/run_medai_terminology_sources_preflight.py"),
         report_paths=("reports/terminology_sources_preflight/terminology_sources_preflight_report.json",),
     ),
     "terminology_inventory": OperatorCommand(
         command_id="terminology_inventory",
-        label="Run Terminology Inventory",
-        group="Terminology",
+        label="Terminology inventory",
+        group="Advanced: terminology checks",
         argv=(sys.executable, "scripts/run_medai_terminology_inventory.py", "--terminology-root", "terminology_data"),
         report_paths=("reports/terminology_data_inventory/terminology_data_inventory_report.json",),
     ),
     "b07_term_validation": OperatorCommand(
         command_id="b07_term_validation",
-        label="Run B07-TERM Validation",
-        group="Terminology",
+        label="B07-TERM validation",
+        group="Advanced: terminology checks",
         argv=(sys.executable, "scripts/run_b07_term01_opt_in_integration_validation.py"),
         report_paths=("reports/b07_term01_opt_in_integration/b07_term01_opt_in_integration_report.json",),
     ),
     "route_fix_validation": OperatorCommand(
         command_id="route_fix_validation",
-        label="Run ROUTE-FIX Validation",
-        group="Routing / Extraction",
+        label="ROUTE-FIX validation",
+        group="Advanced: routing and extraction checks",
         argv=(sys.executable, "scripts/run_medai_route_fix01_validation.py"),
         report_paths=("reports/medai_route_fix_01/medai_route_fix_01_report.json",),
     ),
     "focused_routing_tests": OperatorCommand(
         command_id="focused_routing_tests",
-        label="Run Focused Routing Tests",
-        group="Routing / Extraction",
+        label="Focused routing tests",
+        group="Advanced: routing and extraction checks",
         argv=(
             sys.executable,
             "-m",
@@ -116,15 +123,15 @@ COMMAND_ALLOWLIST: dict[str, OperatorCommand] = {
     ),
     "git_safety_check": OperatorCommand(
         command_id="git_safety_check",
-        label="Run Git Safety Check",
-        group="Git / Safety",
+        label="Git safety check",
+        group="Main checks",
         argv=("__internal_git_safety_check__",),
         description="Shows staged files and short status without staging anything.",
     ),
     "show_last_validation_reports": OperatorCommand(
         command_id="show_last_validation_reports",
-        label="Show Last Validation Reports",
-        group="Git / Safety",
+        label="Last validation reports",
+        group="Advanced: reports and recovery",
         argv=("__internal_show_reports__",),
         report_paths=(
             "reports/medai_release_validate_01/medai_release_validate_01_report.json",
@@ -136,17 +143,26 @@ COMMAND_ALLOWLIST: dict[str, OperatorCommand] = {
     ),
     "show_release_tags": OperatorCommand(
         command_id="show_release_tags",
-        label="Show Release Tags",
-        group="Recovery",
+        label="Release tags",
+        group="Advanced: reports and recovery",
         argv=("git", "tag", "--list", "medai-*2026-05-14"),
     ),
     "verify_final_bundle": OperatorCommand(
         command_id="verify_final_bundle",
-        label="Verify Final Release Bundle",
-        group="Recovery",
+        label="Verify release bundle",
+        group="Advanced: reports and recovery",
         argv=("git", "bundle", "verify", FINAL_BUNDLE.as_posix()),
     ),
 }
+
+
+PANEL_GROUP_ORDER = (
+    "Main checks",
+    "Advanced: terminology checks",
+    "Advanced: routing and extraction checks",
+    "Advanced: full test suite",
+    "Advanced: reports and recovery",
+)
 
 
 PRIVATE_MARKERS = (
@@ -175,6 +191,34 @@ def command_groups() -> dict[str, list[OperatorCommand]]:
     for command in COMMAND_ALLOWLIST.values():
         groups.setdefault(command.group, []).append(command)
     return groups
+
+
+def operator_status_label(status: str | None) -> str:
+    labels = {
+        None: "Not run yet",
+        "not_run": "Not run yet",
+        "running": "Running...",
+        "passed": "Passed",
+        "success": "Passed",
+        "failed": "Needs attention",
+        "error": "Needs attention",
+    }
+    return labels.get(status, "Needs attention")
+
+
+def operator_panel_summary(results: dict[str, CommandResult]) -> dict[str, str]:
+    if not results:
+        return {
+            "last_check": "Not run",
+            "system_status": "Waiting for check",
+            "safety": "Local-only checks",
+        }
+    latest = next(reversed(results.values()))
+    return {
+        "last_check": latest.label,
+        "system_status": operator_status_label(latest.status),
+        "safety": "Local-only checks",
+    }
 
 
 def redact_output(text: str, *, max_chars: int = 4000) -> str:
@@ -358,15 +402,26 @@ def command_summary_for_report() -> list[dict[str, object]]:
 def render_operator_control_panel() -> None:
     import streamlit as st
 
-    st.header("MedAI Operator Control Panel")
-    st.caption("Fixed allowlisted local maintenance and validation commands. No free-form shell input is available.")
+    st.header("Operator Control Panel")
+    st.caption("Run safe local checks and maintenance actions.")
+    st.caption("Only approved local checks are available.")
 
     if "operator_command_results" not in st.session_state:
         st.session_state.operator_command_results = {}
 
-    for group, commands in command_groups().items():
-        st.subheader(group)
+    summary = operator_panel_summary(st.session_state.operator_command_results)
+    status_cols = st.columns(3)
+    status_cols[0].metric("Last check", summary["last_check"])
+    status_cols[1].metric("System status", summary["system_status"])
+    status_cols[2].metric("Safety", summary["safety"])
+
+    groups = command_groups()
+
+    def render_commands(commands: list[OperatorCommand]) -> None:
         for command in commands:
+            help_text = COMMAND_HELP_TEXT.get(command.command_id)
+            if help_text:
+                st.caption(help_text)
             disabled = False
             if command.requires_confirmation:
                 disabled = not st.checkbox(
@@ -380,8 +435,9 @@ def render_operator_control_panel() -> None:
 
             result = st.session_state.operator_command_results.get(command.command_id)
             if result is None:
-                st.caption("Status: not run")
+                st.caption("Not run yet")
                 continue
+            st.caption(operator_status_label(result.status))
             st.write(
                 {
                     "status": result.status,
@@ -394,3 +450,10 @@ def render_operator_control_panel() -> None:
                 st.code(result.output_summary, language="text")
             if result.stderr_summary:
                 st.warning(result.stderr_summary)
+
+    st.subheader("Main checks")
+    render_commands(groups.get("Main checks", []))
+
+    for group in PANEL_GROUP_ORDER[1:]:
+        with st.expander(group, expanded=False):
+            render_commands(groups.get(group, []))
