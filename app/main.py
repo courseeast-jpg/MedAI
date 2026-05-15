@@ -176,7 +176,7 @@ def render_system_status(state: SystemState) -> None:
     elif not state.claude_available:
         st.warning("Claude API not configured. Add ANTHROPIC_API_KEY to .env")
     else:
-        st.success("System ready. Medical connector active.")
+        return
 
 
 def render_degraded_startup_panel(startup: StartupState) -> None:
@@ -285,7 +285,11 @@ def inject_phase52_styles() -> None:
     )
 
 
-def render_operator_safety_panel(run_id: str | None = None, timestamp: str | None = None) -> None:
+def render_operator_safety_panel(
+    run_id: str | None = None,
+    timestamp: str | None = None,
+    knowledge_counts: dict | None = None,
+) -> None:
     labels = privacy_mode_labels()
     st.markdown(
         f"""
@@ -321,6 +325,14 @@ def render_operator_safety_panel(run_id: str | None = None, timestamp: str | Non
         st.caption(f"Local-only: {labels.local_only}")
         st.caption(f"External APIs: {labels.external_apis}")
         st.caption(f"PII scrub required: {labels.pii_scrub_required}")
+        if knowledge_counts:
+            st.caption("Knowledge base")
+            st.caption(f"Active: {knowledge_counts.get('active', 'N/A')}")
+            st.caption(f"Draft facts: {knowledge_counts.get('hypothesis', 'N/A')}")
+            st.caption(f"Quarantined: {knowledge_counts.get('quarantined', 'N/A')}")
+            st.caption(f"Total: {knowledge_counts.get('total', 'N/A')}")
+            st.caption(f"Medical connector: {', '.join(ACTIVE_CONNECTORS)}")
+            st.caption(f"Enrichment: {'enabled' if ENABLE_ENRICHMENT else 'disabled'}")
 
 
 def render_mkb_record(record: MKBRecord, show_hypothesis_warning: bool = True) -> None:
@@ -629,7 +641,8 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             )
             st.rerun()
 
-    with st.expander("Advanced", expanded=False):
+    with st.expander("Advanced actions", expanded=False):
+        st.caption("Removes the visible latest report only. It does not delete source documents.")
         if st.button("Clear last report"):
             removed = clear_latest_test_reports()
             st.session_state.pop("phase52_current_run", None)
@@ -1042,9 +1055,9 @@ def format_bytes(size: int) -> str:
 
 def main() -> None:
     inject_phase52_styles()
-    render_operator_safety_panel()
     startup = initialize_startup_state(load_system)
     if not startup.ok:
+        render_operator_safety_panel()
         render_degraded_startup_panel(startup)
         st.divider()
         st.caption(PRIVACY_INVARIANT_GUIDANCE)
@@ -1054,30 +1067,16 @@ def main() -> None:
     if sys_components is None:
         st.error("Startup failed without component details.")
         return
+    counts = sys_components["sql"].count_records()
+    render_operator_safety_panel(knowledge_counts=counts)
     render_system_status(sys_components["state"])
 
-    show_advanced_tools = False
-    with st.sidebar:
-        sidebar_labels = sidebar_status_labels(enrichment_enabled=ENABLE_ENRICHMENT)
-        st.header(sidebar_labels["knowledge_base"])
-        counts = sys_components["sql"].count_records()
-        st.metric(sidebar_labels["active"], counts["active"])
-        st.metric(sidebar_labels["draft_facts"], counts["hypothesis"])
-        st.metric("Quarantined", counts["quarantined"])
-        st.metric("Total", counts["total"])
-        st.divider()
-        st.caption(sidebar_labels["connector_status"])
-        st.caption(sidebar_labels["enrichment_status"])
-        with st.expander("Build / audit details", expanded=False):
-            st.caption(f"Internal connectors: {', '.join(ACTIVE_CONNECTORS)}")
-            st.caption(f"Enrichment raw state: {'ON' if ENABLE_ENRICHMENT else 'OFF'}")
-        st.divider()
-        show_advanced_tools = st.checkbox(
-            "Show advanced tools",
-            value=False,
-            help="Advanced tools include validation history, audit pages, safety governance, and terminology administration.",
-        )
-        st.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
+    show_advanced_tools = st.checkbox(
+        "Show advanced tools",
+        value=False,
+        help="Advanced tools include validation history, audit pages, safety governance, and terminology administration.",
+    )
+    st.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
 
     tab_labels = operator_tabs(show_advanced_tools)
     tabs = st.tabs(tab_labels)

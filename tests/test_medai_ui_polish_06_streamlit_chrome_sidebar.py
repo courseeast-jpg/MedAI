@@ -39,10 +39,10 @@ def test_raw_connector_and_enrichment_values_remain_audit_only() -> None:
     source = app_source()
     audit_index = source.index('st.expander("Build / audit details", expanded=False)')
 
-    assert "Internal connectors:" in source
-    assert "Enrichment raw state:" in source
-    assert source.index("Internal connectors:") > audit_index
-    assert source.index("Enrichment raw state:") > audit_index
+    assert "Internal connector:" in source
+    assert "Enrichment:" in source
+    assert source.index("Internal connector:") > audit_index
+    assert source.index("Enrichment:") > audit_index
 
 
 def test_streamlit_chrome_css_is_scoped_to_framework_containers() -> None:
