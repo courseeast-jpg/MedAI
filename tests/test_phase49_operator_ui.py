@@ -6,19 +6,19 @@ from app.operator_safety import build_result_summary, operator_guidance, privacy
 
 
 def test_phase49_operator_guidance_for_accepted():
-    assert operator_guidance("accepted") == "Spot-check against source before use."
+    assert operator_guidance("accepted") == "Usable, but still check before relying on it."
 
 
 def test_phase49_operator_guidance_for_review():
-    assert operator_guidance("review") == "Manual review required before relying on output."
+    assert operator_guidance("review") == "MedAI is unsure; compare with the source file."
 
 
 def test_phase49_operator_guidance_for_review_ocr_quality():
-    assert operator_guidance("review_ocr_quality") == "Do not trust extraction. OCR/input quality is insufficient."
+    assert operator_guidance("review_ocr_quality") == "File quality is too low; re-scan or upload a clearer copy."
 
 
 def test_phase49_operator_guidance_for_empty():
-    assert operator_guidance("empty") == "No usable extraction. Check document quality or format."
+    assert operator_guidance("empty") == "MedAI could not read useful text."
 
 
 def test_phase49_privacy_mode_labels_render_expected_text():
@@ -61,7 +61,7 @@ def test_phase49_result_summary_includes_operator_privacy_fields():
     summary = build_result_summary(result)
 
     assert summary["final_status"] == "review"
-    assert summary["operator_next_action"] == "Manual review required before relying on output."
+    assert summary["operator_next_action"] == "MedAI is unsure; compare with the source file."
     assert summary["privacy_gate_status"] == "external_allowed_redacted"
     assert summary["external_api_used"] is True
     assert summary["payload_redacted"] is True

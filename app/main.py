@@ -146,7 +146,7 @@ def render_system_status(state: SystemState) -> None:
     elif not state.claude_available:
         st.warning("Claude API not configured. Add ANTHROPIC_API_KEY to .env")
     else:
-        st.success(f"System ready. Active connectors: {', '.join(state.active_connectors)}")
+        st.success("System ready. Medical connector active.")
 
 
 def render_degraded_startup_panel(startup: StartupState) -> None:
@@ -187,7 +187,7 @@ def inject_phase52_styles() -> None:
         }
         .safety-strip {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: .65rem;
             margin: .75rem 0;
         }
@@ -232,6 +232,11 @@ def inject_phase52_styles() -> None:
             font-size: .78rem;
         }
         .muted-label { color: #64748b; font-size: .84rem; }
+        .stMarkdown h1 a, .stMarkdown h2 a, .stMarkdown h3 a,
+        .stHeading a, [data-testid="stHeaderActionElements"] {
+            display: none !important;
+            visibility: hidden !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -245,24 +250,35 @@ def render_operator_safety_panel(run_id: str | None = None, timestamp: str | Non
         <div class="medai-header">
           <div style="display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;">
             <div>
-              <div class="muted-label">MedAI v2 · OCR / Layout HITL</div>
-              <h2 style="margin:.15rem 0 .25rem 0;">Operator @local</h2>
-              <div class="muted-label">Snapshot: {SNAPSHOT_ID} · Commit: {current_commit()}</div>
-              <div class="muted-label">Run ID: {run_id or "not started"} · Timestamp: {timestamp or "not available"}</div>
+              <div class="muted-label">MedAI v2 - OCR / Layout HITL</div>
+              <h2 style="margin:.15rem 0 .25rem 0;">Local session</h2>
+              <div><span class="badge badge-accepted">System ready</span> <span class="badge badge-privacy">Medical connector active</span></div>
+              <div class="muted-label">No run started yet. Upload or select documents to begin.</div>
             </div>
-            <div><span class="badge badge-privacy">SAFE LOCAL MODE</span></div>
+            <div><span class="badge badge-privacy">Local safe mode</span></div>
           </div>
           <div class="safety-strip">
-            <div class="safety-cell"><span>Mode</span><strong>HITL</strong></div>
-            <div class="safety-cell"><span>Local-only</span><strong>{labels.local_only}</strong></div>
-            <div class="safety-cell"><span>External APIs</span><strong>{labels.external_apis}</strong></div>
-            <div class="safety-cell"><span>PII scrub required</span><strong>{labels.pii_scrub_required}</strong></div>
+            <div class="safety-cell"><strong>Local safe mode</strong></div>
+            <div class="safety-cell"><strong>Human review</strong></div>
+            <div class="safety-cell"><strong>Local only</strong></div>
+            <div class="safety-cell"><strong>Cloud APIs off</strong></div>
+            <div class="safety-cell"><strong>Privacy check on</strong></div>
           </div>
         </div>
         <div class="warning-banner">{PHASE52_SAFETY_WARNING}</div>
         """,
         unsafe_allow_html=True,
     )
+    with st.expander("Build / audit details", expanded=False):
+        st.caption(f"Snapshot: {SNAPSHOT_ID}")
+        st.caption(f"Commit: {current_commit()}")
+        st.caption(f"Run ID: {run_id or 'not started'}")
+        st.caption(f"Timestamp: {timestamp or 'not available'}")
+        st.caption(f"Internal connector: {', '.join(ACTIVE_CONNECTORS)}")
+        st.caption("Mode: HITL")
+        st.caption(f"Local-only: {labels.local_only}")
+        st.caption(f"External APIs: {labels.external_apis}")
+        st.caption(f"PII scrub required: {labels.pii_scrub_required}")
 
 
 def render_mkb_record(record: MKBRecord, show_hypothesis_warning: bool = True) -> None:
@@ -499,18 +515,20 @@ def render_conflict_tab(sys_components: dict) -> None:
 def render_current_run_tab(sys_components: dict) -> None:
     ensure_test_launcher_dirs()
     st.subheader("Current Run")
-    st.caption("Upload PDF/TXT files into `test_input/`, review the active queue, then start a new local run.")
+    st.caption("Add documents, then start a run.")
+    st.caption("Supported files: PDF or TXT. Files stay local.")
 
-    specialty = st.selectbox(
-        "Test specialty",
-        ["general", "neurology", "epilepsy", "gastroenterology", "urology"],
+    specialty_label = st.selectbox(
+        "Document category",
+        ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
         key="test_launcher_specialty",
     )
+    specialty = specialty_label.lower()
     uploaded_files = st.file_uploader(
-        "Add PDF/TXT files",
+        "Choose files",
         type=["pdf", "txt"],
         accept_multiple_files=True,
-        help="Supported files are persisted into test_input/ for local processing.",
+        help="Add documents",
     )
     if uploaded_files:
         saved_uploads = st.session_state.get("test_launcher_saved_uploads", {})
@@ -531,27 +549,27 @@ def render_current_run_tab(sys_components: dict) -> None:
 
     files = list_test_input_files()
     active_run = st.session_state.get("phase52_current_run")
-    run_state = "Idle"
+    run_state = "Waiting to start"
     if active_run:
         run_state = "Complete" if not active_run.get("failed") else "Failed"
 
-    control_cols = st.columns([1, 1, 1])
-    if control_cols[0].button("Clear queue"):
+    if files:
+        st.info(f"Ready to process {len(files)} files.")
+    else:
+        st.info("No documents added yet. Choose files to begin.")
+
+    control_cols = st.columns([1, 1])
+    if control_cols[0].button("Remove queued files"):
         removed = clear_test_input()
         st.session_state["test_launcher_saved_uploads"] = {}
         st.session_state.pop("phase52_current_run", None)
         st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
         st.rerun()
-    if control_cols[1].button("Clear latest report"):
-        removed = clear_latest_test_reports()
-        st.session_state.pop("phase52_current_run", None)
-        st.success(f"Cleared {len(removed)} latest report file(s).")
-        st.rerun()
-    if control_cols[2].button("Start new run", type="primary"):
+    if control_cols[1].button("Start run", type="primary", disabled=not files):
         if not files:
             st.warning("No supported files waiting in test_input/.")
         else:
-            with st.spinner("Running MedAI local test batch..."):
+            with st.spinner("Processing..."):
                 summary = run_medai_test_batch(sys_components["execution"], specialty=specialty)
             st.session_state["phase52_current_run"] = {
                 "timestamp": summary.timestamp,
@@ -568,6 +586,13 @@ def render_current_run_tab(sys_components: dict) -> None:
             )
             st.rerun()
 
+    with st.expander("Advanced", expanded=False):
+        if st.button("Clear last report"):
+            removed = clear_latest_test_reports()
+            st.session_state.pop("phase52_current_run", None)
+            st.success(f"Cleared {len(removed)} latest report file(s).")
+            st.rerun()
+
     render_queue_panel(files)
     active_run = st.session_state.get("phase52_current_run")
     render_run_status_panel(active_run, run_state="Complete" if active_run else run_state)
@@ -578,13 +603,14 @@ def render_current_run_tab(sys_components: dict) -> None:
             render_run_result_card(result)
     else:
         st.caption("No current run results. Previous reports are available in Report Archive.")
+    st.caption("Bad scans and empty results go to review.")
 
 
 def render_queue_panel(files: list[Path]) -> None:
-    st.markdown("**Active upload queue**")
-    st.metric("Queue count", len(files))
+    st.markdown("**Documents waiting**")
+    st.metric("Files ready", len(files))
     if not files:
-        st.caption("No supported files waiting.")
+        st.caption("No documents added yet. Choose files to begin.")
         return
     header = st.columns([4, 2, 2, 1])
     header[0].caption("Filename")
@@ -607,10 +633,10 @@ def render_run_status_panel(active_run: dict | None, *, run_state: str) -> None:
     st.markdown(f"<span class='badge badge-privacy'>{run_state}</span>", unsafe_allow_html=True)
     cols = st.columns(5)
     metric_specs = [
-        ("Accepted", counts["accepted"], "passed all gates · spot-check"),
-        ("Review", counts["review"], "manual reconciliation"),
-        ("OCR Review", counts["ocr_review"], "do not trust extraction"),
-        ("Empty", counts["empty"], "no usable extraction"),
+        ("Accepted", counts["accepted"], "check before relying"),
+        ("Needs review", counts["review"], "compare with source"),
+        ("OCR / scan review", counts["ocr_review"], "re-scan or clearer copy"),
+        ("No text found", counts["empty"], "could not read useful text"),
         ("Errors", counts["errors"], "processing failed"),
     ]
     for col, (label, value, help_text) in zip(cols, metric_specs):
@@ -675,7 +701,7 @@ def render_run_result_card(item: dict) -> None:
 
 
 def render_operator_guidance_panel() -> None:
-    with st.expander("Operator guidance", expanded=True):
+    with st.expander("Result guide", expanded=True):
         for title, guidance in operator_guidance_catalog().items():
             st.markdown(f"**{title}:** {guidance}")
 

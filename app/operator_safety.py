@@ -12,10 +12,7 @@ from app.config import MEDAI_ALLOW_EXTERNAL_API, MEDAI_LOCAL_ONLY, MEDAI_REQUIRE
 
 SNAPSHOT_ID = "MedAI_Snapshot_Phase49_2026-05-01"
 RELEASE_NAME = "MedAI v2 OCR/Layout HITL Release"
-PHASE52_SAFETY_WARNING = (
-    "Not production-autonomous. Human review is required before any extracted fact is used downstream. "
-    "This is not a medical device and does not provide clinical diagnosis."
-)
+PHASE52_SAFETY_WARNING = "Review required. Not for diagnosis."
 PRIVACY_INVARIANT_GUIDANCE = (
     "Local-only mode, empty extraction, and poor OCR cannot become accepted. "
     "Cyrillic non-lab routing cannot bypass review."
@@ -23,60 +20,45 @@ PRIVACY_INVARIANT_GUIDANCE = (
 
 
 STATUS_GUIDANCE = {
-    "accepted": "Spot-check against source before use.",
-    "review": "Manual review required before relying on output.",
-    "review_ocr_quality": "Do not trust extraction. OCR/input quality is insufficient.",
-    "empty": "No usable extraction. Check document quality or format.",
-    "error": "Processing failed.",
+    "accepted": "Usable, but still check before relying on it.",
+    "review": "MedAI is unsure; compare with the source file.",
+    "review_ocr_quality": "File quality is too low; re-scan or upload a clearer copy.",
+    "empty": "MedAI could not read useful text.",
+    "error": "Processing failed; check the message and try again.",
 }
 
 DETAILED_STATUS_GUIDANCE = {
-    "accepted": (
-        "Confidence and safety gates passed. Spot-check the labeled values against the source PDF before downstream use. "
-        "The system never auto-promotes lab normalizations."
-    ),
-    "review": (
-        "Manual review required. The extractor produced output below the acceptance gate or matched a non-acceptable "
-        "routing rule. Open side-by-side and reconcile."
-    ),
-    "review_ocr_quality": (
-        "Do not trust the extraction. The OCR/input quality was too low to be reliable. Re-scan, rekey, or request "
-        "a typed copy from the source system."
-    ),
-    "empty": (
-        "No usable extraction. The page contained too little recognizable text to process. Verify the file is a real "
-        "medical document before re-uploading."
-    ),
-    "error": (
-        "Processing failed before extraction could complete. Review the reason codes, resolve the underlying file issue, "
-        "and re-run."
-    ),
+    "accepted": "Usable, but still check before relying on it.",
+    "review": "MedAI is unsure; compare with the source file.",
+    "review_ocr_quality": "File quality is too low; re-scan or upload a clearer copy.",
+    "empty": "MedAI could not read useful text.",
+    "error": "Processing failed; check the message and try again.",
 }
 
 STATUS_LABELS = {
     "accepted": "Accepted",
-    "review": "Review",
-    "review_ocr_quality": "OCR Review",
-    "ocr_review": "OCR Review",
-    "empty": "Empty",
+    "review": "Needs review",
+    "review_ocr_quality": "OCR / scan review",
+    "ocr_review": "OCR / scan review",
+    "empty": "No text found",
     "error": "Error",
 }
 
 STATUS_BADGE_STYLES = {
     "accepted": {"label": "Accepted", "class": "badge-accepted", "color": "green"},
-    "review": {"label": "Review", "class": "badge-review", "color": "amber"},
-    "review_ocr_quality": {"label": "OCR Review", "class": "badge-ocr", "color": "orange"},
-    "ocr_review": {"label": "OCR Review", "class": "badge-ocr", "color": "orange"},
-    "empty": {"label": "Empty", "class": "badge-empty", "color": "gray"},
+    "review": {"label": "Needs review", "class": "badge-review", "color": "amber"},
+    "review_ocr_quality": {"label": "OCR / scan review", "class": "badge-ocr", "color": "orange"},
+    "ocr_review": {"label": "OCR / scan review", "class": "badge-ocr", "color": "orange"},
+    "empty": {"label": "No text found", "class": "badge-empty", "color": "gray"},
     "error": {"label": "Error", "class": "badge-error", "color": "red"},
-    "privacy_local_only": {"label": "SAFE LOCAL MODE", "class": "badge-privacy", "color": "blue"},
+    "privacy_local_only": {"label": "Local safe mode", "class": "badge-privacy", "color": "blue"},
 }
 
 STATUS_SUBLABELS = {
-    "accepted": "passed all gates · spot-check",
-    "review": "manual reconciliation",
-    "review_ocr_quality": "do not trust extraction",
-    "empty": "no usable extraction",
+    "accepted": "check before relying",
+    "review": "compare with source",
+    "review_ocr_quality": "re-scan or clearer copy",
+    "empty": "could not read useful text",
     "error": "processing failed",
 }
 
@@ -105,7 +87,7 @@ def normalize_status(status: str | None) -> str:
 
 
 def status_label(status: str | None) -> str:
-    return STATUS_LABELS.get(normalize_status(status), "Review")
+    return STATUS_LABELS.get(normalize_status(status), "Needs review")
 
 
 def status_badge(status: str | None) -> dict[str, str]:
@@ -116,11 +98,11 @@ def status_badge(status: str | None) -> dict[str, str]:
 def operator_guidance_catalog() -> dict[str, str]:
     return {
         "Accepted": DETAILED_STATUS_GUIDANCE["accepted"],
-        "Review": DETAILED_STATUS_GUIDANCE["review"],
-        "OCR Review": DETAILED_STATUS_GUIDANCE["review_ocr_quality"],
-        "Empty": DETAILED_STATUS_GUIDANCE["empty"],
+        "Needs review": DETAILED_STATUS_GUIDANCE["review"],
+        "OCR / scan review": DETAILED_STATUS_GUIDANCE["review_ocr_quality"],
+        "No text found": DETAILED_STATUS_GUIDANCE["empty"],
         "Error": DETAILED_STATUS_GUIDANCE["error"],
-        "Privacy invariant": PRIVACY_INVARIANT_GUIDANCE,
+        "Safety rule": "Empty or unclear files cannot be accepted automatically.",
     }
 
 

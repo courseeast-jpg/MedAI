@@ -26,16 +26,18 @@ def app_source() -> str:
 def test_phase52_safety_header_text_is_present():
     source = app_source()
 
-    assert "MedAI v2 · OCR / Layout HITL" in source
-    assert "Operator @local" in source
-    assert "Run ID:" in source
-    assert "Timestamp:" in source
+    assert "MedAI v2 - OCR / Layout HITL" in source
+    assert "Local session" in source
+    assert "No run started yet. Upload or select documents to begin." in source
+    assert "Build / audit details" in source
 
 
 def test_phase52_safe_local_mode_and_warning_are_present():
     source = app_source()
 
-    assert "SAFE LOCAL MODE" in source
+    assert "Local safe mode" in source
+    assert "Human review" in source
+    assert "Cloud APIs off" in source
     assert PHASE52_SAFETY_WARNING in source or "PHASE52_SAFETY_WARNING" in source
 
 
@@ -55,9 +57,9 @@ def test_phase52_raw_json_hidden_by_default():
 
 def test_phase52_status_label_mapping_and_badges():
     assert status_label("accepted") == "Accepted"
-    assert status_label("review") == "Review"
-    assert status_label("review_ocr_quality") == "OCR Review"
-    assert status_label("empty") == "Empty"
+    assert status_label("review") == "Needs review"
+    assert status_label("review_ocr_quality") == "OCR / scan review"
+    assert status_label("empty") == "No text found"
     assert status_label("error") == "Error"
     assert status_badge("accepted")["color"] == "green"
     assert status_badge("review")["color"] == "amber"
@@ -69,13 +71,13 @@ def test_phase52_status_label_mapping_and_badges():
 def test_phase52_operator_guidance_text_is_present():
     catalog = operator_guidance_catalog()
 
-    assert "Confidence and safety gates passed" in detailed_operator_guidance("accepted")
-    assert "Manual review required" in detailed_operator_guidance("review")
-    assert "Do not trust the extraction" in detailed_operator_guidance("review_ocr_quality")
-    assert "No usable extraction" in detailed_operator_guidance("empty")
-    assert "Processing failed before extraction could complete" in detailed_operator_guidance("error")
-    assert operator_guidance("review") == "Manual review required before relying on output."
-    assert catalog["Privacy invariant"] == PRIVACY_INVARIANT_GUIDANCE
+    assert "Usable, but still check" in detailed_operator_guidance("accepted")
+    assert "MedAI is unsure" in detailed_operator_guidance("review")
+    assert "File quality is too low" in detailed_operator_guidance("review_ocr_quality")
+    assert "could not read useful text" in detailed_operator_guidance("empty")
+    assert "Processing failed" in detailed_operator_guidance("error")
+    assert operator_guidance("review") == "MedAI is unsure; compare with the source file."
+    assert catalog["Safety rule"] == "Empty or unclear files cannot be accepted automatically."
 
 
 def test_phase52_blind_audit_tab_references_real_validation_input():
