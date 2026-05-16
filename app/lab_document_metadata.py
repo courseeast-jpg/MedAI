@@ -27,15 +27,56 @@ _URINALYSIS_TERMS = (
 _URINALYSIS_SHORT_TERMS = ("ph", "protein", "glucose", "blood", "rbc", "wbc")
 _LAB_TERMS = (
     "laboratory report",
+    "laboratory result",
+    "laboratory results",
     "lab results",
+    "lab result",
+    "test results",
+    "test result",
+    "patient result",
     "reference range",
+    "reference interval",
     "result",
+    "result value",
+    "value",
     "flag",
+    "units",
     "unit",
     "specimen",
+    "specimen type",
     "collection date",
+    "collected",
+    "received",
+    "reported",
+    "accession",
+    "ordering provider",
+    "component",
+    "analyte",
+    "abnormal",
 )
-_LAB_SHORT_TERMS = ("wbc", "rbc", "hgb", "plt", "alt", "ast", "bun")
+_LAB_PANEL_TERMS = (
+    "cbc",
+    "cmp",
+    "comprehensive metabolic panel",
+    "basic metabolic panel",
+    "lipid panel",
+)
+_LAB_TEST_TERMS = (
+    "hemoglobin",
+    "hematocrit",
+    "platelet",
+    "glucose",
+    "creatinine",
+    "sodium",
+    "potassium",
+    "chloride",
+    "calcium",
+    "albumin",
+    "bilirubin",
+    "cholesterol",
+    "triglycerides",
+)
+_LAB_SHORT_TERMS = ("wbc", "rbc", "hgb", "plt", "alt", "ast", "bun", "hdl", "ldl", "tsh")
 
 _DOCUMENT_TYPE_MAP = {
     "lab_report": LAB_RESULT_LABEL,
@@ -67,14 +108,23 @@ def classify_lab_document_type(text: str | None) -> str:
     if not normalized:
         return UNKNOWN_DOCUMENT_LABEL
 
-    urinalysis_score = _count_term_hits(normalized, _URINALYSIS_TERMS)
+    urinalysis_specific_hits = _count_term_hits(normalized, _URINALYSIS_TERMS)
+    urinalysis_score = urinalysis_specific_hits
     urinalysis_score += _count_word_hits(normalized, _URINALYSIS_SHORT_TERMS)
     lab_score = _count_term_hits(normalized, _LAB_TERMS)
+    lab_score += _count_term_hits(normalized, _LAB_PANEL_TERMS)
+    lab_score += _count_term_hits(normalized, _LAB_TEST_TERMS)
     lab_score += _count_word_hits(normalized, _LAB_SHORT_TERMS)
 
-    if "urinalysis" in normalized or (urinalysis_score >= 2 and lab_score >= 1):
+    if "urinalysis" in normalized or (urinalysis_specific_hits >= 1 and urinalysis_score >= 2 and lab_score >= 1):
         return URINALYSIS_LABEL
-    if lab_score >= 3 or ("reference range" in normalized and "result" in normalized):
+    strong_lab_layout = (
+        ("reference range" in normalized or "reference interval" in normalized)
+        and ("result" in normalized or "value" in normalized)
+    )
+    lab_panel_present = _count_term_hits(normalized, _LAB_PANEL_TERMS) > 0
+    lab_test_hits = _count_term_hits(normalized, _LAB_TEST_TERMS) + _count_word_hits(normalized, _LAB_SHORT_TERMS)
+    if lab_score >= 3 or strong_lab_layout or (lab_panel_present and lab_test_hits >= 2):
         return LAB_RESULT_LABEL
     return UNKNOWN_DOCUMENT_LABEL
 

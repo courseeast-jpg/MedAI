@@ -1,0 +1,109 @@
+{
+  "conclusion": "medai_lab_fix_02_general_lab_detection_ready",
+  "baseline_lab_fix_01_commit_short": "da28d57",
+  "baseline_park_commit_short": "882fc539",
+  "changed_scope": "general lab result metadata classification cue expansion only",
+  "document_type_detection_improved": true,
+  "supported_document_types": [
+    "Lab result",
+    "Urinalysis",
+    "Unknown"
+  ],
+  "general_lab_cues_expanded": true,
+  "urinalysis_detection_preserved": true,
+  "auto_acceptance_changed": false,
+  "confidence_thresholds_changed": false,
+  "confidence_scoring_changed": false,
+  "clinical_logic_changed": false,
+  "clinical_interpretation_added": false,
+  "ocr_engine_changed": false,
+  "ocr_quality_algorithm_added": false,
+  "external_api_enabled": false,
+  "cloud_api_used": false,
+  "extraction_parser_changed": false,
+  "lab_value_parser_added": false,
+  "review_reason_clarity_improved": true,
+  "document_processing_changed": false,
+  "document_processing_change_note": "Only metadata cue matching for display classification changed; extraction and processing decisions are unchanged.",
+  "review_package_logic_changed": false,
+  "review_bucket_logic_changed": false,
+  "safety_gate_changed": false,
+  "cka_safety_behavior_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "free_form_shell_added": false,
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "test_input_files_staged": false,
+  "real_validation_input_files_staged": false,
+  "terminology_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "validation_commands": [
+    {
+      "command": "python -m pytest tests/test_medai_lab_fix_02_general_lab_detection.py -vv",
+      "result": "passed",
+      "summary": "11 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_lab_fix_01_document_type_review_reason.py -vv",
+      "result": "passed",
+      "summary": "9 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py -vv",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py -vv",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_07_header_audit_advanced_actions.py tests/test_medai_ui_polish_06_streamlit_chrome_sidebar.py tests/test_medai_ui_polish_05_run_review_consolidation.py tests/test_medai_ui_ops_panel.py -vv",
+      "result": "passed",
+      "summary": "28 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed; 693 tests reported"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "summary": "2344 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "full_pytest_run": true,
+  "full_pytest_result": "2344 passed, 4 skipped, 22 warnings",
+  "no_raw_phi": true,
+  "no_raw_filenames": true,
+  "no_raw_document_text": true,
+  "no_private_absolute_paths": true,
+  "no_secrets": true
+}
