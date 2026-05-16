@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import os
 import re
@@ -71,6 +72,8 @@ ADVANCED_OPERATOR_TABS = [
 ]
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
+PERSISTED_UPLOAD_FINGERPRINTS_KEY = "test_launcher_persisted_upload_fingerprints"
+UPLOAD_WIDGET_VERSION_KEY = "test_launcher_upload_widget_version"
 
 # Backward-compatible export for older tests/importers. These are current
 # visible labels; advanced pages are shown only after the operator opts in.
@@ -109,6 +112,69 @@ def sidebar_status_labels(*, enrichment_enabled: bool) -> dict[str, str]:
         "connector_status": "Medical connector active",
         "enrichment_status": "Enrichment enabled" if enrichment_enabled else "Enrichment disabled",
     }
+
+
+def uploaded_file_fingerprint(uploaded_file) -> str:
+    content = uploaded_file_bytes_for_fingerprint(uploaded_file)
+    digest = hashlib.sha256(content).hexdigest()
+    name = Path(str(getattr(uploaded_file, "name", ""))).name
+    size = getattr(uploaded_file, "size", len(content))
+    return f"{name}:{size}:{digest}"
+
+
+def uploaded_file_bytes_for_fingerprint(uploaded_file) -> bytes:
+    if hasattr(uploaded_file, "getbuffer"):
+        return bytes(uploaded_file.getbuffer())
+    if not hasattr(uploaded_file, "read"):
+        raise TypeError("Uploaded file object does not expose getbuffer() or read().")
+    position = None
+    if hasattr(uploaded_file, "tell"):
+        try:
+            position = uploaded_file.tell()
+        except Exception:
+            position = None
+    data = bytes(uploaded_file.read())
+    if position is not None and hasattr(uploaded_file, "seek"):
+        try:
+            uploaded_file.seek(position)
+        except Exception:
+            pass
+    return data
+
+
+def persist_uploaded_files_once(uploaded_files, session_state, *, save_func=save_uploaded_test_file) -> list[Path]:
+    persisted = session_state.get(PERSISTED_UPLOAD_FINGERPRINTS_KEY, set())
+    if not isinstance(persisted, set):
+        persisted = set(persisted or [])
+    saved: list[Path] = []
+    for uploaded_file in uploaded_files or []:
+        fingerprint = uploaded_file_fingerprint(uploaded_file)
+        if fingerprint in persisted:
+            continue
+        destination = save_func(uploaded_file)
+        saved.append(destination)
+        persisted.add(fingerprint)
+    session_state[PERSISTED_UPLOAD_FINGERPRINTS_KEY] = persisted
+    return saved
+
+
+def reset_upload_persistence(session_state) -> None:
+    session_state[PERSISTED_UPLOAD_FINGERPRINTS_KEY] = set()
+    version = int(session_state.get(UPLOAD_WIDGET_VERSION_KEY, 0) or 0)
+    session_state[UPLOAD_WIDGET_VERSION_KEY] = version + 1
+
+
+def clear_queue_action(session_state, *, clear_func=clear_test_input) -> list[Path]:
+    removed = clear_func()
+    reset_upload_persistence(session_state)
+    session_state.pop("phase52_current_run", None)
+    return removed
+
+
+def clear_last_report_action(session_state, *, clear_func=clear_latest_test_reports) -> list[Path]:
+    removed = clear_func()
+    session_state.pop("phase52_current_run", None)
+    return removed
 
 
 def display_content(record: MKBRecord) -> tuple[str, bool]:
@@ -584,21 +650,10 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         type=["pdf", "txt"],
         accept_multiple_files=True,
         help="Add documents",
+        key=f"test_launcher_uploads_{st.session_state.get(UPLOAD_WIDGET_VERSION_KEY, 0)}",
     )
     if uploaded_files:
-        saved_uploads = st.session_state.get("test_launcher_saved_uploads", {})
-        if not isinstance(saved_uploads, dict):
-            saved_uploads = {}
-            st.session_state["test_launcher_saved_uploads"] = saved_uploads
-        saved = []
-        for uploaded_file in uploaded_files:
-            upload_key = f"{uploaded_file.name}:{uploaded_file.size}"
-            prior_path = Path(saved_uploads.get(upload_key, ""))
-            if prior_path.exists() and prior_path.parent == TEST_INPUT_DIR:
-                continue
-            destination = save_uploaded_test_file(uploaded_file)
-            saved.append(destination)
-            saved_uploads[upload_key] = str(destination.resolve())
+        saved = persist_uploaded_files_once(uploaded_files, st.session_state)
         if saved:
             st.success(f"Added {len(saved)} file(s) to test_input/.")
 
@@ -615,9 +670,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
 
     control_cols = st.columns([1, 1])
     if control_cols[0].button("Remove queued files"):
-        removed = clear_test_input()
-        st.session_state["test_launcher_saved_uploads"] = {}
-        st.session_state.pop("phase52_current_run", None)
+        removed = clear_queue_action(st.session_state)
         st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
         st.rerun()
     if control_cols[1].button("Start run", type="primary", disabled=not files):
@@ -644,8 +697,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     with st.expander("Advanced actions", expanded=False):
         st.caption("Removes the visible latest report only. It does not delete source documents.")
         if st.button("Clear last report"):
-            removed = clear_latest_test_reports()
-            st.session_state.pop("phase52_current_run", None)
+            removed = clear_last_report_action(st.session_state)
             st.success(f"Cleared {len(removed)} latest report file(s).")
             st.rerun()
 
