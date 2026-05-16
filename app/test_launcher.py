@@ -15,6 +15,13 @@ from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
+from app.lab_document_metadata import (
+    display_document_type,
+    normalize_text_quality_label,
+    reason_label_for_validation,
+    review_reason_for_result,
+)
+
 
 ROOT = Path(__file__).resolve().parent.parent
 TEST_INPUT_DIR = ROOT / "test_input"
@@ -39,6 +46,10 @@ class TestFileResult:
     selected_extractor: str | None = None
     confidence: float | None = None
     validation_status: str | None = None
+    document_type: str | None = None
+    ocr_quality_band: str | None = None
+    operator_review_reason: str | None = None
+    operator_reason_label: str | None = None
     error: str | None = None
 
 
@@ -280,6 +291,26 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
         )
         confidence = _safe_float(extractor_result.get("confidence", audit.get("confidence")))
         accepted = result.outcome in ACCEPTED_OUTCOMES
+        validation_reason_codes = _validation_reason_codes(result.validation_errors)
+        document_type = display_document_type(
+            audit.get("document_type") or extractor_result.get("document_type"),
+            text=str(extractor_result.get("raw_text") or extractor_result.get("text") or ""),
+        )
+        ocr_quality = normalize_text_quality_label(
+            audit.get("ocr_quality_band"),
+            audit.get("input_quality_band"),
+            extractor_result.get("ocr_quality_band"),
+            extractor_result.get("input_quality_band"),
+            extractor_result.get("text_quality_status"),
+            audit.get("text_quality_status"),
+        )
+        operator_reason = review_reason_for_result(
+            document_type=document_type,
+            validation_status=result.validation_status,
+            confidence=confidence,
+            status="accepted" if accepted else "review",
+        )
+        operator_reason_label = reason_label_for_validation(result.validation_status, validation_reason_codes)
         destination_dir = TEST_ARCHIVE_DIR if accepted else TEST_REVIEW_DIR
         destination = _move_to_unique_destination(source_path, destination_dir)
         return TestFileResult(
@@ -290,6 +321,10 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             selected_extractor=str(selected_extractor) if selected_extractor is not None else None,
             confidence=confidence,
             validation_status=result.validation_status,
+            document_type=document_type,
+            ocr_quality_band=ocr_quality,
+            operator_review_reason=operator_reason,
+            operator_reason_label=operator_reason_label,
         )
     except Exception as exc:
         destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)
@@ -308,6 +343,12 @@ def _safe_float(value: Any) -> float | None:
         return float(value)
     except (TypeError, ValueError):
         return None
+
+
+def _validation_reason_codes(errors: Any) -> list[str]:
+    if not isinstance(errors, list):
+        return []
+    return [str(item.get("code")) for item in errors if isinstance(item, dict) and item.get("code")]
 
 
 def _move_to_unique_destination(source_path: Path, destination_dir: Path) -> Path:

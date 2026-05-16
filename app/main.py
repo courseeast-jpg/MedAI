@@ -18,6 +18,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
+from app.lab_document_metadata import reason_label_for_validation, review_reason_for_result
 from app.operator_safety import (
     PHASE52_SAFETY_WARNING,
     PRIVACY_INVARIANT_GUIDANCE,
@@ -819,8 +820,8 @@ def render_run_result_card(item: dict) -> None:
     reason_codes = item.get("reason_codes") or item.get("classification_reason_codes") or []
     if not reason_codes and item.get("error"):
         reason_codes = ["processing_error"]
-    if not reason_codes and item.get("validation_status"):
-        reason_codes = [str(item.get("validation_status"))]
+    operator_reason = operator_review_reason_for_item(item, status=status)
+    operator_reason_label = operator_reason_label_for_item(item, reason_codes)
     st.markdown("<div class='medai-card'>", unsafe_allow_html=True)
     st.markdown(
         f"### {safe_display_name(item)} &nbsp; <span class='badge {badge['class']}'>{badge['label']}</span>",
@@ -838,10 +839,14 @@ def render_run_result_card(item: dict) -> None:
     details[3].caption(f"External API used: {'Yes' if item.get('external_api_used') else 'No'}")
     st.caption(f"PII scrub: {pii_scrub_label(item)}")
     st.caption(f"Processed time: {item.get('processed_time') or item.get('timestamp') or 'unknown'}")
-    st.info(detailed_operator_guidance(status))
+    st.info(operator_reason or detailed_operator_guidance(status))
+    if operator_reason_label:
+        st.caption(f"Reason: {operator_reason_label}")
     if reason_codes:
-        chips = " ".join(f"<span class='reason-chip'>{code}</span>" for code in reason_codes)
-        st.markdown(chips, unsafe_allow_html=True)
+        visible_codes = visible_reason_codes(reason_codes)
+        if visible_codes:
+            chips = " ".join(f"<span class='reason-chip'>{code}</span>" for code in visible_codes)
+            st.markdown(chips, unsafe_allow_html=True)
     with st.expander("Show raw run record", expanded=False):
         st.json(item)
     st.markdown("</div>", unsafe_allow_html=True)
@@ -1114,6 +1119,33 @@ def value_or_unknown(value) -> str:
     if value is None or value == "":
         return "unknown"
     return str(value)
+
+
+def operator_review_reason_for_item(item: dict, *, status: str | None = None) -> str:
+    return item.get("operator_review_reason") or review_reason_for_result(
+        document_type=item.get("document_type"),
+        validation_status=item.get("validation_status"),
+        confidence=_safe_metric_float(item.get("confidence")),
+        status=status or item_status(item),
+    )
+
+
+def operator_reason_label_for_item(item: dict, reason_codes: list | None = None) -> str:
+    return item.get("operator_reason_label") or reason_label_for_validation(
+        item.get("validation_status"),
+        [str(code) for code in (reason_codes or [])],
+    )
+
+
+def visible_reason_codes(reason_codes: list | None) -> list[str]:
+    return [str(code) for code in (reason_codes or []) if str(code).lower() not in {"needs_review", "rejected"}]
+
+
+def _safe_metric_float(value) -> float | None:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def format_bytes(size: int) -> str:
