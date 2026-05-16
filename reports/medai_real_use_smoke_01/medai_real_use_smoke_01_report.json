@@ -1,0 +1,115 @@
+﻿{
+  "conclusion": "medai_real_use_smoke_01_completed",
+  "baseline_commit": "882fc5391296",
+  "test_type": "local_operator_smoke_test",
+  "ui_state": "Run & Review polished UI after PARK-17",
+  "files_attempted_total": 5,
+  "unsupported_files_observed": 2,
+  "unsupported_file_types": [
+    "png",
+    "docx"
+  ],
+  "safe_file_labels": [
+    "file_001",
+    "file_002",
+    "file_003",
+    "unsupported_file_type_png",
+    "unsupported_file_type_docx"
+  ],
+  "supported_files_processed": 3,
+  "accepted_count": 0,
+  "needs_review_count": 3,
+  "ocr_scan_review_count": 0,
+  "no_text_found_count": 0,
+  "errors_count": 0,
+  "external_api_used": false,
+  "cloud_upload_used": false,
+  "privacy_mode": "local_only",
+  "auto_acceptance_observed": false,
+  "upload_queue_duplication_observed": false,
+  "unsupported_format_behavior_correct": true,
+  "main_extraction_result": {
+    "supported_pdfs_processed_safely": true,
+    "all_supported_pdfs_routed_to_review": true,
+    "document_type_appeared_unknown": true,
+    "ocr_quality_appeared_unknown": true,
+    "extractors_observed": [
+      "spacy",
+      "rules_based"
+    ],
+    "confidence_range_observed": {
+      "approximate_low": 0.45,
+      "approximate_high": 0.63,
+      "description": "low/moderate"
+    }
+  },
+  "main_findings": [
+    "Supported PDFs processed safely but all were routed to review.",
+    "Lab/test-style PDFs were not confidently classified; document type appeared unknown.",
+    "OCR quality appeared unknown.",
+    "Confidence remained low/moderate.",
+    "UI should explain unsupported formats more clearly.",
+    "UI should resolve Needs review vs rejected status inconsistency."
+  ],
+  "recommended_next_block": "MEDAI-LAB-ROUTE-DIAG-01 - Lab PDF Classification and Review Reason Diagnostic",
+  "possible_followup_ui_fix": "MEDAI-UI-FIX-02 - Unsupported File Type Explanation",
+  "clinical_logic_changed": false,
+  "ocr_extractor_changed": false,
+  "safety_gate_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "external_api_enabled": false,
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "test_input_files_staged": false,
+  "real_validation_input_files_staged": false,
+  "no_raw_phi_in_report": true,
+  "no_raw_filenames_in_report": true,
+  "no_private_paths_in_report": true,
+  "no_secrets_in_report": true,
+  "validation_results": [
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "details": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "details": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "details": "12 of 12 cases passed; 693 tests reported"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "details": "6 of 6 cases passed"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "details": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py",
+      "result": "passed",
+      "details": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py",
+      "result": "passed",
+      "details": "6 passed"
+    }
+  ],
+  "full_pytest": {
+    "run": false,
+    "reason": "Not run in this report-only block; PARK-17 already recorded a full-suite pass before this report."
+  }
+}
+
