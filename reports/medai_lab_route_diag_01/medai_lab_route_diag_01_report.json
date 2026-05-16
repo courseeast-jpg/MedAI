@@ -1,0 +1,147 @@
+﻿{
+  "conclusion": "medai_lab_route_diag_01_completed",
+  "baseline_smoke_commit": "aac83f9c5a29",
+  "baseline_park_commit_short": "882fc539",
+  "diagnostic_type": "report_only_lab_pdf_classification_review_reason_diagnostic",
+  "files_analyzed_count": 3,
+  "safe_file_labels": [
+    "file_001",
+    "file_002",
+    "file_003"
+  ],
+  "accepted_count": 0,
+  "needs_review_count": 3,
+  "ocr_scan_review_count": 0,
+  "no_text_found_count": 0,
+  "errors_count": 0,
+  "external_api_used": false,
+  "privacy_mode": "local_only",
+  "observed_extractors": [
+    "spacy",
+    "rules_based"
+  ],
+  "observed_document_type": "unknown",
+  "observed_ocr_quality": "unknown",
+  "confidence_range_observed": "approximately_0_45_to_0_63",
+  "root_cause_candidates_ranked": [
+    {
+      "rank": 1,
+      "candidate": "missing_run_review_metadata_propagation_and_lab_document_type_integration",
+      "summary": "Run and Review output keeps extractor, confidence, status, and validation status, but does not surface document type, OCR quality band, structured review reasons, or lower-level audit metadata."
+    },
+    {
+      "rank": 2,
+      "candidate": "structured_lab_parser_coverage_or_layout_mismatch",
+      "summary": "A structured lab parser exists, but observed outputs stayed sparse and low confidence for the smoke-test PDFs."
+    },
+    {
+      "rank": 3,
+      "candidate": "ocr_text_quality_metadata_naming_or_propagation_gap",
+      "summary": "PDF text-quality audit metadata is not mapped into the UI/report fields used by the Run and Review result cards."
+    },
+    {
+      "rank": 4,
+      "candidate": "ui_status_mapping_inconsistency",
+      "summary": "A review queue state can be displayed with a smaller rejected validation tag, which is safe but confusing."
+    },
+    {
+      "rank": 5,
+      "candidate": "expected_safe_fallback_behavior_from_current_confidence_thresholds",
+      "summary": "Observed confidence values are below acceptance thresholds, so review routing is the expected conservative outcome."
+    }
+  ],
+  "likely_primary_cause": "metadata_classification_integration_gap_combined_with_low_confidence_local_lab_extraction",
+  "evidence_summary": [
+    "Latest Run and Review metadata reviewed for this diagnostic contained per-file extractor, confidence, status, and validation status but not document type, OCR/input quality band, or structured reason codes.",
+    "Run and Review result cards display unknown when document type or OCR/input quality fields are absent.",
+    "The UI can fall back to validation status as a smaller reason tag when structured reason codes are absent.",
+    "Observed confidence values around 0.45 to 0.63 are below automatic acceptance and explain review routing without threshold changes.",
+    "No supported file was auto-accepted."
+  ],
+  "ui_status_inconsistency_detected": true,
+  "unsupported_format_explanation_needed": true,
+  "recommended_next_block": "MEDAI-LAB-FIX-01 Lab Urinalysis Document Type Detection and Review Reason Clarity",
+  "recommended_implementation_candidates": [
+    {
+      "rank": 1,
+      "block": "MEDAI-LAB-FIX-01",
+      "title": "Lab/Urinalysis Document Type Detection + Review Reason Clarity"
+    },
+    {
+      "rank": 2,
+      "block": "MEDAI-OCR-META-FIX-01",
+      "title": "OCR Quality Metadata Propagation"
+    },
+    {
+      "rank": 3,
+      "block": "MEDAI-UI-FIX-02",
+      "title": "Unsupported File Type Explanation + Needs Review/Rejected Label Clarity"
+    }
+  ],
+  "recommended_not_to_do_yet": [
+    "do_not_lower_acceptance_thresholds",
+    "do_not_force_lab_pdfs_to_accepted",
+    "do_not_change_ocr_extractor_routing_before_metadata_visibility",
+    "do_not_enable_external_apis",
+    "do_not_import_terminology"
+  ],
+  "validation_commands": [
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed; 693 tests reported"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py",
+      "result": "passed",
+      "summary": "6 passed"
+    }
+  ],
+  "full_pytest_run": false,
+  "clinical_logic_changed": false,
+  "ocr_extractor_changed": false,
+  "classifier_changed": false,
+  "thresholds_changed": false,
+  "safety_gate_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "external_api_enabled": false,
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "test_input_files_staged": false,
+  "real_validation_input_files_staged": false,
+  "no_raw_phi_in_report": true,
+  "no_raw_filenames_in_report": true,
+  "no_raw_document_text_in_report": true,
+  "no_private_paths_in_report": true,
+  "no_secrets_in_report": true
+}
+
