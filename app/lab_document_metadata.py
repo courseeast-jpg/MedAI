@@ -221,12 +221,63 @@ def classify_lab_document_type(text: str | None) -> str:
 
 
 def display_document_type(existing: Any = None, text: str | None = None) -> str:
+    classified_from_text = classify_lab_document_type(text)
     if existing:
-        mapped = _DOCUMENT_TYPE_MAP.get(str(existing).strip().lower())
+        existing_key = str(existing).strip().lower()
+        mapped = _DOCUMENT_TYPE_MAP.get(existing_key)
         if mapped:
+            if mapped == UNKNOWN_DOCUMENT_LABEL and classified_from_text != UNKNOWN_DOCUMENT_LABEL:
+                return classified_from_text
             return mapped
         return str(existing)
-    return classify_lab_document_type(text)
+    return classified_from_text
+
+
+def safe_document_type_diagnostic(
+    *,
+    document_type_before: Any = None,
+    text: str | None = None,
+    extractor: Any = None,
+    confidence: Any = None,
+    ocr_quality: Any = None,
+) -> dict[str, Any]:
+    """Return privacy-safe text-path diagnostics without emitting source text."""
+    normalized = _normalize_text(text)
+    cyrillic_count = len(re.findall(r"[а-яё]", normalized, flags=re.I))
+    total_chars = len(normalized.replace(" ", ""))
+    cyrillic_ratio = (cyrillic_count / total_chars) if total_chars else 0.0
+    categories = _russian_cue_categories(normalized)
+    text_available = bool(normalized)
+    document_type_after = display_document_type(document_type_before, text=text)
+    likely_reason = "unknown"
+    if not text_available:
+        likely_reason = "no_text_available"
+    elif cyrillic_count == 0:
+        likely_reason = "no_cyrillic_text_detected"
+    elif document_type_after == UNKNOWN_DOCUMENT_LABEL and len(categories) < 3:
+        likely_reason = "too_few_cue_categories"
+    elif document_type_after == UNKNOWN_DOCUMENT_LABEL:
+        likely_reason = "cue_normalization_gap"
+    elif (
+        str(document_type_before or "").strip().lower() in {"unknown", "generic"}
+        and document_type_after != UNKNOWN_DOCUMENT_LABEL
+    ):
+        likely_reason = "classifier_input_field_missing"
+
+    return {
+        "document_type_before": display_document_type(document_type_before),
+        "document_type_after": document_type_after,
+        "extractor": str(extractor) if extractor is not None else None,
+        "confidence_bucket": _bucket_confidence(confidence),
+        "ocr_text_quality": str(ocr_quality) if ocr_quality is not None else None,
+        "text_available": text_available,
+        "text_length_bucket": _bucket_text_length(len(normalized)),
+        "cyrillic_detected": cyrillic_count > 0,
+        "cyrillic_density_bucket": _bucket_cyrillic_density(cyrillic_ratio),
+        "russian_lab_cue_categories_detected": categories,
+        "cue_category_count": len(categories),
+        "likely_reason_unknown": likely_reason,
+    }
 
 
 def normalize_text_quality_label(*values: Any) -> str:
@@ -284,7 +335,7 @@ def reason_label_for_validation(validation_status: str | None, reason_codes: lis
 
 
 def _normalize_text(text: str | None) -> str:
-    return re.sub(r"\s+", " ", str(text or "").lower())
+    return re.sub(r"\s+", " ", str(text or "").lower().replace("ё", "е"))
 
 
 def _count_term_hits(text: str, terms: tuple[str, ...]) -> int:
@@ -293,3 +344,68 @@ def _count_term_hits(text: str, terms: tuple[str, ...]) -> int:
 
 def _count_word_hits(text: str, terms: tuple[str, ...]) -> int:
     return sum(1 for term in terms if re.search(rf"\b{re.escape(term)}\b", text, re.I))
+
+
+def _russian_cue_categories(text: str) -> list[str]:
+    categories: list[str] = []
+    category_terms = {
+        "lab_header": ("лабораторное исследование", "анализ", "общий анализ крови", "биохимия"),
+        "result_terms": ("результат", "результаты", "показатель", "значение"),
+        "reference_terms": ("референсные значения", "норма"),
+        "analyte_terms": (
+            "гемоглобин",
+            "лейкоциты",
+            "эритроциты",
+            "тромбоциты",
+            "глюкоза",
+            "креатинин",
+            "мочевина",
+            "билирубин",
+            "холестерин",
+        ),
+        "units_terms": ("единицы", "мг", "мл", "ммоль", "г/л"),
+        "blood_panel_terms": ("оак", "общий анализ крови", "кровь", "биохимия"),
+        "urinalysis_terms": _RU_URINALYSIS_TERMS + _RU_URINALYSIS_SHORT_TERMS,
+        "treatment_plan_terms": _RU_TREATMENT_TERMS,
+        "medication_plan_terms": _RU_MEDICATION_TERMS,
+    }
+    for category, terms in category_terms.items():
+        if _count_term_hits(text, terms) or _count_word_hits(text, terms):
+            categories.append(category)
+    return categories
+
+
+def _bucket_text_length(length: int) -> str:
+    if length <= 0:
+        return "none"
+    if length < 80:
+        return "tiny"
+    if length < 500:
+        return "short"
+    if length < 2000:
+        return "medium"
+    return "long"
+
+
+def _bucket_cyrillic_density(ratio: float) -> str:
+    if ratio <= 0:
+        return "none"
+    if ratio < 0.2:
+        return "low"
+    if ratio < 0.6:
+        return "medium"
+    return "high"
+
+
+def _bucket_confidence(value: Any) -> str:
+    try:
+        confidence = float(value)
+    except (TypeError, ValueError):
+        return "unknown"
+    if confidence < 0.5:
+        return "low_under_0_50"
+    if confidence < 0.65:
+        return "moderate_0_50_to_0_64"
+    if confidence < 0.85:
+        return "review_band_0_65_to_0_84"
+    return "high_0_85_or_above"
