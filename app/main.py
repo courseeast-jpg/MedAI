@@ -73,6 +73,7 @@ ADVANCED_OPERATOR_TABS = [
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
 PERSISTED_UPLOAD_FINGERPRINTS_KEY = "test_launcher_persisted_upload_fingerprints"
+PERSISTED_UPLOAD_GENERATION_KEY = "test_launcher_persisted_upload_generation"
 UPLOAD_WIDGET_VERSION_KEY = "test_launcher_upload_widget_version"
 
 # Backward-compatible export for older tests/importers. These are current
@@ -142,10 +143,32 @@ def uploaded_file_bytes_for_fingerprint(uploaded_file) -> bytes:
     return data
 
 
+def current_upload_generation(session_state) -> int:
+    return int(session_state.get(UPLOAD_WIDGET_VERSION_KEY, 0) or 0)
+
+
+def current_upload_widget_key(session_state) -> str:
+    return f"test_launcher_uploads_{current_upload_generation(session_state)}"
+
+
+def persisted_upload_fingerprints(session_state) -> set[str]:
+    generation = current_upload_generation(session_state)
+    persisted_generation = session_state.get(PERSISTED_UPLOAD_GENERATION_KEY)
+    raw = session_state.get(PERSISTED_UPLOAD_FINGERPRINTS_KEY, set())
+    if persisted_generation is not None and int(persisted_generation) != generation:
+        return set()
+    if isinstance(raw, set):
+        return set(raw)
+    return set(raw or [])
+
+
+def set_persisted_upload_fingerprints(session_state, fingerprints: set[str]) -> None:
+    session_state[PERSISTED_UPLOAD_FINGERPRINTS_KEY] = set(fingerprints)
+    session_state[PERSISTED_UPLOAD_GENERATION_KEY] = current_upload_generation(session_state)
+
+
 def persist_uploaded_files_once(uploaded_files, session_state, *, save_func=save_uploaded_test_file) -> list[Path]:
-    persisted = session_state.get(PERSISTED_UPLOAD_FINGERPRINTS_KEY, set())
-    if not isinstance(persisted, set):
-        persisted = set(persisted or [])
+    persisted = persisted_upload_fingerprints(session_state)
     saved: list[Path] = []
     for uploaded_file in uploaded_files or []:
         fingerprint = uploaded_file_fingerprint(uploaded_file)
@@ -154,14 +177,14 @@ def persist_uploaded_files_once(uploaded_files, session_state, *, save_func=save
         destination = save_func(uploaded_file)
         saved.append(destination)
         persisted.add(fingerprint)
-    session_state[PERSISTED_UPLOAD_FINGERPRINTS_KEY] = persisted
+    set_persisted_upload_fingerprints(session_state, persisted)
     return saved
 
 
 def reset_upload_persistence(session_state) -> None:
-    session_state[PERSISTED_UPLOAD_FINGERPRINTS_KEY] = set()
     version = int(session_state.get(UPLOAD_WIDGET_VERSION_KEY, 0) or 0)
     session_state[UPLOAD_WIDGET_VERSION_KEY] = version + 1
+    set_persisted_upload_fingerprints(session_state, set())
 
 
 def clear_queue_action(session_state, *, clear_func=clear_test_input) -> list[Path]:
@@ -650,7 +673,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         type=["pdf", "txt"],
         accept_multiple_files=True,
         help="Add documents",
-        key=f"test_launcher_uploads_{st.session_state.get(UPLOAD_WIDGET_VERSION_KEY, 0)}",
+        key=current_upload_widget_key(st.session_state),
     )
     if uploaded_files:
         saved = persist_uploaded_files_once(uploaded_files, st.session_state)
