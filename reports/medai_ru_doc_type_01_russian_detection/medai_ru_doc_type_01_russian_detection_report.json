@@ -1,0 +1,106 @@
+{
+  "conclusion": "medai_ru_doc_type_01_russian_detection_ready",
+  "baseline_lab_fix_02_commit_short": "951cadb",
+  "baseline_park_commit_short": "882fc539",
+  "changed_scope": "Russian/Cyrillic metadata-only document type detection",
+  "supported_document_types": [
+    "Lab result",
+    "Urinalysis",
+    "Treatment plan",
+    "Medication plan",
+    "Unknown"
+  ],
+  "russian_lab_detection_added": true,
+  "russian_urinalysis_detection_added": true,
+  "russian_treatment_plan_detection_added": true,
+  "russian_medication_plan_detection_added": true,
+  "auto_acceptance_changed": false,
+  "confidence_thresholds_changed": false,
+  "confidence_scoring_changed": false,
+  "clinical_logic_changed": false,
+  "clinical_interpretation_added": false,
+  "medication_advice_added": false,
+  "ddi_logic_changed": false,
+  "ocr_engine_changed": false,
+  "external_api_enabled": false,
+  "cloud_api_used": false,
+  "extraction_parser_changed": false,
+  "lab_value_parser_added": false,
+  "treatment_parser_added": false,
+  "safety_gate_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "free_form_shell_added": false,
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "test_input_files_staged": false,
+  "real_validation_input_files_staged": false,
+  "terminology_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "validation_commands": [
+    {
+      "command": "python -m pytest tests/test_medai_ru_doc_type_01_russian_detection.py -vv",
+      "result": "passed",
+      "summary": "12 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_lab_fix_02_general_lab_detection.py -vv",
+      "result": "passed",
+      "summary": "11 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_lab_fix_01_document_type_review_reason.py -vv",
+      "result": "passed",
+      "summary": "9 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py -vv",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py -vv",
+      "result": "passed",
+      "summary": "6 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed; 693 tests reported"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "summary": "2356 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "no_raw_phi": true,
+  "no_raw_filenames": true,
+  "no_raw_document_text": true,
+  "no_private_absolute_paths": true,
+  "no_secrets": true
+}

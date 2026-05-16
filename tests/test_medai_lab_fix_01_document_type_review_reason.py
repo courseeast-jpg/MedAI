@@ -75,7 +75,7 @@ def test_lab_detection_does_not_change_auto_acceptance_or_thresholds(tmp_path, m
     assert result.ocr_quality_band == "Native text"
     assert result.operator_reason_label == "Low confidence"
     assert result.operator_review_reason == (
-        "Needs review: lab-style document detected, but confidence is below the acceptance gate."
+        "Needs review: urinalysis-style document detected, but confidence is below the acceptance gate."
     )
     assert not archive_dir.exists()
     assert (review_dir / "synthetic.pdf").exists()
