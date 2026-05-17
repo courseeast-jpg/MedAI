@@ -16,6 +16,7 @@ from typing import Any
 from uuid import uuid4
 
 from app.lab_document_metadata import (
+    UNKNOWN_DOCUMENT_LABEL,
     display_document_type,
     normalize_text_quality_label,
     reason_label_for_validation,
@@ -364,9 +365,7 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
         validation_reason_codes = _validation_reason_codes(result.validation_errors)
         ocr_gate_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
         document_type = display_document_type(
-            audit.get("document_type")
-            or extractor_result.get("document_type")
-            or _fallback_diagnostic_document_type(ocr_gate_marker),
+            _runtime_document_type_candidate(audit, extractor_result, ocr_gate_marker),
             text=str(extractor_result.get("raw_text") or extractor_result.get("text") or ""),
         )
         ocr_quality = normalize_text_quality_label(
@@ -449,6 +448,20 @@ def _fallback_diagnostic_document_type(ocr_gate_marker: dict[str, Any]) -> str |
         if candidate and str(candidate).strip().lower() != "unknown":
             return str(candidate)
     return None
+
+
+def _runtime_document_type_candidate(
+    audit: dict[str, Any],
+    extractor_result: dict[str, Any],
+    ocr_gate_marker: dict[str, Any],
+) -> str | None:
+    for value in (
+        audit.get("document_type"),
+        extractor_result.get("document_type"),
+    ):
+        if value and display_document_type(value) != UNKNOWN_DOCUMENT_LABEL:
+            return str(value)
+    return _fallback_diagnostic_document_type(ocr_gate_marker)
 
 
 def _validation_reason_codes(errors: Any) -> list[str]:

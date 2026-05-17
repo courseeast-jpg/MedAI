@@ -207,7 +207,11 @@ def run_local_cyrillic_ocr_fallback(
     if classification_diagnostic_builder is not None:
         classification_diagnostic = classification_diagnostic_builder(ocr_text)
     treatment_classification_diagnostic = None
-    if treatment_classification_diagnostic_builder is not None:
+    if cyrillic_detected:
+        if treatment_classification_diagnostic_builder is None:
+            from app.lab_document_metadata import safe_fallback_ocr_treatment_classification_diagnostic
+
+            treatment_classification_diagnostic_builder = safe_fallback_ocr_treatment_classification_diagnostic
         treatment_classification_diagnostic = treatment_classification_diagnostic_builder(ocr_text)
     return _fallback_metadata(
         executed=True,
