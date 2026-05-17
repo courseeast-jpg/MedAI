@@ -10,6 +10,18 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from app.document_type_registry import (
+    ADMINISTRATIVE_INSURANCE_LABEL,
+    CLINICAL_NOTE_LABEL,
+    DISCHARGE_SUMMARY_LABEL,
+    IMAGING_REPORT_LABEL,
+    PATHOLOGY_REPORT_LABEL,
+    PROCEDURE_REPORT_LABEL,
+    REFERRAL_ORDER_LABEL,
+    classify_document_family,
+    document_family_classification_diagnostic,
+)
+
 
 LAB_RESULT_LABEL = "Lab result"
 URINALYSIS_LABEL = "Urinalysis"
@@ -225,6 +237,22 @@ _DOCUMENT_TYPE_MAP = {
     "treatment_plan": TREATMENT_PLAN_LABEL,
     "medication plan": MEDICATION_PLAN_LABEL,
     "medication_plan": MEDICATION_PLAN_LABEL,
+    "imaging report": IMAGING_REPORT_LABEL,
+    "imaging_report": IMAGING_REPORT_LABEL,
+    "radiology report": IMAGING_REPORT_LABEL,
+    "radiology_report": IMAGING_REPORT_LABEL,
+    "clinical note": CLINICAL_NOTE_LABEL,
+    "clinical_note": CLINICAL_NOTE_LABEL,
+    "discharge summary": DISCHARGE_SUMMARY_LABEL,
+    "discharge_summary": DISCHARGE_SUMMARY_LABEL,
+    "referral / order": REFERRAL_ORDER_LABEL,
+    "referral_order": REFERRAL_ORDER_LABEL,
+    "procedure report": PROCEDURE_REPORT_LABEL,
+    "procedure_report": PROCEDURE_REPORT_LABEL,
+    "pathology report": PATHOLOGY_REPORT_LABEL,
+    "pathology_report": PATHOLOGY_REPORT_LABEL,
+    "administrative / insurance": ADMINISTRATIVE_INSURANCE_LABEL,
+    "administrative_insurance": ADMINISTRATIVE_INSURANCE_LABEL,
     "generic": UNKNOWN_DOCUMENT_LABEL,
     "unknown": UNKNOWN_DOCUMENT_LABEL,
     "": UNKNOWN_DOCUMENT_LABEL,
@@ -266,6 +294,7 @@ def classify_lab_document_type(text: str | None) -> str:
     treatment_score = _count_term_hits(normalized, _RU_TREATMENT_TERMS)
     medication_score = _count_term_hits(normalized, _RU_MEDICATION_TERMS)
     treatment_schedule_keys = _matched_russian_treatment_cue_keys(normalized)
+    imaging_keys = _matched_russian_imaging_cue_keys(normalized)
     if "medication_schedule_header" in treatment_schedule_keys:
         medication_score += 2
     if "administration_schedule_pattern" in treatment_schedule_keys:
@@ -293,6 +322,11 @@ def classify_lab_document_type(text: str | None) -> str:
         and ("date_grid" in treatment_schedule_keys or "administration_schedule_pattern" in treatment_schedule_keys)
     ):
         return TREATMENT_PLAN_LABEL
+    if _is_russian_imaging_report(imaging_keys):
+        return IMAGING_REPORT_LABEL
+    family_candidate = classify_document_family(normalized)
+    if family_candidate not in {UNKNOWN_DOCUMENT_LABEL, URINALYSIS_LABEL}:
+        return family_candidate
     if medication_score >= 3 and medication_score >= lab_total_score and medication_score >= treatment_score:
         return MEDICATION_PLAN_LABEL
     if treatment_score >= 2 and treatment_medication_score > lab_total_score:
@@ -376,6 +410,7 @@ def safe_document_type_diagnostic(
     return {
         "document_type_before": display_document_type(document_type_before),
         "document_type_after": document_type_after,
+        "document_family_classification_diagnostic": document_family_classification_diagnostic(text),
         "extractor": str(extractor) if extractor is not None else None,
         "confidence_bucket": _bucket_confidence(confidence),
         "ocr_text_quality": str(ocr_quality) if ocr_quality is not None else None,
@@ -395,7 +430,9 @@ def safe_fallback_ocr_classification_diagnostic(text: str | None) -> dict[str, A
     cyrillic_count = len(re.findall(r"[\u0400-\u04ff]", normalized))
     matched_keys = _matched_russian_lab_cue_keys(normalized)
     treatment_keys = _matched_russian_treatment_cue_keys(normalized)
+    imaging_keys = _matched_russian_imaging_cue_keys(normalized)
     candidate = classify_lab_document_type(text)
+    family_diagnostic = document_family_classification_diagnostic(text)
     if not normalized:
         block_reason = "no_fallback_text_available"
     elif cyrillic_count == 0:
@@ -409,6 +446,8 @@ def safe_fallback_ocr_classification_diagnostic(text: str | None) -> dict[str, A
         "cyrillic_char_count_bucket": _bucket_count(cyrillic_count),
         "matched_lab_cue_keys": matched_keys,
         "matched_treatment_cue_keys": treatment_keys,
+        "matched_imaging_cue_keys": imaging_keys,
+        "document_family_classification_diagnostic": family_diagnostic,
         "matched_document_type_candidate": candidate,
         "classification_block_reason": block_reason,
     }
@@ -476,6 +515,14 @@ def review_reason_for_result(
         return "Needs review: treatment-plan style document detected. Human review is required."
     if display_type == MEDICATION_PLAN_LABEL and normalized_validation in {"needs_review", "rejected"}:
         return "Needs review: medication-plan style document detected. Human review is required."
+    if display_type == IMAGING_REPORT_LABEL and normalized_validation in {"needs_review", "rejected"}:
+        return "Needs review: imaging-report style document detected. Human review is required."
+    if display_type == CLINICAL_NOTE_LABEL and normalized_validation in {"needs_review", "rejected"}:
+        return "Needs review: clinical-note style document detected. Human review is required."
+    if display_type == DISCHARGE_SUMMARY_LABEL and normalized_validation in {"needs_review", "rejected"}:
+        return "Needs review: discharge-summary style document detected. Human review is required."
+    if display_type in {REFERRAL_ORDER_LABEL, PROCEDURE_REPORT_LABEL, PATHOLOGY_REPORT_LABEL, ADMINISTRATIVE_INSURANCE_LABEL} and normalized_validation in {"needs_review", "rejected"}:
+        return "Needs review: document family detected. Human review is required."
     if display_type == UNKNOWN_DOCUMENT_LABEL and normalized_validation in {"needs_review", "rejected"}:
         return "Needs review: MedAI could not confidently identify this document type."
     if confidence is not None and confidence < 0.65:
@@ -650,6 +697,71 @@ def _matched_russian_treatment_cue_keys(text: str) -> list[str]:
     if "date_grid" not in keys and ("\u0434\u0430\u0442\u0430" in text or date_like_count >= 2):
         keys.append("date_grid")
     return keys
+
+
+def _matched_russian_imaging_cue_keys(text: str) -> list[str]:
+    cue_terms = {
+        "imaging_modality_mri": (
+            "\u043c\u0440\u0442",
+            "\u043c\u0440 \u0442\u043e\u043c\u043e\u0433\u0440\u0430\u0444",
+            "\u043c\u0440 \u0442\u043e\u043c\u043e\u0433\u0440\u0430\u043c\u043c",
+            "\u043c\u0430\u0433\u043d\u0438\u0442\u043d\u043e \u0440\u0435\u0437\u043e\u043d\u0430\u043d\u0441",
+        ),
+        "imaging_modality_ct": (
+            "\u043a\u0442",
+            "\u043a\u043e\u043c\u043f\u044c\u044e\u0442\u0435\u0440\u043d\u0430\u044f \u0442\u043e\u043c\u043e\u0433\u0440\u0430\u0444",
+        ),
+        "imaging_modality_ultrasound": (
+            "\u0443\u0437\u0438",
+            "\u0443\u043b\u044c\u0442\u0440\u0430\u0437\u0432\u0443\u043a\u043e\u0432",
+        ),
+        "imaging_modality_xray": (
+            "\u0440\u0435\u043d\u0442\u0433\u0435\u043d",
+            "\u0440\u0435\u043d\u0442\u0433\u0435\u043d\u043e\u0433\u0440\u0430\u0444",
+        ),
+        "imaging_report_description_section": (
+            "\u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435",
+            "\u043e\u043f\u0438\u0441\u0430\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0447\u0430\u0441\u0442\u044c",
+        ),
+        "imaging_report_conclusion_section": (
+            "\u0437\u0430\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435",
+            "\u0432\u044b\u0432\u043e\u0434",
+        ),
+        "radiology_series_wording": (
+            "\u0442\u043e\u043c\u043e\u0433\u0440\u0430\u043c\u043c",
+            "\u0441\u0435\u0440\u0438\u044f",
+            "\u0441\u0440\u0435\u0437",
+            "\u043f\u0440\u043e\u0435\u043a\u0446\u0438",
+        ),
+        "imaging_device_header": (
+            "\u0430\u043f\u043f\u0430\u0440\u0430\u0442",
+            "\u0441\u043a\u0430\u043d\u0435\u0440",
+        ),
+    }
+    return [key for key, terms in cue_terms.items() if _count_term_hits(text, terms) or _count_word_hits(text, terms)]
+
+
+def _is_russian_imaging_report(keys: list[str]) -> bool:
+    key_set = set(keys)
+    modality_present = bool(
+        key_set
+        & {
+            "imaging_modality_mri",
+            "imaging_modality_ct",
+            "imaging_modality_ultrasound",
+            "imaging_modality_xray",
+        }
+    )
+    structure_present = bool(
+        key_set
+        & {
+            "imaging_report_description_section",
+            "imaging_report_conclusion_section",
+            "radiology_series_wording",
+            "imaging_device_header",
+        }
+    )
+    return modality_present and structure_present and len(key_set) >= 2
 
 
 def _bucket_text_length(length: int) -> str:

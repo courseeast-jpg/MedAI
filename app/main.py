@@ -878,6 +878,21 @@ def operator_result_explanation(document_type: str) -> str:
             "Medication names, doses, schedules, and recommendations were not interpreted or accepted. "
             "A human must review the source PDF."
         )
+    if normalized in {"imaging report", "radiology report"}:
+        return (
+            "MedAI identified this as an imaging-report style document after recovering readable Russian text locally. "
+            "Imaging findings and conclusions were not interpreted or accepted. A human must review the source PDF."
+        )
+    if normalized == "clinical note":
+        return (
+            "MedAI identified this as a clinical-note style document. Medical meaning was not interpreted or accepted. "
+            "A human must review the source document."
+        )
+    if normalized == "discharge summary":
+        return (
+            "MedAI identified this as a discharge-summary style document. Diagnoses, medications, and recommendations "
+            "were not interpreted or accepted. A human must review the source document."
+        )
     return "MedAI could not confidently identify this document type. A human must review the source PDF."
 
 
@@ -894,6 +909,24 @@ def operator_label_evidence(document_type: str) -> list[str]:
             "Treatment or recommendation section found",
             "Schedule-style layout found",
             "Date/grid pattern found",
+        ]
+    if normalized in {"imaging report", "radiology report"}:
+        return [
+            "Imaging modality wording found",
+            "Description/conclusion structure found",
+            "Imaging-report layout found",
+        ]
+    if normalized == "clinical note":
+        return [
+            "Complaint or history section found",
+            "Examination or assessment structure found",
+            "Clinical-note layout found",
+        ]
+    if normalized == "discharge summary":
+        return [
+            "Admission or discharge wording found",
+            "Hospital-course structure found",
+            "Discharge-summary layout found",
         ]
     return ["No sufficient document-format clues matched"]
 
@@ -935,6 +968,20 @@ def next_actions_for_document_type(document_type: str) -> list[str]:
             "Do not rely on MedAI for medication names, dose, schedule, or recommendations.",
             "Keep medication interpretation for a future medication-safety workflow.",
         ]
+    if normalized in {"imaging report", "radiology report"}:
+        return [
+            "Open the source PDF.",
+            "Confirm only the document type.",
+            "Do not rely on MedAI for imaging findings, measurements, or conclusions.",
+            "Keep imaging interpretation for a future human-reviewed workflow.",
+        ]
+    if normalized in {"clinical note", "discharge summary", "referral / order", "procedure report", "pathology report"}:
+        return [
+            "Open the source document.",
+            "Confirm only the document type.",
+            "Do not rely on MedAI for medical meaning, diagnoses, or recommendations.",
+            "Keep all extracted content in human review.",
+        ]
     return [
         "Open the source PDF.",
         "Decide whether the document type is recognizable.",
@@ -947,6 +994,7 @@ def medai_did_not_do_checklist() -> list[str]:
         "Did not diagnose anything.",
         "Did not recommend treatment.",
         "Did not interpret medications, doses, schedules, or treatment recommendations.",
+        "Did not interpret imaging findings or conclusions.",
         "Did not accept lab values.",
         "Did not send data to the cloud.",
     ]
@@ -981,6 +1029,7 @@ ADVANCED_DIAGNOSTIC_FIELDS = [
     "ocr_gate_fallback_auto_accept_allowed",
     "ocr_gate_fallback_classification_diagnostic",
     "ocr_gate_fallback_treatment_classification_diagnostic",
+    "document_family_classification_diagnostic",
     "operator_review_reason",
     "operator_reason_label",
 ]

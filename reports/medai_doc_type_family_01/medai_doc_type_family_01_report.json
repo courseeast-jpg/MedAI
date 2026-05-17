@@ -1,0 +1,140 @@
+{
+  "conclusion": "medai_doc_type_family_01_ready",
+  "changed_scope": "metadata-only multilingual document family classification",
+  "why_one_off_doc_type_blocks_do_not_scale": "One-off blocks couple each new document format to new runtime code. The registry separates broad families, safe cue keys, and language cue packs so new coverage can be added conservatively.",
+  "new_family_classifier_architecture": {
+    "registry_file": "app/document_type_registry.py",
+    "broad_families": [
+      "Lab result",
+      "Imaging report",
+      "Treatment plan",
+      "Medication plan",
+      "Clinical note",
+      "Discharge summary",
+      "Referral / Order",
+      "Procedure report",
+      "Pathology report",
+      "Administrative / Insurance",
+      "Unknown"
+    ],
+    "language_cue_packs": [
+      "english",
+      "russian",
+      "polish",
+      "albanian"
+    ],
+    "diagnostic_metadata": [
+      "candidate_family",
+      "matched_family_cue_keys",
+      "matched_language_cue_groups",
+      "classification_block_reason",
+      "ambiguous_candidates",
+      "cyrillic_detected",
+      "language_script_detected",
+      "review_only",
+      "auto_accept_allowed"
+    ]
+  },
+  "supported_families": [
+    "Lab result",
+    "Imaging report",
+    "Treatment plan",
+    "Medication plan",
+    "Clinical note",
+    "Discharge summary",
+    "Referral / Order",
+    "Procedure report",
+    "Pathology report",
+    "Administrative / Insurance",
+    "Unknown"
+  ],
+  "supported_language_cue_packs": [
+    "English",
+    "Russian",
+    "Polish",
+    "Albanian"
+  ],
+  "preserved_existing_behavior": {
+    "russian_lab_result_preserved": true,
+    "russian_treatment_plan_preserved": true,
+    "russian_medication_plan_preserved": true,
+    "unknown_fallback_preserved": true
+  },
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01.py -q",
+      "result": "passed",
+      "summary": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix2_always_emit_diagnostic.py tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py tests/test_medai_ru_treatment_doc_type_01.py tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py -q",
+      "result": "passed",
+      "summary": "43 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_run_review_polish_01_fix_state_consistency.py tests/test_medai_ui_run_review_polish_01.py tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py -q",
+      "result": "passed",
+      "summary": "60 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py tests/test_medai_ui_ops_panel.py -q",
+      "result": "passed",
+      "summary": "67 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ui_polish_07_header_audit_advanced_actions.py tests/test_medai_ui_polish_06_streamlit_chrome_sidebar.py tests/test_medai_ui_polish_05_run_review_consolidation.py -q",
+      "result": "passed",
+      "summary": "15 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed; 693 tests passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready; external_api_used false"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "summary": "2476 passed, 4 skipped, 22 warnings in 1809.94s"
+    }
+  ],
+  "runtime_behavior_changed": "document type metadata only",
+  "ocr_routing_changed": false,
+  "classifier_clinical_interpretation_added": false,
+  "threshold_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_logic_changed": false,
+  "medication_parsing_added": false,
+  "dose_parsing_added": false,
+  "lab_value_parsing_added": false,
+  "ddi_logic_changed": false,
+  "external_api_changed": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "affected_files_remain_review_bound": true,
+  "external_api_used": false,
+  "no_raw_phi": true,
+  "no_raw_filenames": true,
+  "no_private_absolute_paths": true,
+  "no_secrets": true
+}
