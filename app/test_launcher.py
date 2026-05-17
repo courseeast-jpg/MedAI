@@ -48,6 +48,12 @@ class TestFileResult:
     validation_status: str | None = None
     document_type: str | None = None
     ocr_quality_band: str | None = None
+    language_text_visibility: str | None = None
+    cyrillic_ocr_recommended: bool = False
+    ocr_gate_reason: str | None = None
+    ocr_gate_review_only: bool = True
+    ocr_gate_auto_accept_allowed: bool = False
+    ocr_gate_fallback_executed: bool = False
     operator_review_reason: str | None = None
     operator_reason_label: str | None = None
     error: str | None = None
@@ -323,6 +329,12 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             validation_status=result.validation_status,
             document_type=document_type,
             ocr_quality_band=ocr_quality,
+            language_text_visibility=extractor_result.get("language_text_visibility"),
+            cyrillic_ocr_recommended=bool(extractor_result.get("cyrillic_ocr_recommended", False)),
+            ocr_gate_reason=extractor_result.get("ocr_gate_reason"),
+            ocr_gate_review_only=bool(extractor_result.get("ocr_gate_review_only", True)),
+            ocr_gate_auto_accept_allowed=bool(extractor_result.get("ocr_gate_auto_accept_allowed", False)),
+            ocr_gate_fallback_executed=bool(extractor_result.get("ocr_gate_fallback_executed", False)),
             operator_review_reason=operator_reason,
             operator_reason_label=operator_reason_label,
         )

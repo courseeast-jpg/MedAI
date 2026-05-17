@@ -41,6 +41,7 @@ from extractors.gemini_extractor import GeminiExtractor
 from extractors.spacy_extractor import SpacyExtractor
 from governance.hypothesis_tier import GovernanceHypothesisTier
 from governance.truth_resolution import GovernanceTruthResolutionAdapter
+from ingestion.cyrillic_ocr_gate import build_cyrillic_ocr_shadow_marker
 
 
 OCR_ARTIFACT_RE = re.compile(r"(\ufffd|[|]{3,}|_{4,}|\b(?:l|I){8,}\b)")
@@ -106,6 +107,21 @@ class ExecutionPipeline:
             source_text = self.extract_pdf_text(job.pdf_path)
             source_name = job.source_name or job.pdf_path.name
             if self._last_pdf_text_audit is not None:
+                shadow_marker = build_cyrillic_ocr_shadow_marker(
+                    source_text,
+                    current_ocr_skipped=not bool(self._last_pdf_text_audit.get("ocr_fallback_used", False)),
+                    language_context="unknown",
+                )
+                self._last_pdf_text_audit.update(
+                    {
+                        "language_text_visibility": shadow_marker.get("language_text_visibility", "not_applicable"),
+                        "cyrillic_ocr_recommended": bool(shadow_marker.get("cyrillic_ocr_recommended", False)),
+                        "ocr_gate_reason": shadow_marker.get("ocr_gate_reason", "not_recommended"),
+                        "ocr_gate_review_only": bool(shadow_marker.get("review_only", True)),
+                        "ocr_gate_auto_accept_allowed": bool(shadow_marker.get("auto_accept_allowed", False)),
+                        "ocr_gate_fallback_executed": bool(shadow_marker.get("ocr_fallback_executed", False)),
+                    }
+                )
                 self._stage_log(
                     record_id=session_id,
                     stage="pdf_text_extraction",
@@ -207,6 +223,12 @@ class ExecutionPipeline:
                 "ocr_fallback_used": self._last_pdf_text_audit.get("ocr_fallback_used", False),
                 "ocr_engine": self._last_pdf_text_audit.get("ocr_engine"),
                 "ocr_text_length": self._last_pdf_text_audit.get("ocr_text_length", 0),
+                "language_text_visibility": self._last_pdf_text_audit.get("language_text_visibility", "not_applicable"),
+                "cyrillic_ocr_recommended": self._last_pdf_text_audit.get("cyrillic_ocr_recommended", False),
+                "ocr_gate_reason": self._last_pdf_text_audit.get("ocr_gate_reason", "not_recommended"),
+                "ocr_gate_review_only": self._last_pdf_text_audit.get("ocr_gate_review_only", True),
+                "ocr_gate_auto_accept_allowed": self._last_pdf_text_audit.get("ocr_gate_auto_accept_allowed", False),
+                "ocr_gate_fallback_executed": self._last_pdf_text_audit.get("ocr_gate_fallback_executed", False),
             })
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
