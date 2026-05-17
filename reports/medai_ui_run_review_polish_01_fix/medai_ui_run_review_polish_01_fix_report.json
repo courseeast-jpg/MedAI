@@ -1,0 +1,111 @@
+{
+  "conclusion": "medai_ui_run_review_polish_01_fix_ready",
+  "changed_scope": "Run & Review UI state rendering and report separation only",
+  "root_cause": [
+    "Upload selection state and actual queued files were not described separately.",
+    "Historical aggregate review-package content appeared directly below current run output.",
+    "Result card rendering needed a canonical per-file record copy for main and advanced metadata."
+  ],
+  "before_after_summary": {
+    "before": [
+      "Selected picker files could be visible while Files ready stayed zero without clear explanation.",
+      "Aggregate review-package status appeared directly below current run results.",
+      "Main and advanced result sections did not explicitly share a canonical record copy."
+    ],
+    "after": [
+      "Selected/no queued files state is explicit.",
+      "Files ready reflects actual queued files.",
+      "Start run enablement follows actual queued files.",
+      "Aggregate review-package status is collapsed and labeled as previous aggregate status.",
+      "Main and advanced result sections render from the same canonical record."
+    ]
+  },
+  "queue_display_behavior": {
+    "selected_no_queued_files_message": "Files selected. Add/start run to process them.",
+    "queued_files_count_source": "actual run queue",
+    "start_run_enabled_only_when_queue_has_files": true
+  },
+  "current_run_record_consistency_behavior": {
+    "canonical_record_copy_added": true,
+    "main_type_matches_advanced_document_type": true,
+    "previous_unknown_does_not_override_current_treatment_plan": true
+  },
+  "stale_report_protection_behavior": {
+    "aggregate_review_summary_collapsed": true,
+    "aggregate_review_summary_label": "Previous review summary / aggregate review status",
+    "current_run_does_not_blend_with_review_package_summary": true
+  },
+  "advanced_technical_details": {
+    "collapsed_by_default": true,
+    "safe_metadata_only": true,
+    "raw_ocr_text_absent": true,
+    "raw_document_text_absent": true,
+    "raw_filenames_absent": true,
+    "private_paths_absent": true,
+    "secrets_absent": true
+  },
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_ui_run_review_polish_01_fix_state_consistency.py tests/test_medai_ui_run_review_polish_01.py -q",
+      "result": "17 passed"
+    },
+    {
+      "command": "python -m pytest existing_ui_polish_and_ops_group -q",
+      "result": "72 passed"
+    },
+    {
+      "command": "python -m pytest russian_treatment_ocr_lab_upload_regression_group -q",
+      "result": "140 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed: medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed: medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed: 12/12 cases, 693 tests passed, external_api_used false"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed: 6/6 cases, external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed: external_api_used false"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2469 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "runtime_behavior_changed": false,
+  "ocr_routing_changed": false,
+  "ocr_engine_changed": false,
+  "classifier_changed": false,
+  "threshold_changed": false,
+  "confidence_scoring_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_logic_changed": false,
+  "clinical_interpretation_added": false,
+  "medication_parsing_added": false,
+  "dose_parsing_added": false,
+  "frequency_parsing_added": false,
+  "duration_parsing_added": false,
+  "ddi_logic_changed": false,
+  "lab_value_parsing_added": false,
+  "b07_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_changed": false,
+  "external_api_used": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "no_raw_phi": true,
+  "no_secrets": true
+}

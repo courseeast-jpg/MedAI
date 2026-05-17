@@ -182,6 +182,25 @@ def persist_uploaded_files_once(uploaded_files, session_state, *, save_func=save
     return saved
 
 
+def selected_upload_count(uploaded_files) -> int:
+    return len(list(uploaded_files or []))
+
+
+def queue_display_state(*, queued_count: int, selected_count: int) -> dict[str, object]:
+    return {
+        "queued_count": queued_count,
+        "selected_count": selected_count,
+        "start_enabled": queued_count > 0,
+        "message": (
+            f"Ready to process {queued_count} files."
+            if queued_count
+            else "Files selected. Add/start run to process them."
+            if selected_count
+            else "No documents added yet. Choose files to begin."
+        ),
+    }
+
+
 def reset_upload_persistence(session_state) -> None:
     version = int(session_state.get(UPLOAD_WIDGET_VERSION_KEY, 0) or 0)
     session_state[UPLOAD_WIDGET_VERSION_KEY] = version + 1
@@ -676,28 +695,37 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         help="Add documents",
         key=current_upload_widget_key(st.session_state),
     )
+    selected_count = selected_upload_count(uploaded_files)
     if uploaded_files:
         saved = persist_uploaded_files_once(uploaded_files, st.session_state)
         if saved:
             st.success(f"Added {len(saved)} file(s) to test_input/.")
 
     files = list_test_input_files()
+    queue_state = queue_display_state(queued_count=len(files), selected_count=selected_count)
     active_run = st.session_state.get("phase52_current_run")
     run_state = "Waiting to start"
     if active_run:
         run_state = "Complete" if not active_run.get("failed") else "Failed"
 
-    if files:
-        st.info(f"Ready to process {len(files)} files.")
+    if queue_state["queued_count"]:
+        st.info(str(queue_state["message"]))
     else:
-        st.info("No documents added yet. Choose files to begin.")
+        st.info(str(queue_state["message"]))
+        if selected_count:
+            st.caption("Selected files are visible in the picker but are not in the run queue yet.")
+            if st.button("Add selected files to queue"):
+                reset_upload_persistence(st.session_state)
+                saved = persist_uploaded_files_once(uploaded_files, st.session_state)
+                st.success(f"Added {len(saved)} selected file(s) to the run queue.")
+                st.rerun()
 
     control_cols = st.columns([1, 1])
     if control_cols[0].button("Remove queued files"):
         removed = clear_queue_action(st.session_state)
         st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
         st.rerun()
-    if control_cols[1].button("Start run", type="primary", disabled=not files):
+    if control_cols[1].button("Start run", type="primary", disabled=not bool(queue_state["start_enabled"])):
         if not files:
             st.warning("No supported files waiting in test_input/.")
         else:
@@ -725,7 +753,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             st.success(f"Cleared {len(removed)} latest report file(s).")
             st.rerun()
 
-    render_queue_panel(files)
+    render_queue_panel(files, selected_count=selected_count)
     active_run = st.session_state.get("phase52_current_run")
     render_run_status_panel(active_run, run_state="Complete" if active_run else run_state)
     render_operator_guidance_panel()
@@ -746,19 +774,24 @@ def render_run_review_tab(sys_components: dict) -> None:
     render_current_run_tab(sys_components, show_title=False)
 
     st.divider()
-    try:
-        from app.review_package_viewer import render_review_package_panel
+    with st.expander("Previous review summary / aggregate review status", expanded=False):
+        st.caption("This is historical aggregate review-package information, not the current run result.")
+        try:
+            from app.review_package_viewer import render_review_package_panel
 
-        render_review_package_panel(show_title=False)
-    except Exception as _exc:
-        st.error(f"Review summary unavailable: {_exc}")
+            render_review_package_panel(show_title=False)
+        except Exception as _exc:
+            st.error(f"Previous review summary unavailable: {_exc}")
 
 
-def render_queue_panel(files: list[Path]) -> None:
+def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
     st.markdown("**Documents waiting**")
     st.metric("Files ready", len(files))
     if not files:
-        st.caption("No documents added yet. Choose files to begin.")
+        if selected_count:
+            st.caption("Files selected. Add/start run to process them.")
+        else:
+            st.caption("No documents added yet. Choose files to begin.")
         return
     header = st.columns([4, 2, 2, 1])
     header[0].caption("Filename")
@@ -817,6 +850,13 @@ def item_status(item: dict) -> str:
 def operator_document_type(item: dict) -> str:
     value = str(item.get("document_type") or "Unknown").strip()
     return value if value else "Unknown"
+
+
+def canonical_run_result_record(item: dict) -> dict:
+    record = dict(item)
+    document_type = operator_document_type(record)
+    record["document_type"] = document_type
+    return record
 
 
 def operator_result_explanation(document_type: str) -> str:
@@ -951,6 +991,7 @@ def advanced_diagnostic_fields(item: dict) -> dict[str, object]:
 
 
 def render_run_result_card(item: dict) -> None:
+    item = canonical_run_result_record(item)
     status = item_status(item)
     badge = status_badge(status)
     document_type = operator_document_type(item)
