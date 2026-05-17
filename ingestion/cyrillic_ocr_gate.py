@@ -206,6 +206,10 @@ def run_local_cyrillic_ocr_fallback(
     classification_diagnostic = None
     if classification_diagnostic_builder is not None:
         classification_diagnostic = classification_diagnostic_builder(ocr_text)
+        family_diagnostic = classification_diagnostic.get("document_family_classification_diagnostic") if isinstance(classification_diagnostic, dict) else None
+        family_candidate = family_diagnostic.get("candidate_family") if isinstance(family_diagnostic, dict) else None
+        if (not document_type or str(document_type).strip().lower() == "unknown") and family_candidate and str(family_candidate).strip().lower() != "unknown":
+            document_type = str(family_candidate)
     treatment_classification_diagnostic = None
     if cyrillic_detected:
         if treatment_classification_diagnostic_builder is None:
@@ -281,6 +285,9 @@ def _fallback_metadata(
         metadata["ocr_gate_fallback_document_type"] = document_type
     if classification_diagnostic:
         metadata["ocr_gate_fallback_classification_diagnostic"] = classification_diagnostic
+        family_diagnostic = classification_diagnostic.get("document_family_classification_diagnostic")
+        if isinstance(family_diagnostic, dict):
+            metadata["document_family_classification_diagnostic"] = family_diagnostic
     if treatment_classification_diagnostic:
         metadata["ocr_gate_fallback_treatment_classification_diagnostic"] = treatment_classification_diagnostic
     return metadata

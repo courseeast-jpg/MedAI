@@ -65,6 +65,7 @@ class TestFileResult:
     ocr_gate_fallback_error_bucket: str | None = None
     ocr_gate_fallback_classification_diagnostic: dict | None = None
     ocr_gate_fallback_treatment_classification_diagnostic: dict | None = None
+    document_family_classification_diagnostic: dict | None = None
     operator_review_reason: str | None = None
     operator_reason_label: str | None = None
     error: str | None = None
@@ -309,6 +310,7 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
             "ocr_gate_fallback_classification_diagnostic": extractor_result.get(
                 "ocr_gate_fallback_classification_diagnostic"
             ),
+            "document_family_classification_diagnostic": _runtime_family_diagnostic(extractor_result),
             "ocr_gate_fallback_treatment_classification_diagnostic": extractor_result.get(
                 "ocr_gate_fallback_treatment_classification_diagnostic"
             ),
@@ -335,6 +337,7 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
         "ocr_gate_fallback_error_bucket": None,
         "ocr_gate_fallback_classification_diagnostic": None,
         "ocr_gate_fallback_treatment_classification_diagnostic": None,
+        "document_family_classification_diagnostic": None,
     }
 
 
@@ -414,6 +417,7 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             ocr_gate_fallback_treatment_classification_diagnostic=ocr_gate_marker[
                 "ocr_gate_fallback_treatment_classification_diagnostic"
             ],
+            document_family_classification_diagnostic=ocr_gate_marker["document_family_classification_diagnostic"],
             operator_review_reason=operator_reason,
             operator_reason_label=operator_reason_label,
         )
@@ -437,6 +441,11 @@ def _safe_float(value: Any) -> float | None:
 
 
 def _fallback_diagnostic_document_type(ocr_gate_marker: dict[str, Any]) -> str | None:
+    family_diagnostic = ocr_gate_marker.get("document_family_classification_diagnostic")
+    if isinstance(family_diagnostic, dict):
+        family_candidate = family_diagnostic.get("candidate_family")
+        if family_candidate and str(family_candidate).strip().lower() != "unknown":
+            return str(family_candidate)
     for key in (
         "ocr_gate_fallback_treatment_classification_diagnostic",
         "ocr_gate_fallback_classification_diagnostic",
@@ -447,6 +456,18 @@ def _fallback_diagnostic_document_type(ocr_gate_marker: dict[str, Any]) -> str |
         candidate = diagnostic.get("matched_document_type_candidate")
         if candidate and str(candidate).strip().lower() != "unknown":
             return str(candidate)
+    return None
+
+
+def _runtime_family_diagnostic(extractor_result: dict[str, Any]) -> dict[str, Any] | None:
+    direct = extractor_result.get("document_family_classification_diagnostic")
+    if isinstance(direct, dict):
+        return direct
+    fallback = extractor_result.get("ocr_gate_fallback_classification_diagnostic")
+    if isinstance(fallback, dict):
+        nested = fallback.get("document_family_classification_diagnostic")
+        if isinstance(nested, dict):
+            return nested
     return None
 
 

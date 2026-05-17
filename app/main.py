@@ -972,8 +972,8 @@ def next_actions_for_document_type(document_type: str) -> list[str]:
         return [
             "Open the source PDF.",
             "Confirm only the document type.",
-            "Do not rely on MedAI for imaging findings, measurements, or conclusions.",
-            "Keep imaging interpretation for a future human-reviewed workflow.",
+            "Do not rely on MedAI for imaging findings or conclusions.",
+            "Keep clinical interpretation for a qualified clinician or future imaging-review workflow.",
         ]
     if normalized in {"clinical note", "discharge summary", "referral / order", "procedure report", "pathology report"}:
         return [

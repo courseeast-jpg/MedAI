@@ -262,6 +262,9 @@ class ExecutionPipeline:
                 "ocr_gate_fallback_classification_diagnostic": self._last_pdf_text_audit.get(
                     "ocr_gate_fallback_classification_diagnostic"
                 ),
+                "document_family_classification_diagnostic": self._last_pdf_text_audit.get(
+                    "document_family_classification_diagnostic"
+                ),
                 "ocr_gate_fallback_treatment_classification_diagnostic": self._last_pdf_text_audit.get(
                     "ocr_gate_fallback_treatment_classification_diagnostic"
                 ),

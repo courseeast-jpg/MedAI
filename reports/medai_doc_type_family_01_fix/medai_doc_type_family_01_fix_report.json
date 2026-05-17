@@ -1,0 +1,108 @@
+{
+  "conclusion": "medai_doc_type_family_01_fix_ready",
+  "changed_scope": "runtime propagation for metadata-only document family classification",
+  "root_cause": "The broad document-family diagnostic was nested inside fallback diagnostics but was not copied into the canonical Run & Review record, and runtime document-type selection did not use the family candidate when primary document_type values were Unknown.",
+  "runtime_propagation_fix_summary": [
+    "Copied document_family_classification_diagnostic into fallback metadata and Run & Review records.",
+    "Used non-Unknown family candidate as a fallback only after primary document_type fields fail.",
+    "Kept fallback OCR and classifier output review-only.",
+    "Updated imaging review reason to state that imaging findings and conclusions were not interpreted or accepted."
+  ],
+  "russian_mri_safe_cue_coverage": [
+    "imaging_modality_mri",
+    "imaging_device_header",
+    "imaging_description_section",
+    "imaging_conclusion_section",
+    "radiology_series_wording",
+    "brain_mri_context"
+  ],
+  "before_safe_metadata": {
+    "document_type": "Unknown",
+    "document_family_classification_diagnostic_visible_in_run_review_record": false,
+    "status": "Needs review",
+    "external_api_used": false,
+    "auto_accept_allowed": false
+  },
+  "after_safe_metadata": {
+    "document_type": "Imaging report",
+    "document_family_classification_diagnostic_visible_in_run_review_record": true,
+    "candidate_family": "Imaging report",
+    "classification_block_reason": "classified",
+    "status": "Needs review",
+    "external_api_used": false,
+    "auto_accept_allowed": false
+  },
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01_fix_runtime_imaging_propagation.py -q",
+      "result": "passed",
+      "summary": "5 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01.py tests/test_medai_ui_run_review_polish_01_fix_state_consistency.py tests/test_medai_ui_run_review_polish_01.py -q",
+      "result": "passed",
+      "summary": "24 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix2_always_emit_diagnostic.py tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py tests/test_medai_ru_treatment_doc_type_01.py tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py -q",
+      "result": "passed",
+      "summary": "43 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py -q",
+      "result": "passed",
+      "summary": "97 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "summary": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "summary": "12/12 cases passed; 693 tests passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "summary": "6/6 cases passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "summary": "medai_route_fix01_ready; external_api_used false"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "summary": "2481 passed, 4 skipped, 22 warnings in 1736.96s"
+    }
+  ],
+  "runtime_behavior_changed": "document type metadata only",
+  "ocr_routing_changed": false,
+  "ocr_engine_changed": false,
+  "threshold_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_logic_changed": false,
+  "imaging_interpretation_added": false,
+  "medication_parsing_added": false,
+  "dose_parsing_added": false,
+  "lab_value_parsing_added": false,
+  "ddi_logic_changed": false,
+  "external_api_changed": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "affected_files_remain_review_bound": true,
+  "external_api_used": false,
+  "no_raw_phi": true,
+  "no_raw_filenames": true,
+  "no_private_absolute_paths": true,
+  "no_secrets": true
+}

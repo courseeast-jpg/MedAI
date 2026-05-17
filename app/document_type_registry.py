@@ -158,7 +158,9 @@ DOCUMENT_FAMILY_REGISTRY: dict[str, FamilyRule] = {
             "russian": {
                 "imaging_modality": (
                     "\u043c\u0440\u0442",
+                    "\u043c\u0440 \u0442\u043e\u043c\u043e\u0433\u0440\u0430\u043c\u043c",
                     "\u043c\u0440 \u0442\u043e\u043c\u043e\u0433\u0440\u0430\u0444",
+                    "\u0442\u043e\u043c\u043e\u0433\u0440\u0430\u043c\u043c",
                     "\u043a\u0442",
                     "\u0443\u0437\u0438",
                     "\u0440\u0435\u043d\u0442\u0433\u0435\u043d",
@@ -170,6 +172,16 @@ DOCUMENT_FAMILY_REGISTRY: dict[str, FamilyRule] = {
                     "\u0442\u043e\u043c\u043e\u0433\u0440\u0430\u043c\u043c",
                     "\u0441\u0435\u0440\u0438\u044f",
                     "\u0441\u0440\u0435\u0437",
+                    "t1",
+                    "t2",
+                    "flair",
+                    "dwi",
+                ),
+                "brain_mri_context": (
+                    "\u0433\u043e\u043b\u043e\u0432\u043d\u043e\u0433\u043e \u043c\u043e\u0437\u0433\u0430",
+                    "\u0441\u0430\u0433\u0438\u0442\u0442\u0430\u043b\u044c",
+                    "\u0430\u043a\u0441\u0438\u0430\u043b\u044c",
+                    "\u043a\u043e\u0440\u043e\u043d\u0430\u0440",
                 ),
             },
             "polish": {

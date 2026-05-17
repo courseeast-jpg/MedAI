@@ -516,7 +516,7 @@ def review_reason_for_result(
     if display_type == MEDICATION_PLAN_LABEL and normalized_validation in {"needs_review", "rejected"}:
         return "Needs review: medication-plan style document detected. Human review is required."
     if display_type == IMAGING_REPORT_LABEL and normalized_validation in {"needs_review", "rejected"}:
-        return "Needs review: imaging-report style document detected. Human review is required."
+        return "Needs review: imaging-report style document detected. Imaging findings and conclusions were not interpreted or accepted. Human review is required."
     if display_type == CLINICAL_NOTE_LABEL and normalized_validation in {"needs_review", "rejected"}:
         return "Needs review: clinical-note style document detected. Human review is required."
     if display_type == DISCHARGE_SUMMARY_LABEL and normalized_validation in {"needs_review", "rejected"}:
@@ -705,6 +705,7 @@ def _matched_russian_imaging_cue_keys(text: str) -> list[str]:
             "\u043c\u0440\u0442",
             "\u043c\u0440 \u0442\u043e\u043c\u043e\u0433\u0440\u0430\u0444",
             "\u043c\u0440 \u0442\u043e\u043c\u043e\u0433\u0440\u0430\u043c\u043c",
+            "\u0442\u043e\u043c\u043e\u0433\u0440\u0430\u043c\u043c",
             "\u043c\u0430\u0433\u043d\u0438\u0442\u043d\u043e \u0440\u0435\u0437\u043e\u043d\u0430\u043d\u0441",
         ),
         "imaging_modality_ct": (
@@ -732,10 +733,20 @@ def _matched_russian_imaging_cue_keys(text: str) -> list[str]:
             "\u0441\u0435\u0440\u0438\u044f",
             "\u0441\u0440\u0435\u0437",
             "\u043f\u0440\u043e\u0435\u043a\u0446\u0438",
+            "t1",
+            "t2",
+            "flair",
+            "dwi",
         ),
         "imaging_device_header": (
             "\u0430\u043f\u043f\u0430\u0440\u0430\u0442",
             "\u0441\u043a\u0430\u043d\u0435\u0440",
+        ),
+        "brain_mri_context": (
+            "\u0433\u043e\u043b\u043e\u0432\u043d\u043e\u0433\u043e \u043c\u043e\u0437\u0433\u0430",
+            "\u0441\u0430\u0433\u0438\u0442\u0442\u0430\u043b\u044c",
+            "\u0430\u043a\u0441\u0438\u0430\u043b\u044c",
+            "\u043a\u043e\u0440\u043e\u043d\u0430\u0440",
         ),
     }
     return [key for key, terms in cue_terms.items() if _count_term_hits(text, terms) or _count_word_hits(text, terms)]
