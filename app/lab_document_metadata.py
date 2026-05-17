@@ -414,6 +414,33 @@ def safe_fallback_ocr_classification_diagnostic(text: str | None) -> dict[str, A
     }
 
 
+def safe_fallback_ocr_treatment_classification_diagnostic(text: str | None) -> dict[str, Any]:
+    """Return treatment schedule diagnostics without exposing fallback OCR text."""
+    normalized = _normalize_text(text)
+    cyrillic_count = len(re.findall(r"[\u0400-\u04ff]", normalized))
+    treatment_keys = _matched_russian_treatment_cue_keys(normalized)
+    candidate = classify_lab_document_type(text)
+    if not normalized:
+        block_reason = "no_fallback_text_available"
+    elif cyrillic_count == 0:
+        block_reason = "no_cyrillic_detected"
+    elif candidate in {MEDICATION_PLAN_LABEL, TREATMENT_PLAN_LABEL}:
+        block_reason = "classified"
+    elif not treatment_keys:
+        block_reason = "too_few_safe_treatment_cue_keys"
+    else:
+        block_reason = "classification_threshold_not_met"
+    return {
+        "cyrillic_detected": cyrillic_count > 0,
+        "cyrillic_char_count_bucket": _bucket_count(cyrillic_count),
+        "matched_treatment_cue_keys": treatment_keys,
+        "matched_document_type_candidate": candidate
+        if candidate in {MEDICATION_PLAN_LABEL, TREATMENT_PLAN_LABEL}
+        else UNKNOWN_DOCUMENT_LABEL,
+        "classification_block_reason": block_reason,
+    }
+
+
 def normalize_text_quality_label(*values: Any) -> str:
     for value in values:
         if value is None:

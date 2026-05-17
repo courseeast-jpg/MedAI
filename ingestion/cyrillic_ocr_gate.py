@@ -164,6 +164,7 @@ def run_local_cyrillic_ocr_fallback(
     ocr_runner=None,
     document_type_classifier=None,
     classification_diagnostic_builder=None,
+    treatment_classification_diagnostic_builder=None,
 ) -> dict[str, Any]:
     if not should_run_local_cyrillic_ocr_fallback(marker, local_only=local_only):
         return _fallback_metadata(
@@ -205,6 +206,9 @@ def run_local_cyrillic_ocr_fallback(
     classification_diagnostic = None
     if classification_diagnostic_builder is not None:
         classification_diagnostic = classification_diagnostic_builder(ocr_text)
+    treatment_classification_diagnostic = None
+    if treatment_classification_diagnostic_builder is not None:
+        treatment_classification_diagnostic = treatment_classification_diagnostic_builder(ocr_text)
     return _fallback_metadata(
         executed=True,
         attempted=True,
@@ -213,6 +217,7 @@ def run_local_cyrillic_ocr_fallback(
         text_visibility=visibility,
         document_type=document_type,
         classification_diagnostic=classification_diagnostic,
+        treatment_classification_diagnostic=treatment_classification_diagnostic,
     )
 
 
@@ -254,6 +259,7 @@ def _fallback_metadata(
     error_bucket: str | None = None,
     document_type: str | None = None,
     classification_diagnostic: dict[str, Any] | None = None,
+    treatment_classification_diagnostic: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     metadata: dict[str, Any] = {
         "ocr_gate_fallback_executed": bool(executed),
@@ -271,4 +277,6 @@ def _fallback_metadata(
         metadata["ocr_gate_fallback_document_type"] = document_type
     if classification_diagnostic:
         metadata["ocr_gate_fallback_classification_diagnostic"] = classification_diagnostic
+    if treatment_classification_diagnostic:
+        metadata["ocr_gate_fallback_treatment_classification_diagnostic"] = treatment_classification_diagnostic
     return metadata

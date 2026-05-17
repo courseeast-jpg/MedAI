@@ -45,6 +45,7 @@ from app.lab_document_metadata import (
     UNKNOWN_DOCUMENT_LABEL,
     classify_lab_document_type,
     safe_fallback_ocr_classification_diagnostic,
+    safe_fallback_ocr_treatment_classification_diagnostic,
 )
 from ingestion.cyrillic_ocr_gate import build_cyrillic_ocr_shadow_marker, run_local_cyrillic_ocr_fallback
 
@@ -133,6 +134,7 @@ class ExecutionPipeline:
                     local_only=True,
                     document_type_classifier=classify_lab_document_type,
                     classification_diagnostic_builder=safe_fallback_ocr_classification_diagnostic,
+                    treatment_classification_diagnostic_builder=safe_fallback_ocr_treatment_classification_diagnostic,
                 )
                 self._last_pdf_text_audit.update(fallback_metadata)
                 self._stage_log(
@@ -259,6 +261,9 @@ class ExecutionPipeline:
                 "ocr_gate_fallback_error_bucket": self._last_pdf_text_audit.get("ocr_gate_fallback_error_bucket"),
                 "ocr_gate_fallback_classification_diagnostic": self._last_pdf_text_audit.get(
                     "ocr_gate_fallback_classification_diagnostic"
+                ),
+                "ocr_gate_fallback_treatment_classification_diagnostic": self._last_pdf_text_audit.get(
+                    "ocr_gate_fallback_treatment_classification_diagnostic"
                 ),
             })
             fallback_document_type = self._last_pdf_text_audit.get("ocr_gate_fallback_document_type")

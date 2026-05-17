@@ -63,6 +63,7 @@ class TestFileResult:
     ocr_gate_fallback_auto_accept_allowed: bool = False
     ocr_gate_fallback_error_bucket: str | None = None
     ocr_gate_fallback_classification_diagnostic: dict | None = None
+    ocr_gate_fallback_treatment_classification_diagnostic: dict | None = None
     operator_review_reason: str | None = None
     operator_reason_label: str | None = None
     error: str | None = None
@@ -307,6 +308,9 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
             "ocr_gate_fallback_classification_diagnostic": extractor_result.get(
                 "ocr_gate_fallback_classification_diagnostic"
             ),
+            "ocr_gate_fallback_treatment_classification_diagnostic": extractor_result.get(
+                "ocr_gate_fallback_treatment_classification_diagnostic"
+            ),
         }
 
     marker = build_cyrillic_ocr_shadow_marker(
@@ -329,6 +333,7 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
         "ocr_gate_fallback_auto_accept_allowed": False,
         "ocr_gate_fallback_error_bucket": None,
         "ocr_gate_fallback_classification_diagnostic": None,
+        "ocr_gate_fallback_treatment_classification_diagnostic": None,
     }
 
 
@@ -357,8 +362,11 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
         confidence = _safe_float(extractor_result.get("confidence", audit.get("confidence")))
         accepted = result.outcome in ACCEPTED_OUTCOMES
         validation_reason_codes = _validation_reason_codes(result.validation_errors)
+        ocr_gate_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
         document_type = display_document_type(
-            audit.get("document_type") or extractor_result.get("document_type"),
+            audit.get("document_type")
+            or extractor_result.get("document_type")
+            or _fallback_diagnostic_document_type(ocr_gate_marker),
             text=str(extractor_result.get("raw_text") or extractor_result.get("text") or ""),
         )
         ocr_quality = normalize_text_quality_label(
@@ -369,7 +377,6 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             extractor_result.get("text_quality_status"),
             audit.get("text_quality_status"),
         )
-        ocr_gate_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
         operator_reason = review_reason_for_result(
             document_type=document_type,
             validation_status=result.validation_status,
@@ -405,6 +412,9 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             ocr_gate_fallback_classification_diagnostic=ocr_gate_marker[
                 "ocr_gate_fallback_classification_diagnostic"
             ],
+            ocr_gate_fallback_treatment_classification_diagnostic=ocr_gate_marker[
+                "ocr_gate_fallback_treatment_classification_diagnostic"
+            ],
             operator_review_reason=operator_reason,
             operator_reason_label=operator_reason_label,
         )
@@ -425,6 +435,20 @@ def _safe_float(value: Any) -> float | None:
         return float(value)
     except (TypeError, ValueError):
         return None
+
+
+def _fallback_diagnostic_document_type(ocr_gate_marker: dict[str, Any]) -> str | None:
+    for key in (
+        "ocr_gate_fallback_treatment_classification_diagnostic",
+        "ocr_gate_fallback_classification_diagnostic",
+    ):
+        diagnostic = ocr_gate_marker.get(key)
+        if not isinstance(diagnostic, dict):
+            continue
+        candidate = diagnostic.get("matched_document_type_candidate")
+        if candidate and str(candidate).strip().lower() != "unknown":
+            return str(candidate)
+    return None
 
 
 def _validation_reason_codes(errors: Any) -> list[str]:
