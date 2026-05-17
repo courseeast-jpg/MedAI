@@ -81,11 +81,16 @@ def cyrillic_ocr_shadow_gate_decision(
     language_context: str | None = None,
 ) -> dict[str, Any]:
     has_substantial_text = text_length_bucket in {"medium", "long"}
-    has_table_digits = digit_density_bucket in {"medium", "high"} and bool(table_like_pattern_detected)
+    has_numeric_or_table_signal = digit_density_bucket in {"medium", "high"} or bool(table_like_pattern_detected)
     missing_cyrillic = cyrillic_density_bucket == "none"
     sparse_or_empty = text_length_bucket in {"none", "tiny", "short"}
     review_only = True
-    recommended = bool(has_substantial_text and has_table_digits and missing_cyrillic and current_ocr_skipped)
+    recommended = bool(
+        has_substantial_text
+        and has_numeric_or_table_signal
+        and missing_cyrillic
+        and current_ocr_skipped
+    )
     visibility = "not_applicable"
     reason = "not_recommended"
     if recommended:
@@ -97,7 +102,7 @@ def cyrillic_ocr_shadow_gate_decision(
     elif sparse_or_empty:
         visibility = "not_applicable"
         reason = "insufficient_native_text_for_shadow_gate"
-    elif not has_table_digits:
+    elif not has_numeric_or_table_signal:
         visibility = "unknown"
         reason = "numeric_table_signal_not_strong"
     elif not current_ocr_skipped:

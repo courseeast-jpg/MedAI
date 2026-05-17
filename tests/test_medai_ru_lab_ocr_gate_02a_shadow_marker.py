@@ -38,6 +38,21 @@ def test_numeric_table_readable_text_with_zero_cyrillic_triggers_shadow_recommen
     assert marker["auto_accept_allowed"] is False
 
 
+def test_medium_digit_density_without_table_pattern_triggers_shadow_recommendation() -> None:
+    marker = cyrillic_ocr_shadow_gate_decision(
+        text_length_bucket="long",
+        digit_density_bucket="medium",
+        cyrillic_density_bucket="none",
+        table_like_pattern_detected=False,
+        current_ocr_skipped=True,
+        language_context="unknown",
+    )
+
+    assert marker["cyrillic_ocr_recommended"] is True
+    assert marker["language_text_visibility"] == "incomplete"
+    assert marker["ocr_gate_reason"] == "numeric_table_text_without_cyrillic"
+
+
 def test_cyrillic_visible_text_does_not_trigger_shadow_recommendation() -> None:
     marker = cyrillic_ocr_shadow_gate_decision(
         text_length_bucket="long",

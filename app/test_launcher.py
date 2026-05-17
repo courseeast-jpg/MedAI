@@ -21,6 +21,7 @@ from app.lab_document_metadata import (
     reason_label_for_validation,
     review_reason_for_result,
 )
+from ingestion.cyrillic_ocr_gate import build_cyrillic_ocr_shadow_marker
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -273,6 +274,34 @@ def load_latest_test_run() -> dict[str, Any] | None:
     return json.loads(LATEST_JSON_REPORT.read_text(encoding="utf-8"))
 
 
+def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> dict[str, Any]:
+    existing_visibility = extractor_result.get("language_text_visibility")
+    existing_reason = extractor_result.get("ocr_gate_reason")
+    if existing_visibility and existing_reason:
+        return {
+            "language_text_visibility": existing_visibility,
+            "cyrillic_ocr_recommended": bool(extractor_result.get("cyrillic_ocr_recommended", False)),
+            "ocr_gate_reason": existing_reason,
+            "ocr_gate_review_only": bool(extractor_result.get("ocr_gate_review_only", True)),
+            "ocr_gate_auto_accept_allowed": bool(extractor_result.get("ocr_gate_auto_accept_allowed", False)),
+            "ocr_gate_fallback_executed": bool(extractor_result.get("ocr_gate_fallback_executed", False)),
+        }
+
+    marker = build_cyrillic_ocr_shadow_marker(
+        str(extractor_result.get("raw_text") or extractor_result.get("text") or ""),
+        current_ocr_skipped=not bool(extractor_result.get("ocr_fallback_used", False)),
+        language_context="unknown",
+    )
+    return {
+        "language_text_visibility": marker.get("language_text_visibility"),
+        "cyrillic_ocr_recommended": bool(marker.get("cyrillic_ocr_recommended", False)),
+        "ocr_gate_reason": marker.get("ocr_gate_reason"),
+        "ocr_gate_review_only": bool(marker.get("review_only", True)),
+        "ocr_gate_auto_accept_allowed": bool(marker.get("auto_accept_allowed", False)),
+        "ocr_gate_fallback_executed": bool(marker.get("ocr_fallback_executed", False)),
+    }
+
+
 def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, run_id: str) -> TestFileResult:
     try:
         if source_path.suffix.lower() == ".pdf":
@@ -310,6 +339,7 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             extractor_result.get("text_quality_status"),
             audit.get("text_quality_status"),
         )
+        ocr_gate_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
         operator_reason = review_reason_for_result(
             document_type=document_type,
             validation_status=result.validation_status,
@@ -329,12 +359,12 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             validation_status=result.validation_status,
             document_type=document_type,
             ocr_quality_band=ocr_quality,
-            language_text_visibility=extractor_result.get("language_text_visibility"),
-            cyrillic_ocr_recommended=bool(extractor_result.get("cyrillic_ocr_recommended", False)),
-            ocr_gate_reason=extractor_result.get("ocr_gate_reason"),
-            ocr_gate_review_only=bool(extractor_result.get("ocr_gate_review_only", True)),
-            ocr_gate_auto_accept_allowed=bool(extractor_result.get("ocr_gate_auto_accept_allowed", False)),
-            ocr_gate_fallback_executed=bool(extractor_result.get("ocr_gate_fallback_executed", False)),
+            language_text_visibility=ocr_gate_marker["language_text_visibility"],
+            cyrillic_ocr_recommended=ocr_gate_marker["cyrillic_ocr_recommended"],
+            ocr_gate_reason=ocr_gate_marker["ocr_gate_reason"],
+            ocr_gate_review_only=ocr_gate_marker["ocr_gate_review_only"],
+            ocr_gate_auto_accept_allowed=ocr_gate_marker["ocr_gate_auto_accept_allowed"],
+            ocr_gate_fallback_executed=ocr_gate_marker["ocr_gate_fallback_executed"],
             operator_review_reason=operator_reason,
             operator_reason_label=operator_reason_label,
         )
