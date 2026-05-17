@@ -1,0 +1,139 @@
+{
+  "conclusion": "medai_park_18_post_ru_ocr_treatment_doc_type_ready",
+  "parked_commit_before_snapshot_short": "7e55d22",
+  "included_commits": {
+    "RU-LAB-OCR-GATE-01": "0c36683",
+    "RU-LAB-OCR-GATE-02A": "5796961",
+    "RU-LAB-OCR-GATE-02A-FIX": "c64c5df",
+    "RU-LAB-OCR-GATE-02B": "ee116d7",
+    "RU-LAB-OCR-GATE-02B-FIX": "4de506e",
+    "RU-LAB-OCR-GATE-02B-FIX2": "4f87a87",
+    "RU-TREATMENT-DOC-TYPE-01": "633f3c4",
+    "RU-TREATMENT-DOC-TYPE-01-FIX": "b0f0edf",
+    "RU-TREATMENT-DOC-TYPE-01-FIX2": "7e55d22"
+  },
+  "safe_smoke_test_summary": [
+    {
+      "safe_id": "file_001",
+      "document_type": "Lab result",
+      "ocr_gate_fallback_executed": true,
+      "ocr_gate_fallback_engine": "tesseract_local",
+      "ocr_gate_fallback_language": "rus+eng",
+      "cyrillic_detected_recovered": true,
+      "matched_lab_cue_keys": [
+        "specimen_or_biomaterial",
+        "result_or_report",
+        "table_header"
+      ],
+      "status": "Needs review",
+      "review_bound": true,
+      "external_api_used": false,
+      "auto_accept_allowed": false
+    },
+    {
+      "safe_id": "file_002",
+      "document_type": "Treatment plan",
+      "ocr_gate_fallback_executed": true,
+      "ocr_gate_fallback_engine": "tesseract_local",
+      "ocr_gate_fallback_language": "rus+eng",
+      "cyrillic_detected_recovered": true,
+      "treatment_diagnostic_non_null": true,
+      "matched_treatment_cue_keys": [
+        "diet_recommendation_section",
+        "administration_schedule_pattern"
+      ],
+      "matched_document_type_candidate": "Treatment plan",
+      "classification_block_reason": "classified",
+      "status": "Needs review",
+      "review_bound": true,
+      "external_api_used": false,
+      "auto_accept_allowed": false
+    }
+  ],
+  "validation_summary": [
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix2_always_emit_diagnostic.py -q",
+      "result": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py -q",
+      "result": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01.py -q",
+      "result": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py -q",
+      "result": "22 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py -q",
+      "result": "43 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py -q",
+      "result": "54 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed, 12/12, 693 tests"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed, 6/6"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2452 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "full_pytest_status": "passed",
+  "full_pytest_result": "2452 passed, 4 skipped, 22 warnings",
+  "runtime_behavior_changed_in_park_block": false,
+  "ocr_routing_changed_in_park_block": false,
+  "classifier_changed_in_park_block": false,
+  "confidence_thresholds_changed": false,
+  "confidence_scoring_changed": false,
+  "auto_acceptance_changed": false,
+  "medication_interpretation_added": false,
+  "dose_parsing_added": false,
+  "ddi_logic_changed": false,
+  "clinical_logic_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "test_input_files_staged": false,
+  "real_validation_input_files_staged": false,
+  "terminology_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "affected_files_remain_review_bound": true,
+  "public_reports_privacy_clean": true,
+  "no_raw_phi_in_report": true,
+  "no_raw_filenames_in_report": true,
+  "no_raw_ocr_text_in_report": true,
+  "no_raw_document_text_in_report": true,
+  "no_private_paths_in_report": true,
+  "no_secrets_in_report": true
+}
