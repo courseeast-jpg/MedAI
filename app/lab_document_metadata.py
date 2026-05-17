@@ -103,6 +103,45 @@ _RU_LAB_TERMS = (
     "холестерин",
 )
 _RU_LAB_SHORT_TERMS = ("оак", "алт", "аст")
+_RU_LAB_TERMS_CYRILLIC = (
+    "\u0430\u043d\u0430\u043b\u0438\u0437",
+    "\u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435",
+    "\u043b\u0430\u0431\u043e\u0440\u0430\u0442\u043e\u0440\u043d\u043e\u0435 \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435",
+    "\u043b\u0430\u0431\u043e\u0440\u0430\u0442\u043e\u0440\u043d\u044b\u0439 \u043e\u0442\u0447\u0435\u0442",
+    "\u0431\u043b\u0430\u043d\u043a \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432",
+    "\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442",
+    "\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b",
+    "\u0440\u0435\u0444\u0435\u0440\u0435\u043d\u0441\u043d\u044b\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f",
+    "\u0440\u0435\u0444 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f",
+    "\u0440\u0435\u0444 \u0438\u043d\u0442\u0435\u0440\u0432\u0430\u043b",
+    "\u043d\u043e\u0440\u043c\u0430",
+    "\u0435\u0434\u0438\u043d\u0438\u0446\u044b",
+    "\u0435\u0434 \u0438\u0437\u043c",
+    "\u0435\u0434\u0438\u043d\u0438\u0446\u044b \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u044f",
+    "\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c",
+    "\u043d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435",
+    "\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435",
+    "\u0431\u0438\u043e\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b",
+    "\u0441\u044b\u0432\u043e\u0440\u043e\u0442\u043a\u0430",
+    "\u043f\u043b\u0430\u0437\u043c\u0430",
+    "\u043a\u0440\u043e\u0432\u044c",
+    "\u043e\u0431\u0449\u0438\u0439 \u0430\u043d\u0430\u043b\u0438\u0437 \u043a\u0440\u043e\u0432\u0438",
+    "\u0431\u0438\u043e\u0445\u0438\u043c\u0438\u044f",
+    "\u0433\u0435\u043c\u043e\u0433\u043b\u043e\u0431\u0438\u043d",
+    "\u043b\u0435\u0439\u043a\u043e\u0446\u0438\u0442\u044b",
+    "\u044d\u0440\u0438\u0442\u0440\u043e\u0446\u0438\u0442\u044b",
+    "\u0442\u0440\u043e\u043c\u0431\u043e\u0446\u0438\u0442\u044b",
+    "\u043d\u0435\u0439\u0442\u0440\u043e\u0444\u0438\u043b\u044b",
+    "\u043b\u0438\u043c\u0444\u043e\u0446\u0438\u0442\u044b",
+    "\u043c\u043e\u043d\u043e\u0446\u0438\u0442\u044b",
+    "\u044d\u043e\u0437\u0438\u043d\u043e\u0444\u0438\u043b\u044b",
+    "\u0433\u043b\u044e\u043a\u043e\u0437\u0430",
+    "\u043a\u0440\u0435\u0430\u0442\u0438\u043d\u0438\u043d",
+    "\u043c\u043e\u0447\u0435\u0432\u0438\u043d\u0430",
+    "\u0431\u0438\u043b\u0438\u0440\u0443\u0431\u0438\u043d",
+    "\u0445\u043e\u043b\u0435\u0441\u0442\u0435\u0440\u0438\u043d",
+)
+_RU_LAB_SHORT_TERMS_CYRILLIC = ("\u043e\u0430\u043a", "\u0430\u043b\u0442", "\u0430\u0441\u0442")
 _RU_URINALYSIS_TERMS = (
     "анализ мочи",
     "общий анализ мочи",
@@ -188,6 +227,8 @@ def classify_lab_document_type(text: str | None) -> str:
     lab_score += _count_word_hits(normalized, _LAB_SHORT_TERMS)
     ru_lab_score = _count_term_hits(normalized, _RU_LAB_TERMS)
     ru_lab_score += _count_word_hits(normalized, _RU_LAB_SHORT_TERMS)
+    ru_lab_score += _count_term_hits(normalized, _RU_LAB_TERMS_CYRILLIC)
+    ru_lab_score += _count_word_hits(normalized, _RU_LAB_SHORT_TERMS_CYRILLIC)
     treatment_score = _count_term_hits(normalized, _RU_TREATMENT_TERMS)
     medication_score = _count_term_hits(normalized, _RU_MEDICATION_TERMS)
     treatment_medication_score = treatment_score + medication_score
@@ -214,6 +255,18 @@ def classify_lab_document_type(text: str | None) -> str:
         and ("результат" in normalized or "значение" in normalized or "показатель" in normalized)
     )
     lab_panel_present = _count_term_hits(normalized, _LAB_PANEL_TERMS) > 0
+    strong_ru_lab_layout = strong_ru_lab_layout or (
+        (
+            "\u0440\u0435\u0444\u0435\u0440\u0435\u043d\u0441\u043d\u044b\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f" in normalized
+            or "\u0440\u0435\u0444 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f" in normalized
+            or "\u043d\u043e\u0440\u043c\u0430" in normalized
+        )
+        and (
+            "\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442" in normalized
+            or "\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435" in normalized
+            or "\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c" in normalized
+        )
+    )
     lab_test_hits = _count_term_hits(normalized, _LAB_TEST_TERMS) + _count_word_hits(normalized, _LAB_SHORT_TERMS)
     if lab_score >= 3 or ru_lab_score >= 3 or strong_lab_layout or strong_ru_lab_layout or (lab_panel_present and lab_test_hits >= 2):
         return LAB_RESULT_LABEL
@@ -280,6 +333,29 @@ def safe_document_type_diagnostic(
     }
 
 
+def safe_fallback_ocr_classification_diagnostic(text: str | None) -> dict[str, Any]:
+    """Return fallback OCR classification diagnostics without exposing OCR text."""
+    normalized = _normalize_text(text)
+    cyrillic_count = len(re.findall(r"[\u0400-\u04ff]", normalized))
+    matched_keys = _matched_russian_lab_cue_keys(normalized)
+    candidate = classify_lab_document_type(text)
+    if not normalized:
+        block_reason = "no_fallback_text_available"
+    elif cyrillic_count == 0:
+        block_reason = "no_cyrillic_detected"
+    elif candidate == UNKNOWN_DOCUMENT_LABEL:
+        block_reason = "too_few_safe_lab_cue_keys" if len(matched_keys) < 3 else "classification_threshold_not_met"
+    else:
+        block_reason = "classified"
+    return {
+        "cyrillic_detected": cyrillic_count > 0,
+        "cyrillic_char_count_bucket": _bucket_count(cyrillic_count),
+        "matched_lab_cue_keys": matched_keys,
+        "matched_document_type_candidate": candidate,
+        "classification_block_reason": block_reason,
+    }
+
+
 def normalize_text_quality_label(*values: Any) -> str:
     for value in values:
         if value is None:
@@ -335,7 +411,9 @@ def reason_label_for_validation(validation_status: str | None, reason_codes: lis
 
 
 def _normalize_text(text: str | None) -> str:
-    return re.sub(r"\s+", " ", str(text or "").lower().replace("ё", "е"))
+    value = str(text or "").lower().replace("ё", "е").replace("С‘", "Рµ")
+    value = re.sub(r"[\u00a0\t\r\n|;:,./\\()\[\]{}<>_+=-]+", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
 
 
 def _count_term_hits(text: str, terms: tuple[str, ...]) -> int:
@@ -375,6 +453,53 @@ def _russian_cue_categories(text: str) -> list[str]:
     return categories
 
 
+def _matched_russian_lab_cue_keys(text: str) -> list[str]:
+    cue_terms = {
+        "generic_lab_form": (
+            "\u043b\u0430\u0431\u043e\u0440\u0430\u0442\u043e\u0440\u043d\u043e\u0435 \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435",
+            "\u043b\u0430\u0431\u043e\u0440\u0430\u0442\u043e\u0440\u043d\u044b\u0439 \u043e\u0442\u0447\u0435\u0442",
+            "\u0431\u043b\u0430\u043d\u043a \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432",
+            "\u0430\u043d\u0430\u043b\u0438\u0437",
+            "\u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435",
+        ),
+        "specimen_or_biomaterial": (
+            "\u0431\u0438\u043e\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b",
+            "\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b",
+            "\u0441\u044b\u0432\u043e\u0440\u043e\u0442\u043a\u0430",
+            "\u043f\u043b\u0430\u0437\u043c\u0430",
+            "\u043a\u0440\u043e\u0432\u044c",
+        ),
+        "result_or_report": (
+            "\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442",
+            "\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b",
+            "\u043e\u0442\u0447\u0435\u0442",
+            "\u0437\u0430\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435",
+        ),
+        "table_header": (
+            "\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c",
+            "\u043d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435",
+            "\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435",
+            "\u0435\u0434\u0438\u043d\u0438\u0446\u044b",
+            "\u0435\u0434 \u0438\u0437\u043c",
+            "\u043d\u043e\u0440\u043c\u0430",
+            "\u0440\u0435\u0444 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f",
+            "\u0440\u0435\u0444\u0435\u0440\u0435\u043d\u0441\u043d\u044b\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f",
+        ),
+        "common_analyte": (
+            "\u0433\u0435\u043c\u043e\u0433\u043b\u043e\u0431\u0438\u043d",
+            "\u043b\u0435\u0439\u043a\u043e\u0446\u0438\u0442\u044b",
+            "\u044d\u0440\u0438\u0442\u0440\u043e\u0446\u0438\u0442\u044b",
+            "\u0442\u0440\u043e\u043c\u0431\u043e\u0446\u0438\u0442\u044b",
+            "\u043d\u0435\u0439\u0442\u0440\u043e\u0444\u0438\u043b\u044b",
+            "\u043b\u0438\u043c\u0444\u043e\u0446\u0438\u0442\u044b",
+            "\u0433\u043b\u044e\u043a\u043e\u0437\u0430",
+            "\u043a\u0440\u0435\u0430\u0442\u0438\u043d\u0438\u043d",
+        ),
+        "lab_panel_abbreviation": ("\u043e\u0430\u043a", "\u0430\u043b\u0442", "\u0430\u0441\u0442"),
+    }
+    return [key for key, terms in cue_terms.items() if _count_term_hits(text, terms) or _count_word_hits(text, terms)]
+
+
 def _bucket_text_length(length: int) -> str:
     if length <= 0:
         return "none"
@@ -409,3 +534,13 @@ def _bucket_confidence(value: Any) -> str:
     if confidence < 0.85:
         return "review_band_0_65_to_0_84"
     return "high_0_85_or_above"
+
+
+def _bucket_count(value: int) -> str:
+    if value <= 0:
+        return "none"
+    if value < 20:
+        return "low"
+    if value < 120:
+        return "medium"
+    return "high"

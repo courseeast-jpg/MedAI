@@ -62,6 +62,7 @@ class TestFileResult:
     ocr_gate_fallback_review_only: bool = True
     ocr_gate_fallback_auto_accept_allowed: bool = False
     ocr_gate_fallback_error_bucket: str | None = None
+    ocr_gate_fallback_classification_diagnostic: dict | None = None
     operator_review_reason: str | None = None
     operator_reason_label: str | None = None
     error: str | None = None
@@ -303,6 +304,9 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
                 extractor_result.get("ocr_gate_fallback_auto_accept_allowed", False)
             ),
             "ocr_gate_fallback_error_bucket": extractor_result.get("ocr_gate_fallback_error_bucket"),
+            "ocr_gate_fallback_classification_diagnostic": extractor_result.get(
+                "ocr_gate_fallback_classification_diagnostic"
+            ),
         }
 
     marker = build_cyrillic_ocr_shadow_marker(
@@ -324,6 +328,7 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
         "ocr_gate_fallback_review_only": True,
         "ocr_gate_fallback_auto_accept_allowed": False,
         "ocr_gate_fallback_error_bucket": None,
+        "ocr_gate_fallback_classification_diagnostic": None,
     }
 
 
@@ -397,6 +402,9 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             ocr_gate_fallback_review_only=ocr_gate_marker["ocr_gate_fallback_review_only"],
             ocr_gate_fallback_auto_accept_allowed=ocr_gate_marker["ocr_gate_fallback_auto_accept_allowed"],
             ocr_gate_fallback_error_bucket=ocr_gate_marker["ocr_gate_fallback_error_bucket"],
+            ocr_gate_fallback_classification_diagnostic=ocr_gate_marker[
+                "ocr_gate_fallback_classification_diagnostic"
+            ],
             operator_review_reason=operator_reason,
             operator_reason_label=operator_reason_label,
         )

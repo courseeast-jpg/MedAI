@@ -1,0 +1,104 @@
+{
+  "conclusion": "medai_ru_lab_ocr_gate_02b_fix_ready",
+  "baseline_02b_commit_short": "ee116d7",
+  "changed_scope": "fallback-recovered Russian lab cue diagnostic and narrow cue expansion only",
+  "what_changed": [
+    "Added privacy-safe fallback OCR classification diagnostics with cue keys and buckets only.",
+    "Expanded Russian lab metadata cues for normal Cyrillic OCR text.",
+    "Propagated safe fallback classification diagnostics into Run & Review result metadata."
+  ],
+  "before_after_safe_metadata": {
+    "file_001": {
+      "before_fallback_recovered_cyrillic": true,
+      "before_document_type": "Lab result",
+      "status_retained": "Needs review"
+    },
+    "file_002": {
+      "before_fallback_recovered_cyrillic": true,
+      "before_document_type": "Unknown",
+      "after_safe_lab_cue_keys_support_lab_result_when_present": true,
+      "status_retained": "Needs review"
+    }
+  },
+  "diagnostic_fields_added": [
+    "cyrillic_detected",
+    "cyrillic_char_count_bucket",
+    "matched_lab_cue_keys",
+    "matched_document_type_candidate",
+    "classification_block_reason"
+  ],
+  "safe_cue_categories": [
+    "generic_lab_form",
+    "specimen_or_biomaterial",
+    "result_or_report",
+    "table_header",
+    "common_analyte",
+    "lab_panel_abbreviation"
+  ],
+  "ocr_routing_conditions_changed": false,
+  "confidence_thresholds_changed": false,
+  "confidence_scoring_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_logic_changed": false,
+  "clinical_interpretation_added": false,
+  "lab_value_parser_added": false,
+  "medication_or_treatment_interpretation_added": false,
+  "ddi_logic_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_in_public_reports": false,
+  "private_paths_in_public_reports": false,
+  "secrets_in_public_reports": false,
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "unsafe_staged_files": 0,
+  "validation_commands": [
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py -q",
+      "result": "6 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py -q",
+      "result": "11 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py -q",
+      "result": "27 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py -q",
+      "result": "70 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed, 12/12, 693 tests"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed, 6/6"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2426 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "recommended_next_step": "Repeat the same Russian Run & Review smoke test and inspect file_002 safe fallback classification metadata."
+}
