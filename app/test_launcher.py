@@ -55,6 +55,13 @@ class TestFileResult:
     ocr_gate_review_only: bool = True
     ocr_gate_auto_accept_allowed: bool = False
     ocr_gate_fallback_executed: bool = False
+    ocr_gate_fallback_engine: str | None = None
+    ocr_gate_fallback_language: str | None = None
+    ocr_gate_fallback_cyrillic_detected: bool = False
+    ocr_gate_fallback_text_visibility: str | None = None
+    ocr_gate_fallback_review_only: bool = True
+    ocr_gate_fallback_auto_accept_allowed: bool = False
+    ocr_gate_fallback_error_bucket: str | None = None
     operator_review_reason: str | None = None
     operator_reason_label: str | None = None
     error: str | None = None
@@ -285,6 +292,17 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
             "ocr_gate_review_only": bool(extractor_result.get("ocr_gate_review_only", True)),
             "ocr_gate_auto_accept_allowed": bool(extractor_result.get("ocr_gate_auto_accept_allowed", False)),
             "ocr_gate_fallback_executed": bool(extractor_result.get("ocr_gate_fallback_executed", False)),
+            "ocr_gate_fallback_engine": extractor_result.get("ocr_gate_fallback_engine"),
+            "ocr_gate_fallback_language": extractor_result.get("ocr_gate_fallback_language"),
+            "ocr_gate_fallback_cyrillic_detected": bool(
+                extractor_result.get("ocr_gate_fallback_cyrillic_detected", False)
+            ),
+            "ocr_gate_fallback_text_visibility": extractor_result.get("ocr_gate_fallback_text_visibility"),
+            "ocr_gate_fallback_review_only": bool(extractor_result.get("ocr_gate_fallback_review_only", True)),
+            "ocr_gate_fallback_auto_accept_allowed": bool(
+                extractor_result.get("ocr_gate_fallback_auto_accept_allowed", False)
+            ),
+            "ocr_gate_fallback_error_bucket": extractor_result.get("ocr_gate_fallback_error_bucket"),
         }
 
     marker = build_cyrillic_ocr_shadow_marker(
@@ -299,6 +317,13 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
         "ocr_gate_review_only": bool(marker.get("review_only", True)),
         "ocr_gate_auto_accept_allowed": bool(marker.get("auto_accept_allowed", False)),
         "ocr_gate_fallback_executed": bool(marker.get("ocr_fallback_executed", False)),
+        "ocr_gate_fallback_engine": None,
+        "ocr_gate_fallback_language": None,
+        "ocr_gate_fallback_cyrillic_detected": False,
+        "ocr_gate_fallback_text_visibility": None,
+        "ocr_gate_fallback_review_only": True,
+        "ocr_gate_fallback_auto_accept_allowed": False,
+        "ocr_gate_fallback_error_bucket": None,
     }
 
 
@@ -365,6 +390,13 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             ocr_gate_review_only=ocr_gate_marker["ocr_gate_review_only"],
             ocr_gate_auto_accept_allowed=ocr_gate_marker["ocr_gate_auto_accept_allowed"],
             ocr_gate_fallback_executed=ocr_gate_marker["ocr_gate_fallback_executed"],
+            ocr_gate_fallback_engine=ocr_gate_marker["ocr_gate_fallback_engine"],
+            ocr_gate_fallback_language=ocr_gate_marker["ocr_gate_fallback_language"],
+            ocr_gate_fallback_cyrillic_detected=ocr_gate_marker["ocr_gate_fallback_cyrillic_detected"],
+            ocr_gate_fallback_text_visibility=ocr_gate_marker["ocr_gate_fallback_text_visibility"],
+            ocr_gate_fallback_review_only=ocr_gate_marker["ocr_gate_fallback_review_only"],
+            ocr_gate_fallback_auto_accept_allowed=ocr_gate_marker["ocr_gate_fallback_auto_accept_allowed"],
+            ocr_gate_fallback_error_bucket=ocr_gate_marker["ocr_gate_fallback_error_bucket"],
             operator_review_reason=operator_reason,
             operator_reason_label=operator_reason_label,
         )

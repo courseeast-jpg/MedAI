@@ -41,7 +41,8 @@ from extractors.gemini_extractor import GeminiExtractor
 from extractors.spacy_extractor import SpacyExtractor
 from governance.hypothesis_tier import GovernanceHypothesisTier
 from governance.truth_resolution import GovernanceTruthResolutionAdapter
-from ingestion.cyrillic_ocr_gate import build_cyrillic_ocr_shadow_marker
+from app.lab_document_metadata import UNKNOWN_DOCUMENT_LABEL, classify_lab_document_type
+from ingestion.cyrillic_ocr_gate import build_cyrillic_ocr_shadow_marker, run_local_cyrillic_ocr_fallback
 
 
 OCR_ARTIFACT_RE = re.compile(r"(\ufffd|[|]{3,}|_{4,}|\b(?:l|I){8,}\b)")
@@ -122,6 +123,13 @@ class ExecutionPipeline:
                         "ocr_gate_fallback_executed": bool(shadow_marker.get("ocr_fallback_executed", False)),
                     }
                 )
+                fallback_metadata = run_local_cyrillic_ocr_fallback(
+                    job.pdf_path,
+                    shadow_marker,
+                    local_only=True,
+                    document_type_classifier=classify_lab_document_type,
+                )
+                self._last_pdf_text_audit.update(fallback_metadata)
                 self._stage_log(
                     record_id=session_id,
                     stage="pdf_text_extraction",
@@ -229,7 +237,25 @@ class ExecutionPipeline:
                 "ocr_gate_review_only": self._last_pdf_text_audit.get("ocr_gate_review_only", True),
                 "ocr_gate_auto_accept_allowed": self._last_pdf_text_audit.get("ocr_gate_auto_accept_allowed", False),
                 "ocr_gate_fallback_executed": self._last_pdf_text_audit.get("ocr_gate_fallback_executed", False),
+                "ocr_gate_fallback_engine": self._last_pdf_text_audit.get("ocr_gate_fallback_engine"),
+                "ocr_gate_fallback_language": self._last_pdf_text_audit.get("ocr_gate_fallback_language"),
+                "ocr_gate_fallback_cyrillic_detected": self._last_pdf_text_audit.get(
+                    "ocr_gate_fallback_cyrillic_detected", False
+                ),
+                "ocr_gate_fallback_text_visibility": self._last_pdf_text_audit.get(
+                    "ocr_gate_fallback_text_visibility"
+                ),
+                "ocr_gate_fallback_review_only": self._last_pdf_text_audit.get(
+                    "ocr_gate_fallback_review_only", True
+                ),
+                "ocr_gate_fallback_auto_accept_allowed": self._last_pdf_text_audit.get(
+                    "ocr_gate_fallback_auto_accept_allowed", False
+                ),
+                "ocr_gate_fallback_error_bucket": self._last_pdf_text_audit.get("ocr_gate_fallback_error_bucket"),
             })
+            fallback_document_type = self._last_pdf_text_audit.get("ocr_gate_fallback_document_type")
+            if fallback_document_type and fallback_document_type != UNKNOWN_DOCUMENT_LABEL:
+                extracted["document_type"] = fallback_document_type
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
