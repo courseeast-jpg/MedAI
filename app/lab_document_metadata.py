@@ -194,6 +194,26 @@ _RU_MEDICATION_TERMS = (
     "капсула",
     "инъекция",
 )
+_RU_TREATMENT_SCHEDULE_TERMS = (
+    "\u043f\u0440\u0435\u043f\u0430\u0440\u0430\u0442\u044b",
+    "\u0434\u0430\u0442\u0430",
+    "\u0441\u0445\u0435\u043c\u0430",
+    "\u0433\u0440\u0430\u0444\u0438\u043a",
+    "\u0440\u0430\u0441\u043f\u0438\u0441\u0430\u043d\u0438\u0435",
+    "\u043f\u0440\u0438\u0435\u043c",
+    "\u043f\u0440\u0438\u0435\u043c\u0430",
+    "\u043a\u0443\u0440\u0441",
+    "\u0440\u0435\u0436\u0438\u043c",
+    "\u0443\u0442\u0440\u043e",
+    "\u0432\u0435\u0447\u0435\u0440",
+    "\u0434\u0435\u043d\u044c",
+    "\u0434\u043d\u0438",
+    "\u0444\u0438\u0437\u0438\u043e\u043f\u0440\u043e\u0446\u0435\u0434\u0443\u0440\u044b",
+    "\u0444\u0438\u0437\u0438\u043e",
+    "\u043f\u0440\u043e\u0446\u0435\u0434\u0443\u0440\u044b",
+    "\u0434\u0438\u0435\u0442\u0430",
+    "\u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0430\u0446\u0438\u0438",
+)
 
 _DOCUMENT_TYPE_MAP = {
     "lab_report": LAB_RESULT_LABEL,
@@ -245,6 +265,13 @@ def classify_lab_document_type(text: str | None) -> str:
     ru_lab_score += _count_word_hits(normalized, _RU_LAB_SHORT_TERMS_CYRILLIC)
     treatment_score = _count_term_hits(normalized, _RU_TREATMENT_TERMS)
     medication_score = _count_term_hits(normalized, _RU_MEDICATION_TERMS)
+    treatment_schedule_keys = _matched_russian_treatment_cue_keys(normalized)
+    if "medication_schedule_header" in treatment_schedule_keys:
+        medication_score += 2
+    if "administration_schedule_pattern" in treatment_schedule_keys:
+        medication_score += 1
+    if "physiotherapy_section" in treatment_schedule_keys or "diet_recommendation_section" in treatment_schedule_keys:
+        treatment_score += 1
     treatment_medication_score = treatment_score + medication_score
     lab_total_score = lab_score + ru_lab_score
 
@@ -256,6 +283,16 @@ def classify_lab_document_type(text: str | None) -> str:
         or (ru_urinalysis_specific_hits >= 1 and ru_urinalysis_score >= 2 and ru_lab_score >= 1)
     ):
         return URINALYSIS_LABEL
+    if (
+        "medication_schedule_header" in treatment_schedule_keys
+        and ("date_grid" in treatment_schedule_keys or "administration_schedule_pattern" in treatment_schedule_keys)
+    ):
+        return MEDICATION_PLAN_LABEL
+    if (
+        ("physiotherapy_section" in treatment_schedule_keys or "diet_recommendation_section" in treatment_schedule_keys)
+        and ("date_grid" in treatment_schedule_keys or "administration_schedule_pattern" in treatment_schedule_keys)
+    ):
+        return TREATMENT_PLAN_LABEL
     if medication_score >= 3 and medication_score >= lab_total_score and medication_score >= treatment_score:
         return MEDICATION_PLAN_LABEL
     if treatment_score >= 2 and treatment_medication_score > lab_total_score:
@@ -357,6 +394,7 @@ def safe_fallback_ocr_classification_diagnostic(text: str | None) -> dict[str, A
     normalized = _normalize_text(text)
     cyrillic_count = len(re.findall(r"[\u0400-\u04ff]", normalized))
     matched_keys = _matched_russian_lab_cue_keys(normalized)
+    treatment_keys = _matched_russian_treatment_cue_keys(normalized)
     candidate = classify_lab_document_type(text)
     if not normalized:
         block_reason = "no_fallback_text_available"
@@ -370,6 +408,7 @@ def safe_fallback_ocr_classification_diagnostic(text: str | None) -> dict[str, A
         "cyrillic_detected": cyrillic_count > 0,
         "cyrillic_char_count_bucket": _bucket_count(cyrillic_count),
         "matched_lab_cue_keys": matched_keys,
+        "matched_treatment_cue_keys": treatment_keys,
         "matched_document_type_candidate": candidate,
         "classification_block_reason": block_reason,
     }
@@ -546,6 +585,44 @@ def _matched_russian_lab_cue_keys(text: str) -> list[str]:
         ),
     }
     return [key for key, terms in cue_terms.items() if _count_term_hits(text, terms) or _count_word_hits(text, terms)]
+
+
+def _matched_russian_treatment_cue_keys(text: str) -> list[str]:
+    cue_terms = {
+        "medication_schedule_header": (
+            "\u043f\u0440\u0435\u043f\u0430\u0440\u0430\u0442\u044b",
+            "\u043f\u0440\u0435\u043f\u0430\u0440\u0430\u0442",
+            "\u043b\u0435\u043a\u0430\u0440\u0441\u0442\u0432\u0430",
+            "\u043b\u0435\u043a\u0430\u0440\u0441\u0442\u0432\u043e",
+            "\u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f",
+        ),
+        "physiotherapy_section": (
+            "\u0444\u0438\u0437\u0438\u043e\u043f\u0440\u043e\u0446\u0435\u0434\u0443\u0440\u044b",
+            "\u0444\u0438\u0437\u0438\u043e",
+            "\u043f\u0440\u043e\u0446\u0435\u0434\u0443\u0440\u044b",
+        ),
+        "diet_recommendation_section": (
+            "\u0434\u0438\u0435\u0442\u0430",
+            "\u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0430\u0446\u0438\u0438",
+            "\u0440\u0435\u0436\u0438\u043c",
+        ),
+        "administration_schedule_pattern": (
+            "\u0441\u0445\u0435\u043c\u0430",
+            "\u0433\u0440\u0430\u0444\u0438\u043a",
+            "\u0440\u0430\u0441\u043f\u0438\u0441\u0430\u043d\u0438\u0435",
+            "\u043f\u0440\u0438\u0435\u043c",
+            "\u043a\u0443\u0440\u0441",
+            "\u0443\u0442\u0440\u043e",
+            "\u0432\u0435\u0447\u0435\u0440",
+            "\u0434\u0435\u043d\u044c",
+            "\u0434\u043d\u0438",
+        ),
+    }
+    keys = [key for key, terms in cue_terms.items() if _count_term_hits(text, terms) or _count_word_hits(text, terms)]
+    date_like_count = len(re.findall(r"\b\d{1,2}[.\-/]\d{1,2}(?:[.\-/]\d{2,4})?\b", text))
+    if "date_grid" not in keys and ("\u0434\u0430\u0442\u0430" in text or date_like_count >= 2):
+        keys.append("date_grid")
+    return keys
 
 
 def _bucket_text_length(length: int) -> str:

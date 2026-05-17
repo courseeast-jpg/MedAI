@@ -1,0 +1,123 @@
+{
+  "conclusion": "medai_ru_treatment_doc_type_01_ready",
+  "changed_scope": "safe metadata-only Russian medication and treatment schedule document type classification",
+  "safe_before_after_metadata": [
+    {
+      "safe_id": "file_001",
+      "before": {
+        "matched_lab_cue_keys": [
+          "specimen_or_biomaterial",
+          "result_or_report",
+          "table_header"
+        ],
+        "matched_document_type_candidate": "Lab result"
+      },
+      "after": {
+        "document_type": "Lab result",
+        "classification_block_reason": "classified"
+      }
+    },
+    {
+      "safe_id": "schedule_document",
+      "before": {
+        "cyrillic_char_count_bucket": "high",
+        "matched_lab_cue_keys": [],
+        "matched_document_type_candidate": "Unknown",
+        "classification_block_reason": "too_few_safe_lab_cue_keys"
+      },
+      "after": {
+        "matched_treatment_cue_keys": [
+          "medication_schedule_header",
+          "date_grid",
+          "physiotherapy_section",
+          "diet_recommendation_section",
+          "administration_schedule_pattern"
+        ],
+        "matched_document_type_candidate": "Medication plan or Treatment plan",
+        "classification_block_reason": "classified_metadata_only"
+      }
+    }
+  ],
+  "cue_keys_added": [
+    "medication_schedule_header",
+    "date_grid",
+    "physiotherapy_section",
+    "diet_recommendation_section",
+    "administration_schedule_pattern"
+  ],
+  "external_api_used": false,
+  "raw_ocr_text_in_public_reports": false,
+  "medication_interpretation_added": false,
+  "ddi_logic_changed": false,
+  "auto_accept_expanded": false,
+  "affected_files_remain_review_bound": true,
+  "ocr_routing_changed": false,
+  "confidence_thresholds_changed": false,
+  "confidence_scoring_changed": false,
+  "clinical_logic_changed": false,
+  "clinical_interpretation_added": false,
+  "lab_value_parser_added": false,
+  "medication_parser_added": false,
+  "treatment_parser_added": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_behavior_changed": false,
+  "allowlist_changed": false,
+  "free_form_shell_added": false,
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "test_input_files_staged": false,
+  "real_validation_input_files_staged": false,
+  "terminology_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "validation_commands": [
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01.py -q",
+      "result": "7 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py -q",
+      "result": "22 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py -q",
+      "result": "43 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py -q",
+      "result": "54 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed, 12/12, 693 tests"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed, 6/6"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2438 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "no_raw_phi_in_report": true,
+  "no_raw_filenames_in_report": true,
+  "no_raw_ocr_text_in_report": true,
+  "no_raw_document_text_in_report": true,
+  "no_private_paths_in_report": true,
+  "no_secrets_in_report": true
+}
