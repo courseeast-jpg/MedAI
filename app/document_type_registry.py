@@ -202,7 +202,7 @@ DOCUMENT_FAMILY_REGISTRY: dict[str, FamilyRule] = {
     ),
     TREATMENT_PLAN_LABEL: FamilyRule(
         label=TREATMENT_PLAN_LABEL,
-        threshold=2,
+        threshold=3,
         required_any=("treatment_recommendation_section", "administration_schedule_pattern"),
         cue_groups={
             "english": {
@@ -433,6 +433,10 @@ def document_family_classification_diagnostic(text: str | None) -> dict[str, obj
     if not matches:
         return _unknown_diagnostic("too_few_safe_family_cue_keys", _script_labels(normalized))
 
+    conflict = _resolve_family_conflict(normalized, matches)
+    if conflict is not None:
+        return conflict
+
     matches.sort(key=lambda item: int(item["score"]), reverse=True)
     top_score = int(matches[0]["score"])
     top_matches = [item for item in matches if int(item["score"]) == top_score]
@@ -444,6 +448,7 @@ def document_family_classification_diagnostic(text: str | None) -> dict[str, obj
             "matched_language_cue_groups": [],
             "classification_block_reason": "ambiguous_family_candidates",
             "ambiguous_candidates": sorted(str(item["label"]) for item in top_matches),
+            "conflict_resolution_reason": "tie_without_safe_precedence",
             "review_only": True,
             "auto_accept_allowed": False,
         }
@@ -456,6 +461,7 @@ def document_family_classification_diagnostic(text: str | None) -> dict[str, obj
         "matched_language_cue_groups": list(winner["matched_language_cue_groups"]),
         "classification_block_reason": "classified",
         "ambiguous_candidates": [],
+        "conflict_resolution_reason": "none",
         "review_only": True,
         "auto_accept_allowed": False,
     }
@@ -487,6 +493,107 @@ def _rule_meets_threshold(rule: FamilyRule, matched_keys: Iterable[str]) -> bool
     return True
 
 
+def _resolve_family_conflict(text: str, matches: list[dict[str, object]]) -> dict[str, object] | None:
+    imaging = next((item for item in matches if item["label"] == IMAGING_REPORT_LABEL), None)
+    treatment_like = [
+        item
+        for item in matches
+        if item["label"] in {TREATMENT_PLAN_LABEL, MEDICATION_PLAN_LABEL}
+    ]
+    if imaging is None:
+        return None
+
+    imaging_keys = set(imaging["matched_family_cue_keys"])
+    strong_imaging = _has_strong_imaging_evidence(imaging_keys)
+    if not treatment_like:
+        weak_treatment_keys = _weak_treatment_like_keys(text)
+        if strong_imaging and len(weak_treatment_keys) >= 2:
+            return {
+                **_base_diagnostic(text),
+                "candidate_family": IMAGING_REPORT_LABEL,
+                "matched_family_cue_keys": list(imaging["matched_family_cue_keys"]),
+                "matched_language_cue_groups": list(imaging["matched_language_cue_groups"]),
+                "classification_block_reason": "classified",
+                "ambiguous_candidates": [IMAGING_REPORT_LABEL, TREATMENT_PLAN_LABEL],
+                "conflict_resolution_reason": "imaging_modality_and_report_structure_overrode_generic_treatment_cues",
+                "review_only": True,
+                "auto_accept_allowed": False,
+            }
+        return None
+
+    strong_treatment = any(_has_strong_treatment_evidence(set(item["matched_family_cue_keys"])) for item in treatment_like)
+    ambiguous = sorted(str(item["label"]) for item in [imaging, *treatment_like])
+
+    if strong_imaging and not strong_treatment:
+        return {
+            **_base_diagnostic(text),
+            "candidate_family": IMAGING_REPORT_LABEL,
+            "matched_family_cue_keys": list(imaging["matched_family_cue_keys"]),
+            "matched_language_cue_groups": list(imaging["matched_language_cue_groups"]),
+            "classification_block_reason": "classified",
+            "ambiguous_candidates": ambiguous,
+            "conflict_resolution_reason": "imaging_modality_and_report_structure_overrode_generic_treatment_cues",
+            "review_only": True,
+            "auto_accept_allowed": False,
+        }
+    if strong_imaging and strong_treatment:
+        return {
+            **_base_diagnostic(text),
+            "candidate_family": UNKNOWN_DOCUMENT_LABEL,
+            "matched_family_cue_keys": [],
+            "matched_language_cue_groups": [],
+            "classification_block_reason": "ambiguous_family_candidates",
+            "ambiguous_candidates": ambiguous,
+            "conflict_resolution_reason": "strong_imaging_and_treatment_cues_require_review",
+            "review_only": True,
+            "auto_accept_allowed": False,
+        }
+    return {
+        **_base_diagnostic(text),
+        "candidate_family": UNKNOWN_DOCUMENT_LABEL,
+        "matched_family_cue_keys": [],
+        "matched_language_cue_groups": [],
+        "classification_block_reason": "ambiguous_family_candidates",
+        "ambiguous_candidates": ambiguous,
+        "conflict_resolution_reason": "weak_mixed_family_cues_not_forced",
+        "review_only": True,
+        "auto_accept_allowed": False,
+    }
+
+
+def _has_strong_imaging_evidence(keys: set[str]) -> bool:
+    has_modality = "imaging_modality" in keys
+    has_structure = bool(
+        keys
+        & {
+            "imaging_device_header",
+            "imaging_description_section",
+            "imaging_conclusion_section",
+            "radiology_series_wording",
+            "brain_mri_context",
+        }
+    )
+    return has_modality and has_structure
+
+
+def _has_strong_treatment_evidence(keys: set[str]) -> bool:
+    if "medication_schedule_header" in keys and (
+        "administration_schedule_pattern" in keys or "date_grid" in keys
+    ):
+        return True
+    return "treatment_recommendation_section" in keys and bool(
+        keys & {"administration_schedule_pattern", "physiotherapy_section"}
+    )
+
+
+def _weak_treatment_like_keys(text: str) -> set[str]:
+    treatment_rule = DOCUMENT_FAMILY_REGISTRY[TREATMENT_PLAN_LABEL]
+    treatment_keys, _ = _matched_rule_cues(text, treatment_rule)
+    medication_rule = DOCUMENT_FAMILY_REGISTRY[MEDICATION_PLAN_LABEL]
+    medication_keys, _ = _matched_rule_cues(text, medication_rule)
+    return set(treatment_keys) | set(medication_keys)
+
+
 def _any_term_matches(text: str, terms: tuple[str, ...]) -> bool:
     return any(_term_matches(text, term) for term in terms)
 
@@ -515,6 +622,7 @@ def _unknown_diagnostic(reason: str, scripts: list[str]) -> dict[str, object]:
         "matched_language_cue_groups": [],
         "classification_block_reason": reason,
         "ambiguous_candidates": [],
+        "conflict_resolution_reason": "none",
         "cyrillic_detected": "cyrillic" in scripts,
         "language_script_detected": scripts,
         "review_only": True,

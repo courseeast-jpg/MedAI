@@ -1,0 +1,131 @@
+{
+  "conclusion": "medai_doc_type_family_01_fix2_ready",
+  "root_cause": "treatment false-positive on imaging report",
+  "changed_scope": "document type metadata conflict resolution only",
+  "runtime_behavior_changed": "document type metadata only",
+  "conflict_resolution_rule_summary": [
+    "Strong imaging modality plus imaging report structure outranks generic treatment-like cues.",
+    "Strong evidence for both imaging and treatment returns an ambiguous review-bound result.",
+    "Weak mixed generic cues remain Unknown or ambiguous and are not forced to Treatment plan."
+  ],
+  "before_after_safe_metadata": {
+    "file_a": {
+      "before": {
+        "candidate_family": "Treatment plan",
+        "classification_block_reason": "classified"
+      },
+      "after": {
+        "candidate_family": "Imaging report",
+        "conflict_resolution_reason": "imaging_modality_and_report_structure_overrode_generic_treatment_cues",
+        "classification_block_reason": "classified"
+      }
+    },
+    "file_b": {
+      "before": {
+        "candidate_family": "Imaging report",
+        "classification_block_reason": "classified"
+      },
+      "after": {
+        "candidate_family": "Imaging report",
+        "classification_block_reason": "classified"
+      }
+    },
+    "weak_mixed_generic_case": {
+      "before": {
+        "candidate_family": "Treatment plan"
+      },
+      "after": {
+        "candidate_family": "Unknown",
+        "classification_block_reason": "ambiguous_family_candidates"
+      }
+    }
+  },
+  "imaging_report_plain_language": "MedAI identified this as an imaging-report style document after recovering readable Russian text locally. Imaging findings and conclusions were not interpreted or accepted. A human must review the source PDF.",
+  "ocr_routing_changed": false,
+  "ocr_engine_changed": false,
+  "threshold_changed": false,
+  "confidence_thresholds_changed": false,
+  "confidence_scoring_changed": false,
+  "auto_accept_expanded": false,
+  "auto_acceptance_changed": false,
+  "clinical_logic_changed": false,
+  "imaging_interpretation_added": false,
+  "medication_parsing_added": false,
+  "dose_parsing_added": false,
+  "lab_value_parsing_added": false,
+  "ddi_logic_changed": false,
+  "external_api_changed": false,
+  "external_api_used": false,
+  "affected_files_remain_review_bound": true,
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01_fix2_imaging_treatment_conflict.py -q",
+      "result": "passed",
+      "details": "5 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01_fix_runtime_imaging_propagation.py tests/test_medai_doc_type_family_01.py tests/test_medai_ui_run_review_polish_01_fix_state_consistency.py tests/test_medai_ui_run_review_polish_01.py -q",
+      "result": "passed",
+      "details": "29 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix2_always_emit_diagnostic.py tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py tests/test_medai_ru_treatment_doc_type_01.py tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py -q",
+      "result": "passed",
+      "details": "43 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py tests/test_medai_ui_bugfix_02_readd_after_queue_clear.py tests/test_medai_ui_bugfix_01_clear_report_upload_idempotency.py -q",
+      "result": "passed",
+      "details": "97 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed",
+      "details": "conclusion medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed",
+      "details": "conclusion medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed",
+      "details": "12/12 cases passed; 693 tests passed"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed",
+      "details": "6/6 cases passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed",
+      "details": "conclusion medai_route_fix01_ready"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "passed",
+      "details": "2486 passed, 4 skipped, 22 warnings in 1704.38 seconds"
+    }
+  ],
+  "full_pytest_status": {
+    "run": true,
+    "result": "passed",
+    "details": "2486 passed, 4 skipped, 22 warnings in 1704.38 seconds"
+  },
+  "public_report_privacy": {
+    "raw_ocr_text_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_private_paths_in_public_reports": false,
+    "no_raw_phi_in_report": true,
+    "no_secrets_in_report": true
+  },
+  "private_files_staged": false,
+  "source_documents_staged": false,
+  "test_input_files_staged": false,
+  "real_validation_input_files_staged": false,
+  "runtime_db_staged": false,
+  "unsafe_staged_files": 0,
+  "recommended_next_step": "Repeat the same local two-document imaging smoke test and confirm both records show Imaging report, Needs review, cloud tools off, and not accepted."
+}

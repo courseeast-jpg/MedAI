@@ -303,6 +303,8 @@ def classify_lab_document_type(text: str | None) -> str:
         treatment_score += 1
     treatment_medication_score = treatment_score + medication_score
     lab_total_score = lab_score + ru_lab_score
+    if _is_russian_imaging_report(imaging_keys):
+        return IMAGING_REPORT_LABEL
 
     if "urinalysis" in normalized or (urinalysis_specific_hits >= 1 and urinalysis_score >= 2 and lab_score >= 1):
         return URINALYSIS_LABEL
@@ -318,12 +320,16 @@ def classify_lab_document_type(text: str | None) -> str:
     ):
         return MEDICATION_PLAN_LABEL
     if (
-        ("physiotherapy_section" in treatment_schedule_keys or "diet_recommendation_section" in treatment_schedule_keys)
+        (
+            "physiotherapy_section" in treatment_schedule_keys
+            or (
+                "diet_recommendation_section" in treatment_schedule_keys
+                and "administration_schedule_pattern" in treatment_schedule_keys
+            )
+        )
         and ("date_grid" in treatment_schedule_keys or "administration_schedule_pattern" in treatment_schedule_keys)
     ):
         return TREATMENT_PLAN_LABEL
-    if _is_russian_imaging_report(imaging_keys):
-        return IMAGING_REPORT_LABEL
     family_candidate = classify_document_family(normalized)
     if family_candidate not in {UNKNOWN_DOCUMENT_LABEL, URINALYSIS_LABEL}:
         return family_candidate
