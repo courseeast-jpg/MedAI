@@ -12,7 +12,10 @@ from app.config import MEDAI_ALLOW_EXTERNAL_API, MEDAI_LOCAL_ONLY, MEDAI_REQUIRE
 
 SNAPSHOT_ID = "MedAI_Snapshot_Phase49_2026-05-01"
 RELEASE_NAME = "MedAI v2 OCR/Layout HITL Release"
-PHASE52_SAFETY_WARNING = "Review required. Not for diagnosis."
+PHASE52_SAFETY_WARNING = (
+    "Review required. Not for diagnosis. MedAI does not diagnose, recommend treatment, "
+    "interpret medications, or accept extracted values on its own."
+)
 PRIVACY_INVARIANT_GUIDANCE = (
     "Local-only mode, empty extraction, and poor OCR cannot become accepted. "
     "Cyrillic non-lab routing cannot bypass review."

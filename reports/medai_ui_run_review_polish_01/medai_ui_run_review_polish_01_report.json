@@ -1,0 +1,117 @@
+{
+  "conclusion": "medai_ui_run_review_polish_01_ready",
+  "changed_scope": "Run & Review operator UI language and reporting only",
+  "screenshots_captured": false,
+  "design_summary": {
+    "main_status_title": "Needs review",
+    "main_ui_sections": [
+      "Why MedAI labeled it this way",
+      "Russian text recovery",
+      "What happened",
+      "Operator next action",
+      "What MedAI did not do"
+    ],
+    "advanced_section": "Advanced technical details",
+    "advanced_collapsed_by_default": true
+  },
+  "before_after_operator_language_summary": {
+    "before": "Main card emphasized confidence, extractor, OCR quality, raw run record, and reason-code chips.",
+    "after": "Main card emphasizes Needs review, document type, text recovery, cloud tools off, not accepted, plain evidence, next actions, and safety checklist."
+  },
+  "fields_surfaced_in_main_ui": [
+    "Status",
+    "Type",
+    "Text recovery",
+    "Cloud tools",
+    "Acceptance",
+    "Plain label evidence",
+    "Russian text recovery summary",
+    "Human next action",
+    "What MedAI did not do"
+  ],
+  "fields_hidden_in_advanced_technical_details": [
+    "document_type",
+    "confidence",
+    "validation_status",
+    "selected_extractor",
+    "ocr_quality_band",
+    "language_text_visibility",
+    "cyrillic_ocr_recommended",
+    "ocr_gate_reason",
+    "ocr_gate_fallback_executed",
+    "ocr_gate_fallback_engine",
+    "ocr_gate_fallback_language",
+    "ocr_gate_fallback_cyrillic_detected",
+    "ocr_gate_fallback_text_visibility",
+    "ocr_gate_fallback_review_only",
+    "ocr_gate_fallback_auto_accept_allowed",
+    "ocr_gate_fallback_classification_diagnostic",
+    "ocr_gate_fallback_treatment_classification_diagnostic",
+    "operator_review_reason",
+    "operator_reason_label"
+  ],
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_ui_run_review_polish_01.py -q",
+      "result": "9 passed"
+    },
+    {
+      "command": "python -m pytest russian_treatment_and_ocr_gate_regression_group -q",
+      "result": "86 passed"
+    },
+    {
+      "command": "python -m pytest russian_doc_type_lab_upload_regression_group -q",
+      "result": "54 passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed: medai_ui_ops_panel_ready"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed: medai_ui_boot_fix_startup_resilience_ready"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed: 12/12 cases, 693 tests passed, external_api_used false"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed: 6/6 cases, external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed: external_api_used false"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2461 passed, 4 skipped, 22 warnings"
+    }
+  ],
+  "runtime_behavior_changed": false,
+  "ocr_routing_changed": false,
+  "ocr_engine_changed": false,
+  "classifier_changed": false,
+  "threshold_changed": false,
+  "confidence_scoring_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_logic_changed": false,
+  "clinical_interpretation_added": false,
+  "medication_parsing_added": false,
+  "dose_parsing_added": false,
+  "frequency_parsing_added": false,
+  "duration_parsing_added": false,
+  "ddi_logic_changed": false,
+  "lab_value_parsing_added": false,
+  "b07_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_changed": false,
+  "external_api_used": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "no_raw_phi": true,
+  "no_secrets": true
+}

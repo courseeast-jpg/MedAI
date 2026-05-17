@@ -28,7 +28,10 @@ def test_current_run_top_labels_are_operator_friendly() -> None:
         "Build / audit details",
     ):
         assert text in source
-    assert PHASE52_SAFETY_WARNING == "Review required. Not for diagnosis."
+    assert PHASE52_SAFETY_WARNING == (
+        "Review required. Not for diagnosis. MedAI does not diagnose, recommend treatment, "
+        "interpret medications, or accept extracted values on its own."
+    )
 
 
 def test_safety_chips_are_plain_language() -> None:

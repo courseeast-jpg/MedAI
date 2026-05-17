@@ -48,11 +48,12 @@ def test_phase52_tabs_include_required_operator_tabs():
     assert "Validation History" in PHASE52_OPERATOR_TABS
 
 
-def test_phase52_raw_json_hidden_by_default():
+def test_phase52_advanced_technical_details_hidden_by_default():
     source = app_source()
 
-    assert 'st.expander("Show raw run record", expanded=False)' in source
-    assert "st.json(item)" in source
+    assert 'st.expander("Advanced technical details", expanded=False)' in source
+    assert "advanced_diagnostic_fields(item)" in source
+    assert 'st.expander("Show raw run record", expanded=False)' not in source
 
 
 def test_phase52_status_label_mapping_and_badges():

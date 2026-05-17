@@ -814,41 +814,188 @@ def item_status(item: dict) -> str:
     return str(item.get("status") or "review")
 
 
+def operator_document_type(item: dict) -> str:
+    value = str(item.get("document_type") or "Unknown").strip()
+    return value if value else "Unknown"
+
+
+def operator_result_explanation(document_type: str) -> str:
+    normalized = document_type.strip().lower()
+    if normalized == "lab result":
+        return (
+            "MedAI identified this as a lab-style document after recovering readable Russian text locally. "
+            "The lab values have not been checked or accepted. A human must compare the result with the source PDF."
+        )
+    if normalized == "treatment plan":
+        return (
+            "MedAI identified this as a treatment-plan style document after recovering readable Russian text locally. "
+            "Medication names, doses, schedules, and recommendations were not interpreted or accepted. "
+            "A human must review the source PDF."
+        )
+    if normalized == "medication plan":
+        return (
+            "MedAI identified this as a medication-plan style document after recovering readable Russian text locally. "
+            "Medication names, doses, schedules, and recommendations were not interpreted or accepted. "
+            "A human must review the source PDF."
+        )
+    return "MedAI could not confidently identify this document type. A human must review the source PDF."
+
+
+def operator_label_evidence(document_type: str) -> list[str]:
+    normalized = document_type.strip().lower()
+    if normalized == "lab result":
+        return [
+            "Biomaterial / result wording found",
+            "Report and table structure found",
+            "Lab-style layout found",
+        ]
+    if normalized in {"treatment plan", "medication plan"}:
+        return [
+            "Treatment or recommendation section found",
+            "Schedule-style layout found",
+            "Date/grid pattern found",
+        ]
+    return ["No sufficient document-format clues matched"]
+
+
+def text_recovery_chip(item: dict) -> str:
+    if item.get("ocr_gate_fallback_text_visibility") == "recovered" and item.get("ocr_gate_fallback_cyrillic_detected"):
+        return "Worked"
+    if item.get("ocr_gate_fallback_executed") and item.get("ocr_gate_fallback_text_visibility") in {"not_recovered", "unavailable"}:
+        return "Failed"
+    if not item.get("cyrillic_ocr_recommended") and not item.get("ocr_gate_fallback_executed"):
+        return "Not needed"
+    return "Not checked"
+
+
+def russian_text_recovery_summary(item: dict) -> dict[str, str]:
+    chip = text_recovery_chip(item)
+    recovered = {"Worked": "Yes", "Failed": "No", "Not needed": "Not checked"}.get(chip, "Not checked")
+    return {
+        "Russian text recovered": recovered,
+        "Local tool used": "Yes" if item.get("ocr_gate_fallback_executed") else "No",
+        "Cloud tools used": "No" if not item.get("external_api_used") else "Yes",
+        "Human review still required": "Yes",
+    }
+
+
+def next_actions_for_document_type(document_type: str) -> list[str]:
+    normalized = document_type.strip().lower()
+    if normalized == "lab result":
+        return [
+            "Open the source PDF.",
+            "Compare each visible value with the source document.",
+            "Mark anything uncertain.",
+            "Sign off only after manual review.",
+        ]
+    if normalized in {"treatment plan", "medication plan"}:
+        return [
+            "Open the source PDF.",
+            "Confirm only the document type.",
+            "Do not rely on MedAI for medication names, dose, schedule, or recommendations.",
+            "Keep medication interpretation for a future medication-safety workflow.",
+        ]
+    return [
+        "Open the source PDF.",
+        "Decide whether the document type is recognizable.",
+        "Keep it in review if uncertain.",
+    ]
+
+
+def medai_did_not_do_checklist() -> list[str]:
+    return [
+        "Did not diagnose anything.",
+        "Did not recommend treatment.",
+        "Did not interpret medications, doses, schedules, or treatment recommendations.",
+        "Did not accept lab values.",
+        "Did not send data to the cloud.",
+    ]
+
+
+def run_review_timeline_steps(item: dict) -> list[tuple[str, str]]:
+    recovered = text_recovery_chip(item)
+    return [
+        ("File added", "done"),
+        ("Text checked", "done"),
+        ("Russian text recovered locally", "done" if recovered == "Worked" else "pending"),
+        ("Document type label assigned", "done" if operator_document_type(item).lower() != "unknown" else "pending"),
+        ("Sent to human review", "review"),
+    ]
+
+
+ADVANCED_DIAGNOSTIC_FIELDS = [
+    "document_type",
+    "confidence",
+    "validation_status",
+    "selected_extractor",
+    "ocr_quality_band",
+    "language_text_visibility",
+    "cyrillic_ocr_recommended",
+    "ocr_gate_reason",
+    "ocr_gate_fallback_executed",
+    "ocr_gate_fallback_engine",
+    "ocr_gate_fallback_language",
+    "ocr_gate_fallback_cyrillic_detected",
+    "ocr_gate_fallback_text_visibility",
+    "ocr_gate_fallback_review_only",
+    "ocr_gate_fallback_auto_accept_allowed",
+    "ocr_gate_fallback_classification_diagnostic",
+    "ocr_gate_fallback_treatment_classification_diagnostic",
+    "operator_review_reason",
+    "operator_reason_label",
+]
+
+
+def advanced_diagnostic_fields(item: dict) -> dict[str, object]:
+    return {field: item.get(field) for field in ADVANCED_DIAGNOSTIC_FIELDS if field in item}
+
+
 def render_run_result_card(item: dict) -> None:
     status = item_status(item)
     badge = status_badge(status)
-    reason_codes = item.get("reason_codes") or item.get("classification_reason_codes") or []
-    if not reason_codes and item.get("error"):
-        reason_codes = ["processing_error"]
-    operator_reason = operator_review_reason_for_item(item, status=status)
-    operator_reason_label = operator_reason_label_for_item(item, reason_codes)
+    document_type = operator_document_type(item)
     st.markdown("<div class='medai-card'>", unsafe_allow_html=True)
     st.markdown(
-        f"### {safe_display_name(item)} &nbsp; <span class='badge {badge['class']}'>{badge['label']}</span>",
+        f"### {badge['label']} &nbsp; <span class='badge {badge['class']}'>Status: {badge['label']}</span>",
         unsafe_allow_html=True,
     )
-    cols = st.columns(4)
-    cols[0].metric("Confidence", value_or_unknown(item.get("confidence")))
-    cols[1].metric("Extractor", value_or_unknown(item.get("selected_extractor")))
-    cols[2].metric("Document type", value_or_unknown(item.get("document_type")))
-    cols[3].metric("OCR quality", value_or_unknown(item.get("ocr_quality_band") or item.get("input_quality_band")))
-    details = st.columns(4)
-    details[0].caption(f"Document ID: {item.get('file_id') or item.get('file_name') or 'unknown'}")
-    details[1].caption(f"File size: {format_bytes(int(item.get('file_size_bytes') or 0)) if item.get('file_size_bytes') else 'unknown'}")
-    details[2].caption(f"Privacy mode: {item.get('privacy_gate_mode') or 'local_only'}")
-    details[3].caption(f"External API used: {'Yes' if item.get('external_api_used') else 'No'}")
-    st.caption(f"PII scrub: {pii_scrub_label(item)}")
-    st.caption(f"Processed time: {item.get('processed_time') or item.get('timestamp') or 'unknown'}")
-    st.info(operator_reason or detailed_operator_guidance(status))
-    if operator_reason_label:
-        st.caption(f"Reason: {operator_reason_label}")
-    if reason_codes:
-        visible_codes = visible_reason_codes(reason_codes)
-        if visible_codes:
-            chips = " ".join(f"<span class='reason-chip'>{code}</span>" for code in visible_codes)
-            st.markdown(chips, unsafe_allow_html=True)
-    with st.expander("Show raw run record", expanded=False):
-        st.json(item)
+    st.info(operator_result_explanation(document_type))
+
+    chip_specs = [
+        ("Status", badge["label"]),
+        ("Type", document_type),
+        ("Text recovery", text_recovery_chip(item)),
+        ("Cloud tools", "Off" if not item.get("external_api_used") else "On"),
+        ("Acceptance", "Not accepted" if status != "accepted" else "Accepted"),
+    ]
+    cols = st.columns(len(chip_specs))
+    for col, (label, value) in zip(cols, chip_specs):
+        col.markdown(f"**{label}:** {value}")
+
+    st.markdown("#### Why MedAI labeled it this way")
+    for cue in operator_label_evidence(document_type):
+        st.markdown(f"- {cue}")
+
+    st.markdown("#### Russian text recovery")
+    for label, value in russian_text_recovery_summary(item).items():
+        st.markdown(f"- **{label}:** {value}")
+
+    st.markdown("#### What happened")
+    for label, state in run_review_timeline_steps(item):
+        badge_class = "badge-accepted" if state == "done" else "badge-review"
+        badge_label = "Done" if state == "done" else "Needs review"
+        st.markdown(f"<span class='badge {badge_class}'>{badge_label}</span> {label}", unsafe_allow_html=True)
+
+    st.markdown("#### What you need to do next")
+    for index, action in enumerate(next_actions_for_document_type(document_type), start=1):
+        st.markdown(f"{index}. {action}")
+
+    st.markdown("#### What MedAI did not do")
+    for item_text in medai_did_not_do_checklist():
+        st.markdown(f"- {item_text}")
+
+    with st.expander("Advanced technical details", expanded=False):
+        st.json(advanced_diagnostic_fields(item))
     st.markdown("</div>", unsafe_allow_html=True)
 
 
