@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import tempfile
 from collections import Counter, defaultdict
@@ -145,6 +146,11 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         native_text_length_bucket=native_length_bucket,
         language_visibility_status=raw_language_visibility,
     )
+    shape_audit = script_visible_unknown_shape_audit(
+        internal_text,
+        script_detection_result=language_audit["script_detection_result"],
+        predicted_document_type=predicted_type,
+    )
     script_level_visibility = script_level_visibility_status(
         raw_language_visibility,
         language_audit["script_detection_result"],
@@ -246,6 +252,15 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         "garbled_text_detected": language_audit["garbled_text_detected"],
         "detector_confidence_bucket": language_audit["detector_confidence_bucket"],
         "visibility_unknown_reason": language_audit["visibility_unknown_reason"],
+        "dominant_script": shape_audit["dominant_script"],
+        "table_like_structure_detected": shape_audit["table_like_structure_detected"],
+        "section_heading_shape_detected": shape_audit["section_heading_shape_detected"],
+        "medical_abbreviation_shape_detected": shape_audit["medical_abbreviation_shape_detected"],
+        "date_or_schedule_shape_detected": shape_audit["date_or_schedule_shape_detected"],
+        "imaging_modality_shape_detected": shape_audit["imaging_modality_shape_detected"],
+        "lab_table_shape_detected": shape_audit["lab_table_shape_detected"],
+        "administrative_form_shape_detected": shape_audit["administrative_form_shape_detected"],
+        "cue_audit_result": shape_audit["cue_audit_result"],
         "auto_accept_allowed": auto_accept_allowed,
         "external_api_used": external_api_used,
     }
@@ -304,6 +319,15 @@ def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[st
         "garbled_text_detected": "unknown",
         "detector_confidence_bucket": "unknown",
         "visibility_unknown_reason": "metadata_missing",
+        "dominant_script": "unknown",
+        "table_like_structure_detected": "unknown",
+        "section_heading_shape_detected": "unknown",
+        "medical_abbreviation_shape_detected": "unknown",
+        "date_or_schedule_shape_detected": "unknown",
+        "imaging_modality_shape_detected": "unknown",
+        "lab_table_shape_detected": "unknown",
+        "administrative_form_shape_detected": "unknown",
+        "cue_audit_result": "needs_manual_review",
         "auto_accept_allowed": False,
         "external_api_used": False,
         "error_bucket": error_bucket,
@@ -372,6 +396,7 @@ def build_report(records: list[dict[str, Any]]) -> dict[str, Any]:
         "unknown_ocr_routing_diagnostics": unknown_ocr_routing_summary(records),
         "language_visibility_audit": language_visibility_audit_summary(records),
         "language_script_detector_unknown_diagnostics": language_script_detector_unknown_summary(records),
+        "script_visible_unknown_cue_audit": script_visible_unknown_cue_audit_summary(records),
         "top_safe_cue_categories_by_family": top_cues,
         "anonymous_per_file_table": records,
         "recommended_next_actions": recommended_next_actions(records),
@@ -564,6 +589,38 @@ def render_markdown_report(report: dict[str, Any]) -> str:
             f"script=`{item['script_detection_result']}` "
             f"script_visibility=`{item['language_script_visibility']}`"
         )
+    lines.extend(["", "### Script-Visible Unknown Cue Audit", ""])
+    cue_audit = report["script_visible_unknown_cue_audit"]
+    for key in (
+        "script_visible_unknown_total",
+        "table_like_shape",
+        "imaging_like_shape",
+        "lab_like_shape",
+        "treatment_schedule_like_shape",
+        "generic_admin_shapes_only",
+        "no_known_shapes",
+        "likely_header_noise",
+    ):
+        lines.append(f"- {key}: `{cue_audit[key]}`")
+    lines.extend(["", "#### Cue Audit Result Buckets", ""])
+    for bucket, count in cue_audit["cue_audit_result_counts"].items():
+        lines.append(f"- {bucket}: `{count}`")
+    lines.extend(["", "#### Cue Audit Recommendations", ""])
+    for item in cue_audit["recommendations"]:
+        lines.append(f"- {item}")
+    lines.extend(["", "#### Top Script-Visible Unknown Samples", ""])
+    if not cue_audit["top_script_visible_unknown_samples"]:
+        lines.append("- No script-visible Unknown samples.")
+    for item in cue_audit["top_script_visible_unknown_samples"]:
+        lines.append(
+            "- "
+            f"{item['file_id']} "
+            f"cue_audit=`{item['cue_audit_result']}` "
+            f"script=`{item['dominant_script']}` "
+            f"table=`{item['table_like_structure_detected']}` "
+            f"lab_shape=`{item['lab_table_shape_detected']}` "
+            f"imaging_shape=`{item['imaging_modality_shape_detected']}`"
+        )
     lines.extend(["", "## Anonymous Per-File Table", ""])
     if not report["anonymous_per_file_table"]:
         lines.append("- No supported files evaluated.")
@@ -578,6 +635,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
             f"ocr_route_bucket=`{record['unknown_ocr_routing_bucket']}` "
             f"visibility_reason=`{record['visibility_unknown_reason']}` "
             f"detector_bucket=`{record['language_script_detector_unknown_bucket']}` "
+            f"cue_audit=`{record['cue_audit_result']}` "
             f"fallback=`{record['ocr_gate_fallback_executed']}` "
             f"external_api=`{record['external_api_used']}`"
         )
@@ -1017,6 +1075,240 @@ def _detector_unknown_priority_rank(bucket: str) -> int:
         "detector_unknown_unclassified": 8,
     }
     return order.get(bucket, 99)
+
+
+def script_visible_unknown_cue_audit_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
+    unknown_records = [
+        record
+        for record in records
+        if str(record.get("predicted_document_type") or "") == UNKNOWN_DOCUMENT_LABEL
+        and str(record.get("dominant_script") or "unknown") in {"latin", "cyrillic", "mixed"}
+    ]
+    result_counts = Counter(str(record.get("cue_audit_result") or "needs_manual_review") for record in unknown_records)
+    samples = sorted(
+        unknown_records,
+        key=lambda record: (
+            _cue_audit_priority_rank(str(record.get("cue_audit_result") or "")),
+            str(record.get("file_id") or ""),
+        ),
+    )[:10]
+    recommendations: list[str] = []
+    if result_counts.get("possible_lab_shape_without_language_cues", 0):
+        recommendations.append("Conservative Latin/structure lab cue audit may be useful in a later block.")
+    if result_counts.get("possible_imaging_shape_without_language_cues", 0):
+        recommendations.append("Imaging cue audit may be useful in a later block.")
+    if result_counts.get("possible_treatment_shape_without_language_cues", 0):
+        recommendations.append("Treatment or schedule cue audit may be useful in a later block.")
+    if result_counts.get("likely_nonmedical_or_header_noise", 0):
+        recommendations.append("Header/noise-heavy records may need native-text sufficiency review before OCR routing changes.")
+    if result_counts.get("no_known_family_shapes", 0):
+        recommendations.append("Records with no known safe shapes should remain Unknown/manual review.")
+    if not recommendations:
+        recommendations.append("No dominant safe shape bucket was detected; leave Unknown/manual review.")
+    return {
+        "script_visible_unknown_total": len(unknown_records),
+        "table_like_shape": sum(1 for record in unknown_records if record.get("table_like_structure_detected") == "yes"),
+        "imaging_like_shape": sum(1 for record in unknown_records if record.get("imaging_modality_shape_detected") == "yes"),
+        "lab_like_shape": sum(1 for record in unknown_records if record.get("lab_table_shape_detected") == "yes"),
+        "treatment_schedule_like_shape": sum(
+            1 for record in unknown_records if record.get("date_or_schedule_shape_detected") == "yes"
+        ),
+        "generic_admin_shapes_only": result_counts.get("generic_form_shapes_only", 0),
+        "no_known_shapes": result_counts.get("no_known_family_shapes", 0),
+        "likely_header_noise": result_counts.get("likely_nonmedical_or_header_noise", 0),
+        "cue_audit_result_counts": dict(sorted(result_counts.items())),
+        "top_script_visible_unknown_samples": [
+            {
+                "file_id": str(record.get("file_id")),
+                "dominant_script": str(record.get("dominant_script") or "unknown"),
+                "alphabetic_content_bucket": str(record.get("alphabetic_content_bucket") or "unknown"),
+                "numeric_content_bucket": str(record.get("numeric_content_bucket") or "unknown"),
+                "table_like_structure_detected": str(record.get("table_like_structure_detected") or "unknown"),
+                "section_heading_shape_detected": str(record.get("section_heading_shape_detected") or "unknown"),
+                "medical_abbreviation_shape_detected": str(
+                    record.get("medical_abbreviation_shape_detected") or "unknown"
+                ),
+                "date_or_schedule_shape_detected": str(record.get("date_or_schedule_shape_detected") or "unknown"),
+                "imaging_modality_shape_detected": str(record.get("imaging_modality_shape_detected") or "unknown"),
+                "lab_table_shape_detected": str(record.get("lab_table_shape_detected") or "unknown"),
+                "administrative_form_shape_detected": str(
+                    record.get("administrative_form_shape_detected") or "unknown"
+                ),
+                "cue_audit_result": str(record.get("cue_audit_result") or "needs_manual_review"),
+            }
+            for record in samples
+        ],
+        "recommendations": recommendations,
+    }
+
+
+def _cue_audit_priority_rank(bucket: str) -> int:
+    order = {
+        "possible_lab_shape_without_language_cues": 0,
+        "possible_imaging_shape_without_language_cues": 1,
+        "possible_treatment_shape_without_language_cues": 2,
+        "generic_form_shapes_only": 3,
+        "likely_nonmedical_or_header_noise": 4,
+        "no_known_family_shapes": 5,
+        "needs_manual_review": 6,
+    }
+    return order.get(bucket, 99)
+
+
+def script_visible_unknown_shape_audit(
+    text: str,
+    *,
+    script_detection_result: str,
+    predicted_document_type: str,
+) -> dict[str, str]:
+    dominant_script = script_detection_result if script_detection_result in {"latin", "cyrillic", "mixed"} else "unknown"
+    if predicted_document_type != UNKNOWN_DOCUMENT_LABEL or dominant_script == "unknown":
+        return {
+            "dominant_script": dominant_script,
+            "table_like_structure_detected": "not_applicable",
+            "section_heading_shape_detected": "not_applicable",
+            "medical_abbreviation_shape_detected": "not_applicable",
+            "date_or_schedule_shape_detected": "not_applicable",
+            "imaging_modality_shape_detected": "not_applicable",
+            "lab_table_shape_detected": "not_applicable",
+            "administrative_form_shape_detected": "not_applicable",
+            "cue_audit_result": "not_applicable",
+        }
+
+    normalized = _shape_normalized_text(text)
+    table_like = _yes_no(_table_like_structure(normalized))
+    section_heading = _yes_no(_section_heading_shape(normalized))
+    medical_abbreviation = _yes_no(_medical_abbreviation_shape(normalized))
+    date_or_schedule = _yes_no(_date_or_schedule_shape(normalized))
+    imaging_modality = _yes_no(_imaging_modality_shape(normalized))
+    lab_table = _yes_no(_lab_table_shape(normalized))
+    administrative_form = _yes_no(_administrative_form_shape(normalized))
+    header_noise = _header_noise_shape(normalized)
+
+    if imaging_modality == "yes":
+        result = "possible_imaging_shape_without_language_cues"
+    elif lab_table == "yes":
+        result = "possible_lab_shape_without_language_cues"
+    elif date_or_schedule == "yes" and (table_like == "yes" or section_heading == "yes"):
+        result = "possible_treatment_shape_without_language_cues"
+    elif header_noise:
+        result = "likely_nonmedical_or_header_noise"
+    elif administrative_form == "yes" and not any(
+        value == "yes" for value in (imaging_modality, lab_table, date_or_schedule, medical_abbreviation)
+    ):
+        result = "generic_form_shapes_only"
+    elif not any(
+        value == "yes"
+        for value in (
+            table_like,
+            section_heading,
+            medical_abbreviation,
+            date_or_schedule,
+            imaging_modality,
+            lab_table,
+            administrative_form,
+        )
+    ):
+        result = "no_known_family_shapes"
+    else:
+        result = "needs_manual_review"
+
+    return {
+        "dominant_script": dominant_script,
+        "table_like_structure_detected": table_like,
+        "section_heading_shape_detected": section_heading,
+        "medical_abbreviation_shape_detected": medical_abbreviation,
+        "date_or_schedule_shape_detected": date_or_schedule,
+        "imaging_modality_shape_detected": imaging_modality,
+        "lab_table_shape_detected": lab_table,
+        "administrative_form_shape_detected": administrative_form,
+        "cue_audit_result": result,
+    }
+
+
+def _shape_normalized_text(text: str) -> str:
+    return str(text or "").lower().strip()
+
+
+def _yes_no(value: bool) -> str:
+    return "yes" if value else "no"
+
+
+def _table_like_structure(text: str) -> bool:
+    rows = [line.strip() for line in str(text or "").splitlines() if line.strip()]
+    table_rows = 0
+    for row in rows:
+        has_digit = any(char.isdigit() for char in row)
+        has_separator = bool(re.search(r"(\s{2,}|\t|[|;,:])", row))
+        if has_digit and has_separator:
+            table_rows += 1
+    return table_rows >= 2 or bool(re.search(r"\b\w+\s+\d+(?:[.,]\d+)?\s+\w+\b", text))
+
+
+def _section_heading_shape(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(description|conclusion|impression|findings|history|assessment|plan|result|results|"
+            r"описание|заключение|результаты|план|назначения)\b",
+            text,
+        )
+    )
+
+
+def _medical_abbreviation_shape(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(mri|ct|us|xray|x-ray|cbc|cmp|bmp|hdl|ldl|tsh|rbc|wbc|plt|alt|ast|bun|mch|mcv|"
+            r"mrt|kt|uzi|мрт|кт|узи|оак|оам|алт|аст)\b",
+            text,
+        )
+    )
+
+
+def _date_or_schedule_shape(text: str) -> bool:
+    return bool(
+        re.search(r"\b\d{1,2}[./-]\d{1,2}(?:[./-]\d{2,4})?\b", text)
+        or re.search(r"\b(mon|tue|wed|thu|fri|sat|sun|am|pm|morning|evening|day|daily|dose|date)\b", text)
+        or re.search(r"\b(дата|утром|вечером|день|дней|принимать|доза|курс)\b", text)
+    )
+
+
+def _imaging_modality_shape(text: str) -> bool:
+    modality = re.search(r"\b(mri|ct|ultrasound|xray|x-ray|radiology|tomogram|tomography|mrt|kt|uzi)\b", text)
+    cyrillic_modality = re.search(r"\b(мрт|мр-?томограмм|томограмм|кт|узи|рентген|аппарат)\b", text)
+    imaging_sections = re.search(r"\b(description|conclusion|impression|findings|описание|заключение)\b", text)
+    sequence_terms = re.search(r"\b(t1|t2|flair|dwi)\b", text)
+    return bool(modality or cyrillic_modality or (sequence_terms and imaging_sections))
+
+
+def _lab_table_shape(text: str) -> bool:
+    lab_terms = re.search(
+        r"\b(result|results|reference|range|unit|units|flag|value|specimen|analyte|component|"
+        r"hemoglobin|glucose|creatinine|cholesterol|triglycerides|platelet|"
+        r"результат|референс|норма|единицы|показатель|значение|биоматериал)\b",
+        text,
+    )
+    lab_abbrev = re.search(r"\b(cbc|cmp|bmp|hdl|ldl|tsh|rbc|wbc|plt|alt|ast|bun|оак|оам|алт|аст)\b", text)
+    return bool((lab_terms and _table_like_structure(text)) or lab_abbrev)
+
+
+def _administrative_form_shape(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(name|dob|date of birth|address|phone|insurance|policy|claim|account|invoice|"
+            r"patient id|member id|page|form|signature)\b",
+            text,
+        )
+    )
+
+
+def _header_noise_shape(text: str) -> bool:
+    if not text:
+        return False
+    words = re.findall(r"[a-zа-яё]+", text, flags=re.IGNORECASE)
+    if len(words) <= 10 and re.search(r"\b(page|header|footer|copy|scan|form)\b", text):
+        return True
+    return False
 
 
 def _internal_text_for_bucketing(extractor_result: dict[str, Any]) -> str:

@@ -1,0 +1,131 @@
+{
+  "conclusion": "medai_doc_type_eval_05_script_visible_unknown_cue_shapes_ready",
+  "diagnostic_type": "script_visible_unknown_family_cue_shape_audit",
+  "changed_scope": "evaluation/reporting only",
+  "observed_post_eval_04_batch_summary": {
+    "total_files_evaluated": 80,
+    "lab_result_count": 15,
+    "urinalysis_count": 1,
+    "unknown_count": 64,
+    "accepted_count_after_normalization": 0,
+    "auto_accept_allowed_count": 0,
+    "external_api_used_count": 0,
+    "detector_returned_unknown_total": 63,
+    "detector_unknown_bucket_script_detectable_language_unknown": 63,
+    "script_level_visibility_latin_visible_language_unknown": 80,
+    "image_like_pdfs_not_routed_to_ocr": 0,
+    "text_layer_pdfs_with_too_little_text": 0,
+    "extraction_errors": 0,
+    "fallback_eligible_but_not_triggered": 0
+  },
+  "root_cause_hypothesis": "The dominant post-EVAL-04 issue is not OCR routing. The batch has visible Latin-script, high-alphabetic detector input, but Unknown records have no matched document-family cue keys. EVAL-05 adds safe text-shape diagnostics to determine whether those Unknown records contain family-like structure without language cue matches, generic/admin forms, header noise, or no known family shapes.",
+  "script_visible_unknown_cue_audit_buckets_added": [
+    "dominant_script",
+    "alphabetic_content_bucket",
+    "numeric_content_bucket",
+    "table_like_structure_detected",
+    "section_heading_shape_detected",
+    "medical_abbreviation_shape_detected",
+    "date_or_schedule_shape_detected",
+    "imaging_modality_shape_detected",
+    "lab_table_shape_detected",
+    "administrative_form_shape_detected",
+    "cue_audit_result"
+  ],
+  "cue_audit_results_supported": [
+    "no_known_family_shapes",
+    "generic_form_shapes_only",
+    "possible_lab_shape_without_language_cues",
+    "possible_imaging_shape_without_language_cues",
+    "possible_treatment_shape_without_language_cues",
+    "likely_nonmedical_or_header_noise",
+    "needs_manual_review"
+  ],
+  "aggregate_counts_added": [
+    "script_visible_unknown_total",
+    "table_like_shape",
+    "imaging_like_shape",
+    "lab_like_shape",
+    "treatment_schedule_like_shape",
+    "generic_admin_shapes_only",
+    "no_known_shapes",
+    "likely_header_noise",
+    "cue_audit_result_counts"
+  ],
+  "recommendation_logic_added": {
+    "possible_lab_shape_without_language_cues": "recommend conservative Latin/structure lab cue audit in a later block",
+    "possible_imaging_shape_without_language_cues": "recommend imaging cue audit in a later block",
+    "possible_treatment_shape_without_language_cues": "recommend treatment or schedule cue audit in a later block",
+    "no_known_family_shapes": "leave Unknown/manual review",
+    "likely_nonmedical_or_header_noise": "review native-text sufficiency before any OCR routing change",
+    "shape_buckets_useful_but_no_family_labels": "recommend cue-family update in a later block, not in this diagnostic block"
+  },
+  "status_anomaly_handling_preserved": {
+    "unknown_runtime_accepted_normalized_to_review": true,
+    "invalid_status_mapping_normalized_remains_reported": true
+  },
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_eval_05_script_visible_unknown_cue_shapes.py -q",
+      "result": "6 passed, 1 warning"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_eval_05_script_visible_unknown_cue_shapes.py tests/test_medai_doc_type_eval_04_language_script_detector.py tests/test_medai_doc_type_eval_03_status_language_visibility.py tests/test_medai_doc_type_eval_02_unknown_text_visibility.py tests/test_medai_doc_type_eval_01_fix_status_unknown.py tests/test_medai_doc_type_eval_01_batch_harness.py -q",
+      "result": "36 passed, 1 warning"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01_fix2_imaging_treatment_conflict.py tests/test_medai_doc_type_family_01_fix_runtime_imaging_propagation.py tests/test_medai_doc_type_family_01.py tests/test_medai_ui_run_review_polish_01_fix_state_consistency.py tests/test_medai_ui_run_review_polish_01.py -q",
+      "result": "34 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix2_always_emit_diagnostic.py tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py tests/test_medai_ru_treatment_doc_type_01.py tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py -q",
+      "result": "128 passed"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "PASS; 12/12 cases passed; 693 tests passed; external API used false"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "PASS; 6/6 cases passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "PASS; medai_route_fix01_ready; external_api_used false"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2522 passed, 4 skipped, 22 warnings in 1735.35s"
+    }
+  ],
+  "runtime_behavior_changed": false,
+  "evaluation_reporting_changed": true,
+  "ocr_routing_changed": false,
+  "ocr_engine_changed": false,
+  "classifier_changed": false,
+  "cue_pack_changed": false,
+  "document_family_thresholds_changed": false,
+  "conflict_rules_changed": false,
+  "auto_acceptance_logic_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_interpretation_added": false,
+  "imaging_interpretation_added": false,
+  "medication_parsing_added": false,
+  "dose_frequency_duration_parsing_added": false,
+  "lab_value_parsing_added": false,
+  "ddi_logic_changed": false,
+  "b07_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_changed": false,
+  "external_api_used": false,
+  "source_documents_staged": false,
+  "private_files_staged": false,
+  "runtime_db_staged": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "no_raw_phi": true,
+  "no_secrets": true
+}
