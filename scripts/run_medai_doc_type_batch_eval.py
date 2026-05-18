@@ -136,13 +136,25 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
     native_length_bucket = native_text_length_bucket(extractor_result, audit, internal_text)
     pdf_text_layer = pdf_text_layer_detected(path)
     image_like = image_like_pdf(path, pdf_text_layer, native_length_bucket)
-    language_visibility = language_visibility_status(ocr_marker, extractor_result)
+    raw_language_visibility = language_visibility_status(ocr_marker, extractor_result)
     cyrillic_visibility = cyrillic_visibility_status(ocr_marker, extractor_result)
+    language_audit = language_visibility_audit(
+        extractor_result=extractor_result,
+        audit=audit,
+        internal_text=internal_text,
+        native_text_length_bucket=native_length_bucket,
+        language_visibility_status=raw_language_visibility,
+    )
+    script_level_visibility = script_level_visibility_status(
+        raw_language_visibility,
+        language_audit["script_detection_result"],
+    )
+    language_visibility = script_level_visibility or raw_language_visibility
     fallback_executed = bool(ocr_marker.get("ocr_gate_fallback_executed", False))
     fallback_eligible = ocr_fallback_eligible(
         cyrillic_ocr_recommended=bool(ocr_marker.get("cyrillic_ocr_recommended", False)),
         image_like_pdf=image_like,
-        language_visibility_status=language_visibility,
+        language_visibility_status=raw_language_visibility,
         native_text_length_bucket=native_length_bucket,
         extension=path.suffix.lower(),
     )
@@ -153,7 +165,7 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         pdf_text_layer_detected=pdf_text_layer,
         image_like_pdf=image_like,
         native_text_length_bucket=native_length_bucket,
-        language_visibility_status=language_visibility,
+        language_visibility_status=raw_language_visibility,
         error_bucket=None,
     )
     cue_count_bucket = document_family_cue_count_bucket(family_diagnostic)
@@ -161,13 +173,6 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         predicted_type=predicted_type,
         raw_review_status=raw_status,
         accepted_status_source=accepted_source,
-    )
-    language_audit = language_visibility_audit(
-        extractor_result=extractor_result,
-        audit=audit,
-        internal_text=internal_text,
-        native_text_length_bucket=native_length_bucket,
-        language_visibility_status=language_visibility,
     )
 
     record = {
@@ -193,8 +198,11 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         "ocr_fallback_eligible": fallback_eligible,
         "ocr_fallback_not_triggered_reason": fallback_not_triggered,
         "language_visibility_status": language_visibility,
+        "raw_language_visibility_status": raw_language_visibility,
+        "language_script_visibility": script_level_visibility or "not_applicable",
         "cyrillic_visibility_status": cyrillic_visibility,
         "document_family_cue_count_bucket": cue_count_bucket,
+        "language_script_detector_unknown_bucket": language_script_detector_unknown_bucket(language_audit),
         "ocr_quality_band": normalize_text_quality_label(
             audit.get("ocr_quality_band"),
             audit.get("input_quality_band"),
@@ -232,6 +240,11 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         "language_detector_input_bucket": language_audit["language_detector_input_bucket"],
         "script_detection_attempted": language_audit["script_detection_attempted"],
         "script_detection_result": language_audit["script_detection_result"],
+        "alphabetic_content_bucket": language_audit["alphabetic_content_bucket"],
+        "numeric_content_bucket": language_audit["numeric_content_bucket"],
+        "symbol_content_bucket": language_audit["symbol_content_bucket"],
+        "garbled_text_detected": language_audit["garbled_text_detected"],
+        "detector_confidence_bucket": language_audit["detector_confidence_bucket"],
         "visibility_unknown_reason": language_audit["visibility_unknown_reason"],
         "auto_accept_allowed": auto_accept_allowed,
         "external_api_used": external_api_used,
@@ -256,8 +269,11 @@ def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[st
         "ocr_fallback_eligible": "unknown",
         "ocr_fallback_not_triggered_reason": "extraction_error",
         "language_visibility_status": "unknown",
+        "raw_language_visibility_status": "unknown",
+        "language_script_visibility": "not_applicable",
         "cyrillic_visibility_status": "unknown",
         "document_family_cue_count_bucket": "none",
+        "language_script_detector_unknown_bucket": "detector_unknown_unclassified",
         "ocr_quality_band": "unknown",
         "language_text_visibility": "unknown",
         "cyrillic_ocr_recommended": False,
@@ -282,6 +298,11 @@ def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[st
         "language_detector_input_bucket": "unknown",
         "script_detection_attempted": "no",
         "script_detection_result": "unknown",
+        "alphabetic_content_bucket": "unknown",
+        "numeric_content_bucket": "unknown",
+        "symbol_content_bucket": "unknown",
+        "garbled_text_detected": "unknown",
+        "detector_confidence_bucket": "unknown",
         "visibility_unknown_reason": "metadata_missing",
         "auto_accept_allowed": False,
         "external_api_used": False,
@@ -350,6 +371,7 @@ def build_report(records: list[dict[str, Any]]) -> dict[str, Any]:
         "unknown_diagnostics": unknown_diagnostics,
         "unknown_ocr_routing_diagnostics": unknown_ocr_routing_summary(records),
         "language_visibility_audit": language_visibility_audit_summary(records),
+        "language_script_detector_unknown_diagnostics": language_script_detector_unknown_summary(records),
         "top_safe_cue_categories_by_family": top_cues,
         "anonymous_per_file_table": records,
         "recommended_next_actions": recommended_next_actions(records),
@@ -515,6 +537,33 @@ def render_markdown_report(report: dict[str, Any]) -> str:
     lines.extend(["", "#### Visibility Unknown Reasons", ""])
     for reason, count in language_audit["visibility_unknown_reason_counts"].items():
         lines.append(f"- {reason}: `{count}`")
+    lines.extend(["", "### Language / Script Detector Unknown Diagnostics", ""])
+    detector = report["language_script_detector_unknown_diagnostics"]
+    for key in (
+        "detector_returned_unknown_total",
+        "numeric_heavy",
+        "alphabetic_low",
+        "cyrillic_present_but_language_unknown",
+        "latin_present_but_language_unknown",
+        "mixed_script",
+        "detector_output_missing",
+        "detector_low_confidence",
+    ):
+        lines.append(f"- {key}: `{detector[key]}`")
+    lines.extend(["", "#### Detector Unknown Buckets", ""])
+    for bucket, count in detector["detector_unknown_bucket_counts"].items():
+        lines.append(f"- {bucket}: `{count}`")
+    lines.extend(["", "#### Top Detector Unknown Samples", ""])
+    if not detector["top_detector_unknown_samples"]:
+        lines.append("- No detector-unknown samples.")
+    for item in detector["top_detector_unknown_samples"]:
+        lines.append(
+            "- "
+            f"{item['file_id']} "
+            f"bucket=`{item['language_script_detector_unknown_bucket']}` "
+            f"script=`{item['script_detection_result']}` "
+            f"script_visibility=`{item['language_script_visibility']}`"
+        )
     lines.extend(["", "## Anonymous Per-File Table", ""])
     if not report["anonymous_per_file_table"]:
         lines.append("- No supported files evaluated.")
@@ -528,6 +577,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
             f"unknown_bucket=`{record['unknown_failure_bucket']}` "
             f"ocr_route_bucket=`{record['unknown_ocr_routing_bucket']}` "
             f"visibility_reason=`{record['visibility_unknown_reason']}` "
+            f"detector_bucket=`{record['language_script_detector_unknown_bucket']}` "
             f"fallback=`{record['ocr_gate_fallback_executed']}` "
             f"external_api=`{record['external_api_used']}`"
         )
@@ -880,7 +930,7 @@ def language_visibility_audit_summary(records: list[dict[str, Any]]) -> dict[str
     visibility_unknown = [
         record
         for record in unknown_records
-        if str(record.get("language_visibility_status") or "unknown") in {"unknown", "incomplete", "not_applicable"}
+        if str(record.get("visibility_unknown_reason") or "not_applicable") != "not_applicable"
     ]
     reason_counts = Counter(str(record.get("visibility_unknown_reason") or "unknown") for record in visibility_unknown)
     return {
@@ -895,6 +945,78 @@ def language_visibility_audit_summary(records: list[dict[str, Any]]) -> dict[str
         "unknown_visibility_metadata_missing": reason_counts.get("metadata_missing", 0),
         "visibility_unknown_reason_counts": dict(sorted(reason_counts.items())),
     }
+
+
+def language_script_detector_unknown_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
+    unknown_detector_records = [
+        record
+        for record in records
+        if str(record.get("visibility_unknown_reason") or "") == "detector_returned_unknown"
+    ]
+    bucket_counts = Counter(
+        str(record.get("language_script_detector_unknown_bucket") or "detector_unknown_unclassified")
+        for record in unknown_detector_records
+    )
+    samples = sorted(
+        unknown_detector_records,
+        key=lambda record: (
+            _detector_unknown_priority_rank(str(record.get("language_script_detector_unknown_bucket") or "")),
+            str(record.get("file_id") or ""),
+        ),
+    )[:10]
+    return {
+        "detector_returned_unknown_total": len(unknown_detector_records),
+        "numeric_heavy": bucket_counts.get("detector_input_numeric_heavy", 0),
+        "alphabetic_low": sum(
+            1
+            for record in unknown_detector_records
+            if record.get("alphabetic_content_bucket") in {"none", "low"}
+        ),
+        "cyrillic_present_but_language_unknown": bucket_counts.get("script_detectable_language_unknown", 0)
+        + sum(
+            1
+            for record in unknown_detector_records
+            if record.get("script_detection_result") == "cyrillic"
+            and record.get("language_script_detector_unknown_bucket") != "script_detectable_language_unknown"
+        ),
+        "latin_present_but_language_unknown": sum(
+            1 for record in unknown_detector_records if record.get("script_detection_result") == "latin"
+        ),
+        "mixed_script": bucket_counts.get("detector_input_mixed_script", 0),
+        "detector_output_missing": bucket_counts.get("detector_output_not_propagated", 0),
+        "detector_low_confidence": bucket_counts.get("detector_confidence_below_threshold", 0),
+        "detector_unknown_bucket_counts": dict(sorted(bucket_counts.items())),
+        "top_detector_unknown_samples": [
+            {
+                "file_id": str(record.get("file_id")),
+                "language_script_detector_unknown_bucket": str(
+                    record.get("language_script_detector_unknown_bucket")
+                    or "detector_unknown_unclassified"
+                ),
+                "script_detection_result": str(record.get("script_detection_result") or "unknown"),
+                "language_script_visibility": str(record.get("language_script_visibility") or "not_applicable"),
+                "alphabetic_content_bucket": str(record.get("alphabetic_content_bucket") or "unknown"),
+                "numeric_content_bucket": str(record.get("numeric_content_bucket") or "unknown"),
+                "detector_confidence_bucket": str(record.get("detector_confidence_bucket") or "unknown"),
+            }
+            for record in samples
+        ],
+    }
+
+
+def _detector_unknown_priority_rank(bucket: str) -> int:
+    order = {
+        "detector_output_not_propagated": 0,
+        "script_detectable_language_unknown": 1,
+        "detector_input_mixed_script": 2,
+        "detector_input_numeric_heavy": 3,
+        "detector_input_garbled_or_mojibake": 4,
+        "detector_confidence_below_threshold": 5,
+        "detector_input_tiny": 6,
+        "detector_input_empty": 7,
+        "detector_unknown_unclassified": 8,
+    }
+    return order.get(bucket, 99)
 
 
 def _internal_text_for_bucketing(extractor_result: dict[str, Any]) -> str:
@@ -953,6 +1075,11 @@ def language_visibility_audit(
     detector_input_bucket = language_detector_input_bucket(internal_text)
     script_attempted = "yes" if detector_attempted == "yes" or internal_text.strip() else "no"
     script_result = script_detection_result(internal_text)
+    alphabetic_bucket = content_density_bucket(_alphabetic_count(internal_text), internal_text)
+    numeric_bucket = content_density_bucket(_digit_count(internal_text), internal_text)
+    symbol_bucket = content_density_bucket(_symbol_count(internal_text), internal_text)
+    garbled = garbled_text_detected(internal_text)
+    confidence_bucket = detector_confidence_bucket(extractor_result)
     reason = visibility_unknown_reason(
         language_visibility_status=language_visibility_status,
         text_source_present=text_source,
@@ -970,6 +1097,11 @@ def language_visibility_audit(
         "language_detector_input_bucket": detector_input_bucket,
         "script_detection_attempted": script_attempted,
         "script_detection_result": script_result,
+        "alphabetic_content_bucket": alphabetic_bucket,
+        "numeric_content_bucket": numeric_bucket,
+        "symbol_content_bucket": symbol_bucket,
+        "garbled_text_detected": garbled,
+        "detector_confidence_bucket": confidence_bucket,
         "visibility_unknown_reason": reason,
     }
 
@@ -1022,6 +1154,92 @@ def script_detection_result(text: str) -> str:
     return "unknown"
 
 
+def script_level_visibility_status(language_visibility_status: str, script_result: str) -> str | None:
+    if language_visibility_status not in {"unknown", "incomplete", "not_applicable"}:
+        return None
+    if script_result == "cyrillic":
+        return "cyrillic_visible_language_unknown"
+    if script_result == "latin":
+        return "latin_visible_language_unknown"
+    if script_result == "mixed":
+        return "mixed_script_visible_language_unknown"
+    return None
+
+
+def language_script_detector_unknown_bucket(audit: dict[str, str]) -> str:
+    if audit.get("visibility_unknown_reason") == "not_applicable":
+        return "not_applicable"
+    if audit.get("text_source_present") == "unknown":
+        return "detector_output_not_propagated"
+    input_bucket = audit.get("language_detector_input_bucket")
+    if input_bucket == "empty":
+        return "detector_input_empty"
+    if audit.get("numeric_content_bucket") == "high":
+        return "detector_input_numeric_heavy"
+    if audit.get("symbol_content_bucket") == "high":
+        return "detector_input_symbol_heavy"
+    if audit.get("script_detection_result") == "mixed":
+        return "detector_input_mixed_script"
+    if audit.get("garbled_text_detected") == "yes":
+        return "detector_input_garbled_or_mojibake"
+    if audit.get("detector_confidence_bucket") == "low":
+        return "detector_confidence_below_threshold"
+    if audit.get("script_detection_result") in {"cyrillic", "latin"}:
+        return "script_detectable_language_unknown"
+    if input_bucket == "tiny":
+        return "detector_input_tiny"
+    return "detector_unknown_unclassified"
+
+
+def content_density_bucket(count: int, text: str) -> str:
+    compact_len = max(1, len("".join(str(text or "").split())))
+    ratio = count / compact_len
+    if count <= 0:
+        return "none"
+    if ratio < 0.05:
+        return "low"
+    if ratio < 0.25:
+        return "medium"
+    return "high"
+
+
+def _alphabetic_count(text: str) -> int:
+    return sum(1 for char in str(text or "") if char.isalpha())
+
+
+def _digit_count(text: str) -> int:
+    return sum(1 for char in str(text or "") if char.isdigit())
+
+
+def _symbol_count(text: str) -> int:
+    return sum(1 for char in str(text or "") if not char.isalnum() and not char.isspace())
+
+
+def garbled_text_detected(text: str) -> str:
+    raw = str(text or "")
+    if not raw:
+        return "unknown"
+    if "\ufffd" in raw or raw.count("?") >= 8 or raw.count("|") >= 8:
+        return "yes"
+    return "no"
+
+
+def detector_confidence_bucket(extractor_result: dict[str, Any]) -> str:
+    language_support = extractor_result.get("language_support")
+    value = None
+    if isinstance(language_support, dict):
+        value = language_support.get("language_confidence")
+    if value is None:
+        value = extractor_result.get("language_confidence")
+    if not isinstance(value, (int, float)):
+        return "unknown"
+    if float(value) < 0.5:
+        return "low"
+    if float(value) < 0.8:
+        return "medium"
+    return "high"
+
+
 def visibility_unknown_reason(
     *,
     language_visibility_status: str,
@@ -1044,12 +1262,12 @@ def visibility_unknown_reason(
         return "detector_not_called"
     if script_detection_result in {"numeric_only", "symbol_only"}:
         return "numeric_or_symbol_only_text"
-    if language_detector_input_bucket in {"empty", "tiny"}:
-        return "no_text_available"
     if language_visibility_status == "unknown":
         return "detector_returned_unknown"
     if language_visibility_status == "incomplete":
         return "detector_returned_unknown"
+    if language_detector_input_bucket in {"empty", "tiny"}:
+        return "no_text_available"
     return "unknown"
 
 

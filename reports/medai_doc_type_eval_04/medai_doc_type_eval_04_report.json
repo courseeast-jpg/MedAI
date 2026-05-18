@@ -1,0 +1,137 @@
+{
+  "conclusion": "medai_doc_type_eval_04_language_script_detector_ready",
+  "diagnostic_type": "language_script_detector_robustness_audit",
+  "changed_scope": "evaluation/reporting and language/script visibility diagnostics only",
+  "observed_post_eval_03_batch_summary": {
+    "total_files_evaluated": 80,
+    "lab_result_count": 15,
+    "urinalysis_count": 1,
+    "unknown_count": 64,
+    "external_api_used_count": 0,
+    "accepted_count_after_normalization": 0,
+    "auto_accept_allowed_count": 0,
+    "unknown_failure_buckets": {
+      "insufficient_text_visibility": 62,
+      "fallback_ran_but_no_family_match": 1,
+      "status_mapping_anomaly": 1
+    },
+    "not_fallback_eligible_reason_language_visibility_unknown": 63,
+    "language_visibility_unknown_reason_counts": {
+      "detector_returned_unknown": 63,
+      "no_text_available": 1
+    }
+  },
+  "root_cause_analysis": {
+    "primary_bottleneck": "detector_returned_unknown",
+    "summary": "Post-EVAL-03 batch diagnostics showed that Unknown coverage was dominated by language visibility unknown records where the detector returned unknown, not by OCR routing, extraction errors, image-like PDFs bypassing OCR, or cue-pack matching.",
+    "why_eval_04_was_needed": "The prior report identified detector_returned_unknown as an aggregate reason but did not separate numeric-heavy input, low alphabetic content, script-visible language-unknown input, mixed-script input, low-confidence detector output, garbled text, or metadata propagation gaps."
+  },
+  "new_detector_buckets": [
+    "detector_input_empty",
+    "detector_input_tiny",
+    "detector_input_numeric_heavy",
+    "detector_input_symbol_heavy",
+    "detector_input_mixed_script",
+    "detector_input_garbled_or_mojibake",
+    "detector_confidence_below_threshold",
+    "detector_output_not_propagated",
+    "script_detectable_language_unknown",
+    "detector_unknown_unclassified"
+  ],
+  "aggregate_counts_added": [
+    "numeric_heavy",
+    "alphabetic_low",
+    "cyrillic_present_but_language_unknown",
+    "latin_present_but_language_unknown",
+    "mixed_script",
+    "detector_output_missing",
+    "detector_low_confidence"
+  ],
+  "script_level_visibility_fallback": {
+    "added": true,
+    "cyrillic_unknown_visibility_label": "cyrillic_visible_language_unknown",
+    "latin_unknown_visibility_label": "latin_visible_language_unknown",
+    "mixed_script_unknown_visibility_label": "mixed_script_visible_language_unknown",
+    "classification_from_script_alone": false,
+    "ocr_routing_eligibility_changed": false
+  },
+  "batch_report_updates": [
+    "language_script_detector_unknown_diagnostics",
+    "language_script_detector_unknown_bucket",
+    "language_script_visibility",
+    "raw_language_visibility_status",
+    "alphabetic_content_bucket",
+    "numeric_content_bucket",
+    "symbol_content_bucket",
+    "garbled_text_detected",
+    "detector_confidence_bucket",
+    "top_detector_unknown_samples"
+  ],
+  "recommendation_logic_added": {
+    "numeric_heavy_table_text": "OCR gate review may be needed later.",
+    "cyrillic_visible_language_unknown": "Script fallback is working; inspect language detector confidence or metadata propagation before OCR routing.",
+    "low_alphabetic_content": "Leave Unknown/manual review or evaluate OCR gate expansion in a later block.",
+    "detector_output_missing": "Investigate propagation of detector output into the batch report.",
+    "garbled_text": "Investigate extraction quality before cue-pack changes."
+  },
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_eval_04_language_script_detector.py tests/test_medai_doc_type_eval_03_status_language_visibility.py tests/test_medai_doc_type_eval_02_unknown_text_visibility.py tests/test_medai_doc_type_eval_01_fix_status_unknown.py tests/test_medai_doc_type_eval_01_batch_harness.py -q",
+      "result": "30 passed, 1 warning"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01_fix2_imaging_treatment_conflict.py tests/test_medai_doc_type_family_01_fix_runtime_imaging_propagation.py tests/test_medai_doc_type_family_01.py tests/test_medai_ui_run_review_polish_01_fix_state_consistency.py tests/test_medai_ui_run_review_polish_01.py -q",
+      "result": "34 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix2_always_emit_diagnostic.py tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py tests/test_medai_ru_treatment_doc_type_01.py tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py -q",
+      "result": "128 passed"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "PASS; 12/12 cases passed; 693 tests passed; external API used false"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "PASS; 6/6 cases passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "PASS; medai_route_fix01_ready; external_api_used false"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2516 passed, 4 skipped, 22 warnings in 1687.46s"
+    }
+  ],
+  "runtime_behavior_changed": false,
+  "evaluation_reporting_changed": true,
+  "ocr_routing_changed": false,
+  "ocr_engine_changed": false,
+  "classifier_changed": false,
+  "cue_pack_changed": false,
+  "document_family_thresholds_changed": false,
+  "conflict_rules_changed": false,
+  "auto_acceptance_logic_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_interpretation_added": false,
+  "imaging_interpretation_added": false,
+  "medication_parsing_added": false,
+  "dose_frequency_duration_parsing_added": false,
+  "lab_value_parsing_added": false,
+  "ddi_logic_changed": false,
+  "b07_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_changed": false,
+  "external_api_used": false,
+  "source_documents_staged": false,
+  "private_files_staged": false,
+  "runtime_db_staged": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "no_raw_phi": true,
+  "no_secrets": true
+}
