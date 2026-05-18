@@ -28,7 +28,7 @@
     "tests_passed": 33,
     "warnings": 7
   },
-  "head_commit": "37536a5",
+  "head_commit": "d4eeb05",
   "metadata_schema_checks": {
     "fallback_selection_reason_present": true,
     "selected_extractor_present": true,
@@ -77,7 +77,7 @@
     "missing": [],
     "passed": true
   },
-  "timestamp": "2026-05-18T22:36:24+00:00",
+  "timestamp": "2026-05-18T23:00:39+00:00",
   "validations_run_before_script": [
     "python -m pytest tests/test_phase23_routing_efficiency.py tests/test_connector_orchestration.py tests/test_phase10_hardening.py -q",
     "python scripts/run_b07_term01_opt_in_integration_validation.py",
