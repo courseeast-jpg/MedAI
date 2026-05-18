@@ -44,6 +44,7 @@ from governance.truth_resolution import GovernanceTruthResolutionAdapter
 from app.lab_document_metadata import (
     UNKNOWN_DOCUMENT_LABEL,
     classify_lab_document_type,
+    document_family_classification_diagnostic,
     safe_fallback_ocr_classification_diagnostic,
     safe_fallback_ocr_treatment_classification_diagnostic,
 )
@@ -272,6 +273,22 @@ class ExecutionPipeline:
             fallback_document_type = self._last_pdf_text_audit.get("ocr_gate_fallback_document_type")
             if fallback_document_type and fallback_document_type != UNKNOWN_DOCUMENT_LABEL:
                 extracted["document_type"] = fallback_document_type
+        family_diagnostic = extracted.get("document_family_classification_diagnostic")
+        family_candidate = (
+            family_diagnostic.get("candidate_family")
+            if isinstance(family_diagnostic, dict)
+            else None
+        )
+        if not family_candidate or family_candidate == UNKNOWN_DOCUMENT_LABEL:
+            family_diagnostic = document_family_classification_diagnostic(source_text)
+            if isinstance(family_diagnostic, dict):
+                family_diagnostic["classification_source"] = "runtime_text_family_classifier"
+            extracted["document_family_classification_diagnostic"] = family_diagnostic
+            family_candidate = family_diagnostic.get("candidate_family")
+            if family_candidate and family_candidate != UNKNOWN_DOCUMENT_LABEL:
+                current_document_type = extracted.get("document_type")
+                if not current_document_type or current_document_type == UNKNOWN_DOCUMENT_LABEL:
+                    extracted["document_type"] = family_candidate
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]

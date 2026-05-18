@@ -1,0 +1,112 @@
+{
+  "conclusion": "medai_doc_type_family_03_latin_lab_cues_ready",
+  "generated_at": "2026-05-18T16:11:10.579026+00:00",
+  "changed_scope": "metadata-only conservative Latin/structure lab document-family cue audit/update",
+  "eval_05_evidence_used": {
+    "total_files_evaluated": 80,
+    "lab_result_before": 15,
+    "urinalysis_before": 1,
+    "unknown_before": 64,
+    "script_visible_unknown_total": 64,
+    "table_like_shape": 64,
+    "lab_like_shape": 64,
+    "cue_audit_result": {
+      "possible_lab_shape_without_language_cues": 64
+    },
+    "external_api_used_count": 0,
+    "auto_accept_allowed_count": 0
+  },
+  "cue_categories_added": [
+    "lab_table_column_structure",
+    "analyte_value_unit_pattern",
+    "reference_range_column_pattern",
+    "flag_or_status_column_pattern",
+    "specimen_result_report_structure",
+    "laboratory_panel_abbreviation_latin",
+    "biomaterial_result_table_structure"
+  ],
+  "runtime_propagation_summary": {
+    "native_text_family_diagnostic_attached_when_missing_or_unknown": true,
+    "batch_eval_recomputes_stale_unknown_only_for_lab_result_with_latin_structure_cues": true,
+    "review_bound_family_runtime_accepted_status_normalized_in_eval_report": true
+  },
+  "before_after_80_file_safe_aggregate_comparison": {
+    "before": {
+      "total_files_evaluated": 80,
+      "lab_result": 15,
+      "urinalysis": 1,
+      "unknown": 64,
+      "accepted_count": 0,
+      "auto_accept_allowed_count": 0,
+      "external_api_used_count": 0,
+      "script_visible_unknown_possible_lab_shape_without_language_cues": 64
+    },
+    "after": {
+      "total_files_evaluated": 80,
+      "count_by_predicted_document_type": {
+        "Lab result": 78,
+        "Imaging report": 0,
+        "Treatment plan": 0,
+        "Medication plan": 0,
+        "Clinical note": 0,
+        "Discharge summary": 0,
+        "Unknown": 1,
+        "Referral / Order": 0,
+        "Procedure report": 0,
+        "Pathology report": 0,
+        "Administrative / Insurance": 0,
+        "Urinalysis": 1
+      },
+      "count_by_review_status": {
+        "review": 80
+      },
+      "accepted_count": 0,
+      "auto_accept_allowed_count": 0,
+      "external_api_used_count": 0,
+      "unknown_failure_bucket_counts": {
+        "fallback_ran_but_no_family_match": 1
+      },
+      "cue_audit_result_counts": {
+        "possible_lab_shape_without_language_cues": 1
+      },
+      "status_consistency": {
+        "unknown_accepted_anomaly_count": 0,
+        "unknown_accepted_anomaly_file_ids": [],
+        "invalid_status_mapping_file_ids": [],
+        "policy_anomaly_present": false
+      }
+    }
+  },
+  "validation_results": {
+    "focused_doc_type_family_03": "9 passed, 1 warning",
+    "doc_type_family_and_eval_regressions": "62 passed, 1 warning",
+    "ui_russian_ocr_gate_lab_upload_regressions": "157 passed",
+    "bang_folder_eval": "passed: 80 evaluated; Lab result 78; Urinalysis 1; Unknown 1; review 80; accepted 0; auto_accept 0; external_api 0",
+    "python scripts/run_medai_ui_ops_panel_validation.py": "passed: medai_ui_ops_panel_ready",
+    "python scripts/run_medai_ui_boot_fix_validation.py": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "python scripts/run_cka_final_mvp_release_validation.py": "passed: 12/12 cases, 693 tests, external_api_used false",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py": "passed: 6/6, external_api_used false",
+    "python scripts/run_medai_route_fix01_validation.py": "passed: medai_route_fix01_ready, external_api_used false",
+    "full_pytest": "timed out after 30 minutes; no full-suite pass claimed"
+  },
+  "safety_privacy": {
+    "ocr_routing_changed": false,
+    "ocr_engine_changed": false,
+    "classifier_changed": "metadata-only",
+    "threshold_changed": false,
+    "auto_accept_expanded": false,
+    "clinical_logic_changed": false,
+    "lab_value_parsing_added": false,
+    "medication_parsing_added": false,
+    "dose_parsing_added": false,
+    "ddi_logic_changed": false,
+    "external_api_changed": false,
+    "raw_ocr_text_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_private_paths_in_public_reports": false,
+    "private_files_staged": false,
+    "source_documents_staged": false,
+    "affected_files_remain_review_bound": true
+  },
+  "recommended_next_step": "Run another safe batch evaluation on a larger anonymized corpus slice; leave the remaining Unknown/manual-review case for targeted diagnostic only if it matters operationally."
+}

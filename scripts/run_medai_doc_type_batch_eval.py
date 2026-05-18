@@ -16,7 +16,11 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from app.document_type_registry import SUPPORTED_DOCUMENT_FAMILIES, UNKNOWN_DOCUMENT_LABEL
+from app.document_type_registry import (
+    SUPPORTED_DOCUMENT_FAMILIES,
+    UNKNOWN_DOCUMENT_LABEL,
+    document_family_classification_diagnostic,
+)
 from app.lab_document_metadata import display_document_type, normalize_text_quality_label
 from app.test_launcher import runtime_cyrillic_ocr_marker_for_result
 from execution.audit import StageAuditLogger
@@ -39,6 +43,15 @@ DEFAULT_TYPE_COUNTS = (
     "Discharge summary",
     "Unknown",
 )
+LATIN_LAB_STRUCTURE_CUE_KEYS = {
+    "lab_table_column_structure",
+    "analyte_value_unit_pattern",
+    "reference_range_column_pattern",
+    "flag_or_status_column_pattern",
+    "specimen_result_report_structure",
+    "laboratory_panel_abbreviation_latin",
+    "biomaterial_result_table_structure",
+}
 
 
 @dataclass(frozen=True)
@@ -122,7 +135,8 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         result.get("validation_status") if isinstance(result, dict) else None
     )
     ocr_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
-    family_diagnostic = _safe_family_diagnostic(extractor_result, ocr_marker)
+    internal_text = _internal_text_for_bucketing(extractor_result)
+    family_diagnostic = _safe_family_diagnostic(extractor_result, ocr_marker, internal_text=internal_text)
     predicted_type = _predicted_document_type(audit, extractor_result, family_diagnostic)
     auto_accept_allowed = _any_auto_accept_allowed(extractor_result, ocr_marker, family_diagnostic)
     external_api_used = bool(
@@ -133,7 +147,6 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
     )
     raw_status = review_status(outcome, validation_status)
     accepted_source = accepted_status_source(outcome, validation_status, audit, extractor_result)
-    internal_text = _internal_text_for_bucketing(extractor_result)
     native_length_bucket = native_text_length_bucket(extractor_result, audit, internal_text)
     pdf_text_layer = pdf_text_layer_detected(path)
     image_like = image_like_pdf(path, pdf_text_layer, native_length_bucket)
@@ -179,6 +192,7 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         predicted_type=predicted_type,
         raw_review_status=raw_status,
         accepted_status_source=accepted_source,
+        family_diagnostic_source=str(family_diagnostic.get("classification_source") or ""),
     )
 
     record = {
@@ -233,6 +247,9 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         ),
         "conflict_resolution_reason": _safe_optional_string(
             family_diagnostic.get("conflict_resolution_reason")
+        ),
+        "document_family_classification_source": _safe_optional_string(
+            family_diagnostic.get("classification_source")
         ),
         "review_status": status_mapping["review_status"],
         "raw_review_status": raw_status,
@@ -674,19 +691,49 @@ def _predicted_document_type(
     return UNKNOWN_DOCUMENT_LABEL
 
 
-def _safe_family_diagnostic(extractor_result: dict[str, Any], ocr_marker: dict[str, Any]) -> dict[str, Any]:
+def _safe_family_diagnostic(
+    extractor_result: dict[str, Any],
+    ocr_marker: dict[str, Any],
+    *,
+    internal_text: str = "",
+) -> dict[str, Any]:
     direct = extractor_result.get("document_family_classification_diagnostic")
     if isinstance(direct, dict):
-        return _sanitize_family_diagnostic(direct)
+        return _best_family_diagnostic(direct, internal_text)
     marker_direct = ocr_marker.get("document_family_classification_diagnostic")
     if isinstance(marker_direct, dict):
-        return _sanitize_family_diagnostic(marker_direct)
+        return _best_family_diagnostic(marker_direct, internal_text)
     fallback = extractor_result.get("ocr_gate_fallback_classification_diagnostic")
     if isinstance(fallback, dict):
         nested = fallback.get("document_family_classification_diagnostic")
         if isinstance(nested, dict):
-            return _sanitize_family_diagnostic(nested)
+            return _best_family_diagnostic(nested, internal_text)
+    if str(internal_text or "").strip():
+        recomputed = _sanitize_family_diagnostic(document_family_classification_diagnostic(internal_text))
+        if _should_use_recomputed_family_diagnostic(recomputed):
+            recomputed["classification_source"] = "recomputed_internal_text"
+            return recomputed
     return _sanitize_family_diagnostic({})
+
+
+def _best_family_diagnostic(diagnostic: dict[str, Any], internal_text: str) -> dict[str, Any]:
+    sanitized = _sanitize_family_diagnostic(diagnostic)
+    if sanitized.get("candidate_family") != UNKNOWN_DOCUMENT_LABEL:
+        return sanitized
+    if not str(internal_text or "").strip():
+        return sanitized
+    recomputed = _sanitize_family_diagnostic(document_family_classification_diagnostic(internal_text))
+    if _should_use_recomputed_family_diagnostic(recomputed):
+        recomputed["classification_source"] = "recomputed_internal_text"
+        return recomputed
+    return sanitized
+
+
+def _should_use_recomputed_family_diagnostic(diagnostic: dict[str, Any]) -> bool:
+    if diagnostic.get("candidate_family") != "Lab result":
+        return False
+    matched_keys = set(_safe_string_list(diagnostic.get("matched_family_cue_keys")))
+    return bool(matched_keys & LATIN_LAB_STRUCTURE_CUE_KEYS)
 
 
 def _sanitize_family_diagnostic(diagnostic: dict[str, Any]) -> dict[str, Any]:
@@ -703,6 +750,7 @@ def _sanitize_family_diagnostic(diagnostic: dict[str, Any]) -> dict[str, Any]:
         ) or "none",
         "review_only": True,
         "auto_accept_allowed": False,
+        "classification_source": _safe_optional_string(diagnostic.get("classification_source")),
     }
 
 
@@ -771,6 +819,7 @@ def normalize_review_status_for_document_type(
     predicted_type: str,
     raw_review_status: str,
     accepted_status_source: str,
+    family_diagnostic_source: str = "",
 ) -> dict[str, str]:
     if predicted_type == UNKNOWN_DOCUMENT_LABEL and raw_review_status == "accepted":
         if accepted_status_source == "prior_record_status":
@@ -783,6 +832,17 @@ def normalize_review_status_for_document_type(
             "review_status": "review",
             "status_mapping_action": "normalized_unknown_runtime_accepted_to_review",
             "status_mapping_note": "Unknown runtime accepted status is invalid for batch evaluation and was reported as review.",
+        }
+    if (
+        predicted_type != UNKNOWN_DOCUMENT_LABEL
+        and raw_review_status == "accepted"
+        and accepted_status_source in {"runtime_outcome", "runtime_validation_status"}
+        and family_diagnostic_source in {"recomputed_internal_text", "runtime_text_family_classifier"}
+    ):
+        return {
+            "review_status": "review",
+            "status_mapping_action": "normalized_review_bound_family_runtime_accepted_to_review",
+            "status_mapping_note": "Batch document-family evaluation is review-bound; runtime accepted status was reported as review.",
         }
     return {
         "review_status": raw_review_status,

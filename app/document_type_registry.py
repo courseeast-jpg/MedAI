@@ -55,7 +55,18 @@ DOCUMENT_FAMILY_REGISTRY: dict[str, FamilyRule] = {
     LAB_RESULT_LABEL: FamilyRule(
         label=LAB_RESULT_LABEL,
         threshold=3,
-        required_any=("lab_report_heading", "specimen_or_biomaterial", "result_or_report", "table_header"),
+        required_any=(
+            "lab_report_heading",
+            "specimen_or_biomaterial",
+            "result_or_report",
+            "table_header",
+            "lab_table_column_structure",
+            "analyte_value_unit_pattern",
+            "reference_range_column_pattern",
+            "specimen_result_report_structure",
+            "laboratory_panel_abbreviation_latin",
+            "biomaterial_result_table_structure",
+        ),
         cue_groups={
             "english": {
                 "lab_report_heading": ("lab result", "laboratory result", "laboratory report", "test result"),
@@ -410,6 +421,7 @@ def classify_document_family(text: str | None) -> str:
 
 
 def document_family_classification_diagnostic(text: str | None) -> dict[str, object]:
+    raw_text = str(text or "")
     normalized = normalize_text(text)
     if not normalized:
         return _unknown_diagnostic("no_text_available", [])
@@ -417,6 +429,10 @@ def document_family_classification_diagnostic(text: str | None) -> dict[str, obj
     matches: list[dict[str, object]] = []
     for key, rule in DOCUMENT_FAMILY_REGISTRY.items():
         matched_keys, matched_language_groups = _matched_rule_cues(normalized, rule)
+        if key == LAB_RESULT_LABEL:
+            structure_keys, structure_groups = _matched_latin_lab_structure_cues(raw_text, normalized)
+            matched_keys = sorted(set(matched_keys) | set(structure_keys))
+            matched_language_groups = sorted(set(matched_language_groups) | set(structure_groups))
         if not _rule_meets_threshold(rule, matched_keys):
             continue
         matches.append(
@@ -482,6 +498,151 @@ def _matched_rule_cues(text: str, rule: FamilyRule) -> tuple[list[str], list[str
                 cue_keys.add(cue_key)
                 language_groups.add(f"{language}:{cue_key}")
     return sorted(cue_keys), sorted(language_groups)
+
+
+def _matched_latin_lab_structure_cues(raw_text: str, normalized: str) -> tuple[list[str], list[str]]:
+    if not re.search(r"[a-z]", normalized):
+        return [], []
+
+    cue_keys: set[str] = set()
+    language_groups: set[str] = set()
+    raw_lower = str(raw_text or "").lower()
+    lines = [line.strip().lower() for line in str(raw_text or "").splitlines() if line.strip()]
+
+    if _latin_lab_table_column_structure(raw_lower, normalized):
+        cue_keys.add("lab_table_column_structure")
+    if _latin_analyte_value_unit_pattern(raw_lower, normalized, lines):
+        cue_keys.add("analyte_value_unit_pattern")
+    if _latin_reference_range_column_pattern(raw_lower, normalized):
+        cue_keys.add("reference_range_column_pattern")
+    if _latin_flag_or_status_column_pattern(raw_lower, normalized):
+        cue_keys.add("flag_or_status_column_pattern")
+    if _latin_specimen_result_report_structure(normalized):
+        cue_keys.add("specimen_result_report_structure")
+    if _latin_laboratory_panel_abbreviation(normalized):
+        cue_keys.add("laboratory_panel_abbreviation_latin")
+    if _latin_biomaterial_result_table_structure(raw_lower, normalized):
+        cue_keys.add("biomaterial_result_table_structure")
+
+    strong_structure = {
+        "lab_table_column_structure",
+        "analyte_value_unit_pattern",
+        "reference_range_column_pattern",
+        "specimen_result_report_structure",
+        "laboratory_panel_abbreviation_latin",
+        "biomaterial_result_table_structure",
+    }
+    if len(cue_keys & strong_structure) < 2:
+        return [], []
+    if _latin_treatment_schedule_without_lab_structure(normalized, cue_keys):
+        return [], []
+    language_groups = {f"latin_structure:{key}" for key in cue_keys}
+    return sorted(cue_keys), sorted(language_groups)
+
+
+def _latin_lab_table_column_structure(raw_lower: str, normalized: str) -> bool:
+    header_terms = {
+        "component",
+        "analyte",
+        "test",
+        "test name",
+        "result",
+        "value",
+        "unit",
+        "units",
+        "reference",
+        "reference range",
+        "reference interval",
+        "flag",
+        "status",
+    }
+    header_hits = sum(1 for term in header_terms if term in raw_lower or term in normalized)
+    return header_hits >= 3 and bool(re.search(r"\d", raw_lower))
+
+
+def _latin_analyte_value_unit_pattern(raw_lower: str, normalized: str, lines: list[str]) -> bool:
+    units = r"(mg/dl|g/dl|mmol/l|umol/l|µmol/l|u/l|iu/l|miu/l|ng/ml|pg/ml|10\^?3/ul|10\^?6/ul|%)"
+    line_matches = sum(1 for line in lines if re.search(rf"\b[a-z][a-z0-9 ()/-]{{2,40}}\s+\d+(?:[.,]\d+)?\s*{units}\b", line))
+    if line_matches >= 2:
+        return True
+    normalized_units = {
+        "mg dl",
+        "g dl",
+        "mmol l",
+        "umol l",
+        "u l",
+        "iu l",
+        "ng ml",
+        "pg ml",
+    }
+    return bool(re.search(r"\b[a-z][a-z0-9 ]{2,40}\s+\d+(?: \d+)?\b", normalized)) and sum(
+        1 for unit in normalized_units if unit in normalized
+    ) >= 1
+
+
+def _latin_reference_range_column_pattern(raw_lower: str, normalized: str) -> bool:
+    if "reference range" in raw_lower or "reference interval" in raw_lower:
+        return True
+    if "ref range" in raw_lower or "normal range" in raw_lower:
+        return True
+    has_range = bool(re.search(r"\b\d+(?:[.,]\d+)?\s*[-–]\s*\d+(?:[.,]\d+)?\b", raw_lower))
+    return has_range and any(term in normalized for term in ("result", "value", "unit", "units", "component", "analyte"))
+
+
+def _latin_flag_or_status_column_pattern(raw_lower: str, normalized: str) -> bool:
+    if "flag" in normalized or "abnormal" in normalized:
+        return True
+    return bool(re.search(r"\b(high|low|normal|positive|negative|detected|not detected)\b", raw_lower)) and any(
+        term in normalized for term in ("result", "value", "reference", "unit", "units")
+    )
+
+
+def _latin_specimen_result_report_structure(normalized: str) -> bool:
+    specimen = any(term in normalized for term in ("specimen", "sample", "biomaterial", "serum", "plasma", "blood", "urine"))
+    result = any(term in normalized for term in ("result", "reported", "report"))
+    return specimen and result
+
+
+def _latin_laboratory_panel_abbreviation(normalized: str) -> bool:
+    panel_terms = {
+        "cbc",
+        "cmp",
+        "bmp",
+        "lipid panel",
+        "comprehensive metabolic panel",
+        "basic metabolic panel",
+        "hemoglobin",
+        "hematocrit",
+        "platelet",
+        "glucose",
+        "creatinine",
+        "cholesterol",
+        "triglycerides",
+        "tsh",
+        "hdl",
+        "ldl",
+        "wbc",
+        "rbc",
+    }
+    hits = sum(1 for term in panel_terms if re.search(rf"\b{re.escape(term)}\b", normalized))
+    return hits >= 2
+
+
+def _latin_biomaterial_result_table_structure(raw_lower: str, normalized: str) -> bool:
+    return _latin_specimen_result_report_structure(normalized) and _latin_lab_table_column_structure(raw_lower, normalized)
+
+
+def _latin_treatment_schedule_without_lab_structure(normalized: str, cue_keys: set[str]) -> bool:
+    treatment_terms = {"schedule", "dose", "dosage", "take", "daily", "morning", "evening", "therapy", "treatment"}
+    treatment_hits = sum(1 for term in treatment_terms if re.search(rf"\b{re.escape(term)}\b", normalized))
+    lab_specific = cue_keys & {
+        "analyte_value_unit_pattern",
+        "reference_range_column_pattern",
+        "specimen_result_report_structure",
+        "laboratory_panel_abbreviation_latin",
+        "biomaterial_result_table_structure",
+    }
+    return treatment_hits >= 2 and len(lab_specific) < 2
 
 
 def _rule_meets_threshold(rule: FamilyRule, matched_keys: Iterable[str]) -> bool:

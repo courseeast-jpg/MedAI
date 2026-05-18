@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from app.document_type_registry import UNKNOWN_DOCUMENT_LABEL
+from app.document_type_registry import LAB_RESULT_LABEL, UNKNOWN_DOCUMENT_LABEL
 from clinical_knowledge.privacy.report_privacy import check_public_report_payload
 from scripts import run_medai_doc_type_batch_eval as eval01
 
@@ -63,15 +63,16 @@ def test_latin_mri_shape_is_possible_imaging_without_family_label(tmp_path: Path
     assert record["cue_audit_result"] == "possible_imaging_shape_without_language_cues"
 
 
-def test_latin_lab_table_shape_is_possible_lab_without_family_label(tmp_path: Path) -> None:
+def test_latin_lab_table_shape_can_be_promoted_by_family03_structure_cues(tmp_path: Path) -> None:
     record = _record(
         tmp_path,
         "Component Result Unit Reference\nGlucose 92 mg/dL 70-99\nCreatinine 0.9 mg/dL 0.6-1.2",
     )
 
-    assert record["predicted_document_type"] == UNKNOWN_DOCUMENT_LABEL
-    assert record["lab_table_shape_detected"] == "yes"
-    assert record["cue_audit_result"] == "possible_lab_shape_without_language_cues"
+    assert record["predicted_document_type"] == LAB_RESULT_LABEL
+    assert "lab_table_column_structure" in record["matched_safe_cue_keys"]
+    assert record["cue_audit_result"] == "not_applicable"
+    assert record["review_status"] == "review"
 
 
 def test_header_noise_shape_gets_header_noise_bucket(tmp_path: Path) -> None:
@@ -90,11 +91,10 @@ def test_script_visible_unknown_cue_audit_summary_counts_safe_shapes(tmp_path: P
     report = eval01.build_report(records)
     audit = report["script_visible_unknown_cue_audit"]
 
-    assert audit["script_visible_unknown_total"] == 3
+    assert audit["script_visible_unknown_total"] == 2
     assert audit["imaging_like_shape"] == 1
-    assert audit["lab_like_shape"] == 1
     assert audit["likely_header_noise"] == 1
-    assert "possible_lab_shape_without_language_cues" in audit["cue_audit_result_counts"]
+    assert "possible_lab_shape_without_language_cues" not in audit["cue_audit_result_counts"]
 
 
 def test_eval05_reports_are_privacy_clean_and_do_not_emit_raw_text(tmp_path: Path) -> None:
