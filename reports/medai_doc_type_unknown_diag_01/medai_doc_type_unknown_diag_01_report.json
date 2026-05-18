@@ -1,0 +1,117 @@
+{
+  "behavior_changed": false,
+  "branch": "clinical-knowledge-architecture",
+  "bucket_counts": {
+    "ambiguous_below_threshold": 15,
+    "fallback_ran_but_no_family_match": 17,
+    "insufficient_text_visibility": 75
+  },
+  "buckets": {
+    "ambiguous_below_threshold": {
+      "count": 15,
+      "likely_next_action": "leave review-bound; must not drive cue expansion from this bucket yet",
+      "name": "ambiguous_below_threshold",
+      "notes": [
+        "Higher false-positive risk. Reported as summary only per the UNKNOWN-DIAG-01 scope.",
+        "All ambiguities remain review-bound; no auto-accept allowance."
+      ],
+      "sample_ids": [
+        "ambiguous_below_threshold_001",
+        "ambiguous_below_threshold_002",
+        "ambiguous_below_threshold_003",
+        "ambiguous_below_threshold_004",
+        "ambiguous_below_threshold_005"
+      ],
+      "sub_breakdown": {
+        "administrative_insurance_medication_plan": 1,
+        "administrative_insurance_medication_plan_referral_order": 1,
+        "administrative_insurance_referral_order": 2,
+        "imaging_report_medication_plan": 4,
+        "imaging_report_medication_plan_treatment_plan": 7
+      }
+    },
+    "fallback_ran_but_no_family_match": {
+      "count": 17,
+      "likely_next_action": "audit shape cues (lab-like / imaging-like / treatment-like / generic admin / no-known-shapes) in a follow-up evaluation-only block",
+      "name": "fallback_ran_but_no_family_match",
+      "notes": [
+        "Aggregate count from the FAMILY-04 public report. Per-shape breakdown for this bucket is not present in the public report; EVAL-05 introduced the shape-audit framework that could be invoked in a follow-up evaluation-only block if operational coverage matters.",
+        "Failure mode is most plausibly missing family cues on degraded text rather than OCR routing -- the bucket name implies fallback ran.",
+        "No cue expansion in this block."
+      ],
+      "sample_ids": [
+        "fallback_ran_but_no_family_match_001",
+        "fallback_ran_but_no_family_match_002",
+        "fallback_ran_but_no_family_match_003",
+        "fallback_ran_but_no_family_match_004",
+        "fallback_ran_but_no_family_match_005"
+      ],
+      "sub_breakdown": {
+        "fallback_ran_no_family_match_aggregate_only": 17
+      }
+    },
+    "insufficient_text_visibility": {
+      "count": 75,
+      "likely_next_action": "improve OCR or text-visibility coverage; must not expand cue packs",
+      "name": "insufficient_text_visibility",
+      "notes": [
+        "image_like_pdf_but_not_routed_to_ocr indicates a candidate for OCR routing review in a later, dedicated block.",
+        "language_visibility_unknown is the largest sub-bucket; primary lever is text-layer or OCR coverage, not classifier cue addition.",
+        "Sub-buckets may overlap (a single file can match more than one reason); the bucket count is authoritative, the sub-breakdown is informational.",
+        "Aggregate-only. No raw filenames, no raw text, no private paths."
+      ],
+      "sample_ids": [
+        "insufficient_text_visibility_001",
+        "insufficient_text_visibility_002",
+        "insufficient_text_visibility_003",
+        "insufficient_text_visibility_004",
+        "insufficient_text_visibility_005"
+      ],
+      "sub_breakdown": {
+        "image_like_pdf_but_not_routed_to_ocr": 11,
+        "language_visibility_unknown": 42,
+        "no_text_layer": 11,
+        "routing_not_eligible": 1,
+        "text_layer_present_but_too_short": 21
+      }
+    }
+  },
+  "conclusion": "Primary diagnostic focus: ocr_or_text_visibility. The dominant Unknown bucket is insufficient_text_visibility (75 of 107 records). The fallback_ran_but_no_family_match bucket (17) is a secondary, evaluation-only candidate for a shape-cue audit. ambiguous_below_threshold (15) remains review-bound and is not optimized in this block.",
+  "external_api_used": false,
+  "generated_at": "2026-05-18T17:31:04.647172+00:00",
+  "head_commit_short": "2446d7719a3e",
+  "park_19_commit_short": "ac466e0f9ab8",
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "recommendation_next_block": "If operational coverage requires it, a follow-up evaluation-only block could (1) audit OCR/text-visibility eligibility for the insufficient_text_visibility sub-buckets, prioritizing language_visibility_unknown and text_layer_present_but_too_short, and (2) re-run the EVAL-05 shape audit specifically over the fallback_ran_but_no_family_match bucket to characterize cue gaps. Otherwise leave all 107 Unknown records review-bound.",
+  "safety_privacy": {
+    "all_records_remain_review_bound": true,
+    "auto_accept_changed": false,
+    "b07_changed": false,
+    "behavior_changed": false,
+    "classifier_behavior_changed": false,
+    "clinical_interpretation_added": false,
+    "command_allowlist_changed": false,
+    "db_schema_changed": false,
+    "ddi_logic_changed": false,
+    "dose_parsing_added": false,
+    "external_api_changed": false,
+    "external_api_used": false,
+    "lab_value_parsing_added": false,
+    "medication_parsing_added": false,
+    "ocr_engine_changed": false,
+    "ocr_routing_changed": false,
+    "private_corpus_files_staged": false,
+    "private_paths_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "raw_ocr_text_in_public_reports": false,
+    "route_fix_changed": false,
+    "scoring_changed": false,
+    "secrets_in_public_reports": false,
+    "source_documents_staged": false,
+    "thresholds_changed": false
+  },
+  "snapshot": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-01",
+  "source_report_label": "reports/medai_doc_type_family_04_larger_slice_validation/(public anonymized larger-slice report)",
+  "total_unknown_analyzed": 107
+}
