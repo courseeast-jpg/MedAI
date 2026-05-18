@@ -129,8 +129,10 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         or extractor_result.get("cloud_api_used")
         or audit.get("cloud_api_used")
     )
+    status = review_status(outcome, validation_status)
+    accepted_source = accepted_status_source(outcome, validation_status, audit, extractor_result)
 
-    return {
+    record = {
         "file_id": safe_id,
         "extension": path.suffix.lower(),
         "size_bucket": size_bucket(_safe_size(path)),
@@ -160,10 +162,14 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         "conflict_resolution_reason": _safe_optional_string(
             family_diagnostic.get("conflict_resolution_reason")
         ),
-        "review_status": review_status(outcome, validation_status),
+        "review_status": status,
+        "accepted_status_source": accepted_source,
         "auto_accept_allowed": auto_accept_allowed,
         "external_api_used": external_api_used,
     }
+    record["unknown_failure_bucket"] = unknown_failure_bucket(record)
+    record["status_consistency_flags"] = status_consistency_flags(record)
+    return record
 
 
 def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[str, Any]:
@@ -185,9 +191,12 @@ def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[st
         "classification_block_reason": "runtime_error",
         "conflict_resolution_reason": "none",
         "review_status": "error",
+        "accepted_status_source": "not_accepted",
         "auto_accept_allowed": False,
         "external_api_used": False,
         "error_bucket": safe_error_bucket(error),
+        "unknown_failure_bucket": "unsupported_or_empty_text",
+        "status_consistency_flags": [],
     }
 
 
@@ -214,9 +223,15 @@ def build_report(records: list[dict[str, Any]]) -> dict[str, Any]:
     fallback_count = sum(1 for record in records if record.get("ocr_gate_fallback_executed") is True)
     external_api_count = sum(1 for record in records if record.get("external_api_used") is True)
     auto_accept_count = sum(1 for record in records if record.get("auto_accept_allowed") is True)
+    accepted_count = sum(1 for record in records if record.get("review_status") == "accepted")
+    status_anomalies = status_anomaly_records(records)
+    accepted_sources = Counter(str(record.get("accepted_status_source") or "not_accepted") for record in records)
+    unknown_diagnostics = unknown_diagnostic_summary(records)
+    evaluation_status = "failed" if external_api_count > 0 or auto_accept_count > 0 else "passed"
 
     return {
         "conclusion": "medai_doc_type_eval_01_ready",
+        "evaluation_status": evaluation_status,
         "generated_at": datetime.now(UTC).isoformat(),
         "evaluation_type": "privacy_safe_local_batch_document_type_evaluation",
         "total_files_evaluated": len(records),
@@ -226,6 +241,14 @@ def build_report(records: list[dict[str, Any]]) -> dict[str, Any]:
         "ocr_fallback_used_count": fallback_count,
         "external_api_used_count": external_api_count,
         "auto_accept_allowed_count": auto_accept_count,
+        "accepted_count": accepted_count,
+        "accepted_status_source_counts": dict(sorted(accepted_sources.items())),
+        "status_consistency": {
+            "unknown_accepted_anomaly_count": len(status_anomalies),
+            "unknown_accepted_anomaly_file_ids": [str(record["file_id"]) for record in status_anomalies],
+            "policy_anomaly_present": bool(status_anomalies),
+        },
+        "unknown_diagnostics": unknown_diagnostics,
         "top_safe_cue_categories_by_family": top_cues,
         "anonymous_per_file_table": records,
         "recommended_next_actions": recommended_next_actions(records),
@@ -256,9 +279,27 @@ def recommended_next_actions(records: list[dict[str, Any]]) -> dict[str, int]:
     actions = {
         "cue-pack update needed": 0,
         "conflict-resolution update needed": 0,
+        "OCR/text visibility investigation": 0,
+        "status mapping fix": 0,
+        "external API violation": 0,
+        "auto-accept violation": 0,
         "UI-only issue": 0,
         "leave Unknown/manual review": 0,
     }
+    unknown_summary = unknown_diagnostic_summary(records)
+    if unknown_summary["unknown_accepted_status_anomaly_count"]:
+        actions["status mapping fix"] += int(unknown_summary["unknown_accepted_status_anomaly_count"])
+    if any(record.get("external_api_used") is True for record in records):
+        actions["external API violation"] += 1
+    if any(record.get("auto_accept_allowed") is True for record in records):
+        actions["auto-accept violation"] += 1
+    if (
+        unknown_summary["unknown_with_low_or_incomplete_text_visibility"]
+        > unknown_summary["unknown_with_high_text_visibility"]
+    ):
+        actions["OCR/text visibility investigation"] += 1
+    if unknown_summary["unknown_with_any_family_cue_keys"] > 0:
+        actions["cue-pack update needed"] += int(unknown_summary["unknown_with_any_family_cue_keys"])
     for record in records:
         predicted = str(record.get("predicted_document_type") or UNKNOWN_DOCUMENT_LABEL)
         block_reason = str(record.get("classification_block_reason") or "")
@@ -269,7 +310,8 @@ def recommended_next_actions(records: list[dict[str, Any]]) -> dict[str, int]:
             "too_few_safe_lab_cue_keys",
             "too_few_safe_treatment_cue_keys",
         }:
-            actions["cue-pack update needed"] += 1
+            if not record.get("matched_safe_cue_keys"):
+                actions["leave Unknown/manual review"] += 1
         elif predicted == UNKNOWN_DOCUMENT_LABEL:
             actions["leave Unknown/manual review"] += 1
         else:
@@ -293,9 +335,11 @@ def render_markdown_report(report: dict[str, Any]) -> str:
         f"- Conclusion: `{report['conclusion']}`",
         f"- Total files evaluated: `{report['total_files_evaluated']}`",
         f"- External API used count: `{report['external_api_used_count']}`",
+        f"- Accepted count: `{report['accepted_count']}`",
         f"- Auto-accept allowed count: `{report['auto_accept_allowed_count']}`",
         f"- OCR fallback used count: `{report['ocr_fallback_used_count']}`",
         f"- Ambiguous family conflict count: `{report['ambiguous_family_conflict_count']}`",
+        f"- Unknown accepted anomaly count: `{report['status_consistency']['unknown_accepted_anomaly_count']}`",
         "",
         "## Count By Predicted Document Type",
         "",
@@ -308,6 +352,33 @@ def render_markdown_report(report: dict[str, Any]) -> str:
     lines.extend(["", "## Recommended Next Actions", ""])
     for label, count in report["recommended_next_actions"].items():
         lines.append(f"- {label}: `{count}`")
+    lines.extend(["", "## Unknown Diagnostics", ""])
+    unknown = report["unknown_diagnostics"]
+    for key in (
+        "unknown_with_fallback_true",
+        "unknown_with_fallback_false",
+        "unknown_with_high_text_visibility",
+        "unknown_with_low_or_incomplete_text_visibility",
+        "unknown_with_any_family_cue_keys",
+        "unknown_with_no_family_cue_keys",
+        "unknown_accepted_status_anomaly_count",
+    ):
+        lines.append(f"- {key}: `{unknown[key]}`")
+    lines.extend(["", "### Unknown Failure Buckets", ""])
+    for bucket, count in unknown["unknown_failure_bucket_counts"].items():
+        lines.append(f"- {bucket}: `{count}`")
+    lines.extend(["", "### Priority Unknown Samples", ""])
+    if not unknown["priority_unknown_samples"]:
+        lines.append("- No Unknown samples.")
+    for item in unknown["priority_unknown_samples"]:
+        lines.append(
+            "- "
+            f"{item['file_id']} "
+            f"bucket=`{item['unknown_failure_bucket']}` "
+            f"fallback=`{item['ocr_gate_fallback_executed']}` "
+            f"visibility=`{item['language_text_visibility']}` "
+            f"accepted_source=`{item['accepted_status_source']}`"
+        )
     lines.extend(["", "## Anonymous Per-File Table", ""])
     if not report["anonymous_per_file_table"]:
         lines.append("- No supported files evaluated.")
@@ -318,6 +389,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
             f"extension=`{record['extension']}` "
             f"type=`{record['predicted_document_type']}` "
             f"review_status=`{record['review_status']}` "
+            f"unknown_bucket=`{record['unknown_failure_bucket']}` "
             f"fallback=`{record['ocr_gate_fallback_executed']}` "
             f"external_api=`{record['external_api_used']}`"
         )
@@ -420,6 +492,142 @@ def review_status(outcome: Any, validation_status: Any) -> str:
     if validation_value in {"rejected", "needs_review"} or outcome_value in {"queued_for_review", "blocked_ddi"}:
         return "review"
     return "review"
+
+
+def accepted_status_source(
+    outcome: Any,
+    validation_status: Any,
+    audit: dict[str, Any] | None = None,
+    extractor_result: dict[str, Any] | None = None,
+) -> str:
+    outcome_value = str(outcome or "").lower()
+    validation_value = str(validation_status or "").lower()
+    audit = audit or {}
+    extractor_result = extractor_result or {}
+    prior_status = str(
+        audit.get("prior_record_status")
+        or extractor_result.get("prior_record_status")
+        or audit.get("record_status")
+        or extractor_result.get("record_status")
+        or ""
+    ).lower()
+    if validation_value == "accepted":
+        return "runtime_validation_status"
+    if outcome_value == "written":
+        return "runtime_outcome"
+    if prior_status in {"accepted", "active", "written"}:
+        return "prior_record_status"
+    return "not_accepted"
+
+
+def unknown_failure_bucket(record: dict[str, Any]) -> str:
+    if str(record.get("predicted_document_type") or "") != UNKNOWN_DOCUMENT_LABEL:
+        return "not_applicable"
+    if record.get("review_status") == "accepted":
+        return "status_mapping_anomaly"
+    if str(record.get("size_bucket") or "") == "empty" or str(record.get("ocr_quality_band") or "") in {
+        "No text found",
+        "Failed",
+    }:
+        return "unsupported_or_empty_text"
+    if record.get("ambiguous_candidates"):
+        return "ambiguous_below_threshold"
+    if record.get("ocr_gate_fallback_executed") is True:
+        return "fallback_ran_but_no_family_match"
+    if record.get("cyrillic_ocr_recommended") is True:
+        return "OCR_not_triggered"
+    visibility = str(record.get("language_text_visibility") or "").lower()
+    if visibility in {"", "none", "unknown", "incomplete", "not_applicable", "failed"}:
+        return "insufficient_text_visibility"
+    if record.get("matched_safe_cue_keys"):
+        return "generic_cues_only"
+    return "no_safe_document_family_cues"
+
+
+def status_consistency_flags(record: dict[str, Any]) -> list[str]:
+    flags: list[str] = []
+    if (
+        str(record.get("predicted_document_type") or "") == UNKNOWN_DOCUMENT_LABEL
+        and record.get("review_status") == "accepted"
+    ):
+        flags.append("unknown_accepted_policy_anomaly")
+    if record.get("external_api_used") is True:
+        flags.append("external_api_used_policy_failure")
+    if record.get("auto_accept_allowed") is True:
+        flags.append("auto_accept_allowed_policy_failure")
+    return flags
+
+
+def status_anomaly_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        record
+        for record in records
+        if "unknown_accepted_policy_anomaly" in _safe_string_list(record.get("status_consistency_flags"))
+    ]
+
+
+def unknown_diagnostic_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
+    unknown_records = [
+        record for record in records if str(record.get("predicted_document_type") or "") == UNKNOWN_DOCUMENT_LABEL
+    ]
+    bucket_counts = Counter(str(record.get("unknown_failure_bucket") or "unknown") for record in unknown_records)
+    high_visibility_values = {"visible", "recovered", "readable"}
+    high_visibility = [
+        record
+        for record in unknown_records
+        if str(record.get("language_text_visibility") or "").lower() in high_visibility_values
+    ]
+    low_visibility = [record for record in unknown_records if record not in high_visibility]
+    any_cues = [record for record in unknown_records if record.get("matched_safe_cue_keys")]
+    no_cues = [record for record in unknown_records if not record.get("matched_safe_cue_keys")]
+    samples = sorted(
+        unknown_records,
+        key=lambda record: (
+            _unknown_priority_rank(str(record.get("unknown_failure_bucket") or "")),
+            str(record.get("file_id") or ""),
+        ),
+    )[:10]
+    return {
+        "unknown_total": len(unknown_records),
+        "unknown_with_fallback_true": sum(
+            1 for record in unknown_records if record.get("ocr_gate_fallback_executed") is True
+        ),
+        "unknown_with_fallback_false": sum(
+            1 for record in unknown_records if record.get("ocr_gate_fallback_executed") is not True
+        ),
+        "unknown_with_high_text_visibility": len(high_visibility),
+        "unknown_with_low_or_incomplete_text_visibility": len(low_visibility),
+        "unknown_with_any_family_cue_keys": len(any_cues),
+        "unknown_with_no_family_cue_keys": len(no_cues),
+        "unknown_accepted_status_anomaly_count": len(status_anomaly_records(unknown_records)),
+        "unknown_failure_bucket_counts": dict(sorted(bucket_counts.items())),
+        "priority_unknown_samples": [
+            {
+                "file_id": str(record.get("file_id")),
+                "unknown_failure_bucket": str(record.get("unknown_failure_bucket")),
+                "language_text_visibility": record.get("language_text_visibility"),
+                "ocr_gate_fallback_executed": bool(record.get("ocr_gate_fallback_executed")),
+                "matched_safe_cue_keys": _safe_string_list(record.get("matched_safe_cue_keys")),
+                "ambiguous_candidates": _safe_string_list(record.get("ambiguous_candidates")),
+                "accepted_status_source": str(record.get("accepted_status_source") or "not_accepted"),
+            }
+            for record in samples
+        ],
+    }
+
+
+def _unknown_priority_rank(bucket: str) -> int:
+    order = {
+        "status_mapping_anomaly": 0,
+        "fallback_ran_but_no_family_match": 1,
+        "generic_cues_only": 2,
+        "ambiguous_below_threshold": 3,
+        "OCR_not_triggered": 4,
+        "insufficient_text_visibility": 5,
+        "no_safe_document_family_cues": 6,
+        "unsupported_or_empty_text": 7,
+    }
+    return order.get(bucket, 99)
 
 
 def size_bucket(size: int) -> str:
