@@ -21,6 +21,7 @@ from app.test_launcher import runtime_cyrillic_ocr_marker_for_result
 from execution.audit import StageAuditLogger
 from execution.logging import AuditLogger
 from execution.pipeline import ExecutionPipeline
+from ingestion.cyrillic_ocr_gate import bucket_text_length
 
 
 DEFAULT_OUTPUT_DIR = ROOT / "reports" / "medai_doc_type_eval_01"
@@ -131,12 +132,57 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
     )
     status = review_status(outcome, validation_status)
     accepted_source = accepted_status_source(outcome, validation_status, audit, extractor_result)
+    internal_text = _internal_text_for_bucketing(extractor_result)
+    native_length_bucket = native_text_length_bucket(extractor_result, audit, internal_text)
+    pdf_text_layer = pdf_text_layer_detected(path)
+    image_like = image_like_pdf(path, pdf_text_layer, native_length_bucket)
+    language_visibility = language_visibility_status(ocr_marker, extractor_result)
+    cyrillic_visibility = cyrillic_visibility_status(ocr_marker, extractor_result)
+    fallback_executed = bool(ocr_marker.get("ocr_gate_fallback_executed", False))
+    fallback_eligible = ocr_fallback_eligible(
+        cyrillic_ocr_recommended=bool(ocr_marker.get("cyrillic_ocr_recommended", False)),
+        image_like_pdf=image_like,
+        language_visibility_status=language_visibility,
+        native_text_length_bucket=native_length_bucket,
+        extension=path.suffix.lower(),
+    )
+    fallback_not_triggered = ocr_fallback_not_triggered_reason(
+        extension=path.suffix.lower(),
+        ocr_fallback_executed=fallback_executed,
+        ocr_fallback_eligible=fallback_eligible,
+        pdf_text_layer_detected=pdf_text_layer,
+        image_like_pdf=image_like,
+        native_text_length_bucket=native_length_bucket,
+        language_visibility_status=language_visibility,
+        error_bucket=None,
+    )
+    cue_count_bucket = document_family_cue_count_bucket(family_diagnostic)
 
     record = {
         "file_id": safe_id,
         "extension": path.suffix.lower(),
         "size_bucket": size_bucket(_safe_size(path)),
         "page_count_bucket": page_count_bucket(path),
+        "text_extraction_status_bucket": text_extraction_status_bucket(
+            normalize_text_quality_label(
+                audit.get("ocr_quality_band"),
+                audit.get("input_quality_band"),
+                extractor_result.get("ocr_quality_band"),
+                extractor_result.get("input_quality_band"),
+                extractor_result.get("text_quality_status"),
+                audit.get("text_quality_status"),
+            ),
+            native_length_bucket,
+            error_bucket=None,
+        ),
+        "native_text_length_bucket": native_length_bucket,
+        "pdf_text_layer_detected": pdf_text_layer,
+        "image_like_pdf": image_like,
+        "ocr_fallback_eligible": fallback_eligible,
+        "ocr_fallback_not_triggered_reason": fallback_not_triggered,
+        "language_visibility_status": language_visibility,
+        "cyrillic_visibility_status": cyrillic_visibility,
+        "document_family_cue_count_bucket": cue_count_bucket,
         "ocr_quality_band": normalize_text_quality_label(
             audit.get("ocr_quality_band"),
             audit.get("input_quality_band"),
@@ -147,7 +193,7 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         ),
         "language_text_visibility": ocr_marker.get("language_text_visibility"),
         "cyrillic_ocr_recommended": bool(ocr_marker.get("cyrillic_ocr_recommended", False)),
-        "ocr_gate_fallback_executed": bool(ocr_marker.get("ocr_gate_fallback_executed", False)),
+        "ocr_gate_fallback_executed": fallback_executed,
         "ocr_gate_fallback_cyrillic_detected": bool(
             ocr_marker.get("ocr_gate_fallback_cyrillic_detected", False)
         ),
@@ -168,16 +214,27 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         "external_api_used": external_api_used,
     }
     record["unknown_failure_bucket"] = unknown_failure_bucket(record)
+    record["unknown_ocr_routing_bucket"] = unknown_ocr_routing_bucket(record)
     record["status_consistency_flags"] = status_consistency_flags(record)
     return record
 
 
 def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[str, Any]:
+    error_bucket = safe_error_bucket(error)
     return {
         "file_id": safe_id,
         "extension": path.suffix.lower(),
         "size_bucket": size_bucket(_safe_size(path)),
         "page_count_bucket": page_count_bucket(path),
+        "text_extraction_status_bucket": "extraction_error",
+        "native_text_length_bucket": "unknown",
+        "pdf_text_layer_detected": pdf_text_layer_detected(path),
+        "image_like_pdf": "unknown",
+        "ocr_fallback_eligible": "unknown",
+        "ocr_fallback_not_triggered_reason": "extraction_error",
+        "language_visibility_status": "unknown",
+        "cyrillic_visibility_status": "unknown",
+        "document_family_cue_count_bucket": "none",
         "ocr_quality_band": "unknown",
         "language_text_visibility": "unknown",
         "cyrillic_ocr_recommended": False,
@@ -194,8 +251,9 @@ def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[st
         "accepted_status_source": "not_accepted",
         "auto_accept_allowed": False,
         "external_api_used": False,
-        "error_bucket": safe_error_bucket(error),
+        "error_bucket": error_bucket,
         "unknown_failure_bucket": "unsupported_or_empty_text",
+        "unknown_ocr_routing_bucket": "extraction_error",
         "status_consistency_flags": [],
     }
 
@@ -249,6 +307,7 @@ def build_report(records: list[dict[str, Any]]) -> dict[str, Any]:
             "policy_anomaly_present": bool(status_anomalies),
         },
         "unknown_diagnostics": unknown_diagnostics,
+        "unknown_ocr_routing_diagnostics": unknown_ocr_routing_summary(records),
         "top_safe_cue_categories_by_family": top_cues,
         "anonymous_per_file_table": records,
         "recommended_next_actions": recommended_next_actions(records),
@@ -296,6 +355,13 @@ def recommended_next_actions(records: list[dict[str, Any]]) -> dict[str, int]:
     if (
         unknown_summary["unknown_with_low_or_incomplete_text_visibility"]
         > unknown_summary["unknown_with_high_text_visibility"]
+    ):
+        actions["OCR/text visibility investigation"] += 1
+    routing_summary = unknown_ocr_routing_summary(records)
+    if (
+        routing_summary["unknown_image_like_pdfs_not_routed_to_ocr"]
+        or routing_summary["unknown_files_eligible_for_fallback_but_not_triggered"]
+        or routing_summary["unknown_files_with_extraction_errors"]
     ):
         actions["OCR/text visibility investigation"] += 1
     if unknown_summary["unknown_with_any_family_cue_keys"] > 0:
@@ -379,6 +445,21 @@ def render_markdown_report(report: dict[str, Any]) -> str:
             f"visibility=`{item['language_text_visibility']}` "
             f"accepted_source=`{item['accepted_status_source']}`"
         )
+    lines.extend(["", "### Unknown OCR Routing Diagnostics", ""])
+    routing = report["unknown_ocr_routing_diagnostics"]
+    for key in (
+        "unknown_image_like_pdfs_not_routed_to_ocr",
+        "unknown_text_layer_pdfs_with_too_little_text",
+        "unknown_files_with_extraction_errors",
+        "unknown_files_eligible_for_fallback_but_not_triggered",
+    ):
+        lines.append(f"- {key}: `{routing[key]}`")
+    lines.extend(["", "#### Fallback False Unknown Buckets", ""])
+    for bucket, count in routing["fallback_false_unknown_bucket_counts"].items():
+        lines.append(f"- {bucket}: `{count}`")
+    lines.extend(["", "#### Not Fallback Eligible Reasons", ""])
+    for reason, count in routing["unknown_not_fallback_eligible_reason_counts"].items():
+        lines.append(f"- {reason}: `{count}`")
     lines.extend(["", "## Anonymous Per-File Table", ""])
     if not report["anonymous_per_file_table"]:
         lines.append("- No supported files evaluated.")
@@ -390,6 +471,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
             f"type=`{record['predicted_document_type']}` "
             f"review_status=`{record['review_status']}` "
             f"unknown_bucket=`{record['unknown_failure_bucket']}` "
+            f"ocr_route_bucket=`{record['unknown_ocr_routing_bucket']}` "
             f"fallback=`{record['ocr_gate_fallback_executed']}` "
             f"external_api=`{record['external_api_used']}`"
         )
@@ -544,6 +626,27 @@ def unknown_failure_bucket(record: dict[str, Any]) -> str:
     return "no_safe_document_family_cues"
 
 
+def unknown_ocr_routing_bucket(record: dict[str, Any]) -> str:
+    if str(record.get("predicted_document_type") or "") != UNKNOWN_DOCUMENT_LABEL:
+        return "not_applicable"
+    if record.get("ocr_gate_fallback_executed") is True:
+        return "fallback_executed"
+    if record.get("review_status") == "accepted":
+        return "status_mapping_anomaly"
+    reason = str(record.get("ocr_fallback_not_triggered_reason") or "unknown_reason")
+    allowed = {
+        "no_text_layer",
+        "text_layer_present_but_too_short",
+        "image_like_pdf_but_not_routed_to_ocr",
+        "language_visibility_unknown",
+        "unsupported_pdf_structure",
+        "extraction_error",
+        "routing_not_eligible",
+        "unknown_reason",
+    }
+    return reason if reason in allowed else "unknown_reason"
+
+
 def status_consistency_flags(record: dict[str, Any]) -> list[str]:
     flags: list[str] = []
     if (
@@ -606,6 +709,14 @@ def unknown_diagnostic_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
                 "file_id": str(record.get("file_id")),
                 "unknown_failure_bucket": str(record.get("unknown_failure_bucket")),
                 "language_text_visibility": record.get("language_text_visibility"),
+                "language_visibility_status": record.get("language_visibility_status"),
+                "cyrillic_visibility_status": record.get("cyrillic_visibility_status"),
+                "native_text_length_bucket": record.get("native_text_length_bucket"),
+                "pdf_text_layer_detected": record.get("pdf_text_layer_detected"),
+                "image_like_pdf": record.get("image_like_pdf"),
+                "ocr_fallback_eligible": record.get("ocr_fallback_eligible"),
+                "ocr_fallback_not_triggered_reason": record.get("ocr_fallback_not_triggered_reason"),
+                "unknown_ocr_routing_bucket": record.get("unknown_ocr_routing_bucket"),
                 "ocr_gate_fallback_executed": bool(record.get("ocr_gate_fallback_executed")),
                 "matched_safe_cue_keys": _safe_string_list(record.get("matched_safe_cue_keys")),
                 "ambiguous_candidates": _safe_string_list(record.get("ambiguous_candidates")),
@@ -628,6 +739,213 @@ def _unknown_priority_rank(bucket: str) -> int:
         "unsupported_or_empty_text": 7,
     }
     return order.get(bucket, 99)
+
+
+def unknown_ocr_routing_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
+    unknown_records = [
+        record for record in records if str(record.get("predicted_document_type") or "") == UNKNOWN_DOCUMENT_LABEL
+    ]
+    fallback_false_unknown = [
+        record for record in unknown_records if record.get("ocr_gate_fallback_executed") is not True
+    ]
+    not_eligible = [
+        record
+        for record in fallback_false_unknown
+        if str(record.get("ocr_fallback_eligible") or "unknown") != "yes"
+    ]
+    return {
+        "unknown_image_like_pdfs_not_routed_to_ocr": sum(
+            1
+            for record in fallback_false_unknown
+            if record.get("image_like_pdf") == "yes"
+            and record.get("ocr_gate_fallback_executed") is not True
+        ),
+        "unknown_text_layer_pdfs_with_too_little_text": sum(
+            1
+            for record in fallback_false_unknown
+            if record.get("pdf_text_layer_detected") == "yes"
+            and record.get("native_text_length_bucket") in {"none", "tiny", "short"}
+        ),
+        "unknown_files_with_extraction_errors": sum(
+            1 for record in unknown_records if record.get("text_extraction_status_bucket") == "extraction_error"
+        ),
+        "unknown_files_eligible_for_fallback_but_not_triggered": sum(
+            1
+            for record in fallback_false_unknown
+            if record.get("ocr_fallback_eligible") == "yes"
+        ),
+        "fallback_false_unknown_bucket_counts": dict(
+            sorted(Counter(str(record.get("unknown_ocr_routing_bucket") or "unknown_reason") for record in fallback_false_unknown).items())
+        ),
+        "unknown_not_fallback_eligible_reason_counts": dict(
+            sorted(
+                Counter(
+                    str(record.get("ocr_fallback_not_triggered_reason") or "unknown_reason")
+                    for record in not_eligible
+                ).items()
+            )
+        ),
+    }
+
+
+def _internal_text_for_bucketing(extractor_result: dict[str, Any]) -> str:
+    for key in ("raw_text", "text", "native_text", "extracted_text"):
+        value = extractor_result.get(key)
+        if value:
+            return str(value)
+    return ""
+
+
+def native_text_length_bucket(extractor_result: dict[str, Any], audit: dict[str, Any], internal_text: str) -> str:
+    for key in ("text_length_bucket", "native_text_length_bucket"):
+        value = _safe_optional_string(extractor_result.get(key) or audit.get(key))
+        if value in {"none", "tiny", "short", "medium", "long"}:
+            return value
+    for key in ("raw_text_length", "text_length", "ocr_text_length", "native_text_length"):
+        value = extractor_result.get(key) if key in extractor_result else audit.get(key)
+        if isinstance(value, (int, float)):
+            return bucket_text_length(max(0, int(value)))
+    return bucket_text_length(len(internal_text.strip()))
+
+
+def text_extraction_status_bucket(quality_label: str, native_length_bucket: str, *, error_bucket: str | None) -> str:
+    if error_bucket:
+        return "extraction_error"
+    quality = str(quality_label or "").lower()
+    if "no text" in quality:
+        return "no_text_available"
+    if native_length_bucket in {"none", "tiny"}:
+        return "text_too_short"
+    if quality in {"readable", "clear", "ocr fallback used"} or native_length_bucket in {"medium", "long"}:
+        return "text_visible"
+    if quality in {"unknown", "not checked", "not available"}:
+        return "unknown"
+    return "low_text_visibility"
+
+
+def pdf_text_layer_detected(path: Path) -> str:
+    if path.suffix.lower() != ".pdf":
+        return "not_applicable"
+    try:
+        from PyPDF2 import PdfReader
+
+        reader = PdfReader(str(path))
+        text_len = 0
+        for index, page in enumerate(reader.pages):
+            if index >= 3:
+                break
+            text_len += len(str(page.extract_text() or "").strip())
+            if text_len >= 80:
+                return "yes"
+        return "no"
+    except Exception:
+        return "unknown"
+
+
+def image_like_pdf(path: Path, pdf_text_layer: str, native_length_bucket: str) -> str:
+    if path.suffix.lower() != ".pdf":
+        return "not_applicable"
+    if pdf_text_layer == "no" and native_length_bucket in {"none", "tiny", "short"}:
+        return "yes"
+    if pdf_text_layer == "yes":
+        return "no"
+    return "unknown"
+
+
+def ocr_fallback_eligible(
+    *,
+    cyrillic_ocr_recommended: bool,
+    image_like_pdf: str,
+    language_visibility_status: str,
+    native_text_length_bucket: str,
+    extension: str,
+) -> str:
+    if extension != ".pdf":
+        return "no"
+    if cyrillic_ocr_recommended or image_like_pdf == "yes":
+        return "yes"
+    if language_visibility_status in {"missing", "incomplete", "unknown"} and native_text_length_bucket in {
+        "none",
+        "tiny",
+        "short",
+    }:
+        return "unknown"
+    return "no"
+
+
+def ocr_fallback_not_triggered_reason(
+    *,
+    extension: str,
+    ocr_fallback_executed: bool,
+    ocr_fallback_eligible: str,
+    pdf_text_layer_detected: str,
+    image_like_pdf: str,
+    native_text_length_bucket: str,
+    language_visibility_status: str,
+    error_bucket: str | None,
+) -> str:
+    if ocr_fallback_executed:
+        return "fallback_executed"
+    if error_bucket:
+        return "extraction_error"
+    if extension != ".pdf":
+        return "routing_not_eligible"
+    if image_like_pdf == "yes":
+        return "image_like_pdf_but_not_routed_to_ocr"
+    if pdf_text_layer_detected == "no":
+        return "no_text_layer"
+    if pdf_text_layer_detected == "yes" and native_text_length_bucket in {"none", "tiny", "short"}:
+        return "text_layer_present_but_too_short"
+    if ocr_fallback_eligible == "yes":
+        return "unknown_reason"
+    if language_visibility_status in {"unknown", "incomplete"}:
+        return "language_visibility_unknown"
+    if pdf_text_layer_detected == "unknown":
+        return "unsupported_pdf_structure"
+    return "routing_not_eligible"
+
+
+def language_visibility_status(ocr_marker: dict[str, Any], extractor_result: dict[str, Any]) -> str:
+    value = str(
+        ocr_marker.get("language_text_visibility")
+        or extractor_result.get("language_text_visibility")
+        or ""
+    ).lower()
+    if value in {"visible", "recovered", "readable"}:
+        return "visible"
+    if value in {"incomplete", "not_recovered"}:
+        return "incomplete"
+    if value in {"not_applicable", "none"}:
+        return "not_applicable"
+    if not value or value == "unknown":
+        return "unknown"
+    return value
+
+
+def cyrillic_visibility_status(ocr_marker: dict[str, Any], extractor_result: dict[str, Any]) -> str:
+    if ocr_marker.get("ocr_gate_fallback_cyrillic_detected") is True:
+        return "recovered"
+    if extractor_result.get("ocr_gate_fallback_cyrillic_detected") is True:
+        return "recovered"
+    if ocr_marker.get("cyrillic_ocr_recommended") is True:
+        return "missing"
+    marker_visibility = str(ocr_marker.get("language_text_visibility") or "").lower()
+    if marker_visibility == "visible":
+        return "visible"
+    if marker_visibility in {"incomplete", "not_recovered"}:
+        return "missing"
+    return "unknown"
+
+
+def document_family_cue_count_bucket(family_diagnostic: dict[str, Any]) -> str:
+    count = len(_safe_string_list(family_diagnostic.get("matched_family_cue_keys")))
+    if count <= 0:
+        return "none"
+    if count == 1:
+        return "one"
+    if count <= 3:
+        return "few"
+    return "many"
 
 
 def size_bucket(size: int) -> str:
