@@ -34,4 +34,4 @@
 - frozen_hitl_release_reopened: False
 
 **Next:** CKA-B09 Operator UI for Clinical Knowledge Safety Panels
-**Generated:** 2026-05-18T18:17:31.339952+00:00
+**Generated:** 2026-05-18T18:35:48.319709+00:00
