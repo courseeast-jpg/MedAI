@@ -1,0 +1,180 @@
+{
+  "behavior_changed": false,
+  "branch": "clinical-knowledge-architecture",
+  "deferred_subsets": {
+    "ambiguous_below_threshold": "remains excluded from optimization; review-bound, no cue expansion",
+    "fallback_ran_but_no_family_match": "deferred to a future cue-coverage audit block per UNKNOWN-DIAG-02"
+  },
+  "external_api_used": false,
+  "generated_at": "2026-05-18T18:14:01.208517+00:00",
+  "head_commit_short": "b8b46dbf030a",
+  "implementation_block_choice": "A",
+  "implementation_block_explanation": "Both diagnostics meet the threshold. 31 records point to candidate_language_detector_diagnostic and 21 to candidate_text_layer_extraction_diagnostic. Recommend A first (larger pool, upstream cause), then B.",
+  "implementation_block_justified": true,
+  "next_action_bucket_counts": {
+    "candidate_language_detector_diagnostic": 31,
+    "candidate_ocr_routing_diagnostic": 0,
+    "candidate_text_layer_extraction_diagnostic": 21,
+    "insufficient_metadata_for_next_action": 0,
+    "leave_manual_review": 0
+  },
+  "park_19_commit_short": "ac466e0f9ab8",
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "root_cause_counts": {
+    "language_script_visible_detector_unresolved": {
+      "cyrillic_visible_language_unknown": 0,
+      "insufficient_safe_metadata": 0,
+      "latin_visible_language_unknown": 15,
+      "leave_manual_review": 0,
+      "mixed_script_detector_gap": 0,
+      "numeric_or_table_heavy_language_detector_gap": 16,
+      "script_visible_language_detector_gap": 0
+    },
+    "likely_text_layer_issue": {
+      "image_like_with_partial_text": 0,
+      "leave_manual_review": 0,
+      "no_safe_text_visibility_metadata": 0,
+      "table_structure_visible_but_text_insufficient": 10,
+      "text_layer_present_but_low_signal": 0,
+      "text_layer_too_short": 11
+    }
+  },
+  "safety_privacy": {
+    "all_records_remain_review_bound": true,
+    "ambiguous_below_threshold_excluded": true,
+    "auto_accept_changed": false,
+    "b07_changed": false,
+    "behavior_changed": false,
+    "classifier_behavior_changed": false,
+    "clinical_interpretation_added": false,
+    "command_allowlist_changed": false,
+    "cue_expansion_recommended": false,
+    "cue_packs_changed": false,
+    "db_schema_changed": false,
+    "ddi_logic_changed": false,
+    "dose_parsing_added": false,
+    "external_api_changed": false,
+    "external_api_used": false,
+    "fallback_ran_but_no_family_match_deferred": true,
+    "lab_value_parsing_added": false,
+    "language_detector_behavior_changed": false,
+    "medication_parsing_added": false,
+    "ocr_engine_changed": false,
+    "ocr_routing_changed": false,
+    "private_corpus_files_staged": false,
+    "private_paths_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "raw_ocr_text_in_public_reports": false,
+    "route_fix_changed": false,
+    "scoring_changed": false,
+    "secrets_in_public_reports": false,
+    "source_documents_staged": false,
+    "thresholds_changed": false
+  },
+  "snapshot": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-03",
+  "source_report_label": "reports/medai_doc_type_family_04_larger_slice_validation/(public anonymized batch-eval per-file table)",
+  "subsets": {
+    "language_script_visible_detector_unresolved": {
+      "count": 31,
+      "diag02_label": "language_script_visible_detector_unresolved",
+      "name": "language_script_visible_detector_unresolved",
+      "raw_signal_counts": {
+        "dominant_script_counts": {
+          "latin": 31
+        },
+        "language_visibility_status_counts": {
+          "latin_visible_language_unknown": 31
+        },
+        "native_text_length_bucket_counts": {
+          "long": 1,
+          "medium": 30
+        },
+        "numeric_content_bucket_counts": {
+          "low": 15,
+          "medium": 16
+        },
+        "table_like_structure_detected_counts": {
+          "no": 2,
+          "yes": 29
+        }
+      },
+      "root_cause_counts": {
+        "cyrillic_visible_language_unknown": 0,
+        "insufficient_safe_metadata": 0,
+        "latin_visible_language_unknown": 15,
+        "leave_manual_review": 0,
+        "mixed_script_detector_gap": 0,
+        "numeric_or_table_heavy_language_detector_gap": 16,
+        "script_visible_language_detector_gap": 0
+      },
+      "sample_ids": [
+        "language_detector_priority_001",
+        "language_detector_priority_002",
+        "language_detector_priority_003",
+        "language_detector_priority_004",
+        "language_detector_priority_005"
+      ],
+      "secondary_signal_counts": {
+        "medical_abbreviation_yes": 8,
+        "numeric_content_medium_or_high": 16,
+        "section_heading_yes": 3,
+        "table_like_structure_yes": 29
+      }
+    },
+    "likely_text_layer_issue": {
+      "count": 21,
+      "diag02_label": "likely_text_layer_issue",
+      "name": "likely_text_layer_issue",
+      "raw_signal_counts": {
+        "alphabetic_content_bucket_counts": {
+          "high": 21
+        },
+        "image_like_pdf_counts": {
+          "no": 21
+        },
+        "native_text_length_bucket_counts": {
+          "none": 10,
+          "short": 8,
+          "tiny": 3
+        },
+        "pdf_text_layer_detected_counts": {
+          "yes": 21
+        },
+        "table_like_structure_detected_counts": {
+          "no": 11,
+          "yes": 10
+        }
+      },
+      "root_cause_counts": {
+        "image_like_with_partial_text": 0,
+        "leave_manual_review": 0,
+        "no_safe_text_visibility_metadata": 0,
+        "table_structure_visible_but_text_insufficient": 10,
+        "text_layer_present_but_low_signal": 0,
+        "text_layer_too_short": 11
+      },
+      "sample_ids": [
+        "text_layer_priority_001",
+        "text_layer_priority_002",
+        "text_layer_priority_003",
+        "text_layer_priority_004",
+        "text_layer_priority_005"
+      ],
+      "secondary_signal_counts": {
+        "alphabetic_low_or_medium": 0,
+        "native_text_length_none": 10,
+        "native_text_length_short": 8,
+        "native_text_length_tiny": 3,
+        "table_like_structure_yes": 10
+      }
+    }
+  },
+  "target_subset_counts": {
+    "language_script_visible_detector_unresolved": 31,
+    "likely_text_layer_issue": 21
+  },
+  "total_priority_analyzed": 52,
+  "upstream_diag_01_label": "reports/medai_doc_type_unknown_diag_01/(public diagnostic)",
+  "upstream_diag_02_label": "reports/medai_doc_type_unknown_diag_02/(public diagnostic)"
+}
