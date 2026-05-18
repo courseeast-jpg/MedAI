@@ -1,0 +1,107 @@
+{
+  "conclusion": "medai_final_post_doc_type_family_validation_snapshot_ready",
+  "snapshot": "MEDAI-PARK-19",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit_short": "496bb4e",
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "included_blocks": {
+    "MEDAI-DOC-TYPE-FAMILY-03": {
+      "commit_short": "d5e07f4",
+      "summary": "Conservative Latin lab-structure cues improved the 80-file bang-folder result while preserving review-bound behavior."
+    },
+    "MEDAI-DOC-TYPE-FAMILY-04": {
+      "commit_short": "496bb4e",
+      "summary": "Larger anonymized 507-file slice validation showed safe generalization with no external API use, auto-accept allowance, or accepted outputs."
+    }
+  },
+  "family_03_80_file_result": {
+    "before": {
+      "Lab result": 15,
+      "Urinalysis": 1,
+      "Unknown": 64
+    },
+    "after": {
+      "Lab result": 78,
+      "Urinalysis": 1,
+      "Unknown": 1
+    },
+    "review_bound_count": 80,
+    "accepted_count": 0,
+    "auto_accept_allowed_count": 0,
+    "external_api_used_count": 0
+  },
+  "family_04_507_file_result": {
+    "total_files_evaluated": 507,
+    "document_family_counts": {
+      "Lab result": 330,
+      "Urinalysis": 35,
+      "Imaging report": 14,
+      "Treatment plan": 4,
+      "Medication plan": 11,
+      "Clinical note": 2,
+      "Administrative / Insurance": 4,
+      "Discharge summary": 0,
+      "Referral / Order": 0,
+      "Procedure report": 0,
+      "Pathology report": 0,
+      "Unknown": 107
+    },
+    "review_bound_count": 507,
+    "accepted_count": 0,
+    "auto_accept_allowed_count": 0,
+    "external_api_used_count": 0
+  },
+  "unknown_buckets": {
+    "insufficient_text_visibility": 75,
+    "fallback_ran_but_no_family_match": 17,
+    "ambiguous_below_threshold": 15
+  },
+  "false_positive_risk_audit": {
+    "lab_vs_treatment_or_medication_ambiguous_candidates": 3,
+    "lab_vs_imaging_ambiguous_candidates": 3,
+    "lab_vs_admin_or_insurance_cue_overlap": 0,
+    "unknown_accepted_anomaly": false,
+    "invalid_status_mapping_normalization": false,
+    "all_ambiguities_review_bound": true,
+    "family_03_generalizes_safely": true
+  },
+  "validation_summary": {
+    "final_cka_mvp_validation": "passed",
+    "b07_validation": "passed",
+    "route_fix_validation": "passed",
+    "ui_ops_validation": "passed",
+    "ui_boot_validation": "passed",
+    "public_report_privacy_checks": "passed",
+    "staged_safety_check": "passed",
+    "focused_family_eval_tests_from_family_04": "passed: 62 passed, 1 warning",
+    "ui_russian_ocr_upload_regression_group_from_family_04": "passed: 157 passed",
+    "full_pytest": "not run for PARK-19; skipped as not practical for snapshot-only block after larger 507-file validation and prior long full-suite timeout behavior"
+  },
+  "safety_privacy": {
+    "runtime_behavior_changed_in_park_block": false,
+    "ocr_routing_changed": false,
+    "ocr_engine_changed": false,
+    "classifier_behavior_changed": false,
+    "confidence_thresholds_changed": false,
+    "confidence_scoring_changed": false,
+    "auto_acceptance_changed": false,
+    "clinical_interpretation_added": false,
+    "lab_value_parsing_added": false,
+    "medication_parsing_added": false,
+    "dose_parsing_added": false,
+    "ddi_logic_changed": false,
+    "b07_terminology_changed": false,
+    "route_fix_changed": false,
+    "db_schema_changed": false,
+    "command_allowlist_changed": false,
+    "external_api_behavior_changed": false,
+    "external_api_used": false,
+    "raw_ocr_text_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_private_paths_in_public_reports": false,
+    "source_documents_staged": false,
+    "private_corpus_files_staged": false,
+    "secrets_in_public_reports": false
+  },
+  "recommendation": "Leave remaining Unknown files review-bound; run the next diagnostic only if operational coverage requires it, prioritizing text visibility and fallback-ran-no-family-match buckets before cue expansion."
+}
