@@ -55,9 +55,11 @@ def test_fix_flags_unknown_accepted_as_policy_anomaly(tmp_path: Path) -> None:
     report = eval01.build_report([record])
 
     assert record["predicted_document_type"] == UNKNOWN_DOCUMENT_LABEL
-    assert record["review_status"] == "accepted"
+    assert record["raw_review_status"] == "accepted"
+    assert record["review_status"] == "review"
     assert record["accepted_status_source"] == "runtime_outcome"
     assert record["unknown_failure_bucket"] == "status_mapping_anomaly"
+    assert record["status_mapping_action"] == "normalized_unknown_runtime_accepted_to_review"
     assert report["status_consistency"]["unknown_accepted_anomaly_file_ids"] == ["file_001"]
 
 

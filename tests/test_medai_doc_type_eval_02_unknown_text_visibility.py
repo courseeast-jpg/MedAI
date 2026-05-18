@@ -117,6 +117,9 @@ def test_unknown_accepted_runtime_validation_status_is_flagged_without_fixing(tm
     report = eval01.build_report([record])
 
     assert record["accepted_status_source"] == "runtime_validation_status"
+    assert record["raw_review_status"] == "accepted"
+    assert record["review_status"] == "review"
+    assert record["status_mapping_action"] == "normalized_unknown_runtime_accepted_to_review"
     assert record["unknown_failure_bucket"] == "status_mapping_anomaly"
     assert report["status_consistency"]["unknown_accepted_anomaly_file_ids"] == ["file_001"]
 

@@ -130,7 +130,7 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         or extractor_result.get("cloud_api_used")
         or audit.get("cloud_api_used")
     )
-    status = review_status(outcome, validation_status)
+    raw_status = review_status(outcome, validation_status)
     accepted_source = accepted_status_source(outcome, validation_status, audit, extractor_result)
     internal_text = _internal_text_for_bucketing(extractor_result)
     native_length_bucket = native_text_length_bucket(extractor_result, audit, internal_text)
@@ -157,6 +157,18 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         error_bucket=None,
     )
     cue_count_bucket = document_family_cue_count_bucket(family_diagnostic)
+    status_mapping = normalize_review_status_for_document_type(
+        predicted_type=predicted_type,
+        raw_review_status=raw_status,
+        accepted_status_source=accepted_source,
+    )
+    language_audit = language_visibility_audit(
+        extractor_result=extractor_result,
+        audit=audit,
+        internal_text=internal_text,
+        native_text_length_bucket=native_length_bucket,
+        language_visibility_status=language_visibility,
+    )
 
     record = {
         "file_id": safe_id,
@@ -208,8 +220,19 @@ def build_safe_file_record(path: Path, *, safe_id: str, result: Any) -> dict[str
         "conflict_resolution_reason": _safe_optional_string(
             family_diagnostic.get("conflict_resolution_reason")
         ),
-        "review_status": status,
+        "review_status": status_mapping["review_status"],
+        "raw_review_status": raw_status,
         "accepted_status_source": accepted_source,
+        "status_mapping_action": status_mapping["status_mapping_action"],
+        "status_mapping_note": status_mapping["status_mapping_note"],
+        "text_source_present": language_audit["text_source_present"],
+        "text_extraction_attempted": language_audit["text_extraction_attempted"],
+        "text_extraction_result_bucket": language_audit["text_extraction_result_bucket"],
+        "language_detector_attempted": language_audit["language_detector_attempted"],
+        "language_detector_input_bucket": language_audit["language_detector_input_bucket"],
+        "script_detection_attempted": language_audit["script_detection_attempted"],
+        "script_detection_result": language_audit["script_detection_result"],
+        "visibility_unknown_reason": language_audit["visibility_unknown_reason"],
         "auto_accept_allowed": auto_accept_allowed,
         "external_api_used": external_api_used,
     }
@@ -248,7 +271,18 @@ def build_error_record(path: Path, *, safe_id: str, error: Exception) -> dict[st
         "classification_block_reason": "runtime_error",
         "conflict_resolution_reason": "none",
         "review_status": "error",
+        "raw_review_status": "error",
         "accepted_status_source": "not_accepted",
+        "status_mapping_action": "not_applicable",
+        "status_mapping_note": "not_applicable",
+        "text_source_present": "unknown",
+        "text_extraction_attempted": "yes",
+        "text_extraction_result_bucket": "unknown",
+        "language_detector_attempted": "no",
+        "language_detector_input_bucket": "unknown",
+        "script_detection_attempted": "no",
+        "script_detection_result": "unknown",
+        "visibility_unknown_reason": "metadata_missing",
         "auto_accept_allowed": False,
         "external_api_used": False,
         "error_bucket": error_bucket,
@@ -304,10 +338,18 @@ def build_report(records: list[dict[str, Any]]) -> dict[str, Any]:
         "status_consistency": {
             "unknown_accepted_anomaly_count": len(status_anomalies),
             "unknown_accepted_anomaly_file_ids": [str(record["file_id"]) for record in status_anomalies],
+            "invalid_status_mapping_file_ids": [
+                str(record["file_id"])
+                for record in records
+                if "invalid_status_mapping_normalized" in _safe_string_list(
+                    record.get("status_consistency_flags")
+                )
+            ],
             "policy_anomaly_present": bool(status_anomalies),
         },
         "unknown_diagnostics": unknown_diagnostics,
         "unknown_ocr_routing_diagnostics": unknown_ocr_routing_summary(records),
+        "language_visibility_audit": language_visibility_audit_summary(records),
         "top_safe_cue_categories_by_family": top_cues,
         "anonymous_per_file_table": records,
         "recommended_next_actions": recommended_next_actions(records),
@@ -460,6 +502,19 @@ def render_markdown_report(report: dict[str, Any]) -> str:
     lines.extend(["", "#### Not Fallback Eligible Reasons", ""])
     for reason, count in routing["unknown_not_fallback_eligible_reason_counts"].items():
         lines.append(f"- {reason}: `{count}`")
+    lines.extend(["", "### Language Visibility Audit", ""])
+    language_audit = report["language_visibility_audit"]
+    for key in (
+        "unknown_visibility_no_text_available",
+        "unknown_visibility_text_not_passed_to_detector",
+        "unknown_visibility_detector_not_called",
+        "unknown_visibility_numeric_or_symbol_only_text",
+        "unknown_visibility_metadata_missing",
+    ):
+        lines.append(f"- {key}: `{language_audit[key]}`")
+    lines.extend(["", "#### Visibility Unknown Reasons", ""])
+    for reason, count in language_audit["visibility_unknown_reason_counts"].items():
+        lines.append(f"- {reason}: `{count}`")
     lines.extend(["", "## Anonymous Per-File Table", ""])
     if not report["anonymous_per_file_table"]:
         lines.append("- No supported files evaluated.")
@@ -472,6 +527,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
             f"review_status=`{record['review_status']}` "
             f"unknown_bucket=`{record['unknown_failure_bucket']}` "
             f"ocr_route_bucket=`{record['unknown_ocr_routing_bucket']}` "
+            f"visibility_reason=`{record['visibility_unknown_reason']}` "
             f"fallback=`{record['ocr_gate_fallback_executed']}` "
             f"external_api=`{record['external_api_used']}`"
         )
@@ -602,9 +658,36 @@ def accepted_status_source(
     return "not_accepted"
 
 
+def normalize_review_status_for_document_type(
+    *,
+    predicted_type: str,
+    raw_review_status: str,
+    accepted_status_source: str,
+) -> dict[str, str]:
+    if predicted_type == UNKNOWN_DOCUMENT_LABEL and raw_review_status == "accepted":
+        if accepted_status_source == "prior_record_status":
+            return {
+                "review_status": "accepted",
+                "status_mapping_action": "historical_prior_status_preserved",
+                "status_mapping_note": "Unknown accepted status came from prior record status.",
+            }
+        return {
+            "review_status": "review",
+            "status_mapping_action": "normalized_unknown_runtime_accepted_to_review",
+            "status_mapping_note": "Unknown runtime accepted status is invalid for batch evaluation and was reported as review.",
+        }
+    return {
+        "review_status": raw_review_status,
+        "status_mapping_action": "unchanged",
+        "status_mapping_note": "not_applicable",
+    }
+
+
 def unknown_failure_bucket(record: dict[str, Any]) -> str:
     if str(record.get("predicted_document_type") or "") != UNKNOWN_DOCUMENT_LABEL:
         return "not_applicable"
+    if record.get("status_mapping_action") == "normalized_unknown_runtime_accepted_to_review":
+        return "status_mapping_anomaly"
     if record.get("review_status") == "accepted":
         return "status_mapping_anomaly"
     if str(record.get("size_bucket") or "") == "empty" or str(record.get("ocr_quality_band") or "") in {
@@ -649,11 +732,11 @@ def unknown_ocr_routing_bucket(record: dict[str, Any]) -> str:
 
 def status_consistency_flags(record: dict[str, Any]) -> list[str]:
     flags: list[str] = []
-    if (
-        str(record.get("predicted_document_type") or "") == UNKNOWN_DOCUMENT_LABEL
-        and record.get("review_status") == "accepted"
-    ):
-        flags.append("unknown_accepted_policy_anomaly")
+    if str(record.get("predicted_document_type") or "") == UNKNOWN_DOCUMENT_LABEL:
+        if record.get("status_mapping_action") == "normalized_unknown_runtime_accepted_to_review":
+            flags.append("invalid_status_mapping_normalized")
+        elif record.get("review_status") == "accepted":
+            flags.append("unknown_accepted_historical_prior_status")
     if record.get("external_api_used") is True:
         flags.append("external_api_used_policy_failure")
     if record.get("auto_accept_allowed") is True:
@@ -665,7 +748,7 @@ def status_anomaly_records(records: list[dict[str, Any]]) -> list[dict[str, Any]
     return [
         record
         for record in records
-        if "unknown_accepted_policy_anomaly" in _safe_string_list(record.get("status_consistency_flags"))
+        if "invalid_status_mapping_normalized" in _safe_string_list(record.get("status_consistency_flags"))
     ]
 
 
@@ -721,6 +804,8 @@ def unknown_diagnostic_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
                 "matched_safe_cue_keys": _safe_string_list(record.get("matched_safe_cue_keys")),
                 "ambiguous_candidates": _safe_string_list(record.get("ambiguous_candidates")),
                 "accepted_status_source": str(record.get("accepted_status_source") or "not_accepted"),
+                "status_mapping_action": str(record.get("status_mapping_action") or "unknown"),
+                "visibility_unknown_reason": str(record.get("visibility_unknown_reason") or "unknown"),
             }
             for record in samples
         ],
@@ -788,12 +873,43 @@ def unknown_ocr_routing_summary(records: list[dict[str, Any]]) -> dict[str, Any]
     }
 
 
+def language_visibility_audit_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
+    unknown_records = [
+        record for record in records if str(record.get("predicted_document_type") or "") == UNKNOWN_DOCUMENT_LABEL
+    ]
+    visibility_unknown = [
+        record
+        for record in unknown_records
+        if str(record.get("language_visibility_status") or "unknown") in {"unknown", "incomplete", "not_applicable"}
+    ]
+    reason_counts = Counter(str(record.get("visibility_unknown_reason") or "unknown") for record in visibility_unknown)
+    return {
+        "unknown_visibility_total": len(visibility_unknown),
+        "unknown_visibility_no_text_available": reason_counts.get("no_text_available", 0),
+        "unknown_visibility_text_not_passed_to_detector": reason_counts.get(
+            "text_not_passed_to_visibility_detector", 0
+        ),
+        "unknown_visibility_detector_not_called": reason_counts.get("detector_not_called", 0),
+        "unknown_visibility_detector_returned_unknown": reason_counts.get("detector_returned_unknown", 0),
+        "unknown_visibility_numeric_or_symbol_only_text": reason_counts.get("numeric_or_symbol_only_text", 0),
+        "unknown_visibility_metadata_missing": reason_counts.get("metadata_missing", 0),
+        "visibility_unknown_reason_counts": dict(sorted(reason_counts.items())),
+    }
+
+
 def _internal_text_for_bucketing(extractor_result: dict[str, Any]) -> str:
     for key in ("raw_text", "text", "native_text", "extracted_text"):
         value = extractor_result.get(key)
         if value:
             return str(value)
     return ""
+
+
+def _has_text_source_field(extractor_result: dict[str, Any]) -> str:
+    for key in ("raw_text", "text", "native_text", "extracted_text"):
+        if key in extractor_result:
+            return "yes" if str(extractor_result.get(key) or "").strip() else "no"
+    return "unknown"
 
 
 def native_text_length_bucket(extractor_result: dict[str, Any], audit: dict[str, Any], internal_text: str) -> str:
@@ -821,6 +937,120 @@ def text_extraction_status_bucket(quality_label: str, native_length_bucket: str,
     if quality in {"unknown", "not checked", "not available"}:
         return "unknown"
     return "low_text_visibility"
+
+
+def language_visibility_audit(
+    *,
+    extractor_result: dict[str, Any],
+    audit: dict[str, Any],
+    internal_text: str,
+    native_text_length_bucket: str,
+    language_visibility_status: str,
+) -> dict[str, str]:
+    text_source = _has_text_source_field(extractor_result)
+    extraction_attempted = "yes" if extractor_result or audit else "no"
+    detector_attempted = _detector_attempted(extractor_result)
+    detector_input_bucket = language_detector_input_bucket(internal_text)
+    script_attempted = "yes" if detector_attempted == "yes" or internal_text.strip() else "no"
+    script_result = script_detection_result(internal_text)
+    reason = visibility_unknown_reason(
+        language_visibility_status=language_visibility_status,
+        text_source_present=text_source,
+        text_extraction_attempted=extraction_attempted,
+        text_extraction_result_bucket=native_text_length_bucket,
+        language_detector_attempted=detector_attempted,
+        language_detector_input_bucket=detector_input_bucket,
+        script_detection_result=script_result,
+    )
+    return {
+        "text_source_present": text_source,
+        "text_extraction_attempted": extraction_attempted,
+        "text_extraction_result_bucket": native_text_length_bucket or "unknown",
+        "language_detector_attempted": detector_attempted,
+        "language_detector_input_bucket": detector_input_bucket,
+        "script_detection_attempted": script_attempted,
+        "script_detection_result": script_result,
+        "visibility_unknown_reason": reason,
+    }
+
+
+def _detector_attempted(extractor_result: dict[str, Any]) -> str:
+    if extractor_result.get("language_support") or extractor_result.get("language_text_visibility"):
+        return "yes"
+    if any(
+        key in extractor_result
+        for key in (
+            "detected_language",
+            "script_detected",
+            "language_confidence",
+            "language_route_note",
+        )
+    ):
+        return "yes"
+    return "no"
+
+
+def language_detector_input_bucket(text: str) -> str:
+    length_bucket = bucket_text_length(len(str(text or "").strip()))
+    if length_bucket in {"none"}:
+        return "empty"
+    if length_bucket == "tiny":
+        return "tiny"
+    if length_bucket == "short":
+        return "short"
+    if length_bucket in {"medium", "long"}:
+        return "sufficient"
+    return "unknown"
+
+
+def script_detection_result(text: str) -> str:
+    raw = str(text or "")
+    latin = sum(1 for char in raw if "a" <= char.lower() <= "z")
+    cyrillic = sum(1 for char in raw if "\u0400" <= char <= "\u04ff")
+    digits = sum(1 for char in raw if char.isdigit())
+    symbols = sum(1 for char in raw if not char.isalnum() and not char.isspace())
+    if cyrillic and latin:
+        return "mixed"
+    if cyrillic:
+        return "cyrillic"
+    if latin:
+        return "latin"
+    if digits and not cyrillic and not latin:
+        return "numeric_only"
+    if symbols and not digits and not cyrillic and not latin:
+        return "symbol_only"
+    return "unknown"
+
+
+def visibility_unknown_reason(
+    *,
+    language_visibility_status: str,
+    text_source_present: str,
+    text_extraction_attempted: str,
+    text_extraction_result_bucket: str,
+    language_detector_attempted: str,
+    language_detector_input_bucket: str,
+    script_detection_result: str,
+) -> str:
+    if language_visibility_status == "visible":
+        return "not_applicable"
+    if text_extraction_attempted != "yes":
+        return "metadata_missing"
+    if text_source_present == "unknown":
+        return "text_not_passed_to_visibility_detector"
+    if text_source_present == "no" or text_extraction_result_bucket in {"none", "empty"}:
+        return "no_text_available"
+    if language_detector_attempted != "yes":
+        return "detector_not_called"
+    if script_detection_result in {"numeric_only", "symbol_only"}:
+        return "numeric_or_symbol_only_text"
+    if language_detector_input_bucket in {"empty", "tiny"}:
+        return "no_text_available"
+    if language_visibility_status == "unknown":
+        return "detector_returned_unknown"
+    if language_visibility_status == "incomplete":
+        return "detector_returned_unknown"
+    return "unknown"
 
 
 def pdf_text_layer_detected(path: Path) -> str:

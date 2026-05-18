@@ -1,0 +1,117 @@
+{
+  "conclusion": "medai_doc_type_eval_03_status_mapping_language_visibility_ready",
+  "diagnostic_type": "status_mapping_fix_and_language_visibility_audit",
+  "changed_scope": "evaluation/reporting plus batch-eval status mapping only",
+  "observed_batch_summary": {
+    "total_files_evaluated": 80,
+    "unknown_count": 64,
+    "unknown_with_low_or_incomplete_text_visibility": 64,
+    "unknown_with_no_family_cue_keys": 64,
+    "unknown_with_fallback_false": 63,
+    "not_fallback_eligible_reason_language_visibility_unknown": 63,
+    "ocr_fallback_eligible_but_not_triggered": 0,
+    "image_like_pdfs_not_routed_to_ocr": 0,
+    "extraction_errors": 0,
+    "unknown_accepted_anomaly_count": 1,
+    "example_anomaly_safe_id": "file_001",
+    "example_anomaly_type": "Unknown",
+    "example_anomaly_review_status_before": "accepted",
+    "example_anomaly_accepted_source": "runtime_validation_status"
+  },
+  "status_mapping_root_cause": "The batch evaluation harness previously derived review_status directly from runtime validation_status before applying document-type review-bound semantics. That allowed Unknown plus runtime_validation_status=accepted to appear as accepted in the report.",
+  "status_mapping_fix": {
+    "unknown_runtime_accepted_normalized_to_review": true,
+    "invalid_status_mapping_flag_added": true,
+    "raw_review_status_preserved": true,
+    "accepted_status_source_preserved": true,
+    "prior_historical_status_explanation_supported": true,
+    "accepted_count_separate_from_auto_accept_allowed_count": true,
+    "known_accepted_document_types_unaffected": true
+  },
+  "language_visibility_audit_fields_added": [
+    "text_source_present",
+    "text_extraction_attempted",
+    "text_extraction_result_bucket",
+    "language_detector_attempted",
+    "language_detector_input_bucket",
+    "script_detection_attempted",
+    "script_detection_result",
+    "visibility_unknown_reason"
+  ],
+  "visibility_unknown_reasons_supported": [
+    "no_text_available",
+    "text_not_passed_to_visibility_detector",
+    "detector_not_called",
+    "detector_returned_unknown",
+    "numeric_or_symbol_only_text",
+    "metadata_missing",
+    "unknown"
+  ],
+  "aggregate_language_visibility_counts_added": [
+    "unknown_visibility_no_text_available",
+    "unknown_visibility_text_not_passed_to_detector",
+    "unknown_visibility_detector_not_called",
+    "unknown_visibility_detector_returned_unknown",
+    "unknown_visibility_numeric_or_symbol_only_text",
+    "unknown_visibility_metadata_missing"
+  ],
+  "validation_results": [
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_eval_03_status_language_visibility.py tests/test_medai_doc_type_eval_02_unknown_text_visibility.py tests/test_medai_doc_type_eval_01_fix_status_unknown.py tests/test_medai_doc_type_eval_01_batch_harness.py -q",
+      "result": "23 passed, 1 warning"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_family_01_fix2_imaging_treatment_conflict.py tests/test_medai_doc_type_family_01_fix_runtime_imaging_propagation.py tests/test_medai_doc_type_family_01.py tests/test_medai_ui_run_review_polish_01_fix_state_consistency.py tests/test_medai_ui_run_review_polish_01.py -q",
+      "result": "34 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_ru_treatment_doc_type_01_fix2_always_emit_diagnostic.py tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py tests/test_medai_ru_treatment_doc_type_01.py tests/test_medai_ru_lab_ocr_gate_02b_fix2_real_format_cue_coverage.py tests/test_medai_ru_lab_ocr_gate_02b_fix_fallback_cue_diagnostic.py tests/test_medai_ru_lab_ocr_gate_02b_local_cyrillic_fallback.py tests/test_medai_ru_lab_ocr_gate_02a_runtime_propagation.py tests/test_medai_ru_lab_ocr_gate_02a_shadow_marker.py tests/test_medai_ru_lab_ocr_gate_01.py tests/test_medai_ru_lab_text_vis_01.py tests/test_medai_ru_lab_extract_diag_01.py tests/test_medai_ru_doc_type_02_real_text_path_diagnostic.py tests/test_medai_ru_doc_type_01_russian_detection.py tests/test_medai_lab_fix_02_general_lab_detection.py tests/test_medai_lab_fix_01_document_type_review_reason.py -q",
+      "result": "128 passed"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "PASS; 12/12 cases passed; 693 tests passed; external API used false"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "PASS; 6/6 cases passed; external_api_used false"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "PASS; medai_route_fix01_ready; external_api_used false"
+    },
+    {
+      "command": "python -m pytest tests",
+      "result": "2509 passed, 4 skipped, 22 warnings in 1711.60s"
+    }
+  ],
+  "runtime_behavior_changed": false,
+  "batch_eval_status_mapping_changed": true,
+  "ocr_routing_changed": false,
+  "ocr_engine_changed": false,
+  "classifier_changed": false,
+  "cue_pack_changed": false,
+  "cue_thresholds_changed": false,
+  "conflict_rules_changed": false,
+  "auto_accept_expanded": false,
+  "clinical_interpretation_added": false,
+  "imaging_interpretation_added": false,
+  "medication_parsing_added": false,
+  "dose_frequency_duration_parsing_added": false,
+  "lab_value_parsing_added": false,
+  "ddi_logic_changed": false,
+  "b07_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_changed": false,
+  "external_api_used": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_private_paths_in_public_reports": false,
+  "source_documents_staged": false,
+  "private_files_staged": false,
+  "runtime_db_staged": false,
+  "no_raw_phi": true,
+  "no_secrets": true
+}

@@ -165,11 +165,13 @@ def test_unknown_accepted_is_flagged_and_source_is_separate_from_auto_accept(tmp
     )
     report = eval01.build_report([record])
 
-    assert record["review_status"] == "accepted"
+    assert record["raw_review_status"] == "accepted"
+    assert record["review_status"] == "review"
     assert record["accepted_status_source"] == "runtime_outcome"
+    assert record["status_mapping_action"] == "normalized_unknown_runtime_accepted_to_review"
     assert record["unknown_failure_bucket"] == "status_mapping_anomaly"
-    assert "unknown_accepted_policy_anomaly" in record["status_consistency_flags"]
-    assert report["accepted_count"] == 1
+    assert "invalid_status_mapping_normalized" in record["status_consistency_flags"]
+    assert report["accepted_count"] == 0
     assert report["auto_accept_allowed_count"] == 0
     assert report["accepted_status_source_counts"]["runtime_outcome"] == 1
     assert report["status_consistency"]["unknown_accepted_anomaly_count"] == 1
