@@ -1,0 +1,348 @@
+{
+  "behavior_changed": false,
+  "branch": "clinical-knowledge-architecture",
+  "cue_expansion_recommended": false,
+  "deferred_subsets": {
+    "ambiguous_below_threshold": "15 records excluded; review-bound, no cue expansion",
+    "candidate_table_header_language_policy_record_count": "1 record(s); deferred as a special case to be absorbed into a future numeric-table spec implementation",
+    "fallback_ran_but_no_family_match": "17 records deferred per DIAG-02; no cue expansion",
+    "language_detector_metadata_propagation_audit_pool": "11 records from DIAG-04 routed to that lever; deferred",
+    "latin_medical_abbreviation_handling_audit_pool": "8 records from DIAG-04 routed to that lever; deferred",
+    "likely_text_layer_issue": "21 records deferred per DIAG-03"
+  },
+  "deferred_table_header_record_count": 1,
+  "exclusion_audit": [
+    {
+      "rule": "exclude_cyrillic_dominant_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_mixed_script_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_low_alphabetic_ratio_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_no_text_layer_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_image_like_but_not_routed_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_ambiguous_below_threshold_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_fallback_ran_but_no_family_match_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_medication_dose_or_ddi_interpretation",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_lab_value_parsing",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_records_with_insufficient_safe_metadata",
+      "violating_record_count": 0
+    }
+  ],
+  "exclusion_rules": [
+    "exclude_cyrillic_dominant_records",
+    "exclude_mixed_script_records",
+    "exclude_low_alphabetic_ratio_records",
+    "exclude_no_text_layer_records",
+    "exclude_image_like_but_not_routed_records",
+    "exclude_ambiguous_below_threshold_records",
+    "exclude_fallback_ran_but_no_family_match_records",
+    "exclude_medication_dose_or_ddi_interpretation",
+    "exclude_lab_value_parsing",
+    "exclude_records_with_insufficient_safe_metadata"
+  ],
+  "external_api_used": false,
+  "future_implementation_acceptance_criteria": [
+    "unknown_count_decreases_only_for_exact_signature_records",
+    "accepted_count_remains_zero",
+    "auto_accept_allowed_count_remains_zero",
+    "external_api_used_count_remains_zero",
+    "all_affected_records_remain_review_bound",
+    "no_new_treatment_imaging_or_admin_false_positive_expansion",
+    "public_report_privacy_checks_remain_clean",
+    "rollback_flag_or_disable_path_exists"
+  ],
+  "future_validation_requirements": [
+    "focused_synthetic_tests",
+    "replay_of_11_record_anonymous_subset",
+    "larger_507_file_aggregate_validation",
+    "document_type_eval_regression_tests",
+    "public_report_privacy_checks",
+    "final_cka_mvp_validation",
+    "b07_validation",
+    "route_fix_validation",
+    "staged_safety_check"
+  ],
+  "generated_at": "2026-05-18T22:34:41.398071+00:00",
+  "head_commit_short": "37536a5e79ad",
+  "implementation_block_justification": "All 11 priority records match the exact positive signature and none violate any exclusion rule. A future implementation block may prototype the numeric-table safe-default safe-default language lever inside the published acceptance criteria for that lever. The implementation must remain review-bound and must not change clinical interpretation, OCR routing, language detector behavior, or cue packs.",
+  "implementation_block_recommended_next": "future_block_named_unknown_diag_06a_implementation",
+  "no_priority_record_violates_any_exclusion_rule": true,
+  "other_diag05_lever_records_deferred": {
+    "candidate_table_header_language_policy": 1
+  },
+  "park_19_commit_short": "ac466e0f9ab8",
+  "policy_implemented_in_this_block": false,
+  "positive_signature": [
+    {
+      "expected": "yes",
+      "key": "table_like_structure_detected"
+    },
+    {
+      "expected": "yes",
+      "key": "high_table_density_required"
+    },
+    {
+      "expected": "yes",
+      "key": "repeated_row_pattern_visible"
+    },
+    {
+      "expected": "medium",
+      "key": "numeric_content_bucket"
+    },
+    {
+      "expected": "yes",
+      "key": "numeric_units_or_ranges_visible"
+    },
+    {
+      "expected": "latin",
+      "key": "script_detection_result"
+    },
+    {
+      "expected": "latin",
+      "key": "dominant_script"
+    },
+    {
+      "expected": "high",
+      "key": "detector_confidence_bucket"
+    },
+    {
+      "expected": "yes",
+      "key": "alphabetic_ratio_sufficient_for_language"
+    },
+    {
+      "expected": "yes",
+      "key": "administrative_table_shape"
+    },
+    {
+      "expected": "yes",
+      "key": "treatment_schedule_table_shape"
+    },
+    {
+      "expected": "yes",
+      "key": "language_detector_attempted"
+    },
+    {
+      "expected": "sufficient",
+      "key": "language_detector_input_bucket"
+    },
+    {
+      "expected": "latin_visible_language_unknown",
+      "key": "language_visibility_status"
+    }
+  ],
+  "positive_signature_holds_on_all_priority_records": true,
+  "positive_signature_match_report": {
+    "administrative_table_shape": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "alphabetic_ratio_sufficient_for_language": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "detector_confidence_bucket": {
+      "expected_value": "high",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "dominant_script": {
+      "expected_value": "latin",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "high_table_density_required": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "language_detector_attempted": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "language_detector_input_bucket": {
+      "expected_value": "sufficient",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "language_visibility_status": {
+      "expected_value": "latin_visible_language_unknown",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "numeric_content_bucket": {
+      "expected_value": "medium",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "numeric_units_or_ranges_visible": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "repeated_row_pattern_visible": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "script_detection_result": {
+      "expected_value": "latin",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "table_like_structure_detected": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    },
+    "treatment_schedule_table_shape": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 11
+    }
+  },
+  "progress_estimate": {
+    "after_06a_project_done_pct": "approximately 76%",
+    "after_06a_project_remaining_pct": "approximately 24%",
+    "after_06a_unknown_track_done_pct": "approximately 62%",
+    "after_06a_unknown_track_remaining_pct": "approximately 38%",
+    "before_06a_unknown_track_done_pct": "approximately 55%",
+    "before_06a_unknown_track_remaining_pct": "approximately 45%",
+    "note": "Estimates are approximate and refer to the residual Unknown-reduction track in this workspace, plus the overall MedAI project state. They are informational only and not a release milestone."
+  },
+  "proposed_future_default": {
+    "applies_to": "records matching the exact positive signature only",
+    "default_action": "assign language visibility as latin_script_likely_english_table_context for routing and metadata purposes only",
+    "must_keep_document_review_bound": true,
+    "must_not_auto_accept": true,
+    "must_not_classify_clinical_meaning": true,
+    "must_not_parse_values": true,
+    "must_not_write_active_clinical_facts": true,
+    "scope_of_effect": "routing and metadata propagation only; no classifier outcome change, no clinical interpretation, no value parsing"
+  },
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "raw_signal_counts": {
+    "administrative_form_shape_detected_counts": {
+      "yes": 11
+    },
+    "alphabetic_content_bucket_counts": {
+      "high": 11
+    },
+    "date_or_schedule_shape_detected_counts": {
+      "yes": 11
+    },
+    "detector_confidence_bucket_counts": {
+      "high": 11
+    },
+    "dominant_script_counts": {
+      "latin": 11
+    },
+    "image_like_pdf_counts": {
+      "no": 11
+    },
+    "imaging_modality_shape_detected_counts": {
+      "no": 11
+    },
+    "lab_table_shape_detected_counts": {
+      "no": 11
+    },
+    "language_visibility_status_counts": {
+      "latin_visible_language_unknown": 11
+    },
+    "medical_abbreviation_shape_detected_counts": {
+      "no": 11
+    },
+    "numeric_content_bucket_counts": {
+      "medium": 11
+    },
+    "pdf_text_layer_detected_counts": {
+      "yes": 11
+    },
+    "section_heading_shape_detected_counts": {
+      "no": 11
+    },
+    "symbol_content_bucket_counts": {
+      "medium": 11
+    },
+    "table_like_structure_detected_counts": {
+      "yes": 11
+    }
+  },
+  "safety_privacy": {
+    "all_records_remain_review_bound": true,
+    "auto_accept_changed": false,
+    "b07_changed": false,
+    "behavior_changed": false,
+    "classifier_behavior_changed": false,
+    "clinical_interpretation_added": false,
+    "command_allowlist_changed": false,
+    "cue_expansion_recommended": false,
+    "cue_packs_changed": false,
+    "db_schema_changed": false,
+    "ddi_logic_changed": false,
+    "deferred_pools_remain_deferred": true,
+    "dose_parsing_added": false,
+    "external_api_changed": false,
+    "external_api_used": false,
+    "lab_value_parsing_added": false,
+    "language_detector_behavior_changed": false,
+    "medication_parsing_added": false,
+    "ocr_engine_changed": false,
+    "ocr_routing_changed": false,
+    "policy_implemented_in_this_block": false,
+    "private_corpus_files_staged": false,
+    "private_paths_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "raw_ocr_text_in_public_reports": false,
+    "route_fix_changed": false,
+    "scoring_changed": false,
+    "secrets_in_public_reports": false,
+    "source_documents_staged": false,
+    "thresholds_changed": false
+  },
+  "sample_ids": [
+    "numeric_table_policy_priority_001",
+    "numeric_table_policy_priority_002",
+    "numeric_table_policy_priority_003",
+    "numeric_table_policy_priority_004",
+    "numeric_table_policy_priority_005"
+  ],
+  "snapshot": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-06A",
+  "source_report_label": "reports/medai_doc_type_family_04_larger_slice_validation/(public anonymized batch-eval per-file table)",
+  "total_numeric_table_policy_records": 11,
+  "upstream_diag_labels": [
+    "reports/medai_doc_type_unknown_diag_05/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_04/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_03/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_02/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_01/(public diagnostic)"
+  ]
+}
