@@ -2,7 +2,7 @@
   "block_id": "CKA-B11",
   "conclusion": "cka_mvp_release_package_ready",
   "branch": "clinical-knowledge-architecture",
-  "head_commit": "e387048",
+  "head_commit": "37536a5",
   "completed_blocks": [
     "CKA-B01",
     "CKA-B02",
@@ -216,7 +216,7 @@
       "details": {
         "tests_passed": 693,
         "files_run": 10,
-        "summary_line": "============================= 693 passed in 5.83s =============================="
+        "summary_line": "============================= 693 passed in 6.17s =============================="
       }
     },
     {
@@ -252,5 +252,5 @@
       }
     }
   ],
-  "generated_at": "2026-05-18T22:22:36.833568+00:00"
+  "generated_at": "2026-05-18T22:36:24.258420+00:00"
 }
