@@ -1,0 +1,167 @@
+{
+  "alphabetic_script_evidence_counts": {
+    "alphabetic_ratio_sufficient_for_language": 12,
+    "alphabetic_ratio_too_low_for_language": 0,
+    "dominant_script_confidence_missing": 0,
+    "insufficient_script_metadata": 0,
+    "latin_script_high_confidence": 12,
+    "latin_script_medium_confidence": 0
+  },
+  "behavior_changed": false,
+  "branch": "clinical-knowledge-architecture",
+  "cue_expansion_recommended": false,
+  "deferred_subsets": {
+    "ambiguous_below_threshold": "15 records remain excluded from optimization; review-bound, no cue expansion",
+    "fallback_ran_but_no_family_match": "17 records deferred to a future cue-coverage audit per UNKNOWN-DIAG-02; no cue expansion",
+    "language_detector_metadata_propagation_audit_pool": "11 records routed by DIAG-04 to this lever; deferred behind the table-heavy lever audit per the recommendation order",
+    "latin_medical_abbreviation_handling_audit_pool": "8 records routed by DIAG-04 to this lever; deferred behind the table-heavy lever audit",
+    "likely_text_layer_issue": "21 records deferred to the option-B follow-up per UNKNOWN-DIAG-03"
+  },
+  "external_api_used": false,
+  "future_policy_candidate_counts": {
+    "candidate_metadata_propagation_audit": 0,
+    "candidate_numeric_table_safe_default_policy": 11,
+    "candidate_table_header_language_policy": 1,
+    "candidate_table_heavy_latin_policy": 0,
+    "insufficient_metadata_for_next_action": 0,
+    "leave_manual_review": 0
+  },
+  "generated_at": "2026-05-18T22:20:22.643236+00:00",
+  "head_commit_short": "e38704803e6f",
+  "implementation_block_choice": "C",
+  "implementation_block_explanation": "`candidate_numeric_table_safe_default_policy` is the only lever above the threshold (11 records). Recommend C.",
+  "implementation_block_justified": true,
+  "numeric_distribution_evidence_counts": {
+    "high_numeric_ratio": 0,
+    "insufficient_numeric_metadata": 0,
+    "low_numeric_ratio": 0,
+    "medium_numeric_ratio": 12,
+    "numeric_units_or_ranges_visible": 12,
+    "sparse_alpha_dense_numeric": 0
+  },
+  "park_19_commit_short": "ac466e0f9ab8",
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "raw_signal_counts": {
+    "administrative_form_shape_detected_counts": {
+      "yes": 12
+    },
+    "alphabetic_content_bucket_counts": {
+      "high": 12
+    },
+    "date_or_schedule_shape_detected_counts": {
+      "yes": 12
+    },
+    "detector_confidence_bucket_counts": {
+      "high": 12
+    },
+    "dominant_script_counts": {
+      "latin": 12
+    },
+    "imaging_modality_shape_detected_counts": {
+      "no": 12
+    },
+    "lab_table_shape_detected_counts": {
+      "no": 12
+    },
+    "language_detector_input_bucket_counts": {
+      "sufficient": 12
+    },
+    "language_visibility_status_counts": {
+      "latin_visible_language_unknown": 12
+    },
+    "medical_abbreviation_shape_detected_counts": {
+      "no": 12
+    },
+    "numeric_content_bucket_counts": {
+      "medium": 12
+    },
+    "page_count_bucket_counts": {
+      "few": 9,
+      "many": 1,
+      "single": 2
+    },
+    "section_heading_shape_detected_counts": {
+      "no": 11,
+      "yes": 1
+    },
+    "size_bucket_counts": {
+      "large": 1,
+      "medium": 11
+    },
+    "symbol_content_bucket_counts": {
+      "medium": 12
+    },
+    "table_like_structure_detected_counts": {
+      "yes": 12
+    }
+  },
+  "safety_privacy": {
+    "all_records_remain_review_bound": true,
+    "ambiguous_below_threshold_excluded": true,
+    "auto_accept_changed": false,
+    "b07_changed": false,
+    "behavior_changed": false,
+    "classifier_behavior_changed": false,
+    "clinical_interpretation_added": false,
+    "command_allowlist_changed": false,
+    "cue_expansion_recommended": false,
+    "cue_packs_changed": false,
+    "db_schema_changed": false,
+    "ddi_logic_changed": false,
+    "dose_parsing_added": false,
+    "external_api_changed": false,
+    "external_api_used": false,
+    "fallback_ran_but_no_family_match_deferred": true,
+    "lab_value_parsing_added": false,
+    "language_detector_behavior_changed": false,
+    "latin_medical_abbreviation_pool_deferred": true,
+    "likely_text_layer_issue_deferred": true,
+    "medication_parsing_added": false,
+    "metadata_propagation_audit_pool_deferred": true,
+    "ocr_engine_changed": false,
+    "ocr_routing_changed": false,
+    "policy_implemented_in_this_block": false,
+    "private_corpus_files_staged": false,
+    "private_paths_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "raw_ocr_text_in_public_reports": false,
+    "route_fix_changed": false,
+    "scoring_changed": false,
+    "secrets_in_public_reports": false,
+    "source_documents_staged": false,
+    "thresholds_changed": false
+  },
+  "sample_ids": [
+    "table_heavy_policy_priority_001",
+    "table_heavy_policy_priority_002",
+    "table_heavy_policy_priority_003",
+    "table_heavy_policy_priority_004",
+    "table_heavy_policy_priority_005"
+  ],
+  "section_shape_evidence_counts": {
+    "administrative_table_shape": 12,
+    "generic_table_shape": 0,
+    "lab_or_result_section_shape": 0,
+    "no_section_shape_available": 0,
+    "treatment_schedule_table_shape": 12
+  },
+  "snapshot": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-05",
+  "source_report_label": "reports/medai_doc_type_family_04_larger_slice_validation/(public anonymized batch-eval per-file table)",
+  "table_structure_evidence_counts": {
+    "high_table_density": 12,
+    "insufficient_table_metadata": 0,
+    "low_table_density": 0,
+    "medium_table_density": 0,
+    "repeated_row_pattern_visible": 12,
+    "table_headers_visible": 1
+  },
+  "target_lever_label": "table_heavy_language_detection_policy_audit",
+  "total_table_heavy_policy_records": 12,
+  "upstream_diag_labels": [
+    "reports/medai_doc_type_unknown_diag_04/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_03/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_02/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_01/(public diagnostic)"
+  ]
+}
