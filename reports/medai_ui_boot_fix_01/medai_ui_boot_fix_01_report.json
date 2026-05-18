@@ -27,7 +27,7 @@
     "sqlite_connect_result": "not_run_missing_db",
     "sqlite_quick_check_result": "not_run_missing_db"
   },
-  "generated_at_utc": "2026-05-18T18:03:07.201603+00:00",
+  "generated_at_utc": "2026-05-18T18:17:34.752929+00:00",
   "next_recommended_action": "Launch Streamlit and confirm the UI renders; if DB initialization still fails, use the diagnostics panel and a separate repair block.",
   "root_cause_classification": {
     "launcher_specific": false,
