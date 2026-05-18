@@ -1,0 +1,115 @@
+{
+  "conclusion": "medai_doc_type_family_04_larger_slice_validation_completed",
+  "generated_at": "2026-05-18T16:41:46.658266+00:00",
+  "validation_type": "larger_anonymized_batch_slice_validation",
+  "input_slice_description": "Temporary anonymized local slice of 507 supported files excluding the prior 80-file bang-folder subset; source names and paths were not recorded in public reports.",
+  "total_files_evaluated": 507,
+  "document_family_counts": {
+    "Lab result": 330,
+    "Imaging report": 14,
+    "Treatment plan": 4,
+    "Medication plan": 11,
+    "Clinical note": 2,
+    "Discharge summary": 0,
+    "Unknown": 107,
+    "Referral / Order": 0,
+    "Procedure report": 0,
+    "Pathology report": 0,
+    "Administrative / Insurance": 4,
+    "Urinalysis": 35
+  },
+  "review_status_counts": {
+    "review": 507
+  },
+  "accepted_count": 0,
+  "auto_accept_allowed_count": 0,
+  "external_api_used_count": 0,
+  "unknown_count": 107,
+  "unknown_failure_buckets": {
+    "ambiguous_below_threshold": 15,
+    "fallback_ran_but_no_family_match": 17,
+    "insufficient_text_visibility": 75
+  },
+  "unknown_ocr_routing_diagnostics": {
+    "unknown_image_like_pdfs_not_routed_to_ocr": 11,
+    "unknown_text_layer_pdfs_with_too_little_text": 21,
+    "unknown_files_with_extraction_errors": 0,
+    "unknown_files_eligible_for_fallback_but_not_triggered": 11,
+    "fallback_false_unknown_bucket_counts": {
+      "image_like_pdf_but_not_routed_to_ocr": 11,
+      "language_visibility_unknown": 42,
+      "no_text_layer": 11,
+      "routing_not_eligible": 1,
+      "text_layer_present_but_too_short": 21
+    },
+    "unknown_not_fallback_eligible_reason_counts": {
+      "language_visibility_unknown": 42,
+      "no_text_layer": 11,
+      "routing_not_eligible": 1,
+      "text_layer_present_but_too_short": 21
+    }
+  },
+  "false_positive_risk_audit": {
+    "lab_vs_treatment_schedule_risk": "low_observed_review_bound_ambiguity",
+    "lab_result_records_with_treatment_or_medication_ambiguous_candidates": 3,
+    "lab_vs_imaging_risk": "low_observed_review_bound_ambiguity",
+    "lab_result_records_with_imaging_ambiguous_candidates": 3,
+    "lab_vs_generic_admin_table_risk": "no_direct_admin_or_insurance_cues_on_lab_predictions",
+    "lab_result_records_with_admin_or_insurance_cues": 0,
+    "stale_unknown_recomputation_risk": "controlled_by_lab_result_plus_latin_structure_cue_gate",
+    "classification_source_counts": {
+      "runtime_text_family_classifier": 444,
+      "not_recorded": 63
+    },
+    "unknown_ambiguous_candidate_sets": {
+      "('Imaging report', 'Medication plan', 'Treatment plan')": 7,
+      "('Administrative / Insurance', 'Referral / Order')": 2,
+      "('Imaging report', 'Medication plan')": 4,
+      "('Administrative / Insurance', 'Medication plan', 'Referral / Order')": 1,
+      "('Administrative / Insurance', 'Medication plan')": 1
+    },
+    "safety_conclusion": "No unsafe acceptance, external API use, or auto-accept allowance observed. Ambiguities remain review-bound."
+  },
+  "family_03_generalizes_safely": true,
+  "follow_up_classifier_work_justified": "not_immediate_for_lab_structure; investigate Unknown buckets only if operationally needed",
+  "remaining_unknown_recommendation": "Leave Unknown/manual review as default. If coverage matters, prioritize text visibility and fallback-ran-no-family-match diagnostics before cue expansion.",
+  "validation_results": {
+    "larger_slice_batch_eval": "passed: 507 evaluated; external_api_used_count 0; auto_accept_allowed_count 0; accepted_count 0",
+    "focused_family_eval_tests": "passed: 62 passed, 1 warning",
+    "ui_russian_ocr_upload_regression_group": "passed: 157 passed",
+    "python scripts/run_medai_ui_ops_panel_validation.py": "passed: medai_ui_ops_panel_ready",
+    "python scripts/run_medai_ui_boot_fix_validation.py": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "python scripts/run_cka_final_mvp_release_validation.py": "passed: 12/12 cases; 693 tests; external_api_used false",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py": "passed: 6/6; external_api_used false",
+    "python scripts/run_medai_route_fix01_validation.py": "passed: medai_route_fix01_ready; external_api_used false",
+    "full_pytest": "not run; not practical after 507-file validation and prior 30-minute timeout on this workspace"
+  },
+  "safety_privacy": {
+    "ocr_routing_changed": false,
+    "ocr_engine_changed": false,
+    "classifier_changed": false,
+    "confidence_thresholds_changed": false,
+    "auto_accept_expanded": false,
+    "clinical_logic_changed": false,
+    "lab_value_parsing_added": false,
+    "medication_parsing_added": false,
+    "dose_parsing_added": false,
+    "ddi_logic_changed": false,
+    "external_api_changed": false,
+    "raw_ocr_text_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_private_paths_in_public_reports": false,
+    "source_documents_staged": false,
+    "affected_files_remain_review_bound": true
+  },
+  "status_consistency": {
+    "unknown_accepted_anomaly_count": 0,
+    "unknown_accepted_anomaly_file_ids": [],
+    "invalid_status_mapping_file_ids": [],
+    "policy_anomaly_present": false
+  },
+  "status_mapping_action_counts": {
+    "unchanged": 507
+  },
+  "baseline_family_03_commit_short": "d5e07f4"
+}
