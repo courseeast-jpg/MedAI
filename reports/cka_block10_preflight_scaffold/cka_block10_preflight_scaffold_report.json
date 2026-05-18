@@ -88,7 +88,9 @@
           "CKA-B05",
           "CKA-B06",
           "CKA-B07",
-          "CKA-B08"
+          "CKA-B08",
+          "CKA-B09",
+          "CKA-B10"
         ]
       }
     },
@@ -302,5 +304,5 @@
   "production_autonomous": false,
   "allow_active_write": false,
   "hitl_freeze_confirmed": true,
-  "generated_at": "2026-05-06T12:28:46.415481+00:00"
+  "generated_at": "2026-05-18T17:18:33.478859+00:00"
 }

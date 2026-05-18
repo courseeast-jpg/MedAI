@@ -7,12 +7,14 @@
     "operator_panel_available_in_degraded_mode": true
   },
   "diagnostics": {
-    "db_file_exists": true,
-    "db_file_size_bucket": "small_under_1mb",
-    "db_parent_exists": true,
+    "db_file_exists": false,
+    "db_file_size_bucket": "missing",
+    "db_header_category": "missing",
+    "db_parent_exists": false,
     "db_path_label": "data/mkb.db",
     "db_schema_length": 1987,
     "db_schema_sha256_12": "533ad38e02df",
+    "db_startup_category": "missing",
     "exception_category": "sqlite_init_memory_error",
     "exception_class": "MemoryError",
     "safe_operator_guidance": [
@@ -22,10 +24,10 @@
       "Avoid manual DB deletion.",
       "Use a Codex repair block if database quarantine or restore is needed."
     ],
-    "sqlite_connect_result": "connect_ok_read_only",
-    "sqlite_quick_check_result": "ok"
+    "sqlite_connect_result": "not_run_missing_db",
+    "sqlite_quick_check_result": "not_run_missing_db"
   },
-  "generated_at_utc": "2026-05-14T20:21:47.079253+00:00",
+  "generated_at_utc": "2026-05-18T17:18:48.796003+00:00",
   "next_recommended_action": "Launch Streamlit and confirm the UI renders; if DB initialization still fails, use the diagnostics panel and a separate repair block.",
   "root_cause_classification": {
     "launcher_specific": false,
@@ -47,12 +49,6 @@
     "route_fix_behavior_changed": false,
     "runtime_db_or_index_created": false
   },
-  "streamlit_smoke_test": {
-    "isolated_port": 8502,
-    "http_status": 200,
-    "process_stayed_alive": true,
-    "logs_written_to_repo": false
-  },
   "validation_commands": [
     "python -m pytest tests/test_medai_ui_boot_fix.py -vv",
     "python scripts/run_medai_ui_boot_fix_validation.py",
@@ -60,7 +56,6 @@
     "python scripts/run_medai_ui_ops_panel_validation.py",
     "python scripts/run_cka_final_mvp_release_validation.py",
     "python scripts/run_b07_term01_opt_in_integration_validation.py",
-    "python scripts/run_medai_route_fix01_validation.py",
-    "isolated Streamlit smoke test on localhost"
+    "python scripts/run_medai_route_fix01_validation.py"
   ]
 }

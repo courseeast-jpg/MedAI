@@ -8,8 +8,8 @@
         "scripts/run_cka_final_mvp_release_validation.py"
       ],
       "command_id": "quick_health_check",
-      "group": "System Health",
-      "label": "Run Quick Health Check",
+      "group": "Main checks",
+      "label": "Quick health check",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -19,8 +19,8 @@
         "scripts/run_cka_final_mvp_release_validation.py"
       ],
       "command_id": "final_mvp_validation",
-      "group": "System Health",
-      "label": "Run Final MVP Validation",
+      "group": "Main checks",
+      "label": "Final MVP validation",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -32,8 +32,8 @@
         "tests"
       ],
       "command_id": "full_test_suite",
-      "group": "System Health",
-      "label": "Run Full Test Suite",
+      "group": "Advanced: full test suite",
+      "label": "Full test suite",
       "requires_confirmation": true,
       "timeout_seconds": 3600
     },
@@ -43,8 +43,8 @@
         "scripts/run_medai_terminology_sources_preflight.py"
       ],
       "command_id": "terminology_source_preflight",
-      "group": "Terminology",
-      "label": "Run Terminology Source Preflight",
+      "group": "Advanced: terminology checks",
+      "label": "Terminology preflight",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -56,8 +56,8 @@
         "terminology_data"
       ],
       "command_id": "terminology_inventory",
-      "group": "Terminology",
-      "label": "Run Terminology Inventory",
+      "group": "Advanced: terminology checks",
+      "label": "Terminology inventory",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -67,8 +67,8 @@
         "scripts/run_b07_term01_opt_in_integration_validation.py"
       ],
       "command_id": "b07_term_validation",
-      "group": "Terminology",
-      "label": "Run B07-TERM Validation",
+      "group": "Advanced: terminology checks",
+      "label": "B07-TERM validation",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -78,8 +78,8 @@
         "scripts/run_medai_route_fix01_validation.py"
       ],
       "command_id": "route_fix_validation",
-      "group": "Routing / Extraction",
-      "label": "Run ROUTE-FIX Validation",
+      "group": "Advanced: routing and extraction checks",
+      "label": "ROUTE-FIX validation",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -94,8 +94,8 @@
         "-q"
       ],
       "command_id": "focused_routing_tests",
-      "group": "Routing / Extraction",
-      "label": "Run Focused Routing Tests",
+      "group": "Advanced: routing and extraction checks",
+      "label": "Focused routing tests",
       "requires_confirmation": false,
       "timeout_seconds": 300
     },
@@ -104,8 +104,8 @@
         "__internal_git_safety_check__"
       ],
       "command_id": "git_safety_check",
-      "group": "Git / Safety",
-      "label": "Run Git Safety Check",
+      "group": "Main checks",
+      "label": "Git safety check",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -114,8 +114,8 @@
         "__internal_show_reports__"
       ],
       "command_id": "show_last_validation_reports",
-      "group": "Git / Safety",
-      "label": "Show Last Validation Reports",
+      "group": "Advanced: reports and recovery",
+      "label": "Last validation reports",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -127,8 +127,8 @@
         "medai-*2026-05-14"
       ],
       "command_id": "show_release_tags",
-      "group": "Recovery",
-      "label": "Show Release Tags",
+      "group": "Advanced: reports and recovery",
+      "label": "Release tags",
       "requires_confirmation": false,
       "timeout_seconds": 120
     },
@@ -140,8 +140,8 @@
         "backups/medai_final_release_2026-05-14.bundle"
       ],
       "command_id": "verify_final_bundle",
-      "group": "Recovery",
-      "label": "Verify Final Release Bundle",
+      "group": "Advanced: reports and recovery",
+      "label": "Verify release bundle",
       "requires_confirmation": false,
       "timeout_seconds": 120
     }
@@ -149,7 +149,7 @@
   "conclusion": "medai_ui_ops_panel_ready",
   "free_form_shell_enabled": false,
   "full_test_suite_requires_confirmation": true,
-  "generated_at_utc": "2026-05-14T20:03:20.602974+00:00",
+  "generated_at_utc": "2026-05-18T17:18:48.139659+00:00",
   "internal_validation_results": {
     "git_safety_check": {
       "exit_code": 0,

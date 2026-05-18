@@ -8,13 +8,6 @@ Conclusion: `medai_ui_boot_fix_startup_resilience_ready`
 - Launcher-specific: false.
 - Operator Control Panel button related: false.
 
-## Startup Smoke Test
-
-- Isolated Streamlit port: `8502`
-- HTTP status: `200`
-- Process stayed alive: `true`
-- Logs written to repo: `false`
-
 ## Safety
 
 - No DB file was deleted or overwritten.

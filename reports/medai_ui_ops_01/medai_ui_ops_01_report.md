@@ -15,18 +15,18 @@ Conclusion: `medai_ui_ops_panel_ready`
 
 | Group | Button | Command ID |
 | --- | --- | --- |
-| System Health | Run Quick Health Check | `quick_health_check` |
-| System Health | Run Final MVP Validation | `final_mvp_validation` |
-| System Health | Run Full Test Suite | `full_test_suite` |
-| Terminology | Run Terminology Source Preflight | `terminology_source_preflight` |
-| Terminology | Run Terminology Inventory | `terminology_inventory` |
-| Terminology | Run B07-TERM Validation | `b07_term_validation` |
-| Routing / Extraction | Run ROUTE-FIX Validation | `route_fix_validation` |
-| Routing / Extraction | Run Focused Routing Tests | `focused_routing_tests` |
-| Git / Safety | Run Git Safety Check | `git_safety_check` |
-| Git / Safety | Show Last Validation Reports | `show_last_validation_reports` |
-| Recovery | Show Release Tags | `show_release_tags` |
-| Recovery | Verify Final Release Bundle | `verify_final_bundle` |
+| Main checks | Quick health check | `quick_health_check` |
+| Main checks | Final MVP validation | `final_mvp_validation` |
+| Advanced: full test suite | Full test suite | `full_test_suite` |
+| Advanced: terminology checks | Terminology preflight | `terminology_source_preflight` |
+| Advanced: terminology checks | Terminology inventory | `terminology_inventory` |
+| Advanced: terminology checks | B07-TERM validation | `b07_term_validation` |
+| Advanced: routing and extraction checks | ROUTE-FIX validation | `route_fix_validation` |
+| Advanced: routing and extraction checks | Focused routing tests | `focused_routing_tests` |
+| Main checks | Git safety check | `git_safety_check` |
+| Advanced: reports and recovery | Last validation reports | `show_last_validation_reports` |
+| Advanced: reports and recovery | Release tags | `show_release_tags` |
+| Advanced: reports and recovery | Verify release bundle | `verify_final_bundle` |
 
 ## Safety
 
