@@ -1,0 +1,147 @@
+{
+  "behavior_changed": false,
+  "branch": "clinical-knowledge-architecture",
+  "bucket_counts": {
+    "ambiguous_below_threshold": 15,
+    "fallback_ran_but_no_family_match": 17,
+    "insufficient_text_visibility": 75
+  },
+  "external_api_used": false,
+  "generated_at": "2026-05-18T18:01:27.640614+00:00",
+  "head_commit_short": "455147097916",
+  "overall_explanation": "Both an OCR / text-visibility evaluation-only block (Section A) and a narrow cue-coverage audit block (Section B) are justified. Recommend sequencing Section A first (larger pool, upstream cause) and then Section B (smaller pool, downstream).",
+  "overall_recommendation": "A_then_B",
+  "park_19_commit_short": "ac466e0f9ab8",
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "safety_privacy": {
+    "all_records_remain_review_bound": true,
+    "auto_accept_changed": false,
+    "b07_changed": false,
+    "behavior_changed": false,
+    "classifier_behavior_changed": false,
+    "clinical_interpretation_added": false,
+    "command_allowlist_changed": false,
+    "cue_packs_changed": false,
+    "db_schema_changed": false,
+    "ddi_logic_changed": false,
+    "dose_parsing_added": false,
+    "external_api_changed": false,
+    "external_api_used": false,
+    "lab_value_parsing_added": false,
+    "medication_parsing_added": false,
+    "ocr_engine_changed": false,
+    "ocr_routing_changed": false,
+    "private_corpus_files_staged": false,
+    "private_paths_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "raw_ocr_text_in_public_reports": false,
+    "route_fix_changed": false,
+    "scoring_changed": false,
+    "secrets_in_public_reports": false,
+    "source_documents_staged": false,
+    "thresholds_changed": false
+  },
+  "section_a": {
+    "block_justification": "74 of 75 records show actionable text-visibility issues. A future OCR / text-visibility evaluation-only block is justified, prioritizing language_script_visible_detector_unresolved and likely_text_layer_issue. No runtime change required by this block.",
+    "block_justified": true,
+    "count": 75,
+    "image_like_pdf_counts": {
+      "no": 52,
+      "not_applicable": 1,
+      "unknown": 11,
+      "yes": 11
+    },
+    "name": "insufficient_text_visibility",
+    "ocr_fallback_eligible_counts": {
+      "no": 59,
+      "unknown": 5,
+      "yes": 11
+    },
+    "ocr_visibility_breakdown": {
+      "extraction_error": 0,
+      "fallback_eligible_but_not_triggered": 0,
+      "image_like_but_ocr_not_routed": 11,
+      "language_script_visible_detector_unresolved": 31,
+      "likely_ocr_eligibility_issue": 0,
+      "likely_text_layer_issue": 21,
+      "no_text_layer": 11,
+      "non_actionable_leave_manual_review": 1
+    },
+    "pdf_text_layer_detected_counts": {
+      "no": 22,
+      "not_applicable": 1,
+      "yes": 52
+    },
+    "primary_signals": [
+      "language_script_visible_detector_unresolved",
+      "likely_text_layer_issue",
+      "image_like_but_ocr_not_routed",
+      "no_text_layer"
+    ],
+    "raw_routing_bucket_counts": {
+      "image_like_pdf_but_not_routed_to_ocr": 11,
+      "language_visibility_unknown": 31,
+      "no_text_layer": 11,
+      "routing_not_eligible": 1,
+      "text_layer_present_but_too_short": 21
+    },
+    "raw_visibility_status_counts": {
+      "latin_visible_language_unknown": 74,
+      "not_applicable": 1
+    }
+  },
+  "section_b": {
+    "block_justification": "14 of 17 fallback-bucket records surface a recognizable medical shape without language cues. A narrow cue-audit / cue-coverage review block (evaluation-only, no cue expansion) is justified. The largest sub-category should steer the audit focus.",
+    "block_justified": true,
+    "count": 17,
+    "name": "fallback_ran_but_no_family_match",
+    "raw_shape_counts": {
+      "administrative_form_shape_detected_counts": {
+        "yes": 17
+      },
+      "date_or_schedule_shape_detected_counts": {
+        "no": 1,
+        "yes": 16
+      },
+      "imaging_modality_shape_detected_counts": {
+        "no": 16,
+        "yes": 1
+      },
+      "lab_table_shape_detected_counts": {
+        "no": 15,
+        "yes": 2
+      },
+      "medical_abbreviation_shape_detected_counts": {
+        "no": 17
+      },
+      "section_heading_shape_detected_counts": {
+        "no": 13,
+        "yes": 4
+      },
+      "table_like_structure_detected_counts": {
+        "no": 2,
+        "yes": 15
+      }
+    },
+    "shape_audit_counts": {
+      "generic_form_shapes_only": 1,
+      "likely_nonmedical_or_header_noise": 0,
+      "needs_manual_review": 2,
+      "no_known_family_shapes": 0,
+      "possible_imaging_shape_without_language_cues": 1,
+      "possible_lab_shape_without_language_cues": 2,
+      "possible_treatment_shape_without_language_cues": 11
+    }
+  },
+  "section_c": {
+    "count": 15,
+    "cue_expansion_recommended": false,
+    "name": "ambiguous_below_threshold",
+    "note": "Higher false-positive risk. Reported as a summary count only per UNKNOWN-DIAG-02 scope. All records remain review-bound; cue expansion must not be driven from this bucket."
+  },
+  "snapshot": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-02",
+  "source_report_label": "reports/medai_doc_type_family_04_larger_slice_validation/(public anonymized batch-eval per-file table)",
+  "total_unknown_analyzed": 107,
+  "upstream_diag_01_label": "reports/medai_doc_type_unknown_diag_01/(public diagnostic)"
+}
