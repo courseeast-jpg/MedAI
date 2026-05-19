@@ -1107,6 +1107,27 @@ def render_run_result_card(item: dict) -> None:
                 st.caption(_op_badge_plan["disclaimer_line"])
         except Exception:
             pass
+        # MEDAI-DOC-TYPE-UNKNOWN-DIAG-10A: optional, read-only language-
+        # propagation metadata display. Default-off; rendered only when the
+        # SEPARATE env var MEDAI_DOC_TYPE_LANGUAGE_PROPAGATION_METADATA_ENABLED
+        # is truthy AND the underlying DIAG-09A helper returns the propagated
+        # metadata label for the record. The DIAG-07A operator-badge env var
+        # does NOT enable this display; each lever toggles independently.
+        # Read-only; no buttons / actions / state mutations attached.
+        try:
+            from clinical_knowledge.document_type.language_propagation_operator_surface import (
+                render_plan_for_language_propagation,
+            )
+
+            _lp_plan = render_plan_for_language_propagation(item)
+            if _lp_plan is not None:
+                st.markdown("---")
+                st.markdown(f"#### {_lp_plan['expander_label']}")
+                for _line in _lp_plan["markdown_lines"]:
+                    st.markdown(_line)
+                st.caption(_lp_plan["disclaimer_line"])
+        except Exception:
+            pass
     st.markdown("</div>", unsafe_allow_html=True)
 
 

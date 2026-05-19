@@ -41,12 +41,24 @@ from clinical_knowledge.document_type.language_propagation_metadata import (
     is_language_propagation_metadata_default_disabled,
     is_language_propagation_metadata_enabled,
 )
+from clinical_knowledge.document_type.language_propagation_operator_surface import (
+    LANGUAGE_PROPAGATION_DISCLAIMER,
+    LANGUAGE_PROPAGATION_DISPLAY_TEXT,
+    LANGUAGE_PROPAGATION_EXPANDER_LABEL,
+    LANGUAGE_PROPAGATION_VOCAB_TOKEN,
+    language_propagation_operator_surface_is_enabled,
+    render_plan_for_language_propagation,
+)
 
 __all__ = [
     "DERIVED_LABEL",
     "EXCLUSION_RULES",
     "POSITIVE_SIGNATURE",
+    "LANGUAGE_PROPAGATION_DISCLAIMER",
+    "LANGUAGE_PROPAGATION_DISPLAY_TEXT",
+    "LANGUAGE_PROPAGATION_EXPANDER_LABEL",
     "LANGUAGE_PROPAGATION_METADATA_ENV_VAR",
+    "LANGUAGE_PROPAGATION_VOCAB_TOKEN",
     "OPERATOR_BADGE_UI_DISCLAIMER",
     "OPERATOR_BADGE_UI_EXPANDER_LABEL",
     "OPERATOR_REVIEW_BADGE_DISCLAIMER",
@@ -63,8 +75,10 @@ __all__ = [
     "is_language_propagation_metadata_enabled",
     "is_operator_review_badge_default_disabled",
     "is_operator_review_badge_enabled",
+    "language_propagation_operator_surface_is_enabled",
     "matches_positive_signature",
     "operator_badge_ui_is_enabled",
+    "render_plan_for_language_propagation",
     "render_plan_for_operator_badge",
     "violates_any_exclusion_rule",
 ]
