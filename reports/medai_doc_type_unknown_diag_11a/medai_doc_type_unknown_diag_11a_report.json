@@ -1,0 +1,404 @@
+{
+  "abbreviation_handling_implemented_in_this_block": false,
+  "anonymized_sample_ids": [
+    "abbreviation_priority_001",
+    "abbreviation_priority_002",
+    "abbreviation_priority_003",
+    "abbreviation_priority_004",
+    "abbreviation_priority_005"
+  ],
+  "behavior_changed": false,
+  "branch": "clinical-knowledge-architecture",
+  "cue_expansion_recommended": false,
+  "deferred_subsets": {
+    "ambiguous_below_threshold": "15 records excluded; review-bound, no cue expansion",
+    "candidate_table_header_language_policy_record": "1 record from DIAG-05 routed to the table-header lever; deferred",
+    "fallback_ran_but_no_family_match": "17 records deferred per DIAG-02; no cue expansion",
+    "language_propagation_pool_already_handled": "11 records handled by DIAG-09A/10A; excluded from this spec",
+    "likely_text_layer_issue": "21 records deferred per DIAG-03",
+    "numeric_table_safe_default_pool_already_handled": "11 records handled by DIAG-06A/07A/08A; excluded from this spec"
+  },
+  "exclusion_audit": [
+    {
+      "rule": "exclude_cyrillic_dominant_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_mixed_script_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_low_detector_confidence_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_insufficient_detector_input_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_no_text_layer_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_image_like_but_not_routed_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_table_heavy_numeric_safe_default_records_already_handled",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_language_propagation_records_already_handled",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_table_header_only_special_case_record",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_ambiguous_below_threshold_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_fallback_ran_but_no_family_match_records",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_medication_dose_or_ddi_interpretation",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_lab_value_parsing",
+      "violating_record_count": 0
+    },
+    {
+      "rule": "exclude_records_with_insufficient_safe_metadata",
+      "violating_record_count": 0
+    }
+  ],
+  "exclusion_rules": [
+    "exclude_cyrillic_dominant_records",
+    "exclude_mixed_script_records",
+    "exclude_low_detector_confidence_records",
+    "exclude_insufficient_detector_input_records",
+    "exclude_no_text_layer_records",
+    "exclude_image_like_but_not_routed_records",
+    "exclude_table_heavy_numeric_safe_default_records_already_handled",
+    "exclude_language_propagation_records_already_handled",
+    "exclude_table_header_only_special_case_record",
+    "exclude_ambiguous_below_threshold_records",
+    "exclude_fallback_ran_but_no_family_match_records",
+    "exclude_medication_dose_or_ddi_interpretation",
+    "exclude_lab_value_parsing",
+    "exclude_records_with_insufficient_safe_metadata"
+  ],
+  "external_api_used": false,
+  "future_implementation_acceptance_criteria": [
+    "only_exact_abbreviation_signature_records_receive_the_metadata_label",
+    "no_overlap_with_numeric_table_safe_default_records",
+    "no_overlap_with_language_propagation_records",
+    "no_overlap_with_table_header_special_case_unless_explicitly_included_later",
+    "accepted_count_remains_zero",
+    "auto_accept_allowed_count_remains_zero",
+    "external_api_used_count_remains_zero",
+    "all_affected_records_remain_review_bound",
+    "data_layer_unknown_count_behavior_explicitly_reported",
+    "no_treatment_imaging_or_admin_false_positive_expansion",
+    "public_report_privacy_checks_remain_clean",
+    "rollback_or_disable_path_exists"
+  ],
+  "future_validation_requirements": [
+    "focused_synthetic_tests",
+    "replay_of_8_record_abbreviation_pool",
+    "five_hundred_seven_file_aggregate_validation",
+    "overlap_audit_against_diag_06a_helper_pool",
+    "overlap_audit_against_diag_09a_helper_pool",
+    "document_type_eval_regression_tests",
+    "public_report_privacy_checks",
+    "final_cka_mvp_validation",
+    "b07_validation",
+    "route_fix_validation",
+    "ui_ops_validation",
+    "ui_boot_validation",
+    "staged_safety_check"
+  ],
+  "generated_at": "2026-05-19T09:35:14.431766+00:00",
+  "head_commit_short": "d5e7493ae628",
+  "implementation_block_justification": "All 8 abbreviation-pool records match the exact positive signal pattern, no exclusion rule fires, and the slice is fully disjoint from both the numeric-table safe-default pool and the language-propagation pool. A future implementation block may prototype the abbreviation-context metadata helper inside the published acceptance criteria. The implementation must remain review-bound, default-off behind a separate env flag distinct from the two existing levers, and must never parse or expand the abbreviation itself.",
+  "implementation_block_recommended_next": "future_block_named_unknown_diag_11a_implementation",
+  "no_overlap_with_language_propagation_pool": true,
+  "no_overlap_with_numeric_table_safe_default_pool": true,
+  "no_priority_record_violates_any_exclusion_rule": true,
+  "overlap_with_language_propagation_pool": 0,
+  "overlap_with_numeric_table_safe_default_pool": 0,
+  "park_19_commit_short": "ac466e0f9ab8",
+  "positive_signal_holds_on_all_priority_records": true,
+  "positive_signal_match_report": {
+    "alphabetic_ratio_sufficient_for_language": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "detector_attempted": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "detector_confidence_bucket": {
+      "expected_value": "high_or_medium",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "detector_input_bucket": {
+      "expected_value": "sufficient",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "dominant_script": {
+      "expected_value": "latin",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "language_visibility_status": {
+      "expected_value": "latin_visible_language_unknown",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "latin_medical_abbrev_visible": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "medical_abbreviation_shape_detected": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "no_cyrillic_dominant_signal": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "no_low_confidence_detector_signal": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "no_mixed_script_signal": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "not_already_handled_by_language_propagation_helper": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "not_already_handled_by_numeric_table_safe_default_helper": {
+      "expected_value": "yes",
+      "fully_matches": true,
+      "matching_record_count": 8
+    },
+    "script_detection_result": {
+      "expected_value": "latin",
+      "fully_matches": true,
+      "matching_record_count": 8
+    }
+  },
+  "positive_signal_pattern": [
+    {
+      "expected": "yes",
+      "key": "detector_attempted"
+    },
+    {
+      "expected": "sufficient",
+      "key": "detector_input_bucket"
+    },
+    {
+      "expected": "high_or_medium",
+      "key": "detector_confidence_bucket"
+    },
+    {
+      "expected": "latin",
+      "key": "script_detection_result"
+    },
+    {
+      "expected": "latin",
+      "key": "dominant_script"
+    },
+    {
+      "expected": "latin_visible_language_unknown",
+      "key": "language_visibility_status"
+    },
+    {
+      "expected": "yes",
+      "key": "latin_medical_abbrev_visible"
+    },
+    {
+      "expected": "yes",
+      "key": "medical_abbreviation_shape_detected"
+    },
+    {
+      "expected": "yes",
+      "key": "alphabetic_ratio_sufficient_for_language"
+    },
+    {
+      "expected": "yes",
+      "key": "no_cyrillic_dominant_signal"
+    },
+    {
+      "expected": "yes",
+      "key": "no_mixed_script_signal"
+    },
+    {
+      "expected": "yes",
+      "key": "no_low_confidence_detector_signal"
+    },
+    {
+      "expected": "yes",
+      "key": "not_already_handled_by_numeric_table_safe_default_helper"
+    },
+    {
+      "expected": "yes",
+      "key": "not_already_handled_by_language_propagation_helper"
+    }
+  ],
+  "progress_estimate": {
+    "after_11a_project_done_pct": "approximately 83%",
+    "after_11a_project_remaining_pct": "approximately 17%",
+    "after_11a_unknown_track_done_pct": "approximately 90%",
+    "after_11a_unknown_track_remaining_pct": "approximately 10%",
+    "before_11a_project_done_pct": "approximately 82%",
+    "before_11a_project_remaining_pct": "approximately 18%",
+    "before_11a_unknown_track_done_pct": "approximately 87%",
+    "before_11a_unknown_track_remaining_pct": "approximately 13%",
+    "note": "Estimates are approximate and refer to the residual Unknown-reduction track in this workspace, plus the overall MedAI project state. They are informational only and not a release milestone."
+  },
+  "proposed_future_behavior": {
+    "applies_to": "records matching the exact positive signal pattern only",
+    "default_action": "derive `latin_medical_abbreviation_context` as a safe metadata label only; never expand or parse the abbreviation",
+    "must_be_default_off_behind_separate_env_flag_or_operator_setting": true,
+    "must_keep_document_review_bound": true,
+    "must_not_alter_raw_detector_output": true,
+    "must_not_auto_accept": true,
+    "must_not_change_data_layer_document_type": true,
+    "must_not_classify_clinical_meaning": true,
+    "must_not_expand_the_abbreviation": true,
+    "must_not_overlap_with_language_propagation_pool": true,
+    "must_not_overlap_with_numeric_table_safe_default_pool": true,
+    "must_not_parse_the_abbreviation": true,
+    "must_not_parse_values": true,
+    "must_not_write_active_clinical_facts": true,
+    "proposed_label": "latin_medical_abbreviation_context",
+    "proposed_label_meaning": "Latin-script text contains medical-style abbreviations useful for language / context routing",
+    "suggested_future_env_var": "MEDAI_DOC_TYPE_LATIN_ABBREVIATION_METADATA_ENABLED"
+  },
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "raw_signal_counts": {
+    "alphabetic_content_bucket_counts": {
+      "high": 8
+    },
+    "detector_confidence_bucket_counts": {
+      "high": 8
+    },
+    "dominant_script_counts": {
+      "latin": 8
+    },
+    "image_like_pdf_counts": {
+      "no": 8
+    },
+    "imaging_modality_shape_detected_counts": {
+      "no": 3,
+      "yes": 5
+    },
+    "lab_table_shape_detected_counts": {
+      "no": 4,
+      "yes": 4
+    },
+    "language_detector_attempted_counts": {
+      "yes": 8
+    },
+    "language_detector_input_bucket_counts": {
+      "sufficient": 8
+    },
+    "language_visibility_status_counts": {
+      "latin_visible_language_unknown": 8
+    },
+    "medical_abbreviation_shape_detected_counts": {
+      "yes": 8
+    },
+    "numeric_content_bucket_counts": {
+      "low": 4,
+      "medium": 4
+    },
+    "pdf_text_layer_detected_counts": {
+      "yes": 8
+    },
+    "script_detection_result_counts": {
+      "latin": 8
+    },
+    "section_heading_shape_detected_counts": {
+      "no": 6,
+      "yes": 2
+    },
+    "symbol_content_bucket_counts": {
+      "high": 2,
+      "medium": 6
+    },
+    "table_like_structure_detected_counts": {
+      "yes": 8
+    }
+  },
+  "safety_privacy": {
+    "abbreviation_handling_behavior_changed": false,
+    "abbreviation_handling_implemented_in_this_block": false,
+    "abbreviation_parsing_or_expansion_recommended": false,
+    "all_records_remain_review_bound": true,
+    "auto_accept_changed": false,
+    "b07_changed": false,
+    "behavior_changed": false,
+    "classifier_behavior_changed": false,
+    "clinical_interpretation_added": false,
+    "command_allowlist_changed": false,
+    "cue_expansion_recommended": false,
+    "cue_packs_changed": false,
+    "db_schema_changed": false,
+    "ddi_logic_changed": false,
+    "dose_parsing_added": false,
+    "external_api_changed": false,
+    "external_api_used": false,
+    "lab_value_parsing_added": false,
+    "medication_parsing_added": false,
+    "no_overlap_with_language_propagation_pool": true,
+    "no_overlap_with_numeric_table_safe_default_pool": true,
+    "ocr_engine_changed": false,
+    "ocr_routing_changed": false,
+    "private_corpus_files_staged": false,
+    "private_paths_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "raw_language_detector_behavior_changed": false,
+    "raw_ocr_text_in_public_reports": false,
+    "route_fix_changed": false,
+    "scoring_changed": false,
+    "secrets_in_public_reports": false,
+    "source_documents_staged": false,
+    "thresholds_changed": false
+  },
+  "snapshot": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-11A",
+  "source_10a_commit_short": "fa4ac76",
+  "source_report_label": "reports/medai_doc_type_family_04_larger_slice_validation/(public anonymized batch-eval per-file table)",
+  "suggested_future_env_var": "MEDAI_DOC_TYPE_LATIN_ABBREVIATION_METADATA_ENABLED",
+  "total_abbreviation_pool_records": 8,
+  "upstream_labels": [
+    "reports/medai_doc_type_unknown_diag_10a_language_propagation_operator_surface/(public)",
+    "reports/medai_doc_type_unknown_diag_09a_implementation/(public)",
+    "reports/medai_doc_type_unknown_diag_09a/(public spec)",
+    "reports/medai_doc_type_unknown_diag_08a_operator_badge_ui/(public)",
+    "reports/medai_doc_type_unknown_diag_07a_operator_routing_review/(public)",
+    "reports/medai_doc_type_unknown_diag_06a_implementation/(public)",
+    "reports/medai_doc_type_unknown_diag_06a/(public spec)",
+    "reports/medai_doc_type_unknown_diag_05/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_04/(public diagnostic)"
+  ]
+}
