@@ -57,6 +57,14 @@ from clinical_knowledge.document_type.latin_abbreviation_metadata import (
     is_latin_abbreviation_metadata_default_disabled,
     is_latin_abbreviation_metadata_enabled,
 )
+from clinical_knowledge.document_type.latin_abbreviation_operator_surface import (
+    LATIN_ABBREVIATION_DISPLAY_TEXT,
+    LATIN_ABBREVIATION_EXPANDER_LABEL,
+    LATIN_ABBREVIATION_UI_DISCLAIMER,
+    LATIN_ABBREVIATION_VOCAB_TOKEN,
+    latin_abbreviation_operator_surface_is_enabled,
+    render_plan_for_latin_abbreviation,
+)
 
 __all__ = [
     "DERIVED_LABEL",
@@ -67,9 +75,13 @@ __all__ = [
     "LANGUAGE_PROPAGATION_EXPANDER_LABEL",
     "LANGUAGE_PROPAGATION_METADATA_ENV_VAR",
     "LANGUAGE_PROPAGATION_VOCAB_TOKEN",
+    "LATIN_ABBREVIATION_DISPLAY_TEXT",
+    "LATIN_ABBREVIATION_EXPANDER_LABEL",
     "LATIN_ABBREVIATION_METADATA_DISCLAIMER",
     "LATIN_ABBREVIATION_METADATA_ENV_VAR",
     "LATIN_ABBREVIATION_METADATA_LABEL",
+    "LATIN_ABBREVIATION_UI_DISCLAIMER",
+    "LATIN_ABBREVIATION_VOCAB_TOKEN",
     "OPERATOR_BADGE_UI_DISCLAIMER",
     "OPERATOR_BADGE_UI_EXPANDER_LABEL",
     "OPERATOR_REVIEW_BADGE_DISCLAIMER",
@@ -90,9 +102,11 @@ __all__ = [
     "is_operator_review_badge_default_disabled",
     "is_operator_review_badge_enabled",
     "language_propagation_operator_surface_is_enabled",
+    "latin_abbreviation_operator_surface_is_enabled",
     "matches_positive_signature",
     "operator_badge_ui_is_enabled",
     "render_plan_for_language_propagation",
+    "render_plan_for_latin_abbreviation",
     "render_plan_for_operator_badge",
     "violates_any_exclusion_rule",
 ]

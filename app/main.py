@@ -1128,6 +1128,29 @@ def render_run_result_card(item: dict) -> None:
                 st.caption(_lp_plan["disclaimer_line"])
         except Exception:
             pass
+        # MEDAI-DOC-TYPE-UNKNOWN-DIAG-12A: optional, read-only Latin
+        # abbreviation metadata display. Default-off; rendered only when the
+        # SEPARATE env var MEDAI_DOC_TYPE_LATIN_ABBREVIATION_METADATA_ENABLED
+        # is truthy AND the underlying DIAG-11A helper returns the
+        # abbreviation metadata label for the record. The DIAG-07A operator-
+        # badge env var and the DIAG-09A propagation env var do NOT enable
+        # this display; each of the three levers toggles independently.
+        # Read-only; the abbreviation is never parsed or expanded; no
+        # buttons / actions / state mutations attached.
+        try:
+            from clinical_knowledge.document_type.latin_abbreviation_operator_surface import (
+                render_plan_for_latin_abbreviation,
+            )
+
+            _la_plan = render_plan_for_latin_abbreviation(item)
+            if _la_plan is not None:
+                st.markdown("---")
+                st.markdown(f"#### {_la_plan['expander_label']}")
+                for _line in _la_plan["markdown_lines"]:
+                    st.markdown(_line)
+                st.caption(_la_plan["disclaimer_line"])
+        except Exception:
+            pass
     st.markdown("</div>", unsafe_allow_html=True)
 
 
