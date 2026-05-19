@@ -1,0 +1,159 @@
+{
+  "conclusion": "medai_doc_type_unknown_diag_13a_text_layer_diagnostic_ready",
+  "block_id": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-13A",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit_short": "657e8c6",
+  "park_20_parking_commit_short": "3e46461",
+  "diag_13_preflight_commit_short": "01c2b69",
+  "remote_tag_caveat": "Branch parked at PARK-20 (3e46461). PARK-20 tags exist locally and target 3e46461 but remote tag push is currently blocked by an HTTP 403 from origin's receive-pack endpoint. Tags are not touched in DIAG-13A. The out-of-band GitHub/proxy permission fix remains pending.",
+  "source_reports_used": [
+    "block DIAG-02 (directory: medai_doc_type_unknown_diag_02)",
+    "block DIAG-03 (directory: medai_doc_type_unknown_diag_03)",
+    "block DIAG-13-PREFLIGHT (directory: medai_doc_type_unknown_diag_13_preflight)"
+  ],
+  "total_text_layer_records_analyzed": 21,
+  "root_cause_candidate_counts": {
+    "text_layer_too_short": 11,
+    "table_structure_visible_but_text_insufficient": 10,
+    "text_layer_present_but_low_signal": 0,
+    "image_like_with_partial_text": 0,
+    "no_safe_text_visibility_metadata": 0,
+    "leave_manual_review": 0
+  },
+  "structural_shape_counts": {
+    "table_like_structure_visible": 10,
+    "row_or_column_pattern_visible": 0,
+    "section_heading_shape_visible": 0,
+    "lab_or_result_shape_possible": 0,
+    "treatment_or_schedule_shape_possible": 0,
+    "administrative_or_form_shape_possible": 0,
+    "no_known_shape_visible": 11
+  },
+  "future_lever_counts": {
+    "candidate_text_layer_extraction_diagnostic": 21,
+    "candidate_pdf_text_extraction_quality_audit": 11,
+    "candidate_layout_table_extraction_audit": 10,
+    "candidate_manual_review_only": 0,
+    "insufficient_metadata_for_next_action": 0
+  },
+  "raw_signal_counts_from_diag03": {
+    "alphabetic_content_bucket_counts": {
+      "high": 21
+    },
+    "image_like_pdf_counts": {
+      "no": 21
+    },
+    "native_text_length_bucket_counts": {
+      "none": 10,
+      "short": 8,
+      "tiny": 3
+    },
+    "pdf_text_layer_detected_counts": {
+      "yes": 21
+    },
+    "table_like_structure_detected_counts": {
+      "no": 11,
+      "yes": 10
+    }
+  },
+  "anonymous_ids_used": [
+    "file_001",
+    "file_002",
+    "file_003",
+    "file_004",
+    "file_005",
+    "file_006",
+    "file_007",
+    "file_008",
+    "file_009",
+    "file_010",
+    "file_011",
+    "file_012",
+    "file_013",
+    "file_014",
+    "file_015",
+    "file_016",
+    "file_017",
+    "file_018",
+    "file_019",
+    "file_020",
+    "file_021"
+  ],
+  "non_text_layer_pool_exclusion_audit": {
+    "likely_text_layer_issue_count": 21,
+    "no_text_layer_count": 0,
+    "non_text_layer_pools_excluded_from_diag13a_buckets": true,
+    "numeric_table_safe_default_pool_excluded": true,
+    "language_propagation_pool_excluded": true,
+    "latin_abbreviation_pool_excluded": true,
+    "fallback_ran_but_no_family_match_pool_excluded": true,
+    "table_header_special_case_pool_excluded": true,
+    "ambiguous_below_threshold_pool_excluded": true
+  },
+  "future_block_decision": {
+    "future_block_justified": true,
+    "recommendation_code": "A",
+    "recommendation_name": "text_layer_extraction_diagnostic_spec",
+    "recommendation_letter_options": {
+      "A": "text-layer extraction diagnostic/spec",
+      "B": "PDF text-quality audit",
+      "C": "layout/table extraction audit",
+      "D": "leave manual review",
+      "E": "insufficient metadata"
+    },
+    "subtrack_split_for_recommendation_A": {
+      "pdf_text_extraction_quality_audit_subset": 11,
+      "layout_table_extraction_audit_subset": 10
+    },
+    "cue_expansion_recommended_as_primary_next_step": false
+  },
+  "behavior_changed": false,
+  "external_api_used": false,
+  "cue_expansion_recommended": false,
+  "implementation_started": false,
+  "runtime_helper_added": false,
+  "operator_ui_surface_added": false,
+  "ocr_routing_changed": false,
+  "ocr_engine_behavior_changed": false,
+  "raw_language_detector_changed": false,
+  "classifier_behavior_changed": false,
+  "thresholds_or_scoring_changed": false,
+  "cue_packs_added": false,
+  "lab_values_parsed": false,
+  "medications_dose_frequency_duration_or_ddi_parsed": false,
+  "abbreviations_parsed_or_expanded": false,
+  "clinical_interpretation_added": false,
+  "b07_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_enabled": false,
+  "park_20_tags_touched": false,
+  "source_documents_staged": false,
+  "private_files_staged": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_in_public_reports": false,
+  "private_paths_in_public_reports": false,
+  "secrets_in_public_reports": false,
+  "safety_privacy_statement": "DIAG-13A is a static, aggregate-only, evaluation-only diagnostic. It re-classifies the 21 text-layer records previously characterized by DIAG-02 and DIAG-03 into three controlled-vocabulary axes. No source documents, raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, DBs, backups, or bundles are read or emitted. Output uses anonymized file_NNN IDs only.",
+  "progress_estimate": {
+    "before": {
+      "residual_unknown_reduction_track_done_pct": 97,
+      "residual_unknown_reduction_track_remaining_pct": 3,
+      "whole_medai_project_done_pct": 86,
+      "whole_medai_project_remaining_pct": 14
+    },
+    "after": {
+      "residual_unknown_reduction_track_done_pct": 98,
+      "residual_unknown_reduction_track_remaining_pct": 2,
+      "whole_medai_project_done_pct": 87,
+      "whole_medai_project_remaining_pct": 13
+    }
+  },
+  "next_block_recommendation": {
+    "recommended_letter": "A",
+    "recommended_name": "text_layer_extraction_diagnostic_spec",
+    "rationale_summary": "All 21 text-layer records have pdf_text_layer_detected=yes and image_like_pdf=no, indicating a usable text layer is present. 11 records resolve to text_layer_too_short (no table structure, native text length none/short/tiny) and 10 records resolve to table_structure_visible_but_text_insufficient (table-like structure visible, native text length still none/short/tiny). A unified text-layer extraction diagnostic / spec block is the appropriate next step. PDF text-quality audit and layout/table extraction audit are natural sub-tracks. Cue expansion is explicitly NOT recommended as the primary next step."
+  }
+}
