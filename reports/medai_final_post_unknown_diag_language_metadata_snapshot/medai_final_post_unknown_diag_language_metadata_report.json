@@ -1,0 +1,207 @@
+{
+  "conclusion": "medai_final_post_unknown_diag_language_metadata_snapshot_ready",
+  "park_block_id": "MEDAI-PARK-20",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit_short": "e41e1f3",
+  "included_implementation_commits": {
+    "DIAG-06A-SPEC": "70a2b59",
+    "DIAG-06A-IMPLEMENTATION": "eef93bc",
+    "DIAG-07A-OPERATOR-ROUTING-REVIEW": "8d8895d",
+    "DIAG-08A-OPERATOR-BADGE-UI": "f5b80ce",
+    "DIAG-09A-SPEC": "5122d93",
+    "DIAG-09A-IMPLEMENTATION": "31f42fc",
+    "DIAG-10A-LANGUAGE-PROPAGATION-OPERATOR-SURFACE": "fa4ac76",
+    "DIAG-11A-SPEC": "7f248ff",
+    "DIAG-11A-IMPLEMENTATION": "a51f323",
+    "DIAG-12A-LATIN-ABBREVIATION-OPERATOR-SURFACE": "2337a5d",
+    "DIAG-12A-VALIDATION-RECEIPT-REFRESH": "e41e1f3"
+  },
+  "language_metadata_tracks": [
+    {
+      "name": "numeric_table_safe_default",
+      "spec_block": "DIAG-06A",
+      "implementation_block": "DIAG-06A-IMPLEMENTATION",
+      "operator_routing_review_block": "DIAG-07A",
+      "run_and_review_ui_surface_block": "DIAG-08A",
+      "env_flag": "MEDAI_DOC_TYPE_OPERATOR_REVIEW_BADGE_ENABLED",
+      "priority_slice_records": 11,
+      "default_off": true,
+      "review_bound": true,
+      "auto_accept": false,
+      "clinical_interpretation": false,
+      "value_parsing": false,
+      "raw_detector_output_unchanged": true,
+      "data_layer_document_type_unchanged": true
+    },
+    {
+      "name": "language_propagation_metadata",
+      "spec_block": "DIAG-09A",
+      "implementation_block": "DIAG-09A-IMPLEMENTATION",
+      "operator_surface_block": "DIAG-10A",
+      "env_flag": "MEDAI_DOC_TYPE_LANGUAGE_PROPAGATION_METADATA_ENABLED",
+      "priority_slice_records": 11,
+      "default_off": true,
+      "review_bound": true,
+      "auto_accept": false,
+      "clinical_interpretation": false,
+      "raw_detector_output_unchanged": true,
+      "data_layer_document_type_unchanged": true
+    },
+    {
+      "name": "latin_abbreviation_metadata",
+      "spec_block": "DIAG-11A",
+      "implementation_block": "DIAG-11A-IMPLEMENTATION",
+      "operator_surface_block": "DIAG-12A",
+      "env_flag": "MEDAI_DOC_TYPE_LATIN_ABBREVIATION_METADATA_ENABLED",
+      "priority_slice_records": 8,
+      "default_off": true,
+      "review_bound": true,
+      "auto_accept": false,
+      "clinical_interpretation": false,
+      "abbreviation_parsed": false,
+      "abbreviation_expanded": false,
+      "raw_detector_output_unchanged": true,
+      "data_layer_document_type_unchanged": true
+    }
+  ],
+  "three_independent_env_flags": [
+    "MEDAI_DOC_TYPE_OPERATOR_REVIEW_BADGE_ENABLED",
+    "MEDAI_DOC_TYPE_LANGUAGE_PROPAGATION_METADATA_ENABLED",
+    "MEDAI_DOC_TYPE_LATIN_ABBREVIATION_METADATA_ENABLED"
+  ],
+  "priority_slices": {
+    "numeric_table_safe_default": 11,
+    "language_propagation_metadata": 11,
+    "latin_abbreviation_metadata": 8
+  },
+  "three_way_flag_separation_holds": true,
+  "three_way_flag_separation_audit_modes_checked": 8,
+  "aggregate_507_file_safety_summary": {
+    "files_scanned": 507,
+    "false_positive_expansion_detected": false,
+    "review_bound_preserved": true,
+    "raw_detector_output_unchanged": true,
+    "data_layer_document_type_unchanged": true
+  },
+  "unknown_count_impact": 0,
+  "accepted_count": 0,
+  "auto_accept_allowed_count": 0,
+  "external_api_used_count": 0,
+  "review_bound_preserved": true,
+  "disabled_state_behavior": "All three render plans return None when their respective env flag is unset or falsy. No UI block renders. Raw language-detector output and data-layer document type are unchanged. No operator-action widgets are attached.",
+  "enabled_state_behavior": "When a given env flag is truthy AND the record satisfies that lever's signature, the corresponding read-only block renders inside the Run & Review tab's Advanced technical details expander: an expander label, plain-language markdown lines (display text, vocab token, source label), and a disclaimer caption. The blocks are independent: any subset of the three flags may be enabled simultaneously and the rendered output is the union without cross-contamination.",
+  "no_action_attached": true,
+  "no_button_or_callback_attached": true,
+  "no_form_or_state_mutation": true,
+  "no_clinical_behavior_change": true,
+  "no_lab_value_parsing": true,
+  "no_medication_dose_frequency_duration_parsing": true,
+  "no_ddi_logic_added": true,
+  "no_abbreviation_parsing": true,
+  "no_abbreviation_expansion": true,
+  "no_cue_pack_added": true,
+  "no_threshold_or_scoring_change": true,
+  "no_classifier_behavior_change_for_non_signature_records": true,
+  "no_ocr_routing_change": true,
+  "no_ocr_engine_change": true,
+  "no_raw_language_detector_change": true,
+  "no_b07_change": true,
+  "no_route_fix_change": true,
+  "no_db_schema_change": true,
+  "no_command_allowlist_change": true,
+  "no_external_api_enabled": true,
+  "validations_run": [
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_unknown_diag_12a_latin_abbreviation_operator_surface.py -q",
+      "result": "70 passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_unknown_diag_01.py ... tests/test_medai_doc_type_unknown_diag_12a_latin_abbreviation_operator_surface.py -q",
+      "result": "664 passed (DIAG-01..12A)"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_doc_type_eval_*.py tests/test_medai_ru_treatment_doc_type_01_fix_runtime_propagation.py -q",
+      "result": "43 passed (non-streamlit doc-type eval subset)"
+    },
+    {
+      "command": "python scripts/run_cka_final_mvp_release_validation.py",
+      "result": "passed, 693 tests, 26 preflight checks"
+    },
+    {
+      "command": "python scripts/run_b07_term01_opt_in_integration_validation.py",
+      "result": "passed, 6/6"
+    },
+    {
+      "command": "python scripts/run_medai_route_fix01_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_ops_panel_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_medai_ui_boot_fix_validation.py",
+      "result": "passed"
+    },
+    {
+      "command": "python scripts/run_medai_doc_type_unknown_diag_12a_latin_abbreviation_operator_surface.py",
+      "result": "passed, 3 reports privacy-clean"
+    }
+  ],
+  "skipped_full_pytest_caveat": "Full repo-wide pytest was skipped in this PARK-20 snapshot block because several tests in the broader suite import streamlit at module level and streamlit is not installed in this environment, which would cause a collection error unrelated to this block's scope. The PARK-20 block changes no runtime code, so a full re-run is unnecessary; the focused DIAG suites, doc-type eval suites, and operational validations cover the surface that PARK-20 documents.",
+  "privacy_safety_status": {
+    "public_reports_privacy_clean": true,
+    "no_raw_phi_in_report": true,
+    "no_raw_filenames_in_report": true,
+    "no_raw_ocr_text_in_report": true,
+    "no_raw_document_text_in_report": true,
+    "no_private_paths_in_report": true,
+    "no_secrets_in_report": true,
+    "source_documents_staged": false,
+    "private_files_staged": false,
+    "test_input_files_staged": false,
+    "real_validation_input_files_staged": false,
+    "terminology_files_staged": false,
+    "runtime_db_staged": false,
+    "unsafe_staged_files": 0
+  },
+  "remaining_deferred_pools": {
+    "table_header_special_case": 1,
+    "text_layer": 21,
+    "fallback_ran_but_no_family_match": 17,
+    "ambiguous_below_threshold": 15
+  },
+  "cue_expansion_recommended": false,
+  "recommendation": "park this state before any DIAG-13 work",
+  "progress_estimate": {
+    "before": {
+      "residual_unknown_reduction_track_done_pct": 96,
+      "residual_unknown_reduction_track_remaining_pct": 4,
+      "whole_medai_project_done_pct": 85,
+      "whole_medai_project_remaining_pct": 15
+    },
+    "after": {
+      "residual_unknown_reduction_track_done_pct": 96,
+      "residual_unknown_reduction_track_remaining_pct": 4,
+      "whole_medai_project_done_pct": 86,
+      "whole_medai_project_remaining_pct": 14
+    }
+  },
+  "runtime_behavior_changed_in_park_block": false,
+  "ocr_routing_changed_in_park_block": false,
+  "classifier_changed_in_park_block": false,
+  "confidence_thresholds_changed": false,
+  "confidence_scoring_changed": false,
+  "auto_acceptance_changed": false,
+  "medication_interpretation_added": false,
+  "dose_parsing_added": false,
+  "ddi_logic_changed": false,
+  "clinical_logic_changed": false,
+  "b07_terminology_changed": false,
+  "route_fix_changed": false,
+  "db_schema_changed": false,
+  "command_allowlist_changed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "affected_files_remain_review_bound": true
+}
