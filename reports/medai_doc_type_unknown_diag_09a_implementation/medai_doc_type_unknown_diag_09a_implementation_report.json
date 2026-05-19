@@ -1,0 +1,194 @@
+{
+  "accepted_count": 0,
+  "anonymized_sample_ids": [
+    "propagation_priority_001",
+    "propagation_priority_002",
+    "propagation_priority_003",
+    "propagation_priority_004",
+    "propagation_priority_005"
+  ],
+  "auto_accept_allowed_count": 0,
+  "behavior_change_scope": "Strictly limited to deriving the safe propagated metadata label `latin_detector_likely_english_context` for records that match the exact 11-field positive signal pattern AND satisfy 5 implementation-level safeguards AND show zero overlap with the numeric-table safe-default pool AND only when the SEPARATE propagation env var is explicitly enabled. No clinical interpretation, no value parsing, no auto-accept, no active clinical fact writes, no document-type promotion at the data layer, no OCR routing or detector behavior change.",
+  "behavior_changed": true,
+  "branch": "clinical-knowledge-architecture",
+  "clinical_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "deferred_subsets": {
+    "ambiguous_below_threshold": "15 records excluded; review-bound, no cue expansion",
+    "candidate_latin_medical_abbreviation_handling_audit_pool": "8 records from DIAG-04 routed to the abbreviation lever; deferred",
+    "candidate_table_header_language_policy_record": "1 record from DIAG-05 routed to the table-header lever; deferred",
+    "fallback_ran_but_no_family_match": "17 records deferred per DIAG-02; no cue expansion",
+    "likely_text_layer_issue": "21 records deferred per DIAG-03",
+    "numeric_table_safe_default_pool_already_handled": "11 records covered by DIAG-06A/07A/08A; excluded from this helper"
+  },
+  "eleven_record_replay": {
+    "default_off_labeled_count": 0,
+    "disabled_labeled_count": 0,
+    "enabled_labeled_count": 11,
+    "matches_priority_slice_exactly": true,
+    "priority_slice_size": 11
+  },
+  "exclusion_rules": [
+    "exclude_cyrillic_dominant_records",
+    "exclude_mixed_script_records",
+    "exclude_low_detector_confidence_records",
+    "exclude_insufficient_detector_input_records",
+    "exclude_no_text_layer_records",
+    "exclude_image_like_but_not_routed_records",
+    "exclude_table_heavy_numeric_safe_default_records_already_handled",
+    "exclude_ambiguous_below_threshold_records",
+    "exclude_fallback_ran_but_no_family_match_records",
+    "exclude_medication_dose_or_ddi_interpretation",
+    "exclude_lab_value_parsing",
+    "exclude_records_with_insufficient_safe_metadata"
+  ],
+  "external_api_used": false,
+  "external_api_used_count": 0,
+  "false_positive_audit": {
+    "administrative_or_table_expansion": 0,
+    "imaging_expansion": 0,
+    "numeric_table_safe_default_overlap": 0,
+    "other_expansion": 0,
+    "treatment_or_schedule_expansion": 0
+  },
+  "five_hundred_seven_file_aggregate": {
+    "corpus_size": 507,
+    "default_off_labeled_count": 0,
+    "explicit_enabled_labeled_count": 11,
+    "extras_outside_priority_count": 0,
+    "flag_separation_holds": true,
+    "missing_from_priority_count": 0,
+    "no_false_negative_inside_priority": true,
+    "no_false_positive_outside_priority": true,
+    "operator_review_env_only_labeled_count": 0,
+    "propagation_env_enabled_labeled_count": 11
+  },
+  "flag_separation_confirmed": true,
+  "generated_at": "2026-05-19T03:58:18.441637+00:00",
+  "head_commit_short": "75bb1c4771b5",
+  "helper_default_disabled": true,
+  "implementation_summary": "Adds `clinical_knowledge.document_type.derive_language_propagation_metadata_label` as a pure default-off helper. Returns `latin_detector_likely_english_context` only when (a) the helper is explicitly enabled via `enabled=True` OR the SEPARATE env var `MEDAI_DOC_TYPE_LANGUAGE_PROPAGATION_METADATA_ENABLED` is truthy, (b) every field of the 11-field positive signal pattern holds, (c) none of the 12 exclusion rules fires, and (d) none of 5 implementation-level safeguards fires (must_be_predicted_document_type_unknown, must_be_in_insufficient_text_visibility_bucket, must_be_in_language_visibility_unknown_routing_bucket, must_have_no_medical_abbreviation_shape_detected, must_not_be_in_table_heavy_diag03_sub_pool). The safeguards close the same kind of gap that DIAG-06A-IMPLEMENTATION closed: on the full 507-row corpus the bare 11-field signature matches many records DIAG-02 / DIAG-03 / DIAG-04 route to other levers; the safeguards ensure the helper labels only the exact 11 propagation-pool records. The helper is pure, never mutates the record, never modifies raw detector output, never auto-accepts, never changes the data-layer document type, never classifies clinical meaning, never parses lab values / medications / doses / DDIs, and never writes active clinical facts.",
+  "language_propagation_metadata_env_var": "MEDAI_DOC_TYPE_LANGUAGE_PROPAGATION_METADATA_ENABLED",
+  "no_false_positive_expansion": true,
+  "no_overlap_with_numeric_table_safe_default_pool": true,
+  "operator_review_badge_env_var_distinct": "MEDAI_DOC_TYPE_OPERATOR_REVIEW_BADGE_ENABLED",
+  "overlap_with_numeric_table_safe_default_pool": 0,
+  "park_19_commit_short": "ac466e0f9ab8",
+  "positive_signal_pattern": [
+    {
+      "expected": "yes",
+      "key": "detector_attempted"
+    },
+    {
+      "expected": "sufficient",
+      "key": "detector_input_bucket"
+    },
+    {
+      "expected": "high",
+      "key": "detector_confidence_bucket"
+    },
+    {
+      "expected": "latin",
+      "key": "script_detection_result"
+    },
+    {
+      "expected": "latin",
+      "key": "dominant_script"
+    },
+    {
+      "expected": "latin_visible_language_unknown",
+      "key": "language_visibility_status"
+    },
+    {
+      "expected": "yes",
+      "key": "detector_output_not_propagated"
+    },
+    {
+      "expected": "yes",
+      "key": "alphabetic_ratio_sufficient_for_language"
+    },
+    {
+      "expected": "yes",
+      "key": "no_cyrillic_dominant_signal"
+    },
+    {
+      "expected": "yes",
+      "key": "no_mixed_script_signal"
+    },
+    {
+      "expected": "yes",
+      "key": "no_low_confidence_detector_signal"
+    }
+  ],
+  "progress_estimate": {
+    "after_impl_project_done_pct": "approximately 81%",
+    "after_impl_project_remaining_pct": "approximately 19%",
+    "after_impl_unknown_track_done_pct": "approximately 84%",
+    "after_impl_unknown_track_remaining_pct": "approximately 16%",
+    "before_impl_project_done_pct": "approximately 80%",
+    "before_impl_project_remaining_pct": "approximately 20%",
+    "before_impl_unknown_track_done_pct": "approximately 80%",
+    "before_impl_unknown_track_remaining_pct": "approximately 20%",
+    "note": "Estimates are approximate and refer to the residual Unknown-reduction track in this workspace, plus the overall MedAI project state. They are informational only and not a release milestone."
+  },
+  "propagated_metadata_disclaimer": "Safe metadata only. Not a final document type. Not clinical interpretation. Raw detector output unchanged.",
+  "propagated_metadata_label": "latin_detector_likely_english_context",
+  "public_report_commit_hash_policy": "short_hashes_only",
+  "review_bound_preserved": true,
+  "review_bound_records_after": 507,
+  "review_bound_records_before": 507,
+  "rollback_disable_path": "Default-off. Any one of the following is sufficient to disable: (1) omit the `enabled` kwarg AND leave the SEPARATE env var `MEDAI_DOC_TYPE_LANGUAGE_PROPAGATION_METADATA_ENABLED` unset; (2) set the env var to a falsy value (`0` / `false` / `no` / `off` / `disabled`); (3) pass `enabled=False` explicitly (overrides any env setting); (4) never import the module - existing pipelines are unaffected. Note: the DIAG-07A operator-badge env var `MEDAI_DOC_TYPE_OPERATOR_REVIEW_BADGE_ENABLED` does NOT enable this helper - the env vars are deliberately separate so each can be rolled back independently.",
+  "safety_privacy": {
+    "all_records_remain_review_bound": true,
+    "auto_accept_changed": false,
+    "b07_changed": false,
+    "behavior_changed_strictly_limited_to_safe_metadata_propagation": true,
+    "classifier_behavior_changed_for_non_signature_records": false,
+    "clinical_behavior_changed": false,
+    "clinical_interpretation_added": false,
+    "command_allowlist_changed": false,
+    "cue_expansion_recommended": false,
+    "cue_packs_changed": false,
+    "data_layer_document_type_changed": false,
+    "db_schema_changed": false,
+    "ddi_logic_changed": false,
+    "dose_parsing_added": false,
+    "external_api_changed": false,
+    "external_api_used": false,
+    "helper_default_disabled": true,
+    "lab_value_parsing_added": false,
+    "medication_parsing_added": false,
+    "no_overlap_with_numeric_table_safe_default_pool": true,
+    "ocr_engine_changed": false,
+    "ocr_routing_changed": false,
+    "private_corpus_files_staged": false,
+    "private_paths_in_public_reports": false,
+    "propagation_env_var_separate_from_operator_badge_env_var": true,
+    "raw_detector_output_unchanged": true,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "raw_language_detector_behavior_changed": false,
+    "raw_ocr_text_in_public_reports": false,
+    "rollback_path_present": true,
+    "route_fix_changed": false,
+    "scoring_changed": false,
+    "secrets_in_public_reports": false,
+    "source_documents_staged": false,
+    "thresholds_changed": false
+  },
+  "snapshot": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-09A-IMPLEMENTATION",
+  "source_report_label": "reports/medai_doc_type_family_04_larger_slice_validation/(public anonymized batch-eval per-file table)",
+  "spec_commit_short": "5122d93",
+  "unknown_count_after": 107,
+  "unknown_count_before": 107,
+  "unknown_count_impact_delta": 0,
+  "upstream_labels": [
+    "reports/medai_doc_type_unknown_diag_09a/(public spec)",
+    "reports/medai_doc_type_unknown_diag_08a_operator_badge_ui/(public)",
+    "reports/medai_doc_type_unknown_diag_07a_operator_routing_review/(public)",
+    "reports/medai_doc_type_unknown_diag_06a_implementation/(public)",
+    "reports/medai_doc_type_unknown_diag_06a/(public spec)",
+    "reports/medai_doc_type_unknown_diag_05/(public diagnostic)",
+    "reports/medai_doc_type_unknown_diag_04/(public diagnostic)"
+  ]
+}
