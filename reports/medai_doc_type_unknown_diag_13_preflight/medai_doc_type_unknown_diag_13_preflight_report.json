@@ -1,0 +1,170 @@
+{
+  "conclusion": "medai_doc_type_unknown_diag_13_preflight_ready",
+  "block_id": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-13-PREFLIGHT",
+  "branch": "clinical-knowledge-architecture",
+  "head_commit_short": "aac7ff6",
+  "park_20_parking_commit_short": "3e46461",
+  "tag_status_caveat": "Branch parked at 3e46461 (PARK-20). PARK-20 tags exist locally and target 3e46461 but remote tag push is currently blocked by HTTP 403 from origin's receive-pack; out-of-band fix pending. This preflight does not touch tags.",
+  "completed_metadata_tracks_summary": [
+    {
+      "name": "numeric_table_safe_default",
+      "blocks": "DIAG-06A / DIAG-07A / DIAG-08A",
+      "env_flag": "MEDAI_DOC_TYPE_OPERATOR_REVIEW_BADGE_ENABLED",
+      "priority_slice_records": 11,
+      "default_off": true,
+      "review_bound": true,
+      "no_auto_accept": true,
+      "no_clinical_behavior": true,
+      "no_parsing": true,
+      "no_external_api": true,
+      "data_layer_unknown_reduction": 0
+    },
+    {
+      "name": "language_propagation_metadata",
+      "blocks": "DIAG-09A / DIAG-10A",
+      "env_flag": "MEDAI_DOC_TYPE_LANGUAGE_PROPAGATION_METADATA_ENABLED",
+      "priority_slice_records": 11,
+      "default_off": true,
+      "review_bound": true,
+      "no_auto_accept": true,
+      "no_clinical_behavior": true,
+      "no_parsing": true,
+      "no_external_api": true,
+      "data_layer_unknown_reduction": 0
+    },
+    {
+      "name": "latin_abbreviation_metadata",
+      "blocks": "DIAG-11A / DIAG-12A",
+      "env_flag": "MEDAI_DOC_TYPE_LATIN_ABBREVIATION_METADATA_ENABLED",
+      "priority_slice_records": 8,
+      "default_off": true,
+      "review_bound": true,
+      "no_auto_accept": true,
+      "no_clinical_behavior": true,
+      "no_parsing": true,
+      "no_abbreviation_expansion": true,
+      "no_external_api": true,
+      "data_layer_unknown_reduction": 0
+    }
+  ],
+  "remaining_deferred_pools": {
+    "table_header_special_case": 1,
+    "text_layer": 21,
+    "fallback_ran_but_no_family_match": 17,
+    "ambiguous_below_threshold": 15
+  },
+  "ranking_criteria": [
+    "safety_risk",
+    "expected_operational_value",
+    "false_positive_risk",
+    "likelihood_of_privacy_safe_aggregate_analysis",
+    "requires_runtime_behavior",
+    "can_remain_evaluation_only"
+  ],
+  "candidate_levers_ranked": [
+    {
+      "rank": 1,
+      "candidate_id": "B",
+      "name": "text_layer_diagnostic",
+      "remaining_records": 21,
+      "safety_risk": "low",
+      "expected_operational_value": "high",
+      "false_positive_risk": "low",
+      "likelihood_of_privacy_safe_aggregate_analysis": "high",
+      "requires_runtime_behavior": false,
+      "can_remain_evaluation_only": true,
+      "rationale": "Largest residual pool. Likely amenable to a purely diagnostic, aggregate-only block that characterizes how text-layer extraction interacts with classifier outcomes (counts, shapes, structural cues) without touching OCR routing, classifier behavior, thresholds, or cue packs. Mirrors the DIAG-02..05 diagnostic pattern that already shipped privacy-safe. Default-off helper would be unnecessary because no operator surface is required at the diagnostic step.",
+      "recommendation": "preferred_first_choice"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "C",
+      "name": "fallback_shape_audit",
+      "remaining_records": 17,
+      "safety_risk": "low",
+      "expected_operational_value": "medium",
+      "false_positive_risk": "low_to_medium",
+      "likelihood_of_privacy_safe_aggregate_analysis": "high",
+      "requires_runtime_behavior": false,
+      "can_remain_evaluation_only": true,
+      "rationale": "Second-largest pool. Can be staged as an aggregate audit of fallback_ran_but_no_family_match shapes (counts, cue-coverage gaps, structural patterns) without expanding cue packs at this stage. Cue expansion remains not recommended; the audit only characterizes the gap, it does not close it. Suited as the follow-up after text-layer to avoid premature cue work.",
+      "recommendation": "second_choice"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "A",
+      "name": "table_header_special_case",
+      "remaining_records": 1,
+      "safety_risk": "low",
+      "expected_operational_value": "low",
+      "false_positive_risk": "low",
+      "likelihood_of_privacy_safe_aggregate_analysis": "high_but_sample_size_minimal",
+      "requires_runtime_behavior": false,
+      "can_remain_evaluation_only": true,
+      "rationale": "Pool size of 1 is too small to justify a dedicated DIAG block unless this specific record is blocking an operational flow. Per the task framing the table-header case does not currently block operational flow, so it is deferred and may be rolled into a later consolidated cleanup pass.",
+      "recommendation": "defer_unless_blocks_operational_flow"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "D",
+      "name": "ambiguous_below_threshold",
+      "remaining_records": 15,
+      "safety_risk": "medium",
+      "expected_operational_value": "medium",
+      "false_positive_risk": "higher",
+      "likelihood_of_privacy_safe_aggregate_analysis": "medium",
+      "requires_runtime_behavior": false,
+      "can_remain_evaluation_only": true,
+      "rationale": "Below-threshold ambiguity carries the highest false-positive risk among the four pools because acting on it tends to drift toward threshold lowering, cue expansion, or scoring changes — all of which are explicitly out of scope for the current safety posture. Should remain last; if addressed, must be strictly aggregate-only and must not propose threshold or scoring changes.",
+      "recommendation": "defer_to_last_avoid_threshold_changes"
+    }
+  ],
+  "next_lever_recommendation": {
+    "primary": "B_text_layer_diagnostic",
+    "secondary": "C_fallback_shape_audit",
+    "deferred_low_value": "A_table_header_special_case",
+    "deferred_high_risk": "D_ambiguous_below_threshold",
+    "must_remain_evaluation_only": true,
+    "must_remain_aggregate_only": true,
+    "must_not_propose_cue_expansion": true,
+    "must_not_propose_threshold_or_scoring_changes": true
+  },
+  "behavior_changed": false,
+  "external_api_used": false,
+  "cue_expansion_recommended": false,
+  "implementation_started": false,
+  "ocr_routing_changed": false,
+  "ocr_engine_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "thresholds_or_scoring_changed": false,
+  "cue_packs_added": false,
+  "lab_values_parsed": false,
+  "medications_or_ddi_parsed": false,
+  "abbreviations_parsed_or_expanded": false,
+  "clinical_interpretation_added": false,
+  "external_api_enabled": false,
+  "source_documents_staged": false,
+  "private_files_staged": false,
+  "raw_ocr_text_in_public_reports": false,
+  "raw_document_text_in_public_reports": false,
+  "raw_filenames_in_public_reports": false,
+  "private_paths_in_public_reports": false,
+  "secrets_in_public_reports": false,
+  "diag_13_implementation_started": false,
+  "tag_push_work_started_in_this_block": false,
+  "safety_privacy_statement": "This is a static, evaluation-only preflight that ranks four already-known residual pools using counts and qualitative criteria. No source documents, raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, DBs, backups, or bundles are referenced. No runtime code is modified. No DIAG-13 implementation begins.",
+  "progress_estimate": {
+    "before": {
+      "residual_unknown_reduction_track_done_pct": 96,
+      "residual_unknown_reduction_track_remaining_pct": 4,
+      "whole_medai_project_done_pct": 86,
+      "whole_medai_project_remaining_pct": 14
+    },
+    "after_if_preflight_completes": {
+      "residual_unknown_reduction_track_done_pct": 97,
+      "residual_unknown_reduction_track_remaining_pct": 3,
+      "whole_medai_project_done_pct": 86,
+      "whole_medai_project_remaining_pct": 14
+    }
+  }
+}
