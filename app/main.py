@@ -1086,6 +1086,27 @@ def render_run_result_card(item: dict) -> None:
 
     with st.expander("Advanced technical details", expanded=False):
         st.json(advanced_diagnostic_fields(item))
+        # MEDAI-DOC-TYPE-UNKNOWN-DIAG-08A: optional, read-only operator
+        # review-routing badge. Default-off; rendered only when the env var
+        # MEDAI_DOC_TYPE_OPERATOR_REVIEW_BADGE_ENABLED is truthy AND the
+        # underlying DIAG-06A helper returns the safe-default label for the
+        # record. No buttons / actions / state mutations are attached to the
+        # badge. UI rendering failures are silently swallowed so the optional
+        # integration can never block the main result card.
+        try:
+            from clinical_knowledge.document_type.operator_badge_ui import (
+                render_plan_for_operator_badge,
+            )
+
+            _op_badge_plan = render_plan_for_operator_badge(item)
+            if _op_badge_plan is not None:
+                st.markdown("---")
+                st.markdown(f"#### {_op_badge_plan['expander_label']}")
+                for _line in _op_badge_plan["markdown_lines"]:
+                    st.markdown(_line)
+                st.caption(_op_badge_plan["disclaimer_line"])
+        except Exception:
+            pass
     st.markdown("</div>", unsafe_allow_html=True)
 
 

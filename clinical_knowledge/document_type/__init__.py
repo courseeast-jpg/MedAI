@@ -27,11 +27,19 @@ from clinical_knowledge.document_type.operator_routing_review import (
     is_operator_review_badge_default_disabled,
     is_operator_review_badge_enabled,
 )
+from clinical_knowledge.document_type.operator_badge_ui import (
+    OPERATOR_BADGE_UI_DISCLAIMER,
+    OPERATOR_BADGE_UI_EXPANDER_LABEL,
+    operator_badge_ui_is_enabled,
+    render_plan_for_operator_badge,
+)
 
 __all__ = [
     "DERIVED_LABEL",
     "EXCLUSION_RULES",
     "POSITIVE_SIGNATURE",
+    "OPERATOR_BADGE_UI_DISCLAIMER",
+    "OPERATOR_BADGE_UI_EXPANDER_LABEL",
     "OPERATOR_REVIEW_BADGE_DISCLAIMER",
     "OPERATOR_REVIEW_BADGE_ENV_VAR",
     "OPERATOR_REVIEW_BADGE_TEXT",
@@ -42,5 +50,7 @@ __all__ = [
     "is_operator_review_badge_default_disabled",
     "is_operator_review_badge_enabled",
     "matches_positive_signature",
+    "operator_badge_ui_is_enabled",
+    "render_plan_for_operator_badge",
     "violates_any_exclusion_rule",
 ]
