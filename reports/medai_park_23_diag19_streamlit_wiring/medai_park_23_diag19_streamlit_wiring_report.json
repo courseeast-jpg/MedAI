@@ -1,0 +1,173 @@
+{
+  "conclusion": "medai_park_23_diag19_streamlit_wiring_ready",
+  "phase_id": "MEDAI-PARK-23",
+  "mode": "parking_snapshot",
+  "reports_only": true,
+  "tags_only_after_commit": true,
+  "branch": "clinical-knowledge-architecture",
+  "current_head_before_park23": "d7c1db5",
+  "diag_19_commit": "57c68b0",
+  "diag_19_receipt_refresh_commit": "d7c1db5",
+  "park_20_parking_commit_short": "3e46461",
+  "park_21_parking_commit_short": "9f9e22d",
+  "park_22_parking_commit_short": "f4d3cc6",
+  "metadata_env_var": "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_IMPL_ENABLED",
+  "ui_env_var": "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_UI_ENABLED",
+  "requires_both_env_vars_for_render": true,
+
+  "covered_chain": [
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-19"
+  ],
+  "covered_chain_commits": {
+    "DIAG-19": "57c68b0",
+    "DIAG-19-receipt-refresh": "d7c1db5"
+  },
+  "park_20_tag_status": "PARK-20 tags medai-unknown-diag-language-metadata-ready-2026-05-19 and medai-final-parked-post-unknown-diag-language-metadata-2026-05-19 remain on origin and resolve to 3e46461. PARK-23 must not touch them.",
+  "park_21_tag_status": "PARK-21 tags medai-text-layer-eval-spec-ready-2026-05-19 and medai-final-parked-post-diag-16-2026-05-19 remain on origin and resolve to 9f9e22d. PARK-23 must not touch them.",
+  "park_22_tag_status": "PARK-22 tags medai-pdf-text-layout-quality-default-off-ready-2026-05-19 and medai-final-parked-post-diag-18-2026-05-19 remain on origin and resolve to f4d3cc6. PARK-23 must not touch them.",
+
+  "why_park_23_exists": "DIAG-19 wired the DIAG-18 read-only render plan into app/main.py::render_run_result_card's Advanced technical details expander, behind both the DIAG-17 metadata env var AND the DIAG-18 UI env var. The wiring is default-off in every env where either flag is unset/falsy and emits only safe controlled-vocabulary markdown when both are truthy. PARK-23 freezes that wiring on origin before any block that would extend the surface beyond read-only or flip an env var on by default. It is the gating snapshot.",
+
+  "what_diag_19_changed": [
+    "added one optional wiring block in app/main.py::render_run_result_card, inside the existing Advanced technical details expander, immediately after the prior DIAG-08A / DIAG-10A / DIAG-12A optional blocks",
+    "the block uses a try/except guarded import for clinical_knowledge.document_type.pdf_text_layout_quality_ui and the render_plan_for_pdf_text_layout_quality helper",
+    "the block calls the helper with no kwargs, so the helper consults os.environ and returns None unless BOTH the DIAG-17 metadata env var AND the DIAG-18 UI env var are truthy",
+    "when the helper returns a plan, the block emits only st.markdown lines and one st.caption — no widgets, no buttons, no forms, no callbacks, no actions",
+    "no new operator UI route, no new tab, no new sidebar entry"
+  ],
+
+  "why_default_behavior_unchanged": [
+    "with no kwargs and the default empty mapping derived from os.environ, the DIAG-18 helper returns None whenever either env var is unset or falsy",
+    "the wiring block has an if _pl_plan is not None: guard, so when the helper returns None no Streamlit call executes",
+    "the try/except around the import keeps non-Streamlit environments importable without ImportError",
+    "no caller in any default-deployment configuration sets the DIAG-17 metadata env var, the DIAG-18 UI env var, or both",
+    "DIAG-17 and DIAG-18 helpers continue to be default-off in the real os.environ (verified by DIAG-19 focused tests and the env-combination audit)"
+  ],
+
+  "two_env_var_gate": {
+    "metadata_env_var_required": "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_IMPL_ENABLED",
+    "ui_env_var_required": "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_UI_ENABLED",
+    "both_must_be_truthy_for_render": true,
+    "neither_env_truthy_emits_plan": false,
+    "metadata_only_env_truthy_emits_plan": false,
+    "ui_only_env_truthy_emits_plan": false,
+    "both_env_truthy_emits_plan": true,
+    "gate_enforced_inside_diag_18_helper": true,
+    "wiring_does_not_add_a_separate_env_check": true
+  },
+
+  "read_only_ui_invariants": {
+    "diag_19_block_appears_exactly_once_in_app_main": true,
+    "inside_advanced_technical_details_expander": true,
+    "after_prior_diag_08a_10a_12a_blocks": true,
+    "uses_try_except_guarded_import": true,
+    "uses_only_st_markdown_and_st_caption": true,
+    "no_st_button_or_form_or_session_state_or_rerun": true,
+    "no_on_click_on_change_on_submit_kwargs": true,
+    "no_state_mutation_added": true,
+    "no_data_layer_write_added": true,
+    "no_document_type_mutation_added": true,
+    "no_raw_text_or_filename_or_path_rendered": true,
+    "no_park_tag_name_rendered": true
+  },
+
+  "safety_privacy_invariants": {
+    "default_behavior_changed": false,
+    "runtime_behavior_changed_by_default": false,
+    "streamlit_wiring_added": true,
+    "streamlit_wiring_enabled_by_default": false,
+    "advanced_technical_details_only": true,
+    "read_only": true,
+    "buttons_added": false,
+    "callbacks_added": false,
+    "actions_added": false,
+    "forms_added": false,
+    "state_mutation_added": false,
+    "data_layer_write_added": false,
+    "document_type_mutation_added": false,
+    "extraction_behavior_changed": false,
+    "pdf_text_extraction_behavior_changed": false,
+    "layout_extraction_behavior_changed": false,
+    "table_extraction_behavior_changed": false,
+    "ocr_behavior_changed": false,
+    "classifier_behavior_changed": false,
+    "threshold_behavior_changed": false,
+    "cue_expansion_recommended": false,
+    "cue_expansion_performed": false,
+    "external_api_used": false,
+    "external_api_enabled": false,
+    "source_documents_opened": false,
+    "source_documents_staged": false,
+    "private_files_staged": false,
+    "raw_text_printed": false,
+    "raw_filenames_printed": false,
+    "private_paths_printed": false,
+    "raw_text_rendered": false,
+    "raw_filenames_rendered": false,
+    "private_paths_rendered": false,
+    "raw_ocr_text_in_public_reports": false,
+    "raw_document_text_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "private_paths_in_public_reports": false,
+    "secrets_in_public_reports": false,
+    "park_20_tags_touched": false,
+    "park_21_tags_touched": false,
+    "park_22_tags_touched": false,
+    "implementation_started_post_park_23": false,
+    "clinical_value_parsing_performed": false,
+    "diagnosis_inference_performed": false,
+    "medication_inference_performed": false,
+    "ddi_inference_performed": false,
+    "treatment_inference_performed": false,
+    "abbreviation_expansion_performed": false,
+
+    "accepted_count": 0,
+    "auto_accept_allowed_count": 0,
+    "external_api_used_count": 0,
+    "all_records_review_bound": true
+  },
+
+  "validation_evidence": {
+    "diag_focused_suite": "DIAG-01..19 = 1002 / 1002 passing at PARK-23 baseline",
+    "doc_type_eval_non_streamlit_subset": "43 / 43 passing",
+    "cka_final_mvp_validation": "693 tests / 26 preflight checks passing",
+    "b07_term01_opt_in_integration": "6 / 6 passing",
+    "route_fix_01": "passing",
+    "ui_ops_panel": "passing",
+    "ui_boot_fix": "passing",
+    "public_report_privacy_checks": "all DIAG-19 public reports pass clinical_knowledge.privacy.check_public_report_payload",
+    "full_repo_pytest_status": "skipped: tests that import streamlit at module load fail collection in this sandbox; streamlit is not installed. The DIAG-19 wiring uses streamlit only via the existing module-level `import streamlit as st` in app/main.py and a try/except-guarded import of the DIAG-18 helper, so non-Streamlit test collection of the helper modules is unaffected. PARK-23 changes no runtime code so a full re-run is unnecessary, and per task instructions this skip is NOT counted as a regression failure."
+  },
+
+  "tag_plan": {
+    "tags_to_create_at_park23_commit": [
+      "medai-pdf-text-layout-quality-streamlit-wiring-ready-2026-05-19",
+      "medai-final-parked-post-diag-19-2026-05-19"
+    ],
+    "tag_push_route": "github-direct (https://github.com/courseeast-jpg/MedAI.git) via gh-installed credentials. The local proxy historically returns HTTP 403 on refs/tags/* writes; PARK-20, PARK-21, and PARK-22 tags were all pushed via the github-direct route. PARK-23 uses the same route.",
+    "must_not_use_force_or_tags_flag": true,
+    "must_not_move_or_delete_existing_tags": true,
+    "park_20_tags_preserved_at_3e46461": true,
+    "park_21_tags_preserved_at_9f9e22d": true,
+    "park_22_tags_preserved_at_f4d3cc6": true
+  },
+
+  "next_block_recommendation_name": "Either (a) a corpus-side env-on operator UAT block (still default-off in production) that exercises the wired surface against the existing 21-record text-layer scope, or (b) an evaluation-only block that audits the wiring under Streamlit fixture tests. Both must remain default-off, review-bound, aggregate-only, and must not touch PARK-20 / PARK-21 / PARK-22 / PARK-23 tags. Cue expansion remains explicitly NOT recommended.",
+
+  "progress_estimate": {
+    "before": {
+      "residual_unknown_reduction_track_done_pct": 99.99,
+      "residual_unknown_reduction_track_remaining_pct": 0.01,
+      "whole_medai_project_done_pct": 91.5,
+      "whole_medai_project_remaining_pct": 8.5
+    },
+    "after": {
+      "residual_unknown_reduction_track_done_pct": 99.99,
+      "residual_unknown_reduction_track_remaining_pct": 0.01,
+      "whole_medai_project_done_pct": 91.5,
+      "whole_medai_project_remaining_pct": 8.5,
+      "release_hygiene_post_park_23_done_pct": 100,
+      "release_hygiene_post_park_23_remaining_pct": 0
+    }
+  }
+}
