@@ -8,7 +8,7 @@ Env-on aggregate evaluation of the DIAG-17 PDF text/layout quality helper. Repor
 - Mode: `env_on_aggregate_evaluation`
 - Env var evaluated: `MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_IMPL_ENABLED`
 - Branch: `clinical-knowledge-architecture`
-- HEAD commit (short): `3adb32f`
+- HEAD commit (short): `6ed9962`
 - DIAG-17 commit (short): `ad7b2d6`
 - PARK-20 parking commit (short): `3e46461`
 - PARK-21 parking commit (short): `9f9e22d`
