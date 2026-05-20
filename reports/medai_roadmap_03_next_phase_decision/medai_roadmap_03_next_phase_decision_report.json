@@ -1,0 +1,280 @@
+{
+  "conclusion": "medai_roadmap_03_next_phase_decision_ready",
+  "phase_id": "MEDAI-ROADMAP-03",
+  "mode": "next_phase_decision_audit",
+  "reports_only": true,
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "91b9eba",
+  "park_26_commit_short": "91b9eba",
+  "park_25_commit_short": "6b31678",
+  "park_24_commit_short": "1b14ffe",
+  "park_23_commit_short": "748c32a",
+  "park_22_commit_short": "f4d3cc6",
+  "park_21_commit_short": "9f9e22d",
+  "park_20_commit_short": "3e46461",
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "source_documents_opened": false,
+  "private_files_opened": false,
+  "runtime_db_contents_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_inference_performed": false,
+  "treatment_inference_performed": false,
+  "abbreviation_expansion_performed": false,
+
+  "local_operator_release_ready": true,
+  "operator_runtime_readiness_parked": true,
+  "residual_unknown_track_status": "parked",
+  "pdf_text_layout_quality_track_status": "parked",
+  "roadmap_02_sequence_status": "complete",
+  "whole_medai_done_estimate": "approximately 93.0%",
+
+  "covered_sources_reviewed_public_safe_only": [
+    "reports/medai_roadmap_01_post_park25_operator_readiness/",
+    "reports/medai_roadmap_02_next_strategic_implementation/",
+    "reports/medai_release_handoff_01_local_operator_pack/",
+    "reports/medai_real_world_operator_uat_02/",
+    "reports/medai_ui_usability_polish_01/",
+    "reports/medai_data_runtime_harden_01/",
+    "reports/medai_park_21_post_text_layer_eval_spec/",
+    "reports/medai_park_22_pdf_text_layout_quality_default_off/",
+    "reports/medai_park_23_diag19_streamlit_wiring/",
+    "reports/medai_park_24_diag20_operator_uat/",
+    "reports/medai_park_25_diag21_streamlit_fixture_audit/",
+    "reports/medai_park_26_operator_runtime_readiness/",
+    "reports/cka_final_mvp_release/",
+    "reports/b07_term01_opt_in_integration/",
+    "reports/medai_route_fix_01/",
+    "reports/medai_ui_ops_01/",
+    "reports/medai_ui_boot_fix_01/"
+  ],
+
+  "readiness_baseline_inputs": {
+    "blocking_bugs_found": false,
+    "launch_readiness_ready": true,
+    "runtime_hardening_ready": true,
+    "release_handoff_ready": true,
+    "operator_workflow_ready": true,
+    "hardening_change_needed": false,
+    "park_26_recommended_next_step": "ROADMAP-03 next phase decision; no cue expansion"
+  },
+
+  "candidate_next_phases_evaluated": [
+    "PRODUCT-UX-NEXT-01",
+    "CKA-TERM-INTEGRATION-NEXT-01",
+    "V2-ARCHITECTURE-BLOCK-01",
+    "REAL-CORPUS-VALIDATION-03",
+    "PACKAGING-DEPLOYMENT-POLISH-03",
+    "DATA-INFRA-NEXT-02",
+    "OPERATOR-MANUAL-CONSOLIDATION-01",
+    "FREEZE-LOCAL-OPERATOR-RELEASE",
+    "MORE-UNKNOWN-DIAGNOSTICS",
+    "CUE-EXPANSION"
+  ],
+
+  "ranking_matrix": [
+    {
+      "candidate_id": "G",
+      "candidate_name": "OPERATOR-MANUAL-CONSOLIDATION-01",
+      "operator_value": 5,
+      "product_value": 4,
+      "implementation_risk": 1,
+      "safety_privacy_risk": 1,
+      "validation_cost": 1,
+      "dependency_risk": 1,
+      "expected_time_cost": 2,
+      "recommended_order": 1,
+      "rationale": "Consolidates the operator handoff, launcher docs, validation commands and runtime guidance generated across RELEASE-HANDOFF-01, REAL-WORLD-OPERATOR-UAT-02, UI-USABILITY-POLISH-01, DATA-RUNTIME-HARDEN-01 and PARK-26 into a single operator manual. Pure docs/text work in reports/ and existing doc trees; touches no runtime code, no launchers, no DBs, no terminology data. Highest operator value per risk unit at this state."
+    },
+    {
+      "candidate_id": "E",
+      "candidate_name": "PACKAGING-DEPLOYMENT-POLISH-03",
+      "operator_value": 3,
+      "product_value": 3,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 1,
+      "validation_cost": 2,
+      "dependency_risk": 1,
+      "expected_time_cost": 2,
+      "recommended_order": 2,
+      "rationale": "Closes the small loop from PACKAGING-LAUNCHER-HARDEN-01: launcher discoverability, dependency-check messages, install instructions, and operator UX of the launch path. Low risk, low validation cost. Best done after the consolidated manual exists so the launch path can reference it."
+    },
+    {
+      "candidate_id": "H",
+      "candidate_name": "FREEZE-LOCAL-OPERATOR-RELEASE",
+      "operator_value": 4,
+      "product_value": 4,
+      "implementation_risk": 1,
+      "safety_privacy_risk": 1,
+      "validation_cost": 2,
+      "dependency_risk": 1,
+      "expected_time_cost": 1,
+      "recommended_order": 3,
+      "rationale": "After G + E, the local operator release becomes the durable shipped artifact. Freezing emits a final release-snapshot report and (optionally) two annotated tags later; it does not block downstream phases. Operator runtime readiness already meets every freeze criterion (blocking_bugs_found=false, launch_readiness_ready=true, runtime_hardening_ready=true, release_handoff_ready=true)."
+    },
+    {
+      "candidate_id": "A",
+      "candidate_name": "PRODUCT-UX-NEXT-01",
+      "operator_value": 4,
+      "product_value": 4,
+      "implementation_risk": 3,
+      "safety_privacy_risk": 2,
+      "validation_cost": 3,
+      "dependency_risk": 2,
+      "expected_time_cost": 3,
+      "recommended_order": 4,
+      "rationale": "Continued operator UI improvement is valuable but reopens app/main.py and the run/review surface. Should only be reopened after concrete operator-friction signals are recorded by REAL-WORLD-OPERATOR-UAT-03 (a future block), not picked off this audit."
+    },
+    {
+      "candidate_id": "D",
+      "candidate_name": "REAL-CORPUS-VALIDATION-03",
+      "operator_value": 4,
+      "product_value": 4,
+      "implementation_risk": 3,
+      "safety_privacy_risk": 5,
+      "validation_cost": 4,
+      "dependency_risk": 3,
+      "expected_time_cost": 4,
+      "recommended_order": 5,
+      "rationale": "Bigger-corpus validation is high-value for confidence but every step touches private data. Should be designed as its own dedicated planning block first (REAL-CORPUS-VALIDATION-03-SPEC) with privacy gates, aggregate-only outputs and explicit scope-limiting before any execution. Not the next block."
+    },
+    {
+      "candidate_id": "F",
+      "candidate_name": "DATA-INFRA-NEXT-02",
+      "operator_value": 3,
+      "product_value": 3,
+      "implementation_risk": 3,
+      "safety_privacy_risk": 2,
+      "validation_cost": 3,
+      "dependency_risk": 2,
+      "expected_time_cost": 3,
+      "recommended_order": 6,
+      "rationale": "DATA-RUNTIME-HARDEN-01 already closed the immediate runtime/config gaps with hardening_change_needed=false. Marginal value of another data-infra pass is low until operator usage produces new signals."
+    },
+    {
+      "candidate_id": "B",
+      "candidate_name": "CKA-TERM-INTEGRATION-NEXT-01",
+      "operator_value": 4,
+      "product_value": 5,
+      "implementation_risk": 4,
+      "safety_privacy_risk": 4,
+      "validation_cost": 4,
+      "dependency_risk": 4,
+      "expected_time_cost": 4,
+      "recommended_order": 7,
+      "rationale": "Terminology/coding integration is the highest medical-value lever long-term, but it crosses licensing and privacy boundaries that no recent block has re-audited. Needs its own ROADMAP-04-style planning block first (CKA-TERM-INTEGRATION-PLAN-01) with explicit license-class table, privacy gates and aggregate-only outputs."
+    },
+    {
+      "candidate_id": "C",
+      "candidate_name": "V2-ARCHITECTURE-BLOCK-01",
+      "operator_value": 3,
+      "product_value": 5,
+      "implementation_risk": 5,
+      "safety_privacy_risk": 3,
+      "validation_cost": 5,
+      "dependency_risk": 5,
+      "expected_time_cost": 5,
+      "recommended_order": 8,
+      "rationale": "Premature without an explicit v2 trigger. The current local operator release works and meets every readiness invariant. v2 should be opened only after the freeze of v1 (H) and a dedicated V2-ARCHITECTURE-SPEC block carves it into safe sub-blocks."
+    },
+    {
+      "candidate_id": "I",
+      "candidate_name": "MORE-UNKNOWN-DIAGNOSTICS",
+      "operator_value": 2,
+      "product_value": 2,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 2,
+      "validation_cost": 3,
+      "dependency_risk": 2,
+      "expected_time_cost": 3,
+      "recommended_order": 9,
+      "rationale": "Defer. The residual-Unknown-reduction track is parked at ~99.99% closed; additional diagnostics would only re-open a parked surface without changing operator outcomes. Reopen only if operator UAT (a later block) produces a new Unknown-related signal."
+    },
+    {
+      "candidate_id": "J",
+      "candidate_name": "CUE-EXPANSION",
+      "operator_value": 2,
+      "product_value": 2,
+      "implementation_risk": 5,
+      "safety_privacy_risk": 5,
+      "validation_cost": 5,
+      "dependency_risk": 5,
+      "expected_time_cost": 5,
+      "recommended_order": 10,
+      "rationale": "Explicitly NOT recommended. Reaffirms the standing project posture across DIAG-13..21 and ROADMAP-01..02: cue expansion remains a non-goal."
+    }
+  ],
+
+  "top_recommended_next_phase": "OPERATOR-MANUAL-CONSOLIDATION-01",
+  "top_recommended_next_phase_id": "G",
+  "top_recommendation_rationale": "G has the best operator-value-per-risk ratio at this state. Every input to G already exists as a public-safe report; G consolidates them into a single operator manual and a single technical handoff so the next reader/operator can onboard without navigating 25+ reports. It cannot regress runtime behavior, cannot leak private data, and lays the documentation foundation that PACKAGING-DEPLOYMENT-POLISH-03 (E) and FREEZE-LOCAL-OPERATOR-RELEASE (H) will both reference.",
+
+  "recommended_next_3_blocks": [
+    "OPERATOR-MANUAL-CONSOLIDATION-01",
+    "PACKAGING-DEPLOYMENT-POLISH-03",
+    "FREEZE-LOCAL-OPERATOR-RELEASE"
+  ],
+
+  "explicitly_deferred_blocks": [
+    "MORE-UNKNOWN-DIAGNOSTICS",
+    "CUE-EXPANSION"
+  ],
+
+  "alternative_top_recommendation_if_stability_is_priority": "FREEZE-LOCAL-OPERATOR-RELEASE (H) directly, skipping G and E. Acceptable because every freeze criterion is met today; the trade-off is losing the consolidation gain that G would deliver before the freeze.",
+
+  "why_cue_expansion_not_recommended": "Cue expansion has been ruled out across every block from DIAG-13 onward and across all ROADMAP/PARK snapshots. Adding cue packs would re-open the classifier surface that the residual-Unknown track explicitly stopped touching, would expand the regression surface, would create new privacy/data-handling responsibilities and would not improve any operator outcome that is currently failing. The standing posture remains: no cue expansion.",
+  "why_residual_unknown_diagnostics_remain_parked": "The 21-record residual Unknown surface (11 Sub-track A + 10 Sub-track B) has been driven through DIAG-13A..21 with default-off metadata, default-off render plan, env-gated Streamlit wiring, env-on aggregate UAT and Streamlit fixture audit. There is no operator-visible signal that re-opening DIAG-22+ would resolve. Park-26 leaves all four parking tag pairs (PARK-20..23) and the additional PARK-24/25/26 snapshots intact. Reopen only if a new operator UAT block surfaces a fresh Unknown-related failure.",
+
+  "next_block_prompt_title_suggested": "MEDAI-OPERATOR-MANUAL-CONSOLIDATION-01 — Consolidate Operator Manual and Technical Handoff",
+
+  "safety_privacy_constraints_observed": [
+    "No source documents opened",
+    "No raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, DBs, backups, bundles, keys or terminology data read",
+    "No runtime DB contents inspected (only public report metadata read)",
+    "No app/main.py / launcher / preflight / config modification",
+    "No tags created, moved, or deleted",
+    "No external APIs called or enabled",
+    "PARK-20..26 tags untouched",
+    "Only the public-safe reports listed under covered_sources_reviewed_public_safe_only were read"
+  ],
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 93.0,
+      "whole_medai_remaining_pct": 7.0
+    },
+    "after": {
+      "whole_medai_done_pct": 93.0,
+      "whole_medai_remaining_pct": 7.0,
+      "note": "ROADMAP-03 is a planning audit; it produces no runtime change and so the project percentage does not advance. Forward motion resumes when the recommended OPERATOR-MANUAL-CONSOLIDATION-01 block lands."
+    }
+  }
+}
