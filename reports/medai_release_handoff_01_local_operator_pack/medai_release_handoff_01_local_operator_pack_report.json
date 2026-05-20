@@ -1,0 +1,75 @@
+{
+  "phase_id": "MEDAI-RELEASE-HANDOFF-01",
+  "mode": "local_operator_release_handoff",
+  "reports_only": true,
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "launcher_files_modified": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "source_documents_opened": false,
+  "private_files_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "local_only_posture_preserved": true,
+  "operator_launch_readiness": "ready",
+  "release_handoff_ready": true,
+  "install_runbook_status": "ready",
+  "blocked_tracks": [
+    "residual_unknown_micro_diagnostics",
+    "cue_expansion"
+  ],
+  "recommended_next_workstreams": [
+    "broader_medai_roadmap_implementation",
+    "optional_packaging_polish",
+    "optional_real_world_operator_uat"
+  ],
+  "whole_medai_done_estimate": "approximately 92.3%",
+  "operator_quick_start": [
+    "Run Start_MedAI_UI.bat from the repository.",
+    "If the browser does not open, use http://localhost:8501.",
+    "Confirm Run & Review is available.",
+    "Keep all documents human-review-bound."
+  ],
+  "health_check_commands": [
+    "python scripts/run_medai_ui_boot_fix_validation.py",
+    "python scripts/run_medai_ui_ops_panel_validation.py",
+    "python scripts/run_cka_final_mvp_release_validation.py",
+    "python scripts/run_b07_term01_opt_in_integration_validation.py",
+    "python scripts/run_medai_route_fix01_validation.py"
+  ],
+  "validation_evidence": {
+    "operator_uat_01": "passed: local operator workflow smoke receipt ready",
+    "packaging_launcher_harden_01": "passed: local launch readiness ready",
+    "roadmap_01": "completed: cue expansion not recommended",
+    "park_25": "completed: Streamlit fixture audit parked",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "final_cka_mvp_validation": "passed: 12/12 cases; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "public_report_privacy_checks": "passed: 3/3 RELEASE-HANDOFF-01 reports privacy-clean",
+    "staged_safety_check": "passed: only 3 RELEASE-HANDOFF-01 report files staged",
+    "full_pytest": "not run; not needed for reports-only release handoff pack"
+  },
+  "do_not_reopen_without_approval": [
+    "ocr_routing_changes",
+    "pdf_text_layout_extraction_behavior",
+    "classifier_threshold_or_scoring_changes",
+    "cue_pack_expansion",
+    "lab_value_parsing",
+    "medication_or_ddi_parsing",
+    "external_api_enablement",
+    "park_tag_changes"
+  ],
+  "recommended_next_step": "broader MedAI roadmap implementation, optional packaging polish, or optional real-world operator UAT"
+}
