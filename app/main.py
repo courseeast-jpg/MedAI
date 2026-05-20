@@ -1151,6 +1151,33 @@ def render_run_result_card(item: dict) -> None:
                 st.caption(_la_plan["disclaimer_line"])
         except Exception:
             pass
+        # MEDAI-DOC-TYPE-UNKNOWN-DIAG-19: optional, read-only PDF text /
+        # layout quality metadata display. Default-off; rendered only when
+        # BOTH SEPARATE env vars are truthy:
+        #   * MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_IMPL_ENABLED (DIAG-17)
+        #   * MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_UI_ENABLED   (DIAG-18)
+        # The prior three doc-type env vars (DIAG-07A operator badge,
+        # DIAG-09A propagation, DIAG-11A latin abbreviation) do NOT enable
+        # this display; the DIAG-18 helper enforces the two-key gate
+        # internally. Read-only; no buttons / forms / actions / callbacks /
+        # state mutations attached; no raw text, raw filenames, or private
+        # paths are rendered. The helper is imported inside the try/except
+        # so non-Streamlit test collection is unaffected if either helper
+        # module is absent.
+        try:
+            from clinical_knowledge.document_type.pdf_text_layout_quality_ui import (
+                render_plan_for_pdf_text_layout_quality,
+            )
+
+            _pl_plan = render_plan_for_pdf_text_layout_quality(item)
+            if _pl_plan is not None:
+                st.markdown("---")
+                st.markdown(f"#### {_pl_plan['expander_label']}")
+                for _line in _pl_plan["markdown_lines"]:
+                    st.markdown(_line)
+                st.caption(_pl_plan["disclaimer_line"])
+        except Exception:
+            pass
     st.markdown("</div>", unsafe_allow_html=True)
 
 

@@ -555,12 +555,31 @@ def test_written_json_safety_flags_false(written_files):
 
 
 def test_no_diag_16_runtime_helper_imported_into_app():
+    """DIAG-16 must not add any runtime symbol of its own to app/main.py.
+
+    A later block (DIAG-19) may legitimately wire the DIAG-18 render-plan
+    helper into a narrow read-only operator surface; that reference is
+    scoped to a MEDAI-DOC-TYPE-UNKNOWN-DIAG-19 marked block and is not
+    attributable to DIAG-16.
+    """
     app_main = Path(__file__).resolve().parents[1] / "app" / "main.py"
     if not app_main.exists():
         pytest.skip("app/main.py absent in this environment")
     body = app_main.read_text(encoding="utf-8")
     assert "run_medai_doc_type_unknown_diag_16" not in body
-    assert "render_plan_for_pdf_text_layout_quality" not in body
+    # Strip any DIAG-19 block before scanning for the DIAG-18 render-plan
+    # symbol — that wiring is explicitly NOT a DIAG-16 change.
+    diag_19_marker = "# MEDAI-DOC-TYPE-UNKNOWN-DIAG-19"
+    if diag_19_marker in body:
+        idx = body.find(diag_19_marker)
+        m = re.search(r"except Exception:\s*\n\s+pass", body[idx:])
+        if m is not None:
+            body_outside_diag_19 = body[:idx] + body[idx + m.end() :]
+        else:
+            body_outside_diag_19 = body
+    else:
+        body_outside_diag_19 = body
+    assert "render_plan_for_pdf_text_layout_quality" not in body_outside_diag_19
 
 
 def test_no_clinical_knowledge_helper_for_diag_16():

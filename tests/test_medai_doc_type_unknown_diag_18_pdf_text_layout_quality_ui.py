@@ -414,13 +414,36 @@ def test_ui_helper_does_not_import_streamlit():
     assert "from streamlit" not in body
 
 
-def test_diag_18_helper_not_wired_into_app_main():
+def test_diag_18_helper_wiring_only_inside_diag_19_marked_block():
+    """The DIAG-18 helper must only be referenced inside an explicit
+    MEDAI-DOC-TYPE-UNKNOWN-DIAG-19 wiring block — never elsewhere in
+    app/main.py. Prior to DIAG-19 this test asserted the helper was
+    absent entirely; DIAG-19 deliberately wires it through, so the
+    invariant becomes "wired only via the DIAG-19 block".
+    """
     app_main = Path(__file__).resolve().parents[1] / "app" / "main.py"
     if not app_main.exists():
         pytest.skip("app/main.py absent in this environment")
     body = app_main.read_text(encoding="utf-8")
-    assert "pdf_text_layout_quality_ui" not in body
-    assert "render_plan_for_pdf_text_layout_quality" not in body
+    # Locate the DIAG-19 block boundaries (marker → next `except Exception: pass`).
+    marker = "# MEDAI-DOC-TYPE-UNKNOWN-DIAG-19"
+    idx = body.find(marker)
+    if idx == -1:
+        # Pre-DIAG-19 world: helper must not be referenced.
+        assert "pdf_text_layout_quality_ui" not in body
+        assert "render_plan_for_pdf_text_layout_quality" not in body
+        return
+    m = re.search(r"except Exception:\s*\n\s+pass", body[idx:])
+    assert m is not None, "DIAG-19 marker present without try/except guard"
+    diag_19_block = body[idx : idx + m.end()]
+    outside_diag_19 = body[:idx] + body[idx + m.end() :]
+    # The helper module path and the render-plan function name must NOT
+    # appear anywhere outside the DIAG-19 block.
+    assert "pdf_text_layout_quality_ui" not in outside_diag_19
+    assert "render_plan_for_pdf_text_layout_quality" not in outside_diag_19
+    # And they MUST appear inside the DIAG-19 block (positive invariant).
+    assert "pdf_text_layout_quality_ui" in diag_19_block
+    assert "render_plan_for_pdf_text_layout_quality" in diag_19_block
 
 
 def test_diag_18_helper_not_re_exported_from_document_type_init():
