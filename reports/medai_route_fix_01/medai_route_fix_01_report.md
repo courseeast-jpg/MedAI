@@ -4,7 +4,7 @@ Conclusion: `medai_route_fix01_ready`
 
 Branch: `clinical-knowledge-architecture`
 
-HEAD: `1870cdb`
+HEAD: `0dee189`
 
 ## Adopted Files
 
