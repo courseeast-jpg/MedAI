@@ -1,0 +1,358 @@
+{
+  "conclusion": "medai_cka_term_integration_plan_01_ready",
+  "phase_id": "MEDAI-CKA-TERM-INTEGRATION-PLAN-01",
+  "mode": "terminology_integration_spec",
+  "reports_only": true,
+  "implementation_started": false,
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "0dee189",
+  "freeze_commit": "7ef8ffd",
+  "freeze_tag_pair_present": [
+    "medai-local-operator-release-frozen-2026-05-20",
+    "medai-final-local-operator-release-2026-05-20"
+  ],
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "source_documents_opened": false,
+  "private_files_opened": false,
+  "runtime_db_contents_opened": false,
+  "licensed_terminology_rows_read": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "license_ack_private_read": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+  "abbreviation_expansion_performed": false,
+
+  "local_only_posture_preserved": true,
+  "frozen_operator_release_preserved": true,
+  "freeze_tags_untouched": true,
+  "license_class_table_created": true,
+  "privacy_gate_plan_created": true,
+  "aggregate_only_reporting_required": true,
+  "review_bound_outputs_required": true,
+  "public_reports_must_not_include_licensed_rows": true,
+
+  "covered_sources_reviewed_public_safe_only": [
+    "reports/medai_roadmap_04_post_freeze_next_phase/",
+    "reports/medai_roadmap_03_next_phase_decision/",
+    "reports/medai_freeze_local_operator_release/",
+    "reports/medai_operator_manual_consolidation_01/",
+    "reports/b07_term01_opt_in_integration/",
+    "reports/b07_term_opt_in_planning/",
+    "reports/cka_block07_medical_coding/",
+    "reports/cka_term01_real_terminology_readiness/",
+    "reports/cka_term02_controlled_local_import/",
+    "reports/cka_term03_local_terminology_qa/",
+    "reports/cka_term04_integration_readiness_blueprint/",
+    "reports/cka_term05_synthetic_adapter/",
+    "reports/cka_term06_private_store_adapter_validation/",
+    "reports/cka_term07_ui_lookup_panel/",
+    "reports/cka_term08_hypothesis_annotation_pilot/",
+    "reports/terminology_sources_preflight/",
+    "reports/terminology_data_inventory/",
+    ".gitignore (terminology_data, LICENSE_ACK_PRIVATE protections only)"
+  ],
+
+  "license_class_table": {
+    "definitions": {
+      "local_open_or_public_reference": "Resource is freely redistributable; may be referenced by URL or name in public reports. Rows still must not be embedded.",
+      "local_license_gated_reference": "Resource exists locally under a publisher license; presence may be referenced by canonical folder name only. Rows, license text, and license-acknowledgement contents must never appear in public reports or any committed file.",
+      "local_private_acknowledgement_only": "Operator-supplied private license acknowledgement file. Presence may be checked; contents must never be read or committed.",
+      "prohibited_for_commit": "Must never be added to git, even when present locally. Enforced by .gitignore.",
+      "runtime_private_store_only": "Resource may be loaded into a private local DB/index for runtime lookup; the DB and index themselves are prohibited_for_commit.",
+      "aggregate_public_report_only": "May appear in public reports only as aggregate counts (e.g. 'rows_imported: N'), never as row content."
+    },
+    "entries": [
+      {
+        "resource": "LOINC (canonical path observed: terminology_data/Loinc_2.82)",
+        "role": "primary",
+        "license_class": [
+          "local_license_gated_reference",
+          "runtime_private_store_only",
+          "prohibited_for_commit",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": true,
+        "rows_already_imported_into_private_store_per_cka_term02": 109325
+      },
+      {
+        "resource": "RxNorm (canonical path observed: terminology_data/RxNorm_full_05042026)",
+        "role": "primary",
+        "license_class": [
+          "local_license_gated_reference",
+          "runtime_private_store_only",
+          "prohibited_for_commit",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": true,
+        "rows_already_imported_into_private_store_per_cka_term02": 244529
+      },
+      {
+        "resource": "RxNorm prescribable subset (auxiliary)",
+        "role": "auxiliary",
+        "license_class": [
+          "local_license_gated_reference",
+          "runtime_private_store_only",
+          "prohibited_for_commit",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": true
+      },
+      {
+        "resource": "SNOMED CT US Edition",
+        "role": "primary",
+        "license_class": [
+          "local_license_gated_reference",
+          "runtime_private_store_only",
+          "prohibited_for_commit",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": true,
+        "runtime_integration_enabled_per_preflight": false
+      },
+      {
+        "resource": "SNOMED CT International Edition",
+        "role": "secondary",
+        "license_class": [
+          "local_license_gated_reference",
+          "runtime_private_store_only",
+          "prohibited_for_commit",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": true
+      },
+      {
+        "resource": "UMLS Metathesaurus",
+        "role": "separate_future_import",
+        "license_class": [
+          "local_license_gated_reference",
+          "runtime_private_store_only",
+          "prohibited_for_commit",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": true,
+        "umls_future_gated_per_preflight": true
+      },
+      {
+        "resource": "LICENSE_ACK_PRIVATE.json (operator-supplied acknowledgement)",
+        "role": "private_license_confirmation",
+        "license_class": [
+          "local_private_acknowledgement_only",
+          "prohibited_for_commit"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": true,
+        "presence_only_check_allowed": true,
+        "contents_read_allowed_in_public_reports": false
+      },
+      {
+        "resource": "MedAI MKB-style internal coding interfaces (already in repo)",
+        "role": "internal_interface",
+        "license_class": [
+          "local_open_or_public_reference",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": false
+      },
+      {
+        "resource": "B07 terminology mapping interface (already shipped, default-off)",
+        "role": "internal_feature_flag_layer",
+        "license_class": [
+          "local_open_or_public_reference",
+          "aggregate_public_report_only"
+        ],
+        "exact_license_terms_claimed_in_public_safe_reports": false,
+        "requires_manual_license_verification_before_implementation": false,
+        "default_off_feature_flag_present": true
+      }
+    ]
+  },
+
+  "private_store_boundaries": {
+    "private_store_paths_already_gitignored": [
+      "terminology_data/",
+      "data/terminology/",
+      "config/terminology_sources.local.json",
+      "LICENSE_ACK_PRIVATE.json",
+      "**/LICENSE_ACK_PRIVATE*",
+      "**/*TERMINOLOGY_PRIVATE*"
+    ],
+    "private_store_access_rules": [
+      "Read-only access only.",
+      "No public-report row dumps; only aggregate counts.",
+      "No license text or license acknowledgement contents ever written to public reports.",
+      "No private paths printed in public reports; use canonical folder names only.",
+      "No external API calls to remote terminology services."
+    ]
+  },
+
+  "prohibited_outputs": [
+    "Raw terminology rows (LOINC/RxNorm/SNOMED/UMLS rows) in any committed file.",
+    "License acknowledgement contents in any committed file.",
+    "Private filesystem paths in public reports.",
+    "PHI or source-document text in any committed file.",
+    "Secrets / keys / tokens in any committed file.",
+    "Clinical interpretation (diagnosis, treatment, DDI, dosing) generated by terminology lookup.",
+    "Auto-acceptance of any record based on terminology match.",
+    "DDI status changes driven by terminology coding.",
+    "Hypothesis promotion (e.g. moving from review to accepted) driven by terminology coding."
+  ],
+  "public_report_rules": [
+    "Aggregate counts only (rows_imported, lookup_hits_count, etc.).",
+    "Controlled-vocabulary status fields only.",
+    "Anonymous identifiers (e.g. record_001) for any per-record reference.",
+    "Pass clinical_knowledge.privacy.check_public_report_payload before commit.",
+    "Use short SHAs (max ~7 chars) for any commit reference.",
+    "No `.json` filename literals containing words like 'report' (privacy scanner trigger); use 'JSON report' phrasing or backtick-close before the extension."
+  ],
+
+  "future_integration_architecture": {
+    "1_terminology_source_registry": "A single read-only registry that enumerates canonical sources by name and license class. Already partly defined by terminology_sources_preflight.canonical_sources.",
+    "2_license_class_gating_layer": "Before any lookup call, the layer must verify license class and refuse to operate on a source whose `requires_manual_license_verification_before_implementation` flag is true and has not been explicitly cleared.",
+    "3_private_local_terminology_store_boundary": "A local SQLite or sqlcipher index whose path is .gitignored. Read-only at runtime. No public exposure of row content.",
+    "4_no_public_row_output_rule": "Every emitted public report must pass an aggregate-only check before write.",
+    "5_aggregate_only_reporting_rule": "Public reports may include counts, distribution buckets, and controlled-vocabulary status fields only.",
+    "6_review_bound_hypothesis_annotation_rule": "Any coding annotation produced is review_required=true and auto_accept_allowed=false, mirroring the DIAG-17/18 metadata pattern.",
+    "7_refusal_for_unsupported_clinical_inference": "The terminology layer must explicitly refuse to: parse lab values, parse medication doses, change DDI status, infer diagnosis, infer treatment, or expand abbreviations. The TERM block must publish explicit `clinical_*_performed=false` flags in every emitted plan.",
+    "8_local_only_posture": "MEDAI_LOCAL_ONLY=1 and MEDAI_ALLOW_EXTERNAL_API=0 must remain shipped defaults. No external terminology API enabled by default.",
+    "9_no_external_api_default": "External terminology APIs (UMLS REST, NLM web services, SNOMED Cloud) must remain disabled unless an explicitly approved, separately-scoped block enables them with their own SPEC.",
+    "10_operator_visible_wording_boundaries": "All operator-visible terminology output must be limited to controlled vocabulary tokens (e.g. 'terminology_match_hypothesis') and a fixed disclaimer ('Review metadata only. Not a final code. Not clinical interpretation.').",
+    "11_validation_and_rollback_plan": "Every new block in this track must ship a focused pytest module that asserts default-off behavior, aggregate-only output, and refusal of clinical inference. Rollback path: unset the controlling feature flag; remove the runtime adapter import."
+  },
+
+  "required_tests_for_next_block": [
+    "test_default_off_when_feature_flag_missing — terminology lookup adapter returns None / no-op when feature flag is unset.",
+    "test_default_off_when_feature_flag_falsy — same when flag is '0' / 'false' / 'no' / 'off' / 'disabled'.",
+    "test_default_off_under_real_os_environ — confirms `os.environ` is not polluted by the test run.",
+    "test_no_clinical_recommendation_generated — adapter must publish clinical_recommendations_generated=false on every call.",
+    "test_no_ddi_status_change — adapter must not flip clears_ddi_status; assert false on every call.",
+    "test_no_hypothesis_promotion — adapter must not promote review→accepted; assert promotes_hypothesis=false.",
+    "test_no_external_api_used — adapter must publish external_api_used=false and external_terminology_api_used=false.",
+    "test_no_licensed_rows_in_public_reports — privacy check on every public report produced by the adapter must pass.",
+    "test_no_license_text_in_public_reports — explicit check that license acknowledgement contents never appear.",
+    "test_no_private_paths_in_public_reports — explicit check that absolute filesystem paths never appear.",
+    "test_aggregate_only_outputs — emitted plans contain controlled-vocabulary tokens and counts only.",
+    "test_refusal_of_lab_value_parsing — adapter refuses to parse lab values.",
+    "test_refusal_of_medication_dose_parsing — adapter refuses to parse dose / frequency / duration.",
+    "test_refusal_of_abbreviation_expansion — adapter refuses to expand abbreviations.",
+    "test_freeze_tags_untouched — the two FREEZE tags and the four PARK-20..23 tag pairs still resolve to their original commits.",
+    "test_app_main_unchanged — the implementation block must not modify app/main.py.",
+    "test_launcher_files_unchanged — must not modify the four shipped launchers.",
+    "test_startup_preflight_unchanged — must not modify app/startup_preflight.py.",
+    "test_config_unchanged — must not modify app/config.py."
+  ],
+  "required_test_coverage_threshold": "All listed tests must pass before any merge. A focused pytest module under tests/ named test_medai_cka_term_integration_next_01.py (or the chosen next-block name) is the deliverable.",
+
+  "rollback_or_stop_conditions": [
+    "Privacy check on any public report fails → stop, redact, must not commit.",
+    "Licensed terminology row appears in any committed file → revert that commit, audit history.",
+    "License acknowledgement contents appear in any public file → revert, audit history.",
+    "Any focused test from required_tests_for_next_block fails → stop, fix, re-run before merge.",
+    "Feature flag turns on by default in any deployment → stop, fix default-off invariant, re-run UAT.",
+    "PARK-20..23 or FREEZE tags appear moved → stop, restore from local reflog or co-author audit.",
+    "Operator UAT records a regression in Run & Review caused by terminology lookup → disable the feature flag, file a new diagnostic block.",
+    "External terminology API gets enabled accidentally → stop, disable, audit env var configuration."
+  ],
+
+  "first_implementation_candidate_recommendation": {
+    "name": "MEDAI-CKA-TERM-INTEGRATION-NEXT-01",
+    "default_off": true,
+    "local_only": true,
+    "no_licensed_rows_committed": true,
+    "no_clinical_auto_accept": true,
+    "no_diagnosis_or_treatment_inference": true,
+    "no_ddi_behavior_change_unless_explicitly_scoped": true,
+    "aggregate_only_public_reports": true,
+    "review_bound_outputs": true,
+    "tests_before_integration": true,
+    "scope_sketch": [
+      "Wire an env-gated, read-only terminology lookup helper that consults the existing private RxNorm/LOINC store imported by CKA-TERM-02.",
+      "Helper returns None when the feature flag MEDAI_TERMINOLOGY_LOOKUP_ENABLED is unset or falsy.",
+      "When enabled and a record matches a positive signature, helper emits a controlled-vocabulary 'terminology_match_hypothesis' metadata dict carrying explicit review_required=true and auto_accept_allowed=false flags. No row content from the private store appears in the dict.",
+      "No wiring into app/main.py runtime view in this block — the helper is a pure metadata function only.",
+      "Focused pytest module covers every item in required_tests_for_next_block."
+    ],
+    "must_be_followed_by_safer_intermediate_if_uncertain": [
+      "CKA-TERM-INTEGRATION-READINESS-02 — reports-only readiness audit if any required_tests_for_next_block invariant can't be met yet.",
+      "CKA-TERM-LICENSE-GATE-SPEC-02 — license-class-by-license-class verification block if exact license terms need manual confirmation before NEXT-01."
+    ]
+  },
+
+  "deferred_items": [
+    "Wiring terminology output into app/main.py runtime (deferred until a separate, approved CKA-TERM-INTEGRATION-WIRING-NEXT-01 block).",
+    "UMLS lookup (umls_future_gated=true; needs its own separately approved block).",
+    "SNOMED CT runtime integration (snomed_runtime_integration_enabled=false; needs explicit enablement).",
+    "DDI logic changes driven by terminology coding.",
+    "Diagnosis / treatment / dosing inference driven by terminology.",
+    "Abbreviation expansion in any form.",
+    "Cue pack expansion (explicitly NOT recommended across DIAG-13..21, ROADMAP-01..04).",
+    "External terminology API enablement.",
+    "Public-report row dumps under any condition."
+  ],
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "safety_privacy_statement": "CKA-TERM-INTEGRATION-PLAN-01 is reports-only SPEC. It reads only the public-safe reports listed under covered_sources_reviewed_public_safe_only and the public .gitignore content describing terminology data protections. No source documents, raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, runtime DB contents, backups, bundles, keys, or licensed terminology rows were opened or referenced. No license acknowledgement contents were read. No terminology imports were performed. No runtime code is modified. No launchers / preflight / config files are modified. No tags are created, moved, or deleted. PARK-20..23 tag pairs and the FREEZE tag pair remain intact.",
+
+  "recommended_next_block": "MEDAI-CKA-TERM-INTEGRATION-NEXT-01 (with the scope sketch and required-tests list above). If any required test invariant cannot be met yet, open the safer intermediate MEDAI-CKA-TERM-INTEGRATION-READINESS-02 or MEDAI-CKA-TERM-LICENSE-GATE-SPEC-02 first.",
+  "recommended_next_3_blocks": [
+    "MEDAI-CKA-TERM-INTEGRATION-NEXT-01 (or safer intermediate)",
+    "MEDAI-CKA-TERM-INTEGRATION-WIRING-NEXT-01 — only after NEXT-01 lands and passes UAT",
+    "MEDAI-ROADMAP-05 — re-evaluate next strategic phase after the terminology integration track has its first runtime helper"
+  ],
+
+  "whole_medai_done_estimate": "approximately 94.1%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 94.0,
+      "whole_medai_remaining_pct": 6.0
+    },
+    "after": {
+      "whole_medai_done_pct": 94.1,
+      "whole_medai_remaining_pct": 5.9,
+      "note": "This SPEC produces no runtime change; the tiny bump reflects the durable planning value of an explicit license-class table and required-tests list before any implementation."
+    }
+  }
+}
