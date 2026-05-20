@@ -1,0 +1,186 @@
+{
+  "conclusion": "medai_cka_term_integration_next_01_ready",
+  "phase_id": "MEDAI-CKA-TERM-INTEGRATION-NEXT-01",
+  "mode": "default_off_terminology_match_helper",
+  "default_off": true,
+  "env_var": "MEDAI_TERMINOLOGY_LOOKUP_ENABLED",
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_block": "15c6fb8",
+  "freeze_commit": "7ef8ffd",
+  "freeze_tag_pair_present": [
+    "medai-local-operator-release-frozen-2026-05-20",
+    "medai-final-local-operator-release-2026-05-20"
+  ],
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+
+  "covered_spec": "MEDAI-CKA-TERM-INTEGRATION-PLAN-01",
+  "covered_spec_commit_short": "30502bd",
+
+  "files_created": [
+    "clinical_knowledge/terminology/term_match_hypothesis.py",
+    "tests/test_medai_cka_term_integration_next_01.py",
+    "reports/medai_cka_term_integration_next_01/ (JSON report, Markdown report, and short-summary Markdown file)"
+  ],
+  "files_modified": [],
+
+  "behavior_changed": true,
+  "default_behavior_changed": false,
+  "runtime_behavior_changed_by_default": false,
+  "app_main_modified": false,
+  "streamlit_wiring_added": false,
+  "operator_ui_surface_added": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "extraction_behavior_changed": false,
+  "pdf_text_extraction_behavior_changed": false,
+  "layout_extraction_behavior_changed": false,
+  "table_extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+  "abbreviation_expansion_performed": false,
+  "lab_value_parsed": false,
+
+  "review_bound_outputs": true,
+  "auto_accept_allowed": false,
+  "aggregate_only_public_reports": true,
+  "frozen_operator_release_preserved": true,
+  "freeze_tags_untouched": true,
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "helper_summary": {
+    "module": "clinical_knowledge/terminology/term_match_hypothesis.py",
+    "public_function": "derive_terminology_match_hypothesis",
+    "env_var": "MEDAI_TERMINOLOGY_LOOKUP_ENABLED",
+    "default_off_paths": [
+      "enabled=False overrides any truthy env value",
+      "enabled=None AND env var unset/falsy returns None",
+      "lookup_adapter=None fails closed and returns None even under truthy env",
+      "Record lacks the positive signature (no terminology_candidate_text / candidate_text / candidate_query field) returns None"
+    ],
+    "positive_signature_fields_accepted": [
+      "terminology_candidate_text",
+      "candidate_text",
+      "candidate_query"
+    ],
+    "positive_signature_fields_rejected_to_prevent_misuse": [
+      "ocr_text",
+      "raw_text",
+      "native_text",
+      "filename",
+      "private_path",
+      "any other free-text record field"
+    ],
+    "output_match_family_controlled_vocab": [
+      "exact_terminology_match",
+      "ambiguous_terminology_match",
+      "unmapped_terminology_candidate"
+    ],
+    "output_terminology_system_family_controlled_vocab": [
+      "rxnorm",
+      "loinc",
+      "internal_public_reference"
+    ],
+    "output_license_class": "aggregate_public_report_only",
+    "output_aggregate_fields_only": true,
+    "no_row_content_in_output": true
+  },
+
+  "test_summary": {
+    "module": "tests/test_medai_cka_term_integration_next_01.py",
+    "tests_total": 26,
+    "tests_passed": 26,
+    "tests_failed": 0,
+    "synthetic_adapter_used": "SyntheticReadOnlyTerminologyAdapter from clinical_knowledge.terminology.term05_read_only_adapter",
+    "real_terminology_rows_required_for_tests": false,
+    "private_store_accessed_in_tests": false,
+    "license_ack_private_read_in_tests": false,
+    "external_api_used_in_tests": false
+  },
+
+  "validation_evidence": {
+    "focused_term_next_01_tests": "passed: 26/26",
+    "public_report_privacy_checks": "passed: 3/3 CKA-TERM-INTEGRATION-NEXT-01 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only CKA-TERM-INTEGRATION-NEXT-01 scoped files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; reports/implementation block produced a new pure helper plus a focused test module that passes 26/26; known sandbox Streamlit-import limitation persists but is unrelated to this block"
+  },
+
+  "safety_privacy_statement": "MEDAI-CKA-TERM-INTEGRATION-NEXT-01 adds a single pure helper module and a focused test module. No app/main.py / launcher / startup-preflight / config file was modified. No Streamlit wiring was added. No operator UI surface was added. No terminology imports were performed. No licensed terminology rows were read or printed. No LICENSE_ACK_PRIVATE.json contents were read. No source documents, raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, runtime DB rows, backups, bundles, keys, or licensed terminology data were opened or referenced. Tests use only the existing synthetic TERM-05 adapter (in-memory synthetic fixtures). The helper itself fails closed when no adapter is injected, so production callers must explicitly inject an audited adapter; otherwise the helper returns None. No tags created, moved, or deleted. PARK-20..23 tag pairs and the FREEZE tag pair remain intact.",
+
+  "recommended_next_step": "MEDAI-CKA-TERM-INTEGRATION-WIRING-NEXT-01 only after operator review; otherwise MEDAI-ROADMAP-05",
+  "recommended_next_block_constraints": [
+    "Must remain default-off; wiring must check the same MEDAI_TERMINOLOGY_LOOKUP_ENABLED env var (plus a second UI env var if desired, mirroring DIAG-17/18)",
+    "Wiring must be read-only (no buttons / forms / callbacks / actions)",
+    "Wiring must reside inside the Advanced technical details expander only",
+    "Wiring must emit only safe st.markdown / st.caption calls",
+    "Wiring must NOT include any row content from the underlying terminology source",
+    "Wiring must NOT touch PARK-20..23 or FREEZE tags",
+    "Wiring must be guarded by a try/except so non-Streamlit test environments stay importable"
+  ],
+  "deferred_items": [
+    "Wiring this helper into app/main.py — deferred to MEDAI-CKA-TERM-INTEGRATION-WIRING-NEXT-01",
+    "Using the private RxNorm/LOINC store as the adapter — deferred until a production adapter has its own safety-redteam block; tests use the synthetic adapter only",
+    "UMLS lookup (umls_future_gated=true)",
+    "SNOMED CT runtime integration (snomed_runtime_integration_enabled=false)",
+    "DDI logic changes driven by terminology coding",
+    "Diagnosis / treatment / dosing inference",
+    "Abbreviation expansion",
+    "Cue-pack expansion (explicitly NOT recommended)",
+    "External terminology API enablement",
+    "Public-report row dumps under any condition"
+  ],
+
+  "whole_medai_done_estimate": "approximately 94.3%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 94.1,
+      "whole_medai_remaining_pct": 5.9
+    },
+    "after": {
+      "whole_medai_done_pct": 94.3,
+      "whole_medai_remaining_pct": 5.7,
+      "note": "First concrete forward-motion block of the terminology track post-freeze. The helper is default-off and fail-closed; the small bump reflects the durable value of the new interface plus 26 focused tests."
+    }
+  }
+}
