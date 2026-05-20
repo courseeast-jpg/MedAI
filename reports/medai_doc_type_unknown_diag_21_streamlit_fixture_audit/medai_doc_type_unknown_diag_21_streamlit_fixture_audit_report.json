@@ -1,0 +1,147 @@
+{
+  "conclusion": "medai_doc_type_unknown_diag_21_streamlit_fixture_audit_ready",
+  "phase_id": "MEDAI-DOC-TYPE-UNKNOWN-DIAG-21",
+  "mode": "streamlit_fixture_audit",
+  "reports_only": true,
+  "default_off": true,
+  "branch": "clinical-knowledge-architecture",
+  "head_commit_short": "1b14ffe",
+  "default_behavior_changed": false,
+  "runtime_behavior_changed": false,
+  "streamlit_wiring_changed": false,
+  "app_main_modified": false,
+  "metadata_env_var": "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_IMPL_ENABLED",
+  "ui_env_var": "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_UI_ENABLED",
+  "requires_both_env_vars": true,
+  "neither_env_truthy_streamlit_calls": 0,
+  "metadata_only_env_truthy_streamlit_calls": 0,
+  "ui_only_env_truthy_streamlit_calls": 0,
+  "both_env_truthy_allowed_calls_only": true,
+  "both_env_truthy_streamlit_calls": 8,
+  "allowed_streamlit_calls": [
+    "st.markdown",
+    "st.caption"
+  ],
+  "forbidden_streamlit_call_count": 0,
+  "buttons_added": false,
+  "callbacks_added": false,
+  "actions_added": false,
+  "forms_added": false,
+  "state_mutation_added": false,
+  "data_layer_write_added": false,
+  "document_type_mutation_added": false,
+  "extraction_behavior_changed": false,
+  "pdf_text_extraction_behavior_changed": false,
+  "layout_extraction_behavior_changed": false,
+  "table_extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "source_documents_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "raw_text_rendered": false,
+  "raw_filenames_rendered": false,
+  "private_paths_rendered": false,
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_inference_performed": false,
+  "treatment_inference_performed": false,
+  "abbreviation_expansion_performed": false,
+  "accepted_count": 0,
+  "auto_accept_allowed_count": 0,
+  "external_api_used_count": 0,
+  "all_records_review_bound": true,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "diag_20_commit_tagged": false,
+  "static_audit": {
+    "diag_19_block_count": 1,
+    "diag_19_block_line_count": 27,
+    "diag_19_inside_advanced_technical_details": true,
+    "try_except_guard_present": true,
+    "helper_import_inside_try": true,
+    "used_streamlit_calls": [
+      "st.caption",
+      "st.markdown"
+    ],
+    "allowed_streamlit_calls_only_static": true,
+    "forbidden_streamlit_calls_static": [],
+    "forbidden_render_tokens_static": [],
+    "no_button_callback_action_form_state_mutation_tokens": true
+  },
+  "fixture_audit": {
+    "neither_env_truthy_streamlit_calls": 0,
+    "metadata_only_env_truthy_streamlit_calls": 0,
+    "ui_only_env_truthy_streamlit_calls": 0,
+    "both_env_truthy_streamlit_calls": 8,
+    "both_env_truthy_call_names": [
+      "st.markdown",
+      "st.markdown",
+      "st.markdown",
+      "st.markdown",
+      "st.markdown",
+      "st.markdown",
+      "st.markdown",
+      "st.caption"
+    ],
+    "both_env_truthy_allowed_calls_only": true,
+    "forbidden_streamlit_call_count": 0,
+    "raw_or_private_token_rendered": false
+  },
+  "tag_verification": {
+    "park_20_tags_at_expected_commit": [
+      "medai-final-parked-post-unknown-diag-language-metadata-2026-05-19",
+      "medai-unknown-diag-language-metadata-ready-2026-05-19"
+    ],
+    "park_21_tags_at_expected_commit": [
+      "medai-final-parked-post-diag-16-2026-05-19",
+      "medai-text-layer-eval-spec-ready-2026-05-19"
+    ],
+    "park_22_tags_at_expected_commit": [
+      "medai-final-parked-post-diag-18-2026-05-19",
+      "medai-pdf-text-layout-quality-default-off-ready-2026-05-19"
+    ],
+    "park_23_tags_at_expected_commit": [
+      "medai-final-parked-post-diag-19-2026-05-19",
+      "medai-pdf-text-layout-quality-streamlit-wiring-ready-2026-05-19"
+    ],
+    "park_24_tags_at_expected_commit": [
+      "medai-final-parked-post-diag-20-2026-05-19",
+      "medai-pdf-text-layout-quality-env-on-uat-ready-2026-05-19"
+    ],
+    "diag_20_tags": []
+  },
+  "validation_results": {
+    "diag_21_focused_pytest": "passed: 18 passed",
+    "diag_21_script_direct": "passed: medai_doc_type_unknown_diag_21_streamlit_fixture_audit_ready",
+    "diag_21_privacy_checks": "passed: 3/3 DIAG-21 reports privacy-clean",
+    "diag_01_through_diag_21_tests": "passed: 1058 passed",
+    "document_type_eval_non_streamlit_subset": "passed: 36 passed, 1 PyPDF2 deprecation warning",
+    "final_cka_mvp_validation": "passed: 12/12 cases; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "public_report_privacy_checks": "passed: DIAG-21 reports privacy-clean",
+    "staged_safety_check": "passed: only DIAG-21 script, test, and reports staged",
+    "full_pytest": "not run; not claimed for DIAG-21"
+  },
+  "safety_privacy_statement": "DIAG-21 is a reports-only/default-off Streamlit fixture-test audit. It uses static source inspection and a fake Streamlit object to record calls. It does not launch Streamlit, open source documents, print raw text, render raw filenames, use private paths, enable external APIs, alter runtime code, mutate document_type, or change extraction/classifier behavior. Cue expansion remains explicitly not recommended.",
+  "progress_estimate": {
+    "residual_unknown_reduction_track_done": "approximately 99.995%",
+    "residual_unknown_reduction_track_remaining": "approximately 0.005%",
+    "whole_medai_done": "approximately 91.9%",
+    "whole_medai_remaining": "approximately 8.1%"
+  },
+  "recommended_next_step": "PARK-25 parking snapshot for DIAG-21, if validations remain clean; no cue expansion."
+}
