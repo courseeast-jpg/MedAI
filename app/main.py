@@ -76,6 +76,7 @@ TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
 PERSISTED_UPLOAD_FINGERPRINTS_KEY = "test_launcher_persisted_upload_fingerprints"
 PERSISTED_UPLOAD_GENERATION_KEY = "test_launcher_persisted_upload_generation"
 UPLOAD_WIDGET_VERSION_KEY = "test_launcher_upload_widget_version"
+TERMINOLOGY_LOOKUP_UI_ENV_VAR = "MEDAI_TERMINOLOGY_LOOKUP_UI_ENABLED"
 
 # Backward-compatible export for older tests/importers. These are current
 # visible labels; advanced pages are shown only after the operator opts in.
@@ -1045,6 +1046,90 @@ def advanced_diagnostic_fields(item: dict) -> dict[str, object]:
     return {field: item.get(field) for field in ADVANCED_DIAGNOSTIC_FIELDS if field in item}
 
 
+def _terminology_lookup_ui_truthy(env: dict | None = None) -> bool:
+    env = os.environ if env is None else env
+    return str(env.get(TERMINOLOGY_LOOKUP_UI_ENV_VAR, "")).strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+        "enabled",
+    }
+
+
+def terminology_match_hypothesis_ui_plan(item: dict, *, env: dict | None = None) -> dict | None:
+    """Return a safe read-only terminology metadata render plan, or None.
+
+    MEDAI-CKA-TERM-INTEGRATION-WIRING-NEXT-01: this UI surface only renders
+    already-emitted aggregate helper metadata. It does not create a lookup
+    adapter, read terminology rows, or perform terminology lookup from the UI.
+    """
+    try:
+        from clinical_knowledge.terminology.term_match_hypothesis import (
+            TERMINOLOGY_LOOKUP_ENV_VAR,
+            is_terminology_lookup_enabled,
+        )
+    except Exception:
+        return None
+
+    env = os.environ if env is None else env
+    if not (is_terminology_lookup_enabled(env) and _terminology_lookup_ui_truthy(env)):
+        return None
+
+    metadata = item.get("terminology_match_hypothesis_metadata")
+    if not isinstance(metadata, dict):
+        metadata = item if item.get("terminology_match_hypothesis") is True else None
+    if not isinstance(metadata, dict):
+        return None
+
+    if metadata.get("terminology_match_hypothesis") is not True:
+        return None
+    if metadata.get("review_required") is not True:
+        return None
+    if metadata.get("auto_accept_allowed") is not False:
+        return None
+    for flag in (
+        "licensed_row_content_included",
+        "raw_text_emitted",
+        "raw_ocr_text_emitted",
+        "raw_document_text_emitted",
+        "raw_filename_emitted",
+        "private_path_emitted",
+        "phi_emitted",
+        "secret_emitted",
+        "clinical_interpretation_performed",
+        "diagnosis_inference_performed",
+        "treatment_inference_performed",
+        "medication_inference_performed",
+        "ddi_behavior_changed",
+        "external_api_used",
+    ):
+        if metadata.get(flag) is not False:
+            return None
+
+    match_family = str(metadata.get("match_family") or "unavailable")
+    system_family = str(metadata.get("terminology_system_family") or "unavailable")
+    matches_count = metadata.get("matches_count")
+    if not isinstance(matches_count, int):
+        return None
+    disclaimer = str(
+        metadata.get("disclaimer")
+        or "Terminology match hypothesis only. Review required. No auto-accept."
+    )
+    return {
+        "expander_label": "Terminology match hypothesis",
+        "markdown_lines": [
+            f"- **Match family:** `{match_family}`",
+            f"- **Terminology system family:** `{system_family}`",
+            f"- **Matches count:** `{matches_count}`",
+            "- **Review required:** `True`",
+            "- **Auto-accept allowed:** `False`",
+        ],
+        "disclaimer_line": disclaimer,
+        "env_vars": [TERMINOLOGY_LOOKUP_ENV_VAR, TERMINOLOGY_LOOKUP_UI_ENV_VAR],
+    }
+
+
 def render_run_result_card(item: dict) -> None:
     item = canonical_run_result_record(item)
     status = item_status(item)
@@ -1186,6 +1271,25 @@ def render_run_result_card(item: dict) -> None:
                 for _line in _pl_plan["markdown_lines"]:
                     st.markdown(_line)
                 st.caption(_pl_plan["disclaimer_line"])
+        except Exception:
+            pass
+        # MEDAI-CKA-TERM-INTEGRATION-WIRING-NEXT-01: optional, read-only
+        # terminology match hypothesis metadata display. Default-off;
+        # rendered only when BOTH env vars are truthy:
+        #   * MEDAI_TERMINOLOGY_LOOKUP_ENABLED
+        #   * MEDAI_TERMINOLOGY_LOOKUP_UI_ENABLED
+        # This block renders already-emitted aggregate helper metadata only.
+        # It never creates an adapter, reads licensed terminology rows,
+        # renders row codes/display strings/synonyms/definitions, or adds
+        # buttons / forms / actions / callbacks / state mutations.
+        try:
+            _tm_plan = terminology_match_hypothesis_ui_plan(item)
+            if _tm_plan is not None:
+                st.markdown("---")
+                st.markdown(f"#### {_tm_plan['expander_label']}")
+                for _line in _tm_plan["markdown_lines"]:
+                    st.markdown(_line)
+                st.caption(_tm_plan["disclaimer_line"])
         except Exception:
             pass
     st.markdown("</div>", unsafe_allow_html=True)
