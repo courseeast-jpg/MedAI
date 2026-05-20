@@ -6,6 +6,23 @@ Personal multi-specialty medical AI - local-first, self-enriching, privacy-prese
 
 ---
 
+## Latest operator documentation
+
+For the current local operator release, start with the two consolidated
+documents under `reports/medai_operator_manual_consolidation_01/`:
+
+- `MEDAI_LOCAL_OPERATOR_MANUAL.md` — single operator manual (startup,
+  health verification, Run & Review usage, recovery, escalation).
+- `MEDAI_TECHNICAL_HANDOFF.md` — single maintainer/developer handoff
+  (validation command map, parked tracks, safety/privacy invariants,
+  known sandbox limitations).
+
+The rest of this README and the legacy release docs remain
+authoritative for their original topics; the two consolidated documents
+above are the navigation index for current local operator use.
+
+---
+
 ## Prerequisites (one-time system installs)
 
 ```bash

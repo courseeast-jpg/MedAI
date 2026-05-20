@@ -4,6 +4,23 @@
 
 ---
 
+## Latest operator manual
+
+The single consolidated operator manual for the current local release
+lives at:
+
+- `reports/medai_operator_manual_consolidation_01/MEDAI_LOCAL_OPERATOR_MANUAL.md`
+
+The maintainer-facing technical handoff lives at:
+
+- `reports/medai_operator_manual_consolidation_01/MEDAI_TECHNICAL_HANDOFF.md`
+
+Use this quickstart for the minimal first-run sequence below. Use the
+consolidated operator manual for full operator guidance, health checks,
+recovery, and escalation.
+
+---
+
 ## 1. Start the UI
 
 ```bash

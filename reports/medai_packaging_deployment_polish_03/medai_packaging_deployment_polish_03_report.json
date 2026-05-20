@@ -1,0 +1,140 @@
+{
+  "conclusion": "medai_packaging_deployment_polish_03_ready",
+  "phase_id": "MEDAI-PACKAGING-DEPLOYMENT-POLISH-03",
+  "mode": "packaging_deployment_polish",
+  "reports_only": false,
+  "docs_or_launcher_changes_needed": true,
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_polish_03": "5e52003",
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "launcher_files_modified": false,
+  "docs_modified": true,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "source_documents_opened": false,
+  "private_files_opened": false,
+  "runtime_db_contents_opened": false,
+  "licensed_terminology_rows_read": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_inference_performed": false,
+  "treatment_inference_performed": false,
+  "abbreviation_expansion_performed": false,
+
+  "local_only_posture_preserved": true,
+  "operator_manual_linked": true,
+  "technical_handoff_linked": true,
+  "first_run_guidance_status": "ready",
+  "launcher_readiness_status": "ready",
+  "validation_command_status": "ready",
+
+  "docs_modified_list": [
+    "README.md",
+    "RELEASE_QUICKSTART_LOCAL_ONLY.md",
+    "RELEASE_OPERATOR_GUIDE.md"
+  ],
+  "docs_unchanged_list": [
+    "RELEASE_LIMITATIONS_AND_SAFETY.md",
+    "ARCHITECTURE.md"
+  ],
+  "launcher_files_unchanged_list": [
+    "Start_MedAI_UI.bat",
+    "Start_MedAI_UI_Silent.vbs",
+    "Start_MedAI_Test_UI.bat",
+    "Start_MedAI_UI_Encrypted.bat"
+  ],
+  "polish_change_summary": "Each of the three top-level docs gained a short pointer block (about 8-12 lines) directing the reader to the two consolidated documents produced by OPERATOR-MANUAL-CONSOLIDATION-01 (the operator manual and the technical handoff under reports/medai_operator_manual_consolidation_01/). No existing content was removed; no instructions were changed; no launcher / preflight / config files were modified.",
+
+  "consolidated_docs_pointed_to": [
+    "reports/medai_operator_manual_consolidation_01/MEDAI_LOCAL_OPERATOR_MANUAL.md",
+    "reports/medai_operator_manual_consolidation_01/MEDAI_TECHNICAL_HANDOFF.md"
+  ],
+
+  "audited_public_safe_sources": [
+    "README.md",
+    "RELEASE_QUICKSTART_LOCAL_ONLY.md",
+    "RELEASE_OPERATOR_GUIDE.md",
+    "RELEASE_LIMITATIONS_AND_SAFETY.md",
+    "ARCHITECTURE.md",
+    "Start_MedAI_UI.bat",
+    "Start_MedAI_UI_Silent.vbs",
+    "Start_MedAI_Test_UI.bat",
+    "Start_MedAI_UI_Encrypted.bat",
+    "reports/medai_operator_manual_consolidation_01/",
+    "reports/medai_packaging_launcher_harden_01/",
+    "reports/medai_release_handoff_01_local_operator_pack/",
+    "reports/medai_park_26_operator_runtime_readiness/",
+    "reports/medai_roadmap_03_next_phase_decision/"
+  ],
+
+  "validation_evidence": {
+    "public_report_privacy_checks": "passed: 3/3 PACKAGING-DEPLOYMENT-POLISH-03 reports privacy-clean",
+    "focused_polish_03_tests": "passed: pointer-existence + untouched runtime surface tests in tests/test_medai_packaging_deployment_polish_03.py",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only PACKAGING-DEPLOYMENT-POLISH-03 scoped files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; reports/docs-only block; known sandbox Streamlit-import limitation persists but is not a regression"
+  },
+
+  "remaining_packaging_risks": [
+    "The legacy quickstart doc still references API-key setup from an earlier project phase (ANTHROPIC_API_KEY and GEMINI_API_KEY). The shipped default is local-only with MEDAI_LOCAL_ONLY=1 and MEDAI_ALLOW_EXTERNAL_API=0; the legacy text is informational only and does not enable external APIs. Cleaning it up is a follow-up candidate for MEDAI-FREEZE-LOCAL-OPERATOR-RELEASE or a later docs-only block.",
+    "The legacy operator guide doc carries pre-existing PERSON and MEDICAL_FILENAME privacy-scanner findings from older content. They predate this block and were left unchanged. They are docs-only triggers, not public-report leaks, and have been present across the chain."
+  ],
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "safety_privacy_statement": "PACKAGING-DEPLOYMENT-POLISH-03 added pointer-only blocks (about 8-12 lines each) to three top-level docs: README, RELEASE_QUICKSTART_LOCAL_ONLY, and RELEASE_OPERATOR_GUIDE. Each block makes the consolidated operator manual and technical handoff discoverable from the first-run docs. No runtime code, launcher, startup-preflight, or config file was modified. No source documents, raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, runtime DB contents, backups, bundles, keys, or licensed terminology data were opened or referenced. No tags created, moved, or deleted. PARK-20..26 tags untouched.",
+
+  "recommended_next_step": "MEDAI-FREEZE-LOCAL-OPERATOR-RELEASE",
+  "recommended_next_3_blocks": [
+    "MEDAI-FREEZE-LOCAL-OPERATOR-RELEASE",
+    "MEDAI-ROADMAP-04",
+    "Next ROADMAP-04-selected expansion block"
+  ],
+  "deferred_blocks": [
+    "MORE-UNKNOWN-DIAGNOSTICS",
+    "CUE-EXPANSION",
+    "BROAD-V2-ARCHITECTURE-UNTIL-AFTER-FREEZE-OR-ROADMAP-04"
+  ],
+
+  "whole_medai_done_estimate": "approximately 93.5%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 93.2,
+      "whole_medai_remaining_pct": 6.8
+    },
+    "after": {
+      "whole_medai_done_pct": 93.5,
+      "whole_medai_remaining_pct": 6.5,
+      "note": "PACKAGING-DEPLOYMENT-POLISH-03 makes the consolidated operator manual and technical handoff discoverable from the three top-level docs operators hit first. The small bump reflects the durable navigation improvement; no runtime change."
+    }
+  }
+}

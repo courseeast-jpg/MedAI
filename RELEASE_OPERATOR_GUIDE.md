@@ -5,6 +5,20 @@
 
 ---
 
+## Latest consolidated operator documentation
+
+For the current local operator release, the single consolidated
+documents are:
+
+- `reports/medai_operator_manual_consolidation_01/MEDAI_LOCAL_OPERATOR_MANUAL.md` — operator manual.
+- `reports/medai_operator_manual_consolidation_01/MEDAI_TECHNICAL_HANDOFF.md` — maintainer/developer handoff.
+
+This guide remains authoritative for the OCR/Layout HITL release frame
+described below; the consolidated operator manual is the navigation
+index for current local operator use.
+
+---
+
 ## What do I do next?
 
 You do not need to review individual documents to use this system.
