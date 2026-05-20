@@ -769,8 +769,13 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
 def render_run_review_tab(sys_components: dict) -> None:
     st.subheader(RUN_REVIEW_TAB)
     st.caption("Add documents, process them locally, and review anything that needs attention.")
+    st.info(
+        "Local operator workflow: files stay on this machine, cloud tools stay off, "
+        "and every result remains for human review until the source document is checked."
+    )
 
     st.markdown("### Current run")
+    st.caption("Use this section for the active file queue, current run status, and per-file review cards.")
     render_current_run_tab(sys_components, show_title=False)
 
     st.divider()
@@ -812,6 +817,7 @@ def render_run_status_panel(active_run: dict | None, *, run_state: str) -> None:
     counts = current_run_counts(active_run)
     st.markdown("**Run status**")
     st.markdown(f"<span class='badge badge-privacy'>{run_state}</span>", unsafe_allow_html=True)
+    st.caption("These are workflow statuses only. They are not diagnosis, treatment advice, or clinical acceptance.")
     cols = st.columns(5)
     metric_specs = [
         ("Accepted", counts["accepted"], "check before relying"),
@@ -1049,6 +1055,9 @@ def render_run_result_card(item: dict) -> None:
         f"### {badge['label']} &nbsp; <span class='badge {badge['class']}'>Status: {badge['label']}</span>",
         unsafe_allow_html=True,
     )
+    st.caption(
+        "Operator summary: confirm the document type, compare with the source, and keep technical metadata collapsed unless needed."
+    )
     st.info(operator_result_explanation(document_type))
 
     chip_specs = [
@@ -1085,6 +1094,7 @@ def render_run_result_card(item: dict) -> None:
         st.markdown(f"- {item_text}")
 
     with st.expander("Advanced technical details", expanded=False):
+        st.caption("Safe metadata only. This section is collapsed by default and does not replace the operator summary.")
         st.json(advanced_diagnostic_fields(item))
         # MEDAI-DOC-TYPE-UNKNOWN-DIAG-08A: optional, read-only operator
         # review-routing badge. Default-off; rendered only when the env var
