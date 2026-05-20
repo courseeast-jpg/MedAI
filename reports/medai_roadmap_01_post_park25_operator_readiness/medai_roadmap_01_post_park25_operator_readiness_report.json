@@ -1,0 +1,159 @@
+{
+  "phase_id": "MEDAI-ROADMAP-01",
+  "mode": "planning_audit",
+  "reports_only": true,
+  "branch": "clinical-knowledge-architecture",
+  "head_commit_short": "6b31678",
+  "runtime_behavior_changed": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "external_api_used": false,
+  "source_documents_opened": false,
+  "private_files_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "accepted_count_changed": false,
+  "auto_accept_allowed_changed": false,
+  "all_records_review_bound": true,
+  "pdf_text_layout_track_status": "parked",
+  "residual_unknown_reduction_track_done_estimate": "approximately 99.995%",
+  "whole_medai_done_estimate": "approximately 92.0%",
+  "current_system_status": {
+    "latest_park": "PARK-25",
+    "pdf_text_layout_quality_track": "parked_through_DIAG_21_and_PARK_25",
+    "mvp_validation": "passed: 12/12 cases, 693 tests, external_api_used false",
+    "b07_validation": "passed: 6/6, external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "release_boundary": "human_review_required; production_autonomous false"
+  },
+  "completed_tracks_summary": [
+    "CKA MVP scaffold and final MVP validation",
+    "B07 terminology opt-in integration with read-only/hypothesis safeguards",
+    "ROUTE-FIX terminal empty fallback and audit metadata",
+    "Operator control panel and boot resilience validations",
+    "Document-family validation through PARK-19",
+    "PDF text/layout quality diagnostic track through DIAG-21 and PARK-25"
+  ],
+  "pdf_text_layout_quality_track_closure": "Closed for now. PARK-25 validates default-off Streamlit fixture behavior with no runtime changes; further cue expansion is not recommended.",
+  "ranking_matrix": [
+    {
+      "workstream": "Operator UAT / practical workflow smoke",
+      "operator_value": 5,
+      "implementation_risk": 1,
+      "safety_privacy_risk": 1,
+      "validation_cost": 2,
+      "expected_practical_usefulness": 5,
+      "recommendation": "highest_priority_next",
+      "rationale": "Validates the parked system in real operator flow without changing extraction, classifier, OCR, or thresholds."
+    },
+    {
+      "workstream": "Packaging / launcher / install hardening",
+      "operator_value": 5,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 1,
+      "validation_cost": 2,
+      "expected_practical_usefulness": 5,
+      "recommendation": "second_priority",
+      "rationale": "Improves repeatable local startup and reduces operator friction; existing UI boot and ops reports show this area matters."
+    },
+    {
+      "workstream": "UI usability polish",
+      "operator_value": 4,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 1,
+      "validation_cost": 2,
+      "expected_practical_usefulness": 4,
+      "recommendation": "third_priority",
+      "rationale": "Useful after UAT exposes concrete friction; keep UI-only and review-bound."
+    },
+    {
+      "workstream": "DB/signing/credential cleanup",
+      "operator_value": 4,
+      "implementation_risk": 3,
+      "safety_privacy_risk": 3,
+      "validation_cost": 3,
+      "expected_practical_usefulness": 4,
+      "recommendation": "scoped_later",
+      "rationale": "Important for install trust and local reliability, but should be a separately scoped safety block."
+    },
+    {
+      "workstream": "Broader v2 architecture roadmap",
+      "operator_value": 3,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 1,
+      "validation_cost": 1,
+      "expected_practical_usefulness": 3,
+      "recommendation": "planning_only_parallel",
+      "rationale": "Good for future direction, but should not displace immediate operator UAT."
+    },
+    {
+      "workstream": "Corpus expansion",
+      "operator_value": 3,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 3,
+      "validation_cost": 4,
+      "expected_practical_usefulness": 3,
+      "recommendation": "defer_until_operator_need",
+      "rationale": "More corpus evaluation can be useful but carries privacy handling and validation cost."
+    },
+    {
+      "workstream": "More Unknown diagnostics",
+      "operator_value": 2,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 2,
+      "validation_cost": 3,
+      "expected_practical_usefulness": 2,
+      "recommendation": "not_next_unless_operationally_needed",
+      "rationale": "Residual Unknown track is already parked at approximately 99.995%; further work is low marginal value."
+    },
+    {
+      "workstream": "Cue expansion",
+      "operator_value": 1,
+      "implementation_risk": 4,
+      "safety_privacy_risk": 3,
+      "validation_cost": 4,
+      "expected_practical_usefulness": 1,
+      "recommendation": "not_recommended_now",
+      "rationale": "Explicitly not recommended after PARK-25; raises false-positive risk without a current operator need."
+    }
+  ],
+  "recommended_next_3_blocks": [
+    "MEDAI-OPERATOR-UAT-01 ? local operator workflow smoke receipt, reports-only unless a blocking UI/reporting bug is found",
+    "MEDAI-LAUNCHER-PACKAGE-HARDEN-01 ? local launcher/install repeatability audit, no clinical behavior changes",
+    "MEDAI-UI-USABILITY-POLISH-02 ? operator-friction fixes discovered by UAT, UI-only and review-bound"
+  ],
+  "blocks_explicitly_not_recommended_now": [
+    "Cue expansion",
+    "More Unknown diagnostics without a concrete operator need",
+    "OCR routing changes",
+    "Classifier threshold/scoring changes",
+    "Clinical value parsing or medication/DDI interpretation",
+    "External API enablement"
+  ],
+  "validation_evidence": {
+    "PARK_25": "passed requested validations; tags pushed; no behavior change",
+    "DIAG_21": "18 focused tests passed; DIAG-01 through DIAG-21 tests passed: 1058; eval subset passed: 36 with 1 warning",
+    "phase_78_release_freeze": "human-in-the-loop release frozen; external_api_used false; privacy self-check passed",
+    "phase_77_operator_polish": "operator docs, quickstart, limitations, and local-only messaging ready",
+    "phase_75_review_package": "review package UI/launcher ready with manual review boundary retained"
+  },
+  "stop_go_recommendation": "next_workstream=operator_uat_practical_workflow_smoke; pdf_text_layout_quality=parked; cue_expansion=false",
+  "recommended_next_step": "MEDAI-OPERATOR-UAT-01 ? local operator workflow smoke receipt; reports-only unless a blocking UI/reporting bug is found; no cue expansion",
+  "validation_results": {
+    "public_report_privacy_checks": "passed: 3/3 ROADMAP-01 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: 12/12 cases; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only 3 ROADMAP-01 report files staged",
+    "full_pytest": "not run; not needed for reports-only planning audit"
+  },
+  "public_report_commit_hash_policy": "short_hashes_only"
+}
