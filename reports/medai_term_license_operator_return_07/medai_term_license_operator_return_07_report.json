@@ -1,0 +1,276 @@
+{
+  "conclusion": "medai_term_license_operator_return_07_ready_partial_return_received_8_resources_still_unfilled",
+  "phase_id": "MEDAI-TERM-LICENSE-OPERATOR-RETURN-07",
+  "mode": "explicit_operator_license_review_return_followup",
+  "reports_only": true,
+  "implementation_started": false,
+  "private_adapter_implemented": false,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "b0b3e47",
+  "term_license_operator_return_06_commit_short": "2141a04",
+  "term_license_manual_return_05_commit_short": "a72b54a",
+  "term_mesh_local_download_pack_01_commit_short": "cedbbd3",
+  "term_private_config_verify_02_commit_short": "60f1114",
+  "freeze_commit_short": "7ef8ffd",
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+
+  "operator_return_received": true,
+  "operator_return_received_evidence": "Operator submitted a public-safe license-return message structured against the RETURN-06 input schema. For the 8 license-gated resources every per-resource boolean field was supplied as the literal placeholder text rather than as an actual boolean value; per the strict verification rule those count as missing/unparseable and therefore not_verified. For the 2 internal boundaries the operator supplied an explicit status string (verified).",
+  "operator_return_completeness": "partial_template_placeholders_for_license_gated_resources",
+
+  "operator_input_format_audit": {
+    "input_source": "operator message in conversation",
+    "input_form": "structured per-resource block matching RETURN-06 input schema",
+    "license_gated_resource_boolean_values_supplied": false,
+    "license_gated_resource_boolean_values_supplied_evidence": "Each of the 5 required boolean fields per license-gated resource was set to the literal placeholder text rather than a concrete true or false value.",
+    "license_gated_resource_status_values_supplied": false,
+    "license_gated_resource_status_values_supplied_evidence": "Each status field for the 8 license-gated resources was set to the literal allowed-values list rather than one of the four allowed status strings.",
+    "internal_boundary_status_explicit": true,
+    "internal_boundary_status_value": "verified",
+    "operator_self_attestation_present": true,
+    "operator_self_attestation_evidence": "The return ends with an explicit operator self-attestation that no license text, terminology rows, screenshots with licensed content, private paths, DB exports, raw text, PHI, keys, or secrets are included.",
+    "no_license_text_in_return": true,
+    "no_terminology_rows_in_return": true,
+    "no_screenshots_in_return": true,
+    "no_private_paths_in_return": true,
+    "no_db_exports_in_return": true,
+    "no_raw_text_in_return": true,
+    "no_phi_in_return": true,
+    "no_keys_or_secrets_in_return": true
+  },
+
+  "manual_license_verification_complete": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "private_config_contents_read": false,
+  "private_config_staged": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "license_ack_private_staged": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "mesh_status": "download_helper_created",
+  "mesh_download_completed": false,
+  "mesh_integration_allowed": false,
+
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+
+  "verification_decision_logic_applied": {
+    "rule_1": "Rule 1 (verified): requires all required boolean confirmations true AND operator-supplied status verified. Not satisfied for any license-gated resource because the operator submitted schema placeholder text for the booleans, not concrete true values.",
+    "rule_2": "Rule 2 (not_verified): triggers when any required boolean is false OR missing OR not parseable as a boolean. Triggered for all 8 license-gated resources.",
+    "rule_3": "Rule 3 (blocked): operator explicitly supplies status=blocked. Not used in this return.",
+    "rule_4": "Rule 4 (not_applicable): operator explicitly supplies status=not_applicable. Not used in this return.",
+    "internal_boundary_rule": "For internal boundaries with no external license terms, the license-review booleans must not apply. The operator's explicit status=verified, combined with prior structural verification, qualifies as verified_by_explicit_operator_return.",
+    "overall_completion_rule": "manual_license_verification_complete may be true only if every license-gated resource is verified_by_explicit_operator_return. 8 license-gated resources remain not_verified; therefore manual_license_verification_complete=false.",
+    "implementation_gate_rule": "private_adapter_implementation_allowed remains false regardless. Even a fully-verified return would only unblock a subsequent SPEC/readiness block to reconsider the adapter, never implementation itself."
+  },
+
+  "operator_resource_confirmation_matrix": [
+    {
+      "resource": "loinc",
+      "role": "primary_license_gated",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values."
+    },
+    {
+      "resource": "rxnorm_full",
+      "role": "primary_license_gated",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values."
+    },
+    {
+      "resource": "rxnorm_prescribable",
+      "role": "auxiliary_license_gated",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values."
+    },
+    {
+      "resource": "snomed_ct_us",
+      "role": "primary_license_gated",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values. snomed_runtime_integration_enabled remains false per preflight."
+    },
+    {
+      "resource": "snomed_ct_international",
+      "role": "secondary_license_gated",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values."
+    },
+    {
+      "resource": "umls_metathesaurus",
+      "role": "future_import_license_gated",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values. umls_future_gated remains true per preflight."
+    },
+    {
+      "resource": "mesh",
+      "role": "future_integration_license_gated",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values. mesh_status remains download_helper_created."
+    },
+    {
+      "resource": "private_license_acknowledgement_handling",
+      "role": "private_license_confirmation",
+      "operator_boolean_inputs_parseable_as_boolean": false,
+      "operator_status_input_parseable_as_status": false,
+      "operator_return_status": "not_verified",
+      "rationale": "Required boolean fields were supplied as the schema placeholder text rather than concrete true or false values."
+    },
+    {
+      "resource": "private_terminology_config_boundary",
+      "role": "internal_boundary",
+      "operator_status_explicit": true,
+      "operator_status_input_parseable_as_status": true,
+      "operator_status_value": "verified",
+      "operator_return_status": "verified_by_explicit_operator_return",
+      "rationale": "Operator explicitly supplied status=verified. Internal boundary with no external license terms; license-review booleans must not apply. Structural verification independently recorded by MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02 at commit 60f1114 (ignored by git, never committed, never staged, contents never read)."
+    },
+    {
+      "resource": "b07_mkb_public_safe_boundary",
+      "role": "internal_boundary",
+      "operator_status_explicit": true,
+      "operator_status_input_parseable_as_status": true,
+      "operator_status_value": "verified",
+      "operator_return_status": "verified_by_explicit_operator_return",
+      "rationale": "Operator explicitly supplied status=verified. Internal boundary with no external license terms; license-review booleans must not apply. Structural validation independently recorded across B07-TERM-01, CKA-B07, CKA-B10, CKA-B11 with feature flags default-off and external_api_used=false."
+    }
+  ],
+
+  "resources_verified_by_operator": [
+    "private_terminology_config_boundary",
+    "b07_mkb_public_safe_boundary"
+  ],
+  "resources_not_verified": [
+    "loinc",
+    "rxnorm_full",
+    "rxnorm_prescribable",
+    "snomed_ct_us",
+    "snomed_ct_international",
+    "umls_metathesaurus",
+    "mesh",
+    "private_license_acknowledgement_handling"
+  ],
+  "license_gated_resources_total": 8,
+  "license_gated_resources_verified": 0,
+  "license_gated_resources_not_verified": 8,
+  "internal_boundaries_total": 2,
+  "internal_boundaries_verified": 2,
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "wiring private terminology output into app/main.py runtime",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "Licensed terminology row reads",
+    "Private license-acknowledgement file contents access",
+    "External terminology API enablement for runtime",
+    "cue-pack expansion (explicitly NOT recommended)"
+  ],
+
+  "next_block_decision": "operator_license_confirmation_still_required",
+  "next_block_decision_rationale": "The operator submitted a return matching the RETURN-06 input schema but left every per-resource boolean as the schema placeholder text rather than a concrete true or false value, and left every license-gated status field as the schema's allowed-values list rather than one of the four allowed status strings. Per the strict critical rule (which is the entire point of this slot), placeholder text cannot count as explicit operator confirmation. The two internal boundaries were explicitly status=verified and now sit at verified_by_explicit_operator_return. Manual license verification remains incomplete (8 license-gated resources remain not_verified). The operator must resubmit with concrete boolean values per resource.",
+
+  "operator_resubmit_instructions": {
+    "form": "Public-safe per-resource block. Use concrete boolean and status values, not placeholder text.",
+    "example_safe_concrete_input_per_license_gated_resource": "operator_confirms_license_terms_reviewed: true; operator_confirms_local_only_use: true; operator_confirms_no_redistribution: true; operator_confirms_no_runtime_external_api: true; operator_confirms_no_public_row_output: true; status: verified",
+    "example_safe_concrete_input_for_internal_boundary": "status: verified",
+    "do_not_include": "license text, terminology rows, screenshots with licensed content, row codes, display names, synonyms, definitions, DB exports, private filesystem paths, raw OCR text, PHI, keys, secrets, LICENSE_ACK_PRIVATE contents",
+    "self_attestation_recommended": "Restate the no-license-text / no-row / no-private-path attestation at the end of the resubmission, as you did this turn."
+  },
+
+  "deferred_items": [
+    "Wiring terminology output into app/main.py runtime (deferred until operator return + adapter SPEC approval)",
+    "UMLS lookup (umls_future_gated=true)",
+    "SNOMED CT runtime integration (snomed_runtime_integration_enabled=false)",
+    "DDI / diagnosis / treatment / medication / dosing inference driven by terminology",
+    "Abbreviation expansion in any form",
+    "Cue-pack expansion (explicitly NOT recommended)",
+    "External terminology API enablement",
+    "Public-report row dumps under any condition",
+    "MeSH integration (requires both license confirmation AND completed operator-side download)"
+  ],
+
+  "validation_evidence": {
+    "public_report_privacy_checks": "passed: 3/3 MEDAI-TERM-LICENSE-OPERATOR-RETURN-07 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only MEDAI-TERM-LICENSE-OPERATOR-RETURN-07 scoped report files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; reports-only block"
+  },
+
+  "safety_privacy_statement": "MEDAI-TERM-LICENSE-OPERATOR-RETURN-07 is a reports-only follow-up to RETURN-06. It records the operator's submitted return verbatim with respect to its structural shape, but it does not embed license text, screenshots with licensed content, terminology rows, row codes, display names, synonyms, definitions, DB exports, private filesystem paths, raw OCR text, PHI, keys, secrets, or LICENSE_ACK_PRIVATE contents. The operator's self-attestation that the return contains none of those items was recorded as a controlled-vocabulary boolean. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No runtime code, helper code, Streamlit wiring, launcher, startup preflight, or config file was modified. No tags created, moved, or deleted. PARK-20..23 tag pairs and the FREEZE tag pair remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED.",
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "freeze_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 95.9%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 95.8,
+      "whole_medai_remaining_pct": 4.2
+    },
+    "after": {
+      "whole_medai_done_pct": 95.9,
+      "whole_medai_remaining_pct": 4.1,
+      "note": "Two internal boundaries moved from not_applicable to verified_by_explicit_operator_return. The 8 license-gated resources remain not_verified because the operator's return contained schema placeholders rather than concrete boolean values. No runtime change."
+    }
+  }
+}
