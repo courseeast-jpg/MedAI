@@ -1,0 +1,471 @@
+{
+  "conclusion": "medai_roadmap_06_post_term_parking_strategic_reevaluation_ready",
+  "phase_id": "MEDAI-ROADMAP-06",
+  "mode": "post_term_parking_strategic_reevaluation",
+  "reports_only": true,
+  "implementation_started": false,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "358bcd4",
+  "park_02_commit_short": "b9b19ad",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+  "freeze_commit_short": "7ef8ffd",
+  "park_26_commit_short": "91b9eba",
+  "park_25_commit_short": "6b31678",
+  "park_24_commit_short": "1b14ffe",
+  "park_23_commit_short": "748c32a",
+  "park_22_commit_short": "f4d3cc6",
+  "park_21_commit_short": "9f9e22d",
+  "park_20_commit_short": "3e46461",
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "private_config_contents_read": false,
+  "private_config_staged": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "mesh_status": "download_helper_created",
+  "mesh_integration_allowed": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+  "manual_license_verification_complete": false,
+  "license_gated_resources_verified_count": 0,
+  "internal_boundaries_verified_count": 2,
+
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+
+  "current_project_status": "stable_frozen_local_operator_release_with_parked_expansion_tracks",
+
+  "covered_sources_reviewed_public_safe_only": [
+    "reports/medai_cka_term_integration_park_02/",
+    "reports/medai_term_license_operator_return_08/",
+    "reports/medai_term_license_operator_return_07/",
+    "reports/medai_term_license_operator_return_06/",
+    "reports/medai_term_license_manual_return_05/",
+    "reports/medai_term_mesh_local_download_pack_01/",
+    "reports/medai_term_private_config_verify_02/",
+    "reports/medai_term_private_config_01/",
+    "reports/medai_cka_term_integration_park_01/ (helper/wiring)",
+    "reports/medai_freeze_local_operator_release/",
+    "reports/medai_park_26_operator_runtime_readiness/",
+    "reports/medai_park_25_diag21_streamlit_fixture_audit/",
+    "reports/medai_park_24_diag20_operator_uat/",
+    "reports/medai_park_23_diag19_streamlit_wiring/",
+    "reports/medai_park_22_pdf_text_layout_quality_default_off/",
+    "reports/medai_park_21_post_text_layer_eval_spec/",
+    "reports/medai_roadmap_05_post_term_wiring_uat/ (if present)",
+    "reports/medai_roadmap_04_post_freeze_next_phase/",
+    "reports/cka_final_mvp_release/",
+    "reports/b07_term01_opt_in_integration/",
+    "reports/medai_route_fix_01/",
+    "reports/medai_ui_ops_01/",
+    "reports/medai_ui_boot_fix_01/"
+  ],
+
+  "parked_track_inventory": [
+    {
+      "track": "Local operator release freeze",
+      "status": "frozen",
+      "latest_commit_short": "7ef8ffd",
+      "tag_pair": ["medai-local-operator-release-frozen-2026-05-20", "medai-final-local-operator-release-2026-05-20"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "freeze_maintenance_re_runs_of_health_checks_only",
+      "safety_risk": 1,
+      "operator_value": 5
+    },
+    {
+      "track": "Residual Unknown diagnostics",
+      "status": "parked",
+      "latest_commit_short": "3e46461",
+      "tag_pair": ["medai-unknown-diag-language-metadata-ready-2026-05-19", "medai-final-parked-post-unknown-diag-language-metadata-2026-05-19"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "deferred_only_on_fresh_operator_uat_signal",
+      "safety_risk": 2,
+      "operator_value": 2
+    },
+    {
+      "track": "PDF text/layout quality track",
+      "status": "parked",
+      "latest_commit_short": "748c32a",
+      "tag_pair": ["medai-pdf-text-layout-quality-streamlit-wiring-ready-2026-05-19", "medai-final-parked-post-diag-19-2026-05-19"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "deferred_only_on_fresh_operator_uat_signal",
+      "safety_risk": 2,
+      "operator_value": 2
+    },
+    {
+      "track": "DIAG-20 operator UAT",
+      "status": "parked",
+      "latest_commit_short": "1b14ffe",
+      "tag_pair": ["medai-pdf-text-layout-quality-env-on-uat-ready-2026-05-19", "medai-final-parked-post-diag-20-2026-05-19"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "deferred",
+      "safety_risk": 2,
+      "operator_value": 2
+    },
+    {
+      "track": "DIAG-21 Streamlit fixture audit",
+      "status": "parked",
+      "latest_commit_short": "6b31678",
+      "tag_pair": ["medai-streamlit-fixture-audit-ready-2026-05-19", "medai-final-parked-post-diag-21-2026-05-19"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "deferred",
+      "safety_risk": 2,
+      "operator_value": 2
+    },
+    {
+      "track": "Operator readiness + runtime hardening",
+      "status": "parked",
+      "latest_commit_short": "91b9eba",
+      "tag_pair": ["medai-operator-runtime-readiness-ready-2026-05-20", "medai-final-parked-post-runtime-hardening-2026-05-20"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "maintenance_only_reuse_existing_validations",
+      "safety_risk": 1,
+      "operator_value": 4
+    },
+    {
+      "track": "Terminology helper/wiring mini-track",
+      "status": "parked",
+      "latest_commit_short": "e398a75",
+      "tag_pair": ["medai-cka-term-helper-wiring-ready-2026-05-20", "medai-final-parked-post-term-wiring-2026-05-20"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "deferred_helper_remains_default_off_fail_closed",
+      "safety_risk": 2,
+      "operator_value": 2
+    },
+    {
+      "track": "License-gated private adapter track",
+      "status": "parked",
+      "latest_commit_short": "b9b19ad",
+      "tag_pair": ["medai-cka-term-license-gated-adapter-parked-2026-05-21", "medai-final-parked-post-term-license-gate-2026-05-21"],
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "deferred_until_concrete_operator_license_confirmations_and_subsequent_spec_block",
+      "safety_risk": 4,
+      "operator_value": 4
+    },
+    {
+      "track": "Private terminology config boundary",
+      "status": "complete_and_verified",
+      "latest_commit_short": "60f1114",
+      "tag_pair": null,
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "no_action_required",
+      "safety_risk": 1,
+      "operator_value": 3
+    },
+    {
+      "track": "MeSH local helper/download boundary",
+      "status": "blocked",
+      "latest_commit_short": "cedbbd3",
+      "tag_pair": null,
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "operator_must_run_helper_on_windows_after_verifying_canonical_nlm_urls",
+      "safety_risk": 3,
+      "operator_value": 3
+    },
+    {
+      "track": "Manual license verification gate",
+      "status": "blocked",
+      "latest_commit_short": "376ca4e",
+      "tag_pair": null,
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "operator_must_supply_concrete_per_resource_boolean_confirmations",
+      "safety_risk": 4,
+      "operator_value": 4
+    },
+    {
+      "track": "Cue expansion",
+      "status": "explicitly_not_recommended",
+      "latest_commit_short": null,
+      "tag_pair": null,
+      "runtime_behavior_changed": false,
+      "implementation_allowed": false,
+      "next_allowed_action": "do_not_open",
+      "safety_risk": 5,
+      "operator_value": 2
+    }
+  ],
+
+  "candidate_next_phase_ranking": [
+    {
+      "candidate_id": "A",
+      "candidate_name": "FREEZE-MAINTENANCE-ONLY",
+      "operator_value": 4,
+      "product_value": 4,
+      "implementation_risk": 1,
+      "safety_privacy_risk": 1,
+      "validation_cost": 1,
+      "dependency_risk": 1,
+      "expected_time_cost": 1,
+      "reversibility": 5,
+      "recommended_order": 1,
+      "rationale": "Every readiness criterion already passes; v1 release is frozen; every expansion track is parked. The lowest-risk default after PARK-02. Holding here costs nothing and preserves the freeze invariants."
+    },
+    {
+      "candidate_id": "F",
+      "candidate_name": "V2-ARCHITECTURE-SPEC-01",
+      "operator_value": 4,
+      "product_value": 5,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 1,
+      "validation_cost": 2,
+      "dependency_risk": 2,
+      "expected_time_cost": 3,
+      "reversibility": 5,
+      "recommended_order": 2,
+      "rationale": "If forward motion is desired, a reports-only v2 architecture SPEC is the safest exit ramp. No runtime change. No license exposure. Frees the project to plan a v2 implementation track without committing to it. Must be SPEC-only; the actual v2 implementation would need its own block-phase SPEC and approval."
+    },
+    {
+      "candidate_id": "C",
+      "candidate_name": "PACKAGING-DEPLOYMENT-NEXT-04",
+      "operator_value": 3,
+      "product_value": 3,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 1,
+      "validation_cost": 2,
+      "dependency_risk": 1,
+      "expected_time_cost": 2,
+      "reversibility": 5,
+      "recommended_order": 3,
+      "rationale": "Marginal value right after PACKAGING-DEPLOYMENT-POLISH-03; useful only if a concrete first-run friction signal surfaces."
+    },
+    {
+      "candidate_id": "B",
+      "candidate_name": "PRODUCT-UX-NEXT-01",
+      "operator_value": 4,
+      "product_value": 4,
+      "implementation_risk": 3,
+      "safety_privacy_risk": 2,
+      "validation_cost": 3,
+      "dependency_risk": 2,
+      "expected_time_cost": 3,
+      "reversibility": 4,
+      "recommended_order": 4,
+      "rationale": "Reopens app/main.py; needs fresh operator-UAT signals first. The frozen artifact does not currently have a documented UX problem to fix."
+    },
+    {
+      "candidate_id": "E",
+      "candidate_name": "REAL-CORPUS-VALIDATION-03",
+      "operator_value": 4,
+      "product_value": 4,
+      "implementation_risk": 3,
+      "safety_privacy_risk": 5,
+      "validation_cost": 4,
+      "dependency_risk": 3,
+      "expected_time_cost": 4,
+      "reversibility": 4,
+      "recommended_order": 5,
+      "rationale": "High privacy handling cost; needs its own privacy-gated SPEC block first. Not appropriate immediately after license-gated parking."
+    },
+    {
+      "candidate_id": "D",
+      "candidate_name": "DATA-INFRA-NEXT-02",
+      "operator_value": 3,
+      "product_value": 3,
+      "implementation_risk": 3,
+      "safety_privacy_risk": 2,
+      "validation_cost": 3,
+      "dependency_risk": 2,
+      "expected_time_cost": 3,
+      "reversibility": 4,
+      "recommended_order": 6,
+      "rationale": "DATA-RUNTIME-HARDEN-01 already closed the immediate runtime gaps. Marginal value until new signals surface."
+    },
+    {
+      "candidate_id": "G",
+      "candidate_name": "TERMINOLOGY-LICENSE-WAIT",
+      "operator_value": 3,
+      "product_value": 3,
+      "implementation_risk": 1,
+      "safety_privacy_risk": 1,
+      "validation_cost": 1,
+      "dependency_risk": 1,
+      "expected_time_cost": 1,
+      "reversibility": 5,
+      "recommended_order": 7,
+      "rationale": "Identical safety profile to FREEZE-MAINTENANCE-ONLY but narrower scope (only terminology). A passive holding pattern, not a forward-motion candidate. Effectively already in place via PARK-02."
+    },
+    {
+      "candidate_id": "H",
+      "candidate_name": "MORE-UNKNOWN-DIAGNOSTICS",
+      "operator_value": 2,
+      "product_value": 2,
+      "implementation_risk": 2,
+      "safety_privacy_risk": 2,
+      "validation_cost": 3,
+      "dependency_risk": 2,
+      "expected_time_cost": 3,
+      "reversibility": 4,
+      "recommended_order": 8,
+      "rationale": "Defer. The residual-Unknown reduction track is parked at ~99.99% closed; reopen only on a fresh operator-UAT signal."
+    },
+    {
+      "candidate_id": "I",
+      "candidate_name": "CUE-EXPANSION",
+      "operator_value": 2,
+      "product_value": 2,
+      "implementation_risk": 5,
+      "safety_privacy_risk": 5,
+      "validation_cost": 5,
+      "dependency_risk": 5,
+      "expected_time_cost": 5,
+      "reversibility": 2,
+      "recommended_order": 9,
+      "rationale": "Explicitly NOT recommended across every ROADMAP / DIAG / FREEZE / PARK block in this chain."
+    }
+  ],
+
+  "top_recommended_next_phase": "FREEZE-MAINTENANCE-ONLY",
+  "top_recommended_next_phase_id": "A",
+  "top_recommendation_rationale": "After PARK-02 every expansion track is now parked, frozen, or blocked: the v1 local operator release is frozen at 7ef8ffd; residual-Unknown / PDF text-layout / DIAG-20 UAT / DIAG-21 fixture audit / operator-runtime-hardening / terminology helper-wiring / license-gated private adapter tracks are all parked with tags; MeSH download and manual license verification are blocked on operator-side actions. With no fresh failure signal driving forward motion, FREEZE-MAINTENANCE-ONLY is the honest default. Forward motion when desired should open through V2-ARCHITECTURE-SPEC-01 (reports-only architecture spec) — never through cue expansion, never through private adapter implementation under the current license posture, and never through operator-UX changes without a fresh operator-UAT signal.",
+
+  "recommended_next_3_blocks": [
+    "FREEZE-MAINTENANCE-ONLY",
+    "V2-ARCHITECTURE-SPEC-01 (reports-only architecture spec, only when forward motion is desired)",
+    "MEDAI-ROADMAP-07 (re-evaluate after V2-ARCHITECTURE-SPEC-01 lands, or sooner if a fresh signal forces re-planning)"
+  ],
+  "alternative_path_if_packaging_polish_preferred_over_v2_spec": "Replace V2-ARCHITECTURE-SPEC-01 with PACKAGING-DEPLOYMENT-NEXT-04 (low risk, marginal value). Both alternatives keep the freeze invariants intact.",
+
+  "explicitly_deferred_blocks": [
+    "MORE-UNKNOWN-DIAGNOSTICS",
+    "CUE-EXPANSION",
+    "PRIVATE-ADAPTER-IMPLEMENTATION"
+  ],
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "wiring private terminology output into app/main.py runtime beyond the parked helper/wiring mini-track",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "Licensed terminology row reads",
+    "Private license-acknowledgement file contents access",
+    "External terminology API enablement for runtime",
+    "cue-pack expansion (explicitly NOT recommended)",
+    "Public-report row dumps under any condition",
+    "Auto-accept driven by terminology coding",
+    "MeSH integration until both license confirmation AND completed operator-side download"
+  ],
+
+  "deferred_items": [
+    "Wiring terminology output into app/main.py runtime",
+    "UMLS lookup (umls_future_gated=true)",
+    "SNOMED CT runtime integration (snomed_runtime_integration_enabled=false)",
+    "DDI / diagnosis / treatment / medication / dosing inference driven by terminology",
+    "Abbreviation expansion in any form",
+    "Cue-pack expansion (explicitly NOT recommended)",
+    "External terminology API enablement",
+    "MeSH integration",
+    "Private adapter implementation"
+  ],
+
+  "next_block_decision": "FREEZE_MAINTENANCE_ONLY_with_V2_ARCHITECTURE_SPEC_01_as_safe_forward_motion_exit_ramp",
+
+  "maintenance_plan": {
+    "scope": "Maintain the frozen v1 local operator release; preserve every park / freeze tag pair on origin; refrain from any runtime code change.",
+    "periodic_validation_set_unchanged": [
+      "scripts/run_cka_final_mvp_release_validation.py",
+      "scripts/run_b07_term01_opt_in_integration_validation.py",
+      "scripts/run_medai_route_fix01_validation.py",
+      "scripts/run_medai_ui_ops_panel_validation.py",
+      "scripts/run_medai_ui_boot_fix_validation.py"
+    ],
+    "expected_conclusions": {
+      "cka_mvp": "cka_mvp_release_package_ready; 693 tests; external_api_used false",
+      "b07_term01": "cases_failed: 0; external_api_used: false",
+      "route_fix01": "medai_route_fix01_ready; passed: true",
+      "ui_ops": "medai_ui_ops_panel_ready",
+      "ui_boot_fix": "medai_ui_boot_fix_startup_resilience_ready"
+    },
+    "cadence_recommendation": "Operator chooses cadence (e.g. weekly or before any planned demo). Each run produces idempotent receipts under reports/; any deviation from the expected conclusions is treated as an escalation event.",
+    "escalation_conditions": [
+      "Any of the five health-check validations prints a non-_ready conclusion two runs in a row.",
+      "Any pre-existing tag appears moved, deleted, or repointed.",
+      "Any private/terminology/PHI/key/secret/private-path artifact appears in git status, in a public report, or in any committed file.",
+      "Any external API gets enabled by default in any deployment.",
+      "Any operator-UAT signal surfaces a new defect against the frozen v1 release.",
+      "Any operator return supplies concrete per-resource license confirmations — that becomes the trigger for the deferred license-gated path."
+    ]
+  },
+
+  "safety_privacy_constraints_observed": [
+    "No source documents opened",
+    "No raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, runtime DB rows, backups, bundles, keys, or licensed terminology rows read",
+    "No license text reproduced",
+    "No private license-acknowledgement file contents read",
+    "No private config contents read",
+    "Only public-safe report metadata read",
+    "No app/main.py / launcher / startup_preflight / config / helper / Streamlit-wiring modification",
+    "No tags created, moved, or deleted",
+    "No external APIs called or enabled",
+    "FREEZE tag pair and all PARK tag pairs (PARK-20..23, PARK-24, PARK-25, PARK-26, helper/wiring PARK-01, license-gate PARK-02) unchanged on origin",
+    "Cue expansion remains explicitly NOT recommended"
+  ],
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "term_license_gate_park_02_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 96.0%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 96.0,
+      "whole_medai_remaining_pct": 4.0
+    },
+    "after": {
+      "whole_medai_done_pct": 96.0,
+      "whole_medai_remaining_pct": 4.0,
+      "note": "ROADMAP-06 is a planning audit; it produces no runtime change. Forward motion resumes when an approved expansion block (recommended: V2-ARCHITECTURE-SPEC-01 reports-only spec) lands, or never if the operator selects long-term freeze-maintenance posture."
+    }
+  }
+}
