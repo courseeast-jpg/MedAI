@@ -63,3 +63,8 @@ LICENSE_ACK_PRIVATE.json
 *.sqlite3
 **/LICENSE_ACK_PRIVATE*
 **/*TERMINOLOGY_PRIVATE*
+
+# MEDAI-TERM-MESH-LOCAL-DOWNLOAD-PACK-01 — local-only operator helper area.
+# Operator-side helper scripts that may reference local terminology paths
+# must never be committed.
+scripts/private_local/

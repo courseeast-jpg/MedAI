@@ -1,0 +1,179 @@
+{
+  "conclusion": "medai_term_mesh_local_download_pack_01_ready",
+  "phase_id": "MEDAI-TERM-MESH-LOCAL-DOWNLOAD-PACK-01",
+  "mode": "local_only_mesh_download_pack",
+  "reports_only": true,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "a29f5dd",
+  "term_private_config_verify_02_commit_short": "60f1114",
+  "term_private_config_01_commit_short": "d6fee2f",
+  "freeze_commit_short": "7ef8ffd",
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_committed": false,
+
+  "private_config_exists": true,
+  "private_config_exists_evidence": "Operator-side presence confirmed by the prior TERM-PRIVATE-CONFIG-01 and TERM-PRIVATE-CONFIG-VERIFY-02 blocks. On this public Linux mirror the file is intentionally absent because it is .gitignored and lives only on the operator's local working copy.",
+  "private_config_ignored_by_git": true,
+  "private_config_staged": false,
+  "private_config_contents_printed": false,
+  "private_config_path_printed": false,
+  "private_config_updated_by_this_block_on_operator_machine": false,
+  "private_config_update_method_recommended_for_operator": "If the operator runs the helper successfully on their Windows working copy, the operator may then privately edit config/terminology_sources.local.json to set MeSH status to downloaded_local_private. This block did not perform that edit; it remains an operator-side action.",
+
+  "mesh_dataset_status": "download_helper_created",
+  "mesh_download_attempted": false,
+  "mesh_download_attempted_evidence": "Direct network access to www.nlm.nih.gov from this public Linux mirror is blocked by the sandbox firewall (HTTP 403 host_not_allowed on the canonical MeSH download page). No MeSH bytes were transferred by this block. Downloads must occur on the operator's local Windows working copy via the helper.",
+  "mesh_download_source": "official_nlm_only",
+  "mesh_files_staged": false,
+  "mesh_files_committed": false,
+  "mesh_contents_read": false,
+
+  "terminology_data_staged": false,
+  "data_terminology_staged": false,
+  "license_ack_private_read": false,
+  "license_ack_private_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+  "abbreviation_expansion_performed": false,
+
+  "manual_license_verification_status": "still_required",
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+
+  "mesh_acquisition_summary": {
+    "status": "download_helper_created",
+    "helper_relative_path": "scripts/private_local/download_mesh_2026_local.ps1",
+    "helper_is_gitignored": true,
+    "helper_was_staged": false,
+    "helper_was_committed": false,
+    "helper_runtime_target": "operator Windows working copy",
+    "helper_target_relative_dest_dir": "terminology_data/mesh/2026 (gitignored under terminology_data/)",
+    "production_year_targeted": "2026",
+    "target_xml_files_planned": ["desc2026.xml", "qual2026.xml", "supp2026.xml"],
+    "operator_must_set_pre_run_env": "MEDAI_MESH_NLM_URLS_VERIFIED=1",
+    "operator_must_verify_against_official_page_before_run": true,
+    "third_party_mirrors_used": false,
+    "official_page_referenced": "https://www.nlm.nih.gov/databases/download/mesh.html",
+    "row_contents_parsed": false,
+    "row_contents_printed": false,
+    "private_paths_printed": false,
+    "local_only_readme_created_by_helper_when_downloads_succeed": true,
+    "reason_downloads_were_not_performed_in_this_block": "This block ran on the public Linux mirror. Direct outbound access to www.nlm.nih.gov returned HTTP 403 host_not_allowed; the operator must execute the helper on their Windows working copy where the private terminology storage lives. Acquisition is therefore deferred to the operator."
+  },
+
+  "official_source_summary": {
+    "canonical_download_page": "https://www.nlm.nih.gov/databases/download/mesh.html",
+    "canonical_url_pattern_targeted": "https://nlmpubs.nlm.nih.gov/projects/mesh/MESH_FILES/xmlmesh/{desc|qual|supp}{YYYY}.xml",
+    "third_party_mirrors_used": false,
+    "operator_must_confirm_urls_against_canonical_page_before_run": true,
+    "production_year_assumption_documented_in_helper": true
+  },
+
+  "private_config_update_summary": {
+    "update_performed_by_this_block": false,
+    "update_recommended_for_operator_if_downloads_succeed": "Set MeSH source status in the private config to downloaded_local_private and store only the relative path used by the helper (terminology_data/mesh/2026). Must not print private contents or absolute paths in any committed file.",
+    "config_contents_read_by_this_block": false,
+    "config_path_printed_by_this_block": false,
+    "config_staged_by_this_block": false,
+    "config_committed_by_this_block": false
+  },
+
+  "staged_safety_results": {
+    "scoped_files_staged_for_commit": [
+      ".gitignore (one additive block: gitignore protection for scripts/private_local/)",
+      "reports/medai_term_mesh_local_download_pack_01/ (three public-safe report files)"
+    ],
+    "private_config_staged_count": 0,
+    "terminology_data_files_staged_count": 0,
+    "data_terminology_files_staged_count": 0,
+    "license_ack_private_files_staged_count": 0,
+    "mesh_files_staged_count": 0,
+    "scripts_private_local_files_staged_count": 0,
+    "private_paths_staged_count": 0,
+    "private_filenames_staged_count": 0,
+    "all_required_safety_checks_passed": true
+  },
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "Licensed terminology row reads",
+    "Private license-acknowledgement file contents access",
+    "External terminology API enablement for runtime",
+    "Wiring private terminology output into app/main.py runtime",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "cue-pack expansion (explicitly NOT recommended)"
+  ],
+
+  "next_block_decision": "manual_operator_license_verification_return",
+  "next_block_decision_rationale": "Manual license verification (NLM / UMLS terms for LOINC, RxNorm, SNOMED CT US, SNOMED CT International, UMLS, and now MeSH) remains operator-side. A reports-only return-pack block packages the operator's manual clearances into a public-safe receipt without reading licensed rows. Private adapter implementation remains blocked until those gates clear.",
+
+  "validation_evidence": {
+    "public_report_privacy_checks": "passed: 3/3 MEDAI-TERM-MESH-LOCAL-DOWNLOAD-PACK-01 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only public-safe scoped files (.gitignore + 3 reports) staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit; no private config, no terminology data, no MeSH files, no helper script staged",
+    "full_pytest": "not run; reports-only / local-private-helper block"
+  },
+
+  "safety_privacy_statement": "MEDAI-TERM-MESH-LOCAL-DOWNLOAD-PACK-01 added a one-block .gitignore protection for scripts/private_local/ and placed a PowerShell MeSH-download helper there. The helper is gitignored and was never staged or committed. The helper uses only the official NLM source and only relative-repo destination paths. No MeSH bytes were transferred by this block from the public Linux mirror (NLM access is blocked by the sandbox firewall); actual downloads must occur on the operator's Windows working copy. No private config contents were read or printed. No private path was printed in any committed file. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No terminology_data row contents were opened. No runtime code, helper code, Streamlit wiring, launcher, startup preflight, or config file was modified. No tags created, moved, or deleted. PARK-20..23 tag pairs and the FREEZE tag pair remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED.",
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "freeze_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 95.6%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 95.5,
+      "whole_medai_remaining_pct": 4.5
+    },
+    "after": {
+      "whole_medai_done_pct": 95.6,
+      "whole_medai_remaining_pct": 4.4,
+      "note": "Helper-created outcome. No runtime change; small bump reflects durable local-only acquisition pack."
+    }
+  }
+}
