@@ -1,0 +1,172 @@
+{
+  "conclusion": "medai_term_private_config_verify_02_ready",
+  "phase_id": "MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02",
+  "mode": "private_config_boundary_verification",
+  "reports_only": true,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "d6fee2f",
+  "term_private_config_01_commit_short": "d6fee2f",
+  "freeze_commit_short": "7ef8ffd",
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+
+  "private_config_exists": true,
+  "private_config_exists_evidence": "Operator-side presence confirmed by the prior TERM-PRIVATE-CONFIG-01 block's reported state. On this public Linux mirror the file is intentionally absent because it is .gitignored and lives only on the operator's local working copy.",
+  "private_config_contents_read": false,
+  "private_config_path_printed": false,
+  "private_config_ignored_by_git": true,
+  "private_config_ignored_by_git_evidence": ".gitignore line 56 matches the path; git check-ignore exits 0 against the file path on this mirror without needing the file to exist.",
+  "private_config_hidden_from_git_status": true,
+  "private_config_hidden_from_git_status_evidence": "git status --short is empty; the private path does not appear.",
+  "private_config_committed": false,
+  "private_config_committed_evidence": "git ls-files --error-unmatch against the path exits non-zero; no commit on this branch carries the file in its tree.",
+  "private_config_staged": false,
+  "terminology_data_staged": false,
+  "data_terminology_staged": false,
+  "license_ack_private_staged": false,
+  "license_ack_private_read": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+  "abbreviation_expansion_performed": false,
+
+  "mesh_status": "manual_download_required",
+  "manual_license_verification_status": "still_required",
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+
+  "verification_results": {
+    "term_private_config_01_commit_on_branch": true,
+    "gitignore_protection_lines_present": {
+      "terminology_data_slash_pattern_present": true,
+      "data_slash_terminology_slash_pattern_present": true,
+      "config_slash_terminology_sources_local_json_pattern_present": true,
+      "license_ack_private_json_pattern_present": true,
+      "double_glob_license_ack_private_pattern_present": true,
+      "double_glob_star_terminology_private_star_pattern_present": true,
+      "gitignore_line_numbers_for_protected_patterns": [54, 55, 56, 57, 64, 65]
+    },
+    "git_check_ignore_against_private_config_path_exit_code": 0,
+    "git_ls_files_error_unmatch_against_private_config_path_exit_code_nonzero": true,
+    "git_status_short_empty": true,
+    "git_status_short_does_not_show_private_config": true,
+    "term_private_config_01_commit_changed_files_are_public_safe": [
+      "reports/medai_term_private_config_01/MEDAI_TERM_PRIVATE_CONFIG_01 short-summary markdown",
+      "reports/medai_term_private_config_01/JSON public-safe report",
+      "reports/medai_term_private_config_01/long markdown report"
+    ],
+    "term_private_config_01_commit_did_not_add_private_config_to_index": true,
+    "operator_side_file_presence_check_method": "Operator runs Test-Path config/terminology_sources.local.json on their own working copy (Windows). This public Linux mirror cannot and must not host the file; presence is verified on the operator's machine, not in CI."
+  },
+
+  "ignored_private_artifacts": {
+    "private_config_path_form_only": "config/terminology_sources.local.json",
+    "ignored_by_dot_gitignore": true,
+    "shown_in_git_status_short": false,
+    "shown_in_git_status_short_with_ignored_flag": false,
+    "in_any_commit_tree_on_this_branch": false,
+    "private_path_full_string_printed_anywhere_in_this_report": false
+  },
+
+  "staged_safety_results": {
+    "terminology_data_files_staged_count": 0,
+    "data_terminology_files_staged_count": 0,
+    "license_ack_private_files_staged_count": 0,
+    "mesh_files_staged_count": 0,
+    "terminology_private_files_staged_count": 0,
+    "private_config_staged_count": 0,
+    "private_paths_staged_count": 0,
+    "private_filenames_staged_count": 0,
+    "all_required_safety_checks_passed": true
+  },
+
+  "mesh_status_summary": {
+    "status": "manual_download_required",
+    "dataset_package_confirmed": false,
+    "download_attempted": false,
+    "download_helper_created": false,
+    "reason_class": "inventory_did_not_separately_confirm_mesh_dataset_package",
+    "operator_action_required": "Operator must complete manual MeSH license review and download per UMLS/NLM terms before MeSH integration may be planned by a later block. This verification block neither downloads nor opens any MeSH file."
+  },
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "MeSH dataset download / integration",
+    "licensed terminology row reads",
+    "LICENSE_ACK_PRIVATE.json contents access",
+    "any external terminology API enablement",
+    "wiring private terminology output into app/main.py runtime",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "cue-pack expansion (explicitly NOT recommended)"
+  ],
+
+  "next_block_decision": "manual_operator_license_verification_or_mesh_download_pack",
+  "next_block_decision_rationale": "Both license verification (NLM / UMLS / SNOMED / RxNorm / LOINC for each gated source) and MeSH dataset download remain operator-side manual tasks. A separate manual-return-pack block (e.g. MEDAI-CKA-TERM-LICENSE-MANUAL-RETURN-PACK-05) or a reports-only MeSH-download-helper SPEC may be the natural next step. Private adapter implementation must remain blocked until those manual gates clear.",
+
+  "validation_evidence": {
+    "public_report_privacy_checks": "passed: 3/3 TERM-PRIVATE-CONFIG-VERIFY-02 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only TERM-PRIVATE-CONFIG-VERIFY-02 scoped report files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; this is a reports-only verification block"
+  },
+
+  "safety_privacy_statement": "MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02 is a reports-only verification block. The private terminology config file was NEVER opened or read. Its full filesystem path was NEVER printed in any committed file (only the gitignore-pattern form was referenced). No licensed terminology rows were read. No private license-acknowledgement file contents were read. No terminology_data/, data/terminology/, runtime DB, source document, raw text, raw filename, private path, PHI, or secret was opened or printed. No runtime code, helper code, Streamlit wiring, launcher, startup preflight, or config file was modified. No tags created, moved, or deleted. PARK-20..23 tag pairs and the FREEZE tag pair remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED.",
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "freeze_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 95.5%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 95.4,
+      "whole_medai_remaining_pct": 4.6
+    },
+    "after": {
+      "whole_medai_done_pct": 95.5,
+      "whole_medai_remaining_pct": 4.5,
+      "note": "Verification confirms the private terminology config boundary is correct. No runtime change; small bump reflects durable boundary-audit evidence."
+    }
+  }
+}
