@@ -1,0 +1,289 @@
+{
+  "conclusion": "medai_v2_validation_harness_01_ready",
+  "block_id": "MEDAI-V2-VALIDATION-HARNESS-01",
+  "phase_id": "MEDAI-V2-VALIDATION-HARNESS-01",
+  "block_mode": "validation_harness_only",
+  "reports_only": true,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_block": "e27a409",
+  "v2_runtime_contracts_01_commit_short": "e6e33dd",
+  "v2_foundation_spec_02_commit_short": "8b53d82",
+  "v2_architecture_spec_01_commit_short": "551af98",
+  "freeze_commit_short": "7ef8ffd",
+  "park_02_commit_short": "b9b19ad",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+
+  "requires_preceding_spec": true,
+  "preceding_architecture_spec_present": true,
+  "preceding_foundation_spec_present": true,
+  "preceding_runtime_contracts_present": true,
+  "v1_validation_healthcheck_catalog_created": true,
+  "v2_validation_matrix_created": true,
+  "contract_conformance_harness_created": true,
+  "validation_harness_module_created": true,
+  "validation_harness_module_path": "clinical_knowledge/v2_contracts/validation_harness.py",
+  "contracts_importable": true,
+  "contracts_side_effect_free": true,
+  "contracts_standard_library_only": true,
+  "validation_harness_side_effect_free": true,
+
+  "runtime_behavior_changed": false,
+  "app_main_changed": false,
+  "ui_changed": false,
+  "launcher_changed": false,
+  "startup_config_changed": false,
+  "extraction_changed": false,
+  "ocr_changed": false,
+  "classifier_changed": false,
+  "threshold_scoring_changed": false,
+  "cue_pack_changed": false,
+  "clinical_behavior_changed": false,
+  "ddi_behavior_changed": false,
+  "terminology_behavior_changed": false,
+  "private_adapter_implemented": false,
+  "concrete_adapters_implemented": false,
+  "runtime_wiring_added": false,
+  "external_api_used": false,
+  "private_data_accessed": false,
+  "licensed_rows_read": false,
+  "private_license_ack_read": false,
+  "private_config_read": false,
+  "runtime_db_accessed": false,
+  "source_documents_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "tags_touched": false,
+  "cue_expansion_recommended": false,
+  "v1_release_preserved": true,
+
+  "section_a_scope_and_non_scope": {
+    "in_scope": [
+      "Catalog the existing V1 five-validation health-check set verbatim (preserved, not new behavior).",
+      "Define the V2 validation matrix across 8 categories (A through H).",
+      "Add contract-conformance focused tests for the typing-only V2 runtime contracts module.",
+      "Provide a typing-only Python catalog module (clinical_knowledge/v2_contracts/validation_harness.py) containing the V1 catalog and V2 matrix as dataclasses / enums / pure helpers."
+    ],
+    "out_of_scope": [
+      "Any V2 implementation.",
+      "Any runtime wiring.",
+      "Any change to V1 validation scripts.",
+      "Any concrete adapter implementation.",
+      "Any extraction / OCR routing / classifier / threshold / cue / clinical / DDI behavior change.",
+      "Any private terminology adapter implementation.",
+      "Any external API enablement.",
+      "Any runtime DB access.",
+      "Any new tag creation or movement."
+    ]
+  },
+
+  "section_b_prior_v2_dependency_chain": [
+    {"block": "MEDAI-V2-ARCHITECTURE-SPEC-01", "commit_short": "551af98"},
+    {"block": "MEDAI-V2-FOUNDATION-SPEC-02", "commit_short": "8b53d82"},
+    {"block": "MEDAI-V2-RUNTIME-CONTRACTS-01", "commit_short": "e6e33dd"}
+  ],
+
+  "section_c_v1_five_validation_health_check_catalog": [
+    {
+      "name": "cka_final_mvp_release",
+      "script_relpath": "scripts/run_cka_final_mvp_release_validation.py",
+      "expected_conclusion_token": "cka_mvp_release_package_ready",
+      "expected_external_api_used": false,
+      "expected_tests_total": 693
+    },
+    {
+      "name": "b07_term01_opt_in_integration",
+      "script_relpath": "scripts/run_b07_term01_opt_in_integration_validation.py",
+      "expected_conclusion_token": "b07_term01_opt_in_integration_ready",
+      "expected_external_api_used": false,
+      "expected_cases_failed": 0
+    },
+    {
+      "name": "medai_route_fix01",
+      "script_relpath": "scripts/run_medai_route_fix01_validation.py",
+      "expected_conclusion_token": "medai_route_fix01_ready",
+      "expected_external_api_used": false,
+      "expected_passed": true
+    },
+    {
+      "name": "medai_ui_ops_panel",
+      "script_relpath": "scripts/run_medai_ui_ops_panel_validation.py",
+      "expected_conclusion_token": "medai_ui_ops_panel_ready",
+      "expected_external_api_used": false
+    },
+    {
+      "name": "medai_ui_boot_fix_startup_resilience",
+      "script_relpath": "scripts/run_medai_ui_boot_fix_validation.py",
+      "expected_conclusion_token": "medai_ui_boot_fix_startup_resilience_ready",
+      "expected_external_api_used": false
+    }
+  ],
+  "v1_health_check_count": 5,
+  "v1_health_check_preserved_not_modified": true,
+  "v1_validation_scripts_unchanged_by_this_block": true,
+
+  "section_d_v2_validation_matrix": {
+    "A_contract_import_and_side_effect_safety": [
+      "runtime_contracts_imports_with_no_stdout_or_stderr",
+      "standard_library_only_imports",
+      "no_streamlit_import",
+      "no_network_or_http_imports",
+      "no_db_or_runtime_or_terminology_imports",
+      "no_side_effects_at_import_time"
+    ],
+    "B_contract_inventory_conformance": [
+      "ten_boundaries_present",
+      "thirty_two_contract_names_resolve_from_module",
+      "required_protocol_classes_are_protocols",
+      "no_concrete_adapter_implementations"
+    ],
+    "C_safety_profile_conformance": [
+      "local_only_true",
+      "review_bound_true",
+      "external_api_blocked_true",
+      "auto_accept_allowed_false",
+      "terminology_lookup_aggregate_only_true",
+      "private_adapter_implemented_false",
+      "cue_expansion_recommended_false",
+      "clinical_decision_expansion_false"
+    ],
+    "D_terminology_aggregate_only_conformance": [
+      "match_family_only_controlled_vocab",
+      "terminology_system_family_only_controlled_vocab",
+      "matches_count_is_aggregate",
+      "licensed_row_content_included_false",
+      "public_report_safe_true",
+      "no_code_display_synonym_definition_concept_field",
+      "no_raw_text_or_ocr_text_field"
+    ],
+    "E_review_hitl_conformance": [
+      "review_required_true_by_default",
+      "auto_accept_allowed_false_by_default",
+      "disposition_pending_review_by_default"
+    ],
+    "F_reports_privacy_conformance": [
+      "no_phi_in_public_reports",
+      "no_raw_ocr_or_document_text_in_public_reports",
+      "no_raw_filenames_in_public_reports",
+      "no_private_filesystem_paths_in_public_reports",
+      "no_secrets_in_public_reports",
+      "no_licensed_terminology_row_content_in_public_reports",
+      "no_license_acknowledgement_contents_in_public_reports"
+    ],
+    "G_runtime_non_modification_conformance": [
+      "app_main_unchanged",
+      "launchers_unchanged",
+      "startup_preflight_unchanged",
+      "config_unchanged",
+      "no_runtime_wiring_added",
+      "no_external_api_used_for_runtime",
+      "no_runtime_db_accessed"
+    ],
+    "H_parking_freeze_preservation_conformance": [
+      "v1_frozen_release_at_7ef8ffd_preserved",
+      "park_20_through_23_tag_pairs_unchanged",
+      "park_24_through_26_anchor_commits_unchanged",
+      "term_helper_wiring_park_01_tag_pair_unchanged",
+      "license_gate_park_02_tag_pair_unchanged",
+      "no_new_tags_created_by_this_block"
+    ]
+  },
+  "v2_validation_matrix_category_count": 8,
+
+  "section_e_contract_conformance_checks_implemented": [
+    "Reports + audit + focused tests prove the validation_harness module imports silently with no stdout/stderr.",
+    "Audit script confirms standard-library-only imports for both runtime_contracts and validation_harness modules.",
+    "Focused tests confirm 32 V2 contract names resolve from clinical_knowledge.v2_contracts.runtime_contracts.",
+    "Focused tests confirm the 10 required Protocol classes are typing.Protocol-shaped.",
+    "Focused tests confirm V2RuntimeSafetyProfile defaults carry the foundation invariants.",
+    "Focused tests confirm V2TerminologyMatchSummary is aggregate-only.",
+    "Focused tests confirm V2ReviewItem defaults are review-bound.",
+    "Focused tests confirm the V2 validation matrix exposes all 8 categories."
+  ],
+
+  "section_f_privacy_report_safety_checks": [
+    "All three V2-VALIDATION-HARNESS-01 reports pass clinical_knowledge.privacy.check_public_report_payload.",
+    "No raw text, raw OCR text, raw filenames, private filesystem paths, PHI, secrets, licensed terminology row content, or license-acknowledgement contents appear in any committed file."
+  ],
+
+  "section_g_runtime_non_modification_checks": [
+    "app/main.py source does not mention MEDAI-V2-VALIDATION-HARNESS-01 or import v2_contracts.validation_harness.",
+    "Launchers (Start_MedAI_UI.bat, Start_MedAI_UI_Silent.vbs, Start_MedAI_Test_UI.bat, Start_MedAI_UI_Encrypted.bat) unchanged.",
+    "app/startup_preflight.py unchanged.",
+    "app/config.py unchanged.",
+    "No runtime wiring added, no external API used, no runtime DB accessed."
+  ],
+
+  "section_h_parking_freeze_preservation": [
+    {"track": "Local operator release", "status": "frozen", "anchor_commit_short": "7ef8ffd"},
+    {"track": "Residual Unknown reduction", "status": "parked", "anchor_commit_short": "3e46461"},
+    {"track": "Text-layer eval spec", "status": "parked", "anchor_commit_short": "9f9e22d"},
+    {"track": "PDF text/layout default-off", "status": "parked", "anchor_commit_short": "f4d3cc6"},
+    {"track": "PDF text/layout Streamlit wiring", "status": "parked", "anchor_commit_short": "748c32a"},
+    {"track": "DIAG-20 operator UAT", "status": "parked", "anchor_commit_short": "1b14ffe"},
+    {"track": "DIAG-21 fixture audit", "status": "parked", "anchor_commit_short": "6b31678"},
+    {"track": "Operator readiness + runtime hardening", "status": "parked", "anchor_commit_short": "91b9eba"},
+    {"track": "Terminology helper/wiring mini-track", "status": "parked", "anchor_commit_short": "e398a75"},
+    {"track": "License-gated private adapter track", "status": "parked", "anchor_commit_short": "b9b19ad"},
+    {"track": "Private terminology config boundary", "status": "complete_and_verified", "anchor_commit_short": "60f1114"},
+    {"track": "MeSH local helper / download", "status": "blocked_operator_side", "anchor_commit_short": "cedbbd3"},
+    {"track": "Manual license verification gate", "status": "blocked_operator_side", "anchor_commit_short": "376ca4e"}
+  ],
+
+  "section_i_stop_on_failure_rules_inherited": [
+    "stop if any prior parking / freeze tag is moved, deleted, repointed, or duplicated under a different SHA",
+    "stop if runtime files are modified in a validation-harness-only block",
+    "stop if any test would require licensed terminology rows, private DB rows, or private filesystem paths",
+    "stop if any test would require Streamlit at module load in an environment where Streamlit is unavailable",
+    "stop if any new validation overwrites or modifies an existing v1 validation script",
+    "stop if any external API is detected at runtime",
+    "stop if private/source documents appear in git status or staged files",
+    "stop if a future block attempts implementation without a preceding approved SPEC"
+  ],
+
+  "section_j_recommended_next_block_sequence": {
+    "option_a_ui_priority": "V2-UI-SHELL-SPEC-01 — reports-only UI shell SPEC; documents the existing Run & Review + Advanced technical details surface and defines env-gating contracts for any future UI expansion.",
+    "option_b_data_infra_priority": "V2-DATA-INFRA-SPEC-01 — reports-only DB / persistence SPEC; defines a runtime-DB-row-blind contract with explicit rollback expectations.",
+    "option_c_extraction_priority": "V2-EXTRACTION-SPEC-01 — reports-only extraction / OCR layer SPEC; only if extraction architecture planning is explicitly selected.",
+    "must_not_do_in_any_of_these_blocks": [
+      "Start V2 implementation directly.",
+      "Add runtime wiring from this harness.",
+      "Convert harness stubs into real adapters.",
+      "Reopen terminology / private adapter implementation.",
+      "Reopen cue expansion."
+    ]
+  },
+
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "term_license_gate_park_02_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+  "prior_park_tags_touched": false,
+
+  "safety_privacy_statement": "MEDAI-V2-VALIDATION-HARNESS-01 is a reports-only / validation-harness-only block. It adds a typing-only Python catalog module (clinical_knowledge/v2_contracts/validation_harness.py), an audit script, a focused pytest module, and three public-safe reports. The catalog module imports only the standard library (dataclasses, enum, typing) and has no runtime side effects on import. No V1 validation script was modified. No app/main.py / launcher / startup preflight / config / helper / Streamlit-wiring modification. No license text was reproduced. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No private filesystem paths were printed. No raw text, raw OCR text, raw document text, raw filenames, PHI, keys, or secrets appear in any committed file. No external API was called or enabled. No tags created, moved, or deleted. PARK-20..26 tag pairs, the FREEZE tag pair, the term helper/wiring PARK-01 tag pair, and the license-gate PARK-02 tag pair all remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED. Cue expansion remains explicitly NOT recommended.",
+
+  "next_recommended_block": "V2-UI-SHELL-SPEC-01_OR_V2-DATA-INFRA-SPEC-01",
+
+  "whole_medai_done_estimate": "approximately 96.4%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 96.3,
+      "whole_medai_remaining_pct": 3.7
+    },
+    "after": {
+      "whole_medai_done_pct": 96.4,
+      "whole_medai_remaining_pct": 3.6,
+      "note": "V2 validation harness foundation landed. V1 five-validation health-check catalog preserved verbatim; V2 8-category validation matrix defined; contract-conformance harness wired. No runtime change."
+    }
+  }
+}
