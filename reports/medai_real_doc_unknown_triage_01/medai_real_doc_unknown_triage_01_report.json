@@ -1,0 +1,367 @@
+{
+  "block_id": "MEDAI-REAL-DOC-UNKNOWN-TRIAGE-01",
+  "phase_id": "MEDAI-REAL-DOC-UNKNOWN-TRIAGE-01",
+  "block_mode": "diagnosis_only_real_doc_unknown_triage",
+  "mode": "diagnosis_only_real_doc_unknown_triage",
+  "reports_only": true,
+  "triggered_by_real_operator_signal": true,
+  "operator_observed_failure_class": "real_document_returned_unknown_or_rejected_or_no_useful_result",
+  "operator_supplied_real_document_artifact": false,
+  "real_document_inspected_by_assistant": false,
+  "raw_text_inspected": false,
+  "raw_ocr_text_inspected": false,
+  "raw_filename_inspected": false,
+  "private_paths_inspected": false,
+  "phi_inspected": false,
+  "implementation_started": false,
+  "new_helper_created": false,
+  "direct_implementation_recommended": false,
+  "preceding_release_freeze_snapshot_present": true,
+  "preceding_freeze_maintenance_only_present": true,
+  "freeze_maintenance_posture_intact": true,
+  "triage_framework_created": true,
+  "diagnostic_field_inventory_created": true,
+  "failure_bucket_taxonomy_created": true,
+  "decision_tree_created": true,
+  "bucket_conditional_next_block_table_created": true,
+  "operator_action_required": true,
+  "code_fix_justified_yet": false,
+  "smallest_next_block_committed_to": false,
+  "advanced_diagnostic_fields_used_by_ui": [
+    "document_type",
+    "confidence",
+    "validation_status",
+    "selected_extractor",
+    "ocr_quality_band",
+    "language_text_visibility",
+    "cyrillic_ocr_recommended",
+    "ocr_gate_reason",
+    "ocr_gate_fallback_executed",
+    "ocr_gate_fallback_engine",
+    "ocr_gate_fallback_language",
+    "ocr_gate_fallback_cyrillic_detected",
+    "ocr_gate_fallback_text_visibility",
+    "ocr_gate_fallback_review_only",
+    "ocr_gate_fallback_auto_accept_allowed",
+    "ocr_gate_fallback_classification_diagnostic",
+    "ocr_gate_fallback_treatment_classification_diagnostic",
+    "document_family_classification_diagnostic",
+    "operator_review_reason",
+    "operator_reason_label"
+  ],
+  "advanced_diagnostic_field_count": 20,
+  "failure_bucket_count": 8,
+  "failure_bucket_taxonomy": [
+    {
+      "id": "B1",
+      "name": "file_not_queued_or_run_not_executed",
+      "summary": "the file never reached the orchestrator pipeline; the apparent Unknown is a UI state confusion rather than a classifier outcome",
+      "primary_signals": [
+        "no run card rendered for the file at all",
+        "Run ID shows 'not started'",
+        "active_run absent or active_run.results does not contain a record matching the operator session"
+      ],
+      "secondary_signals": [
+        "operator did not press the run trigger after upload",
+        "queue page shows the file as pending rather than complete"
+      ]
+    },
+    {
+      "id": "B2",
+      "name": "text_extracted_but_classifier_cues_insufficient",
+      "summary": "the extractor returned a non-empty text payload but no rule fired in the document classifier, so the safe default unknown_medical label was assigned",
+      "primary_signals": [
+        "document_type == 'unknown_medical'",
+        "operator_review_reason == 'unknown_document_type'",
+        "confidence approximately 0.30",
+        "validation_status not 'empty' and not 'review_ocr_quality'",
+        "selected_extractor is a text-based extractor, not an OCR fallback"
+      ],
+      "secondary_signals": [
+        "ocr_quality_band is acceptable or high",
+        "language_text_visibility indicates extractable text",
+        "no cyrillic_ocr_recommended flag"
+      ]
+    },
+    {
+      "id": "B3",
+      "name": "ocr_fallback_needed_but_not_triggered",
+      "summary": "the document required OCR (image-based PDF or low text-layer quality) but the gate did not switch to OCR for it",
+      "primary_signals": [
+        "ocr_quality_band is low or unknown",
+        "ocr_gate_fallback_executed == False",
+        "ocr_gate_reason indicates a missed escalation",
+        "validation_status approaches 'review_ocr_quality' or 'empty'"
+      ],
+      "secondary_signals": [
+        "selected_extractor is a text-only extractor",
+        "language_text_visibility indicates low visibility despite low ocr_quality_band"
+      ]
+    },
+    {
+      "id": "B4",
+      "name": "document_family_unsupported",
+      "summary": "the document is a legitimate clinical record but its family is outside the currently supported classifier coverage (no rule maps cues onto a labeled family)",
+      "primary_signals": [
+        "document_type == 'unknown_medical'",
+        "operator_review_reason == 'unknown_document_type'",
+        "document_family_classification_diagnostic indicates an unsupported family hypothesis or null",
+        "confidence at the safe-default floor (about 0.30)"
+      ],
+      "secondary_signals": [
+        "ocr_quality_band acceptable",
+        "language_text_visibility acceptable",
+        "selected_extractor returned non-empty text"
+      ]
+    },
+    {
+      "id": "B5",
+      "name": "image_or_table_or_layout_heavy_document",
+      "summary": "the document is dominated by images, scanned tables, or complex layout that the current text/table extractors cannot resolve",
+      "primary_signals": [
+        "ocr_quality_band low",
+        "ocr_gate_reason references image-heavy or layout-heavy content",
+        "selected_extractor is a fallback OCR engine that completed but produced sparse text",
+        "validation_status approaches 'empty' or 'review_ocr_quality'"
+      ],
+      "secondary_signals": [
+        "ocr_gate_fallback_executed == True with sparse downstream cues",
+        "operator_reason_label references OCR or extraction-quality concerns"
+      ]
+    },
+    {
+      "id": "B6",
+      "name": "language_or_script_mismatch",
+      "summary": "the document is in a language or script that the current cue packs fail to cover adequately for this document family",
+      "primary_signals": [
+        "language_text_visibility indicates a non-English / Cyrillic / mixed script",
+        "cyrillic_ocr_recommended == True or ocr_gate_fallback_cyrillic_detected == True",
+        "document_type still resolves to 'unknown_medical' despite Cyrillic / mixed signal",
+        "operator_review_reason == 'unknown_document_type' or 'document_type_prescription_not_lab'"
+      ],
+      "secondary_signals": [
+        "ocr_gate_fallback_language explicit",
+        "operator_reason_label references language or script handling"
+      ]
+    },
+    {
+      "id": "B7",
+      "name": "parser_unsupported",
+      "summary": "the parser layer rejected the upstream payload (for example unsupported file type, encrypted PDF, malformed structure) before the classifier had a chance",
+      "primary_signals": [
+        "validation_status == 'empty'",
+        "selected_extractor reports a parser failure",
+        "operator_review_reason references parser / unsupported file"
+      ],
+      "secondary_signals": [
+        "ocr_quality_band absent",
+        "ocr_gate_fallback_executed False with no fallback engine selected"
+      ]
+    },
+    {
+      "id": "B8",
+      "name": "ui_run_state_confusion",
+      "summary": "the operator interpreted a stale or unrelated run as their result, or a session refresh discarded the active_run state",
+      "primary_signals": [
+        "Run ID label inconsistent with the file the operator believes was processed",
+        "run card timestamp older than the operator session",
+        "active_run absent in session state",
+        "queue page disagrees with the run-results page"
+      ],
+      "secondary_signals": [
+        "operator reports the failure after a tab close / browser refresh",
+        "operator inspected a run from a different document",
+        "multiple files in the same batch produced overlapping Unknown labels and the operator selected the wrong card"
+      ]
+    }
+  ],
+  "decision_tree": [
+    {
+      "step": 1,
+      "question": "is there any run card for the file at all (active_run.results contains a matching entry)?",
+      "yes": "go to step 2",
+      "no": "bucket B1 (file_not_queued_or_run_not_executed) or B8 (ui_run_state_confusion)"
+    },
+    {
+      "step": 2,
+      "question": "is validation_status equal to 'empty'?",
+      "yes": "bucket B7 (parser_unsupported) if selected_extractor reports parser failure; else B3 (ocr_fallback_needed_but_not_triggered) or B5 (image_or_table_or_layout_heavy_document)",
+      "no": "go to step 3"
+    },
+    {
+      "step": 3,
+      "question": "is validation_status equal to 'review_ocr_quality' or is ocr_quality_band low?",
+      "yes": "bucket B3 (ocr_fallback_needed_but_not_triggered) if ocr_gate_fallback_executed is False; else B5 (image_or_table_or_layout_heavy_document)",
+      "no": "go to step 4"
+    },
+    {
+      "step": 4,
+      "question": "is cyrillic_ocr_recommended True or does language_text_visibility indicate non-English / Cyrillic / mixed?",
+      "yes": "bucket B6 (language_or_script_mismatch)",
+      "no": "go to step 5"
+    },
+    {
+      "step": 5,
+      "question": "did the extractor return text yet document_type resolves to 'unknown_medical' with confidence approximately 0.30 and operator_review_reason == 'unknown_document_type'?",
+      "yes": "bucket B2 (text_extracted_but_classifier_cues_insufficient) if cues should plausibly cover this family; else B4 (document_family_unsupported)",
+      "no": "review individual fields and re-route via secondary signals; if none fit, record the anomaly for the next triage block"
+    }
+  ],
+  "bucket_conditional_smallest_next_block": [
+    {
+      "bucket_id": "B1",
+      "smallest_next_block_candidate": "no code block; operator re-runs the file and confirms run card appears",
+      "code_fix_justified": false,
+      "rationale": "no classifier or extractor pathway involved; this is a workflow signal only"
+    },
+    {
+      "bucket_id": "B2",
+      "smallest_next_block_candidate": "MEDAI-CLASSIFIER-CUE-COVERAGE-EVAL-01 — aggregate-only re-evaluation of existing cue pack coverage on synthetic fixtures; no cue expansion",
+      "code_fix_justified": "conditional",
+      "rationale": "cue expansion remains explicitly NOT recommended; only an evaluation block (no behavior change) is permitted"
+    },
+    {
+      "bucket_id": "B3",
+      "smallest_next_block_candidate": "MEDAI-OCR-GATE-MISS-EVAL-01 — aggregate-only re-evaluation of the OCR escalation gate on synthetic fixtures; no threshold change",
+      "code_fix_justified": "conditional",
+      "rationale": "OCR routing change is forbidden under freeze-maintenance; only an evaluation block is permitted"
+    },
+    {
+      "bucket_id": "B4",
+      "smallest_next_block_candidate": "MEDAI-DOC-FAMILY-COVERAGE-EVAL-01 — aggregate-only family coverage audit on synthetic fixtures; no new family added in this block",
+      "code_fix_justified": "conditional",
+      "rationale": "adding a new family is a behavior change; only an evaluation block is permitted"
+    },
+    {
+      "bucket_id": "B5",
+      "smallest_next_block_candidate": "MEDAI-LAYOUT-HEAVY-EVAL-01 — aggregate-only evaluation of layout/table/image-heavy documents on synthetic fixtures",
+      "code_fix_justified": false,
+      "rationale": "layout-heavy handling is already parked under prior phases; an eval block can confirm whether the parked plan still applies"
+    },
+    {
+      "bucket_id": "B6",
+      "smallest_next_block_candidate": "MEDAI-LANGUAGE-SCRIPT-COVERAGE-EVAL-01 — aggregate-only language/script coverage audit on synthetic fixtures",
+      "code_fix_justified": "conditional",
+      "rationale": "language coverage expansion has historic park anchors; only an evaluation block is permitted"
+    },
+    {
+      "bucket_id": "B7",
+      "smallest_next_block_candidate": "MEDAI-PARSER-COVERAGE-EVAL-01 — aggregate-only audit of unsupported file types and parser failure modes on synthetic fixtures",
+      "code_fix_justified": "conditional",
+      "rationale": "parser change is a behavior change; only an evaluation block is permitted"
+    },
+    {
+      "bucket_id": "B8",
+      "smallest_next_block_candidate": "MEDAI-UI-RUN-STATE-CLARITY-EVAL-01 — read-only UI surface audit clarifying which card belongs to which run",
+      "code_fix_justified": false,
+      "rationale": "no runtime behavior change involved; possibly only documentation or a small read-only UI legend update in a later approved block"
+    }
+  ],
+  "bucket_conditional_block_count": 8,
+  "prior_unknown_diag_chain_acknowledged": [
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-01",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-02",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-03",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-04",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-05",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-06A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-07A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-08A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-09A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-10A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-11A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-12A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-13",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-13A",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-14",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-15",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-15B",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-16",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-17",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-17B",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-18",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-19",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-20",
+    "MEDAI-DOC-TYPE-UNKNOWN-DIAG-21"
+  ],
+  "freeze_maintenance_anchor": {
+    "v1_frozen_release": "7ef8ffd",
+    "freeze_maintenance_only_01_commit": "fb730f2",
+    "release_freeze_snapshot_01_commit": "ae4b70e",
+    "default_off_status_registry_commit": "5f258c0"
+  },
+  "operator_action_required_steps": [
+    "open the failing run card in the local UI",
+    "expand the advanced diagnostic panel for that card",
+    "read the 20 advanced diagnostic fields off the card without copying any raw text, filename, or path into any public report",
+    "apply the decision tree in section E of this report",
+    "record the matched bucket id (B1 through B8) in a private operator note",
+    "if any bucket maps to a 'conditional' code fix, request a follow-up evaluation block by id (eval block only; no behavior change)",
+    "if the matched bucket is B1 or B8, no code change is justified"
+  ],
+  "runtime_behavior_changed": false,
+  "app_main_changed": false,
+  "streamlit_code_changed": false,
+  "ui_changed": false,
+  "launcher_changed": false,
+  "installer_changed": false,
+  "deployment_script_changed": false,
+  "startup_config_changed": false,
+  "extraction_changed": false,
+  "ocr_changed": false,
+  "ocr_routing_changed": false,
+  "classifier_changed": false,
+  "threshold_scoring_changed": false,
+  "parser_behavior_changed": false,
+  "fallback_behavior_changed": false,
+  "cue_pack_changed": false,
+  "cue_expansion_recommended": false,
+  "db_schema_changed": false,
+  "migration_created": false,
+  "migration_executed": false,
+  "persistence_code_changed": false,
+  "clinical_behavior_changed": false,
+  "ddi_behavior_changed": false,
+  "terminology_behavior_changed": false,
+  "private_adapter_implemented": false,
+  "concrete_adapters_implemented": false,
+  "runtime_wiring_added": false,
+  "external_api_used": false,
+  "private_data_accessed": false,
+  "source_documents_opened": false,
+  "real_pdf_committed": false,
+  "raw_text_read": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_read": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_read": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "licensed_rows_read": false,
+  "licensed_rows_exposed": false,
+  "private_license_ack_read": false,
+  "private_config_read": false,
+  "runtime_db_accessed": false,
+  "tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+  "v1_release_preserved": true,
+  "local_only_default": true,
+  "review_bound_default": true,
+  "external_api_blocked_default": true,
+  "auto_accept_allowed_default": false,
+  "recommended_next_block": "OPERATOR-RUN-DECISION-TREE-LOCALLY_THEN_BUCKET-CONDITIONAL-EVAL-OR-FREEZE-MAINTENANCE-ONLY",
+  "recommended_next_3_blocks": [
+    "OPERATOR-RUN-DECISION-TREE-LOCALLY_THEN_BUCKET-CONDITIONAL-EVAL-OR-FREEZE-MAINTENANCE-ONLY",
+    "BUCKET-CONDITIONAL-EVAL-BLOCK_BY-MATCHED-BUCKET-ID_ONLY_IF_OPERATOR_REQUESTS",
+    "FREEZE-MAINTENANCE-ONLY_OR_V2-ROADMAP-04_IF_NEW_SIGNAL_PERSISTS"
+  ],
+  "validation_results": {
+    "focused_real_doc_unknown_triage_tests": "to_be_recorded_after_test_run",
+    "freeze_maintenance_only_audit_script": "to_be_recorded_after_audit_run",
+    "public_report_privacy_checks": "to_be_recorded_after_privacy_check",
+    "v2_status_registry_focused_tests": "to_be_recorded_after_test_run",
+    "staged_safety_check": "to_be_recorded_after_git_status"
+  }
+}
