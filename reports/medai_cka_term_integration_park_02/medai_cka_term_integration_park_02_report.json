@@ -1,0 +1,252 @@
+{
+  "conclusion": "medai_cka_term_integration_park_02_ready",
+  "phase_id": "MEDAI-CKA-TERM-INTEGRATION-PARK-02",
+  "mode": "parking_snapshot_license_gated_private_adapter_track",
+  "reports_only": true,
+  "tags_only_after_commit": true,
+  "implementation_started": false,
+  "private_adapter_implemented": false,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_park02": "a1fcbf8",
+  "term_license_operator_return_08_commit_short": "376ca4e",
+  "term_license_operator_return_07_commit_short": "61b2fb1",
+  "term_license_operator_return_06_commit_short": "2141a04",
+  "term_license_manual_return_05_commit_short": "a72b54a",
+  "term_mesh_local_download_pack_01_commit_short": "cedbbd3",
+  "term_private_config_verify_02_commit_short": "60f1114",
+  "term_private_config_01_commit_short": "d6fee2f",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+  "freeze_commit_short": "7ef8ffd",
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+  "park_24_commit_short": "1b14ffe",
+  "park_25_commit_short": "6b31678",
+  "park_26_commit_short": "91b9eba",
+
+  "covered_chain": [
+    "MEDAI-CKA-TERM-INTEGRATION-PLAN-01",
+    "MEDAI-CKA-TERM-INTEGRATION-NEXT-01",
+    "MEDAI-CKA-TERM-INTEGRATION-UAT-01",
+    "MEDAI-CKA-TERM-INTEGRATION-WIRING-NEXT-01",
+    "MEDAI-CKA-TERM-INTEGRATION-WIRING-UAT-01",
+    "MEDAI-CKA-TERM-INTEGRATION-PARK-01 (helper/wiring track)",
+    "MEDAI-CKA-TERM-LICENSE-GATE-SPEC-02",
+    "MEDAI-CKA-TERM-LICENSE-GATE-READINESS-03",
+    "MEDAI-CKA-TERM-INTEGRATION-PRIVATE-ADAPTER-SPEC-01",
+    "MEDAI-CKA-TERM-INTEGRATION-PRIVATE-ADAPTER-READINESS-02",
+    "MEDAI-CKA-TERM-LICENSE-MANUAL-RETURN-PACK-04",
+    "MEDAI-TERM-LICENSE-MANUAL-RETURN-05",
+    "MEDAI-TERM-PRIVATE-CONFIG-01",
+    "MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02",
+    "MEDAI-TERM-MESH-LOCAL-DOWNLOAD-PACK-01",
+    "MEDAI-TERM-LICENSE-OPERATOR-RETURN-06",
+    "MEDAI-TERM-LICENSE-OPERATOR-RETURN-07",
+    "MEDAI-TERM-LICENSE-OPERATOR-RETURN-08"
+  ],
+
+  "parked_status_summary": {
+    "license_gated_private_adapter_track": "parked",
+    "license_gated_private_adapter_track_reason": "Operator did not supply concrete per-resource boolean license confirmations across RETURN-06, RETURN-07, or RETURN-08. The strict critical rule prevents marking any license-gated resource verified without explicit confirmation. Implementation must therefore remain blocked, and the track is parked here.",
+    "terminology_helper_wiring_mini_track": "parked at MEDAI-CKA-TERM-INTEGRATION-PARK-01 (commit e398a75; tag pair medai-cka-term-helper-wiring-ready-2026-05-20 and medai-final-parked-post-term-wiring-2026-05-20)",
+    "private_config_boundary": "created (MEDAI-TERM-PRIVATE-CONFIG-01) and structurally verified (MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02). Operator-verified by explicit status=verified in RETURN-07 and RETURN-08.",
+    "mesh_acquisition": "helper created at scripts/private_local/download_mesh_2026_local.ps1 (gitignored); no bytes downloaded; operator-side execution still required.",
+    "manual_license_return_pack_04": "produced public-safe operator return-pack scaffolding; no license text in public reports.",
+    "provisional_return_05": "packaged provisional public-safe evidence; no resource was claimed verified.",
+    "operator_returns_06_07_08": "operator-return slot opened and re-opened; eight license-gated resources never received concrete operator confirmations."
+  },
+
+  "manual_license_verification_complete": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+  "license_gated_resources_verified_count": 0,
+  "internal_boundaries_verified_count": 2,
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "private_config_contents_read": false,
+  "private_config_staged": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "license_ack_private_staged": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "mesh_status": "download_helper_created",
+  "mesh_download_completed": false,
+  "mesh_integration_allowed": false,
+
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+
+  "resource_verification_matrix": [
+    {"resource": "loinc", "role": "primary_license_gated", "operator_return_status": "not_verified"},
+    {"resource": "rxnorm_full", "role": "primary_license_gated", "operator_return_status": "not_verified"},
+    {"resource": "rxnorm_prescribable", "role": "auxiliary_license_gated", "operator_return_status": "not_verified"},
+    {"resource": "snomed_ct_us", "role": "primary_license_gated", "operator_return_status": "not_verified"},
+    {"resource": "snomed_ct_international", "role": "secondary_license_gated", "operator_return_status": "not_verified"},
+    {"resource": "umls_metathesaurus", "role": "future_import_license_gated", "operator_return_status": "not_verified"},
+    {"resource": "mesh", "role": "future_integration_license_gated", "operator_return_status": "not_verified"},
+    {"resource": "private_license_acknowledgement_handling", "role": "private_license_confirmation", "operator_return_status": "not_verified"},
+    {"resource": "private_terminology_config_boundary", "role": "internal_boundary", "operator_return_status": "verified_by_explicit_operator_return"},
+    {"resource": "b07_mkb_public_safe_boundary", "role": "internal_boundary", "operator_return_status": "verified_by_explicit_operator_return"}
+  ],
+
+  "internal_boundary_summary": {
+    "private_terminology_config_boundary": {
+      "operator_status_at_return_07": "verified",
+      "operator_status_at_return_08": "verified",
+      "structural_verification_commit_short": "60f1114",
+      "structural_verification_block": "MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02"
+    },
+    "b07_mkb_public_safe_boundary": {
+      "operator_status_at_return_07": "verified",
+      "operator_status_at_return_08": "verified",
+      "structural_verification_blocks": ["B07-TERM-01", "CKA-B07", "CKA-B10", "CKA-B11"]
+    }
+  },
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "wiring private terminology output into app/main.py runtime beyond the already-parked helper/wiring mini-track",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "Licensed terminology row reads",
+    "Private license-acknowledgement file contents access",
+    "External terminology API enablement for runtime",
+    "cue-pack expansion (explicitly NOT recommended)"
+  ],
+
+  "future_unblock_conditions": {
+    "required_for_license_gated_resource_to_become_verified": [
+      "Concrete operator boolean confirmation of operator_confirms_license_terms_reviewed = true",
+      "Concrete operator boolean confirmation of operator_confirms_local_only_use = true",
+      "Concrete operator boolean confirmation of operator_confirms_no_redistribution = true",
+      "Concrete operator boolean confirmation of operator_confirms_no_runtime_external_api = true",
+      "Concrete operator boolean confirmation of operator_confirms_no_public_row_output = true",
+      "Concrete operator status = verified (not the schema placeholder list)"
+    ],
+    "required_for_mesh_integration": [
+      "Concrete operator license confirmation for MeSH",
+      "Operator-side execution of scripts/private_local/download_mesh_2026_local.ps1",
+      "Operator-side verification of canonical NLM URLs against the official MeSH page"
+    ],
+    "required_for_private_adapter_implementation": [
+      "Every license-gated resource is verified_by_explicit_operator_return",
+      "Both internal boundaries remain verified_by_explicit_operator_return",
+      "A new SPEC/readiness block subsequent to MEDAI-CKA-TERM-INTEGRATION-PRIVATE-ADAPTER-READINESS-02 explicitly reconsiders the adapter under the cleared license posture",
+      "An audited private-store adapter implementation block (still default-off, fail-closed, aggregate-only, review-bound) is approved"
+    ],
+    "must_not_unblock_under_any_circumstance": [
+      "External terminology API enablement",
+      "Cue-pack expansion (explicitly NOT recommended)",
+      "Public-report row dumps",
+      "Auto-accept driven by terminology coding",
+      "DDI behavior changes driven by terminology coding"
+    ]
+  },
+
+  "tag_plan": {
+    "tags_to_create_at_park02_commit": [
+      "medai-cka-term-license-gated-adapter-parked-2026-05-21",
+      "medai-final-parked-post-term-license-gate-2026-05-21"
+    ],
+    "tag_push_route": "github-direct (https://github.com/courseeast-jpg/MedAI.git) via gh-installed credentials. The local proxy historically returns HTTP 403 on refs/tags/* writes; every prior PARK tag pair used this route.",
+    "must_not_use_force_or_tags_flag": true,
+    "must_not_move_or_delete_existing_tags": true,
+    "park_20_tag_pair_unchanged_at_3e46461": true,
+    "park_21_tag_pair_unchanged_at_9f9e22d": true,
+    "park_22_tag_pair_unchanged_at_f4d3cc6": true,
+    "park_23_tag_pair_unchanged_at_748c32a": true,
+    "park_24_tag_unchanged_at_1b14ffe": true,
+    "park_25_tag_unchanged_at_6b31678": true,
+    "park_26_tag_pair_unchanged_at_91b9eba": true,
+    "freeze_tag_pair_unchanged_at_7ef8ffd": true,
+    "term_helper_wiring_park_01_tag_pair_unchanged_at_e398a75": true
+  },
+
+  "existing_tags_untouched": true,
+  "new_tags_created": true,
+
+  "next_block_decision": "ROADMAP-06_or_freeze_maintenance",
+  "next_block_decision_rationale": "With every license-gated terminology track now parked at PARK-02 and the v1 local operator release already frozen, the project has no committed forward-motion block. The natural choices are (a) ROADMAP-06 — a reports-only post-parking strategic re-evaluation block — or (b) freeze-maintenance posture — periodic re-runs of the five fixed health-check validations against the frozen v1 release. Either path keeps every safety invariant intact.",
+
+  "deferred_items": [
+    "Wiring terminology output into app/main.py runtime",
+    "UMLS lookup (umls_future_gated=true)",
+    "SNOMED CT runtime integration (snomed_runtime_integration_enabled=false)",
+    "DDI / diagnosis / treatment / medication / dosing inference driven by terminology",
+    "Abbreviation expansion in any form",
+    "Cue-pack expansion (explicitly NOT recommended)",
+    "External terminology API enablement",
+    "Public-report row dumps under any condition",
+    "MeSH integration (requires both license confirmation AND completed operator-side download)",
+    "Private adapter implementation (blocked under all current state)"
+  ],
+
+  "validation_evidence": {
+    "public_report_privacy_checks": "passed: 3/3 MEDAI-CKA-TERM-INTEGRATION-PARK-02 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only MEDAI-CKA-TERM-INTEGRATION-PARK-02 scoped report files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; reports-only parking block"
+  },
+
+  "safety_privacy_statement": "MEDAI-CKA-TERM-INTEGRATION-PARK-02 is a reports-only / tags-only parking snapshot. No runtime code, helper code, Streamlit/UI wiring, launcher, startup preflight, or config file was modified. No license text was reproduced. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No private filesystem paths were printed. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No existing tag was moved, deleted, or repointed. PARK-20..23 tag pairs, PARK-24 / PARK-25 single tags, PARK-26 tag pair, the FREEZE tag pair, and the term helper/wiring PARK-01 tag pair all remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED.",
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 96.0%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 95.9,
+      "whole_medai_remaining_pct": 4.1
+    },
+    "after": {
+      "whole_medai_done_pct": 96.0,
+      "whole_medai_remaining_pct": 4.0,
+      "note": "PARK-02 freezes the license-gated private adapter track honestly. No runtime change; small bump reflects the durable park snapshot."
+    }
+  }
+}
