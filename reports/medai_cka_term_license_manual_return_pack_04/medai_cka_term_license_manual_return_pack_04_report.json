@@ -1,0 +1,193 @@
+{
+  "phase_id": "MEDAI-CKA-TERM-LICENSE-MANUAL-RETURN-PACK-04",
+  "mode": "manual_license_verification_return_pack",
+  "reports_only": true,
+  "implementation_started": false,
+  "private_adapter_implemented": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+  "manual_license_verification_required": true,
+  "manual_license_verification_status": "open",
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "license_ack_private_read": false,
+  "runtime_db_contents_opened": false,
+  "private_store_opened": false,
+  "private_store_read": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "public_safe_return_pack_created": true,
+  "private_evidence_requested_but_not_collected": true,
+  "manual_verification_checklist": [
+    "confirm_resource_license_allows_planned_local_private_store_use",
+    "confirm_private_acknowledgement_exists_outside_public_reports",
+    "confirm_acknowledgement_contents_remain_private",
+    "confirm_terminology_rows_remain_private",
+    "confirm_no_row_dumps_or_content_screenshots_are_returned",
+    "confirm_no_private_paths_or_db_exports_are_returned",
+    "confirm_no_external_api_use_is_required",
+    "confirm_future_adapter_remains_read_only_fail_closed_and_aggregate_only"
+  ],
+  "resource_verification_matrix": [
+    {
+      "resource": "LOINC",
+      "manual_license_verification_required": true,
+      "private_handling_required": true,
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "RxNorm full",
+      "manual_license_verification_required": true,
+      "private_handling_required": true,
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "RxNorm prescribable",
+      "manual_license_verification_required": true,
+      "private_handling_required": true,
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "SNOMED CT US Edition",
+      "manual_license_verification_required": true,
+      "private_handling_required": true,
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "SNOMED CT International",
+      "manual_license_verification_required": true,
+      "private_handling_required": true,
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "UMLS Metathesaurus",
+      "manual_license_verification_required": true,
+      "private_handling_required": true,
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "LICENSE_ACK_PRIVATE.json",
+      "manual_license_verification_required": true,
+      "private_handling_required": true,
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "MedAI internal/public-safe MKB references",
+      "manual_license_verification_required": "if_used_with_terminology_adapter",
+      "private_handling_required": "review_before_public_use",
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    },
+    {
+      "resource": "B07 interface boundary",
+      "manual_license_verification_required": "boundary_safety_review_required",
+      "private_handling_required": "keep_row_content_out",
+      "public_row_output_allowed": false,
+      "implementation_allowed_now": false
+    }
+  ],
+  "private_store_boundary_checklist": [
+    "private_store_path_config_defined_privately",
+    "private_config_excluded_from_git",
+    "terminology_rows_excluded_from_public_reports",
+    "public_layers_receive_aggregate_metadata_only",
+    "no_runtime_db_writes",
+    "no_external_api_calls",
+    "missing_license_state_fails_closed",
+    "missing_adapter_fails_closed",
+    "unsafe_output_fields_rejected",
+    "no_row_codes_names_synonyms_definitions_concept_rows_private_paths_filenames_acknowledgement_contents_phi_or_secrets_in_public_reports"
+  ],
+  "allowed_return_artifacts": [
+    "public_safe_completed_checklist",
+    "resource_level_status_without_license_text_or_row_content",
+    "confirmation_private_evidence_exists_outside_public_reports",
+    "confirmation_private_config_and_store_contents_remain_excluded_from_git",
+    "confirmation_no_external_api_use_required"
+  ],
+  "prohibited_return_artifacts": [
+    "license_acknowledgement_contents",
+    "licensed_terminology_rows",
+    "row_codes",
+    "row_names",
+    "synonyms",
+    "definitions",
+    "concept_rows",
+    "screenshots_with_licensed_content",
+    "private_paths",
+    "source_filenames",
+    "db_exports",
+    "runtime_db_contents",
+    "source_private_documents",
+    "raw_ocr_text",
+    "raw_document_text",
+    "keys",
+    "secrets",
+    "phi",
+    "private_corpus_files"
+  ],
+  "authorization_gate": {
+    "private_adapter_next_can_be_considered_only_if": [
+      "manual_license_verification_complete_for_each_used_resource",
+      "private_evidence_remains_private_and_uncommitted",
+      "private_store_config_boundary_defined",
+      "fail_closed_behavior_testable_without_private_content_exposure",
+      "no_row_output_rules_enforceable",
+      "synthetic_and_fake_store_tests_defined",
+      "rollback_and_staged_safety_checks_defined"
+    ],
+    "if_missing": "only_spec_or_readiness_work_may_continue",
+    "implementation_allowed_now": false,
+    "real_private_store_access_allowed_now": false
+  },
+  "stop_conditions": [
+    "license_status_unclear",
+    "private_evidence_missing",
+    "private_content_exposed",
+    "row_content_in_public_output",
+    "runtime_db_write_attempted",
+    "external_api_attempted",
+    "clinical_inference_introduced",
+    "ddi_behavior_changed",
+    "cue_expansion_attempted"
+  ],
+  "next_block_decision": "manual_operator_verification_required_before_more_implementation",
+  "deferred_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "terminology_import",
+    "licensed_row_access",
+    "runtime_db_writes",
+    "external_api_calls",
+    "clinical_interpretation",
+    "diagnosis_treatment_inference",
+    "medication_dose_lab_value_parsing",
+    "ddi_behavior",
+    "real_corpus_validation",
+    "cue_expansion"
+  ],
+  "validation_results": {
+    "public_report_privacy_checks": "passed: 3/3 MANUAL-RETURN-PACK-04 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: 12/12 validation cases; 693 total tests passed; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only MANUAL-RETURN-PACK-04 report files staged"
+  },
+  "whole_medai_done_estimate": "approximately 95.3%"
+}
