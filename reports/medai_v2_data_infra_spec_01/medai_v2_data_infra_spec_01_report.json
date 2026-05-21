@@ -1,0 +1,403 @@
+{
+  "conclusion": "medai_v2_data_infra_spec_01_ready",
+  "block_id": "MEDAI-V2-DATA-INFRA-SPEC-01",
+  "phase_id": "MEDAI-V2-DATA-INFRA-SPEC-01",
+  "block_mode": "reports_only_data_infra_spec",
+  "reports_only": true,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_block": "458e859",
+  "v2_ui_shell_spec_01_commit_short": "745a980",
+  "v2_validation_harness_01_commit_short": "73af6f6",
+  "v2_runtime_contracts_01_commit_short": "e6e33dd",
+  "v2_foundation_spec_02_commit_short": "8b53d82",
+  "v2_architecture_spec_01_commit_short": "551af98",
+  "freeze_commit_short": "7ef8ffd",
+  "park_02_commit_short": "b9b19ad",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+
+  "requires_preceding_spec": true,
+  "preceding_architecture_spec_present": true,
+  "preceding_foundation_spec_present": true,
+  "preceding_runtime_contracts_present": true,
+  "preceding_validation_harness_present": true,
+  "preceding_ui_shell_spec_present": true,
+
+  "data_infra_spec_created": true,
+  "conceptual_store_map_created": true,
+  "ledger_audit_separation_defined": true,
+  "rollback_doctrine_defined": true,
+  "migration_gate_doctrine_defined": true,
+  "public_report_data_doctrine_defined": true,
+  "future_data_implementation_gates_defined": true,
+  "v1_validation_healthcheck_catalog_preserved": true,
+
+  "runtime_db_row_blind": true,
+  "runtime_db_accessed": false,
+  "schema_changed": false,
+  "migration_created": false,
+  "migration_executed": false,
+  "persistence_code_changed": false,
+
+  "runtime_behavior_changed": false,
+  "app_main_changed": false,
+  "streamlit_code_changed": false,
+  "ui_changed": false,
+  "launcher_changed": false,
+  "startup_config_changed": false,
+  "extraction_changed": false,
+  "ocr_changed": false,
+  "classifier_changed": false,
+  "threshold_scoring_changed": false,
+  "cue_pack_changed": false,
+  "clinical_behavior_changed": false,
+  "ddi_behavior_changed": false,
+  "terminology_behavior_changed": false,
+  "private_adapter_implemented": false,
+  "concrete_adapters_implemented": false,
+  "runtime_wiring_added": false,
+  "external_api_used": false,
+  "private_data_accessed": false,
+  "licensed_rows_read": false,
+  "licensed_rows_exposed": false,
+  "private_license_ack_read": false,
+  "private_config_read": false,
+  "source_documents_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "tags_touched": false,
+  "cue_expansion_recommended": false,
+  "v1_release_preserved": true,
+
+  "section_a_scope_and_non_scope": {
+    "in_scope": [
+      "Define future V2 data / persistence boundaries at planning level only.",
+      "Establish the runtime-DB-row-blind doctrine for every subsequent block.",
+      "Map the conceptual persistence stores (no schema, no migrations).",
+      "Define ledger / audit separation rules.",
+      "Define rollback expectations for any future schema-changing block.",
+      "Define migration gates that must clear before any data implementation.",
+      "Define public-report data doctrine (allowed vs prohibited content).",
+      "Preserve the terminology / private-adapter data boundary.",
+      "Preserve the V1 five-validation health-check catalog reference."
+    ],
+    "out_of_scope": [
+      "Any DB schema change.",
+      "Any migration (forward or rollback).",
+      "Any persistence code change.",
+      "Any runtime DB row read.",
+      "Any change to app/main.py, launchers, startup preflight, or config.",
+      "Any UI / Streamlit code change.",
+      "Any extraction / OCR routing / classifier / threshold / cue / clinical / DDI behavior change.",
+      "Any private terminology adapter implementation.",
+      "Any external API enablement (cloud, remote DB, hosted storage).",
+      "Any tag creation or movement."
+    ]
+  },
+
+  "section_b_prior_v2_dependency_chain": [
+    {"block": "MEDAI-V2-ARCHITECTURE-SPEC-01", "commit_short": "551af98"},
+    {"block": "MEDAI-V2-FOUNDATION-SPEC-02", "commit_short": "8b53d82"},
+    {"block": "MEDAI-V2-RUNTIME-CONTRACTS-01", "commit_short": "e6e33dd"},
+    {"block": "MEDAI-V2-VALIDATION-HARNESS-01", "commit_short": "73af6f6"},
+    {"block": "MEDAI-V2-UI-SHELL-SPEC-01", "commit_short": "745a980"}
+  ],
+
+  "section_c_runtime_db_row_blind_doctrine": {
+    "runtime_db_is_private_operational_state": true,
+    "reports_must_be_runtime_db_row_blind": true,
+    "v2_report_must_not_contain": [
+      "DB rows",
+      "raw records",
+      "document filenames",
+      "raw OCR text",
+      "raw document text",
+      "PHI",
+      "private filesystem paths",
+      "licensed terminology rows",
+      "license-acknowledgement contents",
+      "private config contents",
+      "secrets / API keys / credentials"
+    ],
+    "future_db_access_requires_separate_implementation_spec": true,
+    "metadata_only_diagnostics_remain_acceptable": true
+  },
+
+  "section_d_conceptual_persistence_store_map": [
+    {
+      "store_id": "PS1",
+      "name": "document_registry_metadata_store",
+      "purpose_token": "track_local_session_documents_anonymously",
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false
+    },
+    {
+      "store_id": "PS2",
+      "name": "extraction_result_store",
+      "purpose_token": "hold_extraction_outputs_locally_no_row_emission",
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false
+    },
+    {
+      "store_id": "PS3",
+      "name": "review_queue_store",
+      "purpose_token": "hold_review_bound_items_until_operator_disposition",
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false
+    },
+    {
+      "store_id": "PS4",
+      "name": "operator_action_ledger",
+      "purpose_token": "append_only_record_of_operator_dispositions",
+      "append_only_default": true,
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false
+    },
+    {
+      "store_id": "PS5",
+      "name": "validation_receipt_store",
+      "purpose_token": "hold_v1_health_check_receipts_and_future_v2_receipts",
+      "append_only_default": true,
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false
+    },
+    {
+      "store_id": "PS6",
+      "name": "audit_observability_event_store",
+      "purpose_token": "aggregate_only_audit_events_no_phi",
+      "append_only_default": true,
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false
+    },
+    {
+      "store_id": "PS7",
+      "name": "terminology_aggregate_cache_if_later_approved",
+      "purpose_token": "future_aggregate_only_cache_subject_to_license_gate",
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false,
+      "currently_blocked_until_operator_license_gate_clears": true
+    },
+    {
+      "store_id": "PS8",
+      "name": "quarantine_blocked_item_store_if_later_approved",
+      "purpose_token": "future_quarantine_for_blocked_items_no_row_emission",
+      "row_content_visible_in_public_reports": false,
+      "aggregate_counts_acceptable_in_public_reports": true,
+      "implementation_present_in_this_spec": false
+    }
+  ],
+
+  "section_e_ledger_audit_separation": {
+    "operator_action_ledger_separate_from_runtime_event_audit": true,
+    "validation_receipts_separate_from_audit_events": true,
+    "privacy_audit_receipts_separate_from_validation_receipts": true,
+    "release_parking_snapshots_separate_from_all_ledgers": true,
+    "all_ledgers_append_only_default": true,
+    "any_non_append_behavior_requires_separate_rollback_spec": true
+  },
+
+  "section_f_rollback_doctrine": {
+    "every_schema_changing_block_requires_pre_migration_snapshot": true,
+    "migration_must_be_reversible_or_explicitly_one_way_with_justification": true,
+    "rollback_verification_must_be_tested": true,
+    "public_reports_contain_only_aggregate_rollback_status": true,
+    "no_db_rows_or_private_paths_in_rollback_reports": true,
+    "rollback_failure_handling_requires_documented_recovery_path": true
+  },
+
+  "section_g_migration_gate_doctrine": [
+    "data_infra_spec_complete",
+    "runtime_contract_alignment_complete",
+    "validation_harness_updated_for_new_store_or_field",
+    "privacy_scanner_updated_if_new_field_class_introduced",
+    "rollback_plan_created",
+    "dry_run_on_synthetic_data_only_passed",
+    "staged_safety_check_clean",
+    "operator_approval_recorded_in_public_safe_report",
+    "real_runtime_db_access_still_blocked_until_implementation_block"
+  ],
+
+  "section_h_public_report_data_doctrine": {
+    "allowed_public_report_content": [
+      "counts",
+      "booleans",
+      "controlled_vocabulary_statuses",
+      "anonymous_ids_or_hashes_where_already_approved",
+      "validation_names",
+      "commit_hashes_short_form_only",
+      "aggregate_result_summaries"
+    ],
+    "prohibited_public_report_content": [
+      "PHI",
+      "raw OCR text",
+      "raw document text",
+      "raw filenames",
+      "private filesystem paths",
+      "runtime DB rows",
+      "licensed terminology row values",
+      "license-acknowledgement contents",
+      "private config contents",
+      "secrets",
+      "API keys",
+      "credentials"
+    ],
+    "long_hex_string_short_sha_only_rule": "Use short SHAs (max ~7 chars) for any commit reference; long 40-char SHAs trigger the privacy scanner."
+  },
+
+  "section_i_terminology_private_adapter_data_boundary": {
+    "licensed_terminology_row_access_blocked": true,
+    "private_adapter_implementation_blocked": true,
+    "terminology_output_aggregate_only": true,
+    "public_reports_show_only_license_gate_status_not_licensed_content": true,
+    "mesh_integration_blocked_until_operator_side_license_and_download_conditions_satisfied": true,
+    "park_02_anchor_commit_short": "b9b19ad",
+    "park_01_anchor_commit_short": "e398a75",
+    "operator_license_confirmation_status": "still_required",
+    "mesh_status_carried_forward": "download_helper_created"
+  },
+
+  "section_j_validation_health_persistence_boundary": {
+    "v1_five_validation_health_check_set_preserved": true,
+    "v1_health_check_names": [
+      "cka_final_mvp_release",
+      "b07_term01_opt_in_integration",
+      "medai_route_fix01",
+      "medai_ui_ops_panel",
+      "medai_ui_boot_fix_startup_resilience"
+    ],
+    "future_validation_receipt_store_is_aggregate_only": true,
+    "future_validation_receipt_store_must_not_embed_raw_test_output": true,
+    "future_validation_receipt_store_consumes_v2_validation_harness_protocol": true
+  },
+
+  "section_k_safety_privacy_invariants": {
+    "block_mode": "reports_only_data_infra_spec",
+    "runtime_db_row_blind": true,
+    "runtime_db_accessed": false,
+    "schema_changed": false,
+    "migration_created": false,
+    "migration_executed": false,
+    "persistence_code_changed": false,
+    "runtime_behavior_changed": false,
+    "app_main_changed": false,
+    "streamlit_code_changed": false,
+    "ui_changed": false,
+    "launcher_changed": false,
+    "startup_config_changed": false,
+    "extraction_changed": false,
+    "ocr_changed": false,
+    "classifier_changed": false,
+    "threshold_scoring_changed": false,
+    "cue_pack_changed": false,
+    "clinical_behavior_changed": false,
+    "ddi_behavior_changed": false,
+    "terminology_behavior_changed": false,
+    "private_adapter_implemented": false,
+    "concrete_adapters_implemented": false,
+    "runtime_wiring_added": false,
+    "external_api_used": false,
+    "private_data_accessed": false,
+    "licensed_rows_read": false,
+    "licensed_rows_exposed": false,
+    "private_license_ack_read": false,
+    "private_config_read": false,
+    "source_documents_opened": false,
+    "raw_text_printed": false,
+    "raw_filenames_printed": false,
+    "private_paths_printed": false,
+    "secrets_printed": false,
+    "tags_touched": false,
+    "cue_expansion_recommended": false,
+    "v1_release_preserved": true
+  },
+
+  "section_l_future_implementation_gates": [
+    "A. Any schema change requires a separate implementation block.",
+    "B. Any migration requires a pre-migration snapshot.",
+    "C. Any migration requires a rollback plan.",
+    "D. Any migration requires a synthetic-data dry run before any real data run.",
+    "E. Any real runtime DB access requires explicit operator approval recorded in a public-safe report.",
+    "F. Any private DB / report bridge must pass the privacy scanner review (clinical_knowledge.privacy.check_public_report_payload).",
+    "G. Any terminology cache must remain aggregate-only unless the license gate changes via a separately approved SPEC.",
+    "H. Any validation receipt store must not expose PHI, private paths, raw OCR text, raw document text, raw filenames, or licensed row content.",
+    "I. Any UI display of persistence state must be covered by a separate UI implementation block (mapped to V2-UI-SHELL-SPEC-01 + its future implementation SPEC).",
+    "J. Any external storage / cloud persistence requires a privacy / safety SPEC and must remain blocked by default."
+  ],
+
+  "section_m_validation_matrix_reference": {
+    "v2_validation_matrix_categories_referenced": [
+      "A_contract_import_and_side_effect_safety",
+      "B_contract_inventory_conformance",
+      "C_safety_profile_conformance",
+      "D_terminology_aggregate_only_conformance",
+      "E_review_hitl_conformance",
+      "F_reports_privacy_conformance",
+      "G_runtime_non_modification_conformance",
+      "H_parking_freeze_preservation_conformance"
+    ],
+    "this_block_conforms_to_categories": [
+      "A (no module side effects)",
+      "B (no contract change)",
+      "C (default safety profile unchanged)",
+      "D (terminology aggregate-only doctrine preserved)",
+      "E (review-bound default preserved)",
+      "F (3 reports pass clinical_knowledge.privacy.check_public_report_payload)",
+      "G (no runtime / app/main / launcher / preflight / config / Streamlit change)",
+      "H (all 10 pre-existing tag groups unchanged)"
+    ]
+  },
+
+  "section_n_recommended_next_block": {
+    "primary_recommendation": "V2-EXTRACTION-SPEC-01 — reports-only extraction / OCR layer SPEC; only if extraction architecture planning is the priority.",
+    "checkpoint_alternative": "V2-ROADMAP-02 — reports-only roadmap audit after foundation / contracts / validation-harness / UI-shell / data-infra specs; re-ranks the remaining v2 workstreams.",
+    "packaging_alternative": "V2-PACKAGING-SPEC-01 — reports-only packaging / deployment SPEC if operator deployment is the priority.",
+    "must_not_do_in_any_of_these_blocks": [
+      "Start V2 data implementation directly.",
+      "Modify DB / schema / migrations.",
+      "Access runtime DB rows.",
+      "Reopen terminology / private adapter implementation.",
+      "Reopen cue expansion (explicitly NOT recommended).",
+      "Touch any existing parking / freeze tag."
+    ]
+  },
+
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "term_license_gate_park_02_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+  "prior_park_tags_touched": false,
+
+  "safety_privacy_statement": "MEDAI-V2-DATA-INFRA-SPEC-01 is a reports-only data-infra spec. It adds three public-safe reports, one reports-only audit script, and one focused pytest module. No DB schema change, no migration, no runtime DB row read, no persistence code change, no app/main.py / launcher / startup preflight / config / Streamlit-wiring / V2 contract module modification. No license text was reproduced. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No private filesystem paths were printed. No raw text, raw OCR text, raw document text, raw filenames, PHI, keys, or secrets appear in any committed file. No external API was called or enabled. No tags created, moved, or deleted. PARK-20..26 tag pairs, the FREEZE tag pair, the term helper/wiring PARK-01 tag pair, and the license-gate PARK-02 tag pair all remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED. Cue expansion remains explicitly NOT recommended.",
+
+  "next_recommended_block": "V2-EXTRACTION-SPEC-01_OR_V2-ROADMAP-02",
+
+  "whole_medai_done_estimate": "approximately 96.6%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 96.5,
+      "whole_medai_remaining_pct": 3.5
+    },
+    "after": {
+      "whole_medai_done_pct": 96.6,
+      "whole_medai_remaining_pct": 3.4,
+      "note": "V2 data / persistence architecture now specified at planning level only: 8 conceptual stores, ledger / audit separation, rollback doctrine, 9 migration gates, public-report data doctrine, 10 future implementation gates. No DB / schema / migration / runtime DB access."
+    }
+  }
+}
