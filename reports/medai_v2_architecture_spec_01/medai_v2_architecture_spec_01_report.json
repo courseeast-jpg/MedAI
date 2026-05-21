@@ -1,0 +1,471 @@
+{
+  "conclusion": "medai_v2_architecture_spec_01_ready",
+  "phase_id": "MEDAI-V2-ARCHITECTURE-SPEC-01",
+  "mode": "v2_architecture_reports_only_spec",
+  "reports_only": true,
+  "implementation_started": false,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "1bf86dd",
+  "roadmap_06_commit_short": "5ea7bd6",
+  "park_02_commit_short": "b9b19ad",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+  "freeze_commit_short": "7ef8ffd",
+  "park_26_commit_short": "91b9eba",
+  "park_25_commit_short": "6b31678",
+  "park_24_commit_short": "1b14ffe",
+  "park_23_commit_short": "748c32a",
+  "park_22_commit_short": "f4d3cc6",
+  "park_21_commit_short": "9f9e22d",
+  "park_20_commit_short": "3e46461",
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "private_config_contents_read": false,
+  "private_config_staged": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "mesh_status": "download_helper_created",
+  "mesh_integration_allowed": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+  "manual_license_verification_complete": false,
+  "license_gated_resources_verified_count": 0,
+  "internal_boundaries_verified_count": 2,
+
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+
+  "v1_release_preserved": true,
+  "v2_architecture_layers_defined": true,
+  "v2_workstreams_defined": true,
+  "v2_non_goals_defined": true,
+
+  "covered_sources_reviewed_public_safe_only": [
+    "reports/medai_roadmap_06_post_term_parking/",
+    "reports/medai_cka_term_integration_park_02/",
+    "reports/medai_cka_term_integration_park_01/",
+    "reports/medai_term_license_operator_return_08/",
+    "reports/medai_term_mesh_local_download_pack_01/",
+    "reports/medai_term_private_config_verify_02/",
+    "reports/medai_freeze_local_operator_release/",
+    "reports/medai_park_26_operator_runtime_readiness/",
+    "reports/medai_park_25_diag21_streamlit_fixture_audit/",
+    "reports/medai_park_24_diag20_operator_uat/",
+    "reports/medai_park_23_diag19_streamlit_wiring/",
+    "reports/medai_park_22_pdf_text_layout_quality_default_off/",
+    "reports/medai_park_21_post_text_layer_eval_spec/",
+    "reports/medai_roadmap_05_post_term_wiring_uat/ (if present)",
+    "reports/medai_roadmap_04_post_freeze_next_phase/",
+    "reports/cka_final_mvp_release/",
+    "reports/b07_term01_opt_in_integration/",
+    "reports/medai_route_fix_01/",
+    "reports/medai_ui_ops_01/",
+    "reports/medai_ui_boot_fix_01/"
+  ],
+
+  "v2_architecture_goals": [
+    "Preserve the frozen v1 local operator release (commit 7ef8ffd, tag pair FREEZE).",
+    "Keep the default local-only posture (MEDAI_LOCAL_ONLY=1, MEDAI_ALLOW_EXTERNAL_API=0, MEDAI_REQUIRE_PII_SCRUB=1, MEDAI_PRIVACY_AUDIT=1).",
+    "Preserve the human-in-the-loop review boundary for every emitted result.",
+    "Preserve the no-silent-auto-accept rule: accepted_count and auto_accept_allowed_count remain workflow tallies, not clinical acceptance counts.",
+    "Preserve the no-external-API-by-default rule for runtime.",
+    "Preserve the private/licensed terminology gates established by PARK-02 and the prior TERM chain.",
+    "Keep cue expansion disallowed unless a future approved SPEC reverses it explicitly.",
+    "Separate runtime pipeline, operator UI, terminology, validation, storage, observability, and deployment into independently gated workstreams.",
+    "Require a parking snapshot (commit + two annotated tags) after each high-risk track.",
+    "Require public-safe reports only; aggregate-only outputs; no row content, no license text, no private paths, no PHI, no secrets."
+  ],
+
+  "v2_architecture_layers": [
+    {
+      "layer_id": "A",
+      "layer_name": "Ingestion and source handling",
+      "concerns": ["file intake", "local-only handling", "privacy gates", "source document quarantine", "no public raw text"],
+      "v2_intent_summary": "Carry forward the v1 ingestion contract; tighten the source-quarantine boundary so private filesystem paths never appear in public outputs.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true
+    },
+    {
+      "layer_id": "B",
+      "layer_name": "Extraction / OCR layer",
+      "concerns": ["PDF text quality", "OCR routing", "extraction adapters", "confidence / fallback isolation"],
+      "v2_intent_summary": "Treat extraction adapters as replaceable contracts; isolate confidence/fallback decisions behind interface seams; never change routing inside any non-SPEC SPEC block.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true
+    },
+    {
+      "layer_id": "C",
+      "layer_name": "Document classification layer",
+      "concerns": ["classifier contracts", "confidence bands", "review-bound defaults", "unknown handling"],
+      "v2_intent_summary": "Classifier remains review-bound. The residual-Unknown track stays parked at PARK-20..23 unless a fresh operator-UAT signal forces reopening.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true,
+      "no_cue_expansion": true
+    },
+    {
+      "layer_id": "D",
+      "layer_name": "Structured medical extraction layer",
+      "concerns": ["labs / medications / findings"],
+      "v2_intent_summary": "Future work only. No clinical inference by default. No implementation in this SPEC.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true,
+      "future_work_requires_separate_spec": true
+    },
+    {
+      "layer_id": "E",
+      "layer_name": "Clinical knowledge / terminology layer",
+      "concerns": ["parked helper/wiring baseline", "license-gated private adapter blocked", "no real private-store access until gates clear", "aggregate-only public reporting"],
+      "v2_intent_summary": "Carry forward the parked helper/wiring mini-track (PARK-01, e398a75) and the parked license-gated private adapter track (PARK-02, b9b19ad). Reopen only after concrete operator license confirmations land.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true,
+      "private_adapter_blocked": true,
+      "real_private_store_access_blocked": true
+    },
+    {
+      "layer_id": "F",
+      "layer_name": "Safety and decision layer",
+      "concerns": ["refusal rules", "no autonomous diagnosis/treatment", "DDI boundary parked unless separately scoped", "review-required outputs"],
+      "v2_intent_summary": "Refusal rules are explicit, observable, and tested. Diagnosis / treatment / DDI logic remains parked unless a separate approved SPEC reopens them under named conditions.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true
+    },
+    {
+      "layer_id": "G",
+      "layer_name": "Operator UI layer",
+      "concerns": ["Run & Review", "Advanced technical details", "local-only status", "safe metadata only"],
+      "v2_intent_summary": "UI shell remains read-only by default; Advanced technical details emit only controlled-vocabulary markdown and captions. Any new UI behavior must be opt-in, env-gated, default-off, mirroring DIAG-17/18/19 pattern.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true
+    },
+    {
+      "layer_id": "H",
+      "layer_name": "Runtime data and persistence layer",
+      "concerns": ["DB safety", "no runtime DB contents opened", "migration gates", "rollback expectations"],
+      "v2_intent_summary": "Treat DB as a private store; never inspect rows; metadata-only diagnostics. Migrations require a dedicated SPEC and rollback plan before any block touches the schema.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true,
+      "runtime_db_contents_opened": false
+    },
+    {
+      "layer_id": "I",
+      "layer_name": "Observability and validation layer",
+      "concerns": ["final CKA MVP validation", "B07", "ROUTE-FIX", "UI ops", "UI boot", "privacy checks", "staged safety checks"],
+      "v2_intent_summary": "Carry the v1 five-validation health-check set into v2 unchanged. Add a v2 validation matrix only when each new v2 block lands; never merge new validation steps into an existing v1 receipt.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true
+    },
+    {
+      "layer_id": "J",
+      "layer_name": "Packaging / deployment layer",
+      "concerns": ["local launcher", "packaging polish", "operator runbook", "freeze / parking rules"],
+      "v2_intent_summary": "Local launcher and packaging hardening continue under the existing PACKAGING-LAUNCHER-HARDEN and PACKAGING-DEPLOYMENT-POLISH series. No production deployment automation in v2 without a separate approved SPEC.",
+      "in_v2_architecture_spec_01_scope": "design only",
+      "no_behavior_change_in_this_spec": true
+    }
+  ],
+
+  "v2_workstream_plan": [
+    {
+      "id": "V2-FOUNDATION-SPEC-02",
+      "scope": "Reports-only foundation SPEC for v2. Restates the cumulative invariants (default-off, review-bound, local-only, no external API, aggregate-only public reports, freeze + park preservation) and defines the canonical termination conditions for any v2 block.",
+      "risk_level": "low",
+      "allowed_mode": "reports_only",
+      "stop_conditions": ["any block would change runtime behavior", "any block would touch a parked / frozen tag", "any block would read licensed rows or private contents"],
+      "validation_requirements": ["public-report privacy checks", "five v1 health-check validations remain _ready"],
+      "parking_requirement": "none (SPEC only); a snapshot is recorded if the SPEC publishes new contract names",
+      "explicit_exclusions": ["any runtime code", "any UI change", "any terminology / license / adapter implementation", "any cue expansion"]
+    },
+    {
+      "id": "V2-RUNTIME-CONTRACTS-01",
+      "scope": "Reports-only contracts (Python typing stubs / Protocol-only) for v2 runtime interfaces: ingestion, extraction adapter, classifier adapter, terminology lookup adapter, persistence adapter, observability hook. Pure type-level / data-class-level definitions; no actual implementations.",
+      "risk_level": "low_to_moderate",
+      "allowed_mode": "reports_only_with_typing_only_module_optional",
+      "stop_conditions": ["a contract would require importing private modules", "a contract would require licensed row knowledge", "a contract would default-on any opt-in behavior"],
+      "validation_requirements": ["public-report privacy checks", "focused tests that the typing-only module has no runtime side effects on import", "five v1 health-check validations remain _ready"],
+      "parking_requirement": "tag the contracts block once it lands; reports-only otherwise",
+      "explicit_exclusions": ["any concrete adapter implementation", "any change to app/main.py", "any Streamlit wiring"]
+    },
+    {
+      "id": "V2-VALIDATION-HARNESS-01",
+      "scope": "Reports-only v2 validation matrix SPEC + a focused pytest harness that catalogs the existing v1 five-validation set, adds reports-only stubs for v2 contract conformance, and records expected _ready conclusions per validation.",
+      "risk_level": "low",
+      "allowed_mode": "reports_only_plus_focused_tests",
+      "stop_conditions": ["any new test would require licensed rows, private DB rows, or private filesystem paths", "any new test would require Streamlit at module load when Streamlit is unavailable"],
+      "validation_requirements": ["all new tests pass", "all v1 health-check validations remain _ready", "public-report privacy checks pass"],
+      "parking_requirement": "no parking tag (validation harness is durable; updates are merged in place)",
+      "explicit_exclusions": ["any change to runtime behavior", "any modification of v1 validation scripts beyond reports-only documentation"]
+    },
+    {
+      "id": "V2-UI-SHELL-SPEC-01",
+      "scope": "Reports-only UI shell SPEC for v2. Documents the existing Run & Review + Advanced technical details surface, defines the env-gating contract for any future UI expansion, and lists the explicit forbidden UI affordances (buttons, forms, callbacks, on_click/on_change/on_submit kwargs, state mutations, data-layer writes, document_type mutations).",
+      "risk_level": "low_to_moderate",
+      "allowed_mode": "reports_only",
+      "stop_conditions": ["the SPEC would change any existing UI behavior", "the SPEC would propose a default-on UI element"],
+      "validation_requirements": ["public-report privacy checks", "five v1 health-check validations remain _ready"],
+      "parking_requirement": "tag the UI-shell SPEC once it lands",
+      "explicit_exclusions": ["any change to app/main.py", "any Streamlit code in this SPEC"]
+    },
+    {
+      "id": "V2-DATA-INFRA-SPEC-01",
+      "scope": "Reports-only DB / persistence SPEC. Defines a runtime-DB-row-blind contract: metadata-only diagnostics, migrations require explicit SPEC + rollback plan, public reports must never embed DB rows or private DB paths.",
+      "risk_level": "moderate",
+      "allowed_mode": "reports_only",
+      "stop_conditions": ["the SPEC would require opening runtime DB rows", "the SPEC would propose a default-on migration"],
+      "validation_requirements": ["public-report privacy checks", "five v1 health-check validations remain _ready"],
+      "parking_requirement": "tag the data-infra SPEC once it lands",
+      "explicit_exclusions": ["any DB schema change", "any DB row read", "any private path printed"]
+    },
+    {
+      "id": "V2-EXTRACTION-SPEC-01",
+      "scope": "Reports-only SPEC for the v2 extraction / OCR layer. Defines adapter seams and confidence/fallback isolation. No behavior change. Cue expansion remains disallowed.",
+      "risk_level": "moderate",
+      "allowed_mode": "reports_only",
+      "stop_conditions": ["the SPEC would alter OCR routing", "the SPEC would change extraction behavior", "the SPEC would propose cue packs"],
+      "validation_requirements": ["public-report privacy checks", "five v1 health-check validations remain _ready"],
+      "parking_requirement": "tag the extraction SPEC once it lands",
+      "explicit_exclusions": ["any change to OCR routing", "any change to PDF text / layout / table extraction", "any cue pack"]
+    },
+    {
+      "id": "V2-TERMINOLOGY-WAIT-GATE",
+      "scope": "Passive wait gate. No new terminology block opens until concrete operator license confirmations land (per PARK-02). When confirmations land, a separate SPEC reopens the gate.",
+      "risk_level": "minimal",
+      "allowed_mode": "passive_wait",
+      "stop_conditions": ["any block would reopen the license-gated track without concrete operator confirmations"],
+      "validation_requirements": ["no new validations required while the gate is closed"],
+      "parking_requirement": "no parking tag (this is a wait state, not a track)",
+      "explicit_exclusions": ["private adapter implementation", "real private-store access", "MeSH integration", "licensed row reads", "license-acknowledgement contents access"]
+    },
+    {
+      "id": "V2-PACKAGING-SPEC-01",
+      "scope": "Reports-only packaging / deployment SPEC. Documents the local launcher, packaging polish, and operator runbook chains. No production deployment automation.",
+      "risk_level": "low",
+      "allowed_mode": "reports_only",
+      "stop_conditions": ["the SPEC would propose production deployment automation", "the SPEC would require any external service"],
+      "validation_requirements": ["public-report privacy checks", "five v1 health-check validations remain _ready"],
+      "parking_requirement": "tag the packaging SPEC once it lands",
+      "explicit_exclusions": ["any launcher behavior change in this SPEC", "any deployment automation"]
+    },
+    {
+      "id": "V2-ROADMAP-02",
+      "scope": "Reports-only roadmap audit after V2-FOUNDATION-SPEC-02 and V2-RUNTIME-CONTRACTS-01 land. Re-ranks the remaining v2 workstreams based on what the SPECs actually produced.",
+      "risk_level": "minimal",
+      "allowed_mode": "reports_only",
+      "stop_conditions": ["the roadmap would recommend a non-SPEC block immediately after V2-FOUNDATION-SPEC-02"],
+      "validation_requirements": ["public-report privacy checks", "five v1 health-check validations remain _ready"],
+      "parking_requirement": "no parking tag",
+      "explicit_exclusions": ["any implementation work"]
+    }
+  ],
+
+  "block_phase_split_guidance": {
+    "must_split_if_block_touches_any_of": [
+      "OCR routing",
+      "extraction behavior",
+      "thresholds or scoring",
+      "privacy gates",
+      "terminology license gates",
+      "clinical decision logic",
+      "DDI behavior",
+      "runtime DB writes",
+      "auto-accept behavior",
+      "default-on changes to any env-gated feature"
+    ],
+    "may_combine_when_all_of_the_following_hold": [
+      "All sub-tasks are reports-only",
+      "All sub-tasks share a single architecture layer",
+      "No sub-task changes runtime behavior",
+      "No sub-task touches a parked / frozen tag",
+      "No sub-task reads licensed rows / private contents",
+      "Total combined report set passes the public-report privacy check"
+    ],
+    "never_combine": [
+      "Unrelated architecture layers",
+      "Reports-only and runtime-behavior-changing work",
+      "License-gated terminology work with anything else",
+      "Cue expansion with anything (cue expansion remains explicitly NOT recommended)",
+      "Private-adapter implementation with any other work"
+    ]
+  },
+
+  "validation_matrix": {
+    "v1_five_health_check_validations_carry_forward_unchanged": [
+      "scripts/run_cka_final_mvp_release_validation.py — expected: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+      "scripts/run_b07_term01_opt_in_integration_validation.py — expected: cases_failed: 0; external_api_used: false",
+      "scripts/run_medai_route_fix01_validation.py — expected: medai_route_fix01_ready; passed: true",
+      "scripts/run_medai_ui_ops_panel_validation.py — expected: medai_ui_ops_panel_ready",
+      "scripts/run_medai_ui_boot_fix_validation.py — expected: medai_ui_boot_fix_startup_resilience_ready"
+    ],
+    "v2_block_required_additions": [
+      "public-report privacy check on every new public report (clinical_knowledge.privacy.check_public_report_payload)",
+      "staged safety check (no terminology data / private config / LICENSE_ACK_PRIVATE / MeSH / private paths in any commit)",
+      "focused pytest module per implementation block (mirroring DIAG-19/20/term-helper test patterns)"
+    ],
+    "every_v2_block_must_emit_invariant_flags_set_false": [
+      "runtime_behavior_changed",
+      "app_main_modified",
+      "helper_modified",
+      "streamlit_wiring_changed",
+      "launcher_files_modified",
+      "startup_preflight_modified",
+      "config_modified",
+      "extraction_behavior_changed",
+      "ocr_behavior_changed",
+      "classifier_behavior_changed",
+      "threshold_behavior_changed",
+      "cue_expansion_recommended",
+      "cue_expansion_performed",
+      "external_api_used",
+      "external_api_enabled",
+      "clinical_interpretation_performed",
+      "diagnosis_inference_performed",
+      "medication_inference_performed",
+      "ddi_behavior_changed",
+      "treatment_inference_performed",
+      "licensed_terminology_rows_read",
+      "license_ack_private_read",
+      "raw_text_printed",
+      "raw_filenames_printed",
+      "private_paths_printed",
+      "secrets_printed",
+      "tags_created (except parking blocks)",
+      "tags_modified"
+    ]
+  },
+
+  "parking_strategy": {
+    "rule_1": "Every high-risk track ends with a parking snapshot: one named commit + two annotated tags ({track}-ready-{date} and medai-final-parked-post-{track}-{date}).",
+    "rule_2": "Parking tags are pushed via github-direct (the local proxy historically 403s on refs/tags/* writes). Use the gh-installed credentials.",
+    "rule_3": "Never use git push --tags. Never use --force / --force-with-lease. Tag pushes are explicit by name.",
+    "rule_4": "Existing parking tags (PARK-20..26, FREEZE, term helper/wiring PARK-01, license-gate PARK-02) must remain unchanged across every subsequent block.",
+    "rule_5": "A parking block is reports-only by definition. It records the matrix, blocks the implementation, and adds the two annotated tags.",
+    "rule_6": "Any reopening of a parked track requires a fresh SPEC block first; reopening must not move or repoint existing parking tags."
+  },
+
+  "non_goals": [
+    "Private adapter implementation",
+    "Real private-store access",
+    "Licensed terminology row reads in any v2 block",
+    "External terminology APIs (UMLS REST, NLM web services, SNOMED Cloud, RxNorm cloud, MeSH cloud) at runtime",
+    "Cue expansion",
+    "Autonomous diagnosis or treatment",
+    "Medication / dose inference",
+    "DDI behavior changes driven by terminology coding",
+    "Real-corpus validation until a privacy-gated SPEC is separately approved",
+    "MORE-UNKNOWN-DIAGNOSTICS",
+    "Runtime DB migrations without a SPEC + rollback plan",
+    "Production deployment automation",
+    "Public-report row dumps under any condition",
+    "Default-on changes to any env-gated feature"
+  ],
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "wiring private terminology output into app/main.py runtime beyond the parked helper/wiring mini-track",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "Licensed terminology row reads",
+    "Private license-acknowledgement file contents access",
+    "External terminology API enablement for runtime",
+    "cue-pack expansion (explicitly NOT recommended)",
+    "Public-report row dumps under any condition",
+    "Auto-accept driven by terminology coding",
+    "MeSH integration until both license confirmation AND completed operator-side download",
+    "Production deployment automation"
+  ],
+
+  "deferred_items": [
+    "Private adapter implementation",
+    "Real private-store access",
+    "Licensed terminology row reads",
+    "External terminology APIs",
+    "Cue expansion",
+    "Autonomous diagnosis or treatment",
+    "Medication / dose inference",
+    "DDI behavior change",
+    "Real-corpus validation until privacy-gated SPEC lands",
+    "MORE-UNKNOWN-DIAGNOSTICS",
+    "Runtime DB migrations",
+    "Production deployment automation"
+  ],
+
+  "top_recommended_next_block": "V2-FOUNDATION-SPEC-02",
+  "recommended_next_3_blocks": [
+    "V2-FOUNDATION-SPEC-02",
+    "V2-RUNTIME-CONTRACTS-01",
+    "V2-VALIDATION-HARNESS-01"
+  ],
+
+  "next_block_decision": "V2_FOUNDATION_SPEC_02_reports_only_first_then_runtime_contracts_then_validation_harness",
+  "next_block_decision_rationale": "The next safest forward-motion step is V2-FOUNDATION-SPEC-02 — a reports-only foundation SPEC that restates the cumulative invariants and defines the canonical termination conditions for any v2 block. After that lands, V2-RUNTIME-CONTRACTS-01 (typing-only Python Protocols / data classes) and V2-VALIDATION-HARNESS-01 (reports-only validation matrix + focused tests) are the next two safest steps. Cue expansion, private adapter implementation, and any work touching the frozen v1 surface remain explicitly off the table.",
+
+  "safety_privacy_constraints_observed": [
+    "No source documents opened",
+    "No raw OCR text, raw document text, raw filenames, private paths, PHI, secrets, runtime DB rows, backups, bundles, keys, or licensed terminology rows read",
+    "No license text reproduced",
+    "No private license-acknowledgement file contents read",
+    "No private config contents read",
+    "Only public-safe report metadata read",
+    "No app/main.py / launcher / startup_preflight / config / helper / Streamlit-wiring modification",
+    "No tags created, moved, or deleted",
+    "No external APIs called or enabled",
+    "FREEZE tag pair and all PARK tag pairs (PARK-20..23, PARK-24, PARK-25, PARK-26, helper/wiring PARK-01, license-gate PARK-02) unchanged on origin",
+    "Cue expansion remains explicitly NOT recommended"
+  ],
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "term_license_gate_park_02_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 96.1%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 96.0,
+      "whole_medai_remaining_pct": 4.0
+    },
+    "after": {
+      "whole_medai_done_pct": 96.1,
+      "whole_medai_remaining_pct": 3.9,
+      "note": "Reports-only v2 architecture SPEC. No runtime change; small bump reflects the durable architecture plan (10 layers, 9 workstreams, block-phase split guidance, validation matrix, parking strategy, non-goals)."
+    }
+  }
+}
