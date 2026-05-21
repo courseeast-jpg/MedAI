@@ -1,0 +1,311 @@
+{
+  "conclusion": "medai_term_license_operator_return_06_ready_operator_return_not_yet_received",
+  "phase_id": "MEDAI-TERM-LICENSE-OPERATOR-RETURN-06",
+  "mode": "explicit_operator_license_review_return",
+  "reports_only": true,
+  "implementation_started": false,
+  "private_adapter_implemented": false,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "e3b66de",
+  "term_license_manual_return_05_commit_short": "a72b54a",
+  "term_mesh_local_download_pack_01_commit_short": "cedbbd3",
+  "term_private_config_verify_02_commit_short": "60f1114",
+  "term_private_config_01_commit_short": "d6fee2f",
+  "freeze_commit_short": "7ef8ffd",
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+
+  "operator_return_received": false,
+  "operator_return_received_evidence": "This block scanned the prompt and any accompanying public-safe status files for an explicit operator-return input model. No per-resource block with operator_confirms_license_terms_reviewed, operator_confirms_local_only_use, operator_confirms_no_redistribution, operator_confirms_no_runtime_external_api, or operator_confirms_no_public_row_output was provided for any license-gated source. The prompt defines the expected input shape and verification logic but supplies no actual operator confirmations.",
+  "manual_license_verification_complete": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "private_config_contents_read": false,
+  "private_config_staged": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "license_ack_private_staged": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "mesh_status": "download_helper_created",
+  "mesh_download_completed": false,
+  "mesh_integration_allowed": false,
+
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+
+  "verification_decision_logic": {
+    "rule_1": "If all required boolean confirmations are true AND the operator-supplied status is verified, the resource is operator_return_status=verified_by_explicit_operator_return.",
+    "rule_2": "If any required boolean is false OR missing, the resource is operator_return_status=not_verified.",
+    "rule_3": "If the operator explicitly supplies status=blocked, the resource is operator_return_status=blocked.",
+    "rule_4": "If the operator explicitly supplies status=not_applicable (e.g. internal boundaries with no license terms), the resource is operator_return_status=not_applicable.",
+    "overall_completion_rule": "manual_license_verification_complete may be true only if every license-gated resource is verified_by_explicit_operator_return, and every internal-boundary entry is verified_by_explicit_operator_return or not_applicable with safe justification. Any not_verified entry forces manual_license_verification_complete=false.",
+    "implementation_gate_rule": "private_adapter_implementation_allowed remains false unless manual_license_verification_complete is true AND a subsequent SPEC/readiness block has explicitly reconsidered the adapter. This block does not allow implementation under any input."
+  },
+
+  "operator_resource_confirmation_matrix": [
+    {
+      "resource": "loinc",
+      "role": "primary_license_gated",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied in this prompt or accompanying public-safe status files."
+    },
+    {
+      "resource": "rxnorm_full",
+      "role": "primary_license_gated",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied."
+    },
+    {
+      "resource": "rxnorm_prescribable",
+      "role": "auxiliary_license_gated",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied."
+    },
+    {
+      "resource": "snomed_ct_us",
+      "role": "primary_license_gated",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied; snomed_runtime_integration_enabled remains false per preflight."
+    },
+    {
+      "resource": "snomed_ct_international",
+      "role": "secondary_license_gated",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied."
+    },
+    {
+      "resource": "umls_metathesaurus",
+      "role": "future_import_license_gated",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied; umls_future_gated remains true per preflight."
+    },
+    {
+      "resource": "mesh",
+      "role": "future_integration_license_gated",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied; mesh_status remains download_helper_created; mesh_download_completed=false."
+    },
+    {
+      "resource": "private_license_acknowledgement_handling",
+      "role": "private_license_confirmation",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": null,
+      "operator_return_status": "not_verified",
+      "rationale": "No explicit operator confirmation supplied. Acknowledgement-file contents have never been read by any block."
+    },
+    {
+      "resource": "private_terminology_config_boundary",
+      "role": "internal_boundary",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": "internal_boundary_has_no_external_license_terms",
+      "operator_return_status": "not_applicable",
+      "rationale": "Internal boundary; license-review booleans must not apply. The structural boundary was separately verified by MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02 (commit 60f1114): ignored by git, never committed, never staged, contents never read. That structural verification stands independently of this license-review return."
+    },
+    {
+      "resource": "b07_mkb_public_safe_boundary",
+      "role": "internal_boundary",
+      "operator_confirms_license_terms_reviewed": null,
+      "operator_confirms_local_only_use": null,
+      "operator_confirms_no_redistribution": null,
+      "operator_confirms_no_runtime_external_api": null,
+      "operator_confirms_no_public_row_output": null,
+      "operator_supplied_status": null,
+      "operator_supplied_notes_public_safe": "internal_boundary_has_no_external_license_terms",
+      "operator_return_status": "not_applicable",
+      "rationale": "Internal boundary; license-review booleans must not apply. The boundary was separately validated by B07-TERM-01 opt-in integration, CKA-B07 medical coding interface, CKA-B10 preflight scaffold, and CKA-B11 final MVP release with feature flags default-off and external_api_used=false. That structural validation stands independently of this license-review return."
+    }
+  ],
+
+  "resources_verified_by_operator": [],
+  "resources_not_verified": [
+    "loinc",
+    "rxnorm_full",
+    "rxnorm_prescribable",
+    "snomed_ct_us",
+    "snomed_ct_international",
+    "umls_metathesaurus",
+    "mesh",
+    "private_license_acknowledgement_handling"
+  ],
+  "resources_marked_not_applicable_with_structural_verification_elsewhere": [
+    "private_terminology_config_boundary",
+    "b07_mkb_public_safe_boundary"
+  ],
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "wiring private terminology output into app/main.py runtime",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "Licensed terminology row reads",
+    "Private license-acknowledgement file contents access",
+    "External terminology API enablement for runtime",
+    "cue-pack expansion (explicitly NOT recommended)"
+  ],
+
+  "next_block_decision": "operator_license_confirmation_still_required",
+  "next_block_decision_rationale": "No operator confirmation block was supplied in the prompt or any accompanying public-safe status file. Every license-gated resource therefore sits at operator_return_status=not_verified. manual_license_verification_complete remains false. private_adapter_implementation_allowed remains false. The operator must supply a reports-only return that records per-resource boolean confirmations (operator_confirms_license_terms_reviewed, operator_confirms_local_only_use, operator_confirms_no_redistribution, operator_confirms_no_runtime_external_api, operator_confirms_no_public_row_output) plus a controlled-vocabulary status string. The return must contain no license text, no row content, no private filesystem paths, no screenshots with licensed content, no DB exports, no keys, no secrets, no PHI, and no LICENSE_ACK_PRIVATE contents.",
+
+  "next_block_input_template_for_operator": {
+    "form": "Re-run MEDAI-TERM-LICENSE-OPERATOR-RETURN-06 with an explicit operator-return block embedded in the prompt or referenced from an accompanying public-safe status file.",
+    "required_fields_per_license_gated_resource": [
+      "operator_confirms_license_terms_reviewed (bool)",
+      "operator_confirms_local_only_use (bool)",
+      "operator_confirms_no_redistribution (bool)",
+      "operator_confirms_no_runtime_external_api (bool)",
+      "operator_confirms_no_public_row_output (bool)",
+      "status (controlled string: verified | not_verified | not_applicable | blocked)",
+      "notes_public_safe (short controlled-vocabulary text, no license text, no private paths)"
+    ],
+    "license_gated_resources_to_cover": [
+      "loinc",
+      "rxnorm_full",
+      "rxnorm_prescribable",
+      "snomed_ct_us",
+      "snomed_ct_international",
+      "umls_metathesaurus",
+      "mesh",
+      "private_license_acknowledgement_handling"
+    ]
+  },
+
+  "deferred_items": [
+    "Wiring terminology output into app/main.py runtime (deferred until operator return + adapter SPEC approval)",
+    "UMLS lookup (umls_future_gated=true)",
+    "SNOMED CT runtime integration (snomed_runtime_integration_enabled=false)",
+    "DDI / diagnosis / treatment / medication / dosing inference driven by terminology",
+    "Abbreviation expansion in any form",
+    "Cue-pack expansion (explicitly NOT recommended)",
+    "External terminology API enablement",
+    "Public-report row dumps under any condition",
+    "MeSH integration (requires both license confirmation AND completed operator-side download)"
+  ],
+
+  "validation_evidence": {
+    "public_report_privacy_checks": "passed: 3/3 MEDAI-TERM-LICENSE-OPERATOR-RETURN-06 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only MEDAI-TERM-LICENSE-OPERATOR-RETURN-06 scoped report files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; reports-only block"
+  },
+
+  "safety_privacy_statement": "MEDAI-TERM-LICENSE-OPERATOR-RETURN-06 is a reports-only block. It scanned the prompt and any accompanying public-safe status file for an explicit operator-return input; none was supplied. No license text was reproduced. No screenshots with licensed content were read. No licensed terminology rows, no row codes, no display strings, no synonyms, no definitions, no DB exports, no private filesystem paths, no raw OCR text, no PHI, no keys, no secrets, and no private license-acknowledgement file contents appear in any committed file. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No runtime code, helper code, Streamlit wiring, launcher, startup preflight, or config file was modified. No tags created, moved, or deleted. PARK-20..23 tag pairs and the FREEZE tag pair remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED.",
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "freeze_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 95.8%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 95.7,
+      "whole_medai_remaining_pct": 4.3
+    },
+    "after": {
+      "whole_medai_done_pct": 95.8,
+      "whole_medai_remaining_pct": 4.2,
+      "note": "Operator-return slot was opened with the required schema, decision logic, and per-resource matrix. No operator confirmations were supplied in this prompt; every license-gated resource therefore remains not_verified. No runtime change."
+    }
+  }
+}
