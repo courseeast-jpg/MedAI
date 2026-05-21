@@ -1,0 +1,365 @@
+{
+  "conclusion": "medai_v2_ui_shell_spec_01_ready",
+  "block_id": "MEDAI-V2-UI-SHELL-SPEC-01",
+  "phase_id": "MEDAI-V2-UI-SHELL-SPEC-01",
+  "block_mode": "reports_only_ui_shell_spec",
+  "reports_only": true,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_block": "826eb7a",
+  "v2_validation_harness_01_commit_short": "73af6f6",
+  "v2_runtime_contracts_01_commit_short": "e6e33dd",
+  "v2_foundation_spec_02_commit_short": "8b53d82",
+  "v2_architecture_spec_01_commit_short": "551af98",
+  "freeze_commit_short": "7ef8ffd",
+  "park_02_commit_short": "b9b19ad",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+
+  "requires_preceding_spec": true,
+  "preceding_architecture_spec_present": true,
+  "preceding_foundation_spec_present": true,
+  "preceding_runtime_contracts_present": true,
+  "preceding_validation_harness_present": true,
+
+  "ui_shell_spec_created": true,
+  "screen_inventory_created": true,
+  "future_ui_implementation_gates_defined": true,
+
+  "runtime_behavior_changed": false,
+  "app_main_changed": false,
+  "streamlit_code_changed": false,
+  "ui_changed": false,
+  "ui_spec_only": true,
+  "read_only_shell_spec": true,
+  "no_ui_actions_added": true,
+  "no_callbacks_added": true,
+  "no_session_state_logic_added": true,
+  "launcher_changed": false,
+  "startup_config_changed": false,
+  "extraction_changed": false,
+  "ocr_changed": false,
+  "classifier_changed": false,
+  "threshold_scoring_changed": false,
+  "cue_pack_changed": false,
+  "clinical_behavior_changed": false,
+  "ddi_behavior_changed": false,
+  "terminology_behavior_changed": false,
+  "private_adapter_implemented": false,
+  "concrete_adapters_implemented": false,
+  "runtime_wiring_added": false,
+  "external_api_used": false,
+  "private_data_accessed": false,
+  "licensed_rows_read": false,
+  "licensed_rows_exposed": false,
+  "private_license_ack_read": false,
+  "private_config_read": false,
+  "runtime_db_accessed": false,
+  "source_documents_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "raw_filenames_exposed": false,
+  "private_paths_printed": false,
+  "private_paths_exposed": false,
+  "secrets_printed": false,
+  "tags_touched": false,
+  "cue_expansion_recommended": false,
+  "v1_release_preserved": true,
+  "review_bound_default": true,
+  "local_only_default": true,
+  "external_api_blocked_default": true,
+  "auto_accept_allowed_default": false,
+
+  "section_a_scope_and_non_scope": {
+    "in_scope": [
+      "Define the V2 operator UI shell screen-by-screen at planning level only.",
+      "Document safety / privacy UI invariants the future V2 UI must satisfy.",
+      "Document the read-only Advanced technical details doctrine carried forward from DIAG-19.",
+      "Document the terminology / private-adapter UI wait gate.",
+      "Document the parking / freeze visibility doctrine.",
+      "Document explicit future UI implementation gates that must be satisfied before any UI code lands."
+    ],
+    "out_of_scope": [
+      "Any Streamlit code change.",
+      "Any change to app/main.py.",
+      "Any change to launcher / startup preflight / config / helper modules.",
+      "Any UI button / form / callback / session-state / on_click / on_change / on_submit / state mutation / data-layer write addition.",
+      "Any operator action wiring (approve / reject / re-extract / escalate).",
+      "Any extraction / OCR routing / classifier / threshold / cue / clinical / DDI behavior change.",
+      "Any private terminology adapter implementation.",
+      "Any external API enablement.",
+      "Any runtime DB access.",
+      "Any new tag creation or movement."
+    ]
+  },
+
+  "section_b_prior_v2_dependency_chain": [
+    {"block": "MEDAI-V2-ARCHITECTURE-SPEC-01", "commit_short": "551af98"},
+    {"block": "MEDAI-V2-FOUNDATION-SPEC-02", "commit_short": "8b53d82"},
+    {"block": "MEDAI-V2-RUNTIME-CONTRACTS-01", "commit_short": "e6e33dd"},
+    {"block": "MEDAI-V2-VALIDATION-HARNESS-01", "commit_short": "73af6f6"}
+  ],
+
+  "section_c_existing_v1_operator_ui_posture_summary": {
+    "v1_ui_surface": "Streamlit-based Run & Review surface in app/main.py with Advanced technical details expander; default-off env-gated read-only metadata blocks established by DIAG-17/18/19 and the terminology helper / wiring mini-track (PARK-01).",
+    "frozen_at_commit_short": "7ef8ffd",
+    "default_off_env_vars_for_v1_optional_metadata": [
+      "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_IMPL_ENABLED",
+      "MEDAI_DOC_TYPE_PDF_TEXT_LAYOUT_QUALITY_UI_ENABLED",
+      "MEDAI_TERMINOLOGY_LOOKUP_ENABLED"
+    ],
+    "local_only_environment_defaults_carried_forward": {
+      "MEDAI_LOCAL_ONLY": "1",
+      "MEDAI_ALLOW_EXTERNAL_API": "0",
+      "MEDAI_REQUIRE_PII_SCRUB": "1",
+      "MEDAI_PRIVACY_AUDIT": "1"
+    },
+    "v1_ui_review_bound_invariant_preserved": true,
+    "v1_advanced_technical_details_read_only_invariant_preserved": true,
+    "v1_no_auto_accept_invariant_preserved": true
+  },
+
+  "section_d_proposed_v2_ui_shell_map": [
+    {
+      "shell_id": "S1",
+      "shell_name": "Operator Home / Current Run shell",
+      "purpose_token": "show_current_local_session_state",
+      "must_distinguish_states": ["no_current_run", "previous_run", "queued_files", "active_processing", "blocked"],
+      "must_not_expose_raw_filenames_in_public_reports": true,
+      "must_preserve_local_only_posture": true,
+      "must_preserve_review_bound_posture": true,
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    },
+    {
+      "shell_id": "S2",
+      "shell_name": "Run & Review shell",
+      "purpose_token": "operator_review_of_processed_documents",
+      "must_preserve_review_required_default": true,
+      "auto_accept_allowed": false,
+      "visual_state_separation_required_tokens": ["accepted_workflow_label", "review_workflow_label", "blocked_workflow_label", "error_workflow_label"],
+      "raw_technical_details_must_remain_behind_advanced_expander": true,
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    },
+    {
+      "shell_id": "S3",
+      "shell_name": "Advanced Technical Details shell",
+      "purpose_token": "read_only_diagnostic_visibility",
+      "collapsed_by_default": true,
+      "no_action_buttons_in_diagnostic_regions": true,
+      "carries_forward_existing_default_off_metadata_surfaces": true,
+      "must_not_become_hidden_automation_control_plane": true,
+      "v1_default_off_blocks_carried_forward_unchanged": ["DIAG-17 metadata", "DIAG-18 render plan", "DIAG-19 streamlit wiring", "terminology helper/wiring mini-track at e398a75"],
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    },
+    {
+      "shell_id": "S4",
+      "shell_name": "Safety / Privacy Status shell",
+      "purpose_token": "visible_local_only_external_api_blocked_privacy_audit_review_bound_status",
+      "must_make_unsafe_or_degraded_states_visible": true,
+      "must_not_imply_medical_device_status": true,
+      "decision_support_only_posture_retained": true,
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    },
+    {
+      "shell_id": "S5",
+      "shell_name": "Validation / Health shell",
+      "purpose_token": "show_v1_five_validation_health_check_status_and_future_v2_validation_matrix_status",
+      "read_only_in_this_spec": true,
+      "runs_validations_from_ui_in_this_spec": false,
+      "creates_runtime_callbacks_in_this_spec": false,
+      "v1_five_validation_health_check_set_preserved": true,
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    },
+    {
+      "shell_id": "S6",
+      "shell_name": "Terminology / Clinical Knowledge shell",
+      "purpose_token": "show_terminology_private_adapter_wait_gate_status_only",
+      "exposes_licensed_rows": false,
+      "exposes_private_config_contents": false,
+      "reads_license_acknowledgement_contents": false,
+      "shows_private_adapter_implementation_blocked": true,
+      "operator_license_confirmation_status_carried_forward": "still_required",
+      "mesh_status_carried_forward": "download_helper_created",
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    },
+    {
+      "shell_id": "S7",
+      "shell_name": "Parking / Release shell",
+      "purpose_token": "show_frozen_release_and_parked_track_anchors",
+      "v1_frozen_release_anchor_short": "7ef8ffd",
+      "creates_moves_deletes_tags": false,
+      "implies_parked_tracks_reopened": false,
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    },
+    {
+      "shell_id": "S8",
+      "shell_name": "Operator Guidance shell",
+      "purpose_token": "plain_language_guidance_on_what_the_operator_can_safely_do",
+      "must_separate_categories": ["safe_to_use_now", "review_required", "blocked", "not_implemented"],
+      "recommends_cue_expansion": false,
+      "action_buttons_allowed_in_this_spec": false,
+      "callbacks_allowed_in_this_spec": false
+    }
+  ],
+  "shell_count": 8,
+
+  "section_e_screen_surface_inventory_summary": {
+    "shells_defined": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"],
+    "total_shells": 8,
+    "action_buttons_added_in_this_spec": 0,
+    "callbacks_added_in_this_spec": 0,
+    "session_state_keys_added_in_this_spec": 0
+  },
+
+  "section_f_safety_privacy_ui_invariants": {
+    "ui_spec_only": true,
+    "streamlit_code_changed": false,
+    "app_main_changed": false,
+    "runtime_behavior_changed": false,
+    "no_ui_actions_added": true,
+    "no_callbacks_added": true,
+    "no_session_state_logic_added": true,
+    "read_only_shell_spec": true,
+    "review_bound_default": true,
+    "local_only_default": true,
+    "external_api_blocked_default": true,
+    "auto_accept_allowed_default": false,
+    "private_adapter_implemented": false,
+    "licensed_rows_exposed": false,
+    "raw_filenames_exposed": false,
+    "private_paths_exposed": false,
+    "cue_expansion_recommended": false,
+    "v1_release_preserved": true
+  },
+
+  "section_g_read_only_advanced_technical_details_doctrine": {
+    "default_collapsed": true,
+    "controlled_vocabulary_only_emission": true,
+    "safe_streamlit_calls_only_when_implemented": ["st.markdown", "st.caption"],
+    "forbidden_streamlit_widgets_in_diagnostic_regions": ["st.button", "st.form", "st.checkbox", "st.radio", "st.selectbox", "st.text_input", "st.text_area", "st.number_input", "st.session_state", "st.rerun", "st.experimental_rerun", "st.form_submit_button"],
+    "forbidden_streamlit_kwargs_in_diagnostic_regions": ["on_click=", "on_change=", "on_submit="],
+    "forbidden_render_field_substrings": ["on_click", "on_change", "on_submit", "button", "callback", "action", "write", "mutate", "document_type_mutation", "data_layer_write", "state_mutation"],
+    "must_not_become_hidden_automation_control_plane": true,
+    "v1_diag_19_wiring_doctrine_carried_forward": true
+  },
+
+  "section_h_terminology_private_adapter_ui_wait_gate": {
+    "private_adapter_implementation_allowed": false,
+    "real_private_store_access_allowed": false,
+    "manual_license_verification_complete": false,
+    "license_gated_resources_verified_count": 0,
+    "internal_boundaries_verified_count": 2,
+    "park_02_anchor_commit_short": "b9b19ad",
+    "park_01_anchor_commit_short": "e398a75",
+    "ui_must_not_expose_licensed_rows": true,
+    "ui_must_not_expose_private_config_contents": true,
+    "ui_must_not_read_license_acknowledgement_contents": true,
+    "ui_must_show_implementation_blocked_message_only": true,
+    "ui_aggregate_only_emission_required": true
+  },
+
+  "section_i_parking_freeze_visibility_doctrine": [
+    {"track": "Local operator release", "status": "frozen", "anchor_commit_short": "7ef8ffd", "ui_visibility_required": true, "tag_pair": ["medai-local-operator-release-frozen-2026-05-20", "medai-final-local-operator-release-2026-05-20"]},
+    {"track": "Residual Unknown reduction", "status": "parked", "anchor_commit_short": "3e46461", "ui_visibility_required": true},
+    {"track": "Text-layer eval spec", "status": "parked", "anchor_commit_short": "9f9e22d", "ui_visibility_required": true},
+    {"track": "PDF text/layout default-off", "status": "parked", "anchor_commit_short": "f4d3cc6", "ui_visibility_required": true},
+    {"track": "PDF text/layout Streamlit wiring", "status": "parked", "anchor_commit_short": "748c32a", "ui_visibility_required": true},
+    {"track": "DIAG-20 operator UAT", "status": "parked", "anchor_commit_short": "1b14ffe", "ui_visibility_required": true},
+    {"track": "DIAG-21 fixture audit", "status": "parked", "anchor_commit_short": "6b31678", "ui_visibility_required": true},
+    {"track": "Operator readiness + runtime hardening", "status": "parked", "anchor_commit_short": "91b9eba", "ui_visibility_required": true},
+    {"track": "Terminology helper/wiring mini-track", "status": "parked", "anchor_commit_short": "e398a75", "ui_visibility_required": true},
+    {"track": "License-gated private adapter track", "status": "parked", "anchor_commit_short": "b9b19ad", "ui_visibility_required": true},
+    {"track": "Private terminology config boundary", "status": "complete_and_verified", "anchor_commit_short": "60f1114", "ui_visibility_required": true},
+    {"track": "MeSH local helper / download", "status": "blocked_operator_side", "anchor_commit_short": "cedbbd3", "ui_visibility_required": true},
+    {"track": "Manual license verification gate", "status": "blocked_operator_side", "anchor_commit_short": "376ca4e", "ui_visibility_required": true}
+  ],
+
+  "section_j_future_ui_implementation_gates": [
+    "A. UI implementation requires a separate implementation block.",
+    "B. Any UI implementation must be default-off if it changes operator-visible behavior.",
+    "C. Any action button requires a separate operator-action contract review (mapped to V2OperatorActionProtocol from RUNTIME-CONTRACTS-01).",
+    "D. Any callback / session-state logic requires focused tests proving review-bound default, no auto-accept, no DDI / clinical-decision drift.",
+    "E. Any private / terminology display must remain aggregate-only and license-gated.",
+    "F. Any validation-runner UI must be separate from this shell spec and must consume V2ValidationHarnessProtocol from RUNTIME-CONTRACTS-01.",
+    "G. Any external API toggle must remain blocked by default and require a privacy / safety SPEC.",
+    "H. Any clinical display must preserve decision-support-only language.",
+    "I. Any raw document display requires a separate privacy-approved design.",
+    "J. Cue expansion remains explicitly NOT recommended."
+  ],
+
+  "section_k_validation_matrix_reference": {
+    "v1_five_validation_health_check_set_preserved": true,
+    "v2_validation_matrix_categories_referenced": [
+      "A_contract_import_and_side_effect_safety",
+      "B_contract_inventory_conformance",
+      "C_safety_profile_conformance",
+      "D_terminology_aggregate_only_conformance",
+      "E_review_hitl_conformance",
+      "F_reports_privacy_conformance",
+      "G_runtime_non_modification_conformance",
+      "H_parking_freeze_preservation_conformance"
+    ],
+    "this_block_conforms_to_categories": [
+      "A_contract_import_and_side_effect_safety (validation_harness module unchanged)",
+      "B_contract_inventory_conformance (runtime_contracts module unchanged)",
+      "C_safety_profile_conformance (default V2RuntimeSafetyProfile unchanged)",
+      "D_terminology_aggregate_only_conformance (no terminology UI implementation; aggregate-only doctrine documented)",
+      "E_review_hitl_conformance (every shell preserves review_required default)",
+      "F_reports_privacy_conformance (3 reports pass clinical_knowledge.privacy.check_public_report_payload)",
+      "G_runtime_non_modification_conformance (no app/main.py / launcher / preflight / config / Streamlit change)",
+      "H_parking_freeze_preservation_conformance (all 10 pre-existing tag groups unchanged)"
+    ]
+  },
+
+  "section_l_recommended_next_block": {
+    "primary_recommendation": "V2-DATA-INFRA-SPEC-01 — reports-only DB / persistence SPEC; defines a runtime-DB-row-blind contract with explicit rollback expectations.",
+    "alternative_if_extraction_planning_selected": "V2-EXTRACTION-SPEC-01 — reports-only extraction / OCR layer SPEC; only if extraction architecture planning is explicitly the priority.",
+    "alternative_if_checkpoint_preferred": "V2-ROADMAP-02 — reports-only roadmap audit after the foundation / contracts / validation-harness / UI-shell sequence; re-ranks the remaining v2 workstreams.",
+    "must_not_do_in_any_of_these_blocks": [
+      "Start V2 UI implementation directly.",
+      "Modify app/main.py.",
+      "Add Streamlit UI code.",
+      "Add buttons, callbacks, or operator actions.",
+      "Reopen terminology / private adapter implementation.",
+      "Reopen cue expansion.",
+      "Touch any existing parking / freeze tag."
+    ]
+  },
+
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "term_license_gate_park_02_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+  "prior_park_tags_touched": false,
+
+  "safety_privacy_statement": "MEDAI-V2-UI-SHELL-SPEC-01 is a reports-only / ui-shell-spec block. It adds three public-safe reports, one reports-only audit script, and one focused pytest module. No Streamlit code was written or modified. No app/main.py / launcher / startup preflight / config / helper modification. No UI button, form, callback, session-state, on_click, on_change, on_submit, state mutation, or data-layer write was added. No license text was reproduced. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No private filesystem paths were printed. No raw text, raw OCR text, raw document text, raw filenames, PHI, keys, or secrets appear in any committed file. No external API was called or enabled. No tags created, moved, or deleted. PARK-20..26 tag pairs, the FREEZE tag pair, the term helper/wiring PARK-01 tag pair, and the license-gate PARK-02 tag pair all remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED. Cue expansion remains explicitly NOT recommended.",
+
+  "next_recommended_block": "V2-DATA-INFRA-SPEC-01",
+
+  "whole_medai_done_estimate": "approximately 96.5%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 96.4,
+      "whole_medai_remaining_pct": 3.6
+    },
+    "after": {
+      "whole_medai_done_pct": 96.5,
+      "whole_medai_remaining_pct": 3.5,
+      "note": "V2 operator UI shell now specified at planning level only: 8 shells, 10 future implementation gates, read-only doctrine carried forward. No UI implementation. No runtime change."
+    }
+  }
+}
