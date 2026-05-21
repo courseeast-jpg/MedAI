@@ -1,0 +1,328 @@
+{
+  "block_id": "MEDAI-REAL-DOC-B4-PATHOLOGY-FAMILY-EVAL-01",
+  "phase_id": "MEDAI-REAL-DOC-B4-PATHOLOGY-FAMILY-EVAL-01",
+  "block_mode": "evaluation_only_pathology_family_audit",
+  "mode": "evaluation_only_pathology_family_audit",
+  "reports_only": true,
+  "evaluation_only": true,
+  "synthetic_only": true,
+  "triggered_by_real_operator_signal": true,
+  "matched_unknown_triage_bucket": "B4",
+  "operator_visual_family_identification": "pathology_or_dermatopathology_consultation_report",
+  "operator_supplied_real_document_artifact": false,
+  "real_document_inspected_by_assistant": false,
+  "real_pdf_committed": false,
+  "real_screenshot_committed": false,
+  "real_diagnosis_printed": false,
+  "raw_text_read": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_read": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_read": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "phi_inspected": false,
+  "preceding_release_freeze_snapshot_present": true,
+  "preceding_freeze_maintenance_only_present": true,
+  "preceding_real_doc_unknown_triage_present": true,
+  "freeze_maintenance_posture_intact": true,
+  "evaluation_framework_created": true,
+  "structural_cue_inventory_created": true,
+  "controlled_family_name_recommended": true,
+  "extraction_field_inventory_created": true,
+  "subtype_taxonomy_drafted": true,
+  "future_implementation_justified": true,
+  "behavior_changed_in_this_block": false,
+  "implementation_started": false,
+  "new_helper_created": false,
+  "direct_implementation_recommended": false,
+  "core_classifier_findings": {
+    "core_classifier_module": "document_classification/document_classifier.py",
+    "core_classifier_entry_point": "classify_document",
+    "core_classifier_emitted_document_types": [
+      "clinical_note",
+      "imaging_report",
+      "lab_report",
+      "microbiology_pcr_report",
+      "prescription",
+      "unknown_medical",
+      "unknown_nonmedical"
+    ],
+    "core_classifier_rules_that_actually_emit_in_classify_document": [
+      "lab_report",
+      "prescription",
+      "microbiology_pcr_report",
+      "unknown_medical"
+    ],
+    "core_classifier_has_pathology_cue": false,
+    "core_classifier_has_dermatopathology_cue": false,
+    "core_classifier_has_biopsy_cue": false,
+    "core_classifier_has_microscopic_cue": false,
+    "core_classifier_has_specimen_cue_in_strong_tokens": false,
+    "core_classifier_has_specimen_cue_in_lab_indicator_only": true,
+    "core_classifier_outcome_for_synthetic_pathology_text": {
+      "document_type": "unknown_medical",
+      "confidence": 0.3,
+      "review_reason": "unknown_document_type",
+      "evidence_tag": "no_strong_signals",
+      "warning_tag": "low_confidence_document_type"
+    }
+  },
+  "metadata_family_registry_findings": {
+    "metadata_registry_module": "app/document_type_registry.py",
+    "metadata_registry_entry_point": "document_family_classification_diagnostic",
+    "supported_family_label_count": 11,
+    "supported_language_pack_count": 4,
+    "supported_language_packs": [
+      "english",
+      "russian",
+      "polish",
+      "albanian"
+    ],
+    "pathology_family_label": "Pathology report",
+    "pathology_family_label_constant": "PATHOLOGY_REPORT_LABEL",
+    "pathology_family_threshold": 2,
+    "pathology_family_required_any_count": 0,
+    "pathology_family_english_cue_key_count": 3,
+    "pathology_family_english_cue_keys": [
+      "microscopic_description_section",
+      "pathology_conclusion_section",
+      "specimen_section"
+    ],
+    "pathology_family_language_pack_count": 4,
+    "pathology_family_languages_with_cues": [
+      "albanian",
+      "english",
+      "polish",
+      "russian"
+    ],
+    "metadata_family_outcome_for_synthetic_pathology_text": {
+      "candidate_family": "Pathology report",
+      "matched_family_cue_key_count": 3,
+      "classification_block_reason": "classified",
+      "review_only": true,
+      "auto_accept_allowed": false,
+      "ambiguous_candidates_count": 0
+    }
+  },
+  "two_layer_split_summary": {
+    "core_classifier_emits": "unknown_medical",
+    "metadata_family_registry_emits": "Pathology report",
+    "ui_primary_card_field": "document_type",
+    "ui_primary_card_value_for_pathology": "Unknown",
+    "ui_secondary_family_badge_field": "document_family_classification_diagnostic",
+    "ui_secondary_family_badge_value_for_pathology": "Pathology report",
+    "operator_visible_label_today": "Unknown (primary) / Pathology report (secondary metadata, may be hidden depending on operator view)",
+    "auto_accept_allowed": false,
+    "review_required": true
+  },
+  "safe_structural_cue_inventory_drafted_for_future_spec_only": {
+    "english_section_header_cues_already_present": [
+      "specimen",
+      "microscopic description",
+      "pathology diagnosis",
+      "final diagnosis"
+    ],
+    "english_section_header_cues_observed_in_operator_description_but_not_yet_covered": [
+      "gross description",
+      "clinical diagnosis",
+      "signs and symptoms",
+      "reason for biopsy",
+      "photomicrograph",
+      "margins",
+      "comments",
+      "icd code"
+    ],
+    "language_packs_with_existing_pathology_cues": [
+      "english",
+      "russian",
+      "polish",
+      "albanian"
+    ],
+    "would_require_cue_expansion_to_implement": true,
+    "cue_expansion_attempted_in_this_block": false,
+    "cue_expansion_recommended_in_this_block": false,
+    "cue_expansion_blocked_by_status_registry": true
+  },
+  "controlled_family_name_recommendation": {
+    "recommended_controlled_family_name": "pathology_report",
+    "reasoning_summary": "matches the existing PATHOLOGY_REPORT_LABEL constant and the existing metadata family rule; avoids creating fragmented top-level families per subspeciality",
+    "alternatives_considered": [
+      "dermatopathology_report",
+      "biopsy_pathology_report",
+      "histopathology_report"
+    ],
+    "alternative_rationale_rejected": "introducing one top-level family per subspeciality would multiply the family registry, dilute the classifier signal, and risk ambiguous matches against the existing Pathology report rule",
+    "recommended_subtype_field_name": "pathology_subtype",
+    "recommended_subtype_controlled_vocabulary": [
+      "dermatopathology",
+      "biopsy",
+      "cytology",
+      "frozen_section",
+      "consultation_pathology",
+      "unspecified_pathology"
+    ]
+  },
+  "future_extraction_field_inventory": [
+    {
+      "field": "specimen",
+      "operator_observed": true,
+      "current_metadata_cue_present": true,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "clinical_diagnosis_or_reason_for_biopsy",
+      "operator_observed": true,
+      "current_metadata_cue_present": false,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "gross_description",
+      "operator_observed": true,
+      "current_metadata_cue_present": false,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "microscopic_description",
+      "operator_observed": true,
+      "current_metadata_cue_present": true,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "final_diagnosis",
+      "operator_observed": true,
+      "current_metadata_cue_present": true,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "icd_code",
+      "operator_observed": true,
+      "current_metadata_cue_present": false,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "margins_or_comments",
+      "operator_observed": true,
+      "current_metadata_cue_present": false,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "image_or_photomicrograph_presence",
+      "operator_observed": true,
+      "current_metadata_cue_present": false,
+      "future_extraction_useful": true
+    },
+    {
+      "field": "signs_and_symptoms",
+      "operator_observed": true,
+      "current_metadata_cue_present": false,
+      "future_extraction_useful": true
+    }
+  ],
+  "future_extraction_field_count": 9,
+  "future_implementation_decision": {
+    "future_implementation_justified": true,
+    "future_implementation_scope": "spec_only_synthetic_only_no_classifier_change_no_cue_expansion",
+    "future_implementation_block_id": "MEDAI-PATHOLOGY-REPORT-FAMILY-SPEC-01",
+    "future_implementation_block_mode": "reports_only_synthetic_only_family_spec",
+    "future_implementation_must_not_include": [
+      "real document text",
+      "real OCR text",
+      "real filename",
+      "real PDF",
+      "real screenshot",
+      "real diagnosis",
+      "cue expansion in classifier code",
+      "threshold change",
+      "auto-accept enablement",
+      "classifier rule change",
+      "OCR routing change",
+      "external API use"
+    ]
+  },
+  "smallest_safe_next_block": "MEDAI-PATHOLOGY-REPORT-FAMILY-SPEC-01_OR_FREEZE-MAINTENANCE-ONLY",
+  "smallest_safe_next_block_summary": "reports-only / synthetic-only family spec; or fall back to freeze-maintenance-only if operator chooses not to draft the spec yet",
+  "why_no_behavior_changed_in_this_block": [
+    "freeze-maintenance posture forbids classifier behavior change without explicit approval",
+    "bucket B4 triage permits evaluation-only follow-up, not implementation",
+    "cue expansion is explicitly blocked by the V2 default-off status registry (entry: cue_expansion, status: blocked)",
+    "any classifier rule change must go through a separate spec block and a privacy / safety review",
+    "the operator has not yet approved a behavior change; this block intentionally surfaces evidence only"
+  ],
+  "preceding_chain_acknowledged": [
+    "MEDAI-V2-FOUNDATION-DEFAULT-OFF-STATUS-REGISTRY-01",
+    "MEDAI-V2-ROADMAP-03",
+    "MEDAI-V2-ROADMAP-PARK-02",
+    "MEDAI-V2-RELEASE-FREEZE-SNAPSHOT-01",
+    "MEDAI-V2-FREEZE-MAINTENANCE-ONLY-01",
+    "MEDAI-REAL-DOC-UNKNOWN-TRIAGE-01"
+  ],
+  "freeze_maintenance_anchor": {
+    "v1_frozen_release": "7ef8ffd",
+    "freeze_maintenance_only_01_commit": "fb730f2",
+    "real_doc_unknown_triage_01_commit": "324682c",
+    "release_freeze_snapshot_01_commit": "ae4b70e",
+    "default_off_status_registry_commit": "5f258c0"
+  },
+  "runtime_behavior_changed": false,
+  "app_main_changed": false,
+  "streamlit_code_changed": false,
+  "ui_changed": false,
+  "launcher_changed": false,
+  "installer_changed": false,
+  "deployment_script_changed": false,
+  "startup_config_changed": false,
+  "extraction_changed": false,
+  "ocr_changed": false,
+  "ocr_routing_changed": false,
+  "classifier_changed": false,
+  "classifier_cue_added": false,
+  "classifier_rule_changed": false,
+  "threshold_scoring_changed": false,
+  "parser_behavior_changed": false,
+  "fallback_behavior_changed": false,
+  "cue_pack_changed": false,
+  "cue_expansion_recommended": false,
+  "db_schema_changed": false,
+  "migration_created": false,
+  "migration_executed": false,
+  "persistence_code_changed": false,
+  "clinical_behavior_changed": false,
+  "ddi_behavior_changed": false,
+  "terminology_behavior_changed": false,
+  "private_adapter_implemented": false,
+  "concrete_adapters_implemented": false,
+  "runtime_wiring_added": false,
+  "external_api_used": false,
+  "private_data_accessed": false,
+  "source_documents_opened": false,
+  "licensed_rows_read": false,
+  "licensed_rows_exposed": false,
+  "private_license_ack_read": false,
+  "private_config_read": false,
+  "runtime_db_accessed": false,
+  "tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+  "v1_release_preserved": true,
+  "local_only_default": true,
+  "review_bound_default": true,
+  "external_api_blocked_default": true,
+  "auto_accept_allowed_default": false,
+  "recommended_next_block": "MEDAI-PATHOLOGY-REPORT-FAMILY-SPEC-01_OR_FREEZE-MAINTENANCE-ONLY",
+  "recommended_next_3_blocks": [
+    "MEDAI-PATHOLOGY-REPORT-FAMILY-SPEC-01_OR_FREEZE-MAINTENANCE-ONLY",
+    "FREEZE-MAINTENANCE-ONLY_IF_OPERATOR_DEFERS_THE_SPEC",
+    "V2-ROADMAP-04_IF_NEW_SIGNAL_ELSE_FREEZE-MAINTENANCE-ONLY"
+  ],
+  "validation_results": {
+    "focused_pathology_family_eval_tests": "to_be_recorded_after_test_run",
+    "public_report_privacy_checks": "to_be_recorded_after_privacy_check",
+    "freeze_maintenance_focused_tests": "to_be_recorded_after_test_run",
+    "status_registry_focused_tests": "to_be_recorded_after_test_run",
+    "real_doc_unknown_triage_focused_tests": "to_be_recorded_after_test_run",
+    "staged_safety_check": "to_be_recorded_after_git_status",
+    "audit_script": "to_be_recorded_after_audit_run"
+  }
+}
