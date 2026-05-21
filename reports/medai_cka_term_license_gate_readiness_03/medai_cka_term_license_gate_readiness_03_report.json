@@ -1,0 +1,214 @@
+{
+  "phase_id": "MEDAI-CKA-TERM-LICENSE-GATE-READINESS-03",
+  "mode": "license_gate_readiness_audit",
+  "reports_only": true,
+  "implementation_started": false,
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_used": false,
+  "external_api_enabled": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_rendered": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "runtime_db_contents_opened": false,
+  "runtime_db_write_attempted": false,
+  "source_documents_opened": false,
+  "private_files_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "clinical_value_parsing_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+  "frozen_operator_release_preserved": true,
+  "freeze_tags_untouched": true,
+  "term_helper_wiring_park_tags_untouched": true,
+  "license_gate_readiness_status": "ready_for_private_adapter_spec",
+  "private_adapter_spec_allowed": true,
+  "private_adapter_implementation_allowed": false,
+  "public_safe_evidence_only": true,
+  "readiness_criteria_results": [
+    {
+      "criterion": "LICENSE_ACK_PRIVATE.json protected by ignore rules",
+      "status": "satisfied_for_spec",
+      "evidence": ".gitignore protects LICENSE_ACK_PRIVATE.json and matching private acknowledgement patterns",
+      "private_contents_read": false
+    },
+    {
+      "criterion": "manual license verification",
+      "status": "required_before_implementation",
+      "evidence": "SPEC-02 requires manual verification; readiness audit did not read private acknowledgement contents",
+      "private_adapter_spec_blocked": false,
+      "implementation_blocked": true
+    },
+    {
+      "criterion": "terminology_data protected",
+      "status": "satisfied_for_spec",
+      "evidence": ".gitignore protects terminology_data/",
+      "private_contents_read": false
+    },
+    {
+      "criterion": "data/terminology protected",
+      "status": "satisfied_for_spec",
+      "evidence": ".gitignore protects data/terminology/",
+      "private_contents_read": false
+    },
+    {
+      "criterion": "terminology data not staged",
+      "status": "satisfied",
+      "evidence": "preflight git status was clean and staged safety is limited to readiness reports",
+      "terminology_data_staged": false
+    },
+    {
+      "criterion": "public reports contain no licensed rows",
+      "status": "satisfied",
+      "evidence": "privacy checks pass and prior terminology reports declare licensed row content absent",
+      "licensed_terminology_rows_in_public_reports": false
+    }
+  ],
+  "adapter_precondition_results": [
+    {
+      "precondition": "adapter_must_be_injectable",
+      "status": "required_for_next_spec",
+      "ready_for_design": true
+    },
+    {
+      "precondition": "adapter_must_be_read_only_by_default",
+      "status": "required_for_next_spec",
+      "ready_for_design": true
+    },
+    {
+      "precondition": "adapter_must_fail_closed_without_verified_license_state",
+      "status": "required_for_next_spec",
+      "ready_for_design": true
+    },
+    {
+      "precondition": "adapter_must_not_write_runtime_db",
+      "status": "required_for_next_spec",
+      "ready_for_design": true
+    },
+    {
+      "precondition": "adapter_must_not_call_external_apis",
+      "status": "required_for_next_spec",
+      "ready_for_design": true
+    },
+    {
+      "precondition": "adapter_must_not_return_row_content_to_public_reports",
+      "status": "required_for_next_spec",
+      "ready_for_design": true
+    },
+    {
+      "precondition": "adapter_must_expose_aggregate_controlled_vocabulary_metadata_only",
+      "status": "required_for_next_spec",
+      "ready_for_design": true
+    }
+  ],
+  "output_restriction_results": [
+    {
+      "restriction": "no_row_codes",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_display_names",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_synonyms",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_definitions",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_concept_rows",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_license_acknowledgement_content",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_private_paths",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_raw_text",
+      "status": "required_and_satisfied_in_current_public_reports"
+    },
+    {
+      "restriction": "no_filenames",
+      "status": "required_and_satisfied_in_current_public_reports"
+    }
+  ],
+  "required_tests_for_private_adapter_spec": [
+    "default_off",
+    "missing_license_state_fails_closed",
+    "missing_adapter_fails_closed",
+    "unsafe_row_content_rejected",
+    "public_report_privacy_checks",
+    "no_db_writes",
+    "no_external_apis",
+    "no_clinical_inference",
+    "no_ddi_behavior_change",
+    "cue_expansion_remains_false"
+  ],
+  "blockers_or_open_questions": [
+    {
+      "item": "manual_license_verification",
+      "status": "open_before_implementation",
+      "blocks_private_adapter_spec": false,
+      "blocks_private_adapter_implementation": true
+    },
+    {
+      "item": "private_store_contract_details",
+      "status": "to_be_defined_in_private_adapter_spec",
+      "blocks_private_adapter_spec": false,
+      "blocks_private_adapter_implementation": true
+    }
+  ],
+  "next_block_decision": {
+    "selected": "CKA-TERM-INTEGRATION-PRIVATE-ADAPTER-SPEC-01",
+    "rationale": "Public-safe evidence is sufficient for a design-only private adapter SPEC. Implementation remains blocked until manual license verification and private-store readiness are proven without exposing licensed rows."
+  },
+  "deferred_items": [
+    "private_adapter_implementation",
+    "terminology_import",
+    "licensed_row_access",
+    "runtime_db_writes",
+    "external_api_calls",
+    "clinical_interpretation",
+    "ddi_behavior",
+    "real_corpus_validation",
+    "cue_expansion"
+  ],
+  "validation_results": {
+    "public_report_privacy_checks": "passed: 3/3 READINESS-03 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: 12/12 validation cases; 693 total tests passed; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only READINESS-03 report files staged"
+  },
+  "whole_medai_done_estimate": "approximately 95.0%"
+}
