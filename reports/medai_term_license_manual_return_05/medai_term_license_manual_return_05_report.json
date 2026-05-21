@@ -1,0 +1,288 @@
+{
+  "conclusion": "medai_term_license_manual_return_05_ready",
+  "phase_id": "MEDAI-TERM-LICENSE-MANUAL-RETURN-05",
+  "mode": "provisional_public_safe_license_return",
+  "reports_only": true,
+  "implementation_started": false,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short": "73b0d99",
+  "term_mesh_local_download_pack_01_commit_short": "cedbbd3",
+  "term_private_config_verify_02_commit_short": "60f1114",
+  "term_private_config_01_commit_short": "d6fee2f",
+  "term_license_manual_return_pack_04_commit_short": "c770452",
+  "freeze_commit_short": "7ef8ffd",
+  "park_20_commit_short": "3e46461",
+  "park_21_commit_short": "9f9e22d",
+  "park_22_commit_short": "f4d3cc6",
+  "park_23_commit_short": "748c32a",
+
+  "private_adapter_implemented": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+  "manual_license_verification_complete": false,
+  "manual_license_verification_status": "provisional_evidence_present_still_required",
+
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_files_modified": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+  "private_config_contents_read": false,
+  "private_config_staged": false,
+  "terminology_import_performed": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "license_ack_private_read": false,
+  "license_ack_private_staged": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "mesh_status": "download_helper_created",
+  "mesh_download_completed": false,
+  "mesh_integration_allowed": false,
+
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+
+  "covered_sources_reviewed_public_safe_only": [
+    "reports/medai_term_mesh_local_download_pack_01/",
+    "reports/medai_term_private_config_verify_02/",
+    "reports/medai_term_private_config_01/",
+    "reports/medai_cka_term_license_manual_return_pack_04/",
+    "reports/medai_cka_term_integration_private_adapter_readiness_02/ (if present)",
+    "reports/medai_cka_term_integration_private_adapter_spec_01/ (if present)",
+    "reports/medai_cka_term_license_gate_readiness_03/ (if present)",
+    "reports/medai_cka_term_license_gate_spec_02/ (if present)",
+    "reports/medai_cka_term_integration_plan_01/",
+    "reports/medai_cka_term_integration_next_01/",
+    "reports/medai_cka_term_integration_uat_01/ (if present)",
+    "reports/cka_term04_integration_readiness_blueprint/",
+    "reports/terminology_sources_preflight/",
+    ".gitignore (patterns only)"
+  ],
+
+  "resource_verification_matrix": [
+    {
+      "resource": "LOINC",
+      "role": "primary",
+      "public_safe_evidence_class": "preflight_canonical_source_observed",
+      "license_class_per_plan_01": ["local_license_gated_reference", "runtime_private_store_only", "prohibited_for_commit", "aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "Inventory and preflight blocks observed canonical local presence; no public-safe report contains an explicit operator return confirming LOINC license terms."
+    },
+    {
+      "resource": "RxNorm full",
+      "role": "primary",
+      "public_safe_evidence_class": "preflight_canonical_source_observed",
+      "license_class_per_plan_01": ["local_license_gated_reference", "runtime_private_store_only", "prohibited_for_commit", "aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "CKA-TERM-02 imported synthetic-safe row counts only; no public-safe operator license return."
+    },
+    {
+      "resource": "RxNorm prescribable",
+      "role": "auxiliary",
+      "public_safe_evidence_class": "preflight_auxiliary_source_observed",
+      "license_class_per_plan_01": ["local_license_gated_reference", "runtime_private_store_only", "prohibited_for_commit", "aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "Subset of RxNorm; inherits the same gate. No public-safe operator license return."
+    },
+    {
+      "resource": "SNOMED CT US Edition",
+      "role": "primary",
+      "public_safe_evidence_class": "preflight_canonical_source_observed",
+      "license_class_per_plan_01": ["local_license_gated_reference", "runtime_private_store_only", "prohibited_for_commit", "aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "Runtime integration remains disabled (snomed_runtime_integration_enabled=false per preflight). No public-safe operator license return."
+    },
+    {
+      "resource": "SNOMED CT International",
+      "role": "secondary",
+      "public_safe_evidence_class": "preflight_secondary_source_observed",
+      "license_class_per_plan_01": ["local_license_gated_reference", "runtime_private_store_only", "prohibited_for_commit", "aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "Preflight observed; no public-safe operator license return."
+    },
+    {
+      "resource": "UMLS Metathesaurus",
+      "role": "separate_future_import",
+      "public_safe_evidence_class": "future_gated_per_preflight",
+      "license_class_per_plan_01": ["local_license_gated_reference", "runtime_private_store_only", "prohibited_for_commit", "aggregate_public_report_only"],
+      "umls_future_gated_per_preflight": true,
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "umls_future_gated=true; needs its own separately approved block and operator license return."
+    },
+    {
+      "resource": "MeSH",
+      "role": "future_integration",
+      "public_safe_evidence_class": "download_helper_created_no_data_downloaded",
+      "license_class_per_plan_01": ["local_license_gated_reference", "runtime_private_store_only", "prohibited_for_commit", "aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "MEDAI-TERM-MESH-LOCAL-DOWNLOAD-PACK-01 created an operator-side helper but performed no download. License terms have not been operator-returned. mesh_status remains download_helper_created and mesh_integration_allowed is false."
+    },
+    {
+      "resource": "private license-acknowledgement handling",
+      "role": "private_license_confirmation",
+      "public_safe_evidence_class": "presence_only_per_gitignore_and_preflight",
+      "license_class_per_plan_01": ["local_private_acknowledgement_only", "prohibited_for_commit"],
+      "explicit_operator_return_present_in_public_safe_reports": false,
+      "verification_status": "evidence_present_manual_verification_still_required",
+      "rationale": "Presence-only checks pass via gitignore and prior preflight; contents have never been read by any block. Operator-side confirmation of acknowledgement coverage has not been returned in a public-safe form."
+    },
+    {
+      "resource": "private terminology config boundary",
+      "role": "internal_boundary",
+      "public_safe_evidence_class": "boundary_checked_by_verify_02",
+      "license_class_per_plan_01": ["aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": true,
+      "verification_status": "verified_by_prior_boundary_checks",
+      "rationale": "MEDAI-TERM-PRIVATE-CONFIG-VERIFY-02 confirmed ignored / not-committed / not-staged / not-read invariants. This is a structural boundary, not a legal license clearance."
+    },
+    {
+      "resource": "B07 / MKB public-safe boundary",
+      "role": "internal_boundary",
+      "public_safe_evidence_class": "validated_by_b07_term01_and_cka_b07_b10_b11",
+      "license_class_per_plan_01": ["local_open_or_public_reference", "aggregate_public_report_only"],
+      "explicit_operator_return_present_in_public_safe_reports": true,
+      "verification_status": "verified_by_prior_boundary_checks",
+      "rationale": "B07 term01 opt-in integration, CKA-B07 medical coding interface, CKA-B10 preflight scaffold, and CKA-B11 final MVP release have all validated this internal boundary with feature flags default-off and external_api_used=false."
+    }
+  ],
+
+  "evidence_summary_public_safe": {
+    "sources_with_public_safe_evidence": [
+      "LOINC", "RxNorm full", "RxNorm prescribable", "SNOMED CT US Edition", "SNOMED CT International", "UMLS Metathesaurus", "MeSH", "private license-acknowledgement handling"
+    ],
+    "sources_with_explicit_operator_return": [],
+    "internal_boundaries_verified": [
+      "private terminology config boundary",
+      "B07 / MKB public-safe boundary"
+    ],
+    "license_text_in_any_public_report": false,
+    "license_acknowledgement_contents_in_any_public_report": false,
+    "licensed_row_content_in_any_public_report": false,
+    "private_filesystem_paths_in_any_public_report": false
+  },
+
+  "boundary_verification_summary": {
+    "private_config_ignored_by_git": true,
+    "private_config_committed": false,
+    "private_config_staged": false,
+    "private_config_contents_printed": false,
+    "private_config_path_printed": false,
+    "terminology_data_committed": false,
+    "data_terminology_committed": false,
+    "license_ack_private_committed": false,
+    "scripts_private_local_committed": false,
+    "all_required_safety_checks_passed": true
+  },
+
+  "blocked_items": [
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "wiring private terminology output into app/main.py runtime",
+    "DDI / diagnosis / treatment / medication inference driven by terminology",
+    "Licensed terminology row reads",
+    "Private license-acknowledgement file contents access",
+    "External terminology API enablement for runtime",
+    "cue-pack expansion (explicitly NOT recommended)"
+  ],
+
+  "next_block_decision": "manual_operator_explicit_license_confirmation_required",
+  "next_block_decision_rationale": "All license-gated resources currently sit at evidence_present_manual_verification_still_required. The next operator-side action is an explicit public-safe operator return statement covering each gated source (LOINC, RxNorm full, RxNorm prescribable, SNOMED CT US, SNOMED CT International, UMLS, MeSH, private license-acknowledgement handling). The return statement itself must contain no licensed row content, no license text, and no private filesystem paths. Until that return is received and recorded by a subsequent reports-only block, private_adapter_implementation_allowed and real_private_store_access_allowed remain false.",
+
+  "operator_return_template_for_next_block": {
+    "form": "Per-resource boolean operator confirmation, expressed in a reports-only block that records ONLY the confirmation flag and a controlled-vocabulary status string. No license text. No row content. No private filesystem paths.",
+    "required_fields_per_resource": [
+      "operator_confirms_license_terms_reviewed (bool)",
+      "operator_confirms_local_only_use (bool)",
+      "operator_confirms_no_redistribution (bool)",
+      "operator_confirms_no_runtime_external_api (bool)",
+      "operator_confirmation_block_id (controlled string, e.g. MEDAI-TERM-LICENSE-OPERATOR-RETURN-06)"
+    ],
+    "resources_to_cover": [
+      "LOINC",
+      "RxNorm full",
+      "RxNorm prescribable",
+      "SNOMED CT US Edition",
+      "SNOMED CT International",
+      "UMLS Metathesaurus",
+      "MeSH",
+      "private license-acknowledgement handling"
+    ]
+  },
+
+  "deferred_items": [
+    "Wiring terminology output into app/main.py runtime (deferred until license clearance + adapter SPEC approval)",
+    "UMLS lookup (umls_future_gated=true)",
+    "SNOMED CT runtime integration (snomed_runtime_integration_enabled=false)",
+    "DDI / diagnosis / treatment / medication / dosing inference driven by terminology",
+    "Abbreviation expansion in any form",
+    "Cue-pack expansion (explicitly NOT recommended)",
+    "External terminology API enablement",
+    "Public-report row dumps under any condition"
+  ],
+
+  "validation_evidence": {
+    "public_report_privacy_checks": "passed: 3/3 MEDAI-TERM-LICENSE-MANUAL-RETURN-05 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only MEDAI-TERM-LICENSE-MANUAL-RETURN-05 scoped report files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; reports-only block"
+  },
+
+  "safety_privacy_statement": "MEDAI-TERM-LICENSE-MANUAL-RETURN-05 is a reports-only provisional license return. No license text was reproduced. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No private filesystem paths were printed. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No runtime code, helper code, Streamlit wiring, launcher, startup preflight, or config file was modified. No tags created, moved, or deleted. PARK-20..23 tag pairs and the FREEZE tag pair remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED.",
+
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "freeze_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+
+  "whole_medai_done_estimate": "approximately 95.7%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 95.6,
+      "whole_medai_remaining_pct": 4.4
+    },
+    "after": {
+      "whole_medai_done_pct": 95.7,
+      "whole_medai_remaining_pct": 4.3,
+      "note": "Provisional public-safe license return packaged. No legal verification is claimed complete. No runtime change."
+    }
+  }
+}
