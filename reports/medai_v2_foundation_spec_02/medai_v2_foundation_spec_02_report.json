@@ -1,0 +1,339 @@
+{
+  "conclusion": "medai_v2_foundation_spec_02_ready",
+  "block_id": "MEDAI-V2-FOUNDATION-SPEC-02",
+  "phase_id": "MEDAI-V2-FOUNDATION-SPEC-02",
+  "mode": "v2_foundation_reports_only_spec",
+  "reports_only": true,
+  "v2_implementation_started": false,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_block": "c27f9f7",
+  "v2_architecture_spec_01_commit_short": "551af98",
+  "roadmap_06_commit_short": "5ea7bd6",
+  "park_02_commit_short": "b9b19ad",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+  "freeze_commit_short": "7ef8ffd",
+  "park_26_commit_short": "91b9eba",
+  "park_25_commit_short": "6b31678",
+  "park_24_commit_short": "1b14ffe",
+  "park_23_commit_short": "748c32a",
+  "park_22_commit_short": "f4d3cc6",
+  "park_21_commit_short": "9f9e22d",
+  "park_20_commit_short": "3e46461",
+
+  "runtime_behavior_changed": false,
+  "app_main_changed": false,
+  "app_main_modified": false,
+  "ui_changed": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "launcher_changed": false,
+  "launcher_files_modified": false,
+  "startup_config_changed": false,
+  "startup_preflight_modified": false,
+  "config_modified": false,
+
+  "extraction_changed": false,
+  "extraction_behavior_changed": false,
+  "ocr_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_scoring_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_pack_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+
+  "clinical_behavior_changed": false,
+  "clinical_interpretation_performed": false,
+  "diagnosis_inference_performed": false,
+  "medication_inference_performed": false,
+  "ddi_behavior_changed": false,
+  "treatment_inference_performed": false,
+  "terminology_behavior_changed": false,
+  "private_adapter_implemented": false,
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+
+  "external_api_used": false,
+  "external_api_used_for_runtime": false,
+  "external_api_enabled": false,
+
+  "private_data_accessed": false,
+  "licensed_rows_read": false,
+  "licensed_terminology_rows_read": false,
+  "licensed_terminology_rows_printed": false,
+  "licensed_terminology_rows_in_public_reports": false,
+  "private_license_ack_read": false,
+  "license_ack_private_read": false,
+  "private_config_read": false,
+  "private_config_contents_read": false,
+  "private_config_staged": false,
+  "runtime_db_accessed": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+
+  "tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+  "prior_park_tags_touched": false,
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "term_license_gate_park_02_tags_touched": false,
+
+  "v1_release_preserved": true,
+  "foundation_doctrine_created": true,
+  "stop_on_failure_rules_defined": true,
+  "future_block_taxonomy_defined": true,
+
+  "manual_license_verification_complete": false,
+  "license_gated_resources_verified_count": 0,
+  "internal_boundaries_verified_count": 2,
+  "mesh_status": "download_helper_created",
+  "mesh_integration_allowed": false,
+
+  "covered_sources_reviewed_public_safe_only": [
+    "reports/medai_v2_architecture_spec_01/",
+    "reports/medai_roadmap_06_post_term_parking/",
+    "reports/medai_cka_term_integration_park_02/",
+    "reports/medai_term_license_operator_return_08/",
+    "reports/medai_term_mesh_local_download_pack_01/",
+    "reports/medai_term_private_config_verify_02/",
+    "reports/medai_freeze_local_operator_release/",
+    "reports/medai_park_26_operator_runtime_readiness/",
+    "reports/medai_park_25_diag21_streamlit_fixture_audit/",
+    "reports/medai_park_24_diag20_operator_uat/",
+    "reports/medai_park_23_diag19_streamlit_wiring/",
+    "reports/medai_park_22_pdf_text_layout_quality_default_off/",
+    "reports/medai_park_21_post_text_layer_eval_spec/",
+    "reports/medai_roadmap_05_post_term_wiring_uat/ (if present)",
+    "reports/medai_roadmap_04_post_freeze_next_phase/",
+    "reports/cka_final_mvp_release/",
+    "reports/b07_term01_opt_in_integration/",
+    "reports/medai_route_fix_01/",
+    "reports/medai_ui_ops_01/",
+    "reports/medai_ui_boot_fix_01/"
+  ],
+
+  "section_a_v2_foundation_principles": [
+    "Frozen v1 local operator release at commit 7ef8ffd (FREEZE tag pair) remains the safe shipped baseline.",
+    "v2 is contract-first and spec-first.",
+    "No direct v2 implementation may start without a preceding SPEC block.",
+    "All changes must preserve local-only, review-bound, default-off posture unless a later approved spec explicitly changes that.",
+    "Clinical behavior remains safety-gated.",
+    "Cue expansion remains explicitly NOT recommended.",
+    "Public reports must remain aggregate-only and privacy-clean.",
+    "Every high-risk track ends with a parking snapshot (one commit + two annotated tags).",
+    "Existing parking tags (PARK-20..26, FREEZE, term helper/wiring PARK-01, license-gate PARK-02) remain unchanged across every subsequent block.",
+    "v1.1 trust hierarchy (privacy boundary, MKB local-only store, plugin registry, self-enriching knowledge loop) remains immutable in v2 design until a separate approved SPEC reopens any of these."
+  ],
+
+  "section_b_required_invariants_for_all_future_v2_blocks": {
+    "local_only_default": true,
+    "external_api_default_blocked": true,
+    "review_bound_default": true,
+    "no_auto_accept_without_spec": true,
+    "no_private_data_access_without_spec": true,
+    "no_licensed_row_access_without_operator_license_gate": true,
+    "no_runtime_db_migration_without_rollback_spec": true,
+    "no_clinical_inference_expansion_without_safety_spec": true,
+    "cue_expansion_recommended": false,
+    "v1_release_preserved": true,
+    "aggregate_only_public_reports_required": true,
+    "public_report_privacy_check_required_before_commit": true,
+    "staged_safety_check_required_before_commit": true,
+    "focused_pytest_module_required_per_implementation_block": true
+  },
+
+  "section_c_block_taxonomy": {
+    "allowed_block_classes": [
+      {
+        "class": "reports_only_spec",
+        "definition": "Pure planning / SPEC block; emits public-safe report files only; no runtime code change; no test code that touches private contents.",
+        "requires_preceding_spec": false,
+        "must_pass_public_report_privacy_check": true
+      },
+      {
+        "class": "contract_stub_only",
+        "definition": "Adds typing-only Python contracts (typing.Protocol / dataclass) with no runtime side effects on import. Optional focused test that the module imports cleanly. No app/main.py change, no Streamlit wiring.",
+        "requires_preceding_spec": true,
+        "preceding_spec_examples": ["MEDAI-V2-FOUNDATION-SPEC-02", "MEDAI-V2-ARCHITECTURE-SPEC-01"],
+        "must_pass_public_report_privacy_check": true
+      },
+      {
+        "class": "validation_harness_only",
+        "definition": "Adds a focused pytest harness or validation report-only without changing runtime behavior. Carries forward the v1 five-validation set unchanged.",
+        "requires_preceding_spec": true,
+        "must_pass_public_report_privacy_check": true
+      },
+      {
+        "class": "default_off_helper",
+        "definition": "Default-off, fail-closed runtime helper module behind an env var. Must emit aggregate-only metadata, review-bound, no row content. Mirrors the DIAG-17 / terminology-helper pattern.",
+        "requires_preceding_spec": true,
+        "must_pass_public_report_privacy_check": true,
+        "default_off_required": true
+      },
+      {
+        "class": "default_off_ui_surface",
+        "definition": "Default-off, read-only UI surface guarded by env var. Lives in Advanced technical details only. Emits only st.markdown and st.caption. Mirrors the DIAG-19 wiring pattern.",
+        "requires_preceding_spec": true,
+        "must_pass_public_report_privacy_check": true,
+        "default_off_required": true,
+        "read_only_required": true
+      },
+      {
+        "class": "data_migration_spec_only",
+        "definition": "SPEC for a DB / persistence change with explicit rollback plan. No actual migration in the SPEC block.",
+        "requires_preceding_spec": false,
+        "must_pass_public_report_privacy_check": true,
+        "rollback_plan_required": true
+      },
+      {
+        "class": "operator_uat_receipt",
+        "definition": "Reports-only operator UAT receipt against the frozen v1 surface or against a default-off helper under synthetic load.",
+        "requires_preceding_spec": true,
+        "must_pass_public_report_privacy_check": true
+      },
+      {
+        "class": "parking_snapshot",
+        "definition": "Reports-only + tags-only parking snapshot. One commit + two annotated tags (track-ready-{date} and medai-final-parked-post-{track}-{date}).",
+        "requires_preceding_spec": false,
+        "must_pass_public_report_privacy_check": true,
+        "tag_push_route": "github-direct"
+      },
+      {
+        "class": "release_freeze_snapshot",
+        "definition": "Reports-only + tags-only release-freeze snapshot. Tag pair (release-frozen-{date}, final-release-{date}). Mirrors the FREEZE-LOCAL-OPERATOR-RELEASE pattern.",
+        "requires_preceding_spec": true,
+        "must_pass_public_report_privacy_check": true,
+        "tag_push_route": "github-direct"
+      }
+    ],
+    "disallowed_block_classes_unless_separately_approved": [
+      "direct_runtime_rewrite",
+      "direct_extraction_behavior_change",
+      "direct_ocr_routing_change",
+      "direct_threshold_change",
+      "direct_classifier_behavior_change",
+      "direct_cue_pack_expansion",
+      "direct_private_adapter_implementation",
+      "direct_licensed_terminology_row_access",
+      "direct_external_api_runtime_integration",
+      "direct_clinical_decision_logic_expansion",
+      "direct_runtime_db_migration"
+    ]
+  },
+
+  "section_d_stop_on_failure_rules": [
+    "stop if branch is dirty before starting, unless dirty files are known validation receipts isolated to a receipt-refresh commit",
+    "stop if private/source documents appear in git status",
+    "stop if LICENSE_ACK_PRIVATE.json, terminology rows, runtime DB files, raw OCR text, raw document text, raw filenames, private paths, secrets, or PHI appear in staged files or in any public report",
+    "stop if runtime files are modified in a reports-only block",
+    "stop if app/main.py is modified in a reports-only block",
+    "stop if extraction / OCR routing / classifier / threshold / cue / clinical / DDI behavior changes during any block other than a directly-scoped behavior-change SPEC and its own approved implementation",
+    "stop if external API use is detected at runtime (external_api_used_for_runtime must remain false unless an explicitly approved SPEC enables it)",
+    "stop if focused tests show safety / privacy invariant regression",
+    "stop if a future block attempts implementation without a preceding approved SPEC block",
+    "stop if a parking / freeze tag is moved, deleted, repointed, or duplicated under a different SHA",
+    "stop if git push --tags or --force / --force-with-lease is used"
+  ],
+
+  "section_e_future_sequence_rules": {
+    "recommended_next_sequence_after_this_block": [
+      "MEDAI-V2-RUNTIME-CONTRACTS-01",
+      "MEDAI-V2-VALIDATION-HARNESS-01",
+      "MEDAI-V2-UI-SHELL-SPEC-01 or MEDAI-V2-DATA-INFRA-SPEC-01 (depending on roadmap signal)"
+    ],
+    "must_not_combine": [
+      "runtime contracts with implementation",
+      "validation harness with real runtime migration",
+      "reports-only blocks with runtime-behavior-changing work",
+      "license-gated terminology work with anything else",
+      "cue expansion with anything (cue expansion remains explicitly NOT recommended)",
+      "private adapter implementation with any other work"
+    ],
+    "must_not_reopen_without_explicit_signal": [
+      "terminology / private adapter work until operator license return is complete",
+      "MORE-UNKNOWN-DIAGNOSTICS unless a fresh operator-UAT failure signal exists",
+      "CUE-EXPANSION (explicitly NOT recommended)"
+    ]
+  },
+
+  "section_f_relationship_to_prior_architecture_specs": {
+    "v1_1_immutable_constraints_preserved": [
+      "local-only MKB",
+      "PII stripping before any external call",
+      "plugin registry",
+      "self-enriching knowledge loop",
+      "trust hierarchy immutability",
+      "progressive activation via feature flags (not uncontrolled activation)"
+    ],
+    "v2_strategic_intent_documented_only_no_implementation": [
+      "multi-tier / multi-model architecture is a v2 design goal; this block does not implement it",
+      "v2 architecture goals from MEDAI-V2-ARCHITECTURE-SPEC-01 remain valid"
+    ],
+    "v2_workstream_split_remains_valid": [
+      "MEDAI-V2-FOUNDATION-SPEC-02 (this block)",
+      "MEDAI-V2-RUNTIME-CONTRACTS-01",
+      "MEDAI-V2-VALIDATION-HARNESS-01",
+      "MEDAI-V2-UI-SHELL-SPEC-01",
+      "MEDAI-V2-DATA-INFRA-SPEC-01",
+      "MEDAI-V2-EXTRACTION-SPEC-01",
+      "MEDAI-V2-TERMINOLOGY-WAIT-GATE",
+      "MEDAI-V2-PACKAGING-SPEC-01",
+      "MEDAI-V2-ROADMAP-02"
+    ]
+  },
+
+  "section_g_parked_frozen_track_preservation_table": [
+    {"track": "Local operator release", "status": "frozen", "anchor_commit_short": "7ef8ffd", "tag_pair": ["medai-local-operator-release-frozen-2026-05-20", "medai-final-local-operator-release-2026-05-20"]},
+    {"track": "Residual Unknown reduction", "status": "parked", "anchor_commit_short": "3e46461", "tag_pair": ["medai-unknown-diag-language-metadata-ready-2026-05-19", "medai-final-parked-post-unknown-diag-language-metadata-2026-05-19"]},
+    {"track": "Text-layer eval spec", "status": "parked", "anchor_commit_short": "9f9e22d", "tag_pair": ["medai-text-layer-eval-spec-ready-2026-05-19", "medai-final-parked-post-diag-16-2026-05-19"]},
+    {"track": "PDF text/layout default-off", "status": "parked", "anchor_commit_short": "f4d3cc6", "tag_pair": ["medai-pdf-text-layout-quality-default-off-ready-2026-05-19", "medai-final-parked-post-diag-18-2026-05-19"]},
+    {"track": "PDF text/layout Streamlit wiring", "status": "parked", "anchor_commit_short": "748c32a", "tag_pair": ["medai-pdf-text-layout-quality-streamlit-wiring-ready-2026-05-19", "medai-final-parked-post-diag-19-2026-05-19"]},
+    {"track": "DIAG-20 operator UAT", "status": "parked", "anchor_commit_short": "1b14ffe", "tag_pair": ["medai-pdf-text-layout-quality-env-on-uat-ready-2026-05-19", "medai-final-parked-post-diag-20-2026-05-19"]},
+    {"track": "DIAG-21 fixture audit", "status": "parked", "anchor_commit_short": "6b31678", "tag_pair": ["medai-streamlit-fixture-audit-ready-2026-05-19", "medai-final-parked-post-diag-21-2026-05-19"]},
+    {"track": "Operator readiness + runtime hardening", "status": "parked", "anchor_commit_short": "91b9eba", "tag_pair": ["medai-operator-runtime-readiness-ready-2026-05-20", "medai-final-parked-post-runtime-hardening-2026-05-20"]},
+    {"track": "Terminology helper/wiring mini-track", "status": "parked", "anchor_commit_short": "e398a75", "tag_pair": ["medai-cka-term-helper-wiring-ready-2026-05-20", "medai-final-parked-post-term-wiring-2026-05-20"]},
+    {"track": "License-gated private adapter track", "status": "parked", "anchor_commit_short": "b9b19ad", "tag_pair": ["medai-cka-term-license-gated-adapter-parked-2026-05-21", "medai-final-parked-post-term-license-gate-2026-05-21"]},
+    {"track": "Private terminology config boundary", "status": "complete_and_verified", "anchor_commit_short": "60f1114", "tag_pair": null},
+    {"track": "MeSH local helper/download", "status": "blocked_operator_side", "anchor_commit_short": "cedbbd3", "tag_pair": null},
+    {"track": "Manual license verification gate", "status": "blocked_operator_side", "anchor_commit_short": "376ca4e", "tag_pair": null}
+  ],
+
+  "next_recommended_block": "MEDAI-V2-RUNTIME-CONTRACTS-01",
+  "recommended_next_3_blocks": [
+    "MEDAI-V2-RUNTIME-CONTRACTS-01",
+    "MEDAI-V2-VALIDATION-HARNESS-01",
+    "MEDAI-V2-UI-SHELL-SPEC-01 or MEDAI-V2-DATA-INFRA-SPEC-01 (depending on roadmap signal)"
+  ],
+
+  "safety_privacy_statement": "MEDAI-V2-FOUNDATION-SPEC-02 is a reports-only foundation SPEC. No runtime code, helper code, Streamlit / UI wiring, launcher, startup preflight, or config file was modified. No license text was reproduced. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No private filesystem paths were printed. No raw text, raw OCR text, raw document text, raw filenames, PHI, keys, or secrets appear in any committed file. No external API was called or enabled. No tags created, moved, or deleted. PARK-20..23 tag pairs, PARK-24 / PARK-25 / PARK-26 tags, the FREEZE tag pair, the term helper/wiring PARK-01 tag pair, and the license-gate PARK-02 tag pair all remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED. Cue expansion remains explicitly NOT recommended.",
+
+  "whole_medai_done_estimate": "approximately 96.2%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 96.1,
+      "whole_medai_remaining_pct": 3.9
+    },
+    "after": {
+      "whole_medai_done_pct": 96.2,
+      "whole_medai_remaining_pct": 3.8,
+      "note": "Reports-only foundation SPEC. No runtime change; small bump reflects the durable v2 doctrine record."
+    }
+  }
+}
