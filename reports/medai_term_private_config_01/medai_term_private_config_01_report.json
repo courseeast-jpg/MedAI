@@ -1,0 +1,146 @@
+{
+  "phase_id": "MEDAI-TERM-PRIVATE-CONFIG-01",
+  "mode": "private_local_terminology_config_creation",
+  "private_config_created": true,
+  "private_config_path_printed": false,
+  "private_config_staged": false,
+  "terminology_data_staged": false,
+  "licensed_terminology_rows_read": false,
+  "license_ack_private_read": false,
+  "runtime_db_contents_opened": false,
+  "source_documents_opened": false,
+  "private_files_opened_for_content": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "runtime_behavior_changed": false,
+  "app_main_modified": false,
+  "helper_modified": false,
+  "streamlit_wiring_changed": false,
+  "extraction_behavior_changed": false,
+  "ocr_behavior_changed": false,
+  "classifier_behavior_changed": false,
+  "threshold_behavior_changed": false,
+  "cue_expansion_recommended": false,
+  "cue_expansion_performed": false,
+  "external_api_enabled": false,
+  "external_api_used_for_runtime": false,
+  "mesh_dataset_status": "manual_download_required",
+  "manual_license_verification_status": "still_required",
+  "private_adapter_implementation_allowed": false,
+  "real_private_store_access_allowed": false,
+  "terminology_sources_local_json_ignored": true,
+  "source_status_summary": {
+    "loinc": {
+      "status": "present",
+      "candidate_count": 375,
+      "selected_config_key": "loinc",
+      "path_redacted": true
+    },
+    "rxnorm_full": {
+      "status": "present",
+      "candidate_count": 592,
+      "selected_config_key": "rxnorm_full",
+      "path_redacted": true
+    },
+    "rxnorm_prescribable": {
+      "status": "present",
+      "candidate_count": 84,
+      "selected_config_key": "rxnorm_prescribable",
+      "path_redacted": true
+    },
+    "umls_metathesaurus": {
+      "status": "present",
+      "candidate_count": 8785,
+      "selected_config_key": "umls_metathesaurus",
+      "path_redacted": true
+    },
+    "snomed_ct_us": {
+      "status": "present",
+      "candidate_count": 191,
+      "selected_config_key": "snomed_ct_us",
+      "path_redacted": true
+    },
+    "snomed_ct_international": {
+      "status": "present",
+      "candidate_count": 126,
+      "selected_config_key": "snomed_ct_international",
+      "path_redacted": true
+    },
+    "license_ack_private": {
+      "status": "present",
+      "candidate_count": 4,
+      "selected_config_key": "license_ack_private",
+      "path_redacted": true
+    },
+    "terminology_data_root": {
+      "status": "present",
+      "candidate_count": 9590,
+      "selected_config_key": "terminology_data_root",
+      "path_redacted": true
+    },
+    "mesh": {
+      "status": "manual_download_required",
+      "candidate_count": 6,
+      "selected_config_key": "mesh",
+      "path_redacted": true
+    }
+  },
+  "selected_config_keys": [
+    "loinc",
+    "rxnorm_full",
+    "rxnorm_prescribable",
+    "umls_metathesaurus",
+    "snomed_ct_us",
+    "snomed_ct_international",
+    "mesh",
+    "license_ack_private"
+  ],
+  "mesh_handling_summary": {
+    "dataset_package_confirmed": false,
+    "download_attempted": false,
+    "download_helper_created": false,
+    "status": "manual_download_required",
+    "reason": "Inventory V2 summary did not separately confirm MeSH as a dataset package."
+  },
+  "safety_privacy_checks": {
+    "private_paths_in_public_reports": false,
+    "raw_filenames_in_public_reports": false,
+    "licensed_rows_in_public_reports": false,
+    "license_text_in_public_reports": false,
+    "private_config_staged": false,
+    "terminology_data_staged": false,
+    "license_ack_private_staged": false
+  },
+  "next_block_decision": "manual_operator_license_verification_still_required_before_private_adapter_work",
+  "deferred_items": [
+    "manual_license_verification_completion",
+    "private_adapter_implementation",
+    "real_private_store_access",
+    "terminology_import",
+    "licensed_row_access",
+    "runtime_db_writes",
+    "external_api_calls",
+    "clinical_interpretation",
+    "diagnosis_treatment_inference",
+    "medication_dose_lab_value_parsing",
+    "ddi_behavior",
+    "cue_expansion"
+  ],
+  "validation_results": {
+    "private_config_exists": "passed",
+    "private_config_ignored": "passed",
+    "private_config_untracked": "passed: hidden from git status by ignore rule",
+    "no_terminology_data_staged": "passed",
+    "no_license_ack_private_staged": "passed",
+    "public_report_privacy_checks": "passed: 3/3 TERM-PRIVATE-CONFIG-01 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: 12/12 validation cases; 693 total tests passed; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only TERM-PRIVATE-CONFIG-01 public report files staged"
+  },
+  "whole_medai_done_estimate": "approximately 95.4%"
+}
