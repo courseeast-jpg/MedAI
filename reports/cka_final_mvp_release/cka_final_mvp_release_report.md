@@ -3,7 +3,7 @@
 - block_id: CKA-B11
 - conclusion: cka_mvp_release_package_ready
 - branch: clinical-knowledge-architecture
-- head_commit: 826eb7a
+- head_commit: 458e859
 - all_tests_passed: True
 - total_tests_passed: 693
 - preflight_checks_passed: 26
