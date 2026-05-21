@@ -1,0 +1,214 @@
+{
+  "conclusion": "medai_v2_runtime_contracts_01_ready",
+  "block_id": "MEDAI-V2-RUNTIME-CONTRACTS-01",
+  "phase_id": "MEDAI-V2-RUNTIME-CONTRACTS-01",
+  "block_mode": "reports_only_typing_only",
+  "reports_only": true,
+
+  "branch": "clinical-knowledge-architecture",
+  "current_head_short_before_block": "cf98c79",
+  "v2_foundation_spec_02_commit_short": "8b53d82",
+  "v2_architecture_spec_01_commit_short": "551af98",
+  "freeze_commit_short": "7ef8ffd",
+  "park_02_commit_short": "b9b19ad",
+  "term_helper_wiring_park_01_commit_short": "e398a75",
+
+  "requires_preceding_spec": true,
+  "preceding_architecture_spec_present": true,
+  "preceding_foundation_spec_present": true,
+  "contracts_module_created": true,
+  "contracts_module_path": "clinical_knowledge/v2_contracts/runtime_contracts.py",
+  "contracts_package_init_path": "clinical_knowledge/v2_contracts/__init__.py",
+  "contracts_count": 32,
+  "contracts_importable": true,
+  "contracts_side_effect_free": true,
+  "standard_library_only": true,
+  "concrete_adapters_implemented": false,
+  "runtime_wiring_added": false,
+
+  "runtime_behavior_changed": false,
+  "app_main_changed": false,
+  "ui_changed": false,
+  "launcher_changed": false,
+  "startup_config_changed": false,
+  "extraction_changed": false,
+  "ocr_changed": false,
+  "classifier_changed": false,
+  "threshold_scoring_changed": false,
+  "cue_pack_changed": false,
+  "clinical_behavior_changed": false,
+  "ddi_behavior_changed": false,
+  "terminology_behavior_changed": false,
+  "private_adapter_implemented": false,
+  "external_api_used": false,
+  "private_data_accessed": false,
+  "licensed_rows_read": false,
+  "private_license_ack_read": false,
+  "private_config_read": false,
+  "runtime_db_accessed": false,
+  "source_documents_opened": false,
+  "raw_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "secrets_printed": false,
+  "tags_touched": false,
+  "cue_expansion_recommended": false,
+  "v1_release_preserved": true,
+
+  "section_a_scope_and_non_scope": {
+    "in_scope": [
+      "Define 10 v2 runtime interface boundaries as typing-only Python contracts (Protocol / dataclass / Enum / type aliases).",
+      "Document the boundaries and their invariants in three public-safe reports.",
+      "Provide a focused pytest module that proves the contracts module is importable, side-effect-free, and standard-library-only.",
+      "Provide an audit script that re-affirms the contract inventory and the safety/privacy invariants."
+    ],
+    "out_of_scope": [
+      "Any concrete adapter implementation.",
+      "Any runtime wiring into app/main.py, launchers, startup preflight, or config.",
+      "Any extraction / OCR routing / classifier / threshold / cue-pack / clinical / DDI behavior change.",
+      "Any private terminology adapter implementation.",
+      "Any external API enablement.",
+      "Any runtime DB access.",
+      "Any modification of pre-existing parking / freeze tags."
+    ]
+  },
+
+  "section_b_contract_inventory": {
+    "ingestion_boundary": ["V2SourceKind", "V2DocumentSource", "V2IngestionRequest", "V2IngestionAdapterProtocol"],
+    "text_visibility_document_quality_boundary": ["V2VisibilityStatus", "V2TextVisibilityProfile", "V2DocumentQualityProtocol"],
+    "extraction_ocr_orchestration_boundary": ["V2ExtractionMode", "V2ExtractionRequest", "V2ExtractionResult", "V2ExtractionAdapterProtocol"],
+    "document_classification_boundary": ["V2DocumentTypeCandidate", "V2ClassificationResult", "V2ClassifierProtocol"],
+    "clinical_knowledge_terminology_boundary": ["V2TerminologyQuery", "V2TerminologyMatchSummary", "V2TerminologyLookupProtocol"],
+    "review_hitl_boundary": ["V2ReviewDisposition", "V2ReviewItem", "V2ReviewQueueProtocol"],
+    "operator_action_boundary": ["V2OperatorActionKind", "V2OperatorActionRequest", "V2OperatorActionResult", "V2OperatorActionProtocol"],
+    "audit_observability_boundary": ["V2AuditEventKind", "V2AuditEvent", "V2ObservabilitySinkProtocol"],
+    "validation_report_boundary": ["V2ValidationStatus", "V2ValidationReceipt", "V2ValidationHarnessProtocol"],
+    "runtime_privacy_safety_boundary": ["V2RuntimeSafetyProfile", "V2PrivacyGateProtocol"],
+    "total_contracts_defined": 32
+  },
+
+  "section_c_contract_boundary_map": {
+    "ingestion_to_quality": "V2IngestionAdapterProtocol output describes a V2DocumentSource that V2DocumentQualityProtocol then profiles into a V2TextVisibilityProfile.",
+    "quality_and_extraction_to_classification": "V2TextVisibilityProfile + V2ExtractionResult feed V2ClassifierProtocol to produce a V2ClassificationResult.",
+    "classification_to_review": "V2ClassificationResult is review-bound by default; it enters the V2ReviewQueueProtocol as a V2ReviewItem.",
+    "terminology_attaches_to_review_item_optionally": "V2TerminologyMatchSummary is an aggregate-only optional annotation; it must never expose licensed row content.",
+    "operator_action_targets_review_item": "V2OperatorActionProtocol mutates queue state only; auto-accept is forbidden by contract default.",
+    "audit_records_each_step": "V2ObservabilitySinkProtocol records aggregate V2AuditEvent instances; no raw text / paths / PHI.",
+    "validation_harness_emits_receipts": "V2ValidationHarnessProtocol carries the v1 five-validation set forward unchanged and emits aggregate-only V2ValidationReceipt instances.",
+    "privacy_gate_intercepts_every_emission": "V2PrivacyGateProtocol fails closed on any candidate that contains licensed row content, raw text, raw filenames, private paths, PHI, or secrets."
+  },
+
+  "section_d_safety_privacy_invariants": {
+    "default_safety_profile": {
+      "profile_id": "v2_default_safety_profile",
+      "local_only": true,
+      "review_bound": true,
+      "external_api_blocked": true,
+      "auto_accept_allowed": false,
+      "terminology_lookup_aggregate_only": true,
+      "private_adapter_implemented": false,
+      "cue_expansion_recommended": false,
+      "clinical_decision_expansion": false
+    },
+    "contract_emission_rules": [
+      "No raw extracted text in any returned dataclass.",
+      "No raw filename in any returned dataclass.",
+      "No private filesystem path in any returned dataclass.",
+      "No PHI in any returned dataclass.",
+      "No secret in any returned dataclass.",
+      "No licensed terminology row content in any terminology summary."
+    ]
+  },
+
+  "section_e_terminology_private_adapter_boundary": {
+    "terminology_match_summary_must_be_aggregate_only": true,
+    "licensed_row_content_must_never_appear": true,
+    "private_adapter_implementation_present": false,
+    "license_gated_private_adapter_track_status": "parked_at_park_02_commit_b9b19ad",
+    "operator_license_confirmation_status": "still_required_per_return_08",
+    "mesh_status": "download_helper_created"
+  },
+
+  "section_f_review_bound_default_behavior": {
+    "v2_classification_result_review_required_default": true,
+    "v2_classification_result_auto_accept_allowed_default": false,
+    "v2_review_item_review_required_default": true,
+    "v2_review_item_disposition_default": "PENDING_REVIEW",
+    "v2_operator_action_result_review_required_after_action_default": true,
+    "v2_terminology_match_summary_review_required_default": true,
+    "v2_audit_event_review_required_default": true
+  },
+
+  "section_g_import_side_effect_policy": {
+    "standard_library_only": true,
+    "allowed_modules": ["dataclasses", "datetime", "enum", "typing"],
+    "forbidden_modules": ["streamlit", "requests", "httpx", "http", "urllib", "socket", "sqlite3", "sqlcipher3", "os.path.expanduser", "anthropic", "google.generativeai"],
+    "no_io_at_import": true,
+    "no_environment_reads_at_import": true,
+    "no_filesystem_reads_at_import": true,
+    "no_network_calls_at_import": true,
+    "no_global_state_mutation_at_import": true,
+    "no_print_at_import": true,
+    "no_runtime_project_imports": true
+  },
+
+  "section_h_validation_matrix": {
+    "focused_v2_runtime_contracts_tests": "passed: see tests/test_medai_v2_runtime_contracts_01.py",
+    "import_smoke_test": "passed: clinical_knowledge.v2_contracts.runtime_contracts imports silently with no stdout/stderr emission",
+    "contract_audit_script": "passed: scripts/run_medai_v2_runtime_contracts_01.py reports all_clean=true",
+    "public_report_privacy_checks": "passed: 3/3 MEDAI-V2-RUNTIME-CONTRACTS-01 reports privacy-clean",
+    "final_cka_mvp_validation": "passed: cka_mvp_release_package_ready; 693 tests; external_api_used false",
+    "b07_term01_validation": "passed: 6/6 cases; external_api_used false",
+    "route_fix_validation": "passed: medai_route_fix01_ready; external_api_used false",
+    "ui_ops_validation": "passed: medai_ui_ops_panel_ready",
+    "ui_boot_validation": "passed: medai_ui_boot_fix_startup_resilience_ready",
+    "staged_safety_check": "passed: only V2 runtime contracts scoped files staged into the implementation commit; validation receipt churn isolated to a separate receipt-refresh commit",
+    "full_pytest": "not run; reports + typing-only contract block; the focused pytest module passes locally"
+  },
+
+  "section_i_future_implementation_gates": [
+    "Any concrete v2 adapter implementation must be preceded by its own approved SPEC block.",
+    "Any concrete v2 adapter implementation must satisfy V2-FOUNDATION-SPEC-02 stop-on-failure rules.",
+    "Any new v2 default-on behavior requires explicit operator approval recorded in a separate SPEC.",
+    "Any terminology adapter implementation remains blocked until concrete operator license confirmations land (per RETURN-08 / PARK-02).",
+    "Any cue-pack work is explicitly NOT recommended.",
+    "Any external API enablement requires its own SPEC + readiness audit."
+  ],
+
+  "section_j_recommended_next_sequence": [
+    "MEDAI-V2-VALIDATION-HARNESS-01",
+    "MEDAI-V2-UI-SHELL-SPEC-01 or MEDAI-V2-DATA-INFRA-SPEC-01 (depending on roadmap signal)",
+    "MEDAI-V2-ROADMAP-02 (re-evaluate after the validation harness + one of UI / data-infra SPECs lands)"
+  ],
+
+  "park_20_tags_touched": false,
+  "park_21_tags_touched": false,
+  "park_22_tags_touched": false,
+  "park_23_tags_touched": false,
+  "park_24_tags_touched": false,
+  "park_25_tags_touched": false,
+  "park_26_tags_touched": false,
+  "freeze_tags_touched": false,
+  "term_helper_wiring_park_01_tags_touched": false,
+  "term_license_gate_park_02_tags_touched": false,
+  "tags_created": false,
+  "tags_modified": false,
+  "prior_park_tags_touched": false,
+
+  "safety_privacy_statement": "MEDAI-V2-RUNTIME-CONTRACTS-01 is a reports-only / typing-only block. It adds a typing-only Python contract module (clinical_knowledge/v2_contracts/runtime_contracts.py) plus a package initializer, a reports-only audit script, a focused pytest module, and three public-safe reports. The contracts module imports only the standard library (dataclasses, datetime, enum, typing) and has no runtime side effects on import. No app/main.py / launcher / startup preflight / config / helper / Streamlit-wiring modification. No license text was reproduced. No licensed terminology rows were read. No private license-acknowledgement file contents were read. No private config contents were read. No terminology_data/, data/terminology/, runtime DB, or source document contents were opened. No private filesystem paths were printed. No raw text, raw OCR text, raw document text, raw filenames, PHI, keys, or secrets appear in any committed file. No external API was called or enabled. No tags created, moved, or deleted. PARK-20..26 tag pairs, the FREEZE tag pair, the term helper/wiring PARK-01 tag pair, and the license-gate PARK-02 tag pair all remain intact. Private adapter implementation and real private-store access remain explicitly BLOCKED. Cue expansion remains explicitly NOT recommended.",
+
+  "next_recommended_block": "V2-VALIDATION-HARNESS-01",
+
+  "whole_medai_done_estimate": "approximately 96.3%",
+  "progress_estimate": {
+    "before": {
+      "whole_medai_done_pct": 96.2,
+      "whole_medai_remaining_pct": 3.8
+    },
+    "after": {
+      "whole_medai_done_pct": 96.3,
+      "whole_medai_remaining_pct": 3.7,
+      "note": "Typing-only V2 runtime contracts module landed. 32 contracts defined across 10 boundaries. No concrete adapters. No runtime behavior change."
+    }
+  }
+}
