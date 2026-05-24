@@ -420,6 +420,11 @@ def summarize_extracted_facts_for_public_report(
       ``unit``, ``reference_range``, ``flag``, ``confidence``,
       ``language_hint``, ``parser_name``, ``requires_review``,
       ``auto_accept_allowed``, ``source_line_hash`` (12-char).
+
+    For interop with the existing spaCy extractor, top-level keys
+    ``value`` / ``unit`` / ``status`` / ``reference_range`` / ``flag``
+    are accepted as fallback when no ``structured`` payload is present.
+    Review-bound default is enforced regardless of upstream shape.
     """
     entities = entities or []
     fact_count = 0
@@ -438,17 +443,25 @@ def summarize_extracted_facts_for_public_report(
         if len(preview) >= max_preview:
             continue
         structured = entity.get("structured") or {}
+        # Defensive fallback: existing spaCy entities carry value/unit at
+        # top level (not inside a structured dict). Read top-level keys
+        # only when the structured payload is missing them.
+        value = structured.get("value") or entity.get("value") or ""
+        unit = structured.get("unit") or entity.get("unit") or ""
+        reference_range = structured.get("reference_range") or entity.get("reference_range") or ""
+        flag = structured.get("flag") or entity.get("status") or entity.get("flag") or ""
         preview.append(
             {
                 "type": fact_type,
                 "test_name": str(entity.get("text") or structured.get("test_name") or ""),
-                "value": str(structured.get("value") or ""),
-                "unit": str(structured.get("unit") or "") or None,
-                "reference_range": str(structured.get("reference_range") or "") or None,
-                "flag": str(structured.get("flag") or "") or None,
+                "value": str(value),
+                "unit": str(unit) or None,
+                "reference_range": str(reference_range) or None,
+                "flag": str(flag) or None,
                 "confidence": float(entity.get("confidence", CONSERVATIVE_CONFIDENCE)),
                 "language_hint": str(structured.get("language_hint") or "unknown"),
-                "parser_name": str(structured.get("parser_name") or "unknown"),
+                "parser_name": str(structured.get("parser_name") or entity.get("parser_name") or "unknown"),
+                # Review-bound default holds regardless of upstream extractor.
                 "requires_review": bool(structured.get("requires_human_review", True)),
                 "auto_accept_allowed": bool(structured.get("auto_accept_allowed", False)),
                 "source_line_hash": str(structured.get("source_line_hash") or ""),

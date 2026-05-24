@@ -947,6 +947,15 @@ class ExecutionPipeline:
             structured.pop("type", None)
             structured.pop("text", None)
 
+            # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-02: honor an entity's
+            # explicit review-bound flag (set by the deterministic adapter
+            # via structured["requires_human_review"]). This routes adapter
+            # facts to review without bypassing any other safety gate. The
+            # medication safety gate, governance hypothesis classifier, and
+            # truth resolution continue to run downstream.
+            entity_requires_review = bool(structured.get("requires_human_review", False))
+            entity_confidence = float(entity.get("confidence", confidence))
+            record_tier = TIER_QUARANTINED if entity_requires_review else TIER_ACTIVE
             record = MKBRecord(
                 fact_type=fact_type,
                 content=self._content_for_entity(fact_type, text, structured),
@@ -955,9 +964,10 @@ class ExecutionPipeline:
                 source_type="extraction",
                 source_name=source_name,
                 trust_level=TRUST_CLINICAL,
-                confidence=confidence,
-                tier=TIER_ACTIVE,
+                confidence=entity_confidence,
+                tier=record_tier,
                 extraction_method=extraction_method or "unknown",
+                requires_review=entity_requires_review,
                 ddi_checked=False,
                 session_id=session_id,
                 tags=[fact_type],

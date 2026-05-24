@@ -1,0 +1,139 @@
+{
+  "block_id": "MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-02-PIPELINE-SMOKE",
+  "mode": "synthetic_pipeline_smoke_validation",
+  "implementation_changed_code": true,
+  "branch_expected": "clinical-knowledge-architecture",
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "real_screenshot_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "audit_findings": {
+    "synthetic_documents_evaluated": 2,
+    "structured_facts_extracted_total": 6,
+    "records_returned_count": 0,
+    "queued_records_returned_count": 6,
+    "review_bound_records_persisted_total": 6,
+    "retrieval_proof_count": 6,
+    "ui_preview_proof_count": 6,
+    "ui_render_plan_built_successfully": true,
+    "external_api_used": false,
+    "auto_accept_allowed_in_any_record": false,
+    "per_document_results": [
+      {
+        "outcome": "queued_for_review",
+        "validation_status": "accepted",
+        "document_type": "Lab result",
+        "extracted_medical_fact_count": 3,
+        "extracted_medical_fact_types": [
+          "test_result"
+        ],
+        "extraction_to_mkb_candidate_count": 3,
+        "extraction_to_mkb_written_count": 0,
+        "extraction_to_mkb_review_count": 3,
+        "extracted_medical_facts_preview_safe": [
+          {
+            "type": "test_result",
+            "test_name": "Glucose",
+            "value": "5.4",
+            "unit": "mmol/L",
+            "reference_range": "3.9-5.5",
+            "flag": "normal",
+            "confidence": 0.55,
+            "language_hint": "en",
+            "parser_name": "deterministic_lab_line_adapter",
+            "requires_review": true,
+            "auto_accept_allowed": false
+          },
+          {
+            "type": "test_result",
+            "test_name": "Hemoglobin",
+            "value": "13.5",
+            "unit": "g/dL",
+            "reference_range": "13.5-17.5",
+            "flag": null,
+            "confidence": 0.55,
+            "language_hint": "en",
+            "parser_name": "deterministic_lab_line_adapter",
+            "requires_review": true,
+            "auto_accept_allowed": false
+          },
+          {
+            "type": "test_result",
+            "test_name": "WBC",
+            "value": "7.2",
+            "unit": "x10E9/L",
+            "reference_range": "4.0-11.0",
+            "flag": null,
+            "confidence": 0.55,
+            "language_hint": "en",
+            "parser_name": "deterministic_lab_line_adapter",
+            "requires_review": true,
+            "auto_accept_allowed": false
+          }
+        ],
+        "label": "synthetic_en_lab"
+      },
+      {
+        "outcome": "queued_for_review",
+        "validation_status": "accepted",
+        "document_type": "Lab result",
+        "extracted_medical_fact_count": 3,
+        "extracted_medical_fact_types": [
+          "test_result"
+        ],
+        "extraction_to_mkb_candidate_count": 3,
+        "extraction_to_mkb_written_count": 0,
+        "extraction_to_mkb_review_count": 3,
+        "extracted_medical_facts_preview_safe": [
+          {
+            "type": "test_result",
+            "test_name": "Глюкоза",
+            "value": "5.4",
+            "unit": "ммоль/л",
+            "reference_range": null,
+            "flag": null,
+            "confidence": 0.55,
+            "language_hint": "ru",
+            "parser_name": "deterministic_lab_line_adapter",
+            "requires_review": true,
+            "auto_accept_allowed": false
+          },
+          {
+            "type": "test_result",
+            "test_name": "Гемоглобин",
+            "value": "135",
+            "unit": "г/л",
+            "reference_range": null,
+            "flag": null,
+            "confidence": 0.55,
+            "language_hint": "ru",
+            "parser_name": "deterministic_lab_line_adapter",
+            "requires_review": true,
+            "auto_accept_allowed": false
+          },
+          {
+            "type": "test_result",
+            "test_name": "Лейкоциты",
+            "value": "7.2",
+            "unit": "x10E9/л",
+            "reference_range": null,
+            "flag": null,
+            "confidence": 0.55,
+            "language_hint": "ru",
+            "parser_name": "deterministic_lab_line_adapter",
+            "requires_review": true,
+            "auto_accept_allowed": false
+          }
+        ],
+        "label": "synthetic_ru_lab"
+      }
+    ]
+  },
+  "conclusion": "pipeline_smoke_ready",
+  "all_pass": true
+}
