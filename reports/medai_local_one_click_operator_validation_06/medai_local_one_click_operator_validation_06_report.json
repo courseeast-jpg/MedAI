@@ -1,0 +1,32 @@
+{
+  "block_id": "MEDAI-LOCAL-ONE-CLICK-OPERATOR-VALIDATION-06",
+  "mode": "one_click_operator_validation_aggregation",
+  "branch_expected": "clinical-knowledge-architecture",
+  "audit_findings": {
+    "branch": "clinical-knowledge-architecture",
+    "head": "29cb7da",
+    "dependency_prepare_exit_code": 0,
+    "selected_input_mode": "synthetic_fallback",
+    "input_suffix": ".txt",
+    "input_safe_hash": "oneclick_0ca51e2abc",
+    "one_doc_validation_exit_code": 0,
+    "one_doc_validation_conclusion": "no_input_file",
+    "streamlit_smoke_exit_code": 0,
+    "ui_smoke_result": "passed",
+    "external_api_used": false,
+    "auto_accept_enabled": false,
+    "next_ui_command": "streamlit run app/main.py"
+  },
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "real_screenshot_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "passed": true,
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": []
+}
