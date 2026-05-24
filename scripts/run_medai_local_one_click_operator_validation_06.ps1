@@ -72,13 +72,18 @@ $headShort = (& git rev-parse --short HEAD).Trim()
 Write-Step ("branch={0} head={1}" -f $branch, $headShort)
 
 # 4. Refuse if working tree has unrelated uncommitted changes.
-$gitStatus = (& git status --porcelain).Trim()
+#    Null-safe: PowerShell returns $null (or a string, or an array of
+#    strings) depending on how many lines git emitted. Force the result
+#    to a single trimmed string before any string ops.
+$gitStatusOutput = @(& git status --porcelain)
+$gitStatus = ($gitStatusOutput -join "`n").Trim()
 if ($gitStatus) {
     # Allowed: report files inside the 06 report directory and queued
     # test_input/ entries that this script itself writes. Everything
     # else means the operator has work in flight; do not run.
     $unexpected = @()
     foreach ($line in ($gitStatus -split "`n")) {
+        if (-not $line -or $line.Length -lt 4) { continue }
         $path = $line.Substring(3).Replace("\\", "/").Trim()
         if ($path.StartsWith("reports/medai_local_one_click_operator_validation_06/")) { continue }
         if ($path.StartsWith("test_input/")) { continue }
