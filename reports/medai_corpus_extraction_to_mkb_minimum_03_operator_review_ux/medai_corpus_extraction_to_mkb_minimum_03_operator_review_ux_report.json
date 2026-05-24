@@ -29,7 +29,6 @@
     "raw_source_line_in_public_report": false,
     "per_record_results": [
       {
-        "record_handle": "rec_f635219ac1",
         "success": true,
         "action": "accept_after_source_comparison",
         "previous_tier": "quarantined",
@@ -44,7 +43,6 @@
         "safe_message": "Accept only after comparing this value with the source document. This does not clinically interpret the result."
       },
       {
-        "record_handle": "rec_8df955aeba",
         "success": true,
         "action": "reject_extracted_fact",
         "previous_tier": "quarantined",
@@ -59,7 +57,6 @@
         "safe_message": "Rejected. The record will not be used as a source-derived fact."
       },
       {
-        "record_handle": "rec_df03fbc66c",
         "success": true,
         "action": "defer_extracted_fact",
         "previous_tier": "quarantined",
@@ -74,7 +71,6 @@
         "safe_message": "Deferred. The record stays review-bound. No clinical interpretation occurred."
       },
       {
-        "record_handle": "rec_9e37153352",
         "success": false,
         "action": "accept_after_source_comparison",
         "previous_tier": null,
@@ -89,7 +85,6 @@
         "safe_message": "Record not found in MKB."
       },
       {
-        "record_handle": "rec_f635219ac1",
         "success": false,
         "action": "accept_after_source_comparison",
         "previous_tier": "active",

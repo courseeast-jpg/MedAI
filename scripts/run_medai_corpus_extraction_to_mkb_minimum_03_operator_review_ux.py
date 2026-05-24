@@ -194,10 +194,14 @@ def main() -> int:
         result_defer = defer_extracted_fact(
             sql_store, target_defer, operator_note="will review later", session_id="ux-en"
         )
+        # Record handles intentionally omitted from the public report so the
+        # committed JSON is byte-stable across re-runs (the underlying
+        # MKBRecord ids are fresh UUIDs on every invocation). The action
+        # outcomes themselves are the stable evidence.
         findings["per_record_results"] = [
-            {"record_handle": _safe_record_handle(target_accept), **_action_summary(result_accept)},
-            {"record_handle": _safe_record_handle(target_reject), **_action_summary(result_reject)},
-            {"record_handle": _safe_record_handle(target_defer), **_action_summary(result_defer)},
+            _action_summary(result_accept),
+            _action_summary(result_reject),
+            _action_summary(result_defer),
         ]
         findings["accepted_action_count"] = 1 if result_accept.success else 0
         findings["rejected_action_count"] = 1 if result_reject.success else 0
@@ -206,12 +210,8 @@ def main() -> int:
         # Error-path probes (each must fail safely without state change).
         miss_result = accept_after_source_comparison(sql_store, "no-such-record-id")
         reaccept_result = accept_after_source_comparison(sql_store, target_accept)
-        findings["per_record_results"].append(
-            {"record_handle": _safe_record_handle("no-such-record-id"), **_action_summary(miss_result)}
-        )
-        findings["per_record_results"].append(
-            {"record_handle": _safe_record_handle(target_accept), **_action_summary(reaccept_result)}
-        )
+        findings["per_record_results"].append(_action_summary(miss_result))
+        findings["per_record_results"].append(_action_summary(reaccept_result))
 
     # Counts after actions
     with sql_store._get_conn() as conn:
