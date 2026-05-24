@@ -236,34 +236,228 @@ def display_content(record: MKBRecord) -> tuple[str, bool]:
 
 @st.cache_resource
 def load_system() -> dict:
-    from decision.decision_engine import DecisionEngine
-    from decision.medication_safety import MedicationSafetyGate
-    from decision.response_scorer import ResponseScorer
-    from enrichment.enrichment_engine import EnrichmentEngine
-    from external_apis.connectors import ClaudeSynthesizer, build_connector_registry
-    from extraction.pii_stripper import PIIStripper
-    from mkb.quality_gate import QualityGate
-    from mkb.sqlite_store import SQLiteStore
-    from mkb.vector_store import VectorStore
+    """Componentized startup. See MEDAI-UI-STARTUP-RESILIENCE-08.
 
-    db_key = os.getenv("DB_ENCRYPTION_KEY", "default_dev_key")
-    sql = SQLiteStore(DB_PATH, db_key)
-    vec = VectorStore(CHROMA_PATH)
-    quality_gate = QualityGate(sql, vec)
-    connectors = build_connector_registry()
-    medication_gate = MedicationSafetyGate(connectors.get("patientnotes_ddi"), sql)
-    scorer = ResponseScorer(vec, medication_gate)
-    synthesizer = ClaudeSynthesizer(ANTHROPIC_API_KEY, "claude-sonnet-4-20250514")
-    state = SystemState(claude_available=bool(ANTHROPIC_API_KEY), active_connectors=ACTIVE_CONNECTORS)
-    engine = DecisionEngine(sql, vec, scorer, medication_gate, connectors, synthesizer, state)
-    execution = ExecutionPipeline(
-        sql_store=sql,
-        vector_store=vec,
-        quality_gate=quality_gate,
-        medication_gate=medication_gate,
-        pii_stripper=PIIStripper(),
+    SQLite is critical: if it fails, the UI runs in diagnostics-only
+    mode. VectorStore, QualityGate, connectors, scorer, synthesizer,
+    DecisionEngine, and EnrichmentEngine are optional — any failure
+    there leaves the local clinical-review workflow available with a
+    "Vector/semantic index unavailable" banner. ExecutionPipeline is
+    built whenever SQLite is OK, with ``vector_store=None`` and
+    ``quality_gate=None`` as needed.
+    """
+    return build_system_components()
+
+
+def build_system_components(
+    *,
+    db_path: Path | None = None,
+    chroma_path: Path | None = None,
+    db_encryption_key: str | None = None,
+    sqlite_store_factory: Any | None = None,
+    vector_store_factory: Any | None = None,
+    quality_gate_factory: Any | None = None,
+    connector_registry_factory: Any | None = None,
+    medication_safety_gate_factory: Any | None = None,
+    response_scorer_factory: Any | None = None,
+    claude_synthesizer_factory: Any | None = None,
+    decision_engine_factory: Any | None = None,
+    execution_pipeline_factory: Any | None = None,
+    enrichment_engine_factory: Any | None = None,
+    pii_stripper_factory: Any | None = None,
+) -> dict:
+    """Build the system components dict with per-component try/except.
+
+    Every dependency import sits inside its try block so a broken
+    optional dependency cannot cascade into a misleading
+    "MKB initialization failed" banner. The factory hooks let tests
+    inject simulated failures (e.g., a VectorStore that raises a
+    Pydantic ConfigValidationError) without touching production code.
+    """
+    db_path = db_path or DB_PATH
+    chroma_path = chroma_path or CHROMA_PATH
+    db_key = db_encryption_key or os.getenv("DB_ENCRYPTION_KEY", "default_dev_key")
+
+    component_errors: list[tuple[str, str]] = []
+    sqlite_store_initialized = False
+    vector_store_initialized = False
+    quality_gate_initialized = False
+    execution_pipeline_initialized = False
+
+    sql = None
+    vec = None
+    quality_gate = None
+    connectors: dict = {}
+    medication_gate = None
+    scorer = None
+    synthesizer = None
+    engine = None
+    execution = None
+    enrichment = None
+
+    # 1. SQLiteStore (critical).
+    try:
+        if sqlite_store_factory is not None:
+            sql = sqlite_store_factory(db_path, db_key)
+        else:
+            from mkb.sqlite_store import SQLiteStore
+
+            sql = SQLiteStore(db_path, db_key)
+        sqlite_store_initialized = True
+    except Exception as exc:
+        component_errors.append(("SQLiteStore", type(exc).__name__))
+
+    # 2. VectorStore (optional).
+    try:
+        if sqlite_store_initialized:
+            if vector_store_factory is not None:
+                vec = vector_store_factory(chroma_path)
+            else:
+                from mkb.vector_store import VectorStore
+
+                vec = VectorStore(chroma_path)
+            vector_store_initialized = True
+    except Exception as exc:
+        component_errors.append(("VectorStore", type(exc).__name__))
+
+    # 3. QualityGate (depends on SQLite + Vector).
+    try:
+        if sqlite_store_initialized and vector_store_initialized:
+            if quality_gate_factory is not None:
+                quality_gate = quality_gate_factory(sql, vec)
+            else:
+                from mkb.quality_gate import QualityGate
+
+                quality_gate = QualityGate(sql, vec)
+            quality_gate_initialized = True
+    except Exception as exc:
+        component_errors.append(("QualityGate", type(exc).__name__))
+
+    # 4. Connector registry (optional).
+    try:
+        if connector_registry_factory is not None:
+            connectors = connector_registry_factory() or {}
+        else:
+            from external_apis.connectors import build_connector_registry
+
+            connectors = build_connector_registry() or {}
+    except Exception as exc:
+        component_errors.append(("ConnectorRegistry", type(exc).__name__))
+        connectors = {}
+
+    # 5. MedicationSafetyGate (depends on SQLite).
+    try:
+        if sqlite_store_initialized:
+            if medication_safety_gate_factory is not None:
+                medication_gate = medication_safety_gate_factory(
+                    connectors.get("patientnotes_ddi"), sql
+                )
+            else:
+                from decision.medication_safety import MedicationSafetyGate
+
+                medication_gate = MedicationSafetyGate(
+                    connectors.get("patientnotes_ddi"), sql
+                )
+    except Exception as exc:
+        component_errors.append(("MedicationSafetyGate", type(exc).__name__))
+
+    # 6. ResponseScorer (depends on Vector).
+    try:
+        if vector_store_initialized:
+            if response_scorer_factory is not None:
+                scorer = response_scorer_factory(vec, medication_gate)
+            else:
+                from decision.response_scorer import ResponseScorer
+
+                scorer = ResponseScorer(vec, medication_gate)
+    except Exception as exc:
+        component_errors.append(("ResponseScorer", type(exc).__name__))
+
+    # 7. ClaudeSynthesizer (always built; degraded when API key absent).
+    try:
+        if claude_synthesizer_factory is not None:
+            synthesizer = claude_synthesizer_factory(
+                ANTHROPIC_API_KEY, "claude-sonnet-4-20250514"
+            )
+        else:
+            from external_apis.connectors import ClaudeSynthesizer
+
+            synthesizer = ClaudeSynthesizer(
+                ANTHROPIC_API_KEY, "claude-sonnet-4-20250514"
+            )
+    except Exception as exc:
+        component_errors.append(("ClaudeSynthesizer", type(exc).__name__))
+
+    state = SystemState(
+        claude_available=bool(ANTHROPIC_API_KEY) and synthesizer is not None,
+        active_connectors=ACTIVE_CONNECTORS,
     )
-    enrichment = EnrichmentEngine(None, sql, vec, quality_gate, medication_gate)
+
+    # 8. DecisionEngine (depends on SQLite + Vector + others).
+    try:
+        if sqlite_store_initialized and vector_store_initialized and scorer is not None and synthesizer is not None:
+            if decision_engine_factory is not None:
+                engine = decision_engine_factory(
+                    sql, vec, scorer, medication_gate, connectors, synthesizer, state
+                )
+            else:
+                from decision.decision_engine import DecisionEngine
+
+                engine = DecisionEngine(
+                    sql, vec, scorer, medication_gate, connectors, synthesizer, state
+                )
+    except Exception as exc:
+        component_errors.append(("DecisionEngine", type(exc).__name__))
+
+    # 9. ExecutionPipeline (built whenever SQLite is OK).
+    try:
+        if sqlite_store_initialized:
+            pii_stripper = None
+            try:
+                if pii_stripper_factory is not None:
+                    pii_stripper = pii_stripper_factory()
+                else:
+                    from extraction.pii_stripper import PIIStripper
+
+                    pii_stripper = PIIStripper()
+            except Exception as pii_exc:
+                component_errors.append(("PIIStripper", type(pii_exc).__name__))
+                pii_stripper = None
+            if execution_pipeline_factory is not None:
+                execution = execution_pipeline_factory(
+                    sql_store=sql,
+                    vector_store=vec,
+                    quality_gate=quality_gate,
+                    medication_gate=medication_gate,
+                    pii_stripper=pii_stripper,
+                )
+            else:
+                execution = ExecutionPipeline(
+                    sql_store=sql,
+                    vector_store=vec,
+                    quality_gate=quality_gate,
+                    medication_gate=medication_gate,
+                    pii_stripper=pii_stripper,
+                )
+            execution_pipeline_initialized = True
+    except Exception as exc:
+        component_errors.append(("ExecutionPipeline", type(exc).__name__))
+
+    # 10. EnrichmentEngine (depends on SQLite + Vector).
+    try:
+        if sqlite_store_initialized and vector_store_initialized:
+            if enrichment_engine_factory is not None:
+                enrichment = enrichment_engine_factory(
+                    None, sql, vec, quality_gate, medication_gate
+                )
+            else:
+                from enrichment.enrichment_engine import EnrichmentEngine
+
+                enrichment = EnrichmentEngine(
+                    None, sql, vec, quality_gate, medication_gate
+                )
+    except Exception as exc:
+        component_errors.append(("EnrichmentEngine", type(exc).__name__))
 
     return {
         "sql": sql,
@@ -274,6 +468,13 @@ def load_system() -> dict:
         "enrichment": enrichment,
         "state": state,
         "med_gate": medication_gate,
+        "component_status": {
+            "sqlite_store_initialized": sqlite_store_initialized,
+            "vector_store_initialized": vector_store_initialized,
+            "quality_gate_initialized": quality_gate_initialized,
+            "execution_pipeline_initialized": execution_pipeline_initialized,
+            "component_errors": list(component_errors),
+        },
     }
 
 
@@ -304,6 +505,26 @@ def render_degraded_startup_panel(startup: StartupState) -> None:
         render_operator_control_panel()
     except Exception as _exc:
         st.error(f"Operator Control Panel unavailable: {_exc}")
+
+
+def render_degraded_vector_banner(startup: StartupState) -> None:
+    """MEDAI-UI-STARTUP-RESILIENCE-08: shown when SQLite is OK but the
+    vector store (Chroma) failed to initialize. The local clinical
+    review workflow continues; semantic / vector search is disabled.
+    """
+    diagnostics = startup.diagnostics.safe_public_summary()
+    st.warning(
+        "Vector/semantic index unavailable. SQLite MKB and local review "
+        "workflow remain available."
+    )
+    st.caption(
+        "Review required. MedAI does not diagnose, recommend treatment, "
+        "interpret medications, or accept extracted values on its own."
+    )
+    with st.expander("Startup diagnostics (degraded vector)", expanded=False):
+        st.json(diagnostics)
+        for item in diagnostics.get("safe_operator_guidance", []):
+            st.write(f"- {item}")
 
 
 def inject_phase52_styles() -> None:
@@ -1762,6 +1983,12 @@ def main() -> None:
         st.divider()
         st.caption(PRIVACY_INVARIANT_GUIDANCE)
         return
+
+    # MEDAI-UI-STARTUP-RESILIENCE-08: SQLite is OK, but the vector index
+    # may have failed. Surface a clear warning banner without blocking
+    # the local clinical-review workflow.
+    if startup.diagnostics.app_startup_status == "app_startup_ok_with_degraded_vector":
+        render_degraded_vector_banner(startup)
 
     sys_components = startup.components
     if sys_components is None:

@@ -1,0 +1,97 @@
+{
+  "block_id": "MEDAI-UI-STARTUP-RESILIENCE-08",
+  "milestone": "A_baseline_audit",
+  "mode": "audit_only_no_code_change",
+  "branch": "clinical-knowledge-architecture",
+  "head_short_before_audit": "bcf12a4",
+  "files_inspected": [
+    "app/main.py",
+    "app/startup_preflight.py",
+    "mkb/sqlite_store.py",
+    "mkb/vector_store.py",
+    "app/config.py"
+  ],
+  "load_system_components_initialized_in_order": [
+    "SQLiteStore",
+    "VectorStore",
+    "QualityGate",
+    "connectors_registry",
+    "MedicationSafetyGate",
+    "ResponseScorer",
+    "ClaudeSynthesizer",
+    "DecisionEngine",
+    "ExecutionPipeline",
+    "EnrichmentEngine"
+  ],
+  "current_failure_model": {
+    "load_system_is_atomic": true,
+    "any_component_exception_disables_entire_ui": true,
+    "initialize_startup_state_catch_all": true,
+    "diagnostics_panel_message": "MKB initialization failed. MedAI started in diagnostics-only mode.",
+    "diagnostics_panel_message_misleads_operator_when_failure_is_vector_or_chroma": true
+  },
+  "exceptions_that_can_be_misreported_as_db_init_failure": [
+    "pydantic.ConfigValidationError raised from chromadb VectorStore constructor",
+    "chromadb dependency / model incompatibility",
+    "google-generativeai unavailable during connectors_registry build (if any path requires it)",
+    "presidio or spaCy unavailable inside PIIStripper or DecisionEngine path",
+    "any OSError raised during VectorStore index directory creation under CHROMA_PATH"
+  ],
+  "sqlcipher_encrypted_metadata_probe_problem": {
+    "store_uses_sqlcipher3_when_available": true,
+    "diagnostics_probe_uses_standard_sqlite3": true,
+    "encrypted_header_marks_db_as_encrypted_or_unknown": true,
+    "metadata_probe_correctly_cannot_open_encrypted_db_without_key": true,
+    "category_returned_today": "encrypted_or_wrong_key_or_unreadable",
+    "category_is_misleading_when_sqlite_store_actually_initialized_successfully": true
+  },
+  "ui_can_safely_start_without_vector_store": {
+    "execution_pipeline_accepts_vector_store_none": true,
+    "execution_pipeline_accepts_quality_gate_none": true,
+    "mkb_writer_treats_quality_gate_none_as_approved_records_path": true,
+    "review_bound_default_preserved_when_quality_gate_none": true,
+    "local_only_default_preserved_when_vector_store_none": true,
+    "semantic_search_unavailable_when_vector_store_none": true,
+    "external_api_default_blocked": true
+  },
+  "componentization_plan": {
+    "init_step_1": "SQLiteStore — critical; any failure -> diagnostics-only mode",
+    "init_step_2": "VectorStore — optional; any failure -> degraded_vector_mode",
+    "init_step_3": "QualityGate — depends on SQLite + Vector; degraded -> None",
+    "init_step_4": "ConnectorRegistry — optional; degraded -> empty",
+    "init_step_5": "MedicationSafetyGate — depends on SQLite; degraded -> None when SQLite missing",
+    "init_step_6": "ResponseScorer / Synthesizer / DecisionEngine — optional; degraded when Vector or connectors missing",
+    "init_step_7": "ExecutionPipeline — depends on SQLite; built whenever SQLite is OK",
+    "init_step_8": "EnrichmentEngine — depends on SQLite + Vector; degraded when either missing"
+  },
+  "new_startup_categories_planned": [
+    "sqlite_store_init_failed",
+    "sqlcipher_encrypted_metadata_probe_unreadable_but_store_ok",
+    "vector_store_init_failed",
+    "quality_gate_degraded",
+    "app_startup_ok_with_degraded_vector",
+    "app_startup_ok",
+    "app_startup_failed"
+  ],
+  "ui_banner_paths_planned": {
+    "sqlite_ok_vector_ok": "no banner (normal)",
+    "sqlite_ok_vector_failed": "Vector/semantic index unavailable. SQLite MKB and local review workflow remain available.",
+    "sqlite_failed": "Diagnostics-only mode. No clinical processing started."
+  },
+  "forbidden_in_this_block": [
+    "deleting any DB file",
+    "changing classifier rules or cues",
+    "changing OCR routing",
+    "changing confidence thresholds",
+    "enabling auto-accept",
+    "calling an external API",
+    "bypassing privacy / DDI / medication / review gates",
+    "implementing new medical logic"
+  ],
+  "external_api_used_in_this_audit": false,
+  "private_data_accessed_in_this_audit": false,
+  "real_pdf_committed_in_this_audit": false,
+  "implementation_started_in_this_milestone": false,
+  "ready_to_proceed_to_milestone_b": true,
+  "next_milestone": "B_componentized_startup"
+}

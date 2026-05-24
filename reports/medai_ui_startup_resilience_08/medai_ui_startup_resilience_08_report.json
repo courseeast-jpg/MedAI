@@ -1,0 +1,110 @@
+{
+  "block_id": "MEDAI-UI-STARTUP-RESILIENCE-08",
+  "mode": "synthetic_ui_startup_resilience_validation",
+  "branch_expected": "clinical-knowledge-architecture",
+  "audit_findings": {
+    "sqlite_startup_result": true,
+    "vector_startup_simulated_failure_result": true,
+    "ui_degraded_mode_result": true,
+    "mkb_explorer_remains_available": true,
+    "run_review_remains_available": true,
+    "execution_pipeline_initialized_without_vector": true,
+    "quality_gate_is_none_when_vector_degraded": true,
+    "hard_failure_returns_diagnostics_only": true,
+    "sqlcipher_encrypted_probe_not_fatal_when_store_ok": true,
+    "external_api_used": false,
+    "auto_accept_enabled": false,
+    "degraded_vector_guidance_includes_local_workflow_message": true,
+    "review_required_default_preserved": true
+  },
+  "diagnostics_degraded_vector": {
+    "db_path_label": "mkb.db",
+    "db_parent_exists": true,
+    "db_file_exists": true,
+    "db_file_size_bucket": "small_under_1mb",
+    "db_header_category": "sqlite_header",
+    "db_schema_length": 1987,
+    "db_schema_sha256_12": "533ad38e02df",
+    "sqlite_connect_result": "connect_ok_read_only",
+    "sqlite_quick_check_result": "ok",
+    "db_startup_category": "valid_readonly_metadata",
+    "exception_class": null,
+    "exception_category": null,
+    "safe_operator_guidance": [
+      "Vector/semantic index unavailable. SQLite MKB and local review workflow remain available.",
+      "Semantic search and similarity-based retrieval are disabled until the vector index is restored.",
+      "Review-bound default is preserved. No auto-accept."
+    ],
+    "sqlite_store_initialized": true,
+    "vector_store_initialized": false,
+    "quality_gate_initialized": false,
+    "execution_pipeline_initialized": true,
+    "component_errors": [
+      {
+        "component": "VectorStore",
+        "error_class": "_SimulatedConfigValidationError"
+      },
+      {
+        "component": "ConnectorRegistry",
+        "error_class": "ModuleNotFoundError"
+      },
+      {
+        "component": "ClaudeSynthesizer",
+        "error_class": "ModuleNotFoundError"
+      }
+    ],
+    "app_startup_status": "app_startup_ok_with_degraded_vector"
+  },
+  "diagnostics_hard_failure": {
+    "db_path_label": "mkb.db",
+    "db_parent_exists": false,
+    "db_file_exists": false,
+    "db_file_size_bucket": "missing",
+    "db_header_category": "missing",
+    "db_schema_length": 1987,
+    "db_schema_sha256_12": "533ad38e02df",
+    "sqlite_connect_result": "not_run_missing_db",
+    "sqlite_quick_check_result": "not_run_missing_db",
+    "db_startup_category": "missing",
+    "exception_class": null,
+    "exception_category": null,
+    "safe_operator_guidance": [
+      "MKB initialization failed.",
+      "No clinical processing started.",
+      "Run Git Safety Check or startup diagnostics.",
+      "Avoid manual DB deletion.",
+      "Use a Codex repair block if database quarantine or restore is needed."
+    ],
+    "sqlite_store_initialized": false,
+    "vector_store_initialized": false,
+    "quality_gate_initialized": false,
+    "execution_pipeline_initialized": false,
+    "component_errors": [
+      {
+        "component": "SQLiteStore",
+        "error_class": "RuntimeError"
+      },
+      {
+        "component": "ConnectorRegistry",
+        "error_class": "ModuleNotFoundError"
+      },
+      {
+        "component": "ClaudeSynthesizer",
+        "error_class": "ModuleNotFoundError"
+      }
+    ],
+    "app_startup_status": "app_startup_failed"
+  },
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "conclusion": "ui_startup_resilience_ready",
+  "all_pass": true,
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": []
+}
