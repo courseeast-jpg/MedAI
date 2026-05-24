@@ -1,0 +1,30 @@
+{
+  "block_id": "MEDAI-LOCAL-RUNTIME-DEPENDENCY-AND-ONE-DOC-VALIDATION-05",
+  "mode": "one_doc_operator_validation",
+  "branch_expected": "clinical-knowledge-architecture",
+  "audit_findings": {
+    "one_doc_input_present": false,
+    "operator_next_step": "NO_INPUT_FILE: Put one PDF or TXT into test_input/ and rerun this script.",
+    "structured_facts_extracted_count": 0,
+    "review_bound_records_persisted_count": 0,
+    "retrieval_proof_count": 0,
+    "ui_render_plan_built": false,
+    "ui_render_plan_row_count": 0,
+    "real_record_action_executed": false,
+    "external_api_used": false,
+    "auto_accept_enabled": false
+  },
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "real_screenshot_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "conclusion": "no_input_file",
+  "all_pass": true,
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": []
+}

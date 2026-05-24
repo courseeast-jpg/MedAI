@@ -1,0 +1,49 @@
+{
+  "block_id": "MEDAI-LOCAL-RUNTIME-DEPENDENCY-AND-ONE-DOC-VALIDATION-05-STREAMLIT-LAUNCH-SMOKE",
+  "mode": "streamlit_launch_smoke",
+  "branch_expected": "clinical-knowledge-architecture",
+  "audit_findings": {
+    "streamlit_present": false,
+    "helper_import_results": [
+      {
+        "module": "app.extracted_information_preview",
+        "passed": true,
+        "error": null
+      },
+      {
+        "module": "app.operator_review_actions",
+        "passed": true,
+        "error": null
+      },
+      {
+        "module": "execution.extracted_medical_facts",
+        "passed": true,
+        "error": null
+      }
+    ],
+    "helper_import_passed": true,
+    "app_main_import_smoke": {
+      "ran": false,
+      "passed": null,
+      "reason": "streamlit_module_not_present_in_local_environment"
+    },
+    "streamlit_brief_launch": {
+      "ran": false,
+      "reason": "MEDAI_STREAMLIT_LAUNCH_SMOKE not set; brief launch skipped by default",
+      "passed": null
+    },
+    "external_api_used": false,
+    "auto_accept_enabled": false
+  },
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "passed": true,
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": []
+}
