@@ -1,0 +1,106 @@
+{
+  "block_id": "MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-04-REAL-LOCAL-OPERATOR-VALIDATION",
+  "mode": "validation_only_no_product_features",
+  "branch_expected": "clinical-knowledge-architecture",
+  "audit_findings": {
+    "branch": "clinical-knowledge-architecture",
+    "head_short_before_block": "8ecf8fe",
+    "synthetic_validation_passed": true,
+    "prior_validation_results": {
+      "run_medai_corpus_extraction_to_mkb_minimum_01.py": {
+        "ran": true,
+        "exit_code": 0,
+        "all_pass": true,
+        "conclusion": "minimum_extraction_to_mkb_ready"
+      },
+      "run_medai_corpus_extraction_to_mkb_minimum_02_pipeline_smoke.py": {
+        "ran": true,
+        "exit_code": 0,
+        "all_pass": true,
+        "conclusion": "pipeline_smoke_ready"
+      },
+      "run_medai_corpus_extraction_to_mkb_minimum_03_operator_review_ux.py": {
+        "ran": true,
+        "exit_code": 0,
+        "all_pass": true,
+        "conclusion": "operator_review_ux_ready"
+      }
+    },
+    "dependency_probe": {
+      "streamlit": false,
+      "spacy": false,
+      "chromadb": false,
+      "sqlcipher3": false,
+      "PyPDF2": false,
+      "pytesseract": false,
+      "medspacy": false,
+      "presidio_analyzer": false
+    },
+    "corpus_folder_counts": {
+      "test_input": {
+        "present": true,
+        "file_count": 0,
+        "file_suffix_counts": {}
+      },
+      "real_validation_input": {
+        "present": true,
+        "file_count": 0,
+        "file_suffix_counts": {}
+      },
+      "full_corpus_input": {
+        "present": true,
+        "file_count": 0,
+        "file_suffix_counts": {}
+      }
+    },
+    "private_corpus_present": false,
+    "private_docs_evaluated_count": 0,
+    "private_doc_handles": [],
+    "structured_facts_extracted_count": 3,
+    "review_bound_records_persisted_count": 3,
+    "retrieval_proof_count": 3,
+    "ui_import_smoke": {
+      "results": {
+        "app.extracted_information_preview": true,
+        "app.operator_review_actions": true,
+        "execution.extracted_medical_facts": true
+      },
+      "errors": {},
+      "passed": true
+    },
+    "ui_import_smoke_passed": true,
+    "streamlit_launch_smoke": {
+      "ran": false,
+      "reason": "streamlit_module_not_present_in_local_environment",
+      "passed": null
+    },
+    "streamlit_launch_smoke_passed": null,
+    "operator_action_synthetic": {
+      "documents_evaluated": 1,
+      "extracted_fact_count": 3,
+      "review_bound_records_persisted": 3,
+      "retrieval_proof_count": 3,
+      "accept_proof": true,
+      "reject_proof": true,
+      "defer_proof": true,
+      "external_api_used": false
+    },
+    "operator_action_synthetic_proof_count": 3,
+    "external_api_used": false,
+    "auto_accept_enabled": false,
+    "practical_mvp_ready_for_local_operator_use": true,
+    "real_pdf_committed": false,
+    "real_screenshot_committed": false,
+    "raw_text_printed": false,
+    "raw_ocr_text_printed": false,
+    "raw_filenames_printed": false,
+    "private_paths_printed": false,
+    "phi_printed": false
+  },
+  "conclusion": "private_corpus_not_present_synthetic_ready",
+  "all_pass": true,
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": []
+}
