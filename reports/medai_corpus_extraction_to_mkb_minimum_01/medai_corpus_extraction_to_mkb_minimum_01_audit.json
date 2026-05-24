@@ -1,0 +1,115 @@
+{
+  "block_id": "MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01",
+  "milestone": "A_baseline_audit",
+  "mode": "audit_only_no_code_change",
+  "branch": "clinical-knowledge-architecture",
+  "head_short_before_audit": "ef42cb8",
+  "pipeline_files_inspected": [
+    "execution/pipeline.py",
+    "execution/jobs.py",
+    "execution/mkb_writer.py",
+    "execution/validation.py",
+    "extractors/spacy_extractor.py",
+    "mkb/sqlite_store.py",
+    "app/main.py",
+    "app/test_launcher.py",
+    "app/schemas.py"
+  ],
+  "pipeline_outcomes_today": {
+    "entities_extracted_today": "yes_when_lab_pattern_matches_or_diagnosis_or_medication_pattern_matches_in_spacy_extractor",
+    "records_created_today": "yes_via_pipeline_entities_to_records",
+    "records_written_to_sqlite_today": "yes_via_mkb_writer_when_validation_accepted_and_quality_gate_clears",
+    "review_bound_records_persisted_today": "yes_via_mkb_writer_when_record_requires_review_or_quarantined_tier",
+    "records_visible_in_mkb_explorer_today": "yes_when_records_exist_in_sqlite_and_filter_matches",
+    "records_returned_by_mkb_retrieval_today": "yes_via_get_by_specialty_get_active_medications_get_active_diagnoses_get_records_requiring_review",
+    "structured_facts_visible_in_run_review_card_today": "no"
+  },
+  "root_cause_of_invisible_extracted_information": {
+    "summary": "extracted entities and persisted records exist in memory and SQLite respectively, but the Run & Review card has no field to surface them and the UI render path does not call into the SQLite store to fetch back the just-written records",
+    "specific_gaps": [
+      "TestFileResult dataclass at app/test_launcher.py:42-71 has no extracted_medical_facts_preview_safe field, no extracted_medical_fact_count, no extraction_to_mkb_candidate_count, no extraction_to_mkb_written_count, no extraction_to_mkb_review_count",
+      "_process_one_file at app/test_launcher.py:344-423 reads extractor_result and audit but does not copy entities, structured facts, or written-record summaries into TestFileResult",
+      "render_run_result_card at app/main.py:1133+ has no 'Extracted information preview' section and prints absolute prose 'The lab values have not been checked or accepted' from operator_result_explanation regardless of extraction outcome",
+      "extractor_result lacks an explicit extracted_medical_facts_preview_safe field that the UI helper layer can consume safely",
+      "no UI render-plan helper exists that builds a public-safe extracted-fact table from a TestFileResult-shaped dict"
+    ]
+  },
+  "downstream_persistence_already_works": {
+    "mkb_writer_persists_accepted_records": true,
+    "mkb_writer_persists_review_bound_records_to_sqlite": true,
+    "mkb_writer_persists_quarantined_records_to_sqlite": true,
+    "sqlite_store_get_records_requiring_review_returns_them": true,
+    "mkb_explorer_can_filter_by_specialty_and_tier": true,
+    "mkb_explorer_can_filter_by_fact_type_today": false
+  },
+  "minimum_safe_path_proposed": {
+    "add_module_execution_extracted_medical_facts_py": true,
+    "deterministic_local_only_lab_extractor": true,
+    "merge_into_extracted_entities_with_provenance": true,
+    "merge_only_when_document_family_lab_style_and_entities_empty_or_sparse": true,
+    "expose_extracted_medical_facts_preview_safe_on_extractor_result": true,
+    "expose_extracted_medical_fact_count_on_extractor_result": true,
+    "expose_extracted_medical_fact_types_on_extractor_result": true,
+    "expose_extraction_to_mkb_candidate_count_on_extractor_result": true,
+    "carry_preview_through_TestFileResult": true,
+    "add_app_extracted_information_preview_helper_module": true,
+    "render_plan_returned_by_helper_is_streamlit_free": true,
+    "wire_render_plan_into_render_run_result_card_before_what_medai_did_not_do_section": true,
+    "augment_mkb_explorer_fact_type_filter_only_if_strictly_needed": true,
+    "do_not_change_classifier_rules": true,
+    "do_not_change_ocr_routing": true,
+    "do_not_change_thresholds": true,
+    "do_not_change_safety_gate": true,
+    "do_not_change_ddi_behavior": true,
+    "do_not_change_privacy_gates": true,
+    "do_not_change_medical_decision_logic": true,
+    "preserve_review_bound_default": true,
+    "preserve_auto_accept_blocked_default": true
+  },
+  "extractor_result_keys_today_relevant_to_facts": [
+    "extractor",
+    "entities",
+    "confidence",
+    "latency_ms",
+    "raw_text",
+    "notes",
+    "validation_status",
+    "validation_errors",
+    "document_type",
+    "document_family_classification_diagnostic",
+    "actual_extractor"
+  ],
+  "test_file_result_fields_today_relevant_to_facts": [
+    "file_name",
+    "status",
+    "outcome",
+    "selected_extractor",
+    "confidence",
+    "validation_status",
+    "document_type",
+    "operator_review_reason",
+    "operator_reason_label"
+  ],
+  "explicit_questions_answered": {
+    "are_entities_extracted_today": "yes_when_text_matches_existing_spacy_regexes_or_structured_lab_patterns",
+    "are_records_created_today": "yes_via_pipeline_entities_to_records",
+    "are_records_written_to_sqlite_today": "yes_via_mkb_writer_write_record",
+    "are_records_visible_in_mkb_explorer_today": "yes_via_get_by_specialty_filter_or_raw_sql_query",
+    "are_records_returned_by_mkb_retrieval_today": "yes_via_get_by_specialty_get_active_medications_get_active_diagnoses_get_records_requiring_review",
+    "where_is_extracted_information_dropped_or_hidden": "in_the_TestFileResult_to_UI_handoff_layer_no_field_carries_the_extracted_fact_preview_to_the_run_review_card"
+  },
+  "privacy_observations": {
+    "current_run_review_card_does_not_print_raw_text_ocr_text_or_raw_filenames": true,
+    "current_test_file_result_carries_file_name_but_run_review_card_already_treats_it_with_care": true,
+    "public_reports_pass_clinical_knowledge_privacy_check": true,
+    "this_audit_inspected_no_real_documents": true,
+    "this_audit_inspected_no_raw_ocr_text": true,
+    "this_audit_inspected_no_private_paths": true
+  },
+  "external_api_used_in_this_audit": false,
+  "private_data_accessed_in_this_audit": false,
+  "real_pdf_committed_in_this_audit": false,
+  "implementation_started_in_this_milestone": false,
+  "ready_to_proceed_to_milestone_b": true,
+  "next_milestone": "B_safe_structured_fact_model_and_adapter"
+}

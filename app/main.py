@@ -458,6 +458,31 @@ def render_mkb_record(record: MKBRecord, show_hypothesis_warning: bool = True) -
     left, right = st.columns([3, 1])
     with left:
         st.markdown(f"**{content}**")
+        # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: render structured lab
+        # facts (test_result) with their value/unit/reference context so they
+        # are visible to the operator in MKB Explorer.
+        if record.fact_type == "test_result":
+            structured = record.structured or {}
+            test_name = structured.get("test_name") or structured.get("text") or content
+            value = structured.get("value")
+            unit = structured.get("unit") or ""
+            reference = structured.get("reference_range") or ""
+            flag = structured.get("flag") or ""
+            line_parts = [f"Lab result: {test_name}"]
+            if value:
+                line_parts.append(f"= {value}")
+            if unit:
+                line_parts.append(str(unit))
+            if reference:
+                line_parts.append(f"(ref {reference})")
+            if flag:
+                line_parts.append(f"[{flag}]")
+            st.caption(" ".join(line_parts))
+            parser = structured.get("parser_name") or record.extraction_method or "unknown"
+            st.caption(
+                f"Parser: {parser} | Confidence: {record.confidence:.2f} | "
+                f"Requires review: {'yes' if record.requires_review else 'no'}"
+            )
         if stale:
             st.caption("Content was over-redacted during ingestion; showing structured fallback.")
         if record.tier == "hypothesis" and show_hypothesis_warning:
@@ -640,23 +665,48 @@ def render_operator_result_panel(result) -> None:
 
 def render_mkb_tab(sys_components: dict) -> None:
     st.subheader("MKB Explorer")
-    specialty_filter, tier_filter = st.columns(2)
-    specialty = specialty_filter.selectbox("Specialty", ["all", "neurology", "epilepsy", "gastroenterology", "urology"])
-    tier = tier_filter.selectbox("Tier", ["all", "active", "hypothesis", "quarantined"])
+    # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: add fact_type filter so
+    # extracted test_result and review-bound records are easy to find.
+    specialty_filter, tier_filter, fact_type_filter = st.columns(3)
+    specialty = specialty_filter.selectbox(
+        "Specialty", ["all", "neurology", "epilepsy", "gastroenterology", "urology"]
+    )
+    tier = tier_filter.selectbox(
+        "Tier", ["all", "active", "hypothesis", "quarantined"]
+    )
+    fact_type = fact_type_filter.selectbox(
+        "Fact type",
+        [
+            "all",
+            "test_result",
+            "diagnosis",
+            "medication",
+            "symptom",
+            "note",
+            "recommendation",
+        ],
+    )
 
     specialty_query = None if specialty == "all" else specialty
     tier_query = None if tier == "all" else tier
+    fact_type_query = None if fact_type == "all" else fact_type
 
     if specialty_query:
         records = sys_components["sql"].get_by_specialty(specialty_query, tier_query)
+        if fact_type_query:
+            records = [r for r in records if r.fact_type == fact_type_query]
     else:
         with sys_components["sql"]._get_conn() as conn:
-            query = "SELECT * FROM records"
-            params = []
+            clauses = []
+            params: list = []
             if tier_query:
-                query += " WHERE tier=?"
+                clauses.append("tier=?")
                 params.append(tier_query)
-            query += " ORDER BY first_recorded DESC LIMIT 50"
+            if fact_type_query:
+                clauses.append("fact_type=?")
+                params.append(fact_type_query)
+            where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
+            query = f"SELECT * FROM records{where} ORDER BY first_recorded DESC LIMIT 50"
             rows = conn.execute(query, params).fetchall()
         records = [sys_components["sql"]._row_to_record(row) for row in rows]
 
@@ -870,8 +920,9 @@ def operator_result_explanation(document_type: str) -> str:
     normalized = document_type.strip().lower()
     if normalized == "lab result":
         return (
-            "MedAI identified this as a lab-style document after recovering readable Russian text locally. "
-            "The lab values have not been checked or accepted. A human must compare the result with the source PDF."
+            "MedAI identified this as a lab-style document after recovering readable text locally. "
+            "Structured factual observations may be extracted below. They are not clinically interpreted and "
+            "require source comparison before use."
         )
     if normalized == "treatment plan":
         return (
@@ -1173,6 +1224,41 @@ def render_run_result_card(item: dict) -> None:
     st.markdown("#### What you need to do next")
     for index, action in enumerate(next_actions_for_document_type(document_type), start=1):
         st.markdown(f"{index}. {action}")
+
+    # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: render the extracted-facts
+    # preview before the "What MedAI did not do" section. The helper module
+    # is Streamlit-free; failures in render are swallowed so they cannot
+    # block the rest of the card.
+    try:
+        from app.extracted_information_preview import (
+            build_extracted_information_preview_plan,
+        )
+
+        _ext_plan = build_extracted_information_preview_plan(item)
+        st.markdown(f"#### {_ext_plan['section_heading']}")
+        st.caption(_ext_plan["message"])
+        _counts = _ext_plan.get("counts") or {}
+        _cols = st.columns(3)
+        _cols[0].metric(
+            "Structured facts extracted",
+            int(_counts.get("structured_facts_extracted", 0)),
+        )
+        _cols[1].metric(
+            "Written to MKB",
+            int(_counts.get("written_to_mkb", 0)),
+        )
+        _cols[2].metric(
+            "Needs review",
+            int(_counts.get("needs_review", 0)),
+        )
+        if _ext_plan.get("rows"):
+            st.dataframe(
+                _ext_plan["rows"],
+                hide_index=True,
+                use_container_width=True,
+            )
+    except Exception:
+        pass
 
     st.markdown("#### What MedAI did not do")
     for item_text in medai_did_not_do_checklist():

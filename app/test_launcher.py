@@ -68,6 +68,15 @@ class TestFileResult:
     document_family_classification_diagnostic: dict | None = None
     operator_review_reason: str | None = None
     operator_reason_label: str | None = None
+    # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: hand-off fields for the
+    # Run & Review "Extracted information preview" section. All fields are
+    # public-safe and carry no raw OCR text, raw lines, filenames, or PHI.
+    extracted_medical_facts_preview_safe: list[dict] = field(default_factory=list)
+    extracted_medical_fact_count: int = 0
+    extracted_medical_fact_types: list[str] = field(default_factory=list)
+    extraction_to_mkb_candidate_count: int = 0
+    extraction_to_mkb_written_count: int = 0
+    extraction_to_mkb_review_count: int = 0
     error: str | None = None
 
 
@@ -420,6 +429,24 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             document_family_classification_diagnostic=ocr_gate_marker["document_family_classification_diagnostic"],
             operator_review_reason=operator_reason,
             operator_reason_label=operator_reason_label,
+            extracted_medical_facts_preview_safe=list(
+                extractor_result.get("extracted_medical_facts_preview_safe") or []
+            ),
+            extracted_medical_fact_count=int(
+                extractor_result.get("extracted_medical_fact_count") or 0
+            ),
+            extracted_medical_fact_types=list(
+                extractor_result.get("extracted_medical_fact_types") or []
+            ),
+            extraction_to_mkb_candidate_count=int(
+                extractor_result.get("extraction_to_mkb_candidate_count") or 0
+            ),
+            extraction_to_mkb_written_count=int(
+                extractor_result.get("extraction_to_mkb_written_count") or 0
+            ),
+            extraction_to_mkb_review_count=int(
+                extractor_result.get("extraction_to_mkb_review_count") or 0
+            ),
         )
     except Exception as exc:
         destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)

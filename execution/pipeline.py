@@ -27,6 +27,12 @@ from execution.enrichment import ControlledEnrichment
 from execution.jobs import ExecutionJob, ExecutionResult
 from execution.language_support import detect_language_support
 from execution.logging import AuditLogger
+from execution.extracted_medical_facts import (
+    extract_lab_observation_entities,
+    is_lab_style_document,
+    merge_facts_into_entities,
+    summarize_extracted_facts_for_public_report,
+)
 from execution.medical_coding import map_medical_codes
 from execution.metrics import PipelineMetrics
 from execution.mkb_writer import MKBWriter
@@ -289,6 +295,12 @@ class ExecutionPipeline:
                 current_document_type = extracted.get("document_type")
                 if not current_document_type or current_document_type == UNKNOWN_DOCUMENT_LABEL:
                     extracted["document_type"] = family_candidate
+        # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: deterministic local-only
+        # lab fact adapter. Supplements existing entities ONLY when the
+        # document family is lab-style and no test_result entity already
+        # exists. Conservative, review-bound, no auto-accept, no PHI in
+        # public preview.
+        self._apply_extracted_medical_facts_adapter(extracted, source_text)
         self._validate_extractor_output(extracted)
         extracted.setdefault("actual_extractor", extracted.get("actual_extractor", extracted.get("extractor", "unknown")))
         extracted["notes"] = list(extracted.get("notes", [])) + [f"pii_method={pii_method}"]
@@ -727,6 +739,14 @@ class ExecutionPipeline:
                 decision_reason=record.resolution_action or record.source_type,
             )
         outcome = self._document_outcome(written=written, queued_records=combined_queued)
+        # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: surface MKB write outcome
+        # for the adapter-produced test_result facts. Counts only — no
+        # record IDs / patient identifiers leave the extractor_result via
+        # this path.
+        written_test_result_count = sum(1 for r in written if getattr(r, "fact_type", "") == "test_result")
+        review_test_result_count = sum(1 for r in combined_queued if getattr(r, "fact_type", "") == "test_result")
+        extracted["extraction_to_mkb_written_count"] = written_test_result_count
+        extracted["extraction_to_mkb_review_count"] = review_test_result_count
         audit = self._audit(
             extracted,
             outcome,
@@ -829,6 +849,83 @@ class ExecutionPipeline:
             raise TypeError("Extractor output 'raw_text' must be a string")
         if not isinstance(extracted["notes"], list):
             raise TypeError("Extractor output 'notes' must be a list")
+
+    def _apply_extracted_medical_facts_adapter(
+        self,
+        extracted: dict,
+        source_text: str,
+    ) -> None:
+        """Augment ``extracted`` with deterministic lab facts when safe.
+
+        Only runs when the document family is lab-style. Merges facts
+        with provenance into ``extracted["entities"]`` and stamps a
+        public-safe summary onto ``extracted``. Never raises; on any
+        unexpected error the pipeline continues with the original
+        entities.
+        """
+        try:
+            if not is_lab_style_document(extracted):
+                extracted.setdefault("extracted_medical_fact_count", 0)
+                extracted.setdefault("extracted_medical_fact_types", [])
+                extracted.setdefault("extracted_medical_facts_preview_safe", [])
+                extracted.setdefault("extraction_to_mkb_candidate_count", 0)
+                extracted.setdefault("extraction_to_mkb_written_count", 0)
+                extracted.setdefault("extraction_to_mkb_review_count", 0)
+                return
+            existing_entities = list(extracted.get("entities") or [])
+            already_has_test_result = any(
+                isinstance(e, dict) and str(e.get("type")) == "test_result"
+                for e in existing_entities
+            )
+            if already_has_test_result:
+                summary = summarize_extracted_facts_for_public_report(existing_entities)
+                extracted.update(
+                    {
+                        "extracted_medical_fact_count": summary["extracted_medical_fact_count"],
+                        "extracted_medical_fact_types": summary["extracted_medical_fact_types"],
+                        "extracted_medical_facts_preview_safe": summary[
+                            "extracted_medical_facts_preview_safe"
+                        ],
+                        "extraction_to_mkb_candidate_count": summary[
+                            "extracted_medical_fact_count"
+                        ],
+                    }
+                )
+                extracted.setdefault("extraction_to_mkb_written_count", 0)
+                extracted.setdefault("extraction_to_mkb_review_count", 0)
+                return
+            adapter_facts = extract_lab_observation_entities(source_text, extracted)
+            if not adapter_facts:
+                extracted.setdefault("extracted_medical_fact_count", 0)
+                extracted.setdefault("extracted_medical_fact_types", [])
+                extracted.setdefault("extracted_medical_facts_preview_safe", [])
+                extracted.setdefault("extraction_to_mkb_candidate_count", 0)
+                extracted.setdefault("extraction_to_mkb_written_count", 0)
+                extracted.setdefault("extraction_to_mkb_review_count", 0)
+                return
+            merged = merge_facts_into_entities(existing_entities, adapter_facts)
+            extracted["entities"] = merged
+            summary = summarize_extracted_facts_for_public_report(merged)
+            extracted.update(
+                {
+                    "extracted_medical_fact_count": summary["extracted_medical_fact_count"],
+                    "extracted_medical_fact_types": summary["extracted_medical_fact_types"],
+                    "extracted_medical_facts_preview_safe": summary[
+                        "extracted_medical_facts_preview_safe"
+                    ],
+                    "extraction_to_mkb_candidate_count": summary["extracted_medical_fact_count"],
+                }
+            )
+            extracted.setdefault("extraction_to_mkb_written_count", 0)
+            extracted.setdefault("extraction_to_mkb_review_count", 0)
+        except Exception:
+            # Defensive: never let the adapter break the main pipeline.
+            extracted.setdefault("extracted_medical_fact_count", 0)
+            extracted.setdefault("extracted_medical_fact_types", [])
+            extracted.setdefault("extracted_medical_facts_preview_safe", [])
+            extracted.setdefault("extraction_to_mkb_candidate_count", 0)
+            extracted.setdefault("extraction_to_mkb_written_count", 0)
+            extracted.setdefault("extraction_to_mkb_review_count", 0)
 
     def _entities_to_records(
         self,
