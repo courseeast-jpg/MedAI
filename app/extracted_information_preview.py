@@ -26,6 +26,12 @@ from execution.extracted_medical_facts import (
     PARSER_VERSION,
     facts_for_ui,
 )
+from app.operator_review_actions import (
+    ACCEPT_DISCLAIMER,
+    DEFER_DISCLAIMER,
+    REJECT_DISCLAIMER,
+    render_action_affordances_plan,
+)
 
 #: Section heading the operator sees in the Run & Review card.
 SECTION_HEADING = "Extracted information preview"
@@ -106,6 +112,28 @@ def build_extracted_information_preview_plan(item: dict[str, Any]) -> dict[str, 
     )
     rows = list(ui.get("rows") or [])
     message = EMPTY_STATE_LINE if not rows else DISCLAIMER_LINE
+    # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-03: attach per-row action
+    # affordance plans so the Run & Review card can render the operator
+    # accept / reject / defer panel below the preview table.
+    row_actions: list[dict[str, Any]] = []
+    fact_ids = list(item.get("extracted_medical_fact_record_ids") or [])
+    record_state_lookup = item.get("extracted_medical_fact_record_states") or {}
+    for index, row in enumerate(rows):
+        record_id = ""
+        state: dict[str, Any] = {}
+        if index < len(fact_ids):
+            record_id = str(fact_ids[index])
+        if isinstance(record_state_lookup, dict) and record_id in record_state_lookup:
+            state = dict(record_state_lookup.get(record_id) or {})
+        plan_state = {
+            "record_id": record_id,
+            "fact_type": str(row.get("type") or state.get("fact_type") or "test_result"),
+            "tier": str(state.get("tier") or "quarantined"),
+            "status": str(state.get("status") or "active"),
+            "requires_review": bool(state.get("requires_review", True)),
+            "ddi_status": str(state.get("ddi_status") or ""),
+        }
+        row_actions.append(render_action_affordances_plan(plan_state))
     return {
         "section_heading": SECTION_HEADING,
         "disclaimer_line": message,
@@ -119,6 +147,12 @@ def build_extracted_information_preview_plan(item: dict[str, Any]) -> dict[str, 
         "auto_accept_allowed": False,
         "review_required": True,
         "conservative_confidence_floor": CONSERVATIVE_CONFIDENCE,
+        "row_actions": row_actions,
+        "operator_review_disclaimers": {
+            "accept": ACCEPT_DISCLAIMER,
+            "reject": REJECT_DISCLAIMER,
+            "defer": DEFER_DISCLAIMER,
+        },
     }
 
 

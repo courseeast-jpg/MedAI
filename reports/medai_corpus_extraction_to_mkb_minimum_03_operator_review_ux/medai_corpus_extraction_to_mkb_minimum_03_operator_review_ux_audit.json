@@ -1,0 +1,110 @@
+{
+  "block_id": "MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-03-OPERATOR-REVIEW-UX",
+  "milestone": "A_baseline_audit",
+  "mode": "audit_only_no_code_change",
+  "branch": "clinical-knowledge-architecture",
+  "head_short_before_audit": "c7c5f13",
+  "review_bound_record_shape_in_sqlite": {
+    "schema_table": "records",
+    "fact_type_for_extracted_lab_facts": "test_result",
+    "tier_when_review_bound": "quarantined",
+    "status_when_review_bound": "active",
+    "requires_review_when_review_bound": true,
+    "structured_keys_relevant_to_review": [
+      "test_name",
+      "value",
+      "unit",
+      "reference_range",
+      "flag",
+      "parser_name",
+      "parser_version",
+      "language_hint",
+      "source_line_hash",
+      "requires_human_review",
+      "auto_accept_allowed",
+      "provenance"
+    ]
+  },
+  "sqlite_update_paths_already_available": {
+    "write_record_insert_or_replace": true,
+    "update_status_with_optional_tier": true,
+    "write_ledger_for_audit_event": true,
+    "get_record_by_id": true,
+    "get_records_requiring_review": true
+  },
+  "existing_ledger_event_model_reusable": true,
+  "ledger_event_fields": [
+    "event_type",
+    "record_id",
+    "source_type",
+    "previous_value",
+    "details",
+    "timestamp",
+    "session_id"
+  ],
+  "existing_operator_action_log_reusable": true,
+  "existing_operator_action_log_module": "mkb/sqlite_store.py:write_ledger",
+  "no_fallback_jsonl_required": true,
+  "tier_status_constants": {
+    "TIER_ACTIVE": "active",
+    "TIER_HYPOTHESIS": "hypothesis",
+    "TIER_QUARANTINED": "quarantined",
+    "TIER_SUPERSEDED": "superseded"
+  },
+  "ddi_status_blocked_values_we_must_refuse_to_accept": [
+    "high_blocked",
+    "pending_ddi_check",
+    "pending_medication_review",
+    "pending_ddi"
+  ],
+  "ui_render_entry_point_for_actions": "app/main.py:render_run_result_card after the existing Extracted information preview block",
+  "ui_helper_module_to_extend_or_create": "app/operator_review_actions.py (new)",
+  "ui_render_plan_helper_to_extend": "app/extracted_information_preview.py (already Streamlit-free)",
+  "operator_action_planned_set": [
+    "accept_after_source_comparison",
+    "reject_extracted_fact",
+    "defer_extracted_fact"
+  ],
+  "operator_action_target_tier_status_table": {
+    "accept_after_source_comparison": {
+      "new_tier": "active",
+      "new_status": "active",
+      "new_requires_review": false
+    },
+    "reject_extracted_fact": {
+      "new_tier": "superseded",
+      "new_status": "rejected_after_operator_review",
+      "new_requires_review": false
+    },
+    "defer_extracted_fact": {
+      "new_tier": "quarantined",
+      "new_status": "deferred_by_operator",
+      "new_requires_review": true
+    }
+  },
+  "forbidden_in_this_block": [
+    "raw source text in any public report",
+    "raw OCR text in any public report",
+    "private paths in any public report",
+    "raw filenames from real corpus in any public report",
+    "PHI in any public report",
+    "external API call",
+    "classifier rule change",
+    "classifier cue expansion",
+    "OCR routing change",
+    "confidence threshold change",
+    "auto-accept enablement",
+    "medication safety gate bypass",
+    "DDI behavior change",
+    "AI clinical interpretation",
+    "diagnosis inference",
+    "treatment recommendation",
+    "abnormality inference"
+  ],
+  "external_api_used_in_this_audit": false,
+  "private_data_accessed_in_this_audit": false,
+  "real_pdf_committed_in_this_audit": false,
+  "implementation_started_in_this_milestone": false,
+  "ready_to_proceed_to_milestone_b": true,
+  "next_milestone": "B_operator_action_model"
+}

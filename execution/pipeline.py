@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 from app.config import (
@@ -741,12 +742,29 @@ class ExecutionPipeline:
         outcome = self._document_outcome(written=written, queued_records=combined_queued)
         # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: surface MKB write outcome
         # for the adapter-produced test_result facts. Counts only — no
-        # record IDs / patient identifiers leave the extractor_result via
-        # this path.
+        # patient identifiers leave the extractor_result via this path.
+        # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-03: also surface the MKB
+        # record id and current state for each test_result so the UI can
+        # render per-row operator action affordances.
         written_test_result_count = sum(1 for r in written if getattr(r, "fact_type", "") == "test_result")
         review_test_result_count = sum(1 for r in combined_queued if getattr(r, "fact_type", "") == "test_result")
         extracted["extraction_to_mkb_written_count"] = written_test_result_count
         extracted["extraction_to_mkb_review_count"] = review_test_result_count
+        fact_record_ids: list[str] = []
+        fact_record_states: dict[str, dict[str, Any]] = {}
+        for record in list(written) + list(combined_queued):
+            if getattr(record, "fact_type", "") != "test_result":
+                continue
+            fact_record_ids.append(record.id)
+            fact_record_states[record.id] = {
+                "fact_type": record.fact_type,
+                "tier": record.tier,
+                "status": record.status,
+                "requires_review": bool(record.requires_review),
+                "ddi_status": record.ddi_status or "",
+            }
+        extracted["extracted_medical_fact_record_ids"] = fact_record_ids
+        extracted["extracted_medical_fact_record_states"] = fact_record_states
         audit = self._audit(
             extracted,
             outcome,

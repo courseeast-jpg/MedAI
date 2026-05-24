@@ -479,9 +479,18 @@ def render_mkb_record(record: MKBRecord, show_hypothesis_warning: bool = True) -
                 line_parts.append(f"[{flag}]")
             st.caption(" ".join(line_parts))
             parser = structured.get("parser_name") or record.extraction_method or "unknown"
+            # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-03: surface the operator
+            # review status when present so MKB Explorer makes the active /
+            # review-bound / rejected / deferred distinction obvious.
+            review_status = structured.get("operator_review_status") or (
+                "active" if (record.tier == "active" and not record.requires_review)
+                else "review_required" if record.requires_review
+                else record.status or "unknown"
+            )
             st.caption(
                 f"Parser: {parser} | Confidence: {record.confidence:.2f} | "
-                f"Requires review: {'yes' if record.requires_review else 'no'}"
+                f"Requires review: {'yes' if record.requires_review else 'no'} | "
+                f"Operator review: {review_status}"
             )
         if stale:
             st.caption("Content was over-redacted during ingestion; showing structured fallback.")
@@ -1257,6 +1266,61 @@ def render_run_result_card(item: dict) -> None:
                 hide_index=True,
                 use_container_width=True,
             )
+        # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-03: per-row operator
+        # review action panel. Buttons call into the deterministic
+        # operator_review_actions module. No auto-accept. No bulk-accept.
+        _row_actions = _ext_plan.get("row_actions") or []
+        if _row_actions:
+            try:
+                from app.operator_review_actions import (
+                    accept_after_source_comparison as _accept_action,
+                    reject_extracted_fact as _reject_action,
+                    defer_extracted_fact as _defer_action,
+                )
+
+                _sql = load_system().get("sql")
+                for _idx, _row_action in enumerate(_row_actions):
+                    _record_id = str(_row_action.get("record_id") or "")
+                    if not _record_id or _sql is None:
+                        continue
+                    _row = _ext_plan["rows"][_idx] if _idx < len(_ext_plan["rows"]) else {}
+                    _label_parts = [
+                        str(_row.get("test_name") or ""),
+                        f"= {_row.get('value','')}",
+                        str(_row.get("unit") or ""),
+                    ]
+                    st.markdown(f"##### Review: {' '.join(p for p in _label_parts if p)}")
+                    _cols = st.columns(3)
+                    _accept_cfg = _row_action["actions"][0]
+                    _reject_cfg = _row_action["actions"][1]
+                    _defer_cfg = _row_action["actions"][2]
+                    st.caption(_accept_cfg.get("disclaimer", ""))
+                    if _cols[0].button(
+                        _accept_cfg["label"],
+                        key=f"op_accept_{_record_id}",
+                        disabled=not _accept_cfg.get("enabled", False),
+                    ):
+                        _result = _accept_action(_sql, _record_id)
+                        st.info(_result.safe_message)
+                        st.rerun()
+                    if _cols[1].button(
+                        _reject_cfg["label"],
+                        key=f"op_reject_{_record_id}",
+                        disabled=not _reject_cfg.get("enabled", False),
+                    ):
+                        _result = _reject_action(_sql, _record_id)
+                        st.info(_result.safe_message)
+                        st.rerun()
+                    if _cols[2].button(
+                        _defer_cfg["label"],
+                        key=f"op_defer_{_record_id}",
+                        disabled=not _defer_cfg.get("enabled", False),
+                    ):
+                        _result = _defer_action(_sql, _record_id)
+                        st.info(_result.safe_message)
+                        st.rerun()
+            except Exception:
+                pass
     except Exception:
         pass
 

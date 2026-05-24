@@ -77,6 +77,11 @@ class TestFileResult:
     extraction_to_mkb_candidate_count: int = 0
     extraction_to_mkb_written_count: int = 0
     extraction_to_mkb_review_count: int = 0
+    # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-03: per-row MKB record IDs and
+    # states so the UI can render operator review action affordances next to
+    # each preview row. Public-safe — no PHI / raw text / private paths.
+    extracted_medical_fact_record_ids: list[str] = field(default_factory=list)
+    extracted_medical_fact_record_states: dict = field(default_factory=dict)
     error: str | None = None
 
 
@@ -446,6 +451,12 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             ),
             extraction_to_mkb_review_count=int(
                 extractor_result.get("extraction_to_mkb_review_count") or 0
+            ),
+            extracted_medical_fact_record_ids=list(
+                extractor_result.get("extracted_medical_fact_record_ids") or []
+            ),
+            extracted_medical_fact_record_states=dict(
+                extractor_result.get("extracted_medical_fact_record_states") or {}
             ),
         )
     except Exception as exc:
