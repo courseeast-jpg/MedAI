@@ -200,11 +200,22 @@ def _derive_app_startup_status(
     pipeline_ok: bool,
     component_errors: tuple[tuple[str, str], ...],
 ) -> str:
+    # MEDAI-UI-STARTUP-RESILIENCE-09: SQLite alone is the floor. Vector
+    # and ExecutionPipeline degrade independently of each other. Errors
+    # from optional cloud connector paths (ConnectorRegistry,
+    # ClaudeSynthesizer, etc.) are recorded but do not downgrade the
+    # core SQLite/Vector/Pipeline status. The component_errors arg is
+    # accepted for interface stability and future use.
+    del component_errors  # informational only; not used for status
     if not sqlite_ok:
         return "app_startup_failed"
+    if not pipeline_ok and not vector_ok:
+        # Both optional layers unavailable: the UI runs in SQLite-only
+        # mode (MKB Explorer + Conflict Review + Operator panel only).
+        return "app_startup_ok_sqlite_only"
     if not pipeline_ok:
-        return "app_startup_failed"
-    if not vector_ok or component_errors:
+        return "app_startup_ok_with_degraded_pipeline"
+    if not vector_ok:
         return "app_startup_ok_with_degraded_vector"
     return "app_startup_ok"
 
@@ -261,6 +272,27 @@ def build_startup_diagnostics(
             "Semantic search and similarity-based retrieval are disabled until the vector index is restored.",
             "Review-bound default is preserved. No auto-accept.",
         )
+    elif app_startup_status == "app_startup_ok_with_degraded_pipeline":
+        # MEDAI-UI-STARTUP-RESILIENCE-09: SQLite + Vector are healthy but
+        # ExecutionPipeline could not be constructed locally. Run &
+        # Review is degraded; MKB Explorer remains available.
+        guidance = (
+            "Processing pipeline unavailable. SQLite MKB remains available. "
+            "Run local validation repair if document processing is needed.",
+            "Run: python scripts/run_medai_local_self_healing_validation_07.py",
+            "Review-bound default is preserved. No auto-accept.",
+        )
+    elif app_startup_status == "app_startup_ok_sqlite_only":
+        # MEDAI-UI-STARTUP-RESILIENCE-09: SQLite-only mode. Both Vector
+        # and ExecutionPipeline failed. MKB Explorer + Conflict Review +
+        # Operator Control Panel remain available.
+        guidance = (
+            "Processing pipeline unavailable. SQLite MKB remains available. "
+            "Run local validation repair if document processing is needed.",
+            "Vector/semantic index also unavailable. Semantic search is disabled.",
+            "Run: python scripts/run_medai_local_self_healing_validation_07.py",
+            "Review-bound default is preserved. No auto-accept.",
+        )
     else:
         guidance = ()
     return StartupDiagnostics(
@@ -307,11 +339,12 @@ def initialize_startup_state(component_factory: Callable[[], dict[str, Any]]) ->
 
     component_status = components.get("component_status") if isinstance(components, dict) else None
     diagnostics = build_startup_diagnostics(component_status=component_status)
+    # MEDAI-UI-STARTUP-RESILIENCE-09: SQLite alone is the floor. The UI
+    # stays available with degraded tabs when ExecutionPipeline / Vector
+    # fail; only a SQLite failure produces the diagnostics-only fallback.
     sqlite_ok = diagnostics.sqlite_store_initialized
-    pipeline_ok = diagnostics.execution_pipeline_initialized
-    overall_ok = sqlite_ok and pipeline_ok
     return StartupState(
-        ok=overall_ok,
-        components=components if overall_ok else None,
+        ok=sqlite_ok,
+        components=components if sqlite_ok else None,
         diagnostics=diagnostics,
     )

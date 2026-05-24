@@ -527,6 +527,46 @@ def render_degraded_vector_banner(startup: StartupState) -> None:
             st.write(f"- {item}")
 
 
+def render_degraded_pipeline_banner(startup: StartupState) -> None:
+    """MEDAI-UI-STARTUP-RESILIENCE-09: shown when SQLite is OK but the
+    ExecutionPipeline (or both pipeline + vector) failed to initialize.
+    MKB Explorer remains available; Run & Review is degraded.
+    """
+    diagnostics = startup.diagnostics.safe_public_summary()
+    st.warning(
+        "Processing pipeline unavailable. SQLite MKB remains available. "
+        "Run local validation repair if document processing is needed."
+    )
+    st.code("python scripts/run_medai_local_self_healing_validation_07.py", language="bash")
+    st.caption(
+        "Review required. MedAI does not diagnose, recommend treatment, "
+        "interpret medications, or accept extracted values on its own."
+    )
+    with st.expander("Startup diagnostics (degraded pipeline)", expanded=False):
+        st.json(diagnostics)
+        for item in diagnostics.get("safe_operator_guidance", []):
+            st.write(f"- {item}")
+
+
+def render_run_review_unavailable_panel() -> None:
+    """MEDAI-UI-STARTUP-RESILIENCE-09: replaces the Run & Review body
+    when ``sys_components['execution']`` is None. Keeps the page from
+    crashing and gives the operator a single repair command.
+    """
+    st.warning(
+        "Document processing is unavailable in this startup mode. "
+        "MKB Explorer remains available."
+    )
+    st.code(
+        "python scripts/run_medai_local_self_healing_validation_07.py",
+        language="bash",
+    )
+    st.caption(
+        "Review required. MedAI does not diagnose, recommend treatment, "
+        "interpret medications, or accept extracted values on its own."
+    )
+
+
 def inject_phase52_styles() -> None:
     st.markdown(
         """
@@ -779,6 +819,11 @@ def render_conflicts(sys_components: dict) -> None:
 
 
 def render_query_tab(sys_components: dict) -> None:
+    # MEDAI-UI-STARTUP-RESILIENCE-09: query path needs DecisionEngine.
+    # If startup degraded to SQLite-only mode, show a safe message.
+    if sys_components.get("engine") is None:
+        render_run_review_unavailable_panel()
+        return
     query = st.text_area(
         "Ask a medical question",
         placeholder="e.g. What does my EEG result mean for my epilepsy treatment?",
@@ -816,6 +861,12 @@ def render_query_tab(sys_components: dict) -> None:
 
 def render_upload_tab(sys_components: dict) -> None:
     st.subheader("Upload Medical Document")
+    # MEDAI-UI-STARTUP-RESILIENCE-09: when the ExecutionPipeline did not
+    # initialize (SQLite-only / degraded-pipeline mode), short-circuit
+    # to a safe message rather than dereferencing a None pipeline.
+    if sys_components.get("execution") is None:
+        render_run_review_unavailable_panel()
+        return
     st.caption("Process one document through the HITL pipeline. Review all non-accepted outputs before use.")
     specialty = st.selectbox("Specialty", ["neurology", "epilepsy", "gastroenterology", "urology", "general"])
     uploaded = st.file_uploader("Upload PDF", type=["pdf"])
@@ -957,9 +1008,15 @@ def render_conflict_tab(sys_components: dict) -> None:
 
 
 def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> None:
-    ensure_test_launcher_dirs()
     if show_title:
         st.subheader("Current Run")
+    # MEDAI-UI-STARTUP-RESILIENCE-09: when the ExecutionPipeline did not
+    # initialize, short-circuit to a safe message. Avoids crashing on
+    # downstream `sys_components["execution"].process_*` calls.
+    if sys_components.get("execution") is None:
+        render_run_review_unavailable_panel()
+        return
+    ensure_test_launcher_dirs()
     st.caption("Add documents, then start a run.")
     st.caption("Supported files: PDF or TXT. Files stay local.")
 
@@ -1984,11 +2041,18 @@ def main() -> None:
         st.caption(PRIVACY_INVARIANT_GUIDANCE)
         return
 
-    # MEDAI-UI-STARTUP-RESILIENCE-08: SQLite is OK, but the vector index
-    # may have failed. Surface a clear warning banner without blocking
-    # the local clinical-review workflow.
-    if startup.diagnostics.app_startup_status == "app_startup_ok_with_degraded_vector":
+    # MEDAI-UI-STARTUP-RESILIENCE-08 + 09: SQLite is OK; show a clear
+    # warning banner without blocking the local clinical-review
+    # workflow. The new degraded-pipeline / sqlite-only banners
+    # surface the one local repair command.
+    _startup_status = startup.diagnostics.app_startup_status
+    if _startup_status == "app_startup_ok_with_degraded_vector":
         render_degraded_vector_banner(startup)
+    elif _startup_status in (
+        "app_startup_ok_with_degraded_pipeline",
+        "app_startup_ok_sqlite_only",
+    ):
+        render_degraded_pipeline_banner(startup)
 
     sys_components = startup.components
     if sys_components is None:

@@ -1,0 +1,55 @@
+{
+  "block_id": "MEDAI-UI-STARTUP-RESILIENCE-09-LOCAL-WORKFLOW-FALLBACK",
+  "milestone": "A_baseline_audit",
+  "mode": "audit_only_no_code_change",
+  "branch": "clinical-knowledge-architecture",
+  "head_short_before_audit": "8f49ab6",
+  "files_inspected": [
+    "app/startup_preflight.py",
+    "app/main.py",
+    "execution/pipeline.py",
+    "reports/medai_ui_startup_resilience_08/"
+  ],
+  "operator_observed_state_after_08": {
+    "sqlite_store_initialized": true,
+    "vector_store_initialized": true,
+    "db_startup_category": "sqlcipher_encrypted_metadata_probe_unreadable_but_store_ok",
+    "exception_class": null,
+    "ui_banner_seen_by_operator": "MKB initialization failed. MedAI started in diagnostics-only mode."
+  },
+  "why_ui_still_blocks_after_08": {
+    "root_cause_summary": "app/startup_preflight.initialize_startup_state still computes overall_ok = sqlite_ok AND pipeline_ok. When ExecutionPipeline construction fails locally (likely due to PIIStripper / Presidio / spaCy / or another optional dependency), pipeline_ok is False and overall_ok is False, so the wrapper drops components and the UI renders the legacy degraded-startup panel.",
+    "specific_code_location": "app/startup_preflight.py: overall_ok = sqlite_ok and pipeline_ok"
+  },
+  "likely_failing_local_component_class_buckets": [
+    "PIIStripper or Presidio or spaCy or model dependency raised at ExecutionPipeline construction",
+    "extraction.pii_stripper import succeeded but Presidio regex fallback raised during config",
+    "ingestion.cyrillic_ocr_gate or extractors path raised on a Windows-specific edge",
+    "any optional dependency exception swallowed by ExecutionPipeline.__init__ chain via _build_router or PII stripper"
+  ],
+  "tabs_that_should_remain_available_when_sqlite_only": [
+    "MKB Explorer (requires sql_store)",
+    "Conflict Review (requires sql_store)",
+    "Operator Control Panel (no runtime dependency)",
+    "Startup Diagnostics (always available)"
+  ],
+  "tabs_that_require_execution_pipeline_and_should_show_degraded_banner": [
+    "Run & Review (process_pdf / process_text)",
+    "Upload (uses execution.process_pdf)"
+  ],
+  "planned_new_categories": [
+    "app_startup_ok",
+    "app_startup_ok_with_degraded_vector",
+    "app_startup_ok_with_degraded_pipeline",
+    "app_startup_ok_sqlite_only",
+    "app_startup_failed"
+  ],
+  "planned_overall_ok_rule": "StartupState.ok = sqlite_store_initialized (pipeline failure no longer blocks UI startup; UI degrades the affected tabs only)",
+  "planned_repair_command": "python scripts/run_medai_local_self_healing_validation_07.py",
+  "external_api_used_in_this_audit": false,
+  "private_data_accessed_in_this_audit": false,
+  "real_pdf_committed_in_this_audit": false,
+  "implementation_started_in_this_milestone": false,
+  "ready_to_proceed_to_milestone_b": true,
+  "next_milestone": "B_startup_status_model"
+}
