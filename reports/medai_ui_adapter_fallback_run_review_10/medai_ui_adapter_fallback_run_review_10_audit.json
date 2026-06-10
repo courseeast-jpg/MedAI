@@ -1,0 +1,33 @@
+{
+  "block_id": "MEDAI-UI-ADAPTER-FALLBACK-RUN-REVIEW-10",
+  "mode": "synthetic_degraded_run_review_adapter_fallback",
+  "branch_expected": "clinical-knowledge-architecture",
+  "audit_findings": {
+    "branch": "",
+    "head": "fd03730",
+    "ui_adapter_fallback_run_review_ready": true,
+    "structured_facts_extracted": 4,
+    "review_bound_records_persisted": 4,
+    "retrieval_proof_count": 4,
+    "ui_preview_rows": 4,
+    "operator_action_proof_count": 3,
+    "run_review_works_when_execution_none": true,
+    "external_api_used": false,
+    "auto_accept_enabled": false,
+    "next_operator_command": "streamlit run app/main.py"
+  },
+  "fallback_mode_ready": true,
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "real_screenshot_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "conclusion": "ui_adapter_fallback_run_review_ready",
+  "all_pass": true,
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": []
+}

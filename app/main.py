@@ -567,6 +567,75 @@ def render_run_review_unavailable_panel() -> None:
     )
 
 
+def render_adapter_fallback_panel(sys_components: dict) -> None:
+    """Render local TXT adapter fallback when ExecutionPipeline is unavailable."""
+    st.warning(
+        "Processing pipeline unavailable. Adapter fallback is available for TXT lab-style text. "
+        "All extracted values remain quarantined for human review."
+    )
+    st.caption(
+        "Review required. MedAI does not diagnose, recommend treatment, "
+        "interpret medications, or accept extracted values on its own."
+    )
+    specialty_label = st.selectbox(
+        "Document category",
+        ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
+        key="adapter_fallback_specialty",
+    )
+    uploaded = st.file_uploader(
+        "Choose TXT file",
+        type=["txt"],
+        accept_multiple_files=False,
+        key="adapter_fallback_txt_upload",
+    )
+    pasted_text = st.text_area(
+        "Or paste lab-style text",
+        height=160,
+        key="adapter_fallback_text",
+    )
+    if st.button("Run adapter fallback", type="primary", key="adapter_fallback_run"):
+        text = ""
+        if uploaded is not None:
+            text = uploaded.getvalue().decode("utf-8", errors="replace")
+        elif pasted_text.strip():
+            text = pasted_text
+        if not text.strip():
+            st.warning("Add a TXT file or paste lab-style text first.")
+            return
+        try:
+            from app.local_adapter_fallback_processor import (
+                process_adapter_fallback_run_review,
+            )
+
+            result = process_adapter_fallback_run_review(
+                sys_components["sql"],
+                raw_text=text,
+                specialty=specialty_label.lower(),
+            )
+            st.session_state["phase52_current_run"] = {
+                "timestamp": datetime.now(UTC).isoformat(),
+                "run_id": result["run_item"].get("input_safe_handle", "adapter_fallback"),
+                "accepted_count": 0,
+                "review_count": int(result["review_bound_records_persisted"]),
+                "error_count": 0,
+                "results": [result["run_item"]],
+                "failed": False,
+                "adapter_fallback_mode": True,
+            }
+            st.success(
+                f"Adapter fallback queued {result['review_bound_records_persisted']} record(s) for review."
+            )
+            st.rerun()
+        except Exception as exc:
+            st.error(f"Adapter fallback unavailable: {exc}")
+
+    active_run = st.session_state.get("phase52_current_run")
+    if active_run:
+        render_run_status_panel(active_run, run_state="Complete")
+        for result in active_run.get("results", []):
+            render_run_result_card(result)
+
+
 def inject_phase52_styles() -> None:
     st.markdown(
         """
@@ -1014,6 +1083,9 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     # initialize, short-circuit to a safe message. Avoids crashing on
     # downstream `sys_components["execution"].process_*` calls.
     if sys_components.get("execution") is None:
+        if sys_components.get("sql") is not None:
+            render_adapter_fallback_panel(sys_components)
+            return
         render_run_review_unavailable_panel()
         return
     ensure_test_launcher_dirs()
