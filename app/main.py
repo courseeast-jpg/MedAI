@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
 from app.lab_document_metadata import reason_label_for_validation, review_reason_for_result
+from app.mkb_explorer_model import build_mkb_explorer_model
 from app.operator_safety import (
     PHASE52_SAFETY_WARNING,
     PRIVACY_INVARIANT_GUIDANCE,
@@ -32,6 +33,14 @@ from app.operator_safety import (
     status_badge,
 )
 from app.schemas import MKBRecord, SystemState, UnifiedResponse
+from app.specialty_selection import (
+    DEFAULT_SPECIALTY_KEY,
+    specialty_key_from_label,
+    specialty_keys_for_ui,
+    specialty_label,
+    specialty_labels_for_ui,
+    validate_specialty_key,
+)
 from app.test_launcher import (
     LATEST_MD_REPORT,
     TEST_INPUT_DIR,
@@ -62,6 +71,7 @@ RUN_REVIEW_TAB = "Run & Review"
 
 PRIMARY_OPERATOR_TABS = [
     RUN_REVIEW_TAB,
+    "MKB Explorer",
     "Operator Control Panel",
 ]
 
@@ -73,6 +83,7 @@ ADVANCED_OPERATOR_TABS = [
 ]
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
+SPECIALTY_SESSION_KEY = "medai_selected_specialty"
 PERSISTED_UPLOAD_FINGERPRINTS_KEY = "test_launcher_persisted_upload_fingerprints"
 PERSISTED_UPLOAD_GENERATION_KEY = "test_launcher_persisted_upload_generation"
 UPLOAD_WIDGET_VERSION_KEY = "test_launcher_upload_widget_version"
@@ -219,6 +230,30 @@ def clear_last_report_action(session_state, *, clear_func=clear_latest_test_repo
     removed = clear_func()
     session_state.pop("phase52_current_run", None)
     return removed
+
+
+def selected_specialty_from_state(session_state) -> str:
+    return validate_specialty_key(session_state.get(SPECIALTY_SESSION_KEY))
+
+
+def render_specialty_selector(session_state, *, key: str) -> str:
+    current = selected_specialty_from_state(session_state)
+    labels = specialty_labels_for_ui()
+    keys = specialty_keys_for_ui()
+    index = keys.index(current) if current in keys else keys.index(DEFAULT_SPECIALTY_KEY)
+    selected_label = st.selectbox(
+        "Medical specialty / domain",
+        labels,
+        index=index,
+        key=key,
+        help="Used only to organize extracted facts in the MKB. It does not diagnose or interpret results.",
+    )
+    selected_key = specialty_key_from_label(selected_label)
+    session_state[SPECIALTY_SESSION_KEY] = selected_key
+    st.caption(
+        "Used only to organize extracted facts in the MKB. It does not diagnose or interpret results."
+    )
+    return selected_key
 
 
 def display_content(record: MKBRecord) -> tuple[str, bool]:
@@ -577,10 +612,14 @@ def render_adapter_fallback_panel(sys_components: dict) -> None:
         "Review required. MedAI does not diagnose, recommend treatment, "
         "interpret medications, or accept extracted values on its own."
     )
-    specialty_label = st.selectbox(
+    selected_specialty = render_specialty_selector(
+        st.session_state,
+        key="adapter_fallback_medical_specialty",
+    )
+    document_category_label = st.selectbox(
         "Document category",
         ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
-        key="adapter_fallback_specialty",
+        key="adapter_fallback_document_category",
     )
     uploaded = st.file_uploader(
         "Choose TXT file",
@@ -610,11 +649,14 @@ def render_adapter_fallback_panel(sys_components: dict) -> None:
             result = process_adapter_fallback_run_review(
                 sys_components["sql"],
                 raw_text=text,
-                specialty=specialty_label.lower(),
+                specialty=document_category_label.lower(),
+                selected_specialty=selected_specialty,
             )
             st.session_state["phase52_current_run"] = {
                 "timestamp": datetime.now(UTC).isoformat(),
                 "run_id": result["run_item"].get("input_safe_handle", "adapter_fallback"),
+                "selected_specialty": selected_specialty,
+                "selected_specialty_label": specialty_label(selected_specialty),
                 "accepted_count": 0,
                 "review_count": int(result["review_bound_records_persisted"]),
                 "error_count": 0,
@@ -1015,14 +1057,21 @@ def render_operator_result_panel(result) -> None:
 
 def render_mkb_tab(sys_components: dict) -> None:
     st.subheader("MKB Explorer")
-    # MEDAI-CORPUS-EXTRACTION-TO-MKB-MINIMUM-01: add fact_type filter so
-    # extracted test_result and review-bound records are easy to find.
+    if sys_components.get("sql") is None:
+        st.warning("MKB Explorer unavailable because SQLite is not initialized.")
+        return
+
     specialty_filter, tier_filter, fact_type_filter = st.columns(3)
-    specialty = specialty_filter.selectbox(
-        "Specialty", ["all", "neurology", "epilepsy", "gastroenterology", "urology"]
+    specialty_display = specialty_filter.selectbox(
+        "Specialty / domain",
+        specialty_labels_for_ui(include_all=True),
+        key="mkb_explorer_specialty_filter",
     )
+    specialty = specialty_key_from_label(specialty_display, include_all=True)
     tier = tier_filter.selectbox(
-        "Tier", ["all", "active", "hypothesis", "quarantined"]
+        "Tier / status",
+        ["all", "active", "quarantined", "review_bound", "superseded", "hypothesis"],
+        key="mkb_explorer_tier_filter",
     )
     fact_type = fact_type_filter.selectbox(
         "Fact type",
@@ -1035,34 +1084,97 @@ def render_mkb_tab(sys_components: dict) -> None:
             "note",
             "recommendation",
         ],
+        key="mkb_explorer_fact_type_filter",
     )
 
-    specialty_query = None if specialty == "all" else specialty
-    tier_query = None if tier == "all" else tier
-    fact_type_query = None if fact_type == "all" else fact_type
+    model = build_mkb_explorer_model(
+        sys_components["sql"],
+        specialty_filter=specialty,
+        tier_filter=tier,
+        fact_type_filter=fact_type,
+    )
+    counts = model["counts"]
+    cols = st.columns(5)
+    cols[0].metric("Total records", counts["total"])
+    cols[1].metric("Active", counts["active"])
+    cols[2].metric("Quarantined", counts["quarantined"])
+    cols[3].metric("Review-bound", counts["review_bound"])
+    cols[4].metric("Superseded", counts["superseded"])
 
-    if specialty_query:
-        records = sys_components["sql"].get_by_specialty(specialty_query, tier_query)
-        if fact_type_query:
-            records = [r for r in records if r.fact_type == fact_type_query]
-    else:
-        with sys_components["sql"]._get_conn() as conn:
-            clauses = []
-            params: list = []
-            if tier_query:
-                clauses.append("tier=?")
-                params.append(tier_query)
-            if fact_type_query:
-                clauses.append("fact_type=?")
-                params.append(fact_type_query)
-            where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-            query = f"SELECT * FROM records{where} ORDER BY first_recorded DESC LIMIT 50"
-            rows = conn.execute(query, params).fetchall()
-        records = [sys_components["sql"]._row_to_record(row) for row in rows]
+    if not model["rows"]:
+        st.info("No MKB records match the selected filters.")
+        return
 
-    st.caption(f"{len(records)} records shown")
-    for record in records:
-        render_mkb_record(record)
+    st.caption(f"{model['row_count']} public-safe record row(s) shown")
+    st.dataframe(
+        [
+            {
+                "record_id": row["record_id"],
+                "fact_type": row["fact_type"],
+                "specialty": row["specialty_label"],
+                "tier": row["tier"],
+                "status": row["status"],
+                "requires_review": row["requires_review"],
+                "operator_review_status": row["operator_review_status"],
+                "display_content": row["display_content"],
+            }
+            for row in model["rows"]
+        ],
+        hide_index=True,
+        use_container_width=True,
+    )
+
+    try:
+        from app.operator_review_actions import (
+            accept_after_source_comparison as _accept_action,
+            defer_extracted_fact as _defer_action,
+            reject_extracted_fact as _reject_action,
+            render_action_affordances_plan as _action_plan,
+        )
+
+        with st.expander("Review-bound record actions", expanded=False):
+            for row in model["rows"]:
+                if not row["requires_review"] and row["tier"] != "quarantined":
+                    continue
+                plan = _action_plan(
+                    {
+                        "record_id": row["record_id_full"],
+                        "fact_type": row["fact_type"],
+                        "tier": row["tier"],
+                        "status": row["status"],
+                        "requires_review": row["requires_review"],
+                    }
+                )
+                st.markdown(f"**{row['record_id']}** - {row['display_content']}")
+                st.caption("Accept only after comparing with source. This does not clinically interpret the result.")
+                action_cols = st.columns(3)
+                accept_cfg, reject_cfg, defer_cfg = plan["actions"]
+                if action_cols[0].button(
+                    accept_cfg["label"],
+                    key=f"mkb_accept_{row['record_id_full']}",
+                    disabled=not accept_cfg.get("enabled", False),
+                ):
+                    result = _accept_action(sys_components["sql"], row["record_id_full"])
+                    st.info(result.safe_message)
+                    st.rerun()
+                if action_cols[1].button(
+                    reject_cfg["label"],
+                    key=f"mkb_reject_{row['record_id_full']}",
+                    disabled=not reject_cfg.get("enabled", False),
+                ):
+                    result = _reject_action(sys_components["sql"], row["record_id_full"])
+                    st.info(result.safe_message)
+                    st.rerun()
+                if action_cols[2].button(
+                    defer_cfg["label"],
+                    key=f"mkb_defer_{row['record_id_full']}",
+                    disabled=not defer_cfg.get("enabled", False),
+                ):
+                    result = _defer_action(sys_components["sql"], row["record_id_full"])
+                    st.info(result.safe_message)
+                    st.rerun()
+    except Exception as exc:
+        st.caption(f"Record actions unavailable: {exc}")
 
 
 def render_conflict_tab(sys_components: dict) -> None:
@@ -1092,12 +1204,16 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     st.caption("Add documents, then start a run.")
     st.caption("Supported files: PDF or TXT. Files stay local.")
 
-    specialty_label = st.selectbox(
+    selected_specialty = render_specialty_selector(
+        st.session_state,
+        key="test_launcher_medical_specialty",
+    )
+    document_category_label = st.selectbox(
         "Document category",
         ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
-        key="test_launcher_specialty",
+        key="test_launcher_document_category",
     )
-    specialty = specialty_label.lower()
+    specialty = selected_specialty
     uploaded_files = st.file_uploader(
         "Choose files",
         type=["pdf", "txt"],
@@ -1144,6 +1260,9 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             st.session_state["phase52_current_run"] = {
                 "timestamp": summary.timestamp,
                 "run_id": summary.run_id,
+                "selected_specialty": selected_specialty,
+                "selected_specialty_label": specialty_label(selected_specialty),
+                "document_category": document_category_label,
                 "accepted_count": summary.accepted_count,
                 "review_count": summary.review_count,
                 "error_count": summary.error_count,
@@ -1198,6 +1317,9 @@ def render_run_review_tab(sys_components: dict) -> None:
         except Exception as _exc:
             st.error(f"Previous review summary unavailable: {_exc}")
 
+    st.divider()
+    render_mkb_tab(sys_components)
+
 
 def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
     st.markdown("**Documents waiting**")
@@ -1228,6 +1350,8 @@ def render_run_status_panel(active_run: dict | None, *, run_state: str) -> None:
     st.markdown("**Run status**")
     st.markdown(f"<span class='badge badge-privacy'>{run_state}</span>", unsafe_allow_html=True)
     st.caption("These are workflow statuses only. They are not diagnosis, treatment advice, or clinical acceptance.")
+    if active_run and active_run.get("selected_specialty_label"):
+        st.caption(f"Selected specialty/domain: {active_run['selected_specialty_label']}")
     cols = st.columns(5)
     metric_specs = [
         ("Accepted", counts["accepted"], "check before relying"),
@@ -2147,6 +2271,8 @@ def main() -> None:
         with tab:
             if label == RUN_REVIEW_TAB:
                 render_run_review_tab(sys_components)
+            elif label == "MKB Explorer":
+                render_mkb_tab(sys_components)
             elif label == "Operator Control Panel":
                 try:
                     from app.operator_control_panel import render_operator_control_panel

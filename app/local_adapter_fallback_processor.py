@@ -23,6 +23,7 @@ from app.operator_review_actions import (
     reject_extracted_fact,
 )
 from app.schemas import MKBRecord
+from app.specialty_selection import specialty_label, validate_specialty_key
 from execution.extracted_medical_facts import (
     CONSERVATIVE_CONFIDENCE,
     extract_lab_observation_entities,
@@ -69,11 +70,13 @@ def process_adapter_fallback_run_review(
     raw_text: str | None = None,
     txt_path: Path | str | None = None,
     specialty: str = "general",
+    selected_specialty: str | None = None,
     session_id: str | None = None,
 ) -> dict[str, Any]:
     """Run the degraded local adapter path and persist review-bound records."""
     if sql_store is None:
         raise ValueError("SQLite store is required for adapter fallback")
+    selected_specialty_key = validate_specialty_key(selected_specialty or specialty)
     text, input_handle = _read_text_input(raw_text=raw_text, txt_path=txt_path)
     session = session_id or f"adapter-fallback-{uuid4()}"
     metadata = {
@@ -100,7 +103,7 @@ def process_adapter_fallback_run_review(
                 "fallback_mode": ADAPTER_FALLBACK_MODE,
                 "source_input_handle": input_handle,
             },
-            specialty=specialty,
+            specialty=selected_specialty_key,
             source_type="extraction",
             source_name=ADAPTER_FALLBACK_SOURCE_NAME,
             trust_level=TRUST_CLINICAL,
@@ -145,6 +148,8 @@ def process_adapter_fallback_run_review(
         "auto_accept_allowed": False,
         "adapter_fallback_mode": ADAPTER_FALLBACK_MODE,
         "input_safe_handle": input_handle,
+        "selected_specialty": selected_specialty_key,
+        "selected_specialty_label": specialty_label(selected_specialty_key),
     }
     preview_plan = build_extracted_information_preview_plan(run_item)
     return {
@@ -155,6 +160,8 @@ def process_adapter_fallback_run_review(
         "structured_facts_extracted": int(summary["extracted_medical_fact_count"]),
         "review_bound_records_persisted": len(record_ids),
         "ui_preview_rows": int(preview_plan.get("row_count") or 0),
+        "selected_specialty": selected_specialty_key,
+        "selected_specialty_label": specialty_label(selected_specialty_key),
         "external_api_used": False,
         "auto_accept_enabled": False,
     }

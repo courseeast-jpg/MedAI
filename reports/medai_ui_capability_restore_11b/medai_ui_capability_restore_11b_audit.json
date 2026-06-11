@@ -1,0 +1,39 @@
+{
+  "block_id": "MEDAI-UI-CAPABILITY-RESTORE-11B-AUDIT",
+  "source_audit": "MEDAI-UI-CAPABILITY-PARITY-AUDIT-11A",
+  "head": "308e8e2",
+  "priority_1_gap_map": [
+    {
+      "gap": "specialty/domain selector",
+      "source_changes": [
+        "app/specialty_selection.py",
+        "app/main.py:render_specialty_selector"
+      ]
+    },
+    {
+      "gap": "MKB Explorer",
+      "source_changes": [
+        "app/mkb_explorer_model.py",
+        "app/main.py:render_mkb_tab",
+        "app/main.py:PRIMARY_OPERATOR_TABS"
+      ]
+    },
+    {
+      "gap": "tier/status visibility",
+      "source_changes": [
+        "app/mkb_explorer_model.py:build_mkb_explorer_model",
+        "app/main.py:render_mkb_tab"
+      ]
+    },
+    {
+      "gap": "specialty routing",
+      "source_changes": [
+        "app/local_adapter_fallback_processor.py:selected_specialty",
+        "app/test_launcher.py existing specialty parameter"
+      ],
+      "normal_pipeline_limitation": "Normal pipeline already accepts a specialty argument. This block routes the visible selector into that existing parameter without changing extraction behavior."
+    }
+  ],
+  "external_api_used": false,
+  "auto_accept_enabled": false
+}
