@@ -18,6 +18,8 @@ class ExecutionJob:
     source_name: str = "manual"
     specialty: str = "general"
     session_id: str = ""
+    source_modality: str = ""
+    document_category: str = ""
 
 
 @dataclass

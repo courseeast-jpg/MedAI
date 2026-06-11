@@ -1295,7 +1295,11 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             st.warning("No supported files waiting in test_input/.")
         else:
             with st.spinner("Processing..."):
-                summary = run_medai_test_batch(sys_components["execution"], specialty=specialty)
+                summary = run_medai_test_batch(
+                    sys_components["execution"],
+                    specialty=specialty,
+                    document_category=document_category_label,
+                )
             st.session_state["phase52_current_run"] = {
                 "timestamp": summary.timestamp,
                 "run_id": summary.run_id,

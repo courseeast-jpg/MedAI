@@ -114,6 +114,8 @@ class ExecutionPipeline:
         source_text = job.text
         source_name = job.source_name
         session_id = job.session_id or str(uuid4())
+        source_modality = str(job.source_modality or "")
+        document_category = str(job.document_category or "")
         self._last_pdf_text_audit = None
         self._last_pii_audit = None
 
@@ -331,6 +333,10 @@ class ExecutionPipeline:
         )
         validation = validate_extraction_result(extracted, extractor_route=extractor_route)
         extracted["validation_status"] = validation.status
+        if source_modality:
+            extracted["source_modality"] = source_modality
+        if document_category:
+            extracted["document_category"] = document_category
         extracted["validation_errors"] = validation.errors
         calibration = calibrate_confidence(
             raw_confidence=float(extracted.get("confidence", 0.0)),
@@ -443,6 +449,8 @@ class ExecutionPipeline:
                         session_id=session_id,
                         confidence=float(extracted.get("confidence", 0.0)),
                         extraction_method=str(extracted.get("extractor", "")),
+                        source_modality=source_modality,
+                        document_category=document_category,
                     ),
                     validation,
                 )
@@ -482,6 +490,8 @@ class ExecutionPipeline:
             session_id=session_id,
             confidence=float(extracted.get("confidence", 0.0)),
             extraction_method=str(extracted.get("extractor", "")),
+            source_modality=source_modality,
+            document_category=document_category,
         )
         resolution = self.truth_resolver.resolve_batch(candidates)
         for decision in resolution.decisions:
@@ -793,8 +803,19 @@ class ExecutionPipeline:
         specialty: str = "general",
         source_name: str = "manual",
         session_id: str = "",
+        source_modality: str = "",
+        document_category: str = "",
     ) -> ExecutionResult:
-        return self.run(ExecutionJob(text=text, specialty=specialty, source_name=source_name, session_id=session_id))
+        return self.run(
+            ExecutionJob(
+                text=text,
+                specialty=specialty,
+                source_name=source_name,
+                session_id=session_id,
+                source_modality=source_modality,
+                document_category=document_category,
+            )
+        )
 
     def process_pdf(self, pdf_path: Path, *, specialty: str = "general", session_id: str = "") -> ExecutionResult:
         return self.run(ExecutionJob(pdf_path=pdf_path, specialty=specialty, source_name=pdf_path.name, session_id=session_id))
@@ -954,8 +975,11 @@ class ExecutionPipeline:
         session_id: str,
         confidence: float,
         extraction_method: str,
+        source_modality: str = "",
+        document_category: str = "",
     ) -> list[MKBRecord]:
         records: list[MKBRecord] = []
+        image_ocr_source = source_modality == "image_ocr"
         for entity in entities:
             fact_type = self._normalize_fact_type(str(entity.get("type", "note")))
             text = str(entity.get("text", "")).strip()
@@ -971,20 +995,33 @@ class ExecutionPipeline:
             # facts to review without bypassing any other safety gate. The
             # medication safety gate, governance hypothesis classifier, and
             # truth resolution continue to run downstream.
-            entity_requires_review = bool(structured.get("requires_human_review", False))
+            entity_requires_review = bool(structured.get("requires_human_review", False)) or image_ocr_source
             entity_confidence = float(entity.get("confidence", confidence))
             record_tier = TIER_QUARANTINED if entity_requires_review else TIER_ACTIVE
+            if source_modality:
+                structured["source_modality"] = source_modality
+            if document_category:
+                structured["document_category"] = document_category
+            if image_ocr_source:
+                structured["requires_human_review"] = True
+                structured["operator_review_status"] = "pending"
+                structured["auto_accept_allowed"] = False
             record = MKBRecord(
                 fact_type=fact_type,
                 content=self._content_for_entity(fact_type, text, structured),
                 structured={"name": text, **structured} if fact_type in {"diagnosis", "medication"} else {"text": text, **structured},
                 specialty=specialty,
-                source_type="extraction",
+                source_type=source_modality or "extraction",
                 source_name=source_name,
                 trust_level=TRUST_CLINICAL,
                 confidence=entity_confidence,
                 tier=record_tier,
-                extraction_method=extraction_method or "unknown",
+                status="pending_validation_review" if image_ocr_source else "active",
+                extraction_method=(
+                    f"local_image_ocr/{extraction_method or 'unknown'}"
+                    if image_ocr_source
+                    else extraction_method or "unknown"
+                ),
                 requires_review=entity_requires_review,
                 ddi_checked=False,
                 session_id=session_id,

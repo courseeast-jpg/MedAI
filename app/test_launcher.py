@@ -7,6 +7,7 @@ extraction, validation, routing, or MKB write behavior.
 from __future__ import annotations
 
 import json
+import inspect
 import re
 import shutil as shutil_module
 import shutil
@@ -262,14 +263,25 @@ def build_test_launcher_display_state(
     }
 
 
-def run_medai_test_batch(execution_pipeline, *, specialty: str = "general") -> TestRunSummary:
+def run_medai_test_batch(
+    execution_pipeline,
+    *,
+    specialty: str = "general",
+    document_category: str = "",
+) -> TestRunSummary:
     ensure_test_launcher_dirs()
     run_id = str(uuid4())
     summary = TestRunSummary(timestamp=datetime.now(UTC).isoformat(), run_id=run_id)
 
     for source_path in list_test_input_files():
         summary.files_attempted.append(source_path.name)
-        file_result = _process_one_file(execution_pipeline, source_path, specialty=specialty, run_id=run_id)
+        file_result = _process_one_file(
+            execution_pipeline,
+            source_path,
+            specialty=specialty,
+            run_id=run_id,
+            document_category=document_category,
+        )
         summary.results.append(file_result.__dict__)
         if file_result.status == "accepted":
             summary.files_processed.append(source_path.name)
@@ -396,20 +408,29 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
     }
 
 
-def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, run_id: str) -> TestFileResult:
+def _process_one_file(
+    execution_pipeline,
+    source_path: Path,
+    *,
+    specialty: str,
+    run_id: str,
+    document_category: str = "",
+) -> TestFileResult:
     try:
         suffix = source_path.suffix.lower()
         if suffix == ".pdf":
             result = execution_pipeline.process_pdf(source_path, specialty=specialty, session_id=run_id)
         elif suffix == ".txt":
-            result = execution_pipeline.process_text(
+            result = _process_text_with_optional_context(
+                execution_pipeline,
                 source_path.read_text(encoding="utf-8", errors="replace"),
                 specialty=specialty,
                 source_name=source_path.name,
                 session_id=run_id,
             )
         elif suffix == ".docx":
-            result = execution_pipeline.process_text(
+            result = _process_text_with_optional_context(
+                execution_pipeline,
                 extract_docx_text_local(source_path),
                 specialty=specialty,
                 source_name=source_path.name,
@@ -426,11 +447,14 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
                 )
             if not image_ocr.text.strip():
                 return _review_bound_no_text_file_result(source_path, image_ocr=image_ocr)
-            result = execution_pipeline.process_text(
+            result = _process_text_with_optional_context(
+                execution_pipeline,
                 image_ocr.text,
                 specialty=specialty,
                 source_name=source_path.name,
                 session_id=run_id,
+                source_modality="image_ocr",
+                document_category=document_category,
             )
         else:
             raise ValueError(f"Unsupported test file type: {source_path.suffix}")
@@ -551,6 +575,31 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             processed_path=str(destination),
             error=str(exc),
         )
+
+
+def _process_text_with_optional_context(
+    execution_pipeline,
+    text: str,
+    *,
+    specialty: str,
+    source_name: str,
+    session_id: str,
+    source_modality: str = "",
+    document_category: str = "",
+):
+    kwargs = {
+        "specialty": specialty,
+        "source_name": source_name,
+        "session_id": session_id,
+    }
+    if source_modality:
+        kwargs["source_modality"] = source_modality
+    if document_category:
+        kwargs["document_category"] = document_category
+    signature = inspect.signature(execution_pipeline.process_text)
+    supported = set(signature.parameters)
+    filtered_kwargs = {key: value for key, value in kwargs.items() if key in supported}
+    return execution_pipeline.process_text(text, **filtered_kwargs)
 
 
 def extract_docx_text_local(source_path: Path) -> str:
