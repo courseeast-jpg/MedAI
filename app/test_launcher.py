@@ -100,6 +100,14 @@ class TestFileResult:
     # each preview row. Public-safe — no PHI / raw text / private paths.
     extracted_medical_fact_record_ids: list[str] = field(default_factory=list)
     extracted_medical_fact_record_states: dict = field(default_factory=dict)
+    extractor_dispatch_count: int = 0
+    extraction_candidates_count: int = 0
+    candidates_after_filter_count: int = 0
+    records_written_count: int = 0
+    records_deduped_count: int = 0
+    review_bound_records_written_count: int = 0
+    source_modality: str | None = None
+    run_review_summary: str | None = None
     image_ocr_available: bool = False
     image_ocr_attempted: bool = False
     image_ocr_engine: str | None = None
@@ -147,6 +155,38 @@ class TestRunSummary:
     @property
     def error_count(self) -> int:
         return len(self.errors)
+
+    @property
+    def safe_ocr_pipeline_diagnostics(self) -> dict[str, Any]:
+        return build_safe_ocr_pipeline_diagnostics(self)
+
+
+def build_safe_ocr_pipeline_diagnostics(summary: TestRunSummary) -> dict[str, Any]:
+    """Return count-only OCR extraction diagnostics for reports/UI.
+
+    No raw OCR text, raw filenames, private paths, or uploaded names are
+    included. Per-file entries use generated ordinal IDs only.
+    """
+    per_file_document_type: dict[str, str] = {}
+    for index, item in enumerate(summary.results, start=1):
+        safe_id = f"file_{index:03d}"
+        per_file_document_type[safe_id] = str(item.get("document_type") or UNKNOWN_DOCUMENT_LABEL)
+    return {
+        "files_processed": int(len(summary.files_processed)),
+        "ocr_attempted_count": sum(1 for item in summary.results if item.get("image_ocr_attempted")),
+        "ocr_recovered_count": sum(
+            1 for item in summary.results if item.get("image_ocr_text_visibility") == "recovered"
+        ),
+        "extractor_dispatch_count": sum(int(item.get("extractor_dispatch_count") or 0) for item in summary.results),
+        "extraction_candidates_count": sum(int(item.get("extraction_candidates_count") or 0) for item in summary.results),
+        "candidates_after_filter_count": sum(int(item.get("candidates_after_filter_count") or 0) for item in summary.results),
+        "records_written_count": sum(int(item.get("records_written_count") or 0) for item in summary.results),
+        "records_deduped_count": sum(int(item.get("records_deduped_count") or 0) for item in summary.results),
+        "review_bound_records_written_count": sum(
+            int(item.get("review_bound_records_written_count") or 0) for item in summary.results
+        ),
+        "per_file_document_type": per_file_document_type,
+    }
 
 
 def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
@@ -315,6 +355,7 @@ def write_test_run_reports(summary: TestRunSummary) -> tuple[Path, Path]:
         "accepted_count": summary.accepted_count,
         "review_count": summary.review_count,
         "error_count": summary.error_count,
+        "safe_ocr_pipeline_diagnostics": summary.safe_ocr_pipeline_diagnostics,
         "results": summary.results,
     }
     LATEST_JSON_REPORT.write_text(json.dumps(data, indent=2), encoding="utf-8")
@@ -418,6 +459,7 @@ def _process_one_file(
 ) -> TestFileResult:
     try:
         suffix = source_path.suffix.lower()
+        source_modality = ""
         if suffix == ".pdf":
             result = execution_pipeline.process_pdf(source_path, specialty=specialty, session_id=run_id)
         elif suffix == ".txt":
@@ -438,6 +480,7 @@ def _process_one_file(
             )
         elif suffix in IMAGE_TEST_EXTENSIONS:
             image_ocr = recover_text_from_image_local(source_path)
+            source_modality = "image_ocr"
             if not image_ocr.available:
                 return _review_bound_unavailable_file_result(
                     source_path,
@@ -482,6 +525,10 @@ def _process_one_file(
             _runtime_document_type_candidate(audit, extractor_result, ocr_gate_marker),
             text=str(extractor_result.get("raw_text") or extractor_result.get("text") or ""),
         )
+        if document_type == UNKNOWN_DOCUMENT_LABEL:
+            extracted_candidate_type = _document_type_from_extracted_candidates(extractor_result)
+            if extracted_candidate_type:
+                document_type = display_document_type(extracted_candidate_type)
         ocr_quality = normalize_text_quality_label(
             audit.get("ocr_quality_band"),
             audit.get("input_quality_band"),
@@ -558,6 +605,20 @@ def _process_one_file(
             ),
             extracted_medical_fact_record_states=dict(
                 extractor_result.get("extracted_medical_fact_record_states") or {}
+            ),
+            extractor_dispatch_count=int(extractor_result.get("cross_domain_extractor_dispatch_count") or 0),
+            extraction_candidates_count=int(extractor_result.get("cross_domain_extraction_candidates_count") or 0),
+            candidates_after_filter_count=int(extractor_result.get("cross_domain_candidates_after_filter_count") or 0),
+            records_written_count=int(extractor_result.get("cross_domain_records_written_count") or 0),
+            records_deduped_count=int(extractor_result.get("cross_domain_records_deduped_count") or 0),
+            review_bound_records_written_count=int(
+                extractor_result.get("cross_domain_review_bound_records_written_count") or 0
+            ),
+            source_modality=str(extractor_result.get("source_modality") or source_modality or ""),
+            run_review_summary=(
+                _run_review_summary_from_extraction(extractor_result)
+                if str(extractor_result.get("source_modality") or source_modality or "") == "image_ocr"
+                else None
             ),
             image_ocr_available=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.available),
             image_ocr_attempted=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.attempted),
@@ -858,6 +919,46 @@ def _runtime_document_type_candidate(
         if value and display_document_type(value) != UNKNOWN_DOCUMENT_LABEL:
             return str(value)
     return _fallback_diagnostic_document_type(ocr_gate_marker)
+
+
+def _document_type_from_extracted_candidates(extractor_result: dict[str, Any]) -> str | None:
+    preview = extractor_result.get("extracted_medical_facts_preview_safe")
+    if not isinstance(preview, list) or not preview:
+        return None
+    kinds = {
+        str(item.get("candidate_kind") or "").lower()
+        for item in preview
+        if isinstance(item, dict)
+    }
+    headings = {
+        str(item.get("section_heading") or "").strip().lower()
+        for item in preview
+        if isinstance(item, dict)
+    }
+    if kinds & {"table_observation", "portal_card_result"}:
+        return "Lab result"
+    if headings & {"cytology", "pathology", "microscopic description", "gross description"}:
+        return "Pathology report"
+    if headings & {"findings", "impression", "procedure"}:
+        return "Imaging report"
+    if headings & {"plan", "recommendation", "recommendations", "treatment plan"}:
+        return "Treatment plan"
+    if kinds & {"key_value_field", "narrative_source_section"}:
+        return "Clinical note"
+    return None
+
+
+def _run_review_summary_from_extraction(extractor_result: dict[str, Any]) -> str:
+    candidates = int(extractor_result.get("cross_domain_extraction_candidates_count") or 0)
+    review_records = int(extractor_result.get("cross_domain_review_bound_records_written_count") or 0)
+    deduped = int(extractor_result.get("cross_domain_records_deduped_count") or 0)
+    if review_records > 0:
+        return f"OCR recovered and structured review-bound observations created: {review_records}."
+    if candidates > 0 and deduped > 0:
+        return f"OCR recovered; {deduped} equivalent extraction candidate(s) were already represented."
+    if candidates > 0:
+        return "OCR recovered; visible extraction candidates require review."
+    return "OCR recovered but no recognizable structured facts were created."
 
 
 def _validation_reason_codes(errors: Any) -> list[str]:

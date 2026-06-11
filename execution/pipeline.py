@@ -29,6 +29,7 @@ from execution.jobs import ExecutionJob, ExecutionResult
 from execution.language_support import detect_language_support
 from execution.logging import AuditLogger
 from execution.extracted_medical_facts import (
+    count_cross_domain_visible_candidates_before_filter,
     extract_cross_domain_visible_entities,
     extract_lab_observation_entities,
     is_lab_style_document,
@@ -774,6 +775,8 @@ class ExecutionPipeline:
             review_fact_count = sum(1 for r in combined_queued if getattr(r, "fact_type", "") == "test_result")
         extracted["extraction_to_mkb_written_count"] = written_fact_count
         extracted["extraction_to_mkb_review_count"] = review_fact_count
+        extracted["cross_domain_records_written_count"] = written_fact_count + review_fact_count
+        extracted["cross_domain_review_bound_records_written_count"] = review_fact_count
         fact_record_ids: list[str] = []
         fact_record_states: dict[str, dict[str, Any]] = {}
         for record in list(written) + list(combined_queued):
@@ -918,19 +921,29 @@ class ExecutionPipeline:
         """
         try:
             existing_entities = list(extracted.get("entities") or [])
+            extracted["cross_domain_extractor_dispatch_count"] = (
+                int(extracted.get("cross_domain_extractor_dispatch_count", 0) or 0) + 1
+            )
+            raw_candidate_count = count_cross_domain_visible_candidates_before_filter(source_text, extracted)
             adapter_facts = extract_cross_domain_visible_entities(source_text, extracted)
             if is_lab_style_document(extracted):
-                adapter_facts = extract_lab_observation_entities(source_text, extracted) + adapter_facts
+                lab_facts = extract_lab_observation_entities(source_text, extracted)
+                raw_candidate_count += len(lab_facts)
+                adapter_facts = lab_facts + adapter_facts
+            extracted["cross_domain_extraction_candidates_count"] = raw_candidate_count
             if not adapter_facts:
                 summary = summarize_extracted_facts_for_public_report(existing_entities)
                 extracted.setdefault("extracted_medical_fact_count", summary["extracted_medical_fact_count"])
                 extracted.setdefault("extracted_medical_fact_types", summary["extracted_medical_fact_types"])
                 extracted.setdefault("extracted_medical_facts_preview_safe", summary["extracted_medical_facts_preview_safe"])
                 extracted.setdefault("extraction_to_mkb_candidate_count", summary["extracted_medical_fact_count"])
+                extracted.setdefault("cross_domain_candidates_after_filter_count", 0)
+                extracted.setdefault("cross_domain_records_deduped_count", 0)
                 extracted.setdefault("extraction_to_mkb_written_count", 0)
                 extracted.setdefault("extraction_to_mkb_review_count", 0)
                 return
             merged = merge_facts_into_entities(existing_entities, adapter_facts)
+            appended_count = max(0, len(merged) - len(existing_entities))
             extracted["entities"] = merged
             summary = summarize_extracted_facts_for_public_report(merged)
             extracted.update(
@@ -943,6 +956,8 @@ class ExecutionPipeline:
                     "extraction_to_mkb_candidate_count": summary["extracted_medical_fact_count"],
                 }
             )
+            extracted["cross_domain_candidates_after_filter_count"] = appended_count
+            extracted["cross_domain_records_deduped_count"] = max(0, raw_candidate_count - appended_count)
             extracted.setdefault("cross_domain_visible_observation_adapter_used", True)
             extracted.setdefault("extraction_to_mkb_written_count", 0)
             extracted.setdefault("extraction_to_mkb_review_count", 0)

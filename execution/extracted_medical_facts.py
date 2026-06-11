@@ -567,6 +567,30 @@ def extract_cross_domain_visible_entities(
     return out
 
 
+def count_cross_domain_visible_candidates_before_filter(
+    text: str,
+    metadata: dict[str, Any] | None = None,
+) -> int:
+    """Return count of raw deterministic candidates before de-duplication."""
+    metadata = metadata or {}
+    family = str(metadata.get("document_type") or "general_medical_report")
+    raw_table_count = 0
+    for line in _line_iter(text):
+        if "|" not in line or _looks_like_date_or_id_line(line):
+            continue
+        parts = [part.strip() for part in line.split("|")]
+        while parts and not parts[-1]:
+            parts.pop()
+        if len(parts) >= 2 and re.search(r"\d|positive|negative|trace|detected|present|absent", parts[1], re.IGNORECASE):
+            raw_table_count += 1
+    return (
+        raw_table_count
+        + len(extract_key_value_entities(text))
+        + len(extract_card_result_entities(text))
+        + len(extract_narrative_section_entities(text, document_family=family))
+    )
+
+
 def _detect_language(text: str) -> str:
     if not text:
         return "unknown"
@@ -856,6 +880,7 @@ __all__ = [
     "extract_card_result_entities",
     "extract_narrative_section_entities",
     "extract_cross_domain_visible_entities",
+    "count_cross_domain_visible_candidates_before_filter",
     "merge_facts_into_entities",
     "summarize_extracted_facts_for_public_report",
     "facts_for_ui",

@@ -1763,6 +1763,14 @@ ADVANCED_DIAGNOSTIC_FIELDS = [
     "image_ocr_text_visibility",
     "image_ocr_review_only",
     "image_ocr_auto_accept_allowed",
+    "extractor_dispatch_count",
+    "extraction_candidates_count",
+    "candidates_after_filter_count",
+    "records_written_count",
+    "records_deduped_count",
+    "review_bound_records_written_count",
+    "source_modality",
+    "run_review_summary",
     "external_api_used",
 ]
 
@@ -1900,6 +1908,8 @@ def render_run_result_card(item: dict) -> None:
         }
         for label, value in image_ocr_lines.items():
             st.markdown(f"- **{label}:** {value}")
+    if item.get("run_review_summary"):
+        st.caption(str(item.get("run_review_summary")))
 
     st.markdown("#### What happened")
     for label, state in run_review_timeline_steps(item):

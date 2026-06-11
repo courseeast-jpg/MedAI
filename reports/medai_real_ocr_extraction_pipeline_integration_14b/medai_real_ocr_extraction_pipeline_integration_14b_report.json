@@ -1,0 +1,30 @@
+{
+  "task_id": "MEDAI-REAL-OCR-EXTRACTION-PIPELINE-INTEGRATION-14B",
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "ocr_text_dispatched_to_cross_domain_extractor": true,
+  "extractor_dispatch_count": 1,
+  "extraction_candidates_count": 7,
+  "candidates_after_filter_count": 7,
+  "records_written_count": 6,
+  "records_deduped_count": 0,
+  "review_bound_records_written_count": 6,
+  "category_propagated": true,
+  "specialty_propagated": true,
+  "source_modality_preserved": true,
+  "run_review_summary_consistent": true,
+  "files_processed": 1,
+  "ocr_attempted_count": 1,
+  "ocr_recovered_count": 1,
+  "per_file_document_type": {
+    "file_001": "Lab result"
+  },
+  "raw_ocr_text_in_report": false,
+  "private_paths_in_report": false,
+  "limitations": [
+    "Synthetic OCR validation only; no private images, OCR dumps, PDFs, or runtime databases are committed.",
+    "Diagnostics are count-only and use generated file IDs, not filenames.",
+    "The integration captures visible observations for review; it does not interpret diagnosis, treatment, imaging, medication, or recommendation content."
+  ]
+}
