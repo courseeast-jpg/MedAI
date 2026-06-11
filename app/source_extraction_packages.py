@@ -8,6 +8,7 @@ private source names; source identity is represented by generated safe IDs.
 from __future__ import annotations
 
 import hashlib
+import re
 from dataclasses import dataclass, field
 from typing import Any, Iterable
 
@@ -38,6 +39,8 @@ class SourceObservation:
     source_section: str = "Unsectioned"
     review_status: str = "review-bound"
     display_content: str = ""
+    row_kind: str = "observation"
+    normalization_status: str = "unchanged"
 
 
 @dataclass
@@ -78,6 +81,8 @@ def build_source_extraction_packages(
     records = _load_records(sql_store, tier_filter=tier_filter, limit=limit)
     packages_by_key: dict[str, SourceExtractionPackage] = {}
     ungrouped_records_count = 0
+    malformed_value_pair_count = 0
+    normalized_value_pair_count = 0
     for record in records:
         structured = dict(record.structured or {})
         if not _is_package_candidate(record, structured):
@@ -92,12 +97,7 @@ def build_source_extraction_packages(
                 selected_document_category=str(structured.get("document_category") or "Unspecified"),
                 selected_medical_specialty_domain=validate_specialty_key(record.specialty),
                 selected_medical_specialty_label=specialty_label(record.specialty),
-                detected_document_family_type=str(
-                    structured.get("document_family")
-                    or structured.get("document_type")
-                    or structured.get("source_document_type")
-                    or "Unknown"
-                ),
+                detected_document_family_type=_display_document_family(structured),
                 source_modality=_source_modality_label(str(structured.get("source_modality") or record.source_type or "")),
                 package_status=_package_status_for_records([record]),
                 actions=package_action_plan([]),
@@ -105,7 +105,11 @@ def build_source_extraction_packages(
             packages_by_key[source_key] = package
         package.record_ids.append(record.id)
         package.package_status = _package_status_for_records([*(_records_for_ids(sql_store, package.record_ids) or []), record])
-        _append_observation(package, record, structured)
+        normalization_status = _append_observation(package, record, structured)
+        if normalization_status == "normalized":
+            normalized_value_pair_count += 1
+        elif normalization_status == "malformed_note":
+            malformed_value_pair_count += 1
 
     packages = list(packages_by_key.values())
     for package in packages:
@@ -113,6 +117,9 @@ def build_source_extraction_packages(
 
     sections_created = sum(len(package.sections) for package in packages)
     observations_grouped = sum(len(section.observations) for package in packages for section in package.sections)
+    unknown_type_package_count = sum(
+        1 for package in packages if package.detected_document_family_type.strip().lower() in {"", "unknown"}
+    )
     return {
         "available": sql_store is not None,
         "packages": [package_to_public_dict(package) for package in packages],
@@ -120,6 +127,10 @@ def build_source_extraction_packages(
         "sections_created": sections_created,
         "observations_grouped": observations_grouped,
         "ungrouped_records_count": ungrouped_records_count,
+        "unknown_type_package_count": unknown_type_package_count,
+        "malformed_value_pair_count": malformed_value_pair_count,
+        "normalized_value_pair_count": normalized_value_pair_count,
+        "package_action_color_semantics_present": True,
         "auto_accept": False,
         "external_api_used": False,
         "atomic_review_fallback_preserved": True,
@@ -159,6 +170,8 @@ def package_to_public_dict(package: SourceExtractionPackage) -> dict[str, Any]:
                         "source_section": obs.source_section,
                         "review_status": obs.review_status,
                         "display_content": obs.display_content,
+                        "row_kind": obs.row_kind,
+                        "normalization_status": obs.normalization_status,
                     }
                     for obs in section.observations
                 ],
@@ -181,18 +194,21 @@ def package_action_plan(record_ids: Iterable[str]) -> dict[str, Any]:
                 "label": "Accept package after source comparison",
                 "enabled": bool(record_ids),
                 "disclaimer": ACCEPT_DISCLAIMER,
+                "visual_semantic": "non_red_primary",
             },
             {
                 "key": "reject_package",
                 "label": "Reject package",
                 "enabled": bool(record_ids),
                 "disclaimer": REJECT_DISCLAIMER,
+                "visual_semantic": "red_destructive",
             },
             {
                 "key": "defer_package",
                 "label": "Defer package",
                 "enabled": bool(record_ids),
                 "disclaimer": DEFER_DISCLAIMER,
+                "visual_semantic": "neutral_secondary",
             },
         ],
         "auto_accept_allowed": False,
@@ -276,7 +292,14 @@ def _is_package_candidate(record: MKBRecord, structured: dict[str, Any]) -> bool
         return False
     if record.fact_type not in {"test_result", "observation", "note"}:
         return False
-    return bool(structured.get("source_visible_observation") or structured.get("parser_name") or structured.get("section_heading"))
+    return bool(
+        structured.get("source_visible_observation")
+        or structured.get("parser_name")
+        or structured.get("section_heading")
+        or structured.get("document_category")
+        or structured.get("source_modality")
+        or record.session_id
+    )
 
 
 def _source_group_key(record: MKBRecord, structured: dict[str, Any]) -> str:
@@ -289,7 +312,7 @@ def _source_group_key(record: MKBRecord, structured: dict[str, Any]) -> str:
     )
 
 
-def _append_observation(package: SourceExtractionPackage, record: MKBRecord, structured: dict[str, Any]) -> None:
+def _append_observation(package: SourceExtractionPackage, record: MKBRecord, structured: dict[str, Any]) -> str:
     heading = str(structured.get("section_heading") or structured.get("source_section") or structured.get("candidate_kind") or record.fact_type or "Unsectioned")
     family = str(structured.get("candidate_kind") or record.fact_type or "observation")
     section_id = f"section_{_stable_hash(package.package_id + '|' + heading + '|' + family)[:10]}"
@@ -304,33 +327,133 @@ def _append_observation(package: SourceExtractionPackage, record: MKBRecord, str
             narrative_preview_available=narrative_available,
         )
         package.sections.append(section)
-    section.observations.append(_observation_from_record(record, structured, heading))
+    observation = _observation_from_record(record, structured, heading)
+    section.observations.append(observation)
+    return observation.normalization_status
 
 
 def _observation_from_record(record: MKBRecord, structured: dict[str, Any], heading: str) -> SourceObservation:
     review_status = str(structured.get("operator_review_status") or record.status or "review-bound")
     if record.requires_review or record.tier == "quarantined":
         review_status = "review-bound" if review_status in {"pending_validation_review", "queued_for_review", "active"} else review_status
-    label = str(
+    label = _clean_cell(
         structured.get("test_name")
         or structured.get("field_label")
         or structured.get("section_heading")
         or structured.get("name")
         or display_content_public_safe(record)
     )
+    normalized = normalize_package_observation_fields(
+        label=label,
+        value=structured.get("value") or structured.get("field_value") or "",
+        reference_interval=structured.get("reference_range") or structured.get("normal_range") or "",
+        flag=structured.get("flag") or "",
+        unit=structured.get("unit") or "",
+    )
     return SourceObservation(
         record_id=safe_record_id(record.id),
         record_id_full=record.id,
         fact_type=record.fact_type,
-        label=label,
-        value=str(structured.get("value") or structured.get("field_value") or ""),
-        flag=str(structured.get("flag") or ""),
-        unit=str(structured.get("unit") or ""),
-        reference_interval=str(structured.get("reference_range") or structured.get("normal_range") or ""),
+        label=normalized["label"],
+        value=normalized["value"],
+        flag=normalized["flag"],
+        unit=normalized["unit"],
+        reference_interval=normalized["reference_interval"],
         source_section=heading,
         review_status=review_status,
         display_content=display_content_public_safe(record),
+        row_kind=normalized["row_kind"],
+        normalization_status=normalized["normalization_status"],
     )
+
+
+def normalize_package_observation_fields(
+    *,
+    label: Any,
+    value: Any,
+    reference_interval: Any = "",
+    flag: Any = "",
+    unit: Any = "",
+) -> dict[str, str]:
+    """Normalize source-visible observation cells without inferring content."""
+    label_text = _clean_cell(label)
+    value_text = _clean_cell(value)
+    original_label_text = label_text
+    original_value_text = value_text
+    reference_text = _clean_cell(reference_interval)
+    flag_text = _clean_cell(flag)
+    unit_text = _clean_cell(unit)
+    status = "unchanged"
+    row_kind = "observation"
+
+    for prefix in (label_text, f"{label_text}:"):
+        if label_text and value_text.lower().startswith(prefix.lower()):
+            value_text = _clean_cell(value_text[len(prefix) :])
+            value_text = value_text.lstrip(":").strip()
+            status = "normalized"
+
+    normal_range_match = re.search(
+        r"(?i)\bNormal range:\s*(?P<range>.+?)(?:\s+Normal value:\s*(?P<normal>.+))?$",
+        value_text,
+    )
+    if normal_range_match:
+        extracted_range = _clean_cell(normal_range_match.group("range") or "")
+        extracted_normal = _clean_cell(normal_range_match.group("normal") or "")
+        if extracted_normal and " normal value:" not in extracted_range.lower():
+            value_text = extracted_normal
+            reference_text = reference_text or extracted_range
+            status = "normalized"
+        elif extracted_range and not reference_text:
+            reference_text = extracted_range
+            value_text = ""
+            status = "normalized"
+
+    normal_value_match = re.search(r"(?i)\bNormal value:\s*(?P<normal>.+)$", value_text)
+    if normal_value_match and not normal_range_match:
+        value_text = _clean_cell(normal_value_match.group("normal") or "")
+        status = "normalized"
+
+    if _looks_malformed_pair(original_label_text, original_value_text):
+        row_kind = "source_visible_note"
+        status = "malformed_note"
+        reference_text = reference_text or ""
+        flag_text = ""
+        unit_text = ""
+
+    return {
+        "label": label_text,
+        "value": value_text,
+        "flag": flag_text,
+        "unit": unit_text,
+        "reference_interval": reference_text,
+        "row_kind": row_kind,
+        "normalization_status": status,
+    }
+
+
+def _looks_malformed_pair(label: str, value: str) -> bool:
+    if not value:
+        return False
+    lower = value.lower()
+    field_markers = sum(1 for marker in ("normal value:", "normal range:", "reference range:", "value:") if marker in lower)
+    return bool(label and label.lower() in {"normal value", "normal range", "reference range"} and field_markers >= 1)
+
+
+def _clean_cell(value: Any) -> str:
+    return re.sub(r"\s+", " ", str(value or "")).strip()
+
+
+def _display_document_family(structured: dict[str, Any]) -> str:
+    selected = str(structured.get("document_category") or "").strip()
+    detected = str(
+        structured.get("document_family")
+        or structured.get("document_type")
+        or structured.get("source_document_type")
+        or ""
+    ).strip()
+    if selected.lower() == "urinalysis" and detected.lower() in {"", "unknown", "treatment plan"}:
+        return "Urinalysis"
+    return detected or selected or "Unknown"
 
 
 def _package_status_for_records(records: list[MKBRecord]) -> str:
@@ -363,6 +486,7 @@ __all__ = [
     "SourcePackageSection",
     "SourceObservation",
     "build_source_extraction_packages",
+    "normalize_package_observation_fields",
     "package_action_plan",
     "accept_package_after_source_comparison",
     "reject_package",

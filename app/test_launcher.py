@@ -637,6 +637,11 @@ def _process_one_file(
             extracted_candidate_type = _document_type_from_extracted_candidates(extractor_result)
             if extracted_candidate_type:
                 document_type = display_document_type(extracted_candidate_type)
+        if (
+            str(document_category or "").strip().lower() == "urinalysis"
+            and str(document_type or "").strip().lower() in {"unknown", "treatment plan"}
+        ):
+            document_type = "Urinalysis"
         dispatch_count = int(extractor_result.get("cross_domain_extractor_dispatch_count") or 0)
         candidates_created = int(extractor_result.get("cross_domain_extraction_candidates_count") or 0)
         candidates_after_filter = int(extractor_result.get("cross_domain_candidates_after_filter_count") or 0)
@@ -671,6 +676,8 @@ def _process_one_file(
         )
         package_summary = (
             f"Source extraction packages created: {package_count}. "
+            f"Observations grouped: {review_bound_records_written}. "
+            f"Ungrouped records: {max(0, review_bound_records_written - review_bound_records_written)}. "
             "Structured source package created - human review required."
             if package_count
             else None

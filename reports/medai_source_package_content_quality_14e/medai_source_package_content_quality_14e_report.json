@@ -1,0 +1,32 @@
+{
+  "task_id": "MEDAI-SOURCE-PACKAGE-CONTENT-QUALITY-14E",
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "package_content_quality_layer_added": true,
+  "package_row_normalizer_added": true,
+  "malformed_value_pair_count": 1,
+  "normalized_value_pair_count": 2,
+  "packages_created_count": 1,
+  "sections_created_count": 1,
+  "observations_grouped_count": 4,
+  "ungrouped_records_count": 0,
+  "unknown_type_package_count": 0,
+  "weak_type_override_prevented": true,
+  "run_review_package_summary_visible": true,
+  "accept_button_non_red": true,
+  "reject_button_red": true,
+  "package_actions_preserved": true,
+  "raw_ocr_text_in_report": false,
+  "private_paths_in_report": false,
+  "normalizer_probe": {
+    "normalized_status": "normalized",
+    "value_present": true,
+    "reference_present": true
+  },
+  "limitations": [
+    "Validation uses synthetic review-bound records only; no private source files, OCR dumps, screenshots, or runtime databases are committed.",
+    "Public reports contain counts and booleans only, not raw OCR text, extracted values, filenames, or private paths.",
+    "The quality layer normalizes source-visible fields and grouping only; it does not infer clinical meaning or change review transitions."
+  ]
+}

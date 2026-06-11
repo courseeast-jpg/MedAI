@@ -1300,6 +1300,11 @@ def render_review_queue_tab(sys_components: dict) -> None:
                     if section.get("narrative_preview_available"):
                         st.caption(section["narrative_label"])
                 st.caption("Accept package only after comparing grouped observations with the source document.")
+                st.markdown(
+                    '<div class="package-action-semantics" '
+                    'data-accept="non-red-primary" data-reject="red-destructive" data-defer="neutral-secondary"></div>',
+                    unsafe_allow_html=True,
+                )
                 action_cols = st.columns(3)
                 if action_cols[0].button(
                     "Accept package after source comparison",
