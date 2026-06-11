@@ -1,0 +1,52 @@
+{
+  "task_id": "MEDAI-OPERATOR-WORKFLOW-UAT-12A",
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "supported_file_types_checked": [
+    "PDF",
+    "TXT",
+    "PNG",
+    "JPG",
+    "JPEG",
+    "TIFF",
+    "TIF",
+    "BMP",
+    "DOCX"
+  ],
+  "supported_file_types_accepted": true,
+  "queued_count": 1,
+  "empty_queue_start_enabled": false,
+  "queued_start_enabled": true,
+  "run_completed": true,
+  "local_ocr_attempted": true,
+  "text_recovery_status": "recovered",
+  "records_created": 3,
+  "records_review_bound_before_action": 3,
+  "records_active_before_action": 0,
+  "review_queue_count_before_action": 3,
+  "accept_action_passed": true,
+  "reject_action_passed": true,
+  "defer_action_passed": true,
+  "records_active_after_accept": 1,
+  "records_rejected_after_reject": 1,
+  "records_review_bound_after_defer": 1,
+  "category_propagated": true,
+  "specialty_propagated": true,
+  "raw_ocr_text_in_report": false,
+  "private_paths_in_report": false,
+  "accepted_count_before_human_action": 0,
+  "review_queue_reader_rows": 3,
+  "mkb_explorer_review_bound_count": 3,
+  "action_proof": {
+    "accept_selected_record_only": true,
+    "reject_selected_record_only": true,
+    "defer_selected_record_only": true
+  },
+  "limitations": [
+    "Synthetic UAT only; no real private documents or runtime DBs were read or mutated.",
+    "Local image OCR is simulated through the existing launcher seam to avoid depending on host OCR binaries.",
+    "UI redesign is out of scope."
+  ],
+  "uat_passed": true
+}
