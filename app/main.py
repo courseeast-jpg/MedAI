@@ -20,6 +20,15 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
 from app.lab_document_metadata import reason_label_for_validation, review_reason_for_result
 from app.mkb_explorer_model import build_mkb_explorer_model
+from app.operator_ui_model import (
+    ADVANCED_TABS,
+    DEFAULT_PRIMARY_TABS,
+    MKB_EXPLORER_TAB,
+    REVIEW_QUEUE_TAB,
+    RUN_REVIEW_TAB,
+    SOURCE_COMPARISON_DISCLAIMER,
+    operator_tabs as operator_ui_tabs,
+)
 from app.operator_safety import (
     PHASE52_SAFETY_WARNING,
     PRIVACY_INVARIANT_GUIDANCE,
@@ -67,20 +76,8 @@ st.set_page_config(
 )
 
 
-RUN_REVIEW_TAB = "Run & Review"
-
-PRIMARY_OPERATOR_TABS = [
-    RUN_REVIEW_TAB,
-    "MKB Explorer",
-    "Operator Control Panel",
-]
-
-ADVANCED_OPERATOR_TABS = [
-    "Validation Batch Audit",
-    "Validation History",
-    "Safety & Governance",
-    "Terminology Admin",
-]
+PRIMARY_OPERATOR_TABS = list(DEFAULT_PRIMARY_TABS)
+ADVANCED_OPERATOR_TABS = list(ADVANCED_TABS)
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
 SPECIALTY_SESSION_KEY = "medai_selected_specialty"
@@ -88,6 +85,10 @@ PERSISTED_UPLOAD_FINGERPRINTS_KEY = "test_launcher_persisted_upload_fingerprints
 PERSISTED_UPLOAD_GENERATION_KEY = "test_launcher_persisted_upload_generation"
 UPLOAD_WIDGET_VERSION_KEY = "test_launcher_upload_widget_version"
 TERMINOLOGY_LOOKUP_UI_ENV_VAR = "MEDAI_TERMINOLOGY_LOOKUP_UI_ENABLED"
+OPERATOR_FIRST_VISIBLE_TAB_LABELS = ["Run & Review", "MKB Explorer", "Review Queue"]
+REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER = (
+    "Accept only after comparing with source. This does not clinically interpret the result."
+)
 
 # Backward-compatible export for older tests/importers. These are current
 # visible labels; advanced pages are shown only after the operator opts in.
@@ -95,9 +96,7 @@ PHASE52_OPERATOR_TABS = PRIMARY_OPERATOR_TABS + ADVANCED_OPERATOR_TABS
 
 
 def operator_tabs(show_advanced_tools: bool = False) -> list[str]:
-    tabs = list(PRIMARY_OPERATOR_TABS)
-    if show_advanced_tools:
-        tabs.extend(ADVANCED_OPERATOR_TABS)
+    tabs = operator_ui_tabs(show_advanced_tools)
     try:
         from app.clinical_knowledge_terminology_lookup_viewer import terminology_lookup_panel_enabled
 
@@ -612,17 +611,17 @@ def render_adapter_fallback_panel(sys_components: dict) -> None:
         "Review required. MedAI does not diagnose, recommend treatment, "
         "interpret medications, or accept extracted values on its own."
     )
-    selected_specialty = render_specialty_selector(
-        st.session_state,
-        key="adapter_fallback_medical_specialty",
-    )
     document_category_label = st.selectbox(
         "Document category",
         ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
         key="adapter_fallback_document_category",
     )
+    selected_specialty = render_specialty_selector(
+        st.session_state,
+        key="adapter_fallback_medical_specialty",
+    )
     uploaded = st.file_uploader(
-        "Choose TXT file",
+        "Choose files",
         type=["txt"],
         accept_multiple_files=False,
         key="adapter_fallback_txt_upload",
@@ -632,7 +631,7 @@ def render_adapter_fallback_panel(sys_components: dict) -> None:
         height=160,
         key="adapter_fallback_text",
     )
-    if st.button("Run adapter fallback", type="primary", key="adapter_fallback_run"):
+    if st.button("Start run", type="primary", key="adapter_fallback_run"):
         text = ""
         if uploaded is not None:
             text = uploaded.getvalue().decode("utf-8", errors="replace")
@@ -771,6 +770,8 @@ def render_operator_safety_panel(
     run_id: str | None = None,
     timestamp: str | None = None,
     knowledge_counts: dict | None = None,
+    *,
+    show_build_details: bool = False,
 ) -> None:
     labels = privacy_mode_labels()
     st.markdown(
@@ -797,6 +798,8 @@ def render_operator_safety_panel(
         """,
         unsafe_allow_html=True,
     )
+    if not show_build_details:
+        return
     with st.expander("Build / audit details", expanded=False):
         st.caption(f"Snapshot: {SNAPSHOT_ID}")
         st.caption(f"Commit: {current_commit()}")
@@ -1056,7 +1059,7 @@ def render_operator_result_panel(result) -> None:
 
 
 def render_mkb_tab(sys_components: dict) -> None:
-    st.subheader("MKB Explorer")
+    st.subheader(MKB_EXPLORER_TAB)
     if sys_components.get("sql") is None:
         st.warning("MKB Explorer unavailable because SQLite is not initialized.")
         return
@@ -1102,7 +1105,10 @@ def render_mkb_tab(sys_components: dict) -> None:
     cols[4].metric("Superseded", counts["superseded"])
 
     if not model["rows"]:
-        st.info("No MKB records match the selected filters.")
+        if counts["total"] == 0:
+            st.info("No MKB records yet. Run a local extraction first.")
+        else:
+            st.info("No MKB records match the selected filters.")
         return
 
     st.caption(f"{model['row_count']} public-safe record row(s) shown")
@@ -1124,6 +1130,27 @@ def render_mkb_tab(sys_components: dict) -> None:
         use_container_width=True,
     )
 
+
+def render_review_queue_tab(sys_components: dict) -> None:
+    st.subheader(REVIEW_QUEUE_TAB)
+    st.caption("Records needing review stay quarantined until an operator compares them with the source.")
+    st.caption(REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER)
+    if sys_components.get("sql") is None:
+        st.warning("Review Queue unavailable because SQLite is not initialized.")
+        return
+
+    model = build_mkb_explorer_model(
+        sys_components["sql"],
+        specialty_filter="all",
+        tier_filter="review_bound",
+        fact_type_filter="all",
+        limit=100,
+    )
+    st.metric("Records needing review", model["counts"]["review_bound"])
+    if not model["rows"]:
+        st.info("No records need review.")
+        return
+
     try:
         from app.operator_review_actions import (
             accept_after_source_comparison as _accept_action,
@@ -1132,49 +1159,59 @@ def render_mkb_tab(sys_components: dict) -> None:
             render_action_affordances_plan as _action_plan,
         )
 
-        with st.expander("Review-bound record actions", expanded=False):
-            for row in model["rows"]:
-                if not row["requires_review"] and row["tier"] != "quarantined":
-                    continue
-                plan = _action_plan(
-                    {
-                        "record_id": row["record_id_full"],
-                        "fact_type": row["fact_type"],
-                        "tier": row["tier"],
-                        "status": row["status"],
-                        "requires_review": row["requires_review"],
-                    }
+        for row in model["rows"]:
+            if not row["requires_review"] and row["tier"] != "quarantined":
+                continue
+            plan = _action_plan(
+                {
+                    "record_id": row["record_id_full"],
+                    "fact_type": row["fact_type"],
+                    "tier": row["tier"],
+                    "status": row["status"],
+                    "requires_review": row["requires_review"],
+                }
+            )
+            st.markdown(f"**{row['record_id']}** - {row['display_content']}")
+            st.caption(
+                " | ".join(
+                    [
+                        f"fact_type: {row['fact_type']}",
+                        f"specialty: {row['specialty_label']}",
+                        f"tier: {row['tier']}",
+                        f"status: {row['status']}",
+                    ]
                 )
-                st.markdown(f"**{row['record_id']}** - {row['display_content']}")
-                st.caption("Accept only after comparing with source. This does not clinically interpret the result.")
-                action_cols = st.columns(3)
-                accept_cfg, reject_cfg, defer_cfg = plan["actions"]
-                if action_cols[0].button(
-                    accept_cfg["label"],
-                    key=f"mkb_accept_{row['record_id_full']}",
-                    disabled=not accept_cfg.get("enabled", False),
-                ):
-                    result = _accept_action(sys_components["sql"], row["record_id_full"])
-                    st.info(result.safe_message)
-                    st.rerun()
-                if action_cols[1].button(
-                    reject_cfg["label"],
-                    key=f"mkb_reject_{row['record_id_full']}",
-                    disabled=not reject_cfg.get("enabled", False),
-                ):
-                    result = _reject_action(sys_components["sql"], row["record_id_full"])
-                    st.info(result.safe_message)
-                    st.rerun()
-                if action_cols[2].button(
-                    defer_cfg["label"],
-                    key=f"mkb_defer_{row['record_id_full']}",
-                    disabled=not defer_cfg.get("enabled", False),
-                ):
-                    result = _defer_action(sys_components["sql"], row["record_id_full"])
-                    st.info(result.safe_message)
-                    st.rerun()
+            )
+            st.caption(REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER)
+            action_cols = st.columns(3)
+            accept_cfg, reject_cfg, defer_cfg = plan["actions"]
+            if action_cols[0].button(
+                accept_cfg["label"],
+                key=f"review_queue_accept_{row['record_id_full']}",
+                disabled=not accept_cfg.get("enabled", False),
+            ):
+                result = _accept_action(sys_components["sql"], row["record_id_full"])
+                st.info(result.safe_message)
+                st.rerun()
+            if action_cols[1].button(
+                reject_cfg["label"],
+                key=f"review_queue_reject_{row['record_id_full']}",
+                disabled=not reject_cfg.get("enabled", False),
+            ):
+                result = _reject_action(sys_components["sql"], row["record_id_full"])
+                st.info(result.safe_message)
+                st.rerun()
+            if action_cols[2].button(
+                defer_cfg["label"],
+                key=f"review_queue_defer_{row['record_id_full']}",
+                disabled=not defer_cfg.get("enabled", False),
+            ):
+                result = _defer_action(sys_components["sql"], row["record_id_full"])
+                st.info(result.safe_message)
+                st.rerun()
+            st.divider()
     except Exception as exc:
-        st.caption(f"Record actions unavailable: {exc}")
+        st.caption(f"Review actions unavailable: {exc}")
 
 
 def render_conflict_tab(sys_components: dict) -> None:
@@ -1204,14 +1241,14 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     st.caption("Add documents, then start a run.")
     st.caption("Supported files: PDF or TXT. Files stay local.")
 
-    selected_specialty = render_specialty_selector(
-        st.session_state,
-        key="test_launcher_medical_specialty",
-    )
     document_category_label = st.selectbox(
         "Document category",
         ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
         key="test_launcher_document_category",
+    )
+    selected_specialty = render_specialty_selector(
+        st.session_state,
+        key="test_launcher_medical_specialty",
     )
     specialty = selected_specialty
     uploaded_files = st.file_uploader(
@@ -1316,9 +1353,6 @@ def render_run_review_tab(sys_components: dict) -> None:
             render_review_package_panel(show_title=False)
         except Exception as _exc:
             st.error(f"Previous review summary unavailable: {_exc}")
-
-    st.divider()
-    render_mkb_tab(sys_components)
 
 
 def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
@@ -2254,16 +2288,16 @@ def main() -> None:
     if sys_components is None:
         st.error("Startup failed without component details.")
         return
-    counts = sys_components["sql"].count_records()
-    render_operator_safety_panel(knowledge_counts=counts)
-    render_system_status(sys_components["state"])
-
     show_advanced_tools = st.checkbox(
         "Show advanced tools",
         value=False,
         help="Advanced tools include validation history, audit pages, safety governance, and terminology administration.",
     )
-    st.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
+    counts = sys_components["sql"].count_records()
+    render_operator_safety_panel(knowledge_counts=counts, show_build_details=show_advanced_tools)
+    render_system_status(sys_components["state"])
+    if show_advanced_tools:
+        st.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
 
     tab_labels = operator_tabs(show_advanced_tools)
     tabs = st.tabs(tab_labels)
@@ -2271,8 +2305,10 @@ def main() -> None:
         with tab:
             if label == RUN_REVIEW_TAB:
                 render_run_review_tab(sys_components)
-            elif label == "MKB Explorer":
+            elif label == MKB_EXPLORER_TAB:
                 render_mkb_tab(sys_components)
+            elif label == REVIEW_QUEUE_TAB:
+                render_review_queue_tab(sys_components)
             elif label == "Operator Control Panel":
                 try:
                     from app.operator_control_panel import render_operator_control_panel

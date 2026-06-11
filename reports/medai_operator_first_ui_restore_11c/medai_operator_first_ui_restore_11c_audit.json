@@ -1,0 +1,14 @@
+{
+  "block_id": "MEDAI-OPERATOR-FIRST-UI-RESTORE-11C-AUDIT",
+  "head": "7756f05",
+  "browser_acceptance_audit": {
+    "block_11b_code_validation_passed": true,
+    "browser_ui_acceptance_failed": true,
+    "specialty_selector_not_visibly_present_in_run_review": true,
+    "mkb_explorer_not_visible_in_primary_workflow": true,
+    "advanced_engineering_controls_dominated_ui": true,
+    "block_11c_scope": "Fix visible operator workflow without changing extraction logic."
+  },
+  "external_api_used": false,
+  "auto_accept_enabled": false
+}
