@@ -1,0 +1,53 @@
+{
+  "task_id": "MEDAI-REGRESSION-PRIVACY-HISTORICAL-11F-REPAIR-12E0",
+  "conclusion": "medai_regression_privacy_historical_11f_repair_12e0_ready",
+  "root_cause": "The public-report privacy checker scanned synthetic canonical UUID record IDs. Some UUID substrings can match the broad historical medical-record-number detector, causing a nondeterministic redacted leak example even though the source value was a UUID and not raw PHI.",
+  "exact_fix": "Filter identifier findings only when the finding is fully contained inside a canonical UUID string in the public-report checker. Non-UUID identifier values and all other privacy categories remain blocked.",
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "no_raw_phi": true,
+  "no_raw_ocr_text": true,
+  "no_private_paths": true,
+  "runtime_db_mutation": false,
+  "redacted_token_classification": "safe_redacted_privacy_checker_example_not_unsafe_public_report_emission",
+  "tests_run": [
+    {
+      "command": "python -m pytest tests/test_medai_regression_privacy_historical_11f_repair_12e0.py tests/test_medai_actual_streamlit_ui_wiring_fix_11f.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_actual_one_screen_ux_final_11g.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_run_review_density_final_11h.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_image_ocr_reviewbound_routing_12d.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_local_image_ocr_routing_12c.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m pytest tests/test_medai_file_intake_multiformat_uat_12b.py",
+      "result": "passed"
+    },
+    {
+      "command": "python -m py_compile app/main.py app/test_launcher.py execution/jobs.py execution/pipeline.py",
+      "result": "passed"
+    }
+  ],
+  "scope_guard": {
+    "ocr_routing_changed": false,
+    "classifier_cues_changed": false,
+    "confidence_thresholds_changed": false,
+    "mkb_write_logic_changed": false,
+    "clinical_logic_changed": false,
+    "external_api_behavior_changed": false,
+    "auto_accept_behavior_changed": false
+  }
+}

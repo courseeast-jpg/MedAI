@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from typing import Any, List
 
@@ -22,12 +23,26 @@ from clinical_knowledge.privacy.patterns import (
 from clinical_knowledge.privacy.sanitizer import Finding, sanitize_text
 
 _SALT = "medai_cka_b02_report_check_v1"
+_UUID_RE = re.compile(
+    r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b",
+    re.IGNORECASE,
+)
 
 
 def _redact_example(original: str, token: str) -> str:
     """Return a safe redacted example: token + hash prefix."""
     h = hashlib.sha256(f"{_SALT}:{original}".encode()).hexdigest()[:8]
     return f"{token} [hash:{h}]"
+
+
+def _is_uuid_fragment_false_positive(text: str, finding: Finding) -> bool:
+    """Return True only for MRN-like substrings that are part of a UUID."""
+    if finding.category != "MRN":
+        return False
+    for match in _UUID_RE.finditer(text):
+        if match.start() <= finding.start and finding.end <= match.end():
+            return True
+    return False
 
 
 @dataclass
@@ -56,22 +71,30 @@ def check_public_report_payload(payload: Any) -> ReportPrivacyCheck:
         if isinstance(node, str):
             strings_checked[0] += 1
             result = sanitize_text(node)
-            all_findings.extend(result.findings)
+            all_findings.extend(
+                f for f in result.findings if not _is_uuid_fragment_false_positive(node, f)
+            )
         elif isinstance(node, dict):
             for k, v in node.items():
                 keys_checked[0] += 1
                 strings_checked[0] += 1
                 # Also check the key string
                 key_result = sanitize_text(str(k))
-                all_findings.extend(key_result.findings)
+                key_text = str(k)
+                all_findings.extend(
+                    f for f in key_result.findings if not _is_uuid_fragment_false_positive(key_text, f)
+                )
                 _walk(v, _depth + 1)
         elif isinstance(node, (list, tuple)):
             for item in node:
                 _walk(item, _depth + 1)
         elif node is not None:
             strings_checked[0] += 1
-            result = sanitize_text(str(node))
-            all_findings.extend(result.findings)
+            scalar_text = str(node)
+            result = sanitize_text(scalar_text)
+            all_findings.extend(
+                f for f in result.findings if not _is_uuid_fragment_false_positive(scalar_text, f)
+            )
 
     _walk(payload)
 
