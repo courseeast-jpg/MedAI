@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
 from app.lab_document_metadata import reason_label_for_validation, review_reason_for_result
 from app.mkb_explorer_model import build_mkb_explorer_model
+from app.operator_compact_styles import COMPACT_OPERATOR_CSS
 from app.operator_ui_model import (
     ADVANCED_TABS,
     DEFAULT_PRIMARY_TABS,
@@ -604,34 +605,34 @@ def render_run_review_unavailable_panel() -> None:
 def render_adapter_fallback_panel(sys_components: dict) -> None:
     """Render local TXT adapter fallback when ExecutionPipeline is unavailable."""
     st.warning(
-        "Processing pipeline unavailable. Adapter fallback is available for TXT lab-style text. "
-        "All extracted values remain quarantined for human review."
+        "Pipeline unavailable. TXT fallback is local only; extracted values stay review-bound."
     )
-    st.caption(
-        "Review required. MedAI does not diagnose, recommend treatment, "
-        "interpret medications, or accept extracted values on its own."
-    )
-    document_category_label = st.selectbox(
-        "Document category",
-        ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
-        key="adapter_fallback_document_category",
-    )
-    selected_specialty = render_specialty_selector(
-        st.session_state,
-        key="adapter_fallback_medical_specialty",
-    )
-    uploaded = st.file_uploader(
-        "Choose files",
-        type=["txt"],
-        accept_multiple_files=False,
-        key="adapter_fallback_txt_upload",
-    )
+    category_col, specialty_col = st.columns(2)
+    with category_col:
+        document_category_label = st.selectbox(
+            "Document category",
+            ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
+            key="adapter_fallback_document_category",
+        )
+    with specialty_col:
+        selected_specialty = render_specialty_selector(
+            st.session_state,
+            key="adapter_fallback_medical_specialty",
+        )
+    upload_col, start_col = st.columns([3, 1])
+    with upload_col:
+        uploaded = st.file_uploader(
+            "Choose files",
+            type=["txt"],
+            accept_multiple_files=False,
+            key="adapter_fallback_txt_upload",
+        )
     pasted_text = st.text_area(
-        "Or paste lab-style text",
-        height=160,
+        "Paste lab-style text",
+        height=90,
         key="adapter_fallback_text",
     )
-    if st.button("Start run", type="primary", key="adapter_fallback_run"):
+    if start_col.button("Start run", type="primary", key="adapter_fallback_run", use_container_width=True):
         text = ""
         if uploaded is not None:
             text = uploaded.getvalue().decode("utf-8", errors="replace")
@@ -764,6 +765,7 @@ def inject_phase52_styles() -> None:
         """,
         unsafe_allow_html=True,
     )
+    st.markdown(COMPACT_OPERATOR_CSS, unsafe_allow_html=True)
 
 
 def render_operator_safety_panel(
@@ -777,21 +779,18 @@ def render_operator_safety_panel(
     st.markdown(
         f"""
         <div class="medai-header">
-          <div style="display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;">
+          <div class="compact-session-header">
             <div>
-              <div class="muted-label">MedAI v2 - OCR / Layout HITL</div>
-              <h2 style="margin:.15rem 0 .25rem 0;">Local session</h2>
-              <div><span class="badge badge-accepted">System ready</span> <span class="badge badge-privacy">Medical connector active</span></div>
-              <div class="muted-label">No run started yet. Upload or select documents to begin.</div>
+              <h2>Local session</h2>
+              <div class="muted-label">Upload or select documents to begin.</div>
             </div>
-            <div><span class="badge badge-privacy">Local safe mode</span></div>
-          </div>
-          <div class="safety-strip">
-            <div class="safety-cell"><strong>Local safe mode</strong></div>
-            <div class="safety-cell"><strong>Human review</strong></div>
-            <div class="safety-cell"><strong>Local only</strong></div>
-            <div class="safety-cell"><strong>Cloud APIs off</strong></div>
-            <div class="safety-cell"><strong>Privacy check on</strong></div>
+            <div class="compact-chip-row">
+              <span class="compact-chip">Local safe mode</span>
+              <span class="compact-chip">Human review</span>
+              <span class="compact-chip">Local only</span>
+              <span class="compact-chip">Cloud APIs off</span>
+              <span class="compact-chip">Privacy check on</span>
+            </div>
           </div>
         </div>
         <div class="warning-banner">{PHASE52_SAFETY_WARNING}</div>
@@ -1064,6 +1063,14 @@ def render_mkb_tab(sys_components: dict) -> None:
         st.warning("MKB Explorer unavailable because SQLite is not initialized.")
         return
 
+    base_model = build_mkb_explorer_model(sys_components["sql"], limit=1)
+    base_counts = base_model["counts"]
+    count_cols = st.columns(4)
+    count_cols[0].metric("Total", base_counts["total"])
+    count_cols[1].metric("Active", base_counts["active"])
+    count_cols[2].metric("Quarantined / review-bound", base_counts["review_bound"])
+    count_cols[3].metric("Superseded / rejected", base_counts["superseded"])
+
     specialty_filter, tier_filter, fact_type_filter = st.columns(3)
     specialty_display = specialty_filter.selectbox(
         "Specialty / domain",
@@ -1096,16 +1103,9 @@ def render_mkb_tab(sys_components: dict) -> None:
         tier_filter=tier,
         fact_type_filter=fact_type,
     )
-    counts = model["counts"]
-    cols = st.columns(5)
-    cols[0].metric("Total records", counts["total"])
-    cols[1].metric("Active", counts["active"])
-    cols[2].metric("Quarantined", counts["quarantined"])
-    cols[3].metric("Review-bound", counts["review_bound"])
-    cols[4].metric("Superseded", counts["superseded"])
 
     if not model["rows"]:
-        if counts["total"] == 0:
+        if base_counts["total"] == 0:
             st.info("No MKB records yet. Run a local extraction first.")
         else:
             st.info("No MKB records match the selected filters.")
@@ -1133,8 +1133,6 @@ def render_mkb_tab(sys_components: dict) -> None:
 
 def render_review_queue_tab(sys_components: dict) -> None:
     st.subheader(REVIEW_QUEUE_TAB)
-    st.caption("Records needing review stay quarantined until an operator compares them with the source.")
-    st.caption(REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER)
     if sys_components.get("sql") is None:
         st.warning("Review Queue unavailable because SQLite is not initialized.")
         return
@@ -1146,7 +1144,9 @@ def render_review_queue_tab(sys_components: dict) -> None:
         fact_type_filter="all",
         limit=100,
     )
-    st.metric("Records needing review", model["counts"]["review_bound"])
+    top_cols = st.columns([1, 3])
+    top_cols[0].metric("Needs review", model["counts"]["review_bound"])
+    top_cols[1].caption(REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER)
     if not model["rows"]:
         st.info("No records need review.")
         return
@@ -1238,26 +1238,29 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         render_run_review_unavailable_panel()
         return
     ensure_test_launcher_dirs()
-    st.caption("Add documents, then start a run.")
-    st.caption("Supported files: PDF or TXT. Files stay local.")
 
-    document_category_label = st.selectbox(
-        "Document category",
-        ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
-        key="test_launcher_document_category",
-    )
-    selected_specialty = render_specialty_selector(
-        st.session_state,
-        key="test_launcher_medical_specialty",
-    )
+    category_col, specialty_col = st.columns(2)
+    with category_col:
+        document_category_label = st.selectbox(
+            "Document category",
+            ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
+            key="test_launcher_document_category",
+        )
+    with specialty_col:
+        selected_specialty = render_specialty_selector(
+            st.session_state,
+            key="test_launcher_medical_specialty",
+        )
     specialty = selected_specialty
-    uploaded_files = st.file_uploader(
-        "Choose files",
-        type=["pdf", "txt"],
-        accept_multiple_files=True,
-        help="Add documents",
-        key=current_upload_widget_key(st.session_state),
-    )
+    upload_col, start_col = st.columns([3, 1])
+    with upload_col:
+        uploaded_files = st.file_uploader(
+            "Choose files",
+            type=["pdf", "txt"],
+            accept_multiple_files=True,
+            help="PDF or TXT. Files stay local.",
+            key=current_upload_widget_key(st.session_state),
+        )
     selected_count = selected_upload_count(uploaded_files)
     if uploaded_files:
         saved = persist_uploaded_files_once(uploaded_files, st.session_state)
@@ -1271,24 +1274,12 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     if active_run:
         run_state = "Complete" if not active_run.get("failed") else "Failed"
 
-    if queue_state["queued_count"]:
-        st.info(str(queue_state["message"]))
-    else:
-        st.info(str(queue_state["message"]))
-        if selected_count:
-            st.caption("Selected files are visible in the picker but are not in the run queue yet.")
-            if st.button("Add selected files to queue"):
-                reset_upload_persistence(st.session_state)
-                saved = persist_uploaded_files_once(uploaded_files, st.session_state)
-                st.success(f"Added {len(saved)} selected file(s) to the run queue.")
-                st.rerun()
-
-    control_cols = st.columns([1, 1])
-    if control_cols[0].button("Remove queued files"):
-        removed = clear_queue_action(st.session_state)
-        st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
-        st.rerun()
-    if control_cols[1].button("Start run", type="primary", disabled=not bool(queue_state["start_enabled"])):
+    if start_col.button(
+        "Start run",
+        type="primary",
+        disabled=not bool(queue_state["start_enabled"]),
+        use_container_width=True,
+    ):
         if not files:
             st.warning("No supported files waiting in test_input/.")
         else:
@@ -1312,6 +1303,24 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             )
             st.rerun()
 
+    render_compact_run_summary(
+        document_category_label=document_category_label,
+        selected_specialty=selected_specialty,
+        queue_state=queue_state,
+        run_state=run_state,
+    )
+    if not queue_state["queued_count"] and selected_count:
+        if st.button("Add selected files to queue"):
+            reset_upload_persistence(st.session_state)
+            saved = persist_uploaded_files_once(uploaded_files, st.session_state)
+            st.success(f"Added {len(saved)} selected file(s) to the run queue.")
+            st.rerun()
+
+    if files and st.button("Remove queued files"):
+        removed = clear_queue_action(st.session_state)
+        st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
+        st.rerun()
+
     with st.expander("Advanced actions", expanded=False):
         st.caption("Removes the visible latest report only. It does not delete source documents.")
         if st.button("Clear last report"):
@@ -1334,14 +1343,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
 
 def render_run_review_tab(sys_components: dict) -> None:
     st.subheader(RUN_REVIEW_TAB)
-    st.caption("Add documents, process them locally, and review anything that needs attention.")
-    st.info(
-        "Local operator workflow: files stay on this machine, cloud tools stay off, "
-        "and every result remains for human review until the source document is checked."
-    )
-
-    st.markdown("### Current run")
-    st.caption("Use this section for the active file queue, current run status, and per-file review cards.")
+    st.caption("Local workflow. Files stay on this machine. Results remain review-bound.")
     render_current_run_tab(sys_components, show_title=False)
 
     st.divider()
@@ -1357,7 +1359,6 @@ def render_run_review_tab(sys_components: dict) -> None:
 
 def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
     st.markdown("**Documents waiting**")
-    st.metric("Files ready", len(files))
     if not files:
         if selected_count:
             st.caption("Files selected. Add/start run to process them.")
@@ -1379,11 +1380,30 @@ def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
             st.rerun()
 
 
+def render_compact_run_summary(
+    *,
+    document_category_label: str,
+    selected_specialty: str,
+    queue_state: dict,
+    run_state: str,
+) -> None:
+    st.markdown(
+        f"""
+        <div class="compact-summary">
+          <span class="compact-chip">Document category: {document_category_label}</span>
+          <span class="compact-chip">Specialty: {specialty_label(selected_specialty)}</span>
+          <span class="compact-chip">Documents waiting: {queue_state['queued_count']}</span>
+          <span class="compact-chip">Current run status: {run_state}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_run_status_panel(active_run: dict | None, *, run_state: str) -> None:
     counts = current_run_counts(active_run)
     st.markdown("**Run status**")
     st.markdown(f"<span class='badge badge-privacy'>{run_state}</span>", unsafe_allow_html=True)
-    st.caption("These are workflow statuses only. They are not diagnosis, treatment advice, or clinical acceptance.")
     if active_run and active_run.get("selected_specialty_label"):
         st.caption(f"Selected specialty/domain: {active_run['selected_specialty_label']}")
     cols = st.columns(5)

@@ -1,0 +1,15 @@
+{
+  "block_id": "MEDAI-OPERATOR-ONE-SCREEN-UI-POLISH-11E-AUDIT",
+  "head": "10d926e",
+  "layout_findings": [
+    "11C restored operator-first tabs but left excess vertical spacing in the header and form sections.",
+    "Verbose helper text can be shortened while preserving local-only and human-review warnings.",
+    "Status cards can be compact chips for the first viewport.",
+    "Document category and specialty controls can share a row.",
+    "Upload and Start run controls can share the first workflow row.",
+    "Build / audit details and engineering tabs remain behind Show advanced tools.",
+    "Run & Review, MKB Explorer, and Review Queue should expose their core controls in the first viewport."
+  ],
+  "external_api_used": false,
+  "auto_accept_enabled": false
+}
