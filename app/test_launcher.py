@@ -9,10 +9,12 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import zipfile
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+from xml.etree import ElementTree
 from uuid import uuid4
 
 from app.lab_document_metadata import (
@@ -34,7 +36,19 @@ TEST_RUN_REPORT_DIR = ROOT / "reports" / "test_runs"
 LATEST_JSON_REPORT = TEST_RUN_REPORT_DIR / "latest_test_run.json"
 LATEST_MD_REPORT = TEST_RUN_REPORT_DIR / "latest_test_run.md"
 
-SUPPORTED_TEST_EXTENSIONS = {".pdf", ".txt"}
+SUPPORTED_TEST_EXTENSIONS = {
+    ".pdf",
+    ".txt",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".tif",
+    ".tiff",
+    ".bmp",
+    ".docx",
+}
+RUN_REVIEW_UPLOAD_TYPES = tuple(extension.lstrip(".") for extension in sorted(SUPPORTED_TEST_EXTENSIONS))
+IMAGE_TEST_EXTENSIONS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
 ACCEPTED_OUTCOMES = {"written"}
 SAFE_FILENAME_RE = re.compile(r"[^A-Za-z0-9._ -]+")
 
@@ -124,12 +138,14 @@ def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
         (root / relative).mkdir(parents=True, exist_ok=True)
 
 
-def list_test_input_files(input_dir: Path = TEST_INPUT_DIR) -> list[Path]:
+def list_test_input_files(input_dir: Path | None = None) -> list[Path]:
+    input_dir = input_dir or TEST_INPUT_DIR
     input_dir.mkdir(parents=True, exist_ok=True)
     return sorted(path for path in input_dir.iterdir() if path.is_file() and path.suffix.lower() in SUPPORTED_TEST_EXTENSIONS)
 
 
-def save_uploaded_test_file(uploaded_file, input_dir: Path = TEST_INPUT_DIR) -> Path:
+def save_uploaded_test_file(uploaded_file, input_dir: Path | None = None) -> Path:
+    input_dir = input_dir or TEST_INPUT_DIR
     input_dir.mkdir(parents=True, exist_ok=True)
     destination = _unique_destination(input_dir / safe_test_filename(uploaded_file.name))
     destination.write_bytes(_uploaded_file_bytes(uploaded_file))
@@ -147,7 +163,8 @@ def safe_test_filename(filename: str) -> str:
     return safe_name
 
 
-def clear_test_input(input_dir: Path = TEST_INPUT_DIR) -> list[Path]:
+def clear_test_input(input_dir: Path | None = None) -> list[Path]:
+    input_dir = input_dir or TEST_INPUT_DIR
     input_dir.mkdir(parents=True, exist_ok=True)
     removed: list[Path] = []
     for path in list_test_input_files(input_dir):
@@ -158,7 +175,8 @@ def clear_test_input(input_dir: Path = TEST_INPUT_DIR) -> list[Path]:
     return removed
 
 
-def remove_test_input_file(filename: str, input_dir: Path = TEST_INPUT_DIR) -> Path | None:
+def remove_test_input_file(filename: str, input_dir: Path | None = None) -> Path | None:
+    input_dir = input_dir or TEST_INPUT_DIR
     input_dir.mkdir(parents=True, exist_ok=True)
     requested = Path(filename or "").name
     target = input_dir / requested
@@ -357,14 +375,28 @@ def runtime_cyrillic_ocr_marker_for_result(extractor_result: dict[str, Any]) -> 
 
 def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, run_id: str) -> TestFileResult:
     try:
-        if source_path.suffix.lower() == ".pdf":
+        suffix = source_path.suffix.lower()
+        if suffix == ".pdf":
             result = execution_pipeline.process_pdf(source_path, specialty=specialty, session_id=run_id)
-        elif source_path.suffix.lower() == ".txt":
+        elif suffix == ".txt":
             result = execution_pipeline.process_text(
                 source_path.read_text(encoding="utf-8", errors="replace"),
                 specialty=specialty,
                 source_name=source_path.name,
                 session_id=run_id,
+            )
+        elif suffix == ".docx":
+            result = execution_pipeline.process_text(
+                extract_docx_text_local(source_path),
+                specialty=specialty,
+                source_name=source_path.name,
+                session_id=run_id,
+            )
+        elif suffix in IMAGE_TEST_EXTENSIONS:
+            return _review_bound_unavailable_file_result(
+                source_path,
+                selected_extractor="local_image_ocr_unavailable",
+                error="Local image OCR extractor is safely unavailable in this runtime.",
             )
         else:
             raise ValueError(f"Unsupported test file type: {source_path.suffix}")
@@ -378,7 +410,12 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             or audit.get("extractor")
         )
         confidence = _safe_float(extractor_result.get("confidence", audit.get("confidence")))
-        accepted = result.outcome in ACCEPTED_OUTCOMES
+        force_review_bound = suffix == ".docx"
+        accepted = result.outcome in ACCEPTED_OUTCOMES and not force_review_bound
+        outcome = "queued_for_review" if force_review_bound else result.outcome
+        validation_status = (
+            "needs_review" if force_review_bound and result.validation_status == "accepted" else result.validation_status
+        )
         validation_reason_codes = _validation_reason_codes(result.validation_errors)
         ocr_gate_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
         document_type = display_document_type(
@@ -395,21 +432,21 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
         )
         operator_reason = review_reason_for_result(
             document_type=document_type,
-            validation_status=result.validation_status,
+            validation_status=validation_status,
             confidence=confidence,
             status="accepted" if accepted else "review",
         )
-        operator_reason_label = reason_label_for_validation(result.validation_status, validation_reason_codes)
+        operator_reason_label = reason_label_for_validation(validation_status, validation_reason_codes)
         destination_dir = TEST_ARCHIVE_DIR if accepted else TEST_REVIEW_DIR
         destination = _move_to_unique_destination(source_path, destination_dir)
         return TestFileResult(
             file_name=source_path.name,
             status="accepted" if accepted else "review",
-            outcome=result.outcome,
+            outcome=outcome,
             processed_path=str(destination),
             selected_extractor=str(selected_extractor) if selected_extractor is not None else None,
             confidence=confidence,
-            validation_status=result.validation_status,
+            validation_status=validation_status,
             document_type=document_type,
             ocr_quality_band=ocr_quality,
             language_text_visibility=ocr_gate_marker["language_text_visibility"],
@@ -467,6 +504,48 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             processed_path=str(destination),
             error=str(exc),
         )
+
+
+def extract_docx_text_local(source_path: Path) -> str:
+    """Extract visible DOCX text locally with stdlib XML parsing."""
+    with zipfile.ZipFile(source_path) as archive:
+        try:
+            document_xml = archive.read("word/document.xml")
+        except KeyError as exc:
+            raise ValueError("DOCX document.xml not found") from exc
+
+    root = ElementTree.fromstring(document_xml)
+    namespaces = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+    fragments = [
+        node.text.strip()
+        for node in root.findall(".//w:t", namespaces)
+        if node.text and node.text.strip()
+    ]
+    extracted = " ".join(fragments).strip()
+    if not extracted:
+        raise ValueError("DOCX contains no extractable text")
+    return extracted
+
+
+def _review_bound_unavailable_file_result(source_path: Path, *, selected_extractor: str, error: str) -> TestFileResult:
+    destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)
+    return TestFileResult(
+        file_name=source_path.name,
+        status="review",
+        outcome="queued_for_review",
+        processed_path=str(destination),
+        selected_extractor=selected_extractor,
+        confidence=None,
+        validation_status="extractor_unavailable",
+        document_type=UNKNOWN_DOCUMENT_LABEL,
+        operator_review_reason="manual_review_required",
+        operator_reason_label="Manual review required",
+        ocr_gate_review_only=True,
+        ocr_gate_auto_accept_allowed=False,
+        ocr_gate_fallback_review_only=True,
+        ocr_gate_fallback_auto_accept_allowed=False,
+        error=error,
+    )
 
 
 def _safe_float(value: Any) -> float | None:

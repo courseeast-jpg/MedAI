@@ -53,6 +53,7 @@ from app.specialty_selection import (
 )
 from app.test_launcher import (
     LATEST_MD_REPORT,
+    RUN_REVIEW_UPLOAD_TYPES,
     TEST_INPUT_DIR,
     clear_latest_test_reports,
     clear_test_input,
@@ -206,13 +207,19 @@ def queue_display_state(*, queued_count: int, selected_count: int) -> dict[str, 
         "selected_count": selected_count,
         "start_enabled": queued_count > 0,
         "message": (
-            f"Ready to process {queued_count} files."
+            f"Ready to process {queued_count} file(s)."
             if queued_count
-            else "Files selected. Add/start run to process them."
+            else "Files selected; adding to local queue..."
             if selected_count
-            else "No documents added yet. Choose files to begin."
+            else "No documents queued."
         ),
     }
+
+
+def visible_current_run(active_run: dict | None, *, queued_count: int, selected_count: int) -> dict | None:
+    if active_run and active_run.get("failed") and not queued_count and not selected_count:
+        return None
+    return active_run
 
 
 def reset_upload_persistence(session_state) -> None:
@@ -1256,9 +1263,9 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     with upload_col:
         uploaded_files = st.file_uploader(
             "Choose files",
-            type=["pdf", "txt"],
+            type=list(RUN_REVIEW_UPLOAD_TYPES),
             accept_multiple_files=True,
-            help="PDF or TXT. Files stay local.",
+            help="PDF, TXT, image, or DOCX. Files stay local.",
             key=current_upload_widget_key(st.session_state),
         )
     selected_count = selected_upload_count(uploaded_files)
@@ -1269,7 +1276,11 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
 
     files = list_test_input_files()
     queue_state = queue_display_state(queued_count=len(files), selected_count=selected_count)
-    active_run = st.session_state.get("phase52_current_run")
+    active_run = visible_current_run(
+        st.session_state.get("phase52_current_run"),
+        queued_count=len(files),
+        selected_count=selected_count,
+    )
     run_state = "Waiting to start"
     if active_run:
         run_state = "Complete" if not active_run.get("failed") else "Failed"
@@ -1328,7 +1339,11 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             st.rerun()
 
     render_queue_panel(files, selected_count=selected_count)
-    active_run = st.session_state.get("phase52_current_run")
+    active_run = visible_current_run(
+        st.session_state.get("phase52_current_run"),
+        queued_count=len(files),
+        selected_count=selected_count,
+    )
     if active_run:
         render_run_status_panel(active_run, run_state="Complete" if active_run else run_state)
     render_operator_guidance_panel()
@@ -1366,9 +1381,9 @@ def render_run_review_tab(sys_components: dict) -> None:
 def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
     if not files:
         if selected_count:
-            st.caption("Files selected. Add/start run to process them.")
+            st.caption("Files selected; adding to local queue...")
         else:
-            st.caption("No documents added yet. Choose files to begin.")
+            st.caption("No documents queued.")
         return
     if len(files) == 1:
         path = files[0]

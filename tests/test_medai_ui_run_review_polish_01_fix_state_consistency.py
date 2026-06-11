@@ -38,7 +38,7 @@ def _record(document_type: str) -> dict:
 def test_selected_but_unqueued_files_are_explicit_and_start_disabled() -> None:
     state = queue_display_state(queued_count=0, selected_count=2)
 
-    assert state["message"] == "Files selected. Add/start run to process them."
+    assert state["message"] == "Files selected; adding to local queue..."
     assert state["start_enabled"] is False
     assert state["queued_count"] == 0
 
@@ -46,7 +46,7 @@ def test_selected_but_unqueued_files_are_explicit_and_start_disabled() -> None:
 def test_queued_files_count_controls_start_enablement() -> None:
     state = queue_display_state(queued_count=3, selected_count=3)
 
-    assert state["message"] == "Ready to process 3 files."
+    assert state["message"] == "Ready to process 3 file(s)."
     assert state["start_enabled"] is True
     assert state["queued_count"] == 3
 
@@ -54,7 +54,7 @@ def test_queued_files_count_controls_start_enablement() -> None:
 def test_empty_queue_without_selection_uses_non_misleading_empty_text() -> None:
     state = queue_display_state(queued_count=0, selected_count=0)
 
-    assert state["message"] == "No documents added yet. Choose files to begin."
+    assert state["message"] == "No documents queued."
     assert state["start_enabled"] is False
 
 
@@ -104,4 +104,4 @@ def test_safety_language_remains_operator_friendly_and_review_bound() -> None:
     assert "Medication names, doses, schedules, and recommendations were not interpreted or accepted" in (
         operator_result_explanation("Treatment plan")
     )
-    assert "lab values have not been checked or accepted" in operator_result_explanation("Lab result")
+    assert "not clinically interpreted" in operator_result_explanation("Lab result")

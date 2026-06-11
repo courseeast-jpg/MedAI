@@ -1,0 +1,46 @@
+{
+  "auto_accept_enabled": false,
+  "checks": {
+    "all_supported_extensions_queued": true,
+    "auto_accept_enabled": false,
+    "docx_review_bound": true,
+    "external_api_used": false,
+    "images_not_auto_accepted": true,
+    "images_review_bound": true,
+    "images_safely_unavailable": true,
+    "pdf_used_existing_pipeline": true,
+    "supported_extension_count": true,
+    "txt_and_docx_used_text_pipeline": true
+  },
+  "docx": {
+    "local_text_extraction": "stdlib_zip_xml",
+    "routed_to_existing_text_pipeline": true
+  },
+  "error_count": 0,
+  "external_api_used": false,
+  "fail_count": 0,
+  "image_ocr": {
+    "mode": "safely_unavailable",
+    "review_bound_count": 6,
+    "used_existing_local_extractor": false
+  },
+  "operator_next_command": "python scripts/run_medai_file_intake_multiformat_uat_12b.py",
+  "pass_count": 10,
+  "privacy_result": "passed",
+  "queued_supported_file_count": 9,
+  "ready": true,
+  "review_bound_records_persisted": 9,
+  "supported_extensions": [
+    ".pdf",
+    ".txt",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".tif",
+    ".tiff",
+    ".bmp",
+    ".docx"
+  ],
+  "task_id": "MEDAI-FILE-INTAKE-MULTIFORMAT-UAT-12B",
+  "timestamp": "2026-06-11T05:14:49.575930+00:00"
+}
