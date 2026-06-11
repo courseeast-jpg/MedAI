@@ -35,6 +35,7 @@ EXTRACTION_METHOD = "rules_based"
 #: A new entity emitted by this adapter carries this provenance tag so the
 #: pipeline can attribute it cleanly without re-parsing.
 PROVENANCE_TAG = "extracted_medical_facts_adapter"
+CROSS_DOMAIN_PROVENANCE_TAG = "cross_domain_visible_observation_adapter"
 
 #: Conservative confidence assigned to deterministic facts. Below
 #: EXTRACTION_ACCEPT_THRESHOLD on purpose so facts land in review.
@@ -63,6 +64,50 @@ LAB_STYLE_DOCUMENT_TYPE_VALUES = {
     "Lab result",
     "Lab report",
 }
+
+SECTION_HEADINGS = {
+    "findings",
+    "impression",
+    "procedure",
+    "plan",
+    "recommendation",
+    "recommendations",
+    "diagnosis",
+    "assessment",
+    "history",
+    "clinical history",
+    "specimen",
+    "source",
+    "interpretation",
+    "cytology",
+    "pathology",
+    "microscopic description",
+    "gross description",
+    "consultation",
+    "treatment plan",
+}
+
+PHI_KEY_LABELS = {
+    "patient",
+    "patient name",
+    "name",
+    "dob",
+    "date of birth",
+    "mrn",
+    "patient id",
+    "chart no",
+    "phone",
+    "address",
+}
+
+_KV_LINE = re.compile(r"^(?P<label>[A-Za-z][A-Za-z0-9 /().-]{1,48})\s*[:=]\s*(?P<value>\S.{0,160})$")
+_CARD_VALUE = re.compile(
+    r"^(?:value|result|current value)\s*[:=]\s*(?P<value>-?\d+(?:[.,]\d+)?|positive|negative|detected|not detected)"
+    r"(?:\s*(?P<unit>%|mg/dL|g/dL|mmol/L|ng/mL|pg/mL|IU/L|U/L|/hpf|/lpf))?",
+    re.IGNORECASE,
+)
+_CARD_RANGE = re.compile(r"^(?:normal range|reference range|range|normal)\s*[:=]\s*(?P<range>.+)$", re.IGNORECASE)
+_SECTION_HEADER = re.compile(r"^(?P<header>[A-Za-z][A-Za-z /-]{2,48})\s*:?\s*$")
 
 
 # ---------------------------------------------------------------------------
@@ -277,6 +322,251 @@ def _build_lab_entity(
     }
 
 
+def _build_visible_entity(
+    *,
+    fact_type: str,
+    text: str,
+    structured: dict[str, Any],
+    source_line: str,
+) -> dict[str, Any]:
+    safe_structured = {
+        **structured,
+        "parser_name": "cross_domain_visible_observation_adapter",
+        "parser_version": "14A",
+        "extraction_method": EXTRACTION_METHOD,
+        "requires_human_review": True,
+        "operator_review_status": "pending",
+        "auto_accept_allowed": False,
+        "provenance": CROSS_DOMAIN_PROVENANCE_TAG,
+        "source_line_hash": _hash_for_line(source_line),
+        "source_visible_observation": True,
+        "not_medai_interpretation": True,
+    }
+    return {
+        "type": fact_type,
+        "text": _safe_test_name(text)[:160],
+        "structured": safe_structured,
+        "confidence": CONSERVATIVE_CONFIDENCE,
+        "tags": ["source_visible_observation", "requires_source_comparison", "review_bound"],
+    }
+
+
+def _safe_label(label: str) -> str:
+    return re.sub(r"\s+", " ", label or "").strip().strip(":=").strip()
+
+
+def _is_safe_key_value_label(label: str) -> bool:
+    normalized = _safe_label(label).lower()
+    if not normalized:
+        return False
+    return normalized not in PHI_KEY_LABELS and not any(token in normalized for token in ["patient", "birth", "mrn"])
+
+
+def extract_table_observation_entities(text: str) -> list[dict[str, Any]]:
+    """Extract visible table-like rows without clinical interpretation."""
+    out: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for line in _line_iter(text):
+        if len(line) > 260 or _looks_like_date_or_id_line(line):
+            continue
+        lowered = line.lower()
+        if all(token in lowered for token in ["test", "result"]) or all(token in lowered for token in ["name", "value"]):
+            continue
+        if "|" in line:
+            parts = [part.strip() for part in line.split("|")]
+            while parts and not parts[-1]:
+                parts.pop()
+        else:
+            parts = [part.strip() for part in re.split(r"\t+|\s{2,}", line) if part.strip()]
+        if len(parts) < 2 or len(parts) > 7:
+            continue
+        name, value = parts[0], parts[1]
+        if not re.search(r"\d|positive|negative|trace|detected|present|absent", value, re.IGNORECASE):
+            continue
+        unit = parts[2] if len(parts) >= 3 else None
+        reference = parts[3] if len(parts) >= 4 else None
+        flag = parts[4] if len(parts) >= 5 else None
+        key = (name.lower(), value.lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(
+            _build_visible_entity(
+                fact_type="test_result",
+                text=name,
+                source_line=line,
+                structured={
+                    "candidate_kind": "table_observation",
+                    "observation_name": _safe_label(name),
+                    "test_name": _safe_label(name),
+                    "value": _normalize_value_text(value),
+                    "unit": _clean_unit(unit),
+                    "reference_range": _clean_optional(reference),
+                    "flag": _clean_optional(flag),
+                },
+            )
+        )
+    return out
+
+
+def extract_key_value_entities(text: str) -> list[dict[str, Any]]:
+    """Extract safe visible key-value pairs from report metadata."""
+    out: list[dict[str, Any]] = []
+    for line in _line_iter(text):
+        if len(line) > 220 or _looks_like_date_or_id_line(line):
+            continue
+        match = _KV_LINE.match(line)
+        if not match:
+            continue
+        label = _safe_label(match.group("label"))
+        value = match.group("value").strip()
+        if not _is_safe_key_value_label(label):
+            continue
+        out.append(
+            _build_visible_entity(
+                fact_type="note",
+                text=f"Source field: {label}",
+                source_line=line,
+                structured={
+                    "candidate_kind": "key_value_field",
+                    "field_label": label,
+                    "field_value": value,
+                    "source_context": "visible_key_value",
+                },
+            )
+        )
+    return out
+
+
+def extract_card_result_entities(text: str) -> list[dict[str, Any]]:
+    """Extract patient-portal style result cards."""
+    lines = list(_line_iter(text))
+    out: list[dict[str, Any]] = []
+    for index, line in enumerate(lines[:-1]):
+        if _looks_like_date_or_id_line(line):
+            continue
+        value_match = _CARD_VALUE.match(lines[index + 1])
+        if not value_match:
+            continue
+        title = _safe_label(line)
+        if not title or title.lower() in {"value", "result", "normal range"}:
+            continue
+        normal_range = None
+        if index + 2 < len(lines):
+            range_match = _CARD_RANGE.match(lines[index + 2])
+            if range_match:
+                normal_range = range_match.group("range").strip()
+        out.append(
+            _build_visible_entity(
+                fact_type="test_result",
+                text=title,
+                source_line="\n".join(lines[index : min(index + 3, len(lines))]),
+                structured={
+                    "candidate_kind": "portal_card_result",
+                    "card_title": title,
+                    "test_name": title,
+                    "value": _normalize_value_text(value_match.group("value")),
+                    "unit": _clean_unit(value_match.groupdict().get("unit")),
+                    "normal_range": normal_range,
+                    "reference_range": normal_range,
+                    "source_section": "portal_result_card",
+                },
+            )
+        )
+    return out
+
+
+def extract_narrative_section_entities(text: str, *, document_family: str = "general_medical_report") -> list[dict[str, Any]]:
+    """Capture source-visible narrative sections as review-bound notes.
+
+    Sections are stored as source-document sections only. Headings such
+    as Impression, Diagnosis, Plan, or Recommendation are not converted
+    into MedAI interpretations or recommendations.
+    """
+    lines = list(_line_iter(text))
+    out: list[dict[str, Any]] = []
+    current_heading: str | None = None
+    current_body: list[str] = []
+
+    def _flush() -> None:
+        nonlocal current_heading, current_body
+        if not current_heading or not current_body:
+            current_heading = None
+            current_body = []
+            return
+        body = " ".join(current_body).strip()
+        if body:
+            out.append(
+                _build_visible_entity(
+                    fact_type="note",
+                    text=f"Source section: {current_heading}",
+                    source_line=f"{current_heading}: {body[:180]}",
+                    structured={
+                        "candidate_kind": "narrative_source_section",
+                        "section_heading": current_heading,
+                        "section_body": body,
+                        "document_family": document_family,
+                        "source_context": "visible_report_section",
+                        "not_medai_diagnosis": True,
+                        "not_medai_recommendation": True,
+                    },
+                )
+            )
+        current_heading = None
+        current_body = []
+
+    for line in lines:
+        header_match = _SECTION_HEADER.match(line)
+        header = _safe_label(header_match.group("header")) if header_match else ""
+        if header.lower() in SECTION_HEADINGS:
+            _flush()
+            current_heading = header
+            current_body = []
+            continue
+        kv_match = _KV_LINE.match(line)
+        if kv_match:
+            label = _safe_label(kv_match.group("label"))
+            if label.lower() in SECTION_HEADINGS:
+                _flush()
+                current_heading = label
+                value = kv_match.group("value").strip()
+                current_body = [value] if value else []
+                continue
+        if current_heading:
+            if not _looks_like_date_or_id_line(line):
+                current_body.append(line)
+    _flush()
+    return out
+
+
+def extract_cross_domain_visible_entities(
+    text: str,
+    metadata: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    """Run all safe visible-observation primitives and de-duplicate."""
+    metadata = metadata or {}
+    family = str(metadata.get("document_type") or "general_medical_report")
+    candidates: list[dict[str, Any]] = []
+    candidates.extend(extract_table_observation_entities(text))
+    candidates.extend(extract_key_value_entities(text))
+    candidates.extend(extract_card_result_entities(text))
+    candidates.extend(extract_narrative_section_entities(text, document_family=family))
+    seen: set[tuple[str, str, str]] = set()
+    out: list[dict[str, Any]] = []
+    for entity in candidates:
+        structured = entity.get("structured") or {}
+        key = (
+            str(entity.get("type") or ""),
+            str(entity.get("text") or "").lower(),
+            str(structured.get("value") or structured.get("field_value") or structured.get("section_heading") or "").lower(),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(entity)
+    return out
+
+
 def _detect_language(text: str) -> str:
     if not text:
         return "unknown"
@@ -433,16 +723,15 @@ def summarize_extracted_facts_for_public_report(
     for entity in entities:
         if not isinstance(entity, dict):
             continue
+        structured = entity.get("structured") or {}
         if str(entity.get("type")) != "test_result":
-            structured = entity.get("structured") or {}
-            if structured.get("provenance") != PROVENANCE_TAG:
+            if structured.get("provenance") not in {PROVENANCE_TAG, CROSS_DOMAIN_PROVENANCE_TAG}:
                 continue
         fact_count += 1
         fact_type = str(entity.get("type") or "test_result")
         types_seen[fact_type] = types_seen.get(fact_type, 0) + 1
         if len(preview) >= max_preview:
             continue
-        structured = entity.get("structured") or {}
         # Defensive fallback: existing spaCy entities carry value/unit at
         # top level (not inside a structured dict). Read top-level keys
         # only when the structured payload is missing them.
@@ -454,6 +743,10 @@ def summarize_extracted_facts_for_public_report(
             {
                 "type": fact_type,
                 "test_name": str(entity.get("text") or structured.get("test_name") or ""),
+                "candidate_kind": str(structured.get("candidate_kind") or ""),
+                "field_label": str(structured.get("field_label") or ""),
+                "section_heading": str(structured.get("section_heading") or ""),
+                "document_family": str(structured.get("document_family") or ""),
                 "value": str(value),
                 "unit": str(unit) or None,
                 "reference_range": str(reference_range) or None,
@@ -558,6 +851,11 @@ __all__ = [
     "is_lab_style_document",
     "normalize_extracted_fact",
     "extract_lab_observation_entities",
+    "extract_table_observation_entities",
+    "extract_key_value_entities",
+    "extract_card_result_entities",
+    "extract_narrative_section_entities",
+    "extract_cross_domain_visible_entities",
     "merge_facts_into_entities",
     "summarize_extracted_facts_for_public_report",
     "facts_for_ui",

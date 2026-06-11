@@ -107,7 +107,7 @@ def test_queue_state_enables_start_only_after_local_queue_exists() -> None:
 
     assert selected["message"] == "Files selected. Add selected files to queue."
     assert selected["start_enabled"] is False
-    assert queued["message"] == "Ready to process 2 file(s)."
+    assert queued["message"] == "Ready: 2 documents waiting."
     assert queued["start_enabled"] is True
     assert empty["message"] == "No documents queued."
     assert empty["start_enabled"] is False

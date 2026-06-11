@@ -1,0 +1,33 @@
+{
+  "task_id": "MEDAI-REAL-DOC-CROSS-DOMAIN-EXTRACTION-14A",
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "table_extraction_primitive_added": true,
+  "key_value_extraction_primitive_added": true,
+  "card_extraction_primitive_added": true,
+  "narrative_section_extraction_primitive_added": true,
+  "lab_adapter_added": true,
+  "portal_card_adapter_added": true,
+  "pathology_cytology_adapter_added": true,
+  "imaging_narrative_adapter_added": true,
+  "consult_treatment_section_adapter_added": true,
+  "synthetic_table_rows_extracted_count": 3,
+  "synthetic_key_value_pairs_extracted_count": 4,
+  "synthetic_card_rows_extracted_count": 2,
+  "synthetic_narrative_sections_extracted_count": 4,
+  "synthetic_total_visible_candidates": 19,
+  "review_bound_records_created": 21,
+  "review_queue_rows": 21,
+  "mkb_review_bound_count": 21,
+  "accepted_records": 0,
+  "category_propagated": true,
+  "specialty_propagated": true,
+  "raw_ocr_text_in_report": false,
+  "private_paths_in_report": false,
+  "limitations": [
+    "Synthetic validation only; no private source documents, images, PDFs, or OCR dumps are used.",
+    "The primitives capture visible observations and source sections only; clinical meaning is not inferred from diagnosis, treatment, imaging, medication, or recommendation headings.",
+    "Coverage is deterministic and conservative; real-world OCR quality and layout variation may still require operator correction."
+  ]
+}
