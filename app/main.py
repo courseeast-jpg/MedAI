@@ -1771,6 +1771,29 @@ ADVANCED_DIAGNOSTIC_FIELDS = [
     "review_bound_records_written_count",
     "source_modality",
     "run_review_summary",
+    "files_processed",
+    "ocr_attempted",
+    "ocr_available",
+    "ocr_recovered",
+    "ocr_text_character_bucket",
+    "ocr_line_count_bucket",
+    "ocr_has_table_like_layout",
+    "ocr_has_key_value_like_layout",
+    "ocr_has_section_heading_like_layout",
+    "extractor_dispatch_attempted",
+    "extractor_dispatch_family",
+    "extraction_candidates_created",
+    "extraction_candidates_after_filter",
+    "extraction_candidates_dropped",
+    "drop_reason_counts",
+    "records_written",
+    "records_deduped",
+    "review_bound_records_written",
+    "selected_document_category",
+    "selected_specialty_domain",
+    "document_type_before_extraction",
+    "document_type_after_extraction",
+    "runtime_diagnostic_summary",
     "external_api_used",
 ]
 
@@ -1910,6 +1933,8 @@ def render_run_result_card(item: dict) -> None:
             st.markdown(f"- **{label}:** {value}")
     if item.get("run_review_summary"):
         st.caption(str(item.get("run_review_summary")))
+    if item.get("runtime_diagnostic_summary"):
+        st.caption(str(item.get("runtime_diagnostic_summary")))
 
     st.markdown("#### What happened")
     for label, state in run_review_timeline_steps(item):

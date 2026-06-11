@@ -108,6 +108,29 @@ class TestFileResult:
     review_bound_records_written_count: int = 0
     source_modality: str | None = None
     run_review_summary: str | None = None
+    files_processed: int = 1
+    ocr_attempted: bool = False
+    ocr_available: bool = False
+    ocr_recovered: bool = False
+    ocr_text_character_bucket: str | None = None
+    ocr_line_count_bucket: str | None = None
+    ocr_has_table_like_layout: bool = False
+    ocr_has_key_value_like_layout: bool = False
+    ocr_has_section_heading_like_layout: bool = False
+    extractor_dispatch_attempted: bool = False
+    extractor_dispatch_family: str | None = None
+    extraction_candidates_created: int = 0
+    extraction_candidates_after_filter: int = 0
+    extraction_candidates_dropped: int = 0
+    drop_reason_counts: dict[str, int] = field(default_factory=dict)
+    records_written: int = 0
+    records_deduped: int = 0
+    review_bound_records_written: int = 0
+    selected_document_category: str | None = None
+    selected_specialty_domain: str | None = None
+    document_type_before_extraction: str | None = None
+    document_type_after_extraction: str | None = None
+    runtime_diagnostic_summary: str | None = None
     image_ocr_available: bool = False
     image_ocr_attempted: bool = False
     image_ocr_engine: str | None = None
@@ -160,6 +183,10 @@ class TestRunSummary:
     def safe_ocr_pipeline_diagnostics(self) -> dict[str, Any]:
         return build_safe_ocr_pipeline_diagnostics(self)
 
+    @property
+    def safe_real_run_extraction_diagnostics(self) -> dict[str, Any]:
+        return build_safe_real_run_extraction_diagnostics(self)
+
 
 def build_safe_ocr_pipeline_diagnostics(summary: TestRunSummary) -> dict[str, Any]:
     """Return count-only OCR extraction diagnostics for reports/UI.
@@ -186,6 +213,62 @@ def build_safe_ocr_pipeline_diagnostics(summary: TestRunSummary) -> dict[str, An
             int(item.get("review_bound_records_written_count") or 0) for item in summary.results
         ),
         "per_file_document_type": per_file_document_type,
+    }
+
+
+def build_safe_real_run_extraction_diagnostics(summary: TestRunSummary) -> dict[str, Any]:
+    """Return 14C runtime counters without raw text, names, or paths."""
+    per_file: dict[str, dict[str, Any]] = {}
+    drop_reason_counts: dict[str, int] = {}
+    for index, item in enumerate(summary.results, start=1):
+        safe_id = f"file_{index:03d}"
+        reasons = dict(item.get("drop_reason_counts") or {})
+        for reason, count in reasons.items():
+            drop_reason_counts[str(reason)] = drop_reason_counts.get(str(reason), 0) + int(count or 0)
+        per_file[safe_id] = {
+            "ocr_attempted": bool(item.get("ocr_attempted")),
+            "ocr_available": bool(item.get("ocr_available")),
+            "ocr_recovered": bool(item.get("ocr_recovered")),
+            "ocr_text_character_bucket": item.get("ocr_text_character_bucket"),
+            "ocr_line_count_bucket": item.get("ocr_line_count_bucket"),
+            "ocr_has_table_like_layout": bool(item.get("ocr_has_table_like_layout")),
+            "ocr_has_key_value_like_layout": bool(item.get("ocr_has_key_value_like_layout")),
+            "ocr_has_section_heading_like_layout": bool(item.get("ocr_has_section_heading_like_layout")),
+            "extractor_dispatch_attempted": bool(item.get("extractor_dispatch_attempted")),
+            "extractor_dispatch_family": item.get("extractor_dispatch_family"),
+            "extraction_candidates_created": int(item.get("extraction_candidates_created") or 0),
+            "extraction_candidates_after_filter": int(item.get("extraction_candidates_after_filter") or 0),
+            "extraction_candidates_dropped": int(item.get("extraction_candidates_dropped") or 0),
+            "drop_reason_counts": reasons,
+            "records_written": int(item.get("records_written") or 0),
+            "records_deduped": int(item.get("records_deduped") or 0),
+            "review_bound_records_written": int(item.get("review_bound_records_written") or 0),
+            "selected_document_category": item.get("selected_document_category"),
+            "selected_specialty_domain": item.get("selected_specialty_domain"),
+            "source_modality": item.get("source_modality"),
+            "document_type_before_extraction": item.get("document_type_before_extraction"),
+            "document_type_after_extraction": item.get("document_type_after_extraction"),
+        }
+    return {
+        "files_processed": int(len(summary.files_processed)),
+        "ocr_attempted": sum(1 for item in summary.results if item.get("ocr_attempted")),
+        "ocr_available": sum(1 for item in summary.results if item.get("ocr_available")),
+        "ocr_recovered": sum(1 for item in summary.results if item.get("ocr_recovered")),
+        "extractor_dispatch_attempted": sum(1 for item in summary.results if item.get("extractor_dispatch_attempted")),
+        "extraction_candidates_created": sum(int(item.get("extraction_candidates_created") or 0) for item in summary.results),
+        "extraction_candidates_after_filter": sum(
+            int(item.get("extraction_candidates_after_filter") or 0) for item in summary.results
+        ),
+        "extraction_candidates_dropped": sum(
+            int(item.get("extraction_candidates_dropped") or 0) for item in summary.results
+        ),
+        "drop_reason_counts": drop_reason_counts,
+        "records_written": sum(int(item.get("records_written") or 0) for item in summary.results),
+        "records_deduped": sum(int(item.get("records_deduped") or 0) for item in summary.results),
+        "review_bound_records_written": sum(
+            int(item.get("review_bound_records_written") or 0) for item in summary.results
+        ),
+        "per_file": per_file,
     }
 
 
@@ -356,6 +439,7 @@ def write_test_run_reports(summary: TestRunSummary) -> tuple[Path, Path]:
         "review_count": summary.review_count,
         "error_count": summary.error_count,
         "safe_ocr_pipeline_diagnostics": summary.safe_ocr_pipeline_diagnostics,
+        "safe_real_run_extraction_diagnostics": summary.safe_real_run_extraction_diagnostics,
         "results": summary.results,
     }
     LATEST_JSON_REPORT.write_text(json.dumps(data, indent=2), encoding="utf-8")
@@ -460,6 +544,8 @@ def _process_one_file(
     try:
         suffix = source_path.suffix.lower()
         source_modality = ""
+        image_ocr = LocalImageOcrResult(available=False, attempted=False)
+        ocr_shape = _ocr_text_shape_diagnostics("")
         if suffix == ".pdf":
             result = execution_pipeline.process_pdf(source_path, specialty=specialty, session_id=run_id)
         elif suffix == ".txt":
@@ -487,9 +573,17 @@ def _process_one_file(
                     selected_extractor="local_image_ocr_unavailable",
                     error="Local image OCR extractor is safely unavailable in this runtime.",
                     image_ocr=image_ocr,
+                    specialty=specialty,
+                    document_category=document_category,
                 )
             if not image_ocr.text.strip():
-                return _review_bound_no_text_file_result(source_path, image_ocr=image_ocr)
+                return _review_bound_no_text_file_result(
+                    source_path,
+                    image_ocr=image_ocr,
+                    specialty=specialty,
+                    document_category=document_category,
+                )
+            ocr_shape = _ocr_text_shape_diagnostics(image_ocr.text)
             result = _process_text_with_optional_context(
                 execution_pipeline,
                 image_ocr.text,
@@ -521,14 +615,39 @@ def _process_one_file(
         ocr_gate_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
         if suffix in IMAGE_TEST_EXTENSIONS:
             ocr_gate_marker.update(_image_ocr_gate_marker(image_ocr))
-        document_type = display_document_type(
+        document_type_before_extraction = display_document_type(
             _runtime_document_type_candidate(audit, extractor_result, ocr_gate_marker),
             text=str(extractor_result.get("raw_text") or extractor_result.get("text") or ""),
         )
+        document_type = document_type_before_extraction
         if document_type == UNKNOWN_DOCUMENT_LABEL:
             extracted_candidate_type = _document_type_from_extracted_candidates(extractor_result)
             if extracted_candidate_type:
                 document_type = display_document_type(extracted_candidate_type)
+        dispatch_count = int(extractor_result.get("cross_domain_extractor_dispatch_count") or 0)
+        candidates_created = int(extractor_result.get("cross_domain_extraction_candidates_count") or 0)
+        candidates_after_filter = int(extractor_result.get("cross_domain_candidates_after_filter_count") or 0)
+        records_written = int(extractor_result.get("cross_domain_records_written_count") or 0)
+        records_deduped = int(extractor_result.get("cross_domain_records_deduped_count") or 0)
+        review_bound_records_written = int(
+            extractor_result.get("cross_domain_review_bound_records_written_count") or 0
+        )
+        candidates_dropped = max(0, candidates_created - candidates_after_filter)
+        drop_reason_counts = _drop_reason_counts(
+            candidates_created=candidates_created,
+            candidates_after_filter=candidates_after_filter,
+            records_deduped=records_deduped,
+            ocr_recovered=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.text_visibility == "recovered"),
+            extractor_dispatch_attempted=dispatch_count > 0,
+        )
+        runtime_summary = _runtime_diagnostic_summary(
+            ocr_recovered=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.text_visibility == "recovered"),
+            extractor_dispatch_attempted=dispatch_count > 0,
+            candidates_created=candidates_created,
+            records_written=records_written,
+            records_deduped=records_deduped,
+            review_bound_records_written=review_bound_records_written,
+        )
         ocr_quality = normalize_text_quality_label(
             audit.get("ocr_quality_band"),
             audit.get("input_quality_band"),
@@ -606,20 +725,41 @@ def _process_one_file(
             extracted_medical_fact_record_states=dict(
                 extractor_result.get("extracted_medical_fact_record_states") or {}
             ),
-            extractor_dispatch_count=int(extractor_result.get("cross_domain_extractor_dispatch_count") or 0),
-            extraction_candidates_count=int(extractor_result.get("cross_domain_extraction_candidates_count") or 0),
-            candidates_after_filter_count=int(extractor_result.get("cross_domain_candidates_after_filter_count") or 0),
-            records_written_count=int(extractor_result.get("cross_domain_records_written_count") or 0),
-            records_deduped_count=int(extractor_result.get("cross_domain_records_deduped_count") or 0),
-            review_bound_records_written_count=int(
-                extractor_result.get("cross_domain_review_bound_records_written_count") or 0
-            ),
+            extractor_dispatch_count=dispatch_count,
+            extraction_candidates_count=candidates_created,
+            candidates_after_filter_count=candidates_after_filter,
+            records_written_count=records_written,
+            records_deduped_count=records_deduped,
+            review_bound_records_written_count=review_bound_records_written,
             source_modality=str(extractor_result.get("source_modality") or source_modality or ""),
             run_review_summary=(
                 _run_review_summary_from_extraction(extractor_result)
                 if str(extractor_result.get("source_modality") or source_modality or "") == "image_ocr"
                 else None
             ),
+            files_processed=1,
+            ocr_attempted=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.attempted),
+            ocr_available=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.available),
+            ocr_recovered=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.text_visibility == "recovered"),
+            ocr_text_character_bucket=ocr_shape["ocr_text_character_bucket"],
+            ocr_line_count_bucket=ocr_shape["ocr_line_count_bucket"],
+            ocr_has_table_like_layout=ocr_shape["ocr_has_table_like_layout"],
+            ocr_has_key_value_like_layout=ocr_shape["ocr_has_key_value_like_layout"],
+            ocr_has_section_heading_like_layout=ocr_shape["ocr_has_section_heading_like_layout"],
+            extractor_dispatch_attempted=dispatch_count > 0,
+            extractor_dispatch_family=document_type_before_extraction,
+            extraction_candidates_created=candidates_created,
+            extraction_candidates_after_filter=candidates_after_filter,
+            extraction_candidates_dropped=candidates_dropped,
+            drop_reason_counts=drop_reason_counts,
+            records_written=records_written,
+            records_deduped=records_deduped,
+            review_bound_records_written=review_bound_records_written,
+            selected_document_category=document_category,
+            selected_specialty_domain=specialty,
+            document_type_before_extraction=document_type_before_extraction,
+            document_type_after_extraction=document_type,
+            runtime_diagnostic_summary=runtime_summary,
             image_ocr_available=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.available),
             image_ocr_attempted=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.attempted),
             image_ocr_engine=image_ocr.engine if suffix in IMAGE_TEST_EXTENSIONS else None,
@@ -794,6 +934,8 @@ def _review_bound_unavailable_file_result(
     selected_extractor: str,
     error: str,
     image_ocr: LocalImageOcrResult | None = None,
+    specialty: str = "",
+    document_category: str = "",
 ) -> TestFileResult:
     destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)
     image_ocr = image_ocr or LocalImageOcrResult(
@@ -829,12 +971,37 @@ def _review_bound_unavailable_file_result(
         image_ocr_text_visibility=image_ocr.text_visibility,
         image_ocr_review_only=True,
         image_ocr_auto_accept_allowed=False,
+        files_processed=1,
+        ocr_attempted=bool(image_ocr.attempted),
+        ocr_available=bool(image_ocr.available),
+        ocr_recovered=False,
+        ocr_text_character_bucket="0",
+        ocr_line_count_bucket="0",
+        source_modality="image_ocr",
+        selected_document_category=document_category,
+        selected_specialty_domain=specialty,
+        document_type_before_extraction=UNKNOWN_DOCUMENT_LABEL,
+        document_type_after_extraction=UNKNOWN_DOCUMENT_LABEL,
+        runtime_diagnostic_summary=_runtime_diagnostic_summary(
+            ocr_recovered=False,
+            extractor_dispatch_attempted=False,
+            candidates_created=0,
+            records_written=0,
+            records_deduped=0,
+            review_bound_records_written=0,
+        ),
         external_api_used=False,
         error=error,
     )
 
 
-def _review_bound_no_text_file_result(source_path: Path, *, image_ocr: LocalImageOcrResult) -> TestFileResult:
+def _review_bound_no_text_file_result(
+    source_path: Path,
+    *,
+    image_ocr: LocalImageOcrResult,
+    specialty: str = "",
+    document_category: str = "",
+) -> TestFileResult:
     destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)
     return TestFileResult(
         file_name=source_path.name,
@@ -860,6 +1027,25 @@ def _review_bound_no_text_file_result(source_path: Path, *, image_ocr: LocalImag
         image_ocr_text_visibility=image_ocr.text_visibility,
         image_ocr_review_only=True,
         image_ocr_auto_accept_allowed=False,
+        files_processed=1,
+        ocr_attempted=True,
+        ocr_available=True,
+        ocr_recovered=False,
+        ocr_text_character_bucket="0",
+        ocr_line_count_bucket="0",
+        source_modality="image_ocr",
+        selected_document_category=document_category,
+        selected_specialty_domain=specialty,
+        document_type_before_extraction=UNKNOWN_DOCUMENT_LABEL,
+        document_type_after_extraction=UNKNOWN_DOCUMENT_LABEL,
+        runtime_diagnostic_summary=_runtime_diagnostic_summary(
+            ocr_recovered=False,
+            extractor_dispatch_attempted=False,
+            candidates_created=0,
+            records_written=0,
+            records_deduped=0,
+            review_bound_records_written=0,
+        ),
         external_api_used=False,
         operator_review_reason="manual_review_required",
         operator_reason_label="Manual review required",
@@ -946,6 +1132,73 @@ def _document_type_from_extracted_candidates(extractor_result: dict[str, Any]) -
     if kinds & {"key_value_field", "narrative_source_section"}:
         return "Clinical note"
     return None
+
+
+def _ocr_text_shape_diagnostics(text: str) -> dict[str, Any]:
+    lines = [line.strip() for line in str(text or "").splitlines() if line.strip()]
+    return {
+        "ocr_text_character_bucket": _count_bucket(len(str(text or "")), [(0, "0"), (500, "1-500"), (2000, "501-2000"), (5000, "2001-5000")], "5001+"),
+        "ocr_line_count_bucket": _count_bucket(len(lines), [(0, "0"), (10, "1-10"), (50, "11-50"), (200, "51-200")], "201+"),
+        "ocr_has_table_like_layout": any("|" in line or re.search(r"\S\s{2,}\S\s{2,}\S", line) for line in lines),
+        "ocr_has_key_value_like_layout": any(re.search(r"^[^:\n]{1,60}:\s*\S", line) for line in lines),
+        "ocr_has_section_heading_like_layout": any(
+            re.search(r"^[A-Za-z][A-Za-z /-]{2,48}:$", line)
+            or line.lower().rstrip(":") in {"findings", "impression", "results", "plan", "recommendation", "recommendations"}
+            for line in lines
+        ),
+    }
+
+
+def _count_bucket(value: int, bounds: list[tuple[int, str]], overflow: str) -> str:
+    if value <= 0:
+        return "0"
+    previous = 0
+    for upper, label in bounds:
+        if upper == 0:
+            continue
+        if previous < value <= upper:
+            return label
+        previous = upper
+    return overflow
+
+
+def _drop_reason_counts(
+    *,
+    candidates_created: int,
+    candidates_after_filter: int,
+    records_deduped: int,
+    ocr_recovered: bool,
+    extractor_dispatch_attempted: bool,
+) -> dict[str, int]:
+    dropped = max(0, int(candidates_created or 0) - int(candidates_after_filter or 0))
+    reasons: dict[str, int] = {}
+    if records_deduped > 0:
+        reasons["deduped_or_already_represented"] = int(records_deduped)
+    remaining = max(0, dropped - int(records_deduped or 0))
+    if remaining > 0:
+        reasons["filtered_before_write"] = remaining
+    if ocr_recovered and extractor_dispatch_attempted and int(candidates_created or 0) == 0:
+        reasons["no_parseable_visible_observations"] = 1
+    return reasons
+
+
+def _runtime_diagnostic_summary(
+    *,
+    ocr_recovered: bool,
+    extractor_dispatch_attempted: bool,
+    candidates_created: int,
+    records_written: int,
+    records_deduped: int,
+    review_bound_records_written: int,
+) -> str:
+    return (
+        f"OCR recovered: {'yes' if ocr_recovered else 'no'}; "
+        f"extractor dispatch: {'yes' if extractor_dispatch_attempted else 'no'}; "
+        f"candidates: {int(candidates_created or 0)}; "
+        f"written: {int(records_written or 0)}; "
+        f"deduped: {int(records_deduped or 0)}; "
+        f"review-bound written: {int(review_bound_records_written or 0)}"
+    )
 
 
 def _run_review_summary_from_extraction(extractor_result: dict[str, Any]) -> str:
