@@ -1,0 +1,97 @@
+{
+  "task_id": "MEDAI-OPERATOR-BASELINE-PARK-13B",
+  "current_head": "59b68c6",
+  "branch": "clinical-knowledge-architecture (detached worktree)",
+  "expected_baseline_head": "59b68c6",
+  "current_head_full_hash_validated": true,
+  "expected_head_reachable": true,
+  "recent_completed_blocks": [
+    {
+      "block": "12B file intake multiformat",
+      "sha": "a8b32bc",
+      "status": "supported multiformat intake and queueing works"
+    },
+    {
+      "block": "12C local image OCR routing",
+      "sha": "86b34f1",
+      "status": "guarded local image OCR routing works"
+    },
+    {
+      "block": "12D OCR review-bound routing",
+      "sha": "2f5f99e",
+      "status": "OCR-derived records remain quarantined and review-bound"
+    },
+    {
+      "block": "12E0 privacy regression repair",
+      "sha": "1142032",
+      "status": "historical 11F privacy regression repaired"
+    },
+    {
+      "block": "12A operator workflow UAT",
+      "sha": "b6f8e16",
+      "status": "synthetic end-to-end operator UAT passed"
+    },
+    {
+      "block": "13A operator console redesign",
+      "sha": "fab50a8",
+      "status": "operator-first console layout implemented"
+    },
+    {
+      "block": "13A-R1 stale queue state fix",
+      "sha": "59b68c6",
+      "status": "stale queue state copy fixed"
+    }
+  ],
+  "functional_baseline": {
+    "supported_file_types": [
+      "PDF",
+      "TXT",
+      "PNG",
+      "JPG/JPEG",
+      "TIFF/TIF",
+      "BMP",
+      "DOCX"
+    ],
+    "local_ocr_text_recovery": "guarded local recovery is available for supported image inputs",
+    "review_bound_mkb_persistence": "OCR-derived and extracted records remain quarantined until human review",
+    "mkb_explorer": "defaults and counts emphasize review-bound records",
+    "review_queue": "shows actionable records for human review",
+    "accept_reject_defer_behavior": "accept, reject, and defer apply to selected records only",
+    "no_cloud": true,
+    "no_auto_accept": true
+  },
+  "browser_acceptance_summary": {
+    "queue_count_visible": true,
+    "queued_files_observed": 12,
+    "start_reason_accurate": true,
+    "run_completed": true,
+    "stale_queue_message_fixed": true,
+    "review_bound_records_visible": true,
+    "review_queue_records_visible": true,
+    "cloud_apis_off": true,
+    "auto_accept_off": true
+  },
+  "known_limitations": [
+    "Real-world OCR quality may vary by scan or photo quality.",
+    "The active 28 records observed in the local browser database are pre-existing and were not proven OCR-derived by the 12E dry run.",
+    "Synthetic UAT does not use private medical files.",
+    "MedAI is not a medical device and does not diagnose or recommend treatment."
+  ],
+  "operator_run_command": "$env:MEDAI_ALLOW_EXTERNAL_API='false'; $env:MEDAI_LOCAL_ONLY='true'; python -m streamlit run app/main.py",
+  "next_recommended_future_block": "None required for this parking snapshot.",
+  "validation_receipts": {
+    "operator_console_13a_r1_report_present": true,
+    "operator_console_13a_r1_ready": true,
+    "operator_workflow_12a_report_present": true,
+    "operator_workflow_12a_ready": true
+  },
+  "key_report_files_exist": true,
+  "no_runtime_dbs_images_uploads_staged": true,
+  "bad_status_paths": [],
+  "raw_ocr_text_in_report": false,
+  "private_paths_in_report": false,
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "baseline_status": "parked"
+}
