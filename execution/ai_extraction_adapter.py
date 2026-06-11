@@ -75,6 +75,16 @@ class ExtractionWorkflowContext:
     line_count_bucket: str = "1-20"
     layout_hints: dict[str, bool] = field(default_factory=dict)
     fake_local_only: bool = True
+    raw_text_local_only: str = ""
+    payload_type: str = "redacted_text_layout_summary"
+    provider_mode: str = "disabled"
+    provider_name: str = "disabled"
+    model_name: str = "disabled"
+    operator_approval_state: str = "not_requested"
+    estimated_input_tokens: int = 256
+    estimated_output_tokens: int = 512
+    session_budget_cap_usd: float = 1.00
+    monthly_budget_cap_usd: float = 10.00
 
 
 @dataclass(frozen=True)
@@ -83,15 +93,24 @@ class ExtractionWorkflowResult:
     packages: list[dict]
     privacy_gate_status: str
     pii_redaction_required: bool
+    pii_detected_count: int
+    pii_redacted_count: int
+    pii_token_map_local_only: bool
     external_payload_allowed: bool
     external_payload_preview_available: bool
+    external_call_requires_operator_approval: bool
     external_api_used: bool
+    final_external_call_allowed: bool
     active_written_count: int
     auto_accept: bool
     review_required: bool
     review_bound_package_count: int
     package_types_tested: list[str]
     operator_preview: dict
+    privacy_gate_result: dict
+    payload_policy_result: dict
+    budget_guard_result: dict
+    audit_result: dict
     validation_errors: list[str] = field(default_factory=list)
 
 

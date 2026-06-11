@@ -10,9 +10,10 @@
 - Local OCR attempted: `True`
 - Text recovery status: `recovered`
 - Records created: `3`
+- Actionable review records: `3`
 - Review-bound before action: `3`
 - Active before action: `0`
-- Review queue before action: `3`
+- Review queue before action: `6`
 - Accept action passed: `True`
 - Reject action passed: `True`
 - Defer action passed: `True`

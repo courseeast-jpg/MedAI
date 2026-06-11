@@ -302,6 +302,29 @@ def run_fake_ai_extraction_workflow_for_test(source_class: str = "urinalysis_tab
     return workflow_result_to_public_dict(result)
 
 
+def run_fake_ai_extraction_privacy_gate_for_test(source_class: str = "urinalysis_table") -> dict[str, Any]:
+    """Run the 15B privacy-gated fake AI seam without external calls."""
+    from execution.ai_extraction_adapter import ExtractionWorkflowContext
+    from execution.extraction_workflow import run_ai_extraction_workflow, workflow_result_to_public_dict
+
+    result = run_ai_extraction_workflow(
+        ExtractionWorkflowContext(
+            source_class=source_class,
+            safe_source_document_id="source_fake_15b",
+            selected_document_category="AI-assisted extraction",
+            selected_specialty_domain="urology",
+            source_modality="fake_local_adapter",
+            raw_text_local_only=(
+                "Patient Jane Example; DOB 01/02/1970; MRN 123456; Accession CY-2026-0001; "
+                "Facility Park Medical Center; Provider Dr. Alice Clinician; "
+                "123 Main Street, Springfield, NY 10001; 555-123-4567; jane.example@example.com; "
+                "Insurance INS-ABC-12345; Collected 06/10/2026"
+            ),
+        )
+    )
+    return workflow_result_to_public_dict(result)
+
+
 def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
     for relative in (
         "test_input",

@@ -1,0 +1,84 @@
+{
+  "preview_label": "AI-assisted extraction draft - privacy gated, review-bound only",
+  "package_count": 3,
+  "packages": [
+    {
+      "document_type": "Cytology / pathology narrative",
+      "section_count": 6,
+      "observation_count": 6,
+      "sections": [
+        {
+          "heading": "Tests Ordered",
+          "observation_count": 1
+        },
+        {
+          "heading": "Diagnosis",
+          "observation_count": 1
+        },
+        {
+          "heading": "Recommendation",
+          "observation_count": 1
+        },
+        {
+          "heading": "Clinical History / ICD",
+          "observation_count": 1
+        },
+        {
+          "heading": "Cytology Information",
+          "observation_count": 1
+        },
+        {
+          "heading": "Gross Description",
+          "observation_count": 1
+        }
+      ]
+    },
+    {
+      "document_type": "Urinalysis",
+      "section_count": 1,
+      "observation_count": 5,
+      "sections": [
+        {
+          "heading": "Urinalysis Table",
+          "observation_count": 5
+        }
+      ]
+    },
+    {
+      "document_type": "Portal result cards",
+      "section_count": 1,
+      "observation_count": 8,
+      "sections": [
+        {
+          "heading": "Portal Result Cards",
+          "observation_count": 8
+        }
+      ]
+    }
+  ],
+  "privacy_gate_status": "redacted_payload_ready",
+  "pii_detected_count": 12,
+  "pii_redacted_count": 12,
+  "pii_categories": [
+    "ACCESSION",
+    "ADDRESS",
+    "DATE",
+    "DOB",
+    "EMAIL",
+    "FACILITY",
+    "INSURANCE_ID",
+    "MRN",
+    "PATIENT",
+    "PHONE",
+    "PROVIDER"
+  ],
+  "redacted_payload_preview_available": true,
+  "external_call_approval_status": "not_requested",
+  "budget_allowed": true,
+  "payload_policy_allowed": false,
+  "final_external_call_allowed": false,
+  "operator_notice": "No external AI call was made",
+  "external_api_used": false,
+  "auto_accept": false,
+  "review_required": true
+}

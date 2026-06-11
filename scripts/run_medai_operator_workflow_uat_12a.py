@@ -209,7 +209,12 @@ def run_uat() -> dict[str, Any]:
         mkb_model = build_mkb_explorer_model(context.sql_store)
         review_model = build_mkb_explorer_model(context.sql_store, tier_filter="review_bound")
         review_rows = list(review_model["rows"])
-        record_ids = [row["record_id_full"] for row in review_rows]
+        actionable_review_rows = [
+            row
+            for row in review_rows
+            if row.get("fact_type") in {"test_result", "observation"} and row.get("record_id_full")
+        ]
+        record_ids = [row["record_id_full"] for row in actionable_review_rows]
 
         records_before = [context.sql_store.get_record(record_id) for record_id in record_ids]
         category_propagated = all(
@@ -270,6 +275,7 @@ def run_uat() -> dict[str, Any]:
             "local_ocr_attempted": bool(summary.results and summary.results[0].get("image_ocr_attempted")),
             "text_recovery_status": str(summary.results[0].get("image_ocr_text_visibility") if summary.results else ""),
             "records_created": len(record_ids),
+            "actionable_review_records_count": len(actionable_review_rows),
             "records_review_bound_before_action": review_bound_before,
             "records_active_before_action": active_before,
             "review_queue_count_before_action": int(review_model["row_count"]),
@@ -381,6 +387,7 @@ def _markdown(report: dict[str, Any]) -> str:
         f"- Local OCR attempted: `{report['local_ocr_attempted']}`",
         f"- Text recovery status: `{report['text_recovery_status']}`",
         f"- Records created: `{report['records_created']}`",
+        f"- Actionable review records: `{report['actionable_review_records_count']}`",
         f"- Review-bound before action: `{report['records_review_bound_before_action']}`",
         f"- Active before action: `{report['records_active_before_action']}`",
         f"- Review queue before action: `{report['review_queue_count_before_action']}`",

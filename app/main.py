@@ -1423,6 +1423,23 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
     packages = list(preview.get("packages") or [])
     st.markdown("#### AI-assisted extraction drafts")
     st.caption("Review-bound only. Fake local adapter. No external API. No auto-accept.")
+    st.info("No external AI call was made")
+    st.caption(
+        "Privacy gate: "
+        f"{preview.get('privacy_gate_status') or 'not evaluated'} | "
+        f"PII categories: {', '.join(preview.get('pii_categories') or []) or 'none'} | "
+        f"PII found/redacted: {int(preview.get('pii_detected_count') or 0)}/"
+        f"{int(preview.get('pii_redacted_count') or 0)}"
+    )
+    st.caption(
+        "External approval: "
+        f"{preview.get('external_call_approval_status') or 'not_requested'} | "
+        f"Budget allowed: {bool(preview.get('budget_allowed'))} | "
+        f"Payload policy allowed: {bool(preview.get('payload_policy_allowed'))} | "
+        "Final external call allowed: False"
+    )
+    if preview.get("redacted_payload_preview_available"):
+        st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:
         st.info("No AI-assisted extraction draft packages available.")
         return

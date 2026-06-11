@@ -1,0 +1,33 @@
+{
+  "blocker_name": "MEDAI-15B-REGRESSION-12A-DEFER-UAT-REPAIR",
+  "root_cause": "The 12A UAT harness selected the first three review rows by timestamp for accept/reject/defer action proof. The review row order can include rows outside the lab action fact types, so action proof could fail even though review-bound actionable records existed.",
+  "cause_classification": "E. Missing fixture/state setup for defer action",
+  "exact_fix": "Filter 12A UAT action proof candidates to review-bound rows with fact_type test_result or observation before applying accept/reject/defer actions, and report the actionable candidate count.",
+  "files_changed": [
+    "12A UAT validation harness",
+    "15B repair report JSON",
+    "15B repair report markdown"
+  ],
+  "before_command_results": {
+    "python -m pytest tests/test_medai_operator_usability_polish_13c.py": "failed before repair through nested 12A readiness",
+    "python scripts/run_medai_operator_workflow_uat_12a.py": "intermittently not_ready before repair",
+    "defer_action_passed": false
+  },
+  "after_command_results": {
+    "python scripts/run_medai_operator_workflow_uat_12a.py": "passed",
+    "python -m pytest tests/test_medai_operator_usability_polish_13c.py": "passed",
+    "python -m pytest tests/test_medai_ai_extraction_privacy_gate_15b.py": "passed",
+    "python -m pytest tests/test_medai_ai_extraction_workflow_seam_15a.py": "passed",
+    "python scripts/run_medai_ai_extraction_privacy_gate_15b.py": "passed",
+    "python scripts/run_medai_ai_extraction_workflow_seam_15a.py": "passed"
+  },
+  "defer_action_passed_after_repair": true,
+  "regression_status": "passed",
+  "privacy_status": "passed",
+  "external_api_used": false,
+  "final_external_call_allowed": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_bound_package_count_15b": 3,
+  "commit_decision": "commit allowed after final clean status and safe detached-worktree push checks"
+}

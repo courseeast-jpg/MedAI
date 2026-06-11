@@ -1,0 +1,10 @@
+{
+  "payload_type": "redacted_text_layout_summary",
+  "provider_mode": "disabled",
+  "provider_name": "disabled",
+  "operator_approval_state": "not_requested",
+  "payload_policy_allowed": false,
+  "final_external_call_allowed": false,
+  "external_api_used": false,
+  "fail_closed_reason": "provider_mode_not_external_candidate"
+}

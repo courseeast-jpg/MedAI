@@ -11,12 +11,20 @@ from dataclasses import asdict
 from typing import Any
 
 from app.source_extraction_packages import source_package_from_ai_draft
+from execution.ai_budget_guard import AIBudgetGuard, budget_guard_to_public_dict
 from execution.ai_extraction_adapter import (
     AIExtractionAdapterInput,
     AIExtractionPackageDraft,
     ExtractionWorkflowContext,
     ExtractionWorkflowResult,
     FakeAIExtractionAdapter,
+)
+from execution.ai_payload_policy import AIPayloadPolicy, payload_policy_to_public_dict
+from execution.ai_privacy_gate import (
+    AIExternalCallApprovalState,
+    build_ai_external_call_audit_record,
+    privacy_gate_to_public_dict,
+    run_ai_privacy_gate,
 )
 
 
@@ -41,7 +49,25 @@ def run_ai_extraction_workflow(
     adapter: Any | None = None,
 ) -> ExtractionWorkflowResult:
     adapter = adapter or FakeAIExtractionAdapter()
-    privacy = _privacy_gate_placeholder(context)
+    privacy = run_ai_privacy_gate(raw_text=context.raw_text_local_only, payload_type=context.payload_type)
+    approval_state = AIExternalCallApprovalState(state=context.operator_approval_state)
+    budget = AIBudgetGuard(
+        provider_name=context.provider_name,
+        model_name=context.model_name,
+        session_budget_cap_usd=context.session_budget_cap_usd,
+        monthly_budget_cap_usd=context.monthly_budget_cap_usd,
+    ).evaluate(
+        estimated_input_tokens=context.estimated_input_tokens,
+        estimated_output_tokens=context.estimated_output_tokens,
+    )
+    payload_policy = AIPayloadPolicy().evaluate(
+        payload_type=context.payload_type,
+        privacy_gate_result=privacy,
+        operator_approval_state=approval_state,
+        budget_result=budget,
+        provider_mode=context.provider_mode,
+        provider_name=context.provider_name,
+    )
     adapter_input = AIExtractionAdapterInput(
         source_class=context.source_class,
         safe_source_document_id=context.safe_source_document_id,
@@ -55,21 +81,46 @@ def run_ai_extraction_workflow(
     draft = adapter.extract(adapter_input)
     errors = validate_ai_package_draft(draft)
     packages = [] if errors else [source_package_from_ai_draft(draft)]
-    operator_preview = build_operator_preview(packages)
+    audit = build_ai_external_call_audit_record(
+        source_id=context.safe_source_document_id,
+        adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
+        privacy_gate_result=privacy,
+        payload_policy_result=payload_policy,
+        budget_result=budget,
+        approval_state=approval_state,
+    )
+    privacy_public = privacy_gate_to_public_dict(privacy)
+    payload_policy_public = payload_policy_to_public_dict(payload_policy)
+    budget_public = budget_guard_to_public_dict(budget)
+    operator_preview = build_operator_preview(
+        packages,
+        privacy_gate_result=privacy_public,
+        payload_policy_result=payload_policy_public,
+        budget_guard_result=budget_public,
+    )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
         packages=packages,
-        privacy_gate_status=privacy["privacy_gate_status"],
-        pii_redaction_required=privacy["pii_redaction_required"],
-        external_payload_allowed=privacy["external_payload_allowed"],
-        external_payload_preview_available=privacy["external_payload_preview_available"],
+        privacy_gate_status=privacy.privacy_gate_status,
+        pii_redaction_required=privacy.pii_detected_count > 0,
+        pii_detected_count=privacy.pii_detected_count,
+        pii_redacted_count=privacy.pii_redacted_count,
+        pii_token_map_local_only=privacy.pii_token_map_local_only,
+        external_payload_allowed=False,
+        external_payload_preview_available=privacy.redacted_payload_preview_available,
+        external_call_requires_operator_approval=True,
         external_api_used=False,
+        final_external_call_allowed=False,
         active_written_count=0,
         auto_accept=False,
         review_required=True,
         review_bound_package_count=len(packages),
         package_types_tested=[str(getattr(draft, "document_type", "Unknown"))],
         operator_preview=operator_preview,
+        privacy_gate_result=privacy_public,
+        payload_policy_result=payload_policy_public,
+        budget_guard_result=budget_public,
+        audit_result=audit,
         validation_errors=errors,
     )
 
@@ -97,7 +148,13 @@ def validate_ai_package_draft(draft: AIExtractionPackageDraft) -> list[str]:
     return sorted(set(errors))
 
 
-def build_operator_preview(packages: list[dict[str, Any]]) -> dict[str, Any]:
+def build_operator_preview(
+    packages: list[dict[str, Any]],
+    *,
+    privacy_gate_result: dict[str, Any] | None = None,
+    payload_policy_result: dict[str, Any] | None = None,
+    budget_guard_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
         preview_packages.append(
@@ -132,6 +189,20 @@ def build_operator_preview(packages: list[dict[str, Any]]) -> dict[str, Any]:
         "packages": preview_packages,
         "review_required": True,
         "auto_accept": False,
+        "ai_external_api_status": "disabled",
+        "privacy_gate_status": (privacy_gate_result or {}).get("privacy_gate_status", ""),
+        "pii_detected_count": int((privacy_gate_result or {}).get("pii_detected_count", 0)),
+        "pii_redacted_count": int((privacy_gate_result or {}).get("pii_redacted_count", 0)),
+        "pii_categories": sorted((privacy_gate_result or {}).get("token_category_counts", {}).keys()),
+        "redacted_payload_preview_available": bool(
+            (privacy_gate_result or {}).get("redacted_payload_preview_available", False)
+        ),
+        "external_call_approval_status": (payload_policy_result or {}).get("operator_approval_state", "not_requested"),
+        "budget_allowed": bool((budget_guard_result or {}).get("budget_allowed", False)),
+        "budget_fail_reason": (budget_guard_result or {}).get("budget_fail_reason", ""),
+        "payload_policy_allowed": bool((payload_policy_result or {}).get("payload_policy_allowed", False)),
+        "final_external_call_allowed": False,
+        "operator_notice": "No external AI call was made",
     }
 
 
@@ -141,17 +212,9 @@ def workflow_result_to_public_dict(result: ExtractionWorkflowResult) -> dict[str
     payload["active_written_count"] = 0
     payload["auto_accept"] = False
     payload["review_required"] = True
+    payload["final_external_call_allowed"] = False
+    payload["external_payload_allowed"] = False
     return payload
-
-
-def _privacy_gate_placeholder(context: ExtractionWorkflowContext) -> dict[str, Any]:
-    return {
-        "privacy_gate_status": "placeholder_passed_fake_local_only",
-        "pii_redaction_required": False,
-        "external_payload_allowed": bool(False if context.fake_local_only else False),
-        "external_payload_preview_available": False,
-        "placeholder_tokens_supported": list(PLACEHOLDER_TOKENS),
-    }
 
 
 __all__ = [

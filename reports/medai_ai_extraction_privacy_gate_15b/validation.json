@@ -1,0 +1,23 @@
+{
+  "privacy_gate_model_exists": true,
+  "payload_policy_exists": true,
+  "budget_guard_exists": true,
+  "audit_record_exists": true,
+  "external_api_used_false": true,
+  "final_external_call_allowed_false": true,
+  "active_written_count_zero": true,
+  "auto_accept_false": true,
+  "review_bound_packages_visible": true,
+  "operator_preview_has_body": true,
+  "token_map_absent_from_public_reports": true,
+  "focused_15b_tests": {
+    "command": "python -m pytest tests/test_medai_ai_extraction_privacy_gate_15b.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15a_tests": {
+    "command": "python -m pytest tests/test_medai_ai_extraction_workflow_seam_15a.py",
+    "returncode": 0,
+    "skipped": false
+  }
+}

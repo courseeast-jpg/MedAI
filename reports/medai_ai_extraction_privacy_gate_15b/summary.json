@@ -1,0 +1,25 @@
+{
+  "block": "MEDAI-AI-EXTRACTION-PRIVACY-GATE-15B",
+  "external_api_used": false,
+  "final_external_call_allowed": false,
+  "auto_accept": false,
+  "active_written_count": 0,
+  "review_bound_package_count": 3,
+  "package_types_tested": [
+    "Cytology / pathology narrative",
+    "Urinalysis",
+    "Portal result cards"
+  ],
+  "privacy_gate_status": "redacted_payload_ready",
+  "payload_policy_allowed": false,
+  "budget_allowed": true,
+  "fail_closed_reason": "provider_mode_not_external_candidate",
+  "redacted_payload_evidence": {
+    "redacted_payload_hash": "b330f74306a0",
+    "payload_type": "redacted_text_layout_summary",
+    "pii_detected_count": 12,
+    "pii_redacted_count": 12,
+    "token_categories_count": 11
+  },
+  "privacy_result": "passed"
+}
