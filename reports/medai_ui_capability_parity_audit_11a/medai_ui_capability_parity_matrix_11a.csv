@@ -1,0 +1,35 @@
+category,expected_capability,evidence_source,current_visibility,current_functional_status,missing_or_degraded_reason,risk_level,recommended_action,suggested_repair_block_id
+Primary operator workflow,document upload/queue,app/test_launcher.py,default,available,Run & Review queue is visible.,low,Keep.,none
+Primary operator workflow,start run,app/main.py,default,available/degraded,Normal pipeline path requires execution; adapter fallback covers TXT lab-style text.,medium,Clarify degraded labels.,MEDAI-UI-RUN-REVIEW-REPAIR-11B
+Primary operator workflow,current run status,app/main.py,default,available,Current run panel remains visible.,low,Keep.,none
+Primary operator workflow,extracted information preview,app/extracted_information_preview.py,default,available,Preview renders from pipeline and adapter fallback.,low,Keep.,none
+Primary operator workflow,MKB persistence,app/local_adapter_fallback_processor.py,default,available,Adapter fallback writes quarantined test_result records.,low,Keep review-bound.,none
+Primary operator workflow,operator accept/reject/defer,app/operator_review_actions.py,default,available,One-record controls are rendered from preview rows.,low,Keep no bulk accept.,none
+Primary operator workflow,specialty/domain selector,app/config.py; app/main.py,code-only,unexpectedly missing,Only document category is exposed in current primary workflow; domain breadth is reduced.,high,Restore explicit domain selector without changing extraction rules.,MEDAI-UI-CAPABILITY-RESTORE-11B
+Primary operator workflow,document category selector,app/main.py,default,available,"Document category is visible, but it is not full domain selection.",medium,Keep and distinguish from specialty.,MEDAI-UI-CAPABILITY-RESTORE-11B
+MKB / knowledge workflow,MKB Explorer,app/main.py,code-only,unexpectedly missing,render_mkb_tab exists but is not reachable from current tab list.,high,Restore safe read-only tab visibility.,MEDAI-UI-CAPABILITY-RESTORE-11B
+MKB / knowledge workflow,review-bound records,app/operator_review_actions.py,default,available,Preview/action plans expose review-bound records.,low,Keep.,none
+MKB / knowledge workflow,active/quarantined/superseded tiers,app/operator_review_actions.py,code-only,degraded,Tier filter exists in MKB Explorer but tab is disconnected.,medium,Restore MKB Explorer visibility.,MEDAI-UI-CAPABILITY-RESTORE-11B
+MKB / knowledge workflow,retrieval proof,reports/tests,report-only,available,Validation reports prove SQLite retrieval.,low,Keep in reports.,none
+MKB / knowledge workflow,specialty routing,app/test_launcher.py,code-only,degraded,"Pipeline call accepts specialty, but visible selector is category-labeled and limited.",medium,Restore explicit selector.,MEDAI-UI-CAPABILITY-RESTORE-11B
+MKB / knowledge workflow,conflict review,app/conflict_review.py; app/main.py,code-only,disconnected,render_conflict_tab exists but is not reachable.,medium,Restore after MKB Explorer.,MEDAI-UI-CAPABILITY-RESTORE-11C
+Safety / governance,privacy audit,clinical_knowledge/privacy/report_privacy.py,advanced,available,Safety dashboard and report privacy checks exist.,low,Keep advanced.,none
+Safety / governance,safe mode,app/config.py,advanced/code,available,Safe mode thresholds and status panels exist.,low,Keep.,none
+Safety / governance,DDI/medication safety,app/clinical_knowledge_safety_viewer.py,advanced,available,Safety dashboard surfaces DDI/medication panels.,low,Keep.,none
+Safety / governance,no auto-accept,app/operator_review_actions.py,default/code,available,Action plans and reports keep auto_accept false.,low,Keep.,none
+Safety / governance,external API off,app/config.py,default/code,available,Validation scripts set local-only flags.,low,Keep.,none
+Safety / governance,audit reports,reports,advanced/report,available,Report archive and generated reports exist.,low,Keep.,none
+Validation / corpus workflow,single-document validation,current code/reports,operator panel,available,Validation command is listed in the control panel.,medium,Keep listed.,none
+Validation / corpus workflow,self-healing validation,scripts/run_medai_local_self_healing_validation_07.py,operator panel,available,Operator panel command exists.,medium,Keep.,none
+Validation / corpus workflow,batch audit,app/main.py,advanced,available,Validation Batch Audit tab is advanced-only.,low,Keep advanced.,none
+Validation / corpus workflow,full corpus audit,app/main.py,advanced,available,Full corpus section is nested in validation tab.,low,Keep advanced.,none
+Validation / corpus workflow,OCR review,app/test_launcher.py,default/code,available,OCR markers render in result cards.,low,Keep read-only.,none
+Validation / corpus workflow,unknown triage,reports/git history,report/history,deferred,Historical reports exist; not primary UI.,low,Defer.,MEDAI-UI-TRIAGE-PARKED
+Terminology workflow,terminology admin,app/terminology_readiness_viewer.py,advanced,available,Terminology Admin tab exists behind advanced tools.,low,Keep advanced.,none
+Terminology workflow,terminology lookup,app/clinical_knowledge_terminology_lookup_viewer.py,advanced/flagged,hidden,Lookup panel is feature-flag gated.,low,Keep gated.,none
+Terminology workflow,import readiness,app/terminology_readiness_viewer.py,advanced,available,Readiness panel exposes import status.,low,Keep.,none
+Terminology workflow,license-safe reporting,reports/b07_term_opt_in_planning,report,available,License-safe reports exist.,low,Keep.,none
+External connector / agent workflow,external agents/comments back,git history/reports,not visible,deferred,No safe local UI found; out of current MVP scope.,low,Defer.,MEDAI-UI-EXTERNAL-AGENTS-DEFERRED
+External connector / agent workflow,Claude/Gemini status,app/config.py,code/config,deferred,Config exists but external API behavior remains disabled.,low,Keep disabled.,out-of-scope
+External connector / agent workflow,cloud API disabled state,app/config.py,safety,available,Safety panels and reports show external_api_used false.,low,Keep.,none
+External connector / agent workflow,future/deferred connector status,app/clinical_knowledge_safety_viewer.py,advanced,available,Safety dashboard states local stubs/future connector status.,low,Keep advanced.,none
