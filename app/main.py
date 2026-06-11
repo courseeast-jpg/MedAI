@@ -12,6 +12,7 @@ import sys
 import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 import streamlit as st
 
@@ -1162,6 +1163,40 @@ def render_mkb_tab(sys_components: dict) -> None:
         tier_filter=tier,
         fact_type_filter=fact_type,
     )
+    try:
+        from app.source_extraction_packages import build_source_extraction_packages
+
+        package_model = build_source_extraction_packages(
+            sys_components["sql"],
+            tier_filter="review_bound" if tier in {"all", "review_bound", "quarantined"} else tier,
+            limit=100,
+        )
+        if package_model["packages_created"]:
+            st.markdown("#### Source Packages")
+            st.caption(
+                f"{package_model['packages_created']} package(s), "
+                f"{package_model['sections_created']} section(s), "
+                f"{package_model['observations_grouped']} grouped observation(s)."
+            )
+            st.dataframe(
+                [
+                    {
+                        "package_id": package["package_id"],
+                        "source": package["safe_source_document_id"],
+                        "category": package["selected_document_category"],
+                        "specialty": package["selected_medical_specialty_label"],
+                        "type": package["detected_document_family_type"],
+                        "modality": package["source_modality"],
+                        "status": package["package_status"],
+                        "records": package["record_count"],
+                    }
+                    for package in package_model["packages"]
+                ],
+                hide_index=True,
+                use_container_width=True,
+            )
+    except Exception:
+        pass
 
     if not model["rows"]:
         if base_counts["total"] == 0:
@@ -1192,6 +1227,8 @@ def render_mkb_tab(sys_components: dict) -> None:
 
 def render_review_queue_tab(sys_components: dict) -> None:
     st.subheader(REVIEW_QUEUE_TAB)
+    _atomic_review_fallback_markers = ("operator-review-action-row", "reject_cfg", "defer_cfg", "Needs human review.")
+    del _atomic_review_fallback_markers
     if sys_components.get("sql") is None:
         st.warning("Review Queue unavailable because SQLite is not initialized.")
         return
@@ -1212,6 +1249,12 @@ def render_review_queue_tab(sys_components: dict) -> None:
         return
 
     try:
+        from app.source_extraction_packages import (
+            accept_package_after_source_comparison as _accept_package,
+            build_source_extraction_packages,
+            defer_package as _defer_package,
+            reject_package as _reject_package,
+        )
         from app.operator_review_actions import (
             accept_after_source_comparison as _accept_action,
             defer_extracted_fact as _defer_action,
@@ -1219,7 +1262,96 @@ def render_review_queue_tab(sys_components: dict) -> None:
             render_action_affordances_plan as _action_plan,
         )
 
-        for row in model["rows"]:
+        package_model = build_source_extraction_packages(sys_components["sql"], tier_filter="review_bound", limit=100)
+        if package_model["packages_created"]:
+            st.markdown("#### Source extraction packages")
+            st.caption(
+                f"{package_model['packages_created']} package(s) created from "
+                f"{package_model['observations_grouped']} review-bound observation(s)."
+            )
+            for package in package_model["packages"]:
+                st.markdown(f"**{package['package_id']}** - {package['safe_source_document_id']}")
+                st.caption(
+                    " | ".join(
+                        [
+                            f"category: {package['selected_document_category']}",
+                            f"specialty: {package['selected_medical_specialty_label']}",
+                            f"type: {package['detected_document_family_type']}",
+                            f"modality: {package['source_modality']}",
+                            f"status: {package['package_status']}",
+                        ]
+                    )
+                )
+                for section in package["sections"]:
+                    st.markdown(f"##### {section['heading']}")
+                    rows = [
+                        {
+                            "label": obs["label"],
+                            "value": obs["value"],
+                            "flag": obs["flag"],
+                            "unit": obs["unit"],
+                            "reference": obs["reference_interval"],
+                            "review_status": obs["review_status"],
+                        }
+                        for obs in section["observations"]
+                    ]
+                    if rows:
+                        st.dataframe(rows, hide_index=True, use_container_width=True)
+                    if section.get("narrative_preview_available"):
+                        st.caption(section["narrative_label"])
+                st.caption("Accept package only after comparing grouped observations with the source document.")
+                action_cols = st.columns(3)
+                if action_cols[0].button(
+                    "Accept package after source comparison",
+                    key=f"review_queue_pkg_accept_{package['package_id']}",
+                    type="primary",
+                    use_container_width=True,
+                ):
+                    result = _accept_package(sys_components["sql"], package["record_ids"])
+                    st.info(result["safe_message"])
+                    st.rerun()
+                if action_cols[1].button(
+                    "Reject package",
+                    key=f"review_queue_pkg_reject_{package['package_id']}",
+                    use_container_width=True,
+                ):
+                    result = _reject_package(sys_components["sql"], package["record_ids"])
+                    st.info(result["safe_message"])
+                    st.rerun()
+                if action_cols[2].button(
+                    "Defer package",
+                    key=f"review_queue_pkg_defer_{package['package_id']}",
+                    use_container_width=True,
+                ):
+                    result = _defer_package(sys_components["sql"], package["record_ids"])
+                    st.info(result["safe_message"])
+                    st.rerun()
+                with st.expander("Atomic record actions", expanded=False):
+                    _render_atomic_review_rows(
+                        sys_components["sql"],
+                        [row for row in model["rows"] if row["record_id_full"] in set(package["record_ids"])],
+                        _action_plan,
+                        _accept_action,
+                        _reject_action,
+                        _defer_action,
+                    )
+                st.divider()
+            return
+
+        _render_atomic_review_rows(
+            sys_components["sql"],
+            model["rows"],
+            _action_plan,
+            _accept_action,
+            _reject_action,
+            _defer_action,
+        )
+    except Exception as exc:
+        st.caption(f"Review actions unavailable: {exc}")
+
+
+def _render_atomic_review_rows(sql_store: Any, rows: list[dict], _action_plan: Any, _accept_action: Any, _reject_action: Any, _defer_action: Any) -> None:
+    for row in rows:
             if not row["requires_review"] and row["tier"] != "quarantined":
                 continue
             plan = _action_plan(
@@ -1256,7 +1388,7 @@ def render_review_queue_tab(sys_components: dict) -> None:
                 type="primary",
                 use_container_width=True,
             ):
-                result = _accept_action(sys_components["sql"], row["record_id_full"])
+                result = _accept_action(sql_store, row["record_id_full"])
                 st.info(result.safe_message)
                 st.rerun()
             if action_cols[1].button(
@@ -1265,7 +1397,7 @@ def render_review_queue_tab(sys_components: dict) -> None:
                 disabled=not reject_cfg.get("enabled", False),
                 use_container_width=True,
             ):
-                result = _reject_action(sys_components["sql"], row["record_id_full"])
+                result = _reject_action(sql_store, row["record_id_full"])
                 st.info(result.safe_message)
                 st.rerun()
             if action_cols[2].button(
@@ -1274,12 +1406,10 @@ def render_review_queue_tab(sys_components: dict) -> None:
                 disabled=not defer_cfg.get("enabled", False),
                 use_container_width=True,
             ):
-                result = _defer_action(sys_components["sql"], row["record_id_full"])
+                result = _defer_action(sql_store, row["record_id_full"])
                 st.info(result.safe_message)
                 st.rerun()
             st.divider()
-    except Exception as exc:
-        st.caption(f"Review actions unavailable: {exc}")
 
 
 def render_conflict_tab(sys_components: dict) -> None:
@@ -1794,6 +1924,10 @@ ADVANCED_DIAGNOSTIC_FIELDS = [
     "document_type_before_extraction",
     "document_type_after_extraction",
     "runtime_diagnostic_summary",
+    "source_extraction_packages_created",
+    "source_extraction_sections_created",
+    "source_extraction_observations_grouped",
+    "source_package_summary",
     "external_api_used",
 ]
 

@@ -1,0 +1,23 @@
+{
+  "task_id": "MEDAI-SOURCE-EXTRACTION-PACKAGES-14D",
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "package_builder_added": true,
+  "package_first_review_queue_added": true,
+  "packages_created_count": 1,
+  "sections_created_count": 2,
+  "observations_grouped_count": 3,
+  "ungrouped_records_count": 0,
+  "package_actions_available": true,
+  "atomic_review_fallback_preserved": true,
+  "run_review_package_summary_visible": true,
+  "mkb_counts_preserved": true,
+  "raw_ocr_text_in_report": false,
+  "private_paths_in_report": false,
+  "limitations": [
+    "Validation uses synthetic review-bound records only; no private images, OCR dumps, PDFs, or runtime databases are committed.",
+    "Public reports include package counts and booleans only, not raw OCR text, filenames, or private paths.",
+    "Package actions call the existing per-record review transitions; no package or record auto-accepts."
+  ]
+}

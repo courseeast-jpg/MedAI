@@ -131,6 +131,10 @@ class TestFileResult:
     document_type_before_extraction: str | None = None
     document_type_after_extraction: str | None = None
     runtime_diagnostic_summary: str | None = None
+    source_extraction_packages_created: int = 0
+    source_extraction_sections_created: int = 0
+    source_extraction_observations_grouped: int = 0
+    source_package_summary: str | None = None
     image_ocr_available: bool = False
     image_ocr_attempted: bool = False
     image_ocr_engine: str | None = None
@@ -267,6 +271,15 @@ def build_safe_real_run_extraction_diagnostics(summary: TestRunSummary) -> dict[
         "records_deduped": sum(int(item.get("records_deduped") or 0) for item in summary.results),
         "review_bound_records_written": sum(
             int(item.get("review_bound_records_written") or 0) for item in summary.results
+        ),
+        "source_extraction_packages_created": sum(
+            int(item.get("source_extraction_packages_created") or 0) for item in summary.results
+        ),
+        "source_extraction_sections_created": sum(
+            int(item.get("source_extraction_sections_created") or 0) for item in summary.results
+        ),
+        "source_extraction_observations_grouped": sum(
+            int(item.get("source_extraction_observations_grouped") or 0) for item in summary.results
         ),
         "per_file": per_file,
     }
@@ -648,6 +661,20 @@ def _process_one_file(
             records_deduped=records_deduped,
             review_bound_records_written=review_bound_records_written,
         )
+        package_count = 1 if review_bound_records_written > 0 else 0
+        package_sections = len(
+            {
+                str(item.get("section_heading") or item.get("candidate_kind") or item.get("type") or "Unsectioned")
+                for item in list(extractor_result.get("extracted_medical_facts_preview_safe") or [])
+                if isinstance(item, dict)
+            }
+        )
+        package_summary = (
+            f"Source extraction packages created: {package_count}. "
+            "Structured source package created - human review required."
+            if package_count
+            else None
+        )
         ocr_quality = normalize_text_quality_label(
             audit.get("ocr_quality_band"),
             audit.get("input_quality_band"),
@@ -760,6 +787,10 @@ def _process_one_file(
             document_type_before_extraction=document_type_before_extraction,
             document_type_after_extraction=document_type,
             runtime_diagnostic_summary=runtime_summary,
+            source_extraction_packages_created=package_count,
+            source_extraction_sections_created=package_sections,
+            source_extraction_observations_grouped=review_bound_records_written,
+            source_package_summary=package_summary,
             image_ocr_available=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.available),
             image_ocr_attempted=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.attempted),
             image_ocr_engine=image_ocr.engine if suffix in IMAGE_TEST_EXTENSIONS else None,
@@ -990,6 +1021,9 @@ def _review_bound_unavailable_file_result(
             records_deduped=0,
             review_bound_records_written=0,
         ),
+        source_extraction_packages_created=0,
+        source_extraction_sections_created=0,
+        source_extraction_observations_grouped=0,
         external_api_used=False,
         error=error,
     )
@@ -1046,6 +1080,9 @@ def _review_bound_no_text_file_result(
             records_deduped=0,
             review_bound_records_written=0,
         ),
+        source_extraction_packages_created=0,
+        source_extraction_sections_created=0,
+        source_extraction_observations_grouped=0,
         external_api_used=False,
         operator_review_reason="manual_review_required",
         operator_reason_label="Manual review required",
