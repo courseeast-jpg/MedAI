@@ -515,14 +515,12 @@ def build_system_components(
     }
 
 
-def render_system_status(state: SystemState) -> None:
+def render_system_status(state: SystemState, *, show_advanced_tools: bool = False) -> None:
     if state.safe_mode:
-        st.error(
-            "SAFE MODE - External AI unavailable. Operating on MKB context only. "
-            f"Reason: {state.safe_mode_reason or 'API unavailable'}"
-        )
+        st.caption(f"Local safe mode active. Cloud APIs off. Reason: {state.safe_mode_reason or 'API unavailable'}")
     elif not state.claude_available:
-        st.warning("Claude API not configured. Add ANTHROPIC_API_KEY to .env")
+        if show_advanced_tools:
+            st.caption("Cloud API connector not configured. Local workflow remains available.")
     else:
         return
 
@@ -1344,8 +1342,17 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
 
 
 def render_run_review_tab(sys_components: dict) -> None:
-    st.subheader(RUN_REVIEW_TAB)
-    st.caption("Local workflow. Files stay on this machine. Results remain review-bound.")
+    st.markdown(
+        """
+        <div class="compact-workflow-row">
+          <strong>Run & Review</strong>
+          <span class="compact-chip">Local only</span>
+          <span class="compact-chip">Review-bound</span>
+          <span class="compact-chip">No auto-accept</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     render_current_run_tab(sys_components, show_title=False)
 
     st.divider()
@@ -1976,7 +1983,7 @@ def render_run_result_card(item: dict) -> None:
 
 
 def render_operator_guidance_panel() -> None:
-    with st.expander("Result guide", expanded=True):
+    with st.expander("Result guide", expanded=False):
         for title, guidance in operator_guidance_catalog().items():
             st.markdown(f"**{title}:** {guidance}")
 
@@ -2310,16 +2317,16 @@ def main() -> None:
     if sys_components is None:
         st.error("Startup failed without component details.")
         return
-    show_advanced_tools = st.checkbox(
+    show_advanced_tools = st.sidebar.checkbox(
         "Show advanced tools",
         value=False,
         help="Advanced tools include validation history, audit pages, safety governance, and terminology administration.",
     )
     counts = sys_components["sql"].count_records()
     render_operator_safety_panel(knowledge_counts=counts, show_build_details=show_advanced_tools)
-    render_system_status(sys_components["state"])
+    render_system_status(sys_components["state"], show_advanced_tools=show_advanced_tools)
     if show_advanced_tools:
-        st.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
+        st.sidebar.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
 
     tab_labels = [
         RUN_REVIEW_TAB,

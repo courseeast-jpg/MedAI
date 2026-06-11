@@ -1,0 +1,53 @@
+{
+  "block_id": "MEDAI-ACTUAL-ONE-SCREEN-UX-FINAL-11G",
+  "mode": "actual_streamlit_one_screen_layout_validation",
+  "head": "eda96ce",
+  "audit_findings": {
+    "default_advanced_tools_off": true,
+    "default_visible_tabs": [
+      "Run & Review",
+      "MKB Explorer",
+      "Review Queue"
+    ],
+    "advanced_only_tabs": [
+      "Operator Control Panel",
+      "Validation Batch Audit",
+      "Validation History",
+      "Safety & Governance",
+      "Terminology Admin"
+    ],
+    "advanced_tabs_not_in_default_block": true,
+    "build_audit_hidden_by_default": true,
+    "claude_api_warning_compact_or_advanced_only": true,
+    "compact_style_helper_applied": true,
+    "run_review_first_viewport_compact": true,
+    "mkb_explorer_first_viewport_compact": true,
+    "review_queue_first_viewport_compact": true,
+    "result_guide_collapsed_by_default": true,
+    "advanced_actions_collapsed_by_default": true,
+    "specialty_selector_still_separate": true,
+    "urology_option_visible": true,
+    "dermatology_option_visible": true,
+    "gastroenterology_option_visible": true,
+    "adapter_fallback_selected_specialty": "dermatology",
+    "review_bound_records": 4,
+    "structured_facts_extracted": 4,
+    "external_api_used": false,
+    "auto_accept_enabled": false
+  },
+  "conclusion": "actual_one_screen_ux_final_11g_ready",
+  "all_pass": true,
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "real_screenshot_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "next_operator_command": "streamlit run app/main.py",
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": [],
+  "public_artifacts_path_safe": true
+}
