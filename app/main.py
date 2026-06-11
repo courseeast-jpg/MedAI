@@ -208,7 +208,7 @@ def queue_display_state(*, queued_count: int, selected_count: int) -> dict[str, 
         "selected_count": selected_count,
         "start_enabled": queued_count > 0,
         "message": (
-            f"Ready to process {queued_count} file(s)."
+            f"Ready: {queued_count} documents waiting."
             if queued_count
             else "Files selected. Add selected files to queue."
             if selected_count
@@ -228,7 +228,7 @@ def start_run_state_reason(queue_state: dict, *, active_run: dict | None = None)
     selected_count = int(queue_state.get("selected_count", 0) or 0)
     enabled = bool(queue_state.get("start_enabled", False))
     if enabled:
-        reason = f"Start enabled: {queued_count} supported document(s) waiting."
+        reason = f"Ready: {queued_count} documents waiting."
     elif active_run:
         reason = "Run complete. Add files to start another run."
     elif selected_count:
@@ -240,7 +240,7 @@ def start_run_state_reason(queue_state: dict, *, active_run: dict | None = None)
 
 def current_run_status_message(*, queue_state: dict, active_run: dict | None) -> str:
     if active_run:
-        return "Run complete. Current results are shown below."
+        return "Run complete. Review results below."
     return str(queue_state.get("message") or "No documents queued.")
 
 
@@ -1243,12 +1243,18 @@ def render_review_queue_tab(sys_components: dict) -> None:
                 )
             )
             st.caption(REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER)
+            st.markdown(
+                '<div class="operator-review-action-row">Needs human review.</div>',
+                unsafe_allow_html=True,
+            )
             action_cols = st.columns(3)
             accept_cfg, reject_cfg, defer_cfg = plan["actions"]
             if action_cols[0].button(
                 accept_cfg["label"],
                 key=f"review_queue_accept_{row['record_id_full']}",
                 disabled=not accept_cfg.get("enabled", False),
+                type="primary",
+                use_container_width=True,
             ):
                 result = _accept_action(sys_components["sql"], row["record_id_full"])
                 st.info(result.safe_message)
@@ -1257,6 +1263,7 @@ def render_review_queue_tab(sys_components: dict) -> None:
                 reject_cfg["label"],
                 key=f"review_queue_reject_{row['record_id_full']}",
                 disabled=not reject_cfg.get("enabled", False),
+                use_container_width=True,
             ):
                 result = _reject_action(sys_components["sql"], row["record_id_full"])
                 st.info(result.safe_message)
@@ -1265,6 +1272,7 @@ def render_review_queue_tab(sys_components: dict) -> None:
                 defer_cfg["label"],
                 key=f"review_queue_defer_{row['record_id_full']}",
                 disabled=not defer_cfg.get("enabled", False),
+                use_container_width=True,
             ):
                 result = _defer_action(sys_components["sql"], row["record_id_full"])
                 st.info(result.safe_message)
@@ -1299,6 +1307,18 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         return
     ensure_test_launcher_dirs()
 
+    st.markdown(
+        """
+        <div class="operator-path">
+          <div class="operator-path-step"><span>1</span><strong>Run setup</strong></div>
+          <div class="operator-path-step"><span>2</span><strong>Files / queue</strong></div>
+          <div class="operator-path-step"><span>3</span><strong>Start run</strong></div>
+          <div class="operator-path-step"><span>4</span><strong>Results / review</strong></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.markdown('<div class="operator-run-setup"><div class="operator-section-title">Run setup</div></div>', unsafe_allow_html=True)
     category_col, specialty_col = st.columns(2)
     with category_col:
         document_category_label = st.selectbox(
@@ -1312,6 +1332,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             key="test_launcher_medical_specialty",
         )
     specialty = selected_specialty
+    st.markdown('<div class="operator-files-queue"><div class="operator-section-title">Files / queue</div></div>', unsafe_allow_html=True)
     upload_col, start_col = st.columns([3, 1])
     with upload_col:
         uploaded_files = st.file_uploader(
@@ -1340,6 +1361,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         run_state = "Complete" if not active_run.get("failed") else "Failed"
     start_state = start_run_state_reason(queue_state, active_run=active_run)
 
+    start_col.markdown('<div class="operator-start-rail"><div class="operator-section-title">Start run</div></div>', unsafe_allow_html=True)
     start_col.metric("Documents waiting", int(queue_state["queued_count"]))
     start_col.caption(start_state["reason"])
     if start_col.button(
@@ -1383,7 +1405,11 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         run_state=run_state,
     )
     if not queue_state["queued_count"] and selected_count:
-        if st.button("Add selected files to queue"):
+        st.markdown(
+            '<div class="operator-add-queue-callout">Next step: add selected files to the queue.</div>',
+            unsafe_allow_html=True,
+        )
+        if st.button("Add selected files to queue", type="primary", use_container_width=True):
             reset_upload_persistence(st.session_state)
             saved = persist_uploaded_files_once(uploaded_files, st.session_state)
             st.success(f"Added {len(saved)} selected file(s) to the run queue.")
@@ -1407,6 +1433,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         selected_count=selected_count,
     )
     if active_run:
+        st.markdown('<div class="operator-results-review"><div class="operator-section-title">Results / review</div></div>', unsafe_allow_html=True)
         render_run_status_panel(active_run, run_state="Complete" if active_run else run_state)
     render_operator_guidance_panel()
     if active_run:

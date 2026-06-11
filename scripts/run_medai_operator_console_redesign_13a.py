@@ -47,7 +47,7 @@ def build_report() -> dict[str, Any]:
         and "selected files are still being added to the local queue" not in source
     )
     completed_run_empty_queue_copy_correct = (
-        "Run complete. Current results are shown below." in source
+        "Run complete. Review results below." in source
         and "Run complete. Add files to start another run." in source
     )
     start_disabled_reason_correct = (
@@ -73,7 +73,7 @@ def build_report() -> dict[str, Any]:
         "safety_pills_visible": all(pill in source for pill in static_model["safety_pills"]),
         "supported_file_types_visible": "PDF, TXT, PNG, JPG/JPEG, TIFF/TIF, BMP, DOCX" in source,
         "start_run_disabled_reason_visible": start_disabled_reason_correct,
-        "start_run_enabled_reason_visible": "Start enabled:" in source,
+        "start_run_enabled_reason_visible": "Ready:" in source and "documents waiting" in source,
         "stale_empty_queue_result_hidden": "visible_current_run" in source and "active_run.get(\"failed\")" in source,
         "stale_queue_message_removed_after_completion": completed_run_empty_queue_copy_correct,
         "mkb_counts_visible": all(

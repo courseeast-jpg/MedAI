@@ -104,7 +104,7 @@ def test_start_run_enabled_reason_appears_when_queued_count_positive() -> None:
     state = start_run_state_reason(queue_display_state(queued_count=2, selected_count=0))
 
     assert state["enabled"] is True
-    assert state["reason"] == "Start enabled: 2 supported document(s) waiting."
+    assert state["reason"] == "Ready: 2 documents waiting."
 
 
 def test_empty_queue_hides_stale_failed_current_result() -> None:
@@ -121,7 +121,7 @@ def test_completed_run_does_not_show_stale_adding_to_local_queue_message() -> No
         active_run={"failed": False, "results": []},
     )
 
-    assert message == "Run complete. Current results are shown below."
+    assert message == "Run complete. Review results below."
     assert "adding to local queue" not in message
 
 
