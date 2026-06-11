@@ -101,6 +101,7 @@ OPERATOR_FIRST_VISIBLE_TAB_LABELS = ["Run & Review", "MKB Explorer", "Review Que
 REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER = (
     "Accept only after comparing with source. This does not clinically interpret the result."
 )
+SUPPORTED_FILE_TYPE_COPY = "Supported file types: PDF, TXT, PNG, JPG/JPEG, TIFF/TIF, BMP, DOCX"
 
 # Backward-compatible export for older tests/importers. These are current
 # visible labels; advanced pages are shown only after the operator opts in.
@@ -220,6 +221,54 @@ def visible_current_run(active_run: dict | None, *, queued_count: int, selected_
     if active_run and active_run.get("failed") and not queued_count and not selected_count:
         return None
     return active_run
+
+
+def start_run_state_reason(queue_state: dict) -> dict[str, object]:
+    queued_count = int(queue_state.get("queued_count", 0) or 0)
+    selected_count = int(queue_state.get("selected_count", 0) or 0)
+    enabled = bool(queue_state.get("start_enabled", False))
+    if enabled:
+        reason = f"Start enabled: {queued_count} supported document(s) waiting."
+    elif selected_count:
+        reason = "Start disabled: selected files are still being added to the local queue."
+    else:
+        reason = "Start disabled: no documents queued."
+    return {"enabled": enabled, "reason": reason}
+
+
+def current_run_status_message(*, queue_state: dict, active_run: dict | None) -> str:
+    if active_run:
+        return "Run complete. Current results are shown below."
+    return str(queue_state.get("message") or "No documents queued.")
+
+
+def operator_file_state_label(item: dict) -> str:
+    status = item_status(item)
+    if status == "accepted":
+        return "Accepted"
+    if status == "review_ocr_quality":
+        return "No text found"
+    if status == "error":
+        return "Error"
+    if str(item.get("outcome") or "") == "unsupported":
+        return "Unsupported file"
+    if item.get("running"):
+        return "Running"
+    if status == "review":
+        return "Needs review"
+    return "Queued"
+
+
+def operator_console_redesign_static_model() -> dict[str, object]:
+    return {
+        "default_tabs": [RUN_REVIEW_TAB, MKB_EXPLORER_TAB, REVIEW_QUEUE_TAB],
+        "safety_banner": "Review required - not for diagnosis.",
+        "safety_pills": ["Local only", "Cloud APIs off", "Privacy check on", "Human review"],
+        "supported_file_types": SUPPORTED_FILE_TYPE_COPY,
+        "review_queue_actions": ["Accept after source comparison", "Reject", "Defer"],
+        "external_api_used": False,
+        "auto_accept": False,
+    }
 
 
 def reset_upload_persistence(session_state) -> None:
@@ -788,15 +837,14 @@ def render_operator_safety_panel(
         <div class="medai-header">
           <div class="compact-session-header">
             <div>
-              <h2>Local session</h2>
-              <div class="muted-label">Upload or select documents to begin.</div>
+              <h2>MedAI Operator Console</h2>
+              <div class="muted-label">Review required - not for diagnosis.</div>
             </div>
             <div class="compact-chip-row">
-              <span class="compact-chip">Local safe mode</span>
-              <span class="compact-chip">Human review</span>
               <span class="compact-chip">Local only</span>
               <span class="compact-chip">Cloud APIs off</span>
               <span class="compact-chip">Privacy check on</span>
+              <span class="compact-chip">Human review</span>
             </div>
           </div>
         </div>
@@ -1077,6 +1125,7 @@ def render_mkb_tab(sys_components: dict) -> None:
     count_cols[1].metric("Active", base_counts["active"])
     count_cols[2].metric("Quarantined / review-bound", base_counts["review_bound"])
     count_cols[3].metric("Superseded / rejected", base_counts["superseded"])
+    st.caption("Active records are separated from quarantined / review-bound records. Review-bound records are emphasized by default when present.")
 
     specialty_filter, tier_filter, fact_type_filter = st.columns(3)
     specialty_display = specialty_filter.selectbox(
@@ -1088,6 +1137,7 @@ def render_mkb_tab(sys_components: dict) -> None:
     tier = tier_filter.selectbox(
         "Tier / status",
         ["all", "active", "quarantined", "review_bound", "superseded", "hypothesis"],
+        index=3 if base_counts["review_bound"] else 0,
         key="mkb_explorer_tier_filter",
     )
     fact_type = fact_type_filter.selectbox(
@@ -1154,6 +1204,7 @@ def render_review_queue_tab(sys_components: dict) -> None:
     top_cols = st.columns([1, 3])
     top_cols[0].metric("Needs review", model["counts"]["review_bound"])
     top_cols[1].caption(REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER)
+    st.caption("Accept after source comparison is a human review action, not clinical interpretation or automatic acceptance.")
     if not model["rows"]:
         st.info("No records waiting for review.")
         return
@@ -1265,9 +1316,10 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             "Choose files",
             type=list(RUN_REVIEW_UPLOAD_TYPES),
             accept_multiple_files=True,
-            help="PDF, TXT, image, or DOCX. Files stay local.",
+            help=SUPPORTED_FILE_TYPE_COPY + ". Files stay local.",
             key=current_upload_widget_key(st.session_state),
         )
+        st.caption(SUPPORTED_FILE_TYPE_COPY)
     selected_count = selected_upload_count(uploaded_files)
     if uploaded_files:
         saved = persist_uploaded_files_once(uploaded_files, st.session_state)
@@ -1284,7 +1336,10 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     run_state = "Waiting to start"
     if active_run:
         run_state = "Complete" if not active_run.get("failed") else "Failed"
+    start_state = start_run_state_reason(queue_state)
 
+    start_col.metric("Documents waiting", int(queue_state["queued_count"]))
+    start_col.caption(start_state["reason"])
     if start_col.button(
         "Start run",
         type="primary",
@@ -1322,6 +1377,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
         document_category_label=document_category_label,
         selected_specialty=selected_specialty,
         queue_state=queue_state,
+        active_run=active_run,
         run_state=run_state,
     )
     if not queue_state["queued_count"] and selected_count:
@@ -1408,7 +1464,7 @@ def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
         row = st.columns([4, 2, 2, 1])
         row[0].caption(path.name)
         row[1].caption(format_bytes(path.stat().st_size))
-        row[2].caption("queued")
+        row[2].caption("Queued")
         if row[3].button("Remove", key=f"remove_queued_{path.name}"):
             remove_test_input_file(path.name)
             st.rerun()
@@ -1420,7 +1476,9 @@ def render_compact_run_summary(
     selected_specialty: str,
     queue_state: dict,
     run_state: str,
+    active_run: dict | None = None,
 ) -> None:
+    status_message = current_run_status_message(queue_state=queue_state, active_run=active_run)
     st.markdown(
         f"""
         <div class="compact-summary">
@@ -1428,6 +1486,7 @@ def render_compact_run_summary(
           <span class="compact-chip">Specialty: {specialty_label(selected_specialty)}</span>
           <span class="compact-chip">Documents waiting: {queue_state['queued_count']}</span>
           <span class="compact-chip">Current run status: {run_state}</span>
+          <span class="compact-chip">Start state: {status_message}</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -1783,7 +1842,7 @@ def render_run_result_card(item: dict) -> None:
     st.info(operator_result_explanation(document_type))
 
     chip_specs = [
-        ("Status", badge["label"]),
+        ("File state", operator_file_state_label(item)),
         ("Type", document_type),
         ("Text recovery", text_recovery_chip(item)),
         ("Cloud tools", "Off" if not item.get("external_api_used") else "On"),
