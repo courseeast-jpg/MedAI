@@ -184,6 +184,84 @@ def package_to_public_dict(package: SourceExtractionPackage) -> dict[str, Any]:
     }
 
 
+def source_package_from_ai_draft(draft: Any) -> dict[str, Any]:
+    """Convert an AI-shaped package draft into the package-first UI shape.
+
+    The bridge is intentionally in-memory. It does not write active MKB records
+    and all generated observation IDs are synthetic package-local IDs.
+    """
+    source_id = str(getattr(draft, "safe_source_document_id", "") or "source_fake_001")
+    package_id = f"ai_pkg_{_stable_hash(source_id + str(getattr(draft, 'document_type', '')))[:12]}"
+    sections: list[dict[str, Any]] = []
+    record_ids: list[str] = []
+    for section_index, section in enumerate(list(getattr(draft, "sections", []) or []), start=1):
+        heading = str(getattr(section, "heading", "") or f"Section {section_index}")
+        observations: list[dict[str, Any]] = []
+        for obs_index, obs in enumerate(list(getattr(section, "observations", []) or []), start=1):
+            record_id = f"{package_id}_obs_{section_index:02d}_{obs_index:02d}"
+            record_ids.append(record_id)
+            normalized = normalize_package_observation_fields(
+                label=getattr(obs, "label", ""),
+                value=getattr(obs, "value", ""),
+                reference_interval=getattr(obs, "reference_interval", ""),
+                flag=getattr(obs, "flag", ""),
+                unit=getattr(obs, "unit", ""),
+            )
+            observations.append(
+                {
+                    "record_id": safe_record_id(record_id),
+                    "record_id_full": record_id,
+                    "fact_type": "test_result" if normalized["row_kind"] == "observation" else "note",
+                    "label": normalized["label"],
+                    "value": normalized["value"],
+                    "flag": normalized["flag"],
+                    "unit": normalized["unit"],
+                    "reference_interval": normalized["reference_interval"],
+                    "source_section": heading,
+                    "review_status": "review-bound",
+                    "display_content": normalized["label"],
+                    "row_kind": normalized["row_kind"],
+                    "normalization_status": normalized["normalization_status"],
+                }
+            )
+        sections.append(
+            {
+                "section_id": f"ai_section_{_stable_hash(package_id + heading)[:10]}",
+                "heading": heading,
+                "observation_family": "ai_assisted_source_extraction",
+                "narrative_source_section": heading if getattr(section, "narrative_preview", "") else "",
+                "narrative_preview_available": bool(getattr(section, "narrative_preview", "")),
+                "narrative_label": str(
+                    getattr(section, "narrative_label", "")
+                    or "source text only - not MedAI interpretation"
+                ),
+                "observations": observations,
+            }
+        )
+    return {
+        "package_id": package_id,
+        "safe_source_document_id": source_id,
+        "selected_document_category": str(getattr(draft, "selected_document_category", "") or "AI-assisted extraction"),
+        "selected_medical_specialty_domain": validate_specialty_key(
+            str(getattr(draft, "selected_specialty_domain", "") or "general")
+        ),
+        "selected_medical_specialty_label": specialty_label(
+            str(getattr(draft, "selected_specialty_domain", "") or "general")
+        ),
+        "detected_document_family_type": str(getattr(draft, "document_type", "") or "Unknown"),
+        "source_modality": _source_modality_label(str(getattr(draft, "source_modality", "") or "local_text")),
+        "package_status": "review-bound",
+        "record_ids": record_ids,
+        "record_count": len(record_ids),
+        "sections": sections,
+        "actions": package_action_plan([]),
+        "auto_accept_allowed": False,
+        "review_required": True,
+        "ai_assisted_draft": True,
+        "active_written_count": 0,
+    }
+
+
 def package_action_plan(record_ids: Iterable[str]) -> dict[str, Any]:
     record_ids = [str(record_id) for record_id in record_ids if str(record_id or "")]
     return {
@@ -486,6 +564,7 @@ __all__ = [
     "SourcePackageSection",
     "SourceObservation",
     "build_source_extraction_packages",
+    "source_package_from_ai_draft",
     "normalize_package_observation_fields",
     "package_action_plan",
     "accept_package_after_source_comparison",

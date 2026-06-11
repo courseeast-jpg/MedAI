@@ -285,6 +285,23 @@ def build_safe_real_run_extraction_diagnostics(summary: TestRunSummary) -> dict[
     }
 
 
+def run_fake_ai_extraction_workflow_for_test(source_class: str = "urinalysis_table") -> dict[str, Any]:
+    """Run the 15A fake AI seam from the launcher without changing batch runs."""
+    from execution.ai_extraction_adapter import ExtractionWorkflowContext
+    from execution.extraction_workflow import run_ai_extraction_workflow, workflow_result_to_public_dict
+
+    result = run_ai_extraction_workflow(
+        ExtractionWorkflowContext(
+            source_class=source_class,
+            safe_source_document_id="source_fake_001",
+            selected_document_category="AI-assisted extraction",
+            selected_specialty_domain="urology",
+            source_modality="fake_local_adapter",
+        )
+    )
+    return workflow_result_to_public_dict(result)
+
+
 def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
     for relative in (
         "test_input",

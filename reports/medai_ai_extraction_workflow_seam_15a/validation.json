@@ -1,0 +1,15 @@
+{
+  "adapter_contract_exists": true,
+  "workflow_orchestrator_exists": true,
+  "source_package_bridge_exists": true,
+  "review_bound_only": true,
+  "active_written_count_zero": true,
+  "external_api_used_false": true,
+  "auto_accept_false": true,
+  "operator_preview_has_body": true,
+  "focused_tests": {
+    "command": "python -m pytest tests/test_medai_ai_extraction_workflow_seam_15a.py",
+    "returncode": 0,
+    "skipped": false
+  }
+}

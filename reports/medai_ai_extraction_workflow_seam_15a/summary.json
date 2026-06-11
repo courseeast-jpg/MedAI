@@ -1,0 +1,15 @@
+{
+  "block": "MEDAI-AI-EXTRACTION-WORKFLOW-SEAM-15A",
+  "adapter_name": "FakeAIExtractionAdapter",
+  "external_api_used": false,
+  "auto_accept": false,
+  "active_written_count": 0,
+  "review_bound_package_count": 3,
+  "package_types_tested": [
+    "Cytology / pathology narrative",
+    "Urinalysis",
+    "Portal result cards"
+  ],
+  "operator_preview_visible": true,
+  "privacy_result": "passed"
+}

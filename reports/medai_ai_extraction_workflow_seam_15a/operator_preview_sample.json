@@ -1,0 +1,231 @@
+{
+  "adapter_name": "FakeAIExtractionAdapter",
+  "preview_label": "AI-assisted extraction draft - review-bound only",
+  "package_count": 3,
+  "packages": [
+    {
+      "document_type": "Cytology / pathology narrative",
+      "section_count": 6,
+      "observation_count": 6,
+      "sections": [
+        {
+          "heading": "Tests Ordered",
+          "narrative_label": "source text only - not MedAI interpretation",
+          "observations": [
+            {
+              "label": "Tests Ordered",
+              "value": "source-visible narrative present",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "",
+              "review_status": "review-bound"
+            }
+          ]
+        },
+        {
+          "heading": "Diagnosis",
+          "narrative_label": "source text only - not MedAI interpretation",
+          "observations": [
+            {
+              "label": "Diagnosis",
+              "value": "source-visible narrative present",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "",
+              "review_status": "review-bound"
+            }
+          ]
+        },
+        {
+          "heading": "Recommendation",
+          "narrative_label": "source text only - not MedAI recommendation",
+          "observations": [
+            {
+              "label": "Recommendation",
+              "value": "source-visible narrative present",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "",
+              "review_status": "review-bound"
+            }
+          ]
+        },
+        {
+          "heading": "Clinical History / ICD",
+          "narrative_label": "source text only - not MedAI interpretation",
+          "observations": [
+            {
+              "label": "Clinical History / ICD",
+              "value": "source-visible narrative present",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "",
+              "review_status": "review-bound"
+            }
+          ]
+        },
+        {
+          "heading": "Cytology Information",
+          "narrative_label": "source text only - not MedAI interpretation",
+          "observations": [
+            {
+              "label": "Cytology Information",
+              "value": "source-visible narrative present",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "",
+              "review_status": "review-bound"
+            }
+          ]
+        },
+        {
+          "heading": "Gross Description",
+          "narrative_label": "source text only - not MedAI interpretation",
+          "observations": [
+            {
+              "label": "Gross Description",
+              "value": "source-visible narrative present",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "",
+              "review_status": "review-bound"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_type": "Urinalysis",
+      "section_count": 1,
+      "observation_count": 5,
+      "sections": [
+        {
+          "heading": "Urinalysis Table",
+          "narrative_label": "source text only - not MedAI interpretation",
+          "observations": [
+            {
+              "label": "Specific Gravity",
+              "value": "1.020",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "1.005-1.030",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "pH",
+              "value": "7.5",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "5.0-7.5",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Occult Blood",
+              "value": "Trace",
+              "flag": "abnormal",
+              "unit": "",
+              "reference_interval": "Negative",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "RBC",
+              "value": "3-10",
+              "flag": "abnormal",
+              "unit": "/hpf",
+              "reference_interval": "0-2",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Culture result",
+              "value": "No growth",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "",
+              "review_status": "review-bound"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_type": "Portal result cards",
+      "section_count": 1,
+      "observation_count": 8,
+      "sections": [
+        {
+          "heading": "Portal Result Cards",
+          "narrative_label": "source text only - not MedAI interpretation",
+          "observations": [
+            {
+              "label": "Specific Gravity",
+              "value": "1.020",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "1.005-1.030",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "pH",
+              "value": "7.5",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "5.0-7.5",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Urine Color",
+              "value": "Orange",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "Yellow",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Appearance",
+              "value": "Clear",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "Clear",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Leukocyte Esterase",
+              "value": "Negative",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "Negative",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Protein",
+              "value": "Trace",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "Negative/Trace",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Glucose",
+              "value": "Negative",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "Negative",
+              "review_status": "review-bound"
+            },
+            {
+              "label": "Ketones",
+              "value": "Negative",
+              "flag": "",
+              "unit": "",
+              "reference_interval": "Negative",
+              "review_status": "review-bound"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "external_api_used": false,
+  "auto_accept": false,
+  "review_required": true
+}

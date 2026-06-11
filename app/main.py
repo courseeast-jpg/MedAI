@@ -1417,6 +1417,36 @@ def _render_atomic_review_rows(sql_store: Any, rows: list[dict], _action_plan: A
             st.divider()
 
 
+def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> None:
+    """Render safe AI-assisted extraction drafts for human review."""
+    preview = dict(workflow_result.get("operator_preview") or {})
+    packages = list(preview.get("packages") or [])
+    st.markdown("#### AI-assisted extraction drafts")
+    st.caption("Review-bound only. Fake local adapter. No external API. No auto-accept.")
+    if not packages:
+        st.info("No AI-assisted extraction draft packages available.")
+        return
+    for package in packages:
+        st.markdown(f"**{package['label']}**")
+        st.caption(f"Type: {package['document_type']} | Sections: {package['section_count']} | Observations: {package['observation_count']}")
+        for section in package["sections"]:
+            st.markdown(f"##### {section['heading']}")
+            rows = [
+                {
+                    "label": obs["label"],
+                    "value": obs["value"],
+                    "flag": obs["flag"],
+                    "unit": obs["unit"],
+                    "reference": obs["reference_interval"],
+                    "review_status": obs["review_status"],
+                }
+                for obs in section["observations"]
+            ]
+            if rows:
+                st.dataframe(rows, hide_index=True, use_container_width=True)
+            st.caption(section["narrative_label"])
+
+
 def render_conflict_tab(sys_components: dict) -> None:
     try:
         from app.conflict_review import render_conflict_review
