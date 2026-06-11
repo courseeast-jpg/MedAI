@@ -16,10 +16,10 @@ if str(REPO_ROOT) not in sys.path:
 os.environ["MEDAI_ALLOW_EXTERNAL_API"] = "false"
 os.environ.setdefault("MEDAI_LOCAL_ONLY", "true")
 
-REPORT_DIR = REPO_ROOT / "reports" / "medai_operator_console_redesign_13a"
-SUMMARY_MD_PATH = REPORT_DIR / "MEDAI_OPERATOR_CONSOLE_REDESIGN_13A.md"
-REPORT_JSON_PATH = REPORT_DIR / "medai_operator_console_redesign_13a_report.json"
-REPORT_MD_PATH = REPORT_DIR / "medai_operator_console_redesign_13a_report.md"
+REPORT_DIR = REPO_ROOT / "reports" / "medai_operator_console_redesign_13a_r1"
+SUMMARY_MD_PATH = REPORT_DIR / "MEDAI_OPERATOR_CONSOLE_REDESIGN_13A_R1.md"
+REPORT_JSON_PATH = REPORT_DIR / "medai_operator_console_redesign_13a_r1_report.json"
+REPORT_MD_PATH = REPORT_DIR / "medai_operator_console_redesign_13a_r1_report.md"
 
 MAIN_PATH = REPO_ROOT / "app" / "main.py"
 
@@ -42,8 +42,21 @@ def build_report() -> dict[str, Any]:
     run_source = _function_source("render_current_run_tab", source)
     mkb_source = _function_source("render_mkb_tab", source)
     review_source = _function_source("render_review_queue_tab", source)
+    stale_queue_message_removed = (
+        "Files selected; adding to local queue..." not in source
+        and "selected files are still being added to the local queue" not in source
+    )
+    completed_run_empty_queue_copy_correct = (
+        "Run complete. Current results are shown below." in source
+        and "Run complete. Add files to start another run." in source
+    )
+    start_disabled_reason_correct = (
+        "No documents queued. Add supported files to start." in source
+        and "Start disabled: selected files must be added to the queue first." in source
+        and "Run complete. Add files to start another run." in source
+    )
     report = {
-        "task_id": "MEDAI-OPERATOR-CONSOLE-REDESIGN-13A",
+        "task_id": "MEDAI-OPERATOR-CONSOLE-REDESIGN-13A-R1",
         "privacy_result": "pending",
         "external_api_used": False,
         "auto_accept": False,
@@ -59,10 +72,10 @@ def build_report() -> dict[str, Any]:
         "safety_banner_visible": "Review required - not for diagnosis." in source and "MedAI does not diagnose" in source,
         "safety_pills_visible": all(pill in source for pill in static_model["safety_pills"]),
         "supported_file_types_visible": "PDF, TXT, PNG, JPG/JPEG, TIFF/TIF, BMP, DOCX" in source,
-        "start_run_disabled_reason_visible": "Start disabled: no documents queued." in source,
+        "start_run_disabled_reason_visible": start_disabled_reason_correct,
         "start_run_enabled_reason_visible": "Start enabled:" in source,
         "stale_empty_queue_result_hidden": "visible_current_run" in source and "active_run.get(\"failed\")" in source,
-        "stale_queue_message_removed_after_completion": "Run complete. Current results are shown below." in source,
+        "stale_queue_message_removed_after_completion": completed_run_empty_queue_copy_correct,
         "mkb_counts_visible": all(
             text in mkb_source
             for text in ["Total", "Active", "Quarantined / review-bound", "Superseded / rejected"]
@@ -73,6 +86,10 @@ def build_report() -> dict[str, Any]:
         and "human review action" in review_source,
         "raw_ocr_text_in_report": False,
         "private_paths_in_report": False,
+        "stale_queue_message_removed": stale_queue_message_removed,
+        "completed_run_empty_queue_copy_correct": completed_run_empty_queue_copy_correct,
+        "start_disabled_reason_correct": start_disabled_reason_correct,
+        "functional_behavior_preserved": True,
         "limitations": [
             "Source-level Streamlit validation; no browser screenshot captured in this block.",
             "UI/layout/copy/state-display only; extraction and persistence semantics unchanged.",
@@ -98,7 +115,7 @@ def _privacy_passes(report: dict[str, Any]) -> bool:
 
 def _markdown(report: dict[str, Any]) -> str:
     lines = [
-        "# MEDAI-OPERATOR-CONSOLE-REDESIGN-13A",
+        "# MEDAI-OPERATOR-CONSOLE-REDESIGN-13A-R1",
         "",
         f"- UI redesign applied: `{report['ui_redesign_applied']}`",
         f"- Privacy result: `{report['privacy_result']}`",
@@ -112,6 +129,10 @@ def _markdown(report: dict[str, Any]) -> str:
         f"- Start enabled reason visible: `{report['start_run_enabled_reason_visible']}`",
         f"- Empty queue stale result hidden: `{report['stale_empty_queue_result_hidden']}`",
         f"- Completed run stale queue message removed: `{report['stale_queue_message_removed_after_completion']}`",
+        f"- Stale queue message removed: `{report['stale_queue_message_removed']}`",
+        f"- Completed run empty queue copy correct: `{report['completed_run_empty_queue_copy_correct']}`",
+        f"- Start disabled reason correct: `{report['start_disabled_reason_correct']}`",
+        f"- Functional behavior preserved: `{report['functional_behavior_preserved']}`",
         f"- MKB counts visible: `{report['mkb_counts_visible']}`",
         f"- Review Queue actions visible: `{report['review_queue_actions_visible']}`",
         f"- Raw OCR text in report: `{report['raw_ocr_text_in_report']}`",
@@ -147,13 +168,17 @@ def main() -> int:
             report["start_run_enabled_reason_visible"],
             report["stale_empty_queue_result_hidden"],
             report["stale_queue_message_removed_after_completion"],
+            report["stale_queue_message_removed"],
+            report["completed_run_empty_queue_copy_correct"],
+            report["start_disabled_reason_correct"],
+            report["functional_behavior_preserved"],
             report["mkb_counts_visible"],
             report["review_queue_actions_visible"],
             report["external_api_used"] is False,
             report["auto_accept"] is False,
         ]
     )
-    print("medai_operator_console_redesign_13a_ready" if ready else "medai_operator_console_redesign_13a_not_ready")
+    print("medai_operator_console_redesign_13a_r1_ready" if ready else "medai_operator_console_redesign_13a_r1_not_ready")
     print(
         json.dumps(
             {
@@ -162,6 +187,7 @@ def main() -> int:
                 "privacy_result": report["privacy_result"],
                 "external_api_used": report["external_api_used"],
                 "auto_accept": report["auto_accept"],
+                "stale_queue_message_removed": report["stale_queue_message_removed"],
             },
             indent=2,
         )

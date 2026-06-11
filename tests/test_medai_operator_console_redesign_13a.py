@@ -69,7 +69,33 @@ def test_start_run_disabled_reason_appears_when_queue_empty() -> None:
     state = start_run_state_reason(queue_display_state(queued_count=0, selected_count=0))
 
     assert state["enabled"] is False
-    assert state["reason"] == "Start disabled: no documents queued."
+    assert state["reason"] == "No documents queued. Add supported files to start."
+
+
+def test_completed_run_empty_queue_has_restart_reason_not_stale_selected_copy() -> None:
+    from app.main import queue_display_state, start_run_state_reason
+
+    state = start_run_state_reason(
+        queue_display_state(queued_count=0, selected_count=1),
+        active_run={"failed": False, "results": []},
+    )
+
+    assert state["enabled"] is False
+    assert state["reason"] == "Run complete. Add files to start another run."
+    assert "selected files are still being added" not in state["reason"]
+    assert "adding to local queue" not in state["reason"]
+
+
+def test_selected_files_not_queued_show_add_action_not_adding_state() -> None:
+    from app.main import queue_display_state, start_run_state_reason
+
+    queue_state = queue_display_state(queued_count=0, selected_count=2)
+    state = start_run_state_reason(queue_state)
+
+    assert queue_state["message"] == "Files selected. Add selected files to queue."
+    assert state["reason"] == "Start disabled: selected files must be added to the queue first."
+    assert "adding to local queue" not in queue_state["message"]
+    assert "still being added" not in state["reason"]
 
 
 def test_start_run_enabled_reason_appears_when_queued_count_positive() -> None:
@@ -97,6 +123,11 @@ def test_completed_run_does_not_show_stale_adding_to_local_queue_message() -> No
 
     assert message == "Run complete. Current results are shown below."
     assert "adding to local queue" not in message
+
+
+def test_stale_queue_copy_removed_from_source() -> None:
+    assert "Files selected; adding to local queue..." not in SOURCE
+    assert "selected files are still being added to the local queue" not in SOURCE
 
 
 def test_mkb_explorer_displays_active_and_quarantined_review_bound() -> None:
@@ -134,7 +165,7 @@ def test_external_api_used_remains_false_in_report() -> None:
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
     payload = json.loads(
-        (REPO_ROOT / "reports" / "medai_operator_console_redesign_13a" / "medai_operator_console_redesign_13a_report.json").read_text(
+        (REPO_ROOT / "reports" / "medai_operator_console_redesign_13a_r1" / "medai_operator_console_redesign_13a_r1_report.json").read_text(
             encoding="utf-8"
         )
     )
@@ -150,7 +181,7 @@ def test_privacy_report_safe() -> None:
         capture_output=True,
         text=True,
     )
-    report_dir = REPO_ROOT / "reports" / "medai_operator_console_redesign_13a"
+    report_dir = REPO_ROOT / "reports" / "medai_operator_console_redesign_13a_r1"
     for path in report_dir.iterdir():
         payload = json.loads(path.read_text(encoding="utf-8")) if path.suffix == ".json" else path.read_text(encoding="utf-8")
         result = check_public_report_payload(payload)

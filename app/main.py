@@ -210,7 +210,7 @@ def queue_display_state(*, queued_count: int, selected_count: int) -> dict[str, 
         "message": (
             f"Ready to process {queued_count} file(s)."
             if queued_count
-            else "Files selected; adding to local queue..."
+            else "Files selected. Add selected files to queue."
             if selected_count
             else "No documents queued."
         ),
@@ -223,16 +223,18 @@ def visible_current_run(active_run: dict | None, *, queued_count: int, selected_
     return active_run
 
 
-def start_run_state_reason(queue_state: dict) -> dict[str, object]:
+def start_run_state_reason(queue_state: dict, *, active_run: dict | None = None) -> dict[str, object]:
     queued_count = int(queue_state.get("queued_count", 0) or 0)
     selected_count = int(queue_state.get("selected_count", 0) or 0)
     enabled = bool(queue_state.get("start_enabled", False))
     if enabled:
         reason = f"Start enabled: {queued_count} supported document(s) waiting."
+    elif active_run:
+        reason = "Run complete. Add files to start another run."
     elif selected_count:
-        reason = "Start disabled: selected files are still being added to the local queue."
+        reason = "Start disabled: selected files must be added to the queue first."
     else:
-        reason = "Start disabled: no documents queued."
+        reason = "No documents queued. Add supported files to start."
     return {"enabled": enabled, "reason": reason}
 
 
@@ -1336,7 +1338,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     run_state = "Waiting to start"
     if active_run:
         run_state = "Complete" if not active_run.get("failed") else "Failed"
-    start_state = start_run_state_reason(queue_state)
+    start_state = start_run_state_reason(queue_state, active_run=active_run)
 
     start_col.metric("Documents waiting", int(queue_state["queued_count"]))
     start_col.caption(start_state["reason"])
@@ -1441,7 +1443,7 @@ def render_run_review_tab(sys_components: dict) -> None:
 def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
     if not files:
         if selected_count:
-            st.caption("Files selected; adding to local queue...")
+            st.caption("Files selected. Add selected files to queue.")
         else:
             st.caption("No documents queued.")
         return

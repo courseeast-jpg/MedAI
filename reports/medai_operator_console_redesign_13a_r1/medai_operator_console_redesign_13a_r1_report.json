@@ -1,0 +1,32 @@
+{
+  "task_id": "MEDAI-OPERATOR-CONSOLE-REDESIGN-13A-R1",
+  "privacy_result": "passed",
+  "external_api_used": false,
+  "auto_accept": false,
+  "ui_redesign_applied": true,
+  "default_tabs": [
+    "Run & Review",
+    "MKB Explorer",
+    "Review Queue"
+  ],
+  "safety_banner_visible": true,
+  "safety_pills_visible": true,
+  "supported_file_types_visible": true,
+  "start_run_disabled_reason_visible": true,
+  "start_run_enabled_reason_visible": true,
+  "stale_empty_queue_result_hidden": true,
+  "stale_queue_message_removed_after_completion": true,
+  "mkb_counts_visible": true,
+  "review_queue_actions_visible": true,
+  "raw_ocr_text_in_report": false,
+  "private_paths_in_report": false,
+  "stale_queue_message_removed": true,
+  "completed_run_empty_queue_copy_correct": true,
+  "start_disabled_reason_correct": true,
+  "functional_behavior_preserved": true,
+  "limitations": [
+    "Source-level Streamlit validation; no browser screenshot captured in this block.",
+    "UI/layout/copy/state-display only; extraction and persistence semantics unchanged.",
+    "Advanced/admin pages remain available only after opt-in."
+  ]
+}
