@@ -77,9 +77,9 @@ class ExtractionWorkflowContext:
     fake_local_only: bool = True
     raw_text_local_only: str = ""
     payload_type: str = "redacted_text_layout_summary"
-    provider_mode: str = "disabled"
-    provider_name: str = "disabled"
-    model_name: str = "disabled"
+    provider_mode: str = "fake_local"
+    provider_name: str = "fake_local"
+    model_name: str = "fake-local-15c"
     operator_approval_state: str = "not_requested"
     estimated_input_tokens: int = 256
     estimated_output_tokens: int = 512
@@ -111,6 +111,7 @@ class ExtractionWorkflowResult:
     payload_policy_result: dict
     budget_guard_result: dict
     audit_result: dict
+    provider_registry_result: dict
     validation_errors: list[str] = field(default_factory=list)
 
 

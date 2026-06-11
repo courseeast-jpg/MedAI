@@ -1,0 +1,21 @@
+{
+  "block": "MEDAI-AI-PROVIDER-ADAPTER-STUB-15C",
+  "external_api_used": false,
+  "final_external_call_allowed": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "review_bound_package_count": 3,
+  "provider_count": 5,
+  "enabled_providers": [
+    "fake_local"
+  ],
+  "disabled_providers": [
+    "claude",
+    "gemini",
+    "local_ollama",
+    "openai"
+  ],
+  "fake_local_visible_packages": true,
+  "privacy_result": "passed"
+}

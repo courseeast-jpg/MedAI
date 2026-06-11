@@ -1,0 +1,15 @@
+{
+  "package_count": 3,
+  "selected_provider": "fake_local",
+  "provider_enabled": true,
+  "provider_model_name": "fake-local-15c",
+  "provider_mode": "fake_local",
+  "provider_requires_operator_approval": false,
+  "provider_message": "Provider available for local fake path only",
+  "privacy_gate_status": "redacted_payload_ready",
+  "payload_policy_allowed": false,
+  "budget_allowed": true,
+  "operator_notice": "No external AI call was made",
+  "final_external_call_allowed": false,
+  "external_api_used": false
+}

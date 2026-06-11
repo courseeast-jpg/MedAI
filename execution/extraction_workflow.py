@@ -26,6 +26,7 @@ from execution.ai_privacy_gate import (
     privacy_gate_to_public_dict,
     run_ai_privacy_gate,
 )
+from execution.ai_provider_registry import AIProviderRegistry, provider_readiness_to_public_dict
 
 
 PLACEHOLDER_TOKENS = (
@@ -68,6 +69,13 @@ def run_ai_extraction_workflow(
         provider_mode=context.provider_mode,
         provider_name=context.provider_name,
     )
+    provider_readiness = AIProviderRegistry().validate_provider_readiness(
+        provider_name=context.provider_name,
+        operator_approval_state=context.operator_approval_state,
+        privacy_gate_result=privacy_gate_to_public_dict(privacy),
+        payload_policy_result=payload_policy_to_public_dict(payload_policy),
+        budget_guard_result=budget_guard_to_public_dict(budget),
+    )
     adapter_input = AIExtractionAdapterInput(
         source_class=context.source_class,
         safe_source_document_id=context.safe_source_document_id,
@@ -92,11 +100,13 @@ def run_ai_extraction_workflow(
     privacy_public = privacy_gate_to_public_dict(privacy)
     payload_policy_public = payload_policy_to_public_dict(payload_policy)
     budget_public = budget_guard_to_public_dict(budget)
+    provider_public = provider_readiness_to_public_dict(provider_readiness)
     operator_preview = build_operator_preview(
         packages,
         privacy_gate_result=privacy_public,
         payload_policy_result=payload_policy_public,
         budget_guard_result=budget_public,
+        provider_registry_result=provider_public,
     )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
@@ -121,6 +131,7 @@ def run_ai_extraction_workflow(
         payload_policy_result=payload_policy_public,
         budget_guard_result=budget_public,
         audit_result=audit,
+        provider_registry_result=provider_public,
         validation_errors=errors,
     )
 
@@ -154,6 +165,7 @@ def build_operator_preview(
     privacy_gate_result: dict[str, Any] | None = None,
     payload_policy_result: dict[str, Any] | None = None,
     budget_guard_result: dict[str, Any] | None = None,
+    provider_registry_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -202,6 +214,19 @@ def build_operator_preview(
         "budget_fail_reason": (budget_guard_result or {}).get("budget_fail_reason", ""),
         "payload_policy_allowed": bool((payload_policy_result or {}).get("payload_policy_allowed", False)),
         "final_external_call_allowed": False,
+        "selected_provider": (provider_registry_result or {}).get("provider_name", ""),
+        "provider_enabled": bool((provider_registry_result or {}).get("provider_enabled", False)),
+        "provider_model_name": (provider_registry_result or {}).get("model_name", ""),
+        "provider_mode": (provider_registry_result or {}).get("provider_mode", ""),
+        "provider_requires_operator_approval": bool(
+            (provider_registry_result or {}).get("requires_operator_approval", False)
+        ),
+        "provider_fail_closed_reason": (provider_registry_result or {}).get("fail_closed_reason", ""),
+        "provider_message": (
+            "Provider disabled by policy"
+            if not bool((provider_registry_result or {}).get("provider_enabled", False))
+            else "Provider available for local fake path only"
+        ),
         "operator_notice": "No external AI call was made",
     }
 

@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-06-11T23:51:34+00:00",
+  "source_id": "source_fake_15c_001",
+  "adapter_name": "FakeAIExtractionAdapter",
+  "provider_name": "fake_local",
+  "model_name": "fake-local-15c",
+  "external_api_used": false,
+  "privacy_gate_status": "redacted_payload_ready",
+  "pii_detected_count": 11,
+  "pii_redacted_count": 11,
+  "redacted_payload_hash": "76e3194890ba",
+  "raw_payload_hash_local_only": "18784689ba80",
+  "operator_approval_state": "not_requested",
+  "budget_allowed": true,
+  "payload_policy_allowed": false,
+  "final_external_call_allowed": false,
+  "fail_closed_reason": "provider_mode_not_external_candidate",
+  "provider_policy_allowed": true
+}

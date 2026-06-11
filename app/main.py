@@ -1438,6 +1438,16 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
         f"Payload policy allowed: {bool(preview.get('payload_policy_allowed'))} | "
         "Final external call allowed: False"
     )
+    st.caption(
+        "Provider: "
+        f"{preview.get('selected_provider') or 'not selected'} | "
+        f"Model: {preview.get('provider_model_name') or 'not selected'} | "
+        f"Enabled: {bool(preview.get('provider_enabled'))} | "
+        f"Mode: {preview.get('provider_mode') or 'unknown'} | "
+        f"Approval required: {bool(preview.get('provider_requires_operator_approval'))}"
+    )
+    if preview.get("provider_fail_closed_reason"):
+        st.caption(preview.get("provider_message") or "Provider disabled by policy")
     if preview.get("redacted_payload_preview_available"):
         st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:
