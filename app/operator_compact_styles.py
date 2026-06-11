@@ -9,10 +9,10 @@ section.main > div.block-container {
     padding-bottom: .75rem;
 }
 div[data-testid="stVerticalBlock"] {
-    gap: .28rem;
+    gap: .22rem;
 }
 div[data-testid="stHorizontalBlock"] {
-    gap: .42rem;
+    gap: .35rem;
 }
 div[data-testid="stTabs"] [role="tablist"] {
     margin-bottom: .25rem;
@@ -22,8 +22,8 @@ div[data-testid="stTabs"] [role="tab"] {
     padding-bottom: .35rem;
 }
 div[data-testid="stFileUploader"] section {
-    padding: .35rem .5rem;
-    min-height: 2.6rem;
+    padding: .22rem .42rem;
+    min-height: 2.25rem;
 }
 div[data-testid="stFileUploader"] small {
     display: none;
@@ -35,7 +35,7 @@ div[data-testid="stMetric"] {
     background: #ffffff;
     border: 1px solid #d8dee5;
     border-radius: 8px;
-    padding: .35rem .55rem;
+    padding: .25rem .45rem;
 }
 div[data-testid="stMetric"] label {
     font-size: .72rem;
@@ -92,8 +92,8 @@ div[data-testid="stCaptionContainer"] {
     border: 1px solid #d8dee5;
     border-radius: 8px;
     background: #ffffff;
-    padding: .58rem .65rem;
-    margin-bottom: .45rem;
+    padding: .42rem .55rem;
+    margin-bottom: .28rem;
 }
 .compact-summary {
     display: flex;
@@ -104,6 +104,12 @@ div[data-testid="stCaptionContainer"] {
 .compact-table-note {
     color: #64748b;
     font-size: .8rem;
+}
+div[data-testid="stDataFrame"] {
+    margin-top: .15rem;
+}
+button[kind="secondary"], button[kind="primary"] {
+    min-height: 2.15rem;
 }
 </style>
 """

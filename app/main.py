@@ -1316,29 +1316,26 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
             st.success(f"Added {len(saved)} selected file(s) to the run queue.")
             st.rerun()
 
-    if files and st.button("Remove queued files"):
-        removed = clear_queue_action(st.session_state)
-        st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
-        st.rerun()
-
     with st.expander("Advanced actions", expanded=False):
         st.caption("Removes the visible latest report only. It does not delete source documents.")
         if st.button("Clear last report"):
             removed = clear_last_report_action(st.session_state)
             st.success(f"Cleared {len(removed)} latest report file(s).")
             st.rerun()
+        if files and st.button("Clear queued files"):
+            removed = clear_queue_action(st.session_state)
+            st.success(f"Cleared {len(removed)} queued file(s) from test_input/.")
+            st.rerun()
 
     render_queue_panel(files, selected_count=selected_count)
     active_run = st.session_state.get("phase52_current_run")
-    render_run_status_panel(active_run, run_state="Complete" if active_run else run_state)
+    if active_run:
+        render_run_status_panel(active_run, run_state="Complete" if active_run else run_state)
     render_operator_guidance_panel()
     if active_run:
         st.markdown("**Per-file results**")
         for result in active_run.get("results", []):
             render_run_result_card(result)
-    else:
-        st.caption("No current run results. Previous reports are available in Validation History.")
-    st.caption("Bad scans and empty results go to review.")
 
 
 def render_run_review_tab(sys_components: dict) -> None:
@@ -1367,13 +1364,22 @@ def render_run_review_tab(sys_components: dict) -> None:
 
 
 def render_queue_panel(files: list[Path], *, selected_count: int = 0) -> None:
-    st.markdown("**Documents waiting**")
     if not files:
         if selected_count:
             st.caption("Files selected. Add/start run to process them.")
         else:
             st.caption("No documents added yet. Choose files to begin.")
         return
+    if len(files) == 1:
+        path = files[0]
+        row = st.columns([5, 2, 1])
+        row[0].caption(f"Documents waiting: {path.name}")
+        row[1].caption(format_bytes(path.stat().st_size))
+        if row[2].button("Remove", key=f"remove_queued_{path.name}"):
+            remove_test_input_file(path.name)
+            st.rerun()
+        return
+    st.caption(f"Documents waiting: {len(files)}")
     header = st.columns([4, 2, 2, 1])
     header[0].caption("Filename")
     header[1].caption("Size")

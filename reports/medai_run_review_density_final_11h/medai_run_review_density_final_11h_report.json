@@ -1,0 +1,41 @@
+{
+  "block_id": "MEDAI-RUN-REVIEW-DENSITY-FINAL-11H",
+  "mode": "actual_run_review_density_source_validation",
+  "head": "1bc8dfb",
+  "audit_findings": {
+    "default_tabs": [
+      "Run & Review",
+      "MKB Explorer",
+      "Review Queue"
+    ],
+    "default_tabs_wired": true,
+    "no_run_zero_cards_hidden": true,
+    "result_guide_collapsed": true,
+    "previous_review_summary_collapsed": true,
+    "advanced_actions_collapsed": true,
+    "queued_documents_compact": true,
+    "upload_start_first_viewport": true,
+    "specialty_selector_separate": true,
+    "mkb_explorer_still_visible": true,
+    "review_queue_still_visible": true,
+    "specialty_options_required": true,
+    "compact_css_density": true,
+    "external_api_used": false,
+    "auto_accept_enabled": false
+  },
+  "conclusion": "run_review_density_final_11h_ready",
+  "all_pass": true,
+  "external_api_used": false,
+  "auto_accept_enabled": false,
+  "real_pdf_committed": false,
+  "real_screenshot_committed": false,
+  "raw_text_printed": false,
+  "raw_ocr_text_printed": false,
+  "raw_filenames_printed": false,
+  "private_paths_printed": false,
+  "phi_printed": false,
+  "next_operator_command": "streamlit run app/main.py",
+  "privacy_check_passed": true,
+  "privacy_check_leak_examples_redacted": [],
+  "public_artifacts_path_safe": true
+}
