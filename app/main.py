@@ -1557,6 +1557,14 @@ def operator_label_evidence(document_type: str) -> list[str]:
 
 
 def text_recovery_chip(item: dict) -> str:
+    if item.get("image_ocr_available") is False and item.get("image_ocr_engine"):
+        return "OCR unavailable"
+    if item.get("image_ocr_attempted") and item.get("image_ocr_text_visibility") == "recovered":
+        return "OCR recovered"
+    if item.get("image_ocr_attempted") and item.get("image_ocr_text_visibility") == "not_recovered":
+        return "No text found"
+    if item.get("image_ocr_attempted") and item.get("image_ocr_text_visibility") == "unavailable":
+        return "OCR attempted"
     if item.get("ocr_gate_fallback_text_visibility") == "recovered" and item.get("ocr_gate_fallback_cyrillic_detected"):
         return "Worked"
     if item.get("ocr_gate_fallback_executed") and item.get("ocr_gate_fallback_text_visibility") in {"not_recovered", "unavailable"}:
@@ -1657,6 +1665,13 @@ ADVANCED_DIAGNOSTIC_FIELDS = [
     "document_family_classification_diagnostic",
     "operator_review_reason",
     "operator_reason_label",
+    "image_ocr_available",
+    "image_ocr_attempted",
+    "image_ocr_engine",
+    "image_ocr_text_visibility",
+    "image_ocr_review_only",
+    "image_ocr_auto_accept_allowed",
+    "external_api_used",
 ]
 
 
@@ -1781,6 +1796,18 @@ def render_run_result_card(item: dict) -> None:
     st.markdown("#### Russian text recovery")
     for label, value in russian_text_recovery_summary(item).items():
         st.markdown(f"- **{label}:** {value}")
+    if item.get("image_ocr_engine"):
+        st.markdown("#### Local image OCR")
+        image_ocr_lines = {
+            "OCR attempted": "Yes" if item.get("image_ocr_attempted") else "No",
+            "OCR available": "Yes" if item.get("image_ocr_available") else "No",
+            "Text recovery": str(item.get("image_ocr_text_visibility") or "unavailable"),
+            "Cloud tools": "Off" if not item.get("external_api_used") else "On",
+            "Human review still required": "Yes",
+            "Acceptance": "Not accepted",
+        }
+        for label, value in image_ocr_lines.items():
+            st.markdown(f"- **{label}:** {value}")
 
     st.markdown("#### What happened")
     for label, state in run_review_timeline_steps(item):

@@ -146,6 +146,17 @@ def test_image_dispatch_is_review_bound_when_local_ocr_is_unavailable(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     _configure_launcher_dirs(monkeypatch, tmp_path)
+    monkeypatch.setattr(
+        launcher,
+        "recover_text_from_image_local",
+        lambda path: launcher.LocalImageOcrResult(
+            available=False,
+            attempted=False,
+            engine="tesseract_local",
+            text_visibility="unavailable",
+            error_bucket="local_ocr_unavailable",
+        ),
+    )
     image_path = tmp_path / "sample.png"
     image_path.write_bytes(b"\x89PNG\r\n\x1a\n")
 

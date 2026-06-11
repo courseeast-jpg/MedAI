@@ -8,10 +8,13 @@ from __future__ import annotations
 
 import json
 import re
+import shutil as shutil_module
 import shutil
+import subprocess
 import zipfile
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from importlib.util import find_spec
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree
@@ -96,7 +99,25 @@ class TestFileResult:
     # each preview row. Public-safe — no PHI / raw text / private paths.
     extracted_medical_fact_record_ids: list[str] = field(default_factory=list)
     extracted_medical_fact_record_states: dict = field(default_factory=dict)
+    image_ocr_available: bool = False
+    image_ocr_attempted: bool = False
+    image_ocr_engine: str | None = None
+    image_ocr_text_visibility: str | None = None
+    image_ocr_review_only: bool = True
+    image_ocr_auto_accept_allowed: bool = False
+    external_api_used: bool = False
     error: str | None = None
+
+
+@dataclass(frozen=True)
+class LocalImageOcrResult:
+    available: bool
+    attempted: bool
+    text: str = ""
+    engine: str | None = None
+    language: str | None = None
+    text_visibility: str = "unavailable"
+    error_bucket: str | None = None
 
 
 @dataclass
@@ -253,7 +274,7 @@ def run_medai_test_batch(execution_pipeline, *, specialty: str = "general") -> T
         if file_result.status == "accepted":
             summary.files_processed.append(source_path.name)
             summary.files_accepted.append(source_path.name)
-        elif file_result.status == "review":
+        elif file_result.status in {"review", "review_ocr_quality"}:
             summary.files_processed.append(source_path.name)
             summary.files_sent_to_review.append(source_path.name)
         else:
@@ -267,6 +288,8 @@ def run_medai_test_batch(execution_pipeline, *, specialty: str = "general") -> T
 
 def write_test_run_reports(summary: TestRunSummary) -> tuple[Path, Path]:
     ensure_test_launcher_dirs()
+    LATEST_JSON_REPORT.parent.mkdir(parents=True, exist_ok=True)
+    LATEST_MD_REPORT.parent.mkdir(parents=True, exist_ok=True)
     data = {
         "timestamp": summary.timestamp,
         "run_id": summary.run_id,
@@ -393,10 +416,21 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
                 session_id=run_id,
             )
         elif suffix in IMAGE_TEST_EXTENSIONS:
-            return _review_bound_unavailable_file_result(
-                source_path,
-                selected_extractor="local_image_ocr_unavailable",
-                error="Local image OCR extractor is safely unavailable in this runtime.",
+            image_ocr = recover_text_from_image_local(source_path)
+            if not image_ocr.available:
+                return _review_bound_unavailable_file_result(
+                    source_path,
+                    selected_extractor="local_image_ocr_unavailable",
+                    error="Local image OCR extractor is safely unavailable in this runtime.",
+                    image_ocr=image_ocr,
+                )
+            if not image_ocr.text.strip():
+                return _review_bound_no_text_file_result(source_path, image_ocr=image_ocr)
+            result = execution_pipeline.process_text(
+                image_ocr.text,
+                specialty=specialty,
+                source_name=source_path.name,
+                session_id=run_id,
             )
         else:
             raise ValueError(f"Unsupported test file type: {source_path.suffix}")
@@ -410,7 +444,7 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             or audit.get("extractor")
         )
         confidence = _safe_float(extractor_result.get("confidence", audit.get("confidence")))
-        force_review_bound = suffix == ".docx"
+        force_review_bound = suffix == ".docx" or suffix in IMAGE_TEST_EXTENSIONS
         accepted = result.outcome in ACCEPTED_OUTCOMES and not force_review_bound
         outcome = "queued_for_review" if force_review_bound else result.outcome
         validation_status = (
@@ -418,6 +452,8 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
         )
         validation_reason_codes = _validation_reason_codes(result.validation_errors)
         ocr_gate_marker = runtime_cyrillic_ocr_marker_for_result(extractor_result)
+        if suffix in IMAGE_TEST_EXTENSIONS:
+            ocr_gate_marker.update(_image_ocr_gate_marker(image_ocr))
         document_type = display_document_type(
             _runtime_document_type_candidate(audit, extractor_result, ocr_gate_marker),
             text=str(extractor_result.get("raw_text") or extractor_result.get("text") or ""),
@@ -444,7 +480,11 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             status="accepted" if accepted else "review",
             outcome=outcome,
             processed_path=str(destination),
-            selected_extractor=str(selected_extractor) if selected_extractor is not None else None,
+            selected_extractor=(
+                f"local_image_ocr:{selected_extractor}"
+                if suffix in IMAGE_TEST_EXTENSIONS and selected_extractor is not None
+                else str(selected_extractor) if selected_extractor is not None else None
+            ),
             confidence=confidence,
             validation_status=validation_status,
             document_type=document_type,
@@ -495,6 +535,13 @@ def _process_one_file(execution_pipeline, source_path: Path, *, specialty: str, 
             extracted_medical_fact_record_states=dict(
                 extractor_result.get("extracted_medical_fact_record_states") or {}
             ),
+            image_ocr_available=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.available),
+            image_ocr_attempted=bool(suffix in IMAGE_TEST_EXTENSIONS and image_ocr.attempted),
+            image_ocr_engine=image_ocr.engine if suffix in IMAGE_TEST_EXTENSIONS else None,
+            image_ocr_text_visibility=image_ocr.text_visibility if suffix in IMAGE_TEST_EXTENSIONS else None,
+            image_ocr_review_only=True,
+            image_ocr_auto_accept_allowed=False,
+            external_api_used=bool(extractor_result.get("external_api_used", False)),
         )
     except Exception as exc:
         destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)
@@ -527,8 +574,125 @@ def extract_docx_text_local(source_path: Path) -> str:
     return extracted
 
 
-def _review_bound_unavailable_file_result(source_path: Path, *, selected_extractor: str, error: str) -> TestFileResult:
+def local_image_ocr_available() -> bool:
+    return bool(find_spec("pytesseract") and find_spec("PIL") and shutil_module.which("tesseract"))
+
+
+def recover_text_from_image_local(source_path: Path, *, timeout_seconds: int = 30) -> LocalImageOcrResult:
+    if not local_image_ocr_available():
+        return LocalImageOcrResult(
+            available=False,
+            attempted=False,
+            engine="tesseract_local",
+            text_visibility="unavailable",
+            error_bucket="local_ocr_unavailable",
+        )
+    try:
+        from PIL import Image, ImageOps, ImageSequence
+        import pytesseract
+    except Exception:
+        return LocalImageOcrResult(
+            available=False,
+            attempted=False,
+            engine="tesseract_local",
+            text_visibility="unavailable",
+            error_bucket="local_ocr_import_failed",
+        )
+
+    language = _choose_local_image_ocr_language()
+    try:
+        pages: list[str] = []
+        with Image.open(source_path) as image:
+            for frame in ImageSequence.Iterator(image):
+                normalized = ImageOps.grayscale(ImageOps.exif_transpose(frame.copy()))
+                pages.append(
+                    pytesseract.image_to_string(
+                        normalized,
+                        lang=language,
+                        config="--psm 6",
+                        timeout=timeout_seconds,
+                    )
+                )
+        text = "\n".join(page for page in pages if page).strip()
+    except Exception:
+        return LocalImageOcrResult(
+            available=True,
+            attempted=True,
+            engine="tesseract_local",
+            language=language,
+            text_visibility="unavailable",
+            error_bucket="local_ocr_failed",
+        )
+    return LocalImageOcrResult(
+        available=True,
+        attempted=True,
+        text=text,
+        engine="tesseract_local",
+        language=language,
+        text_visibility="recovered" if text else "not_recovered",
+    )
+
+
+def _choose_local_image_ocr_language() -> str:
+    languages = _list_tesseract_languages()
+    available = set(languages)
+    if "rus" in available and "eng" in available:
+        return "rus+eng"
+    if "eng" in available:
+        return "eng"
+    if "rus" in available:
+        return "rus"
+    return "eng"
+
+
+def _list_tesseract_languages() -> list[str]:
+    binary = shutil_module.which("tesseract") or "tesseract"
+    try:
+        completed = subprocess.run(
+            [binary, "--list-langs"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+            timeout=10,
+        )
+    except Exception:
+        return []
+    if completed.returncode != 0:
+        return []
+    lines = (completed.stdout or completed.stderr or "").splitlines()
+    return [line.strip() for line in lines if line.strip() and "available languages" not in line.lower()]
+
+
+def _image_ocr_gate_marker(image_ocr: LocalImageOcrResult) -> dict[str, Any]:
+    return {
+        "ocr_gate_fallback_executed": bool(image_ocr.attempted and image_ocr.available),
+        "ocr_gate_fallback_attempted": bool(image_ocr.attempted),
+        "ocr_gate_fallback_engine": image_ocr.engine,
+        "ocr_gate_fallback_language": image_ocr.language,
+        "ocr_gate_fallback_text_visibility": image_ocr.text_visibility,
+        "ocr_gate_fallback_review_only": True,
+        "ocr_gate_fallback_auto_accept_allowed": False,
+        "ocr_gate_fallback_error_bucket": image_ocr.error_bucket,
+    }
+
+
+def _review_bound_unavailable_file_result(
+    source_path: Path,
+    *,
+    selected_extractor: str,
+    error: str,
+    image_ocr: LocalImageOcrResult | None = None,
+) -> TestFileResult:
     destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)
+    image_ocr = image_ocr or LocalImageOcrResult(
+        available=False,
+        attempted=False,
+        engine="tesseract_local",
+        text_visibility="unavailable",
+        error_bucket="local_ocr_unavailable",
+    )
     return TestFileResult(
         file_name=source_path.name,
         status="review",
@@ -544,7 +708,52 @@ def _review_bound_unavailable_file_result(source_path: Path, *, selected_extract
         ocr_gate_auto_accept_allowed=False,
         ocr_gate_fallback_review_only=True,
         ocr_gate_fallback_auto_accept_allowed=False,
+        ocr_gate_fallback_executed=False,
+        ocr_gate_fallback_engine=image_ocr.engine,
+        ocr_gate_fallback_language=image_ocr.language,
+        ocr_gate_fallback_text_visibility=image_ocr.text_visibility,
+        ocr_gate_fallback_error_bucket=image_ocr.error_bucket,
+        image_ocr_available=image_ocr.available,
+        image_ocr_attempted=image_ocr.attempted,
+        image_ocr_engine=image_ocr.engine,
+        image_ocr_text_visibility=image_ocr.text_visibility,
+        image_ocr_review_only=True,
+        image_ocr_auto_accept_allowed=False,
+        external_api_used=False,
         error=error,
+    )
+
+
+def _review_bound_no_text_file_result(source_path: Path, *, image_ocr: LocalImageOcrResult) -> TestFileResult:
+    destination = _move_to_unique_destination(source_path, TEST_REVIEW_DIR)
+    return TestFileResult(
+        file_name=source_path.name,
+        status="review_ocr_quality",
+        outcome="queued_for_review",
+        processed_path=str(destination),
+        selected_extractor="local_image_ocr:tesseract_local",
+        validation_status="empty",
+        document_type=UNKNOWN_DOCUMENT_LABEL,
+        ocr_quality_band="no_text_found",
+        language_text_visibility="not_recovered",
+        ocr_gate_review_only=True,
+        ocr_gate_auto_accept_allowed=False,
+        ocr_gate_fallback_executed=True,
+        ocr_gate_fallback_engine=image_ocr.engine,
+        ocr_gate_fallback_language=image_ocr.language,
+        ocr_gate_fallback_text_visibility=image_ocr.text_visibility,
+        ocr_gate_fallback_review_only=True,
+        ocr_gate_fallback_auto_accept_allowed=False,
+        image_ocr_available=True,
+        image_ocr_attempted=True,
+        image_ocr_engine=image_ocr.engine,
+        image_ocr_text_visibility=image_ocr.text_visibility,
+        image_ocr_review_only=True,
+        image_ocr_auto_accept_allowed=False,
+        external_api_used=False,
+        operator_review_reason="manual_review_required",
+        operator_reason_label="Manual review required",
+        error="Local image OCR found no readable text.",
     )
 
 
