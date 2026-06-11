@@ -79,6 +79,16 @@ st.set_page_config(
 
 PRIMARY_OPERATOR_TABS = list(DEFAULT_PRIMARY_TABS)
 ADVANCED_OPERATOR_TABS = list(ADVANCED_TABS)
+DOCUMENT_CATEGORY_OPTIONS = [
+    "General",
+    "Lab result",
+    "Urinalysis",
+    "Imaging report",
+    "Pathology report",
+    "Treatment plan",
+    "Clinical note",
+    "Other / needs review",
+]
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
 SPECIALTY_SESSION_KEY = "medai_selected_specialty"
@@ -97,15 +107,7 @@ PHASE52_OPERATOR_TABS = PRIMARY_OPERATOR_TABS + ADVANCED_OPERATOR_TABS
 
 
 def operator_tabs(show_advanced_tools: bool = False) -> list[str]:
-    tabs = operator_ui_tabs(show_advanced_tools)
-    try:
-        from app.clinical_knowledge_terminology_lookup_viewer import terminology_lookup_panel_enabled
-
-        if show_advanced_tools and terminology_lookup_panel_enabled():
-            tabs.append(TERMINOLOGY_LOOKUP_TAB)
-    except Exception:
-        pass
-    return tabs
+    return operator_ui_tabs(show_advanced_tools)
 
 
 def navigation_subtitle(tab_label: str) -> str:
@@ -611,7 +613,7 @@ def render_adapter_fallback_panel(sys_components: dict) -> None:
     with category_col:
         document_category_label = st.selectbox(
             "Document category",
-            ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
+            DOCUMENT_CATEGORY_OPTIONS,
             key="adapter_fallback_document_category",
         )
     with specialty_col:
@@ -1148,7 +1150,7 @@ def render_review_queue_tab(sys_components: dict) -> None:
     top_cols[0].metric("Needs review", model["counts"]["review_bound"])
     top_cols[1].caption(REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER)
     if not model["rows"]:
-        st.info("No records need review.")
+        st.info("No records waiting for review.")
         return
 
     try:
@@ -1243,7 +1245,7 @@ def render_current_run_tab(sys_components: dict, *, show_title: bool = True) -> 
     with category_col:
         document_category_label = st.selectbox(
             "Document category",
-            ["General", "Neurology", "Epilepsy", "Gastroenterology", "Urology"],
+            DOCUMENT_CATEGORY_OPTIONS,
             key="test_launcher_document_category",
         )
     with specialty_col:
@@ -2319,7 +2321,21 @@ def main() -> None:
     if show_advanced_tools:
         st.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
 
-    tab_labels = operator_tabs(show_advanced_tools)
+    tab_labels = [
+        RUN_REVIEW_TAB,
+        MKB_EXPLORER_TAB,
+        REVIEW_QUEUE_TAB,
+    ]
+    if show_advanced_tools:
+        tab_labels.extend(
+            [
+                "Operator Control Panel",
+                "Validation Batch Audit",
+                "Validation History",
+                "Safety & Governance",
+                "Terminology Admin",
+            ]
+        )
     tabs = st.tabs(tab_labels)
     for label, tab in zip(tab_labels, tabs):
         with tab:
