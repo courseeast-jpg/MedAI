@@ -346,16 +346,48 @@ def _doctrine_phrase_check() -> dict[str, Any]:
     return {"doctrine_file_exists": DOCTRINE.exists(), "missing_phrases": missing, "passed": DOCTRINE.exists() and not missing}
 
 
+_RECURSIVE_DESELECT = "not regressions_still_pass and not prior_block_regressions"
+
+
+def _is_prior_block_script(command: list[str]) -> bool:
+    """True if the command invokes a run_medai_ai_*_15*.py validation script."""
+    for arg in command:
+        base = str(arg).replace("\\", "/").split("/")[-1]
+        if base.startswith("run_medai_ai_") and base.endswith(".py"):
+            return True
+    return False
+
+
+def _with_recursive_deselect(command: list[str]) -> list[str]:
+    """Append a deselect filter to pytest commands so recursive cross-block
+    regression tests do not re-trigger nested subprocess chains (15K hang fix)."""
+    if "pytest" in command and "-k" not in command:
+        return [*command, "-k", _RECURSIVE_DESELECT]
+    return command
+
+
 def _run_command(command: list[str], public_command: str) -> dict[str, Any]:
     if os.environ.get("MEDAI_15K_SKIP_PYTEST") == "1":
         return {"command": public_command, "skipped": True}
+    command = _with_recursive_deselect(command)
     proc = subprocess.run(command, cwd=REPO_ROOT, check=False, capture_output=True, text=True)
-    return {"command": public_command, "returncode": proc.returncode, "skipped": False}
+    result = {"command": public_command, "returncode": proc.returncode, "skipped": False}
+    if "-k" in command:
+        result["recursive_tests_deselected"] = True
+    return result
 
 
 def _run_optional_command(command: list[str], public_command: str) -> dict[str, Any]:
     if not _command_target_exists(command):
         return {"command": public_command, "missing": True}
+    # Non-recursive default: refuse nested prior-block validation scripts unless
+    # explicitly allowed. This prevents the 15K script-to-script recursion hang.
+    if _is_prior_block_script(command) and os.environ.get("MEDAI_ALLOW_NESTED_SCRIPTS") != "1":
+        return {
+            "command": public_command,
+            "skipped": True,
+            "reason": "nested_prior_block_script_disabled_by_default",
+        }
     return _run_command(command, public_command)
 
 

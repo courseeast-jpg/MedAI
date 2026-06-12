@@ -1,0 +1,14 @@
+{
+  "deselect_patterns": [
+    "regressions_still_pass",
+    "prior_block_regressions"
+  ],
+  "deselected_recursive_test_count": 8,
+  "recursive_tests_deselected": true,
+  "flat_suite_status": "passed",
+  "flat_suite_counts": {
+    "passed": 185,
+    "deselected": 8
+  },
+  "passed": true
+}

@@ -1,0 +1,10 @@
+{
+  "depth_env_var": "MEDAI_VALIDATION_DEPTH",
+  "default_refused": true,
+  "default_reason": "nested_prior_block_validation_script_refused_by_default",
+  "depth1_blocked": true,
+  "depth1_reason": "nested_prior_block_validation_script_blocked_at_depth_1",
+  "prior_block_script_detected": true,
+  "no_script_executed": true,
+  "passed": true
+}

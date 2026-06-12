@@ -1,0 +1,113 @@
+{
+  "flat_harness": {
+    "depth": 0,
+    "flat_suite": {
+      "name": "flat_focused_suite",
+      "command": "python -m pytest tests/test_medai_ai_extraction_workflow_seam_15a.py tests/test_medai_ai_extraction_privacy_gate_15b.py tests/test_medai_ai_provider_adapter_stub_15c.py tests/test_medai_ai_provider_selection_ui_15d.py tests/test_medai_ai_external_call_dry_run_15e.py tests/test_medai_ai_real_provider_enablement_gate_15f.py tests/test_medai_ai_gemini_adapter_disabled_15g.py tests/test_medai_ai_premium_adapters_disabled_15i.py tests/test_medai_ai_local_ollama_adapter_disabled_15j.py tests/test_medai_ai_provider_enablement_operator_control_15k.py tests/test_medai_ai_validation_harness_derecursion_15l.py -p no:cacheprovider -q -k not regressions_still_pass and not prior_block_regressions",
+      "status": "passed",
+      "returncode": 0,
+      "duration_s": 49.781,
+      "stdout_tail": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-9.0.3, pluggy-1.6.0\n<redacted-header>\n<redacted-header>\n<redacted-header>\nasyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollected 193 items / 8 deselected / 185 selected\n\n<path> .............        [  7%]\n<path> ................      [ 15%]\n<path> .........               [ 20%]\n<path> .......                 [ 24%]\n<path> ..........              [ 29%]\n<path> ........        [ 34%]\n<path> ..................... [ 45%]\n...                                                                      [ 47%]\n<path> ................... [ 57%]\n............                                                             [ 63%]\n<path> ............... [ 71%]\n.....                                                                    [ 74%]\n<path> ........ [ 78%]\n..........                                                               [ 84%]\n<path> .............. [ 91%]\n...............                                                          [100%]\n\n===================== 185 passed, 8 deselected in 47.93s ======================\n",
+      "stderr_tail": "",
+      "pytest_counts": {
+        "passed": 185,
+        "deselected": 8
+      },
+      "reason": ""
+    },
+    "direct_commands": [
+      {
+        "name": "regression_12a_uat",
+        "command": "python scripts/run_medai_operator_workflow_uat_12a.py",
+        "status": "passed",
+        "returncode": 0,
+        "duration_s": 1.812,
+        "stdout_tail": "medai_operator_workflow_uat_12a_ready\n{\n  \"report\": \"<path>\",\n  \"uat_passed\": true,\n  \"privacy_result\": \"passed\",\n  \"external_api_used\": false,\n  \"auto_accept\": false\n}\n",
+        "stderr_tail": "<date> WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
+        "pytest_counts": {},
+        "reason": ""
+      },
+      {
+        "name": "regression_13c_pytest",
+        "command": "python -m pytest tests/test_medai_operator_usability_polish_13c.py -p no:cacheprovider -q",
+        "status": "passed",
+        "returncode": 0,
+        "duration_s": 6.235,
+        "stdout_tail": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-9.0.3, pluggy-1.6.0\n<redacted-header>\n<redacted-header>\n<redacted-header>\nasyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollected 14 items\n\n<path> ..............         [100%]\n\n============================= 14 passed in 4.47s ==============================\n",
+        "stderr_tail": "",
+        "pytest_counts": {
+          "passed": 14
+        },
+        "reason": ""
+      }
+    ],
+    "missing_test_files": [],
+    "deselect_patterns": [
+      "regressions_still_pass",
+      "prior_block_regressions"
+    ],
+    "deselected_recursive_test_count": 8,
+    "recursive_tests_deselected": true,
+    "nested_prior_block_scripts_invoked": false,
+    "nested_prior_block_scripts_refused_by_default": true,
+    "per_command_timeout_s": 600,
+    "total_timeout_s": 1800,
+    "total_duration_s": 57.828,
+    "subprocess_use": "local_test_runner_only",
+    "provider_execution_subprocess_path": false,
+    "external_api_used": false,
+    "real_network_call_used": false,
+    "local_model_call_used": false,
+    "final_external_call_allowed": false,
+    "real_provider_execution_enabled": false,
+    "passed": true,
+    "real_failures": []
+  },
+  "depth_guard_check": {
+    "depth_env_var": "MEDAI_VALIDATION_DEPTH",
+    "default_refused": true,
+    "default_reason": "nested_prior_block_validation_script_refused_by_default",
+    "depth1_blocked": true,
+    "depth1_reason": "nested_prior_block_validation_script_blocked_at_depth_1",
+    "prior_block_script_detected": true,
+    "no_script_executed": true,
+    "passed": true
+  },
+  "timeout_check": {
+    "probe_command": "python -c import time; time.sleep(5)  (timeout 1s)",
+    "status": "timed_out",
+    "reason": "exceeded_timeout_1s",
+    "timed_out_recorded_honestly": true,
+    "passed": true
+  },
+  "recursive_test_deselect_check": {
+    "deselect_patterns": [
+      "regressions_still_pass",
+      "prior_block_regressions"
+    ],
+    "deselected_recursive_test_count": 8,
+    "recursive_tests_deselected": true,
+    "flat_suite_status": "passed",
+    "flat_suite_counts": {
+      "passed": 185,
+      "deselected": 8
+    },
+    "passed": true
+  },
+  "doctrine_check": {
+    "doctrine_file_exists": true,
+    "missing_phrases": [],
+    "passed": true,
+    "package_first_extraction_preserved": true,
+    "review_bound_ai_output_preserved": true,
+    "record_count_not_success_metric": true
+  },
+  "source_safety_scan": {
+    "provider_sdk_imports_introduced": false,
+    "provider_execution_subprocess_path_introduced": false,
+    "network_call_code_introduced": false,
+    "localhost_or_ollama_call_introduced": false,
+    "matches": [],
+    "passed": true
+  }
+}

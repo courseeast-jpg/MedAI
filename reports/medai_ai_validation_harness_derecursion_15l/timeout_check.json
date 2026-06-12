@@ -1,0 +1,7 @@
+{
+  "probe_command": "python -c import time; time.sleep(5)  (timeout 1s)",
+  "status": "timed_out",
+  "reason": "exceeded_timeout_1s",
+  "timed_out_recorded_honestly": true,
+  "passed": true
+}

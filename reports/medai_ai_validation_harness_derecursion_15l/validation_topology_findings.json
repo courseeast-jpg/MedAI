@@ -1,0 +1,51 @@
+{
+  "block": "MEDAI-AI-VALIDATION-HARNESS-DERECURSION-15L",
+  "recursion_defect_confirmed": true,
+  "root_cause_summary": "Validation recursed two ways: (1) each scripts/run_medai_ai_*_15X.py ran all prior-block validation scripts via PRIOR_BASELINE_COMMANDS, and each of those ran their own prior scripts; (2) each focused test file contained a test_*regressions_still_pass test that subprocess-ran prior focused test files, which ran their own regression tests. Both compound into effectively exponential nested execution and the ~4h 15K hang.",
+  "script_to_script_recursion_points": [
+    {
+      "script": "scripts/run_medai_ai_provider_enablement_operator_control_15k.py",
+      "mechanism": "PRIOR_BASELINE_COMMANDS invokes prior-block run_medai_ai_*_15*.py scripts"
+    },
+    {
+      "script": "scripts/run_medai_ai_local_ollama_adapter_disabled_15j.py",
+      "mechanism": "PRIOR_BASELINE_COMMANDS invokes prior-block run_medai_ai_*_15*.py scripts"
+    },
+    {
+      "script": "scripts/run_medai_ai_premium_adapters_disabled_15i.py",
+      "mechanism": "PRIOR_BASELINE_COMMANDS invokes prior-block run_medai_ai_*_15*.py scripts"
+    },
+    {
+      "script": "scripts/run_medai_ai_gemini_adapter_disabled_15g.py",
+      "mechanism": "PRIOR_BASELINE_COMMANDS invokes prior-block run_medai_ai_*_15*.py scripts"
+    }
+  ],
+  "subprocess_cross_block_regression_tests": [
+    "tests/test_medai_ai_provider_adapter_stub_15c.py::test_15b_15a_and_12a_13c_regressions_still_pass",
+    "tests/test_medai_ai_provider_selection_ui_15d.py::test_15c_15b_15a_12a_and_13c_regressions_still_pass",
+    "tests/test_medai_ai_external_call_dry_run_15e.py::test_15d_15c_15b_15a_12a_and_13c_regressions_still_pass",
+    "tests/test_medai_ai_real_provider_enablement_gate_15f.py::test_15e_15d_15c_15b_15a_12a_and_13c_regressions_still_pass",
+    "tests/test_medai_ai_gemini_adapter_disabled_15g.py::test_15f_through_15a_12a_and_13c_regressions_still_pass",
+    "tests/test_medai_ai_premium_adapters_disabled_15i.py::test_15g_through_15a_12a_and_13c_regressions_still_pass",
+    "tests/test_medai_ai_local_ollama_adapter_disabled_15j.py::test_15i_through_15a_12a_and_13c_regressions_still_pass",
+    "tests/test_medai_ai_provider_enablement_operator_control_15k.py::test_prior_block_regressions_still_pass"
+  ],
+  "commands_that_caused_15k_hang": [
+    "PRIOR_BASELINE_COMMANDS nested run_medai_ai_*_15*.py scripts",
+    "test_prior_block_regressions_still_pass (recursive subprocess of prior focused files)"
+  ],
+  "safe_flat_tests": [
+    "tests/test_medai_ai_extraction_workflow_seam_15a.py",
+    "tests/test_medai_ai_extraction_privacy_gate_15b.py",
+    "tests/test_medai_ai_provider_adapter_stub_15c.py",
+    "tests/test_medai_ai_provider_selection_ui_15d.py",
+    "tests/test_medai_ai_external_call_dry_run_15e.py",
+    "tests/test_medai_ai_real_provider_enablement_gate_15f.py",
+    "tests/test_medai_ai_gemini_adapter_disabled_15g.py",
+    "tests/test_medai_ai_premium_adapters_disabled_15i.py",
+    "tests/test_medai_ai_local_ollama_adapter_disabled_15j.py",
+    "tests/test_medai_ai_provider_enablement_operator_control_15k.py",
+    "tests/test_medai_ai_validation_harness_derecursion_15l.py"
+  ],
+  "fix_strategy": "Run focused test files in one flat pytest process with recursive regression tests deselected; run 12A and 13C as direct commands once; refuse nested prior-block scripts by default with a MEDAI_VALIDATION_DEPTH guard and explicit timeouts."
+}
