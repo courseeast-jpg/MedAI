@@ -1461,6 +1461,16 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
     if preview.get("dry_run_fail_closed_reason"):
         st.caption(f"Dry-run blocked: {preview.get('dry_run_fail_closed_reason')}")
     st.caption("Dry-run only - real provider execution remains disabled")
+    st.caption(
+        "Credential readiness: "
+        f"{preview.get('credential_env_var_name') or 'not required'} | "
+        f"Present: {bool(preview.get('credential_present'))}"
+    )
+    st.caption(
+        "Real provider execution enabled: False | "
+        f"Block reason: {preview.get('real_provider_execution_block_reason') or 'real_provider_execution_disabled_by_policy'}"
+    )
+    st.caption("Real provider execution disabled by policy")
     if preview.get("redacted_payload_preview_available"):
         st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:

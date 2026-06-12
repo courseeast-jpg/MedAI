@@ -1,0 +1,15 @@
+{
+  "operator_notice": "No external AI call was made.",
+  "real_provider_notice": "Real provider execution disabled by policy",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "credential_env_var_name": "GEMINI_API_KEY",
+  "credential_present": true,
+  "real_provider_execution_enabled": false,
+  "real_provider_execution_block_reason": "real_provider_execution_disabled_by_policy",
+  "dry_run_status": "dry-run only - real provider execution remains disabled",
+  "privacy_gate_status": "redacted_payload_ready",
+  "payload_policy_allowed": true,
+  "budget_allowed": true,
+  "approval_state": "approved_for_dry_run"
+}

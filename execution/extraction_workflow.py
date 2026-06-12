@@ -25,6 +25,12 @@ from execution.ai_extraction_adapter import (
     FakeAIExtractionAdapter,
 )
 from execution.ai_payload_policy import AIPayloadPolicy, payload_policy_to_public_dict
+from execution.ai_provider_enablement import (
+    evaluate_real_provider_execution_readiness,
+    real_provider_credential_to_public_dict,
+    real_provider_enablement_to_public_dict,
+    real_provider_safety_checklist_to_public_dict,
+)
 from execution.ai_privacy_gate import (
     AIExternalCallApprovalState,
     build_ai_external_call_audit_record,
@@ -144,6 +150,19 @@ def run_ai_extraction_workflow(
     selection_public = provider_selection_public
     dry_run_decision_public = dry_run_decision_to_public_dict(dry_run)
     dry_run_audit_public = dry_run_audit_to_public_dict(dry_run)
+    enablement_provider_name = (
+        selection_public["requested_provider"]
+        if context.real_provider_enablement_mode == "readiness_check"
+        else "fake_local"
+    )
+    provider_enablement = evaluate_real_provider_execution_readiness(
+        provider_name=enablement_provider_name,
+        operator_approval_state=context.operator_approval_state,
+        dry_run_decision_result=dry_run_decision_public,
+    )
+    provider_enablement_public = real_provider_enablement_to_public_dict(provider_enablement)
+    credential_public = real_provider_credential_to_public_dict(provider_enablement)
+    safety_checklist_public = real_provider_safety_checklist_to_public_dict(provider_enablement)
     operator_preview = build_operator_preview(
         packages,
         privacy_gate_result=privacy_public,
@@ -152,6 +171,8 @@ def run_ai_extraction_workflow(
         provider_registry_result=provider_public,
         provider_selection_result=selection_public,
         dry_run_decision_result=dry_run_decision_public,
+        real_provider_enablement_result=provider_enablement_public,
+        credential_readiness_result=credential_public,
     )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
@@ -180,6 +201,9 @@ def run_ai_extraction_workflow(
         provider_selection_result=selection_public,
         dry_run_decision_result=dry_run_decision_public,
         dry_run_audit_result=dry_run_audit_public,
+        real_provider_enablement_result=provider_enablement_public,
+        credential_readiness_result=credential_public,
+        real_provider_safety_checklist_result=safety_checklist_public,
         validation_errors=errors,
     )
 
@@ -216,6 +240,8 @@ def build_operator_preview(
     provider_registry_result: dict[str, Any] | None = None,
     provider_selection_result: dict[str, Any] | None = None,
     dry_run_decision_result: dict[str, Any] | None = None,
+    real_provider_enablement_result: dict[str, Any] | None = None,
+    credential_readiness_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -246,7 +272,7 @@ def build_operator_preview(
                 ],
             }
         )
-    return {
+    preview = {
         "visible": bool(preview_packages),
         "packages": preview_packages,
         "review_required": True,
@@ -293,6 +319,12 @@ def build_operator_preview(
         ),
         "dry_run_fail_closed_reason": (dry_run_decision_result or {}).get("fail_closed_reason", ""),
         "real_network_call_used": False,
+        "real_provider_execution_enabled": False,
+        "real_provider_execution_block_reason": (real_provider_enablement_result or {}).get(
+            "real_provider_execution_block_reason",
+            "real_provider_execution_disabled_by_policy",
+        ),
+        "real_provider_execution_notice": "Real provider execution disabled by policy",
         "provider_message": (
             "Provider disabled by policy"
             if not bool((provider_registry_result or {}).get("provider_enabled", False))
@@ -301,6 +333,17 @@ def build_operator_preview(
         "operator_notice": "No external AI call was made",
         "operator_notice_sentence": "No external AI call was made.",
     }
+    if (credential_readiness_result or {}).get("credential_env_var_name"):
+        preview.update(
+            {
+                "credential_env_var_name": credential_readiness_result.get("credential_env_var_name", ""),
+                "credential_present": bool(credential_readiness_result.get("credential_present", False)),
+                "credential_value_redacted": bool(
+                    credential_readiness_result.get("credential_value_redacted", False)
+                ),
+            }
+        )
+    return preview
 
 
 def workflow_result_to_public_dict(result: ExtractionWorkflowResult) -> dict[str, Any]:

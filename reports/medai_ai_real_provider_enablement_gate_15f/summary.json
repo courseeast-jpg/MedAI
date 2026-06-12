@@ -1,0 +1,19 @@
+{
+  "block": "MEDAI-AI-REAL-PROVIDER-ENABLEMENT-GATE-15F",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "credential_env_var_name": "GEMINI_API_KEY",
+  "credential_present_sample": true,
+  "credential_missing_sample": false,
+  "real_provider_execution_enabled": false,
+  "real_provider_execution_block_reason": "real_provider_execution_disabled_by_policy",
+  "dry_run_external_call_allowed": true,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "review_bound_package_count": 3,
+  "privacy_result": "passed"
+}

@@ -1,0 +1,12 @@
+{
+  "provider_name": "gemini",
+  "privacy_gate_required": true,
+  "payload_policy_required": true,
+  "budget_guard_required": true,
+  "operator_approval_required": true,
+  "dry_run_required_before_real_call": true,
+  "dry_run_passed": true,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false
+}
