@@ -1,0 +1,113 @@
+{
+  "adapter_class": "OpenAIExtractionAdapter",
+  "provider_name": "openai",
+  "model_name": "openai-disabled-15i",
+  "prompt_contract": {
+    "provider_name": "openai",
+    "prompt_contract_version": "openai-extraction-prompt-15i-v1",
+    "schema_contract_version": "openai-extraction-schema-15i-v1",
+    "instruction_rule_keys": [
+      "extract_source_visible_content_only",
+      "return_structured_json_only",
+      "do_not_diagnose",
+      "do_not_recommend_treatment",
+      "do_not_infer_medical_truth",
+      "preserve_uncertainty",
+      "label_recommendation_sections_as_source_text_only",
+      "review_required_true",
+      "auto_accept_false",
+      "active_write_allowed_false"
+    ],
+    "raw_payload_text_included": false
+  },
+  "allowed_payload_type": "redacted_text_layout_summary",
+  "forbidden_payload_types": [
+    "external_vision_payload",
+    "provider_sdk_request",
+    "raw_file_upload",
+    "raw_image",
+    "raw_pdf",
+    "scanned_image",
+    "unredacted_ocr_body"
+  ],
+  "real_provider_execution_enabled": false,
+  "provider_real_call_attempted": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false,
+  "provider_sdk_import_required": false,
+  "gate_samples": {
+    "raw_pdf_rejected": {
+      "fail_closed_reason": "forbidden_payload_type",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "raw_image_rejected": {
+      "fail_closed_reason": "forbidden_payload_type",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "vision_rejected": {
+      "fail_closed_reason": "forbidden_payload_type",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "missing_privacy_gate": {
+      "fail_closed_reason": "missing_privacy_gate_result",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "failed_payload_policy": {
+      "fail_closed_reason": "payload_policy_failed",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "budget_failure": {
+      "fail_closed_reason": "budget_exceeded",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "real_execution_disabled": {
+      "fail_closed_reason": "real_provider_execution_disabled_by_policy",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "final_call_disabled": {
+      "fail_closed_reason": "final_external_call_not_allowed",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    },
+    "all_gates_pass_still_blocked": {
+      "fail_closed_reason": "real_provider_execution_disabled_by_policy",
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "provider_real_call_attempted": false,
+      "external_api_used": false,
+      "real_network_call_used": false
+    }
+  }
+}

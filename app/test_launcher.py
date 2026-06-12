@@ -391,6 +391,49 @@ def run_gemini_mock_extraction_preview_for_test() -> dict[str, Any]:
     return run_gemini_mock_extraction_preview()
 
 
+def run_premium_adapter_disabled_for_test(provider_name: str = "claude") -> dict[str, Any]:
+    """Run the 15I disabled Claude/OpenAI adapter path without any external call.
+
+    Effective provider stays fake_local; real Claude/OpenAI execution remains
+    disabled by policy. Used to show premium adapters as disabled implementations.
+    """
+    from execution.ai_extraction_adapter import ExtractionWorkflowContext
+    from execution.extraction_workflow import run_ai_extraction_workflow, workflow_result_to_public_dict
+
+    result = run_ai_extraction_workflow(
+        ExtractionWorkflowContext(
+            source_class="urinalysis_table",
+            safe_source_document_id="source_fake_15i",
+            selected_document_category="AI-assisted extraction",
+            selected_specialty_domain="urology",
+            source_modality="fake_local_adapter",
+            raw_text_local_only=(
+                "Patient Jane Example; DOB 01/02/1970; MRN 123456; Accession CY-2026-0001; "
+                "Facility Park Medical Center; Provider Dr. Alice Clinician; "
+                "123 Main Street, Springfield, NY 10001; 555-123-4567; jane.example@example.com; "
+                "Insurance INS-ABC-12345; Collected 06/10/2026"
+            ),
+            provider_name=provider_name,
+            provider_mode="disabled" if provider_name != "fake_local" else "fake_local",
+            operator_approval_state="approved_for_dry_run",
+            external_call_mode="dry_run",
+            real_provider_enablement_mode="readiness_check",
+        )
+    )
+    return workflow_result_to_public_dict(result)
+
+
+def run_premium_mock_extraction_preview_for_test(provider_name: str = "claude") -> dict[str, Any]:
+    """Run the 15I mock Claude/OpenAI schema/parse preview (no network)."""
+    if str(provider_name).strip().lower() == "openai":
+        from execution.openai_extraction_adapter import run_openai_mock_extraction_preview
+
+        return run_openai_mock_extraction_preview()
+    from execution.claude_extraction_adapter import run_claude_mock_extraction_preview
+
+    return run_claude_mock_extraction_preview()
+
+
 def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
     for relative in (
         "test_input",

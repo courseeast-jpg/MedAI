@@ -1484,6 +1484,32 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
         preview.get("gemini_adapter_status_message")
         or "Gemini adapter installed but real execution disabled by policy"
     )
+    st.caption(
+        "Claude adapter: "
+        f"{'installed (disabled)' if preview.get('claude_adapter_installed') else 'not installed'} | "
+        f"Selected: {bool(preview.get('claude_selected'))} | "
+        f"Real execution enabled: False | "
+        f"Real call attempted: {bool(preview.get('claude_real_call_attempted'))} | "
+        f"Credential env: {preview.get('claude_credential_env_var_name') or 'not required'} | "
+        f"Present: {bool(preview.get('claude_credential_present'))}"
+    )
+    st.caption(
+        preview.get("claude_adapter_status_message")
+        or "Claude adapter installed but real execution disabled by policy"
+    )
+    st.caption(
+        "OpenAI adapter: "
+        f"{'installed (disabled)' if preview.get('openai_adapter_installed') else 'not installed'} | "
+        f"Selected: {bool(preview.get('openai_selected'))} | "
+        f"Real execution enabled: False | "
+        f"Real call attempted: {bool(preview.get('openai_real_call_attempted'))} | "
+        f"Credential env: {preview.get('openai_credential_env_var_name') or 'not required'} | "
+        f"Present: {bool(preview.get('openai_credential_present'))}"
+    )
+    st.caption(
+        preview.get("openai_adapter_status_message")
+        or "OpenAI adapter installed but real execution disabled by policy"
+    )
     if preview.get("redacted_payload_preview_available"):
         st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:

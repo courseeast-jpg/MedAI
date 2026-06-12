@@ -26,6 +26,8 @@ from execution.ai_extraction_adapter import (
 )
 from execution.ai_payload_policy import AIPayloadPolicy, payload_policy_to_public_dict
 from execution.gemini_extraction_adapter import build_gemini_adapter_status
+from execution.claude_extraction_adapter import build_claude_adapter_status
+from execution.openai_extraction_adapter import build_openai_adapter_status
 from execution.ai_provider_enablement import (
     evaluate_real_provider_execution_readiness,
     real_provider_credential_to_public_dict,
@@ -164,12 +166,21 @@ def run_ai_extraction_workflow(
     provider_enablement_public = real_provider_enablement_to_public_dict(provider_enablement)
     credential_public = real_provider_credential_to_public_dict(provider_enablement)
     safety_checklist_public = real_provider_safety_checklist_to_public_dict(provider_enablement)
+    block_reason = provider_enablement_public.get(
+        "real_provider_execution_block_reason",
+        "real_provider_execution_disabled_by_policy",
+    )
     gemini_adapter_status_public = build_gemini_adapter_status(
         selected_provider=selection_public["requested_provider"],
-        real_provider_execution_block_reason=provider_enablement_public.get(
-            "real_provider_execution_block_reason",
-            "real_provider_execution_disabled_by_policy",
-        ),
+        real_provider_execution_block_reason=block_reason,
+    )
+    claude_adapter_status_public = build_claude_adapter_status(
+        selected_provider=selection_public["requested_provider"],
+        real_provider_execution_block_reason=block_reason,
+    )
+    openai_adapter_status_public = build_openai_adapter_status(
+        selected_provider=selection_public["requested_provider"],
+        real_provider_execution_block_reason=block_reason,
     )
     operator_preview = build_operator_preview(
         packages,
@@ -182,6 +193,8 @@ def run_ai_extraction_workflow(
         real_provider_enablement_result=provider_enablement_public,
         credential_readiness_result=credential_public,
         gemini_adapter_status_result=gemini_adapter_status_public,
+        claude_adapter_status_result=claude_adapter_status_public,
+        openai_adapter_status_result=openai_adapter_status_public,
     )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
@@ -215,6 +228,8 @@ def run_ai_extraction_workflow(
         real_provider_safety_checklist_result=safety_checklist_public,
         validation_errors=errors,
         gemini_adapter_status_result=gemini_adapter_status_public,
+        claude_adapter_status_result=claude_adapter_status_public,
+        openai_adapter_status_result=openai_adapter_status_public,
     )
 
 
@@ -253,6 +268,8 @@ def build_operator_preview(
     real_provider_enablement_result: dict[str, Any] | None = None,
     credential_readiness_result: dict[str, Any] | None = None,
     gemini_adapter_status_result: dict[str, Any] | None = None,
+    claude_adapter_status_result: dict[str, Any] | None = None,
+    openai_adapter_status_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -345,7 +362,9 @@ def build_operator_preview(
         "operator_notice_sentence": "No external AI call was made.",
     }
     gemini_status = dict(gemini_adapter_status_result or {})
-    # Non-credential Gemini status is always safe to surface (no "credential"
+    claude_status = dict(claude_adapter_status_result or {})
+    openai_status = dict(openai_adapter_status_result or {})
+    # Non-credential adapter status is always safe to surface (no "credential"
     # or "api_key" substrings).
     preview.update(
         {
@@ -360,6 +379,34 @@ def build_operator_preview(
             "gemini_schema_contract_version": gemini_status.get("schema_contract_version", ""),
             "gemini_real_provider_execution_enabled": False,
             "gemini_real_provider_execution_block_reason": gemini_status.get(
+                "real_provider_execution_block_reason",
+                "real_provider_execution_disabled_by_policy",
+            ),
+            "claude_adapter_installed": bool(claude_status.get("adapter_installed", True)),
+            "claude_adapter_status_message": claude_status.get(
+                "adapter_status_message",
+                "Claude adapter installed but real execution disabled by policy",
+            ),
+            "claude_selected": bool(claude_status.get("provider_selected", False)),
+            "claude_real_call_attempted": False,
+            "claude_prompt_contract_version": claude_status.get("prompt_contract_version", ""),
+            "claude_schema_contract_version": claude_status.get("schema_contract_version", ""),
+            "claude_real_provider_execution_enabled": False,
+            "claude_real_provider_execution_block_reason": claude_status.get(
+                "real_provider_execution_block_reason",
+                "real_provider_execution_disabled_by_policy",
+            ),
+            "openai_adapter_installed": bool(openai_status.get("adapter_installed", True)),
+            "openai_adapter_status_message": openai_status.get(
+                "adapter_status_message",
+                "OpenAI adapter installed but real execution disabled by policy",
+            ),
+            "openai_selected": bool(openai_status.get("provider_selected", False)),
+            "openai_real_call_attempted": False,
+            "openai_prompt_contract_version": openai_status.get("prompt_contract_version", ""),
+            "openai_schema_contract_version": openai_status.get("schema_contract_version", ""),
+            "openai_real_provider_execution_enabled": False,
+            "openai_real_provider_execution_block_reason": openai_status.get(
                 "real_provider_execution_block_reason",
                 "real_provider_execution_disabled_by_policy",
             ),
@@ -378,6 +425,10 @@ def build_operator_preview(
                 ),
                 "gemini_credential_env_var_name": gemini_status.get("credential_env_var_name", ""),
                 "gemini_credential_present": bool(gemini_status.get("credential_present", False)),
+                "claude_credential_env_var_name": claude_status.get("credential_env_var_name", ""),
+                "claude_credential_present": bool(claude_status.get("credential_present", False)),
+                "openai_credential_env_var_name": openai_status.get("credential_env_var_name", ""),
+                "openai_credential_present": bool(openai_status.get("credential_present", False)),
             }
         )
     return preview

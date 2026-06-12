@@ -1,0 +1,113 @@
+{
+  "claude_schema_contract_version": "claude-extraction-schema-15i-v1",
+  "openai_schema_contract_version": "openai-extraction-schema-15i-v1",
+  "claude_valid_responses": [
+    {
+      "schema_valid": true,
+      "schema_contract_version": "claude-extraction-schema-15i-v1",
+      "document_type": "Cytology / pathology narrative",
+      "package_title": "AI-assisted extraction",
+      "section_count": 6,
+      "observation_count": 6,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    },
+    {
+      "schema_valid": true,
+      "schema_contract_version": "claude-extraction-schema-15i-v1",
+      "document_type": "Urinalysis",
+      "package_title": "AI-assisted extraction",
+      "section_count": 1,
+      "observation_count": 5,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    },
+    {
+      "schema_valid": true,
+      "schema_contract_version": "claude-extraction-schema-15i-v1",
+      "document_type": "Portal result cards",
+      "package_title": "AI-assisted extraction",
+      "section_count": 1,
+      "observation_count": 8,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    }
+  ],
+  "openai_valid_responses": [
+    {
+      "schema_valid": true,
+      "schema_contract_version": "openai-extraction-schema-15i-v1",
+      "document_type": "Cytology / pathology narrative",
+      "package_title": "AI-assisted extraction",
+      "section_count": 6,
+      "observation_count": 6,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    },
+    {
+      "schema_valid": true,
+      "schema_contract_version": "openai-extraction-schema-15i-v1",
+      "document_type": "Urinalysis",
+      "package_title": "AI-assisted extraction",
+      "section_count": 1,
+      "observation_count": 5,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    },
+    {
+      "schema_valid": true,
+      "schema_contract_version": "openai-extraction-schema-15i-v1",
+      "document_type": "Portal result cards",
+      "package_title": "AI-assisted extraction",
+      "section_count": 1,
+      "observation_count": 8,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    }
+  ],
+  "claude_auto_accept_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "openai_auto_accept_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "claude_active_write_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "openai_active_write_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "claude_review_required_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "openai_review_required_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "recommendation_label_preserved": true,
+  "claude_schema_valid_count": 3,
+  "openai_schema_valid_count": 3
+}

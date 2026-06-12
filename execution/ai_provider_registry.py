@@ -101,6 +101,28 @@ class AIProviderRegistry:
     def get_provider(self, provider_name: str) -> AIProviderConfig | None:
         return self._configs.get(str(provider_name or "").strip().lower())
 
+    def premium_adapter_for(self, provider_name: str) -> Any | None:
+        """Return the disabled-by-policy real-shaped adapter for a premium provider.
+
+        Additive to ``adapter_for`` (which keeps the 15C blocked stubs). These
+        adapters are source-package reconstruction adapters whose real execution
+        is disabled by policy; they never call a provider or import an SDK.
+        """
+        name = str(provider_name or "").strip().lower()
+        if name == "gemini":
+            from execution.gemini_extraction_adapter import GeminiExtractionAdapter
+
+            return GeminiExtractionAdapter()
+        if name == "claude":
+            from execution.claude_extraction_adapter import ClaudeExtractionAdapter
+
+            return ClaudeExtractionAdapter()
+        if name == "openai":
+            from execution.openai_extraction_adapter import OpenAIExtractionAdapter
+
+            return OpenAIExtractionAdapter()
+        return None
+
     def adapter_for(self, provider_name: str) -> BlockedProviderAdapterStub | None:
         config = self.get_provider(provider_name)
         if config is None:

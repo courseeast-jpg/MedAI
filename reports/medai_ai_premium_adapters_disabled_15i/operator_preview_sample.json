@@ -1,0 +1,21 @@
+{
+  "operator_notice": "No external AI call was made.",
+  "selected_provider": "claude",
+  "effective_provider": "fake_local",
+  "claude_adapter_status_message": "Claude adapter installed but real execution disabled by policy",
+  "openai_adapter_status_message": "OpenAI adapter installed but real execution disabled by policy",
+  "claude_adapter_installed": true,
+  "openai_adapter_installed": true,
+  "claude_real_call_attempted": false,
+  "openai_real_call_attempted": false,
+  "claude_real_provider_execution_enabled": false,
+  "openai_real_provider_execution_enabled": false,
+  "claude_credential_env_var_name": "ANTHROPIC_API_KEY",
+  "claude_credential_present": false,
+  "openai_credential_env_var_name": "OPENAI_API_KEY",
+  "openai_credential_present": false,
+  "dry_run_status": "dry-run only - real provider execution remains disabled",
+  "privacy_gate_status": "redacted_payload_ready",
+  "payload_policy_allowed": true,
+  "budget_allowed": true
+}

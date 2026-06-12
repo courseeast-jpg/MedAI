@@ -1,0 +1,29 @@
+{
+  "block": "MEDAI-AI-PREMIUM-ADAPTERS-DISABLED-15I",
+  "selected_provider": "claude",
+  "effective_provider": "fake_local",
+  "claude_adapter_installed": true,
+  "openai_adapter_installed": true,
+  "claude_adapter_status_message": "Claude adapter installed but real execution disabled by policy",
+  "openai_adapter_status_message": "OpenAI adapter installed but real execution disabled by policy",
+  "real_provider_execution_enabled": false,
+  "claude_real_call_attempted": false,
+  "openai_real_call_attempted": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "claude_schema_valid_count": 3,
+  "openai_schema_valid_count": 3,
+  "review_bound_package_count": 6,
+  "doctrine_compliance": {
+    "doctrine_file_exists": true,
+    "doctrine_phrases_present": true,
+    "package_first_preserved": true,
+    "ai_output_review_bound": true,
+    "record_count_not_success_metric": true
+  },
+  "privacy_result": "passed"
+}
