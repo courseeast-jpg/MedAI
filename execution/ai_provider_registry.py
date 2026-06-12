@@ -37,6 +37,25 @@ class ProviderStubResult:
     fail_closed_reason: str
 
 
+@dataclass(frozen=True)
+class AIProviderSelectionState:
+    selected_provider: str
+    requested_provider: str
+    effective_provider: str
+    provider_enabled: bool
+    provider_mode: str
+    provider_status_message: str
+    provider_execution_allowed: bool
+    provider_execution_block_reason: str
+    operator_approval_required: bool
+    operator_approval_state: str
+    privacy_gate_status: str
+    payload_policy_allowed: bool
+    budget_allowed: bool
+    external_api_used: bool
+    final_external_call_allowed: bool
+
+
 class BlockedProviderAdapterStub:
     provider_name = "blocked"
 
@@ -148,12 +167,63 @@ class AIProviderRegistry:
             fail_closed_reason=reason or "fake_local_provider_ready_no_external_call",
         )
 
+    def build_selection_state(
+        self,
+        *,
+        requested_provider: str,
+        operator_approval_state: str,
+        privacy_gate_result: dict[str, Any] | None,
+        payload_policy_result: dict[str, Any] | None,
+        budget_guard_result: dict[str, Any] | None,
+    ) -> AIProviderSelectionState:
+        requested = str(requested_provider or "fake_local").strip().lower() or "fake_local"
+        readiness = self.validate_provider_readiness(
+            provider_name=requested,
+            operator_approval_state=operator_approval_state,
+            privacy_gate_result=privacy_gate_result,
+            payload_policy_result=payload_policy_result,
+            budget_guard_result=budget_guard_result,
+        )
+        effective_provider = "fake_local"
+        block_reason = (
+            ""
+            if requested == "fake_local"
+            else readiness.fail_closed_reason or "provider_disabled_by_policy"
+        )
+        if requested == "fake_local" and not readiness.provider_ready:
+            block_reason = readiness.fail_closed_reason
+        return AIProviderSelectionState(
+            selected_provider=requested,
+            requested_provider=requested,
+            effective_provider=effective_provider,
+            provider_enabled=readiness.provider_enabled,
+            provider_mode=readiness.provider_mode,
+            provider_status_message=(
+                "Provider available for local fake path only"
+                if requested == "fake_local" and readiness.provider_enabled
+                else "Provider disabled by policy"
+            ),
+            provider_execution_allowed=False,
+            provider_execution_block_reason=block_reason or "external_calls_disabled_in_15d",
+            operator_approval_required=readiness.requires_operator_approval,
+            operator_approval_state=operator_approval_state,
+            privacy_gate_status=str((privacy_gate_result or {}).get("privacy_gate_status") or ""),
+            payload_policy_allowed=bool((payload_policy_result or {}).get("payload_policy_allowed", False)),
+            budget_allowed=bool((budget_guard_result or {}).get("budget_allowed", False)),
+            external_api_used=False,
+            final_external_call_allowed=False,
+        )
+
 
 def provider_readiness_to_public_dict(result: AIProviderReadinessResult) -> dict:
     return asdict(result)
 
 
 def provider_stub_to_public_dict(result: ProviderStubResult) -> dict:
+    return asdict(result)
+
+
+def provider_selection_to_public_dict(result: AIProviderSelectionState) -> dict:
     return asdict(result)
 
 
@@ -181,6 +251,7 @@ def _unknown_provider_result(provider_name: str) -> AIProviderReadinessResult:
 __all__ = [
     "AIProviderReadinessResult",
     "ProviderStubResult",
+    "AIProviderSelectionState",
     "AIProviderRegistry",
     "GeminiExtractionAdapterStub",
     "ClaudeExtractionAdapterStub",
@@ -188,4 +259,5 @@ __all__ = [
     "LocalOllamaExtractionAdapterStub",
     "provider_readiness_to_public_dict",
     "provider_stub_to_public_dict",
+    "provider_selection_to_public_dict",
 ]

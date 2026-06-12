@@ -1,0 +1,14 @@
+{
+  "operator_notice": "No external AI call was made",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "provider_enabled": false,
+  "provider_message": "Provider disabled by policy",
+  "provider_execution_allowed": false,
+  "provider_execution_block_reason": "provider_disabled_by_policy",
+  "privacy_gate_status": "redacted_payload_ready",
+  "payload_policy_allowed": false,
+  "budget_allowed": true,
+  "final_external_call_allowed": false,
+  "external_api_used": false
+}

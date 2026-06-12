@@ -26,7 +26,11 @@ from execution.ai_privacy_gate import (
     privacy_gate_to_public_dict,
     run_ai_privacy_gate,
 )
-from execution.ai_provider_registry import AIProviderRegistry, provider_readiness_to_public_dict
+from execution.ai_provider_registry import (
+    AIProviderRegistry,
+    provider_readiness_to_public_dict,
+    provider_selection_to_public_dict,
+)
 
 
 PLACEHOLDER_TOKENS = (
@@ -69,8 +73,16 @@ def run_ai_extraction_workflow(
         provider_mode=context.provider_mode,
         provider_name=context.provider_name,
     )
-    provider_readiness = AIProviderRegistry().validate_provider_readiness(
+    provider_registry = AIProviderRegistry()
+    provider_readiness = provider_registry.validate_provider_readiness(
         provider_name=context.provider_name,
+        operator_approval_state=context.operator_approval_state,
+        privacy_gate_result=privacy_gate_to_public_dict(privacy),
+        payload_policy_result=payload_policy_to_public_dict(payload_policy),
+        budget_guard_result=budget_guard_to_public_dict(budget),
+    )
+    provider_selection = provider_registry.build_selection_state(
+        requested_provider=context.provider_name,
         operator_approval_state=context.operator_approval_state,
         privacy_gate_result=privacy_gate_to_public_dict(privacy),
         payload_policy_result=payload_policy_to_public_dict(payload_policy),
@@ -101,12 +113,14 @@ def run_ai_extraction_workflow(
     payload_policy_public = payload_policy_to_public_dict(payload_policy)
     budget_public = budget_guard_to_public_dict(budget)
     provider_public = provider_readiness_to_public_dict(provider_readiness)
+    selection_public = provider_selection_to_public_dict(provider_selection)
     operator_preview = build_operator_preview(
         packages,
         privacy_gate_result=privacy_public,
         payload_policy_result=payload_policy_public,
         budget_guard_result=budget_public,
         provider_registry_result=provider_public,
+        provider_selection_result=selection_public,
     )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
@@ -132,6 +146,7 @@ def run_ai_extraction_workflow(
         budget_guard_result=budget_public,
         audit_result=audit,
         provider_registry_result=provider_public,
+        provider_selection_result=selection_public,
         validation_errors=errors,
     )
 
@@ -166,6 +181,7 @@ def build_operator_preview(
     payload_policy_result: dict[str, Any] | None = None,
     budget_guard_result: dict[str, Any] | None = None,
     provider_registry_result: dict[str, Any] | None = None,
+    provider_selection_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -215,6 +231,8 @@ def build_operator_preview(
         "payload_policy_allowed": bool((payload_policy_result or {}).get("payload_policy_allowed", False)),
         "final_external_call_allowed": False,
         "selected_provider": (provider_registry_result or {}).get("provider_name", ""),
+        "requested_provider": (provider_selection_result or {}).get("requested_provider", ""),
+        "effective_provider": (provider_selection_result or {}).get("effective_provider", ""),
         "provider_enabled": bool((provider_registry_result or {}).get("provider_enabled", False)),
         "provider_model_name": (provider_registry_result or {}).get("model_name", ""),
         "provider_mode": (provider_registry_result or {}).get("provider_mode", ""),
@@ -222,6 +240,12 @@ def build_operator_preview(
             (provider_registry_result or {}).get("requires_operator_approval", False)
         ),
         "provider_fail_closed_reason": (provider_registry_result or {}).get("fail_closed_reason", ""),
+        "provider_execution_allowed": bool(
+            (provider_selection_result or {}).get("provider_execution_allowed", False)
+        ),
+        "provider_execution_block_reason": (provider_selection_result or {}).get(
+            "provider_execution_block_reason", ""
+        ),
         "provider_message": (
             "Provider disabled by policy"
             if not bool((provider_registry_result or {}).get("provider_enabled", False))

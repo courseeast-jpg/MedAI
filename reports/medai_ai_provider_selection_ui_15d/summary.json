@@ -1,0 +1,13 @@
+{
+  "block": "MEDAI-AI-PROVIDER-SELECTION-UI-15D",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "external_api_used": false,
+  "final_external_call_allowed": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "review_bound_package_count": 3,
+  "disabled_provider_fail_closed": true,
+  "privacy_result": "passed"
+}

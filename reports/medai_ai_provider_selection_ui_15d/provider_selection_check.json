@@ -1,0 +1,41 @@
+{
+  "default_selection": {
+    "selected_provider": "fake_local",
+    "requested_provider": "fake_local",
+    "effective_provider": "fake_local",
+    "provider_enabled": true,
+    "provider_mode": "fake_local",
+    "provider_status_message": "Provider available for local fake path only",
+    "provider_execution_allowed": false,
+    "provider_execution_block_reason": "external_calls_disabled_in_15d",
+    "operator_approval_required": false,
+    "operator_approval_state": "not_requested",
+    "privacy_gate_status": "redacted_payload_ready",
+    "payload_policy_allowed": false,
+    "budget_allowed": true,
+    "external_api_used": false,
+    "final_external_call_allowed": false
+  },
+  "disabled_provider_selection": {
+    "selected_provider": "gemini",
+    "requested_provider": "gemini",
+    "effective_provider": "fake_local",
+    "provider_enabled": false,
+    "provider_mode": "disabled",
+    "provider_status_message": "Provider disabled by policy",
+    "provider_execution_allowed": false,
+    "provider_execution_block_reason": "provider_disabled_by_policy",
+    "operator_approval_required": true,
+    "operator_approval_state": "not_requested",
+    "privacy_gate_status": "redacted_payload_ready",
+    "payload_policy_allowed": false,
+    "budget_allowed": true,
+    "external_api_used": false,
+    "final_external_call_allowed": false
+  },
+  "default_selected_provider_is_fake_local": true,
+  "disabled_provider_intent_recorded": true,
+  "effective_provider_remains_fake_local": true,
+  "provider_execution_allowed": false,
+  "provider_execution_block_reason": "provider_disabled_by_policy"
+}

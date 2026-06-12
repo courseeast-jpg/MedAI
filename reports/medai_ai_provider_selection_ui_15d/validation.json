@@ -1,0 +1,32 @@
+{
+  "focused_15d_tests": {
+    "command": "python -m pytest tests/test_medai_ai_provider_selection_ui_15d.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15c_tests": {
+    "command": "python -m pytest tests/test_medai_ai_provider_adapter_stub_15c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15b_tests": {
+    "command": "python -m pytest tests/test_medai_ai_extraction_privacy_gate_15b.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15a_tests": {
+    "command": "python -m pytest tests/test_medai_ai_extraction_workflow_seam_15a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "regression_12a_script": {
+    "command": "python scripts/run_medai_operator_workflow_uat_12a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "regression_13c_pytest": {
+    "command": "python -m pytest tests/test_medai_operator_usability_polish_13c.py",
+    "returncode": 0,
+    "skipped": false
+  }
+}

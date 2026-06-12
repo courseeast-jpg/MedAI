@@ -112,6 +112,7 @@ class ExtractionWorkflowResult:
     budget_guard_result: dict
     audit_result: dict
     provider_registry_result: dict
+    provider_selection_result: dict
     validation_errors: list[str] = field(default_factory=list)
 
 
