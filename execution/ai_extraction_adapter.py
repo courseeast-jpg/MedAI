@@ -124,6 +124,7 @@ class ExtractionWorkflowResult:
     gemini_adapter_status_result: dict = field(default_factory=dict)
     claude_adapter_status_result: dict = field(default_factory=dict)
     openai_adapter_status_result: dict = field(default_factory=dict)
+    local_ollama_adapter_status_result: dict = field(default_factory=dict)
 
 
 class FakeAIExtractionAdapter:

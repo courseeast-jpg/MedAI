@@ -1,0 +1,181 @@
+{
+  "focused_15j_tests": {
+    "command": "python -m pytest tests/test_medai_ai_local_ollama_adapter_disabled_15j.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15i_tests": {
+    "command": "python -m pytest tests/test_medai_ai_premium_adapters_disabled_15i.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15g_tests": {
+    "command": "python -m pytest tests/test_medai_ai_gemini_adapter_disabled_15g.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15f_tests": {
+    "command": "python -m pytest tests/test_medai_ai_real_provider_enablement_gate_15f.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15e_tests": {
+    "command": "python -m pytest tests/test_medai_ai_external_call_dry_run_15e.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15d_tests": {
+    "command": "python -m pytest tests/test_medai_ai_provider_selection_ui_15d.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15c_tests": {
+    "command": "python -m pytest tests/test_medai_ai_provider_adapter_stub_15c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15b_tests": {
+    "command": "python -m pytest tests/test_medai_ai_extraction_privacy_gate_15b.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "focused_15a_tests": {
+    "command": "python -m pytest tests/test_medai_ai_extraction_workflow_seam_15a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "regression_12a_script": {
+    "command": "python scripts/run_medai_operator_workflow_uat_12a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "regression_13c_pytest": {
+    "command": "python -m pytest tests/test_medai_operator_usability_polish_13c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15i_script": {
+    "command": "python scripts/run_medai_ai_premium_adapters_disabled_15i.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15g_script": {
+    "command": "python scripts/run_medai_ai_gemini_adapter_disabled_15g.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15f_script": {
+    "command": "python scripts/run_medai_ai_real_provider_enablement_gate_15f.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15e_script": {
+    "command": "python scripts/run_medai_ai_external_call_dry_run_15e.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15d_script": {
+    "command": "python scripts/run_medai_ai_provider_selection_ui_15d.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15c_script": {
+    "command": "python scripts/run_medai_ai_provider_adapter_stub_15c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15b_script": {
+    "command": "python scripts/run_medai_ai_extraction_privacy_gate_15b.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_15a_script": {
+    "command": "python scripts/run_medai_ai_extraction_workflow_seam_15a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14e_pytest": {
+    "command": "python -m pytest tests/test_medai_source_package_content_quality_14e.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14e_script": {
+    "command": "python scripts/run_medai_source_package_content_quality_14e.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14d_pytest": {
+    "command": "python -m pytest tests/test_medai_source_extraction_packages_14d.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14d_script": {
+    "command": "python scripts/run_medai_source_extraction_packages_14d.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14c_pytest": {
+    "command": "python -m pytest tests/test_medai_real_run_extraction_diagnostics_14c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14c_script": {
+    "command": "python scripts/run_medai_real_run_extraction_diagnostics_14c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14b_pytest": {
+    "command": "python -m pytest tests/test_medai_real_ocr_extraction_pipeline_integration_14b.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14b_script": {
+    "command": "python scripts/run_medai_real_ocr_extraction_pipeline_integration_14b.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14a_pytest": {
+    "command": "python -m pytest tests/test_medai_real_doc_cross_domain_extraction_14a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_14a_script": {
+    "command": "python scripts/run_medai_real_doc_cross_domain_extraction_14a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_13c_script": {
+    "command": "python scripts/run_medai_operator_usability_polish_13c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_13c_pytest": {
+    "command": "python -m pytest tests/test_medai_operator_usability_polish_13c.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_12a_script": {
+    "command": "python scripts/run_medai_operator_workflow_uat_12a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "baseline_12a_pytest": {
+    "command": "python -m pytest tests/test_medai_operator_workflow_uat_12a.py",
+    "returncode": 0,
+    "skipped": false
+  },
+  "doctrine_phrase_check": {
+    "doctrine_file_exists": true,
+    "missing_phrases": [],
+    "passed": true
+  },
+  "source_safety_scan": {
+    "provider_sdk_imports_introduced": false,
+    "network_call_code_introduced": false,
+    "localhost_or_ollama_call_introduced": false,
+    "subprocess_call_introduced": false,
+    "raw_pdf_image_upload_introduced": false,
+    "matches": [],
+    "passed": true
+  }
+}

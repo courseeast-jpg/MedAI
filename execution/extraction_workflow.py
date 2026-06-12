@@ -28,6 +28,7 @@ from execution.ai_payload_policy import AIPayloadPolicy, payload_policy_to_publi
 from execution.gemini_extraction_adapter import build_gemini_adapter_status
 from execution.claude_extraction_adapter import build_claude_adapter_status
 from execution.openai_extraction_adapter import build_openai_adapter_status
+from execution.local_ollama_extraction_adapter import build_local_ollama_adapter_status
 from execution.ai_provider_enablement import (
     evaluate_real_provider_execution_readiness,
     real_provider_credential_to_public_dict,
@@ -182,6 +183,10 @@ def run_ai_extraction_workflow(
         selected_provider=selection_public["requested_provider"],
         real_provider_execution_block_reason=block_reason,
     )
+    local_ollama_adapter_status_public = build_local_ollama_adapter_status(
+        selected_provider=selection_public["requested_provider"],
+        real_provider_execution_block_reason=block_reason,
+    )
     operator_preview = build_operator_preview(
         packages,
         privacy_gate_result=privacy_public,
@@ -195,6 +200,7 @@ def run_ai_extraction_workflow(
         gemini_adapter_status_result=gemini_adapter_status_public,
         claude_adapter_status_result=claude_adapter_status_public,
         openai_adapter_status_result=openai_adapter_status_public,
+        local_ollama_adapter_status_result=local_ollama_adapter_status_public,
     )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
@@ -230,6 +236,7 @@ def run_ai_extraction_workflow(
         gemini_adapter_status_result=gemini_adapter_status_public,
         claude_adapter_status_result=claude_adapter_status_public,
         openai_adapter_status_result=openai_adapter_status_public,
+        local_ollama_adapter_status_result=local_ollama_adapter_status_public,
     )
 
 
@@ -270,6 +277,7 @@ def build_operator_preview(
     gemini_adapter_status_result: dict[str, Any] | None = None,
     claude_adapter_status_result: dict[str, Any] | None = None,
     openai_adapter_status_result: dict[str, Any] | None = None,
+    local_ollama_adapter_status_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -364,6 +372,7 @@ def build_operator_preview(
     gemini_status = dict(gemini_adapter_status_result or {})
     claude_status = dict(claude_adapter_status_result or {})
     openai_status = dict(openai_adapter_status_result or {})
+    local_ollama_status = dict(local_ollama_adapter_status_result or {})
     # Non-credential adapter status is always safe to surface (no "credential"
     # or "api_key" substrings).
     preview.update(
@@ -407,6 +416,27 @@ def build_operator_preview(
             "openai_schema_contract_version": openai_status.get("schema_contract_version", ""),
             "openai_real_provider_execution_enabled": False,
             "openai_real_provider_execution_block_reason": openai_status.get(
+                "real_provider_execution_block_reason",
+                "real_provider_execution_disabled_by_policy",
+            ),
+            "local_ollama_adapter_installed": bool(local_ollama_status.get("adapter_installed", True)),
+            "local_ollama_adapter_status_message": local_ollama_status.get(
+                "adapter_status_message",
+                "Local/Ollama adapter installed but real execution disabled by policy",
+            ),
+            "local_ollama_no_local_model_call_notice": local_ollama_status.get(
+                "no_local_model_call_notice", "No local model call was made"
+            ),
+            "local_ollama_selected": bool(local_ollama_status.get("provider_selected", False)),
+            "local_ollama_real_call_attempted": False,
+            "local_ollama_local_model_call_used": False,
+            "local_ollama_subprocess_call_used": False,
+            "local_ollama_model_name": local_ollama_status.get("model_name", ""),
+            "local_ollama_base_url": local_ollama_status.get("ollama_base_url", ""),
+            "local_ollama_prompt_contract_version": local_ollama_status.get("prompt_contract_version", ""),
+            "local_ollama_schema_contract_version": local_ollama_status.get("schema_contract_version", ""),
+            "local_ollama_real_provider_execution_enabled": False,
+            "local_ollama_real_provider_execution_block_reason": local_ollama_status.get(
                 "real_provider_execution_block_reason",
                 "real_provider_execution_disabled_by_policy",
             ),

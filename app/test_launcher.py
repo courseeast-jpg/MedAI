@@ -434,6 +434,45 @@ def run_premium_mock_extraction_preview_for_test(provider_name: str = "claude") 
     return run_claude_mock_extraction_preview()
 
 
+def run_local_ollama_adapter_disabled_for_test(provider_name: str = "local_ollama") -> dict[str, Any]:
+    """Run the 15J disabled Local/Ollama adapter path without any local call.
+
+    Effective provider stays fake_local; real local-model execution remains
+    disabled by policy. No localhost HTTP, no subprocess, no network.
+    """
+    from execution.ai_extraction_adapter import ExtractionWorkflowContext
+    from execution.extraction_workflow import run_ai_extraction_workflow, workflow_result_to_public_dict
+
+    result = run_ai_extraction_workflow(
+        ExtractionWorkflowContext(
+            source_class="urinalysis_table",
+            safe_source_document_id="source_fake_15j",
+            selected_document_category="AI-assisted extraction",
+            selected_specialty_domain="urology",
+            source_modality="fake_local_adapter",
+            raw_text_local_only=(
+                "Patient Jane Example; DOB 01/02/1970; MRN 123456; Accession CY-2026-0001; "
+                "Facility Park Medical Center; Provider Dr. Alice Clinician; "
+                "123 Main Street, Springfield, NY 10001; 555-123-4567; jane.example@example.com; "
+                "Insurance INS-ABC-12345; Collected 06/10/2026"
+            ),
+            provider_name=provider_name,
+            provider_mode="disabled" if provider_name != "fake_local" else "fake_local",
+            operator_approval_state="approved_for_dry_run",
+            external_call_mode="dry_run",
+            real_provider_enablement_mode="readiness_check",
+        )
+    )
+    return workflow_result_to_public_dict(result)
+
+
+def run_local_ollama_mock_extraction_preview_for_test() -> dict[str, Any]:
+    """Run the 15J mock Local/Ollama schema/parse preview (no network/subprocess)."""
+    from execution.local_ollama_extraction_adapter import run_local_ollama_mock_extraction_preview
+
+    return run_local_ollama_mock_extraction_preview()
+
+
 def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
     for relative in (
         "test_input",

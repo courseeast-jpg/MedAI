@@ -1510,6 +1510,22 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
         preview.get("openai_adapter_status_message")
         or "OpenAI adapter installed but real execution disabled by policy"
     )
+    st.caption(
+        "Local/Ollama adapter: "
+        f"{'installed (disabled)' if preview.get('local_ollama_adapter_installed') else 'not installed'} | "
+        f"Selected: {bool(preview.get('local_ollama_selected'))} | "
+        f"Real execution enabled: False | "
+        f"Real call attempted: {bool(preview.get('local_ollama_real_call_attempted'))} | "
+        f"Local model call: {bool(preview.get('local_ollama_local_model_call_used'))} | "
+        f"Subprocess call: {bool(preview.get('local_ollama_subprocess_call_used'))} | "
+        f"Model: {preview.get('local_ollama_model_name') or 'not selected'} | "
+        f"Base URL (config only): {preview.get('local_ollama_base_url') or 'not configured'}"
+    )
+    st.caption(
+        preview.get("local_ollama_adapter_status_message")
+        or "Local/Ollama adapter installed but real execution disabled by policy"
+    )
+    st.caption(preview.get("local_ollama_no_local_model_call_notice") or "No local model call was made")
     if preview.get("redacted_payload_preview_available"):
         st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:

@@ -121,6 +121,10 @@ class AIProviderRegistry:
             from execution.openai_extraction_adapter import OpenAIExtractionAdapter
 
             return OpenAIExtractionAdapter()
+        if name == "local_ollama":
+            from execution.local_ollama_extraction_adapter import LocalOllamaExtractionAdapter
+
+            return LocalOllamaExtractionAdapter()
         return None
 
     def adapter_for(self, provider_name: str) -> BlockedProviderAdapterStub | None:

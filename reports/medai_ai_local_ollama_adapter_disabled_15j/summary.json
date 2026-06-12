@@ -1,0 +1,28 @@
+{
+  "block": "MEDAI-AI-LOCAL-OLLAMA-ADAPTER-DISABLED-15J",
+  "selected_provider": "local_ollama",
+  "effective_provider": "fake_local",
+  "local_ollama_adapter_installed": true,
+  "local_ollama_adapter_status_message": "Local/Ollama adapter installed but real execution disabled by policy",
+  "ollama_base_url": "http://localhost:11434",
+  "real_provider_execution_enabled": false,
+  "ollama_real_call_attempted": false,
+  "local_model_call_used": false,
+  "subprocess_call_used": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "schema_valid_count": 3,
+  "review_bound_package_count": 3,
+  "doctrine_compliance": {
+    "doctrine_file_exists": true,
+    "doctrine_phrases_present": true,
+    "package_first_preserved": true,
+    "ai_output_review_bound": true,
+    "record_count_not_success_metric": true
+  },
+  "privacy_result": "passed"
+}

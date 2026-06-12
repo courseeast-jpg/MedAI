@@ -1,0 +1,16 @@
+{
+  "selected_provider": "local_ollama",
+  "effective_provider": "fake_local",
+  "local_ollama_adapter_installed": true,
+  "local_ollama_adapter_status_message": "Local/Ollama adapter installed but real execution disabled by policy",
+  "real_provider_execution_enabled": false,
+  "real_provider_execution_block_reason": "real_provider_execution_disabled_by_policy",
+  "ollama_real_call_attempted": false,
+  "local_model_call_used": false,
+  "subprocess_call_used": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false,
+  "fake_local_package_output_preserved": true,
+  "premium_disabled_behavior_preserved": true
+}

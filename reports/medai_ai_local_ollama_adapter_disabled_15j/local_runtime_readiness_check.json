@@ -1,0 +1,11 @@
+{
+  "model_name": "ollama-disabled-15j",
+  "ollama_base_url": "http://localhost:11434",
+  "credential_required": false,
+  "local_runtime_required_for_tests": false,
+  "local_model_call_used": false,
+  "subprocess_call_used": false,
+  "ollama_real_call_attempted": false,
+  "no_local_model_call_notice": "No local model call was made",
+  "non_secret_config_only": true
+}
