@@ -1,0 +1,78 @@
+{
+  "flat_harness": {
+    "depth": 0,
+    "flat_suite": {
+      "name": "flat_focused_suite",
+      "command": "python -m pytest tests/test_medai_ai_extraction_workflow_seam_15a.py tests/test_medai_ai_extraction_privacy_gate_15b.py tests/test_medai_ai_provider_adapter_stub_15c.py tests/test_medai_ai_provider_selection_ui_15d.py tests/test_medai_ai_external_call_dry_run_15e.py tests/test_medai_ai_real_provider_enablement_gate_15f.py tests/test_medai_ai_gemini_adapter_disabled_15g.py tests/test_medai_ai_premium_adapters_disabled_15i.py tests/test_medai_ai_local_ollama_adapter_disabled_15j.py tests/test_medai_ai_provider_enablement_operator_control_15k.py tests/test_medai_ai_validation_harness_derecursion_15l.py tests/test_medai_ai_gemini_live_smoke_gated_15m.py -p no:cacheprovider -q -k not regressions_still_pass and not prior_block_regressions",
+      "status": "passed",
+      "returncode": 0,
+      "duration_s": 111.875,
+      "stdout_tail": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-9.0.3, pluggy-1.6.0\n<redacted-header>\n<redacted-header>\n<redacted-header>\nasyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollected 230 items / 8 deselected / 222 selected\n\n<path> .............        [  5%]\n<path> ................      [ 13%]\n<path> .........               [ 17%]\n<path> .......                 [ 20%]\n<path> ..........              [ 24%]\n<path> ........        [ 28%]\n<path> ..................... [ 37%]\n...                                                                      [ 39%]\n<path> ................... [ 47%]\n............                                                             [ 53%]\n<path> ............... [ 59%]\n.....                                                                    [ 62%]\n<path> ........ [ 65%]\n..........                                                               [ 70%]\n<path> .............. [ 76%]\n...............                                                          [ 83%]\n<path> ..................... [ 92%]\n................                                                         [100%]\n\n================ 222 passed, 8 deselected in 110.02s (0:01:50) ================\n",
+      "stderr_tail": "",
+      "pytest_counts": {
+        "passed": 222,
+        "deselected": 8
+      },
+      "reason": ""
+    },
+    "direct_commands": [
+      {
+        "name": "regression_12a_uat",
+        "command": "python scripts/run_medai_operator_workflow_uat_12a.py",
+        "status": "passed",
+        "returncode": 0,
+        "duration_s": 2.047,
+        "stdout_tail": "medai_operator_workflow_uat_12a_ready\n{\n  \"report\": \"<path>\",\n  \"uat_passed\": true,\n  \"privacy_result\": \"passed\",\n  \"external_api_used\": false,\n  \"auto_accept\": false\n}\n",
+        "stderr_tail": "<date> WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
+        "pytest_counts": {},
+        "reason": ""
+      },
+      {
+        "name": "regression_13c_pytest",
+        "command": "python -m pytest tests/test_medai_operator_usability_polish_13c.py -p no:cacheprovider -q",
+        "status": "passed",
+        "returncode": 0,
+        "duration_s": 6.609,
+        "stdout_tail": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-9.0.3, pluggy-1.6.0\n<redacted-header>\n<redacted-header>\n<redacted-header>\nasyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollected 14 items\n\n<path> ..............         [100%]\n\n============================= 14 passed in 4.83s ==============================\n",
+        "stderr_tail": "",
+        "pytest_counts": {
+          "passed": 14
+        },
+        "reason": ""
+      }
+    ],
+    "missing_test_files": [],
+    "deselect_patterns": [
+      "regressions_still_pass",
+      "prior_block_regressions"
+    ],
+    "deselected_recursive_test_count": 8,
+    "recursive_tests_deselected": true,
+    "nested_prior_block_scripts_invoked": false,
+    "nested_prior_block_scripts_refused_by_default": true,
+    "per_command_timeout_s": 600,
+    "total_timeout_s": 1800,
+    "total_duration_s": 120.531,
+    "subprocess_use": "local_test_runner_only",
+    "provider_execution_subprocess_path": false,
+    "external_api_used": false,
+    "real_network_call_used": false,
+    "local_model_call_used": false,
+    "final_external_call_allowed": false,
+    "real_provider_execution_enabled": false,
+    "passed": true,
+    "real_failures": []
+  },
+  "doctrine_check": {
+    "missing_phrases": [],
+    "passed": true
+  },
+  "source_safety_scan": {
+    "provider_sdk_hard_import_introduced": false,
+    "network_call_code_introduced": false,
+    "provider_execution_subprocess_path_introduced": false,
+    "raw_pdf_image_upload_introduced": false,
+    "matches": [],
+    "passed": true
+  }
+}

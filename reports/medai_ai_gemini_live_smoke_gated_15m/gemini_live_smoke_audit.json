@@ -1,0 +1,19 @@
+{
+  "selected_provider": "gemini",
+  "payload_class": "synthetic_redacted_live_smoke",
+  "redacted_payload_hash": "synthetic15m",
+  "live_call_status": "blocked_missing_operator_approval",
+  "provider_client_kind": "none",
+  "gemini_real_call_attempted": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "provider_response_received": false,
+  "schema_valid": false,
+  "review_bound_package_count": 0,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "credential_value_in_audit": false,
+  "raw_private_payload_in_audit": false,
+  "audit_scope": "public_statuses_counts_hashes_only"
+}

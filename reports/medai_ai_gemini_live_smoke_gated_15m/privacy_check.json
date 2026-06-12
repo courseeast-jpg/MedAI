@@ -1,0 +1,15 @@
+{
+  "privacy_result": "passed",
+  "raw_ocr_text_in_report": false,
+  "real_patient_identifiers_in_report": false,
+  "token_map_in_report": false,
+  "credential_value_in_report": false,
+  "raw_gemini_credential_value_in_report": false,
+  "raw_private_payload_in_report": false,
+  "provider_sdk_hard_dependency": false,
+  "external_api_used_default_mode": false,
+  "real_network_call_used_default_mode": false,
+  "gemini_real_call_attempted_default_mode": false,
+  "active_written_count": 0,
+  "auto_accept": false
+}

@@ -473,6 +473,20 @@ def run_local_ollama_mock_extraction_preview_for_test() -> dict[str, Any]:
     return run_local_ollama_mock_extraction_preview()
 
 
+def run_gemini_live_smoke_status_for_test() -> dict[str, Any]:
+    """Run the 15M gated Gemini live-smoke in default mode (no env gates -> no call).
+
+    Returns a public-safe operator preview. No external call, no network, no
+    credential value. Status is blocked until explicit operator approval.
+    """
+    from execution.gemini_live_smoke import (
+        build_live_smoke_operator_preview,
+        run_gemini_live_smoke,
+    )
+
+    return build_live_smoke_operator_preview(run_gemini_live_smoke(environ={}))
+
+
 def run_provider_operator_control_for_test(
     provider_name: str = "claude",
     *,

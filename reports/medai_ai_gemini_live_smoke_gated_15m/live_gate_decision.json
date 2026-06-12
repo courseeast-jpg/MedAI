@@ -1,0 +1,27 @@
+{
+  "selected_provider": "gemini",
+  "payload_type": "redacted_text_layout_summary",
+  "payload_class": "synthetic_redacted_live_smoke",
+  "redacted_payload_hash": "synthetic15m",
+  "privacy_gate_status": "passed",
+  "payload_policy_allowed": true,
+  "budget_allowed": true,
+  "dry_run_status": "passed",
+  "operator_enablement_request_state": "staged",
+  "allow_real_provider_smoke_env_present": false,
+  "operator_approved_live_smoke_env_present": false,
+  "credential_present": false,
+  "credential_value_redacted": false,
+  "per_call_budget_cap": 0.05,
+  "call_limit": 1,
+  "real_provider_execution_enabled": true,
+  "final_external_call_allowed": true,
+  "live_call_allowed": false,
+  "live_call_status": "blocked_missing_operator_approval",
+  "block_reason": "MEDAI_ALLOW_REAL_PROVIDER_SMOKE_missing",
+  "missing_gates": [
+    "MEDAI_ALLOW_REAL_PROVIDER_SMOKE_missing",
+    "MEDAI_OPERATOR_APPROVED_LIVE_SMOKE_missing",
+    "gemini_api_key_missing"
+  ]
+}

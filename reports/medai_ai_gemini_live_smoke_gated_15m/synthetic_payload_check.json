@@ -1,0 +1,8 @@
+{
+  "payload_class": "synthetic_redacted_live_smoke",
+  "is_obviously_synthetic": true,
+  "contains_no_identifier_markers": true,
+  "char_length": 285,
+  "is_cost_bounded_short": true,
+  "represents_lab_or_portal_package": true
+}

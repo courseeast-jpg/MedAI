@@ -1586,6 +1586,36 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
             st.caption(section["narrative_label"])
 
 
+def render_gemini_live_smoke_status(status: dict[str, Any]) -> None:
+    """Render the 15M gated Gemini live-smoke status (no credential value shown)."""
+    status = dict(status or {})
+    st.markdown("#### Gemini live smoke (gated)")
+    st.caption(
+        "Selected: "
+        f"{status.get('selected_provider') or 'gemini'} | "
+        f"Effective: {status.get('effective_provider') or 'fake_local'} | "
+        f"Status: {status.get('gemini_live_smoke_status') or 'not_attempted'} | "
+        f"Call limit: {status.get('call_limit', 1)} | "
+        f"Budget cap: {status.get('per_call_budget_cap', 0.0)} | "
+        f"Payload class: {status.get('payload_class') or 'synthetic_redacted_live_smoke'}"
+    )
+    st.caption(
+        "Credential present: "
+        f"{bool(status.get('credential_present'))} | "
+        f"Approval env present: {bool(status.get('operator_approved_live_smoke_env_present'))} | "
+        f"Allow-smoke env present: {bool(status.get('allow_real_provider_smoke_env_present'))}"
+    )
+    if status.get("missing_live_gates"):
+        st.caption(f"Missing live gates: {', '.join(status['missing_live_gates'])}")
+    if status.get("no_external_call_notice"):
+        st.info(status["no_external_call_notice"])
+    if status.get("blocked_notice"):
+        st.warning(status["blocked_notice"])
+    if status.get("one_call_notice"):
+        st.success(status["one_call_notice"])
+    st.caption(status.get("review_bound_output_notice") or "Live smoke output is review-bound only")
+
+
 def render_conflict_tab(sys_components: dict) -> None:
     try:
         from app.conflict_review import render_conflict_review

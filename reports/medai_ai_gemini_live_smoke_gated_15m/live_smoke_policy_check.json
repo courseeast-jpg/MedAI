@@ -1,0 +1,15 @@
+{
+  "selected_provider": "gemini",
+  "payload_type": "redacted_text_layout_summary",
+  "payload_class": "synthetic_redacted_live_smoke",
+  "call_limit": 1,
+  "per_call_budget_cap": 0.05,
+  "allow_smoke_env_var": "MEDAI_ALLOW_REAL_PROVIDER_SMOKE",
+  "operator_approved_env_var": "MEDAI_OPERATOR_APPROVED_LIVE_SMOKE",
+  "credential_env_var_name": "GEMINI_API_KEY",
+  "credential_value_in_report": false,
+  "real_call_requires_exactly_one_call": true,
+  "real_call_requires_synthetic_payload_class": true,
+  "real_call_requires_both_env_flags": true,
+  "real_call_requires_staged_operator_request": true
+}

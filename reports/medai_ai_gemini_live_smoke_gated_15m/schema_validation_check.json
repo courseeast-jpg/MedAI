@@ -1,0 +1,6 @@
+{
+  "schema_valid": false,
+  "review_bound_package_count": 0,
+  "package_summary": [],
+  "note": "schema validated only if a live/fake call actually returned a response"
+}

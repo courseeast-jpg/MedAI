@@ -1,0 +1,5 @@
+{
+  "per_call_budget_cap": 0.05,
+  "call_limit": 1,
+  "budget_allowed": true
+}

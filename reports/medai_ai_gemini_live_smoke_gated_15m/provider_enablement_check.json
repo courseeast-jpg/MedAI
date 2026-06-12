@@ -1,0 +1,14 @@
+{
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "real_provider_execution_enabled_for_smoke_only": true,
+  "gemini_real_call_attempted": false,
+  "claude_real_call_attempted": false,
+  "openai_real_call_attempted": false,
+  "ollama_real_call_attempted": false,
+  "local_model_call_used": false,
+  "provider_execution_subprocess_path": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": true
+}

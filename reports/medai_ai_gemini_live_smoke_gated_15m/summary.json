@@ -1,0 +1,36 @@
+{
+  "block": "MEDAI-AI-GEMINI-LIVE-SMOKE-GATED-15M",
+  "overall_status": "BLOCKED_READY_FOR_LIVE_SMOKE",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "live_call_status": "blocked_missing_operator_approval",
+  "live_call_attempted": false,
+  "missing_live_gates": [
+    "MEDAI_ALLOW_REAL_PROVIDER_SMOKE_missing",
+    "MEDAI_OPERATOR_APPROVED_LIVE_SMOKE_missing",
+    "gemini_api_key_missing"
+  ],
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "gemini_real_call_attempted": false,
+  "claude_real_call_attempted": false,
+  "openai_real_call_attempted": false,
+  "ollama_real_call_attempted": false,
+  "local_model_call_used": false,
+  "provider_execution_subprocess_path": false,
+  "final_external_call_allowed": true,
+  "real_provider_execution_enabled": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "review_bound_package_count": 0,
+  "doctrine_phrases_present": true,
+  "flat_suite_status": "passed",
+  "flat_suite_counts": {
+    "passed": 222,
+    "deselected": 8
+  },
+  "flat_total_duration_s": 120.531,
+  "nested_prior_block_scripts_invoked": false,
+  "privacy_result": "passed"
+}
