@@ -1,0 +1,13 @@
+{
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "gemini_adapter_installed": true,
+  "gemini_adapter_status_message": "Gemini adapter installed but real execution disabled by policy",
+  "real_provider_execution_enabled": false,
+  "real_provider_execution_block_reason": "real_provider_execution_disabled_by_policy",
+  "gemini_real_call_attempted": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false,
+  "fake_local_package_output_preserved": true
+}

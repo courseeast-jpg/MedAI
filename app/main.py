@@ -1471,6 +1471,19 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
         f"Block reason: {preview.get('real_provider_execution_block_reason') or 'real_provider_execution_disabled_by_policy'}"
     )
     st.caption("Real provider execution disabled by policy")
+    st.caption(
+        "Gemini adapter: "
+        f"{'installed (disabled)' if preview.get('gemini_adapter_installed') else 'not installed'} | "
+        f"Selected: {bool(preview.get('gemini_selected'))} | "
+        f"Real execution enabled: False | "
+        f"Real call attempted: {bool(preview.get('gemini_real_call_attempted'))} | "
+        f"Credential env: {preview.get('gemini_credential_env_var_name') or 'not required'} | "
+        f"Present: {bool(preview.get('gemini_credential_present'))}"
+    )
+    st.caption(
+        preview.get("gemini_adapter_status_message")
+        or "Gemini adapter installed but real execution disabled by policy"
+    )
     if preview.get("redacted_payload_preview_available"):
         st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:

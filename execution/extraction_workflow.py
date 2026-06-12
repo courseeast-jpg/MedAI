@@ -25,6 +25,7 @@ from execution.ai_extraction_adapter import (
     FakeAIExtractionAdapter,
 )
 from execution.ai_payload_policy import AIPayloadPolicy, payload_policy_to_public_dict
+from execution.gemini_extraction_adapter import build_gemini_adapter_status
 from execution.ai_provider_enablement import (
     evaluate_real_provider_execution_readiness,
     real_provider_credential_to_public_dict,
@@ -163,6 +164,13 @@ def run_ai_extraction_workflow(
     provider_enablement_public = real_provider_enablement_to_public_dict(provider_enablement)
     credential_public = real_provider_credential_to_public_dict(provider_enablement)
     safety_checklist_public = real_provider_safety_checklist_to_public_dict(provider_enablement)
+    gemini_adapter_status_public = build_gemini_adapter_status(
+        selected_provider=selection_public["requested_provider"],
+        real_provider_execution_block_reason=provider_enablement_public.get(
+            "real_provider_execution_block_reason",
+            "real_provider_execution_disabled_by_policy",
+        ),
+    )
     operator_preview = build_operator_preview(
         packages,
         privacy_gate_result=privacy_public,
@@ -173,6 +181,7 @@ def run_ai_extraction_workflow(
         dry_run_decision_result=dry_run_decision_public,
         real_provider_enablement_result=provider_enablement_public,
         credential_readiness_result=credential_public,
+        gemini_adapter_status_result=gemini_adapter_status_public,
     )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
@@ -205,6 +214,7 @@ def run_ai_extraction_workflow(
         credential_readiness_result=credential_public,
         real_provider_safety_checklist_result=safety_checklist_public,
         validation_errors=errors,
+        gemini_adapter_status_result=gemini_adapter_status_public,
     )
 
 
@@ -242,6 +252,7 @@ def build_operator_preview(
     dry_run_decision_result: dict[str, Any] | None = None,
     real_provider_enablement_result: dict[str, Any] | None = None,
     credential_readiness_result: dict[str, Any] | None = None,
+    gemini_adapter_status_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -333,6 +344,30 @@ def build_operator_preview(
         "operator_notice": "No external AI call was made",
         "operator_notice_sentence": "No external AI call was made.",
     }
+    gemini_status = dict(gemini_adapter_status_result or {})
+    # Non-credential Gemini status is always safe to surface (no "credential"
+    # or "api_key" substrings).
+    preview.update(
+        {
+            "gemini_adapter_installed": bool(gemini_status.get("gemini_adapter_installed", True)),
+            "gemini_adapter_status_message": gemini_status.get(
+                "gemini_adapter_status_message",
+                "Gemini adapter installed but real execution disabled by policy",
+            ),
+            "gemini_selected": bool(gemini_status.get("gemini_selected", False)),
+            "gemini_real_call_attempted": False,
+            "gemini_prompt_contract_version": gemini_status.get("prompt_contract_version", ""),
+            "gemini_schema_contract_version": gemini_status.get("schema_contract_version", ""),
+            "gemini_real_provider_execution_enabled": False,
+            "gemini_real_provider_execution_block_reason": gemini_status.get(
+                "real_provider_execution_block_reason",
+                "real_provider_execution_disabled_by_policy",
+            ),
+        }
+    )
+    # Credential-name/presence fields only appear once an explicit real-provider
+    # readiness check has run (matching 15F behavior). 15D/15E disabled-mode
+    # previews stay free of any credential/api-key strings.
     if (credential_readiness_result or {}).get("credential_env_var_name"):
         preview.update(
             {
@@ -341,6 +376,8 @@ def build_operator_preview(
                 "credential_value_redacted": bool(
                     credential_readiness_result.get("credential_value_redacted", False)
                 ),
+                "gemini_credential_env_var_name": gemini_status.get("credential_env_var_name", ""),
+                "gemini_credential_present": bool(gemini_status.get("credential_present", False)),
             }
         )
     return preview

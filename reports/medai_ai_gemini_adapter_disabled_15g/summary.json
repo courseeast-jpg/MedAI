@@ -1,0 +1,20 @@
+{
+  "block": "MEDAI-AI-GEMINI-ADAPTER-DISABLED-15G",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "gemini_adapter_installed": true,
+  "gemini_adapter_status_message": "Gemini adapter installed but real execution disabled by policy",
+  "credential_env_var_name": "GEMINI_API_KEY",
+  "credential_present": true,
+  "real_provider_execution_enabled": false,
+  "gemini_real_call_attempted": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "final_external_call_allowed": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "schema_valid_count": 3,
+  "review_bound_package_count": 3,
+  "privacy_result": "passed"
+}

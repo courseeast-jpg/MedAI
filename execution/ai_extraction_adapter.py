@@ -121,6 +121,7 @@ class ExtractionWorkflowResult:
     credential_readiness_result: dict
     real_provider_safety_checklist_result: dict
     validation_errors: list[str] = field(default_factory=list)
+    gemini_adapter_status_result: dict = field(default_factory=dict)
 
 
 class FakeAIExtractionAdapter:

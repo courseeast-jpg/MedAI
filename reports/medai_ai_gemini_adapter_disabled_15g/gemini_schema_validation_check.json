@@ -1,0 +1,58 @@
+{
+  "schema_contract_version": "gemini-extraction-schema-15g-v1",
+  "valid_responses": [
+    {
+      "schema_valid": true,
+      "schema_contract_version": "gemini-extraction-schema-15g-v1",
+      "document_type": "Cytology / pathology narrative",
+      "package_title": "AI-assisted extraction",
+      "section_count": 6,
+      "observation_count": 6,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    },
+    {
+      "schema_valid": true,
+      "schema_contract_version": "gemini-extraction-schema-15g-v1",
+      "document_type": "Urinalysis",
+      "package_title": "AI-assisted extraction",
+      "section_count": 1,
+      "observation_count": 5,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    },
+    {
+      "schema_valid": true,
+      "schema_contract_version": "gemini-extraction-schema-15g-v1",
+      "document_type": "Portal result cards",
+      "package_title": "AI-assisted extraction",
+      "section_count": 1,
+      "observation_count": 8,
+      "review_required": true,
+      "auto_accept": false,
+      "active_write_allowed": false,
+      "source_text_only_recommendation_preserved": true,
+      "errors": []
+    }
+  ],
+  "auto_accept_true_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "active_write_allowed_true_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "review_required_false_rejected": {
+    "schema_valid": false,
+    "expected_error_present": true
+  },
+  "recommendation_label_preserved": true,
+  "schema_valid_count": 3
+}
