@@ -1451,6 +1451,16 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
         st.caption(preview.get("provider_message") or "Provider disabled by policy")
     if preview.get("provider_execution_block_reason"):
         st.caption(f"Provider execution blocked: {preview.get('provider_execution_block_reason')}")
+    st.caption(
+        "Dry-run: "
+        f"{preview.get('dry_run_mode_status') or 'dry-run blocked'} | "
+        f"Allowed: {bool(preview.get('dry_run_external_call_allowed'))} | "
+        f"Real network call used: {bool(preview.get('real_network_call_used'))} | "
+        "Final external call allowed: False"
+    )
+    if preview.get("dry_run_fail_closed_reason"):
+        st.caption(f"Dry-run blocked: {preview.get('dry_run_fail_closed_reason')}")
+    st.caption("Dry-run only - real provider execution remains disabled")
     if preview.get("redacted_payload_preview_available"):
         st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:

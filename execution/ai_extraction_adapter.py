@@ -81,6 +81,7 @@ class ExtractionWorkflowContext:
     provider_name: str = "fake_local"
     model_name: str = "fake-local-15c"
     operator_approval_state: str = "not_requested"
+    external_call_mode: str = "disabled"
     estimated_input_tokens: int = 256
     estimated_output_tokens: int = 512
     session_budget_cap_usd: float = 1.00
@@ -113,6 +114,8 @@ class ExtractionWorkflowResult:
     audit_result: dict
     provider_registry_result: dict
     provider_selection_result: dict
+    dry_run_decision_result: dict
+    dry_run_audit_result: dict
     validation_errors: list[str] = field(default_factory=list)
 
 

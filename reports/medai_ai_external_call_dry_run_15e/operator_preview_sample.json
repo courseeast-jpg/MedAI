@@ -1,0 +1,13 @@
+{
+  "operator_notice": "No external AI call was made.",
+  "dry_run_status": "dry-run only - real provider execution remains disabled",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "approval_state": "approved_for_dry_run",
+  "privacy_gate_status": "redacted_payload_ready",
+  "payload_policy_allowed": true,
+  "budget_allowed": true,
+  "dry_run_external_call_allowed": true,
+  "final_external_call_allowed": false,
+  "real_network_call_used": false
+}

@@ -1,0 +1,16 @@
+{
+  "block": "MEDAI-AI-EXTERNAL-CALL-DRY-RUN-15E",
+  "selected_provider": "gemini",
+  "effective_provider": "fake_local",
+  "operator_approval_state": "approved_for_dry_run",
+  "dry_run_external_call_allowed": true,
+  "final_external_call_allowed": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "review_bound_package_count": 3,
+  "simulated_response_created": true,
+  "privacy_result": "passed"
+}

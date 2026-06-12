@@ -11,6 +11,11 @@ from dataclasses import asdict
 from typing import Any
 
 from app.source_extraction_packages import source_package_from_ai_draft
+from execution.ai_external_call_dry_run import (
+    build_ai_external_call_dry_run,
+    dry_run_audit_to_public_dict,
+    dry_run_decision_to_public_dict,
+)
 from execution.ai_budget_guard import AIBudgetGuard, budget_guard_to_public_dict
 from execution.ai_extraction_adapter import (
     AIExtractionAdapterInput,
@@ -65,13 +70,23 @@ def run_ai_extraction_workflow(
         estimated_input_tokens=context.estimated_input_tokens,
         estimated_output_tokens=context.estimated_output_tokens,
     )
-    payload_policy = AIPayloadPolicy().evaluate(
+    policy_approval_state = approval_state
+    policy_provider_mode = context.provider_mode
+    policy_provider_name = context.provider_name
+    policy_fail_real_providers = True
+    if context.external_call_mode == "dry_run":
+        policy_approval_state = AIExternalCallApprovalState(
+            state="approved" if context.operator_approval_state == "approved_for_dry_run" else context.operator_approval_state
+        )
+        policy_provider_mode = "external_candidate"
+        policy_fail_real_providers = False
+    payload_policy = AIPayloadPolicy(fail_real_providers_in_15b=policy_fail_real_providers).evaluate(
         payload_type=context.payload_type,
         privacy_gate_result=privacy,
-        operator_approval_state=approval_state,
+        operator_approval_state=policy_approval_state,
         budget_result=budget,
-        provider_mode=context.provider_mode,
-        provider_name=context.provider_name,
+        provider_mode=policy_provider_mode,
+        provider_name=policy_provider_name,
     )
     provider_registry = AIProviderRegistry()
     provider_readiness = provider_registry.validate_provider_readiness(
@@ -87,6 +102,19 @@ def run_ai_extraction_workflow(
         privacy_gate_result=privacy_gate_to_public_dict(privacy),
         payload_policy_result=payload_policy_to_public_dict(payload_policy),
         budget_guard_result=budget_guard_to_public_dict(budget),
+    )
+    provider_selection_public = provider_selection_to_public_dict(provider_selection)
+    provider_readiness_public = provider_readiness_to_public_dict(provider_readiness)
+    dry_run = build_ai_external_call_dry_run(
+        requested_provider=provider_selection_public["requested_provider"],
+        effective_provider=provider_selection_public["effective_provider"],
+        model_name=provider_readiness_public["model_name"],
+        provider_enabled=provider_readiness_public["provider_enabled"],
+        operator_approval_state=context.operator_approval_state,
+        privacy_gate_result=privacy_gate_to_public_dict(privacy),
+        payload_policy_result=payload_policy_to_public_dict(payload_policy),
+        budget_guard_result=budget_guard_to_public_dict(budget),
+        dry_run_mode=context.external_call_mode == "dry_run",
     )
     adapter_input = AIExtractionAdapterInput(
         source_class=context.source_class,
@@ -112,8 +140,10 @@ def run_ai_extraction_workflow(
     privacy_public = privacy_gate_to_public_dict(privacy)
     payload_policy_public = payload_policy_to_public_dict(payload_policy)
     budget_public = budget_guard_to_public_dict(budget)
-    provider_public = provider_readiness_to_public_dict(provider_readiness)
-    selection_public = provider_selection_to_public_dict(provider_selection)
+    provider_public = provider_readiness_public
+    selection_public = provider_selection_public
+    dry_run_decision_public = dry_run_decision_to_public_dict(dry_run)
+    dry_run_audit_public = dry_run_audit_to_public_dict(dry_run)
     operator_preview = build_operator_preview(
         packages,
         privacy_gate_result=privacy_public,
@@ -121,6 +151,7 @@ def run_ai_extraction_workflow(
         budget_guard_result=budget_public,
         provider_registry_result=provider_public,
         provider_selection_result=selection_public,
+        dry_run_decision_result=dry_run_decision_public,
     )
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
@@ -147,6 +178,8 @@ def run_ai_extraction_workflow(
         audit_result=audit,
         provider_registry_result=provider_public,
         provider_selection_result=selection_public,
+        dry_run_decision_result=dry_run_decision_public,
+        dry_run_audit_result=dry_run_audit_public,
         validation_errors=errors,
     )
 
@@ -182,6 +215,7 @@ def build_operator_preview(
     budget_guard_result: dict[str, Any] | None = None,
     provider_registry_result: dict[str, Any] | None = None,
     provider_selection_result: dict[str, Any] | None = None,
+    dry_run_decision_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -225,7 +259,10 @@ def build_operator_preview(
         "redacted_payload_preview_available": bool(
             (privacy_gate_result or {}).get("redacted_payload_preview_available", False)
         ),
-        "external_call_approval_status": (payload_policy_result or {}).get("operator_approval_state", "not_requested"),
+        "external_call_approval_status": (dry_run_decision_result or {}).get(
+            "operator_approval_state",
+            (payload_policy_result or {}).get("operator_approval_state", "not_requested"),
+        ),
         "budget_allowed": bool((budget_guard_result or {}).get("budget_allowed", False)),
         "budget_fail_reason": (budget_guard_result or {}).get("budget_fail_reason", ""),
         "payload_policy_allowed": bool((payload_policy_result or {}).get("payload_policy_allowed", False)),
@@ -246,12 +283,23 @@ def build_operator_preview(
         "provider_execution_block_reason": (provider_selection_result or {}).get(
             "provider_execution_block_reason", ""
         ),
+        "dry_run_mode_status": (
+            "dry-run only - real provider execution remains disabled"
+            if (dry_run_decision_result or {}).get("dry_run_external_call_allowed")
+            else "dry-run blocked"
+        ),
+        "dry_run_external_call_allowed": bool(
+            (dry_run_decision_result or {}).get("dry_run_external_call_allowed", False)
+        ),
+        "dry_run_fail_closed_reason": (dry_run_decision_result or {}).get("fail_closed_reason", ""),
+        "real_network_call_used": False,
         "provider_message": (
             "Provider disabled by policy"
             if not bool((provider_registry_result or {}).get("provider_enabled", False))
             else "Provider available for local fake path only"
         ),
         "operator_notice": "No external AI call was made",
+        "operator_notice_sentence": "No external AI call was made.",
     }
 
 
