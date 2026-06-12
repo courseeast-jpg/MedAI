@@ -1526,6 +1526,40 @@ def render_ai_extraction_operator_preview(workflow_result: dict[str, Any]) -> No
         or "Local/Ollama adapter installed but real execution disabled by policy"
     )
     st.caption(preview.get("local_ollama_no_local_model_call_notice") or "No local model call was made")
+    # Unified operator-control surface (15K): readiness matrix + staged request.
+    control = dict(workflow_result.get("operator_control_result") or {})
+    st.markdown("##### Provider operator control")
+    st.caption(
+        "Selected: "
+        f"{control.get('selected_provider') or preview.get('requested_provider') or 'fake_local'} | "
+        f"Effective: {control.get('effective_provider') or 'fake_local'} | "
+        f"Staged request: {preview.get('operator_control_staged_request_state') or 'not_requested'} | "
+        "Real provider execution enabled: False"
+    )
+    st.caption(preview.get("operator_control_staged_request_notice") or "Staged request does not enable execution")
+    st.caption(preview.get("operator_control_real_provider_disabled_notice") or "Real provider execution disabled by policy")
+    st.caption(preview.get("operator_control_no_external_call_notice") or "No external AI call was made")
+    st.caption(preview.get("operator_control_no_local_model_call_notice") or "No local model call was made")
+    control_rows = control.get("providers") or preview.get("operator_control_provider_status") or []
+    if control_rows:
+        st.dataframe(
+            [
+                {
+                    "provider": row.get("provider_name", ""),
+                    "enabled_by_policy": bool(row.get("provider_enabled_by_policy", False)),
+                    "adapter_contract": bool(row.get("adapter_contract_available", True)),
+                    "schema_contract": bool(row.get("schema_contract_available", True)),
+                    "credential_present": bool(row.get("credential_present", False)),
+                    "dry_run": row.get("dry_run_status", ""),
+                    "request_state": row.get("operator_enablement_request_state", "not_requested"),
+                    "execution_allowed": False,
+                    "block_reason": row.get("execution_block_reason", ""),
+                }
+                for row in control_rows
+            ],
+            hide_index=True,
+            use_container_width=True,
+        )
     if preview.get("redacted_payload_preview_available"):
         st.caption("Redacted payload preview is available for review; token map remains local-only.")
     if not packages:

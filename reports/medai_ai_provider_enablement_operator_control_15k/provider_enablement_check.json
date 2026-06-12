@@ -1,0 +1,15 @@
+{
+  "selected_provider": "claude",
+  "effective_provider": "fake_local",
+  "real_provider_execution_enabled": false,
+  "gemini_real_call_attempted": false,
+  "claude_real_call_attempted": false,
+  "openai_real_call_attempted": false,
+  "ollama_real_call_attempted": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "local_model_call_used": false,
+  "subprocess_call_used": false,
+  "final_external_call_allowed": false,
+  "fake_local_package_output_preserved": true
+}

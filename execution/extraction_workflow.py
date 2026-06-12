@@ -29,6 +29,14 @@ from execution.gemini_extraction_adapter import build_gemini_adapter_status
 from execution.claude_extraction_adapter import build_claude_adapter_status
 from execution.openai_extraction_adapter import build_openai_adapter_status
 from execution.local_ollama_extraction_adapter import build_local_ollama_adapter_status
+from execution.ai_provider_operator_control import (
+    build_provider_operator_control,
+    operator_control_to_public_dict,
+    NO_EXTERNAL_CALL_NOTICE,
+    NO_LOCAL_MODEL_CALL_NOTICE,
+    REAL_PROVIDER_DISABLED_NOTICE,
+    STAGED_REQUEST_NOTICE,
+)
 from execution.ai_provider_enablement import (
     evaluate_real_provider_execution_readiness,
     real_provider_credential_to_public_dict,
@@ -187,6 +195,18 @@ def run_ai_extraction_workflow(
         selected_provider=selection_public["requested_provider"],
         real_provider_execution_block_reason=block_reason,
     )
+    operator_control_public = operator_control_to_public_dict(
+        build_provider_operator_control(
+            requested_provider=selection_public["requested_provider"],
+            selected_provider=selection_public["selected_provider"],
+            effective_provider=selection_public["effective_provider"],
+            privacy_gate_result=privacy_public,
+            payload_policy_result=payload_policy_public,
+            budget_guard_result=budget_public,
+            dry_run_decision_result=dry_run_decision_public,
+            enablement_request=context.operator_enablement_request,
+        )
+    )
     operator_preview = build_operator_preview(
         packages,
         privacy_gate_result=privacy_public,
@@ -201,7 +221,9 @@ def run_ai_extraction_workflow(
         claude_adapter_status_result=claude_adapter_status_public,
         openai_adapter_status_result=openai_adapter_status_public,
         local_ollama_adapter_status_result=local_ollama_adapter_status_public,
+        operator_control_result=operator_control_public,
     )
+    operator_preview["operator_control_matrix_available"] = bool(operator_control_public.get("providers"))
     return ExtractionWorkflowResult(
         adapter_name=str(getattr(adapter, "adapter_name", adapter.__class__.__name__)),
         packages=packages,
@@ -237,6 +259,7 @@ def run_ai_extraction_workflow(
         claude_adapter_status_result=claude_adapter_status_public,
         openai_adapter_status_result=openai_adapter_status_public,
         local_ollama_adapter_status_result=local_ollama_adapter_status_public,
+        operator_control_result=operator_control_public,
     )
 
 
@@ -278,6 +301,7 @@ def build_operator_preview(
     claude_adapter_status_result: dict[str, Any] | None = None,
     openai_adapter_status_result: dict[str, Any] | None = None,
     local_ollama_adapter_status_result: dict[str, Any] | None = None,
+    operator_control_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     preview_packages: list[dict[str, Any]] = []
     for package in packages:
@@ -440,6 +464,45 @@ def build_operator_preview(
                 "real_provider_execution_block_reason",
                 "real_provider_execution_disabled_by_policy",
             ),
+        }
+    )
+    # Unified operator-control surface. Only credential-free keys go into the
+    # preview dict (credential presence lives in operator_control_result, which
+    # 15D/15E preview scans do not touch). Provider rows here omit any
+    # credential/api-key fields.
+    control = dict(operator_control_result or {})
+    control_rows = [
+        {
+            "provider_name": row.get("provider_name", ""),
+            "adapter_contract_available": bool(row.get("adapter_contract_available", True)),
+            "schema_contract_available": bool(row.get("schema_contract_available", True)),
+            "provider_enabled_by_policy": bool(row.get("provider_enabled_by_policy", False)),
+            "dry_run_status": row.get("dry_run_status", ""),
+            "operator_enablement_request_state": row.get("operator_enablement_request_state", "not_requested"),
+            "execution_allowed": False,
+            "execution_block_reason": row.get("execution_block_reason", ""),
+        }
+        for row in control.get("providers", [])
+    ]
+    preview.update(
+        {
+            "operator_control_provider_status": control_rows,
+            "operator_control_selected_provider": control.get("selected_provider", ""),
+            "operator_control_effective_provider": control.get("effective_provider", "fake_local"),
+            "operator_control_staged_request_state": control.get(
+                "operator_enablement_request_state", "not_requested"
+            ),
+            "operator_control_staged_request_allowed": bool(
+                control.get("operator_enablement_request_allowed", False)
+            ),
+            "operator_control_staged_request_block_reason": control.get(
+                "operator_enablement_request_block_reason", "no_request"
+            ),
+            "operator_control_real_provider_execution_enabled": False,
+            "operator_control_staged_request_notice": STAGED_REQUEST_NOTICE,
+            "operator_control_real_provider_disabled_notice": REAL_PROVIDER_DISABLED_NOTICE,
+            "operator_control_no_external_call_notice": NO_EXTERNAL_CALL_NOTICE,
+            "operator_control_no_local_model_call_notice": NO_LOCAL_MODEL_CALL_NOTICE,
         }
     )
     # Credential-name/presence fields only appear once an explicit real-provider

@@ -87,6 +87,7 @@ class ExtractionWorkflowContext:
     estimated_output_tokens: int = 512
     session_budget_cap_usd: float = 1.00
     monthly_budget_cap_usd: float = 10.00
+    operator_enablement_request: dict | None = None
 
 
 @dataclass(frozen=True)
@@ -125,6 +126,7 @@ class ExtractionWorkflowResult:
     claude_adapter_status_result: dict = field(default_factory=dict)
     openai_adapter_status_result: dict = field(default_factory=dict)
     local_ollama_adapter_status_result: dict = field(default_factory=dict)
+    operator_control_result: dict = field(default_factory=dict)
 
 
 class FakeAIExtractionAdapter:

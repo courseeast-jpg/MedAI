@@ -1,0 +1,111 @@
+{
+  "samples": {
+    "claude_staged_all_gates_pass": {
+      "requested_provider": "claude",
+      "operator_enablement_request_state": "staged",
+      "operator_enablement_request_allowed": true,
+      "operator_enablement_request_block_reason": "staged_only_execution_remains_disabled",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    },
+    "openai_missing_credential": {
+      "requested_provider": "openai",
+      "operator_enablement_request_state": "invalid",
+      "operator_enablement_request_allowed": false,
+      "operator_enablement_request_block_reason": "credential_missing",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    },
+    "missing_privacy": {
+      "requested_provider": "claude",
+      "operator_enablement_request_state": "invalid",
+      "operator_enablement_request_allowed": false,
+      "operator_enablement_request_block_reason": "missing_privacy_gate",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    },
+    "failed_payload_policy": {
+      "requested_provider": "claude",
+      "operator_enablement_request_state": "invalid",
+      "operator_enablement_request_allowed": false,
+      "operator_enablement_request_block_reason": "payload_policy_failed",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    },
+    "budget_failure": {
+      "requested_provider": "claude",
+      "operator_enablement_request_state": "invalid",
+      "operator_enablement_request_allowed": false,
+      "operator_enablement_request_block_reason": "budget_exceeded",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    },
+    "missing_dry_run": {
+      "requested_provider": "claude",
+      "operator_enablement_request_state": "invalid",
+      "operator_enablement_request_allowed": false,
+      "operator_enablement_request_block_reason": "dry_run_required",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    },
+    "local_ollama_no_credential_ok": {
+      "requested_provider": "local_ollama",
+      "operator_enablement_request_state": "staged",
+      "operator_enablement_request_allowed": true,
+      "operator_enablement_request_block_reason": "staged_only_execution_remains_disabled",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    },
+    "fake_local_invalid": {
+      "requested_provider": "fake_local",
+      "operator_enablement_request_state": "invalid",
+      "operator_enablement_request_allowed": false,
+      "operator_enablement_request_block_reason": "fake_local_no_enablement_request_needed",
+      "staged_only": true,
+      "real_provider_execution_enabled": false,
+      "final_external_call_allowed": false,
+      "external_api_used": false,
+      "real_network_call_used": false,
+      "local_model_call_used": false,
+      "subprocess_call_used": false
+    }
+  },
+  "staged_does_not_enable_execution": true,
+  "blocked_when_gates_missing": true,
+  "claude_staged_allowed": true
+}

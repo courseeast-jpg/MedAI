@@ -1,0 +1,40 @@
+{
+  "controlled_providers": [
+    "fake_local",
+    "gemini",
+    "claude",
+    "openai",
+    "local_ollama"
+  ],
+  "selected_provider": "claude",
+  "effective_provider": "fake_local",
+  "fake_local_enabled": true,
+  "real_providers_disabled": true,
+  "operator_enablement_request_state": "staged",
+  "operator_enablement_request_allowed": true,
+  "real_provider_execution_enabled": false,
+  "final_external_call_allowed": false,
+  "external_api_used": false,
+  "real_network_call_used": false,
+  "local_model_call_used": false,
+  "subprocess_call_used": false,
+  "all_real_call_attempted_false": true,
+  "audit": {
+    "requested_provider": "claude",
+    "selected_provider": "claude",
+    "effective_provider": "fake_local",
+    "operator_enablement_request_state": "staged",
+    "operator_enablement_request_allowed": true,
+    "operator_enablement_request_block_reason": "staged_only_execution_remains_disabled",
+    "real_provider_execution_enabled": false,
+    "final_external_call_allowed": false,
+    "external_api_used": false,
+    "real_network_call_used": false,
+    "local_model_call_used": false,
+    "subprocess_call_used": false,
+    "active_written_count": 0,
+    "auto_accept": false,
+    "review_required": true,
+    "audit_scope": "public_statuses_counts_only"
+  }
+}

@@ -473,6 +473,44 @@ def run_local_ollama_mock_extraction_preview_for_test() -> dict[str, Any]:
     return run_local_ollama_mock_extraction_preview()
 
 
+def run_provider_operator_control_for_test(
+    provider_name: str = "claude",
+    *,
+    stage_request: bool = False,
+) -> dict[str, Any]:
+    """Run the 15K unified operator-control surface (no real call, no staging-as-enable).
+
+    Staging only records intent; it never enables execution. Effective provider
+    stays fake_local and all real providers remain disabled by policy.
+    """
+    from execution.ai_extraction_adapter import ExtractionWorkflowContext
+    from execution.extraction_workflow import run_ai_extraction_workflow, workflow_result_to_public_dict
+
+    request = {"provider": provider_name, "requested_state": "staged"} if stage_request else None
+    result = run_ai_extraction_workflow(
+        ExtractionWorkflowContext(
+            source_class="urinalysis_table",
+            safe_source_document_id="source_fake_15k",
+            selected_document_category="AI-assisted extraction",
+            selected_specialty_domain="urology",
+            source_modality="fake_local_adapter",
+            raw_text_local_only=(
+                "Patient Jane Example; DOB 01/02/1970; MRN 123456; Accession CY-2026-0001; "
+                "Facility Park Medical Center; Provider Dr. Alice Clinician; "
+                "123 Main Street, Springfield, NY 10001; 555-123-4567; jane.example@example.com; "
+                "Insurance INS-ABC-12345; Collected 06/10/2026"
+            ),
+            provider_name=provider_name,
+            provider_mode="disabled" if provider_name != "fake_local" else "fake_local",
+            operator_approval_state="approved_for_dry_run",
+            external_call_mode="dry_run",
+            real_provider_enablement_mode="readiness_check",
+            operator_enablement_request=request,
+        )
+    )
+    return workflow_result_to_public_dict(result)
+
+
 def ensure_test_launcher_dirs(root: Path = ROOT) -> None:
     for relative in (
         "test_input",
