@@ -1,0 +1,17 @@
+{
+  "block": "MEDAI-CAPABILITY-BOUNDARY-DOCTRINE-DOC-15H",
+  "type": "documentation/governance",
+  "doctrine_file": "docs/architecture/MEDAI_CAPABILITY_BOUNDARY_DOCTRINE.md",
+  "reports": [
+    "reports/medai_capability_boundary_doctrine_15h/implementation_report.md",
+    "reports/medai_capability_boundary_doctrine_15h/validation.json",
+    "reports/medai_capability_boundary_doctrine_15h/summary.json"
+  ],
+  "doctrine_principle_present": true,
+  "acceptance_rule_present": true,
+  "checklist_questions_present": true,
+  "forbidden_patterns_present": true,
+  "allowed_patterns_present": true,
+  "privacy_safe": true,
+  "result": "passed"
+}

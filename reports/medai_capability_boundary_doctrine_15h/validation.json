@@ -1,0 +1,27 @@
+{
+  "block": "MEDAI-CAPABILITY-BOUNDARY-DOCTRINE-DOC-15H",
+  "doctrine_file": "docs/architecture/MEDAI_CAPABILITY_BOUNDARY_DOCTRINE.md",
+  "required_section_count": 12,
+  "required_exact_phrase_count": 2,
+  "required_checklist_question_count": 8,
+  "required_forbidden_pattern_count": 7,
+  "required_allowed_pattern_count": 8,
+  "checks": {
+    "doctrine_file_exists": true,
+    "missing_sections": [],
+    "missing_exact_phrases": [],
+    "missing_checklist_questions": [],
+    "missing_forbidden_patterns": [],
+    "missing_allowed_patterns": [],
+    "sensitive_marker_hits": [],
+    "email_pattern_hits": [],
+    "ssn_pattern_hits": [],
+    "privacy_check_passed": true
+  },
+  "raw_patient_data_added": false,
+  "api_keys_or_credentials_added": false,
+  "private_document_text_added": false,
+  "python_files_changed": false,
+  "all_required_content_present": true,
+  "result": "passed"
+}
