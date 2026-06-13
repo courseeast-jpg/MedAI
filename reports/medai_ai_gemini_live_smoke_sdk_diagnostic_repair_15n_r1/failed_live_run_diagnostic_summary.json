@@ -1,0 +1,16 @@
+{
+  "block": "MEDAI-AI-GEMINI-LIVE-SMOKE-GATED-15M",
+  "overall_status": "FAIL_LIVE_SMOKE",
+  "live_call_status": "failed",
+  "missing_live_gates": [],
+  "external_api_used": true,
+  "real_network_call_used": true,
+  "gemini_real_call_attempted": true,
+  "provider_response_received": false,
+  "schema_validation_ran": false,
+  "review_bound_package_count": 0,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "pre_repair_error_capture": "generic_only (gemini_live_call_failed); provider error type/message/status were discarded",
+  "additional_live_call_made_during_15n_r1": false
+}

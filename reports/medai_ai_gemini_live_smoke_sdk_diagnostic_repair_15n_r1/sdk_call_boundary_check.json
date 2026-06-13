@@ -1,0 +1,11 @@
+{
+  "no_hard_sdk_import_in_source": true,
+  "supports_google_genai": true,
+  "supports_legacy_generativeai": true,
+  "model_configurable": true,
+  "model_env_override_supported": true,
+  "default_is_text_model": true,
+  "sdk_call_kwargs_keys_names_only": true,
+  "no_live_call_during_15n_r1": true,
+  "provider_execution_subprocess_path": false
+}

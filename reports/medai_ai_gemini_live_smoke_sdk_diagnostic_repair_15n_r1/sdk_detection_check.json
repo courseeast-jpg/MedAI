@@ -1,0 +1,12 @@
+{
+  "google_genai_present": false,
+  "legacy_generativeai_present": true,
+  "sdk_call_style": "legacy_generativeai",
+  "sdk_package_detected": "google-generativeai",
+  "sdk_package_version": "0.8.6",
+  "detection_used_network": false,
+  "default_model": "gemini-2.5-flash-lite",
+  "model_env_override_var": "GEMINI_MODEL",
+  "resolved_model_default": "gemini-2.5-flash-lite",
+  "resolved_model_override": "gemini-2.5-flash"
+}

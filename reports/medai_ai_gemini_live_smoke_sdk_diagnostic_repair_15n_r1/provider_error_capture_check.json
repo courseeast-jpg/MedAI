@@ -1,0 +1,12 @@
+{
+  "broad_exception_no_longer_generic_only": true,
+  "provider_error_type": "InvalidArgument",
+  "provider_error_category": "request_config_rejected",
+  "provider_error_status_code": "400",
+  "provider_error_code": "INVALID_ARGUMENT",
+  "provider_error_source": "gemini_sdk_call",
+  "provider_error_retryable": false,
+  "provider_error_redaction_applied_field_present": true,
+  "provider_error_message_truncated_field_present": true,
+  "audit_carries_error_fields": true
+}
