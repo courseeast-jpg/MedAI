@@ -1,0 +1,82 @@
+{
+  "cases": [
+    {
+      "case_id": "synthetic_case_1_demographics",
+      "tokenized_text": "Patient: [PATIENT_NAME_1]\nDOB: [DOB_1]\nAddress: [ADDRESS_1]\nPhone: [PHONE_1]\nEmail: [EMAIL_1]\nNote: Synthetic demographics block, all values fabricated.",
+      "token_classes": [
+        "ADDRESS",
+        "DOB",
+        "EMAIL",
+        "PATIENT_NAME",
+        "PHONE"
+      ],
+      "token_count": 5,
+      "finding_count": 5,
+      "outbound_fingerprint": "sha256:0ddc54e410535b4a"
+    },
+    {
+      "case_id": "synthetic_case_2_identifiers",
+      "tokenized_text": "MRN: [MRN_1]\nInsurance ID: [INSURANCE_ID_1]\nAccount ID: [ACCOUNT_ID_1]\nAccession ID: [ACCESSION_1]\nNote: Synthetic identifier block.",
+      "token_classes": [
+        "ACCESSION",
+        "ACCOUNT_ID",
+        "INSURANCE_ID",
+        "MRN"
+      ],
+      "token_count": 4,
+      "finding_count": 4,
+      "outbound_fingerprint": "sha256:60990a5c043da835"
+    },
+    {
+      "case_id": "synthetic_case_3_care_team",
+      "tokenized_text": "Provider: [PROVIDER_1]\nFacility: [FACILITY_1]\nService date: [DATE_1]\nNote: Synthetic care-team block.",
+      "token_classes": [
+        "DATE",
+        "FACILITY",
+        "PROVIDER"
+      ],
+      "token_count": 3,
+      "finding_count": 3,
+      "outbound_fingerprint": "sha256:e54fc76cef7a2693"
+    },
+    {
+      "case_id": "synthetic_case_4_file_metadata",
+      "tokenized_text": "Filename: [FILENAME_1]\nLocal path: [PATH_1]\nEmbedded metadata: [METADATA_1]\nOCR artifact: [OCR_ARTIFACT_1]\nNote: Synthetic file/metadata block.",
+      "token_classes": [
+        "FILENAME",
+        "METADATA",
+        "OCR_ARTIFACT",
+        "PATH"
+      ],
+      "token_count": 4,
+      "finding_count": 4,
+      "outbound_fingerprint": "sha256:d4462dc0193870fc"
+    },
+    {
+      "case_id": "synthetic_case_5_freetext_and_rare",
+      "tokenized_text": "Known as: [FREETEXT_ID_1]\nRare combination: [RARE_COMBO_1]\nNote: Synthetic free-text and rare-combination block.",
+      "token_classes": [
+        "FREETEXT_ID",
+        "RARE_COMBO"
+      ],
+      "token_count": 2,
+      "finding_count": 2,
+      "outbound_fingerprint": "sha256:a9b05440efb00e25"
+    },
+    {
+      "case_id": "synthetic_case_6_mixed",
+      "tokenized_text": "Patient: [PATIENT_NAME_1]\nDOB: [DOB_1]\nMRN: [MRN_1]\nProvider: [PROVIDER_1]\nFacility: [FACILITY_1]\nAccession ID: [ACCESSION_1]\nNote: Synthetic mixed block, all values fabricated.",
+      "token_classes": [
+        "ACCESSION",
+        "DOB",
+        "FACILITY",
+        "MRN",
+        "PATIENT_NAME",
+        "PROVIDER"
+      ],
+      "token_count": 6,
+      "finding_count": 6,
+      "outbound_fingerprint": "sha256:3f5ff66d3610c690"
+    }
+  ]
+}
