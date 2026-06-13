@@ -1,0 +1,49 @@
+# MEDAI-VERTEX-REAL-DOC-SINGLE-PILOT-DESIGN-NO-LIVE-16A
+
+## Result
+
+- Created a no-live design package for a future single-document Vertex pilot.
+- Did not call any provider or billing API.
+- Did not process real documents, set live gates, write active MKB, mutate production review queue, auto-accept, or produce medical decision output.
+
+## Metrics
+
+- pilot_design_created: `True`
+- authorization_template_created: `True`
+- go_no_go_checklist_created: `True`
+- test_plan_created: `True`
+- next_decision_memo_created: `True`
+- no_live_status_present: `True`
+- one_document_limit_present: `True`
+- one_call_limit_present: `True`
+- redacted_tokenized_only_present: `True`
+- no_raw_pii_boundary_present: `True`
+- no_token_map_outbound_boundary_present: `True`
+- request_shape_boundary_present: `True`
+- evidence_anchor_boundary_present: `True`
+- label_alias_boundary_present: `True`
+- medication_safety_boundary_present: `True`
+- no_active_write_boundary_present: `True`
+- no_auto_accept_boundary_present: `True`
+- no_medical_decision_boundary_present: `True`
+- review_required_boundary_present: `True`
+- future_live_gate_required: `True`
+- cost_cap_boundary_present: `True`
+- stop_on_first_failure_present: `True`
+- operator_authorization_required: `True`
+- refusal_conditions_present: `True`
+- next_decision_required: `True`
+- real_doc_live_allowed_count: `0`
+- required_design_checks_passed: `25`
+- required_design_checks_total: `25`
+- docs_only_change: `True`
+- production_code_changed: `False`
+- live_call_made: `False`
+- external_api_used: `False`
+- billing_api_used: `False`
+- active_written_count: `0`
+- active_mkb_record_created_count: `0`
+- auto_accept_true_count: `0`
+- medical_decision_made_count: `0`
+- privacy_result: `passed`
+- billing_check_pending: `True`
