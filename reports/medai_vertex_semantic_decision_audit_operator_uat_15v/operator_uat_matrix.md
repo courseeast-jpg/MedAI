@@ -1,0 +1,43 @@
+# 15V operator UAT matrix
+
+| Metric | Value |
+| --- | --- |
+| uat_passed | `True` |
+| operator_nav_entry_found | `True` |
+| operator_tab_opened | `True` |
+| panel_rendered_from_nav | `True` |
+| panel_title_visible | `True` |
+| no_live_read_only_indicator_visible | `True` |
+| read_only_statement_visible | `True` |
+| decision_records_loaded | `15` |
+| decision_records_visible_count | `15` |
+| total_decision_count_visible | `15` |
+| accepted_for_review_count_visible | `13` |
+| rejected_count_visible | `1` |
+| deferred_count_visible | `1` |
+| package_family_breakdown_correct | `True` |
+| provider_route_visible_count | `15` |
+| provider_model_visible_count | `15` |
+| evidence_anchor_visible_count | `15` |
+| source_evidence_visible_count | `15` |
+| source_report_reference_visible_count | `15` |
+| audit_reason_visible_count | `15` |
+| unknown_values_visible_count | `15` |
+| uncertainty_flags_visible_count | `15` |
+| hallucinated_field_count_visible | `0` |
+| json_export_affordance_visible | `True` |
+| csv_export_affordance_visible | `True` |
+| markdown_export_affordance_visible | `True` |
+| json_export_artifact_exists | `True` |
+| csv_export_artifact_exists | `True` |
+| markdown_export_artifact_exists | `True` |
+| decision_store_unchanged | `True` |
+| active_mkb_record_created_count | `0` |
+| active_written_count | `0` |
+| auto_accept_true_count | `0` |
+| live_call_made | `False` |
+| external_api_used | `False` |
+| privacy_result | `passed` |
+| billing_check_pending | `True` |
+
+Bounded deterministic UAT; read-only; no active writes; no auto-accept; no live call.

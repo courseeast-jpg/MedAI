@@ -1,0 +1,448 @@
+{
+  "journey_steps": [
+    {
+      "step": 1,
+      "action": "Locate 'Vertex Decision Audit' in advanced operator navigation",
+      "observed": true
+    },
+    {
+      "step": 2,
+      "action": "Open the tab via app dispatch (routes to read-only 15T hook)",
+      "observed": true
+    },
+    {
+      "step": 3,
+      "action": "Panel title shown: 'Vertex Semantic Review Decision Audit'",
+      "observed": true
+    },
+    {
+      "step": 4,
+      "action": "No-live/read-only indicator shown",
+      "observed": true
+    },
+    {
+      "step": 5,
+      "action": "Read-only export statement shown",
+      "observed": true
+    },
+    {
+      "step": 6,
+      "action": "Provider route/model shown (vertex / gemini-2.5-flash-lite)",
+      "observed": true
+    },
+    {
+      "step": 7,
+      "action": "Decision summary shown (total 15)",
+      "observed": true
+    },
+    {
+      "step": 8,
+      "action": "Package-family breakdown shown",
+      "observed": true
+    },
+    {
+      "step": 9,
+      "action": "Safety status shown (writes 0, auto-accept off, review required)",
+      "observed": true
+    },
+    {
+      "step": 10,
+      "action": "Evidence/provenance preview shown (anchors, source evidence, source refs, audit reasons)",
+      "observed": true
+    },
+    {
+      "step": 11,
+      "action": "Unknown values shown",
+      "observed": true
+    },
+    {
+      "step": 12,
+      "action": "Uncertainty flags shown",
+      "observed": true
+    },
+    {
+      "step": 13,
+      "action": "Hallucinated field count shown and equals 0",
+      "observed": true
+    },
+    {
+      "step": 14,
+      "action": "JSON export affordance visible + artifact exists",
+      "observed": true
+    },
+    {
+      "step": 15,
+      "action": "CSV export affordance visible + artifact exists",
+      "observed": true
+    },
+    {
+      "step": 16,
+      "action": "Markdown export affordance visible + artifact exists",
+      "observed": true
+    },
+    {
+      "step": 17,
+      "action": "Exports are read-only references to 15S artifacts",
+      "observed": true
+    },
+    {
+      "step": 18,
+      "action": "Decision store fingerprint unchanged before/after UAT",
+      "observed": true
+    },
+    {
+      "step": 19,
+      "action": "No active MKB write paths invoked",
+      "observed": true
+    },
+    {
+      "step": 20,
+      "action": "No provider/network call paths invoked",
+      "observed": true
+    }
+  ],
+  "view_model": {
+    "title": "Vertex Semantic Review Decision Audit",
+    "no_live_read_only_indicator": "Read-only audit. No live provider call. No active MKB records are created.",
+    "read_only_export_statement": "Exports are read-only. No active MKB records are created.",
+    "provider_summary": {
+      "provider_route": "vertex",
+      "provider_model": "gemini-2.5-flash-lite"
+    },
+    "decision_summary": {
+      "total_decisions": 15,
+      "accepted_for_review": 13,
+      "rejected": 1,
+      "deferred": 1
+    },
+    "package_family_breakdown": {
+      "cytology_pathology_narrative": 3,
+      "mixed_narrative_numeric_result": 4,
+      "portal_result_cards": 4,
+      "urinalysis_table_like_lab": 4
+    },
+    "safety_summary": {
+      "active_written_count": 0,
+      "active_mkb_record_created_count": 0,
+      "auto_accept": false,
+      "review_required": true,
+      "hallucinated_field_count": 0,
+      "export_read_only": true
+    },
+    "decision_rows": [
+      {
+        "package_family": "cytology_pathology_narrative",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "cyto_a1",
+        "source_evidence_text": "tests ordered section present",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 3,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "cytology_pathology_narrative",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "cyto_a1",
+        "source_evidence_text": "diagnosis section present",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 3,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "cytology_pathology_narrative",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "cyto_a1",
+        "source_evidence_text": "recommendation section present",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 3,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "urinalysis_table_like_lab",
+        "decision_status": "rejected",
+        "action": "reject",
+        "evidence_anchor": "ua_a1",
+        "source_evidence_text": "table rows grouped under urinalysis table",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator rejected finding; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "urinalysis_table_like_lab",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "ua_a1",
+        "source_evidence_text": "table rows grouped under urinalysis table",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "urinalysis_table_like_lab",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "ua_a1",
+        "source_evidence_text": "table rows grouped under urinalysis table",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "urinalysis_table_like_lab",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "ua_a1",
+        "source_evidence_text": "table rows grouped under urinalysis table",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "portal_result_cards",
+        "decision_status": "deferred",
+        "action": "defer",
+        "evidence_anchor": "portal_a1",
+        "source_evidence_text": "card labels grouped as portal result cards",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_comparison_live_15p_c/live_comparison_result.json",
+        "audit_reason": "operator deferred finding; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "portal_result_cards",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "portal_a1",
+        "source_evidence_text": "card labels grouped as portal result cards",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_comparison_live_15p_c/live_comparison_result.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "portal_result_cards",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "portal_a1",
+        "source_evidence_text": "card labels grouped as portal result cards",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_comparison_live_15p_c/live_comparison_result.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "portal_result_cards",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "portal_a1",
+        "source_evidence_text": "card labels grouped as portal result cards",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_comparison_live_15p_c/live_comparison_result.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "mixed_narrative_numeric_result",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "mixed_a1",
+        "source_evidence_text": "narrative section present",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [
+          "Collection Time"
+        ],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "mixed_narrative_numeric_result",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "mixed_a1",
+        "source_evidence_text": "numeric/result section present",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [
+          "Collection Time"
+        ],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "mixed_narrative_numeric_result",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "mixed_a1",
+        "source_evidence_text": "numeric/result section present",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [
+          "Collection Time"
+        ],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      },
+      {
+        "package_family": "mixed_narrative_numeric_result",
+        "decision_status": "review_draft",
+        "action": "accept_for_review",
+        "evidence_anchor": "mixed_a1",
+        "source_evidence_text": "numeric/result section present",
+        "provider_route": "vertex",
+        "provider_model": "gemini-2.5-flash-lite",
+        "source_report_reference": "reports/medai_vertex_semantic_package_remaining_families_live_15p_d/live_remaining_families_results.json",
+        "audit_reason": "operator accepted finding for review queue only; no active write",
+        "unknown_values": [
+          "Collection Time"
+        ],
+        "uncertainty_flag_count": 4,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "auto_accept": false,
+        "active_written_count_delta": 0
+      }
+    ],
+    "export_affordances": {
+      "json": "reports/medai_vertex_semantic_review_decision_audit_export_15s/decision_audit_export.json",
+      "csv": "reports/medai_vertex_semantic_review_decision_audit_export_15s/decision_audit_export.csv",
+      "markdown": "reports/medai_vertex_semantic_review_decision_audit_export_15s/decision_audit_summary.md"
+    },
+    "export_affordances_present": {
+      "json": true,
+      "csv": true,
+      "markdown": true
+    },
+    "source_summary": {
+      "block": "MEDAI-VERTEX-SEMANTIC-REVIEW-DECISION-AUDIT-EXPORT-15S",
+      "decision_records_loaded": 15,
+      "decision_records_exported_json": 15,
+      "decision_records_exported_csv": 15,
+      "package_family_count": 4,
+      "package_family_breakdown": {
+        "cytology_pathology_narrative": 3,
+        "mixed_narrative_numeric_result": 4,
+        "portal_result_cards": 4,
+        "urinalysis_table_like_lab": 4
+      },
+      "package_family_breakdown_present": true,
+      "action_breakdown": {
+        "accept_for_review": 13,
+        "defer": 1,
+        "reject": 1
+      },
+      "action_breakdown_present": true,
+      "accepted_for_review_count": 13,
+      "rejected_count": 1,
+      "deferred_count": 1,
+      "provider_provenance_visible_count": 15,
+      "evidence_anchor_visible_count": 15,
+      "unknown_values_visible_count": 15,
+      "uncertainty_flags_visible_count": 15,
+      "source_report_reference_visible_count": 15,
+      "audit_reason_visible_count": 15,
+      "hallucinated_field_count": 0,
+      "active_mkb_record_created_count": 0,
+      "active_written_count": 0,
+      "auto_accept_true_count": 0,
+      "review_required_true_count": 15,
+      "export_read_only": true,
+      "live_call_made": false,
+      "external_api_used": false,
+      "privacy_result": "passed",
+      "billing_check_pending": true,
+      "all_records_review_bound": true
+    }
+  }
+}
