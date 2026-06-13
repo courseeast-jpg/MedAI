@@ -1,0 +1,36 @@
+{
+  "provider_status": {
+    "provider_route": "vertex",
+    "provider_name": "gemini_vertex",
+    "vertex_project_id": "sot-knowledge-ocr",
+    "vertex_location": "global",
+    "vertex_model": "gemini-2.5-flash-lite",
+    "vertex_endpoint": "https://aiplatform.googleapis.com",
+    "vertex_enabled": false,
+    "vertex_live_smoke_allowed": true,
+    "endpoint_host": "aiplatform.googleapis.com",
+    "live_call_made": false,
+    "external_api_used": false,
+    "real_network_call_used": false,
+    "active_written_count": 0,
+    "auto_accept": false,
+    "review_required": true,
+    "billing_check_pending": true
+  },
+  "url_template": "https://aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/publishers/google/models/{model}:generateContent",
+  "resolved_url": "https://aiplatform.googleapis.com/v1/projects/sot-knowledge-ocr/locations/global/publishers/google/models/gemini-2.5-flash-lite:generateContent",
+  "request_payload_keys": [
+    "contents",
+    "generationConfig"
+  ],
+  "contents_count": 1,
+  "prompt_text_hash_only": "vertex_smoke_prompt_fixed_15n_r4",
+  "prompt_body_in_report": false,
+  "generation_config": {
+    "temperature": 0,
+    "maxOutputTokens": 32,
+    "responseMimeType": "application/json"
+  },
+  "max_output_tokens_within_limit": true,
+  "exact_prompt_contract": "fixed_synthetic_json_status_prompt_15n_r4"
+}

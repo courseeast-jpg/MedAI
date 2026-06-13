@@ -1,0 +1,8 @@
+{
+  "env_gate_name": "MEDAI_VERTEX_LIVE_SMOKE_ALLOWED",
+  "env_gate_enabled": true,
+  "live_call_refused_without_gate": false,
+  "exactly_one_live_provider_call_allowed": true,
+  "no_retries": true,
+  "stop_on_first_live_call_failure": true
+}

@@ -1,0 +1,18 @@
+{
+  "privacy_result": "passed",
+  "token_scan_passed": true,
+  "public_report_payload_check_passed": true,
+  "api_key_values_in_report": false,
+  "bearer_tokens_in_report": false,
+  "token_map_in_report": false,
+  "raw_prompt_body_in_report": false,
+  "raw_provider_response_body_in_report": false,
+  "real_patient_identifiers_in_report": false,
+  "absolute_local_paths_in_report": false,
+  "no_real_medical_docs_sent": true,
+  "no_raw_pdf_image_sent": true,
+  "no_private_ocr_payload_sent": true,
+  "no_mkb_active_write": true,
+  "auto_accept": false,
+  "review_required": true
+}
