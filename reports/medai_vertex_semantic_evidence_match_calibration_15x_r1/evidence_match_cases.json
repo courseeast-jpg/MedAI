@@ -1,0 +1,104 @@
+{
+  "cases": [
+    {
+      "case": "exact_evidence_match",
+      "evidence": "possible mild finding, uncertain",
+      "section": null,
+      "expect_pass": true,
+      "kind": "exact",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "normalized_whitespace_match",
+      "evidence": "possible   mild   finding,   uncertain",
+      "section": null,
+      "expect_pass": true,
+      "kind": "normalized_whitespace",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "unicode_quote_normalized_match",
+      "evidence": "\u2018possible mild finding, uncertain\u2019",
+      "section": null,
+      "expect_pass": true,
+      "kind": "substring",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "substring_of_source",
+      "evidence": "value 5 mg/dL within range",
+      "section": null,
+      "expect_pass": true,
+      "kind": "substring",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "paraphrase_dropped_comma",
+      "evidence": "possible mild finding uncertain",
+      "section": null,
+      "expect_pass": false,
+      "kind": "paraphrase",
+      "observed_pass": false,
+      "correct": true
+    },
+    {
+      "case": "paraphrase_synonym",
+      "evidence": "a slight finding that is unclear",
+      "section": null,
+      "expect_pass": false,
+      "kind": "paraphrase",
+      "observed_pass": false,
+      "correct": true
+    },
+    {
+      "case": "inferred_evidence_not_in_source",
+      "evidence": "patient is clinically stable",
+      "section": null,
+      "expect_pass": false,
+      "kind": "inferred",
+      "observed_pass": false,
+      "correct": true
+    },
+    {
+      "case": "wrong_section_constraint",
+      "evidence": "possible mild finding, uncertain",
+      "section": "header metadata only",
+      "expect_pass": false,
+      "kind": "wrong_section",
+      "observed_pass": false,
+      "correct": true
+    },
+    {
+      "case": "right_section_constraint",
+      "evidence": "value 5 mg/dL within range",
+      "section": "value 5 mg/dL within range",
+      "expect_pass": true,
+      "kind": "substring_section",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "null_evidence",
+      "evidence": null,
+      "section": null,
+      "expect_pass": false,
+      "kind": "null",
+      "observed_pass": false,
+      "correct": true
+    },
+    {
+      "case": "empty_evidence",
+      "evidence": "",
+      "section": null,
+      "expect_pass": false,
+      "kind": "empty",
+      "observed_pass": false,
+      "correct": true
+    }
+  ],
+  "synthetic_source": "SYNTHETIC note: 'possible mild finding, uncertain' in section Results; value 5 mg/dL within range."
+}

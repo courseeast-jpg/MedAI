@@ -57,6 +57,12 @@ PROMPT_REQUIRED_PHRASES = {
     "unknowns": "Keep unknown or missing values unknown; do not infer values.",
     "uncertainty": "Set uncertainty when the source wording is uncertain or narrative-only.",
     "no_hallucinated_fields": "Do not add fields, values, sections, dates, identifiers, or facts not present in the source.",
+    # 15X-R1 hardening: evidence must be a verbatim source span, never paraphrased.
+    "evidence_verbatim": (
+        "Copy evidence_text verbatim from the synthetic source body; do not paraphrase, "
+        "reword, summarize, synthesize, or infer evidence_text. If no exact source span "
+        "supports a finding, set evidence_text to null and set uncertainty with review_required true."
+    ),
 }
 
 FORBIDDEN_PROMPT_MARKERS = (
@@ -224,6 +230,53 @@ def validate_vertex_semantic_response(
     return not errors, errors
 
 
+_UNICODE_NORMALIZE_MAP = {
+    "‘": "'", "’": "'", "“": '"', "”": '"',  # smart quotes
+    "–": "-", "—": "-", "−": "-",                  # en/em/minus dashes
+    " ": " ", " ": " ", " ": " ", " ": " ",   # nbsp/thin spaces
+}
+
+
+def normalize_evidence_text(text: str) -> str:
+    """Normalize ONLY harmless formatting: whitespace + common Unicode quote/dash
+    variants. This never changes words and never accepts paraphrase."""
+    import re as _re
+
+    text = str(text or "")
+    for raw, repl in _UNICODE_NORMALIZE_MAP.items():
+        text = text.replace(raw, repl)
+    text = _re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def evidence_text_is_source_verbatim(
+    evidence_text: Any,
+    source_text: str,
+    *,
+    section_text: str | None = None,
+) -> bool:
+    """Strict, deterministic literal source-anchor check (substring only).
+
+    Returns True only if the (whitespace/Unicode-normalized) ``evidence_text`` is a
+    non-empty verbatim substring of the normalized source body (and of the section
+    text when a section constraint is supplied). Reworded, paraphrased, or inferred
+    text, or any text not literally present in the source, is rejected. No fuzzy or
+    semantic scoring is used. A null/empty evidence_text is not a verbatim match
+    (callers treat null as "no supporting span" + uncertainty, not a passing anchor).
+    """
+    if evidence_text is None:
+        return False
+    needle = normalize_evidence_text(str(evidence_text))
+    if not needle:
+        return False
+    haystack = normalize_evidence_text(source_text)
+    if needle not in haystack:
+        return False
+    if section_text is not None:
+        return needle in normalize_evidence_text(section_text)
+    return True
+
+
 def evaluate_vertex_semantic_contract() -> dict[str, Any]:
     cases = [_evaluate_preview(preview) for preview in build_run_review_package_previews()]
     summary = {
@@ -374,4 +427,6 @@ __all__ = [
     "prompt_privacy_check",
     "validate_vertex_semantic_response",
     "vertex_semantic_case_to_public_dict",
+    "normalize_evidence_text",
+    "evidence_text_is_source_verbatim",
 ]

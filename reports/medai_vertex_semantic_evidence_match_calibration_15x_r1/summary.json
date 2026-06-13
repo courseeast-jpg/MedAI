@@ -1,0 +1,31 @@
+{
+  "block": "MEDAI-VERTEX-SEMANTIC-EVIDENCE-MATCH-CALIBRATION-15X-R1",
+  "exact_evidence_match_pass_count": 1,
+  "normalized_whitespace_match_pass_count": 1,
+  "substring_evidence_match_pass_count": 3,
+  "paraphrase_rejected_count": 2,
+  "inferred_evidence_rejected_count": 1,
+  "wrong_section_rejected_count": 1,
+  "null_or_empty_rejected_count": 2,
+  "all_cases_correct": true,
+  "recorded_15x_failure_preserved": true,
+  "recorded_case": {
+    "fixture_id": "cal_uncertainty",
+    "recorded_marker": "finding_0_not_source_anchored",
+    "paraphrase_rejected": true,
+    "verbatim_span_would_pass": true
+  },
+  "prompt_contract_hardened": true,
+  "evidence_text_verbatim_required": true,
+  "embedding_or_llm_judge_used": false,
+  "hallucinated_field_count": 0,
+  "live_call_made": false,
+  "external_api_used": false,
+  "active_written_count": 0,
+  "active_mkb_record_created_count": 0,
+  "auto_accept_true_count": 0,
+  "review_required": true,
+  "privacy_result": "passed",
+  "billing_check_pending": true,
+  "evidence_match_calibration_passed": true
+}
