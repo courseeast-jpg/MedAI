@@ -277,6 +277,34 @@ def evidence_text_is_source_verbatim(
     return True
 
 
+def normalize_candidate_label(label: Any) -> str:
+    """Normalize a label using ONLY whitespace + common Unicode quote/dash
+    variants (same harmless normalization as evidence). No case folding and no
+    scoring — drift in actual characters is preserved and will not match."""
+    return normalize_evidence_text(str(label or ""))
+
+
+def label_matches_candidate(
+    finding_label: Any,
+    candidate_label: str,
+    accepted_aliases: Any = (),
+) -> bool:
+    """Deterministic, explicit literal label match (declared aliases only).
+
+    True only if the normalized ``finding_label`` equals the normalized canonical
+    candidate label or one of the explicitly-declared, normalized ``accepted_aliases``.
+    Undeclared aliases, unrelated labels, and inferred rewrites are rejected. No
+    scoring of any kind is used.
+    """
+    needle = normalize_candidate_label(finding_label)
+    if not needle:
+        return False
+    accepted = {normalize_candidate_label(candidate_label)}
+    for alias in accepted_aliases or ():
+        accepted.add(normalize_candidate_label(alias))
+    return needle in accepted
+
+
 def evaluate_vertex_semantic_contract() -> dict[str, Any]:
     cases = [_evaluate_preview(preview) for preview in build_run_review_package_previews()]
     summary = {
@@ -429,4 +457,6 @@ __all__ = [
     "vertex_semantic_case_to_public_dict",
     "normalize_evidence_text",
     "evidence_text_is_source_verbatim",
+    "normalize_candidate_label",
+    "label_matches_candidate",
 ]

@@ -30,9 +30,86 @@ from execution.gemini_vertex_adapter import (
 from execution.vertex_semantic_package_contract import (
     build_fake_vertex_semantic_response,
     build_vertex_semantic_request_payload,
+    evidence_text_is_source_verbatim,
+    label_matches_candidate,
     prompt_privacy_check,
     validate_vertex_semantic_response,
 )
+
+_FINDING_REQUIRED_KEYS = (
+    "label", "value", "source_section", "evidence_text", "uncertainty", "unknown_value", "source_faithful",
+)
+
+
+def validate_calibration_response(response: Mapping[str, Any], fixture: "CalibrationFixture") -> dict[str, Any]:
+    """Strict calibration validation using verbatim source anchoring (15X-R1).
+
+    A finding is source-anchored only if (label, source_section) is a real
+    candidate and evidence_text is a verbatim substring of the source body. This
+    is at least as strict as exact-tuple matching for faithfulness (evidence must
+    literally be in the source) and rejects paraphrase/inferred evidence. No
+    embeddings, no LLM judge, no fuzzy similarity.
+    """
+    errors: list[str] = []
+    schema_ok = True
+    if response.get("package_family") != fixture.package_family:
+        errors.append("package_family_mismatch")
+        schema_ok = False
+    if response.get("review_required") is not True:
+        errors.append("review_required_not_true")
+        schema_ok = False
+    if response.get("auto_accept") is not False:
+        errors.append("auto_accept_not_false")
+        schema_ok = False
+    findings = response.get("semantic_findings")
+    if not isinstance(findings, list) or not findings:
+        errors.append("semantic_findings_missing")
+        return {"schema_validation_pass": False, "verbatim_evidence_anchor_pass": False, "hallucinated_field_count": 0, "errors": errors}
+
+    hallucinated = 0
+    verbatim_anchor_pass = True
+    for index, item in enumerate(findings):
+        if not isinstance(item, Mapping):
+            errors.append(f"finding_{index}_not_object")
+            schema_ok = False
+            hallucinated += 1
+            verbatim_anchor_pass = False
+            continue
+        missing = [k for k in _FINDING_REQUIRED_KEYS if k not in item]
+        if missing:
+            errors.append(f"finding_{index}_missing_{'_'.join(missing)}")
+            schema_ok = False
+        finding_label = str(item.get("label", ""))
+        finding_section = str(item.get("source_section", ""))
+        # A finding matches a candidate only if the section is identical AND the
+        # label equals the candidate's canonical label or an explicitly-declared
+        # deterministic alias (no fuzzy / embeddings / LLM judge).
+        matched_candidate = next(
+            (
+                cf
+                for cf in fixture.candidate_facts
+                if str(cf["source_section"]) == finding_section
+                and label_matches_candidate(finding_label, str(cf["label"]), cf.get("accepted_label_aliases", []))
+            ),
+            None,
+        )
+        if matched_candidate is None:
+            errors.append(f"finding_{index}_label_section_not_candidate")
+            hallucinated += 1
+            verbatim_anchor_pass = False
+            continue
+        if not evidence_text_is_source_verbatim(item.get("evidence_text"), fixture.source_visible_body):
+            errors.append(f"finding_{index}_evidence_not_verbatim_source")
+            hallucinated += 1
+            verbatim_anchor_pass = False
+        if item.get("source_faithful") is not True:
+            errors.append(f"finding_{index}_not_source_faithful")
+    return {
+        "schema_validation_pass": schema_ok,
+        "verbatim_evidence_anchor_pass": verbatim_anchor_pass and hallucinated == 0,
+        "hallucinated_field_count": hallucinated,
+        "errors": errors,
+    }
 
 LIVE_ENV = "MEDAI_VERTEX_CALIBRATION_BATCH_SYNTHETIC_LIVE_ALLOWED"
 MAX_LIVE_CALLS = 20
@@ -62,7 +139,16 @@ class CalibrationFixture:
     uncertainty_flags: list[str] = field(default_factory=list)
 
 
-def _fact(label: str, value: str, section: str, anchor: str, snippet: str, uncertainty: str = "source-visible candidate fact", unknown: bool = False) -> dict[str, Any]:
+def _fact(
+    label: str,
+    value: str,
+    section: str,
+    anchor: str,
+    snippet: str,
+    uncertainty: str = "source-visible candidate fact",
+    unknown: bool = False,
+    aliases: list[str] | None = None,
+) -> dict[str, Any]:
     return {
         "label": label,
         "value": value,
@@ -72,6 +158,8 @@ def _fact(label: str, value: str, section: str, anchor: str, snippet: str, uncer
         "uncertainty": uncertainty,
         "unknown_value": unknown,
         "row_kind": "observation",
+        # Explicit, deterministic, locally-declared label aliases (15X-R3).
+        "accepted_label_aliases": list(aliases or []),
     }
 
 
@@ -80,67 +168,73 @@ def _anchor(anchor_id: str, section: str, snippet: str) -> dict[str, str]:
 
 
 def build_calibration_fixtures() -> list[CalibrationFixture]:
+    """Synthetic/redacted calibration fixtures.
+
+    Each candidate ``evidence_snippet`` and anchor snippet is a VERBATIM substring
+    of its ``source_visible_body`` (15X-R1 hardening: evidence must be copyable
+    verbatim from source). No real identifiers; every body is prefixed SYNTHETIC.
+    """
     fixtures: list[CalibrationFixture] = []
 
     # 1-2. portal result-card variants
     fixtures.append(CalibrationFixture(
         "cal_portal_v1", "portal_result_cards", "Portal result-card package", "portal_result_cards",
-        "SYNTHETIC portal cards: Specific Gravity, pH, Glucose values shown.",
-        [_fact("Specific Gravity", "1.015", "Portal Result Cards", "p1", "specific gravity card"),
-         _fact("pH", "6.0", "Portal Result Cards", "p1", "ph card")],
-        [_anchor("p1", "Portal Result Cards", "synthetic portal result cards")],
+        "SYNTHETIC portal result cards. Specific Gravity 1.015. pH 6.0.",
+        [_fact("Specific Gravity", "1.015", "Portal Result Cards", "p1", "Specific Gravity 1.015"),
+         _fact("pH", "6.0", "Portal Result Cards", "p1", "pH 6.0")],
+        [_anchor("p1", "Portal Result Cards", "Specific Gravity 1.015")],
         uncertainty_flags=["Specific Gravity: source-visible candidate fact; operator must compare"],
     ))
     fixtures.append(CalibrationFixture(
         "cal_portal_v2", "portal_result_cards", "Portal result-card package", "portal_result_cards",
-        "SYNTHETIC portal cards: Color and Appearance descriptive values shown.",
-        [_fact("Urine Color", "Yellow", "Portal Result Cards", "p2", "color card"),
-         _fact("Appearance", "Clear", "Portal Result Cards", "p2", "appearance card")],
-        [_anchor("p2", "Portal Result Cards", "synthetic appearance cards")],
+        "SYNTHETIC portal result cards. Urine Color Yellow. Appearance Clear.",
+        [_fact("Urine Color", "Yellow", "Portal Result Cards", "p2", "Urine Color Yellow"),
+         _fact("Appearance", "Clear", "Portal Result Cards", "p2", "Appearance Clear")],
+        [_anchor("p2", "Portal Result Cards", "Urine Color Yellow")],
         uncertainty_flags=["Urine Color: source-visible candidate fact; operator must compare"],
     ))
 
     # 3-4. cytology/pathology narrative variants
     fixtures.append(CalibrationFixture(
         "cal_cyto_v1", "cytology_pathology_narrative", "Cytology/pathology narrative package", "cytology_pathology_narrative",
-        "SYNTHETIC narrative: tests ordered section and descriptive impression present.",
-        [_fact("Tests Ordered", "panel listed", "Tests Ordered", "c1", "tests ordered section present", "narrative-only; operator must compare")],
-        [_anchor("c1", "Tests Ordered", "tests ordered section present")],
+        "SYNTHETIC narrative. Tests Ordered: panel listed.",
+        [_fact("Tests Ordered", "panel listed", "Tests Ordered", "c1", "Tests Ordered: panel listed", "narrative-only; operator must compare")],
+        [_anchor("c1", "Tests Ordered", "Tests Ordered: panel listed")],
         uncertainty_flags=["Tests Ordered: narrative-only; operator must compare"],
     ))
     fixtures.append(CalibrationFixture(
         "cal_cyto_v2", "cytology_pathology_narrative", "Cytology/pathology narrative package", "cytology_pathology_narrative",
-        "SYNTHETIC narrative: specimen description paragraph present, no numeric values.",
-        [_fact("Specimen Description", "descriptive text present", "Specimen", "c2", "specimen description paragraph", "narrative-only; operator must compare")],
-        [_anchor("c2", "Specimen", "specimen description paragraph")],
+        "SYNTHETIC narrative. Specimen Description: descriptive text present.",
+        [_fact("Specimen Description", "descriptive text present", "Specimen", "c2", "Specimen Description: descriptive text present", "narrative-only; operator must compare")],
+        [_anchor("c2", "Specimen", "Specimen Description: descriptive text present")],
         uncertainty_flags=["Specimen Description: narrative-only; operator must compare"],
     ))
 
     # 5-6. urinalysis/table-like lab variants
     fixtures.append(CalibrationFixture(
         "cal_urine_v1", "urinalysis_table_like_lab", "Urinalysis/table-like lab package", "urinalysis_table_like_lab",
-        "SYNTHETIC table: pH and protein rows shown with reference ranges.",
-        [_fact("pH", "6.5", "Urinalysis", "u1", "ph row"),
-         _fact("Protein", "Negative", "Urinalysis", "u1", "protein row")],
-        [_anchor("u1", "Urinalysis", "synthetic urinalysis table")],
+        "SYNTHETIC urinalysis table. pH 6.5. Protein Negative.",
+        [_fact("pH", "6.5", "Urinalysis", "u1", "pH 6.5"),
+         _fact("Protein", "Negative", "Urinalysis", "u1", "Protein Negative")],
+        [_anchor("u1", "Urinalysis", "pH 6.5")],
         uncertainty_flags=["pH: source-visible candidate fact; operator must compare"],
     ))
     fixtures.append(CalibrationFixture(
         "cal_urine_v2", "urinalysis_table_like_lab", "Urinalysis/table-like lab package", "urinalysis_table_like_lab",
-        "SYNTHETIC table: glucose and ketones rows shown.",
-        [_fact("Glucose", "Negative", "Urinalysis", "u2", "glucose row"),
-         _fact("Ketones", "Negative", "Urinalysis", "u2", "ketones row")],
-        [_anchor("u2", "Urinalysis", "synthetic urinalysis table v2")],
+        "SYNTHETIC urinalysis table. Glucose Negative. Ketones Negative.",
+        [_fact("Glucose", "Negative", "Urinalysis", "u2", "Glucose Negative"),
+         _fact("Ketones", "Negative", "Urinalysis", "u2", "Ketones Negative")],
+        [_anchor("u2", "Urinalysis", "Glucose Negative")],
         uncertainty_flags=["Glucose: source-visible candidate fact; operator must compare"],
     ))
 
     # 7. mixed narrative + numeric variant
     fixtures.append(CalibrationFixture(
         "cal_mixed_v1", "mixed_narrative_numeric_result", "Mixed narrative + numeric result package", "mixed_narrative_numeric_result",
-        "SYNTHETIC mixed: narrative impression plus a numeric value row present.",
-        [_fact("Impression", "descriptive text present", "Impression", "m1", "narrative impression present", "narrative-only; operator must compare"),
-         _fact("Value A", "12", "Results", "m1", "numeric value row")],
-        [_anchor("m1", "Impression", "narrative plus numeric")],
+        "SYNTHETIC mixed report. Impression: descriptive text present. Value A 12.",
+        [_fact("Impression", "descriptive text present", "Impression", "m1", "Impression: descriptive text present", "narrative-only; operator must compare"),
+         _fact("Value A", "12", "Results", "m1", "Value A 12")],
+        [_anchor("m1", "Impression", "Impression: descriptive text present")],
         unknown_values=["Specimen date: unknown"],
         uncertainty_flags=["Impression: narrative-only; operator must compare"],
     ))
@@ -148,8 +242,8 @@ def build_calibration_fixtures() -> list[CalibrationFixture]:
     # 8. short clinical note with negation
     fixtures.append(CalibrationFixture(
         "cal_negation", "short_clinical_note_negation", "Short clinical note (negation)", "short_clinical_note_negation",
-        "SYNTHETIC note: 'no fever and no rash reported' (negation preserved).",
-        [_fact("Fever", "no fever reported", "Note", "n1", "no fever reported", "negation; source-visible only")],
+        "SYNTHETIC note: no fever and no rash reported.",
+        [_fact("Fever", "no fever", "Note", "n1", "no fever and no rash reported", "negation; source-visible only")],
         [_anchor("n1", "Note", "no fever and no rash reported")],
         uncertainty_flags=["Fever: negation; source-visible only"],
     ))
@@ -157,8 +251,8 @@ def build_calibration_fixtures() -> list[CalibrationFixture]:
     # 9. short clinical note with uncertainty
     fixtures.append(CalibrationFixture(
         "cal_uncertainty", "short_clinical_note_uncertainty", "Short clinical note (uncertainty)", "short_clinical_note_uncertainty",
-        "SYNTHETIC note: 'possible mild finding, uncertain' (uncertainty preserved).",
-        [_fact("Finding", "possible mild finding", "Note", "q1", "possible mild finding uncertain", "explicit uncertainty in source")],
+        "SYNTHETIC note: possible mild finding, uncertain.",
+        [_fact("Finding", "possible mild finding", "Note", "q1", "possible mild finding, uncertain", "explicit uncertainty in source")],
         [_anchor("q1", "Note", "possible mild finding, uncertain")],
         uncertainty_flags=["Finding: explicit uncertainty in source"],
     ))
@@ -166,17 +260,18 @@ def build_calibration_fixtures() -> list[CalibrationFixture]:
     # 10. medication mention without DDI decision
     fixtures.append(CalibrationFixture(
         "cal_medication", "medication_mention_no_ddi", "Medication mention (no interaction decision)", "medication_mention_no_ddi",
-        "SYNTHETIC note: medication list mentions a generic agent; no interaction decision.",
-        [_fact("Medication Mention", "generic agent listed", "Medications", "x1", "medication list mention", "source-visible mention; no interaction decision")],
-        [_anchor("x1", "Medications", "medication list mention")],
+        "SYNTHETIC note. Medications: generic agent listed.",
+        [_fact("Medication Mention", "generic agent listed", "Medications", "x1", "Medications: generic agent listed", "source-visible mention; no interaction decision")],
+        [_anchor("x1", "Medications", "Medications: generic agent listed")],
         uncertainty_flags=["Medication Mention: source-visible mention; no interaction decision"],
     ))
 
     # 11. bilingual / Cyrillic-safe synthetic snippet
     fixtures.append(CalibrationFixture(
         "cal_cyrillic", "bilingual_cyrillic_snippet", "Bilingual/Cyrillic-safe synthetic snippet", "bilingual_cyrillic_snippet",
-        "SYNTHETIC bilingual snippet: 'Анализ мочи pH 6.0' alongside English label.",
-        [_fact("pH (bilingual)", "6.0", "Urinalysis", "b1", "Анализ мочи pH 6.0", "bilingual source-visible value")],
+        "SYNTHETIC bilingual snippet. Анализ мочи pH 6.0.",
+        [_fact("pH (bilingual)", "6.0", "Urinalysis", "b1", "Анализ мочи pH 6.0", "bilingual source-visible value",
+               aliases=["pH", "рН"])],
         [_anchor("b1", "Urinalysis", "Анализ мочи pH 6.0")],
         uncertainty_flags=["pH (bilingual): bilingual source-visible value"],
     ))
@@ -184,9 +279,9 @@ def build_calibration_fixtures() -> list[CalibrationFixture]:
     # 12. sparse/low-information result
     fixtures.append(CalibrationFixture(
         "cal_sparse", "sparse_low_information_result", "Sparse low-information result", "sparse_low_information_result",
-        "SYNTHETIC sparse result: single label present, value not provided.",
-        [_fact("Result Label", "", "Results", "s1", "single sparse label", "value not provided in source", unknown=True)],
-        [_anchor("s1", "Results", "single sparse label")],
+        "SYNTHETIC sparse result. Result Label present; value not provided.",
+        [_fact("Result Label", "", "Results", "s1", "Result Label present; value not provided", "value not provided in source", unknown=True)],
+        [_anchor("s1", "Results", "Result Label present; value not provided")],
         unknown_values=["Result value: unknown"],
         uncertainty_flags=["Result Label: value not provided in source"],
     ))
@@ -194,10 +289,10 @@ def build_calibration_fixtures() -> list[CalibrationFixture]:
     # 13. multi-section report with explicit unknowns
     fixtures.append(CalibrationFixture(
         "cal_multi_unknown", "multi_section_explicit_unknowns", "Multi-section report with explicit unknowns", "multi_section_explicit_unknowns",
-        "SYNTHETIC multi-section: section A has a value; section B value is unknown.",
-        [_fact("Section A Value", "5", "Section A", "ms1", "section a value row"),
-         _fact("Section B Value", "", "Section B", "ms2", "section b value unknown", "unknown in source", unknown=True)],
-        [_anchor("ms1", "Section A", "section a value row"), _anchor("ms2", "Section B", "section b value unknown")],
+        "SYNTHETIC multi-section. Section A Value 5. Section B Value not provided.",
+        [_fact("Section A Value", "5", "Section A", "ms1", "Section A Value 5"),
+         _fact("Section B Value", "", "Section B", "ms2", "Section B Value not provided", "unknown in source", unknown=True)],
+        [_anchor("ms1", "Section A", "Section A Value 5"), _anchor("ms2", "Section B", "Section B Value not provided")],
         unknown_values=["Section B Value: unknown"],
         uncertainty_flags=["Section B Value: unknown in source"],
     ))
@@ -205,18 +300,18 @@ def build_calibration_fixtures() -> list[CalibrationFixture]:
     # 14. abnormal numeric values with units
     fixtures.append(CalibrationFixture(
         "cal_abnormal_numeric", "abnormal_numeric_with_units", "Abnormal numeric values with units", "abnormal_numeric_with_units",
-        "SYNTHETIC abnormal numeric: a value above reference shown with units.",
-        [_fact("Marker X", "15 mg/dL", "Results", "an1", "marker x 15 mg/dL above range")],
-        [_anchor("an1", "Results", "marker x 15 mg/dL above range")],
+        "SYNTHETIC abnormal numeric. Marker X 15 mg/dL above range.",
+        [_fact("Marker X", "15 mg/dL", "Results", "an1", "Marker X 15 mg/dL above range")],
+        [_anchor("an1", "Results", "Marker X 15 mg/dL above range")],
         uncertainty_flags=["Marker X: source-visible value above range; operator must compare"],
     ))
 
     # 15. normal numeric values with units
     fixtures.append(CalibrationFixture(
         "cal_normal_numeric", "normal_numeric_with_units", "Normal numeric values with units", "normal_numeric_with_units",
-        "SYNTHETIC normal numeric: a value within reference shown with units.",
-        [_fact("Marker Y", "5 mg/dL", "Results", "nn1", "marker y 5 mg/dL within range")],
-        [_anchor("nn1", "Results", "marker y 5 mg/dL within range")],
+        "SYNTHETIC normal numeric. Marker Y 5 mg/dL within range.",
+        [_fact("Marker Y", "5 mg/dL", "Results", "nn1", "Marker Y 5 mg/dL within range")],
+        [_anchor("nn1", "Results", "Marker Y 5 mg/dL within range")],
         uncertainty_flags=["Marker Y: source-visible value within range; operator must compare"],
     ))
 
@@ -294,6 +389,7 @@ def compare_one_fixture(
         "posted_body_allowed_top_level_keys_only": set(posted_keys) <= ALLOWED_TOP_LEVEL_KEYS,
         "provider_response_received": False,
         "schema_validation_pass": False,
+        "verbatim_evidence_anchor_pass": False,
         "source_visible_body_preserved": False,
         "evidence_anchor_preserved": False,
         "candidate_facts_separated": False,
@@ -353,10 +449,14 @@ def compare_one_fixture(
         result["block_reason"] = "vertex_response_not_valid_json"
         return result
 
-    schema_valid, errors = validate_vertex_semantic_response(parsed, fixture)
-    hallucinated = _count_hallucinated(parsed, fixture)
+    validation = validate_calibration_response(parsed, fixture)
+    schema_valid = validation["schema_validation_pass"]
+    verbatim_anchor_pass = validation["verbatim_evidence_anchor_pass"]
+    hallucinated = validation["hallucinated_field_count"]
+    errors = validation["errors"]
     findings = parsed.get("semantic_findings") if isinstance(parsed.get("semantic_findings"), list) else []
     result["schema_validation_pass"] = bool(schema_valid)
+    result["verbatim_evidence_anchor_pass"] = bool(verbatim_anchor_pass)
     result["validation_errors"] = list(errors)
     result["hallucinated_field_count"] = hallucinated
     result["source_visible_body_preserved"] = parsed.get("package_family") == fixture.package_family
@@ -371,6 +471,7 @@ def compare_one_fixture(
 
     passed = (
         schema_valid
+        and verbatim_anchor_pass
         and hallucinated == 0
         and result["review_required"] is True
         and result["auto_accept"] is False
@@ -388,6 +489,9 @@ def compare_one_fixture(
     elif not schema_valid:
         result["status"] = "FAIL_SCHEMA_INVALID"
         result["block_reason"] = "vertex_response_schema_invalid"
+    elif not verbatim_anchor_pass:
+        result["status"] = "FAIL_NON_VERBATIM_EVIDENCE"
+        result["block_reason"] = "vertex_evidence_not_verbatim_source"
     else:
         result["status"] = "PASS" if passed else "FAIL_CONTRACT_NOT_PRESERVED"
         result["block_reason"] = "" if passed else "vertex_response_contract_not_preserved"
@@ -419,6 +523,7 @@ def run_calibration_batch(
         "live_call_count": 0,
         "provider_response_received_count": 0,
         "schema_validation_pass_count": 0,
+        "verbatim_evidence_anchor_pass_count": 0,
         "source_visible_body_preserved_count": 0,
         "evidence_anchor_preserved_count": 0,
         "candidate_facts_separated_count": 0,
@@ -479,6 +584,7 @@ def run_calibration_batch(
         agg["category_breakdown"][fixture.category] = agg["category_breakdown"].get(fixture.category, 0) + 1
         agg["provider_response_received_count"] += int(bool(result["provider_response_received"]))
         agg["schema_validation_pass_count"] += int(bool(result["schema_validation_pass"]))
+        agg["verbatim_evidence_anchor_pass_count"] += int(bool(result.get("verbatim_evidence_anchor_pass")))
         agg["source_visible_body_preserved_count"] += int(bool(result["source_visible_body_preserved"]))
         agg["evidence_anchor_preserved_count"] += int(bool(result["evidence_anchor_preserved"]))
         agg["candidate_facts_separated_count"] += int(bool(result["candidate_facts_separated"]))
@@ -504,6 +610,7 @@ def run_calibration_batch(
         "PASS"
         if (
             agg["schema_validation_pass_count"] == len(fixtures)
+            and agg["verbatim_evidence_anchor_pass_count"] == len(fixtures)
             and agg["hallucinated_field_count"] == 0
             and agg["auto_accept_true_count"] == 0
             and agg["active_written_count"] == 0
@@ -554,4 +661,5 @@ __all__ = [
     "is_calibration_live_allowed",
     "compare_one_fixture",
     "run_calibration_batch",
+    "validate_calibration_response",
 ]

@@ -75,7 +75,8 @@ def _ledger_csv(rows: list[dict[str, Any]]) -> str:
 def _matrix_markdown(agg: dict[str, Any]) -> str:
     keys = [
         "status", "fixture_count", "live_call_count", "provider_response_received_count",
-        "schema_validation_pass_count", "source_visible_body_preserved_count", "evidence_anchor_preserved_count",
+        "schema_validation_pass_count", "verbatim_evidence_anchor_pass_count",
+        "source_visible_body_preserved_count", "evidence_anchor_preserved_count",
         "candidate_facts_separated_count", "unknown_values_explicit_count", "uncertainty_flags_visible_count",
         "posted_body_allowed_top_level_keys_only_count", "review_required_count", "hallucinated_field_count",
         "total_prompt_tokens", "total_output_tokens", "total_token_count_all_calls",
@@ -157,6 +158,7 @@ def main() -> int:
             "fixture_count": agg["fixture_count"],
             "live_call_count": agg["live_call_count"],
             "schema_validation_pass_count": agg["schema_validation_pass_count"],
+            "verbatim_evidence_anchor_pass_count": agg["verbatim_evidence_anchor_pass_count"],
             "hallucinated_field_count": agg["hallucinated_field_count"],
             "total_token_count_all_calls": agg["total_token_count_all_calls"],
             "estimated_total_cost_usd_all_calls": agg["estimated_total_cost_usd_all_calls"],

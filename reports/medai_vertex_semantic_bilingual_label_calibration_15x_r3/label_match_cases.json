@@ -1,0 +1,65 @@
+{
+  "label_cases": [
+    {
+      "case": "exact_canonical_label",
+      "label": "pH (bilingual)",
+      "expect_pass": true,
+      "kind": "exact",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "declared_alias_latin_pH",
+      "label": "pH",
+      "expect_pass": true,
+      "kind": "declared_alias",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "declared_alias_cyrillic",
+      "label": "\u0440\u041d",
+      "expect_pass": true,
+      "kind": "declared_alias",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "declared_alias_whitespace_normalized",
+      "label": "  pH  ",
+      "expect_pass": true,
+      "kind": "unicode_alias",
+      "observed_pass": true,
+      "correct": true
+    },
+    {
+      "case": "undeclared_alias_ph_level",
+      "label": "ph level",
+      "expect_pass": false,
+      "kind": "undeclared",
+      "observed_pass": false,
+      "correct": true
+    },
+    {
+      "case": "undeclared_alias_lowercase_ph_word",
+      "label": "acidity",
+      "expect_pass": false,
+      "kind": "undeclared",
+      "observed_pass": false,
+      "correct": true
+    },
+    {
+      "case": "unrelated_label_glucose",
+      "label": "Glucose",
+      "expect_pass": false,
+      "kind": "unrelated",
+      "observed_pass": false,
+      "correct": true
+    }
+  ],
+  "canonical": "pH (bilingual)",
+  "aliases": [
+    "pH",
+    "\u0440\u041d"
+  ]
+}
