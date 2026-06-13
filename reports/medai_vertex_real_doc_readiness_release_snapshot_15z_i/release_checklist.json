@@ -1,0 +1,21 @@
+{
+  "15z_a_through_15z_h_artifacts_exist": true,
+  "release_snapshot_folder_exists": true,
+  "release_document_exists": true,
+  "validation_receipt_exists": true,
+  "artifact_index_exists": true,
+  "continuation_snapshot_exists": true,
+  "next_decision_memo_exists": true,
+  "gate_inventory_present": true,
+  "operator_commands_present": true,
+  "real_document_boundary_present": true,
+  "future_authorization_boundary_present": true,
+  "no_live_boundary_present": true,
+  "active_write_boundary_present": true,
+  "auto_accept_boundary_present": true,
+  "medication_safety_boundary_present": true,
+  "no_medical_decision_boundary_present": true,
+  "privacy_boundary_present": true,
+  "dirty_file_warning_present": true,
+  "next_recommended_block_present": true
+}
