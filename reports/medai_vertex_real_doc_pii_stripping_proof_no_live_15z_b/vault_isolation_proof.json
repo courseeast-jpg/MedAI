@@ -1,0 +1,198 @@
+{
+  "block": "MEDAI-VERTEX-REAL-DOC-PII-STRIPPING-PROOF-NO-LIVE-15Z-B",
+  "note": "Vault records are isolated: public form carries counts, classes, and a fingerprint only. The token map is never serialized into this report.",
+  "vault_records": [
+    {
+      "case_id": "redacted_real_like_basic_note_with_name_dob_mrn",
+      "vault_id": "vault_78b934bc2450",
+      "token_class_counts": {
+        "PATIENT_NAME": 1,
+        "DATE": 1,
+        "MRN": 1
+      },
+      "total_tokens": 3,
+      "token_classes": [
+        "DATE",
+        "MRN",
+        "PATIENT_NAME"
+      ],
+      "vault_fingerprint": "sha256:78b934bc24506fba",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "redacted_real_like_lab_report_with_facility_accession_provider",
+      "vault_id": "vault_57b0744ae67e",
+      "token_class_counts": {
+        "FACILITY": 1,
+        "ACCESSION": 1,
+        "PROVIDER": 1
+      },
+      "total_tokens": 3,
+      "token_classes": [
+        "ACCESSION",
+        "FACILITY",
+        "PROVIDER"
+      ],
+      "vault_fingerprint": "sha256:57b0744ae67e4aec",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "redacted_real_like_contact_fields_phone_email_address",
+      "vault_id": "vault_88961a4a3ce4",
+      "token_class_counts": {
+        "PHONE": 1,
+        "EMAIL": 1,
+        "ADDRESS": 1
+      },
+      "total_tokens": 3,
+      "token_classes": [
+        "ADDRESS",
+        "EMAIL",
+        "PHONE"
+      ],
+      "vault_fingerprint": "sha256:88961a4a3ce4c6d4",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "multi_section_report_with_repeated_same_identifier",
+      "vault_id": "vault_3c521281de65",
+      "token_class_counts": {
+        "MRN": 1,
+        "PATIENT_NAME": 1
+      },
+      "total_tokens": 2,
+      "token_classes": [
+        "MRN",
+        "PATIENT_NAME"
+      ],
+      "vault_fingerprint": "sha256:3c521281de650880",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "fixture_with_unredacted_pii_residue_should_block",
+      "vault_id": "vault_d5688ae77117",
+      "token_class_counts": {
+        "PATIENT_NAME": 1,
+        "DATE": 1
+      },
+      "total_tokens": 2,
+      "token_classes": [
+        "DATE",
+        "PATIENT_NAME"
+      ],
+      "vault_fingerprint": "sha256:d5688ae771174b3c",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "fixture_with_token_map_in_payload_should_block",
+      "vault_id": "vault_bf09546b3c61",
+      "token_class_counts": {
+        "PATIENT_NAME": 1,
+        "MRN": 1
+      },
+      "total_tokens": 2,
+      "token_classes": [
+        "MRN",
+        "PATIENT_NAME"
+      ],
+      "vault_fingerprint": "sha256:bf09546b3c615df9",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "fixture_with_token_map_in_report_should_block",
+      "vault_id": "vault_15577df73736",
+      "token_class_counts": {
+        "PATIENT_NAME": 1,
+        "MRN": 1
+      },
+      "total_tokens": 2,
+      "token_classes": [
+        "MRN",
+        "PATIENT_NAME"
+      ],
+      "vault_fingerprint": "sha256:15577df737367f6e",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "unknown_provenance_even_redacted_should_block",
+      "vault_id": "vault_f7aec35e369e",
+      "token_class_counts": {
+        "PATIENT_NAME": 1,
+        "MRN": 1
+      },
+      "total_tokens": 2,
+      "token_classes": [
+        "MRN",
+        "PATIENT_NAME"
+      ],
+      "vault_fingerprint": "sha256:f7aec35e369e9536",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "real_private_marker_even_redacted_should_block",
+      "vault_id": "vault_9ceaed46c5a1",
+      "token_class_counts": {
+        "PATIENT_NAME": 1,
+        "MRN": 1
+      },
+      "total_tokens": 2,
+      "token_classes": [
+        "MRN",
+        "PATIENT_NAME"
+      ],
+      "vault_fingerprint": "sha256:9ceaed46c5a1e9cb",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    },
+    {
+      "case_id": "sanitized_redacted_real_like_ready_for_no_live_replay_only",
+      "vault_id": "vault_a9454cdfcf7b",
+      "token_class_counts": {
+        "PATIENT_NAME": 1,
+        "DATE": 1,
+        "MRN": 1,
+        "FACILITY": 1,
+        "ACCESSION": 1,
+        "PROVIDER": 1,
+        "PHONE": 1,
+        "EMAIL": 1,
+        "ADDRESS": 1
+      },
+      "total_tokens": 9,
+      "token_classes": [
+        "ACCESSION",
+        "ADDRESS",
+        "DATE",
+        "EMAIL",
+        "FACILITY",
+        "MRN",
+        "PATIENT_NAME",
+        "PHONE",
+        "PROVIDER"
+      ],
+      "vault_fingerprint": "sha256:a9454cdfcf7bb5c2",
+      "isolated": true,
+      "raw_pii_in_record": false,
+      "token_map_in_record": false
+    }
+  ],
+  "token_map_in_report": false,
+  "raw_pii_in_report": false
+}
