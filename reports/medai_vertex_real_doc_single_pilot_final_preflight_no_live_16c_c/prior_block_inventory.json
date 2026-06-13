@@ -1,0 +1,31 @@
+{
+  "16A": {
+    "summary_path": "reports/medai_vertex_real_doc_single_pilot_design_no_live_16a/summary.json",
+    "exists": true,
+    "verified": true,
+    "block": "MEDAI-VERTEX-REAL-DOC-SINGLE-PILOT-DESIGN-NO-LIVE-16A"
+  },
+  "16B": {
+    "summary_path": "reports/medai_vertex_real_doc_single_pilot_authorization_prep_no_live_16b/summary.json",
+    "exists": true,
+    "verified": true,
+    "block": "MEDAI-VERTEX-REAL-DOC-SINGLE-PILOT-AUTHORIZATION-PREP-NO-LIVE-16B"
+  },
+  "16C-A": {
+    "summary_path": "reports/medai_vertex_real_doc_single_pilot_live_gate_prep_no_live_16c_a/summary.json",
+    "exists": true,
+    "verified": true,
+    "block": "MEDAI-VERTEX-REAL-DOC-SINGLE-PILOT-LIVE-GATE-PREP-NO-LIVE-16C-A",
+    "future_live_gate_named": true,
+    "future_live_gate_set": false
+  },
+  "16C-B": {
+    "summary_path": "reports/medai_vertex_real_doc_single_pilot_redaction_preflight_no_live_16c_b/summary.json",
+    "exists": true,
+    "verified": true,
+    "block": "MEDAI-VERTEX-REAL-DOC-SINGLE-PILOT-REDACTION-PREFLIGHT-NO-LIVE-16C-B",
+    "raw_identifier_leak_count": 0,
+    "token_map_written_to_public_report": false,
+    "outbound_payload_tokenized": true
+  }
+}
