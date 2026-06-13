@@ -1,0 +1,38 @@
+{
+  "task_id": "MEDAI-AI-PACKAGE-QUALITY-REVIEW-SURFACE-WIRING-15O-B",
+  "baseline_commit_short": "425b2a600458",
+  "report_generation_commit_short": "425b2a600458",
+  "package_families_rendered": [
+    "cytology_pathology_narrative",
+    "urinalysis_table_like_lab",
+    "portal_result_cards",
+    "mixed_narrative_numeric_result"
+  ],
+  "package_family_count": 4,
+  "source_visible_body_present_count": 4,
+  "evidence_anchor_present_count": 4,
+  "candidate_facts_separated_count": 4,
+  "unknown_values_explicit_count": 4,
+  "under_1_minute_compare_preserved_count": 4,
+  "hallucinated_field_count": 0,
+  "live_call_made": false,
+  "external_api_used": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "billing_check_pending": true,
+  "all_review_surface_invariants_passed": true,
+  "privacy_result": "passed",
+  "tests_run": [
+    "python -m pytest tests/test_medai_ai_package_quality_review_surface_15o_b.py -q",
+    "python -m py_compile scripts/run_medai_ai_package_quality_review_surface_15o_b.py",
+    "python scripts/run_medai_ai_package_quality_review_surface_15o_b.py"
+  ],
+  "files_changed": [
+    "app/ai_package_review_surface.py",
+    "scripts/run_medai_ai_package_quality_review_surface_15o_b.py",
+    "tests/test_medai_ai_package_quality_review_surface_15o_b.py",
+    "reports/medai_ai_package_quality_review_surface_15o_b/*"
+  ],
+  "push_status": "pending"
+}
