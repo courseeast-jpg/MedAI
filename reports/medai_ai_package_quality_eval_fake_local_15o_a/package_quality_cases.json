@@ -1,0 +1,329 @@
+{
+  "task_id": "MEDAI-AI-PACKAGE-QUALITY-EVAL-FAKE-LOCAL-15O-A",
+  "cases": [
+    {
+      "fixture": {
+        "family_key": "cytology_pathology_narrative",
+        "display_name": "Cytology/pathology narrative package",
+        "source_visible_body_present": true,
+        "source_visible_body_char_count": 87,
+        "section_headings": [
+          "Tests Ordered",
+          "Diagnosis",
+          "Recommendation"
+        ],
+        "evidence_anchors": [
+          {
+            "anchor_id": "cyto_a1",
+            "source_section": "Tests Ordered",
+            "snippet": "tests ordered section present"
+          },
+          {
+            "anchor_id": "cyto_a2",
+            "source_section": "Diagnosis",
+            "snippet": "diagnosis section present"
+          },
+          {
+            "anchor_id": "cyto_a3",
+            "source_section": "Recommendation",
+            "snippet": "recommendation section present"
+          }
+        ],
+        "expected_source_fields": [
+          "Tests Ordered",
+          "Diagnosis",
+          "Recommendation"
+        ],
+        "candidate_fact_labels": [
+          "Tests Ordered",
+          "Diagnosis",
+          "Recommendation"
+        ],
+        "unknown_value_labels": [],
+        "raw_source_body_in_report": false
+      },
+      "package": {
+        "package_id": "ai_pkg_545e9690d709",
+        "detected_document_family_type": "Cytology / pathology narrative",
+        "package_status": "review-bound",
+        "record_count": 3,
+        "section_summaries": [
+          {
+            "heading": "Tests Ordered",
+            "observation_count": 1,
+            "narrative_preview_available": true,
+            "narrative_label": "source text only - not MedAI interpretation"
+          },
+          {
+            "heading": "Diagnosis",
+            "observation_count": 1,
+            "narrative_preview_available": true,
+            "narrative_label": "source text only - not MedAI interpretation"
+          },
+          {
+            "heading": "Recommendation",
+            "observation_count": 1,
+            "narrative_preview_available": true,
+            "narrative_label": "source text only - not MedAI recommendation"
+          }
+        ],
+        "source_body_hash_only": "fixture_cytology_pathology_narrative",
+        "review_required": true,
+        "auto_accept_allowed": false,
+        "active_written_count": 0
+      },
+      "metrics": {
+        "family_key": "cytology_pathology_narrative",
+        "display_name": "Cytology/pathology narrative package",
+        "package_id": "ai_pkg_545e9690d709",
+        "source_visible_body_present": true,
+        "source_section_grouping_present": true,
+        "evidence_anchor_present": true,
+        "candidate_facts_separated": true,
+        "unknown_values_explicit": true,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "active_written_count": 0,
+        "auto_accept": false,
+        "external_api_used": false,
+        "live_call_made": false,
+        "estimated_human_compare_seconds": 28,
+        "under_1_minute_compare_pass": true,
+        "section_count": 3,
+        "observation_count": 3,
+        "evidence_anchor_count": 3
+      }
+    },
+    {
+      "fixture": {
+        "family_key": "urinalysis_table_like_lab",
+        "display_name": "Urinalysis/table-like lab package",
+        "source_visible_body_present": true,
+        "source_visible_body_char_count": 78,
+        "section_headings": [
+          "Urinalysis Table"
+        ],
+        "evidence_anchors": [
+          {
+            "anchor_id": "ua_a1",
+            "source_section": "Urinalysis Table",
+            "snippet": "table rows grouped under urinalysis table"
+          }
+        ],
+        "expected_source_fields": [
+          "Specific Gravity",
+          "pH",
+          "Occult Blood",
+          "RBC"
+        ],
+        "candidate_fact_labels": [
+          "Specific Gravity",
+          "pH",
+          "Occult Blood",
+          "RBC"
+        ],
+        "unknown_value_labels": [],
+        "raw_source_body_in_report": false
+      },
+      "package": {
+        "package_id": "ai_pkg_8a213d94bc1a",
+        "detected_document_family_type": "Urinalysis",
+        "package_status": "review-bound",
+        "record_count": 4,
+        "section_summaries": [
+          {
+            "heading": "Urinalysis Table",
+            "observation_count": 4,
+            "narrative_preview_available": false,
+            "narrative_label": "source text only - not MedAI interpretation"
+          }
+        ],
+        "source_body_hash_only": "fixture_urinalysis_table_like_lab",
+        "review_required": true,
+        "auto_accept_allowed": false,
+        "active_written_count": 0
+      },
+      "metrics": {
+        "family_key": "urinalysis_table_like_lab",
+        "display_name": "Urinalysis/table-like lab package",
+        "package_id": "ai_pkg_8a213d94bc1a",
+        "source_visible_body_present": true,
+        "source_section_grouping_present": true,
+        "evidence_anchor_present": true,
+        "candidate_facts_separated": true,
+        "unknown_values_explicit": true,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "active_written_count": 0,
+        "auto_accept": false,
+        "external_api_used": false,
+        "live_call_made": false,
+        "estimated_human_compare_seconds": 26,
+        "under_1_minute_compare_pass": true,
+        "section_count": 1,
+        "observation_count": 4,
+        "evidence_anchor_count": 1
+      }
+    },
+    {
+      "fixture": {
+        "family_key": "portal_result_cards",
+        "display_name": "Portal result-card package",
+        "source_visible_body_present": true,
+        "source_visible_body_char_count": 75,
+        "section_headings": [
+          "Portal Result Cards"
+        ],
+        "evidence_anchors": [
+          {
+            "anchor_id": "portal_a1",
+            "source_section": "Portal Result Cards",
+            "snippet": "card labels grouped as portal result cards"
+          }
+        ],
+        "expected_source_fields": [
+          "Urine Color",
+          "Appearance",
+          "Leukocyte Esterase",
+          "Protein"
+        ],
+        "candidate_fact_labels": [
+          "Urine Color",
+          "Appearance",
+          "Leukocyte Esterase",
+          "Protein"
+        ],
+        "unknown_value_labels": [],
+        "raw_source_body_in_report": false
+      },
+      "package": {
+        "package_id": "ai_pkg_46903c24680e",
+        "detected_document_family_type": "Portal result cards",
+        "package_status": "review-bound",
+        "record_count": 4,
+        "section_summaries": [
+          {
+            "heading": "Portal Result Cards",
+            "observation_count": 4,
+            "narrative_preview_available": false,
+            "narrative_label": "source text only - not MedAI interpretation"
+          }
+        ],
+        "source_body_hash_only": "fixture_portal_result_cards",
+        "review_required": true,
+        "auto_accept_allowed": false,
+        "active_written_count": 0
+      },
+      "metrics": {
+        "family_key": "portal_result_cards",
+        "display_name": "Portal result-card package",
+        "package_id": "ai_pkg_46903c24680e",
+        "source_visible_body_present": true,
+        "source_section_grouping_present": true,
+        "evidence_anchor_present": true,
+        "candidate_facts_separated": true,
+        "unknown_values_explicit": true,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "active_written_count": 0,
+        "auto_accept": false,
+        "external_api_used": false,
+        "live_call_made": false,
+        "estimated_human_compare_seconds": 26,
+        "under_1_minute_compare_pass": true,
+        "section_count": 1,
+        "observation_count": 4,
+        "evidence_anchor_count": 1
+      }
+    },
+    {
+      "fixture": {
+        "family_key": "mixed_narrative_numeric_result",
+        "display_name": "Mixed narrative + numeric result package",
+        "source_visible_body_present": true,
+        "source_visible_body_char_count": 114,
+        "section_headings": [
+          "Clinical Note",
+          "Result Summary"
+        ],
+        "evidence_anchors": [
+          {
+            "anchor_id": "mixed_a1",
+            "source_section": "Clinical Note",
+            "snippet": "narrative section present"
+          },
+          {
+            "anchor_id": "mixed_a2",
+            "source_section": "Result Summary",
+            "snippet": "numeric/result section present"
+          }
+        ],
+        "expected_source_fields": [
+          "Clinical Note",
+          "Culture Result",
+          "Collection Time",
+          "Nitrite"
+        ],
+        "candidate_fact_labels": [
+          "Culture Result",
+          "Collection Time",
+          "Nitrite"
+        ],
+        "unknown_value_labels": [
+          "Collection Time"
+        ],
+        "raw_source_body_in_report": false
+      },
+      "package": {
+        "package_id": "ai_pkg_f853c87c7d20",
+        "detected_document_family_type": "Mixed narrative and numeric result",
+        "package_status": "review-bound",
+        "record_count": 4,
+        "section_summaries": [
+          {
+            "heading": "Clinical Note",
+            "observation_count": 1,
+            "narrative_preview_available": true,
+            "narrative_label": "source text only - not MedAI interpretation"
+          },
+          {
+            "heading": "Result Summary",
+            "observation_count": 3,
+            "narrative_preview_available": false,
+            "narrative_label": "source text only - not MedAI interpretation"
+          }
+        ],
+        "source_body_hash_only": "fixture_mixed_narrative_numeric_result",
+        "review_required": true,
+        "auto_accept_allowed": false,
+        "active_written_count": 0
+      },
+      "metrics": {
+        "family_key": "mixed_narrative_numeric_result",
+        "display_name": "Mixed narrative + numeric result package",
+        "package_id": "ai_pkg_f853c87c7d20",
+        "source_visible_body_present": true,
+        "source_section_grouping_present": true,
+        "evidence_anchor_present": true,
+        "candidate_facts_separated": true,
+        "unknown_values_explicit": true,
+        "hallucinated_field_count": 0,
+        "review_required": true,
+        "active_written_count": 0,
+        "auto_accept": false,
+        "external_api_used": false,
+        "live_call_made": false,
+        "estimated_human_compare_seconds": 28,
+        "under_1_minute_compare_pass": true,
+        "section_count": 2,
+        "observation_count": 4,
+        "evidence_anchor_count": 2
+      }
+    }
+  ],
+  "live_call_made": false,
+  "external_api_used": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true
+}
