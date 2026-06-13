@@ -1,0 +1,44 @@
+{
+  "task_id": "MEDAI-AI-PACKAGE-RUN-REVIEW-OPERATOR-UAT-15O-D",
+  "baseline_commit_short": "b675eb528a3b",
+  "report_generation_commit_short": "b675eb528a3b",
+  "uat_method_used": "bounded_source_reachability_plus_deterministic_view_model_markdown_uat",
+  "streamlit_live_launch_used": false,
+  "run_review_preview_entry_point_reachable_count": 4,
+  "package_families_checked": [
+    "cytology_pathology_narrative",
+    "urinalysis_table_like_lab",
+    "portal_result_cards",
+    "mixed_narrative_numeric_result"
+  ],
+  "package_family_count": 4,
+  "source_visible_body_present_count": 4,
+  "evidence_anchor_present_count": 4,
+  "candidate_facts_separated_count": 4,
+  "unknown_values_explicit_count": 4,
+  "uncertainty_flags_visible_count": 4,
+  "no_live_indicator_visible_count": 4,
+  "active_written_count_indicator_visible_count": 4,
+  "auto_accept_false_indicator_visible_count": 4,
+  "under_1_minute_compare_preserved_count": 4,
+  "hallucinated_field_count": 0,
+  "live_call_made": false,
+  "external_api_used": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "billing_check_pending": true,
+  "privacy_result": "passed",
+  "all_operator_uat_checks_passed": true,
+  "tests_run": [
+    "python -m pytest tests/test_medai_ai_package_run_review_operator_uat_15o_d.py -q",
+    "python -m py_compile scripts/run_medai_ai_package_run_review_operator_uat_15o_d.py",
+    "python scripts/run_medai_ai_package_run_review_operator_uat_15o_d.py"
+  ],
+  "files_changed": [
+    "scripts/run_medai_ai_package_run_review_operator_uat_15o_d.py",
+    "tests/test_medai_ai_package_run_review_operator_uat_15o_d.py",
+    "reports/medai_ai_package_run_review_operator_uat_15o_d/*"
+  ],
+  "push_status": "pending"
+}
