@@ -1,0 +1,79 @@
+{
+  "review_queue_handoff_records": [
+    {
+      "handoff_id": "handoff_ebcc3a76db94",
+      "case_id": "sanitized_redacted_real_like_basic_note",
+      "status": "review_required",
+      "report_only": true,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "live_call_allowed": false,
+      "review_required": true,
+      "outbound_payload_fingerprint": "sha256:1e6e44f88e1c7a10",
+      "would_be_request_fingerprint": "sha256:571f5d3874b76cf3",
+      "vault_record_fingerprint": "sha256:78b934bc24506fba",
+      "provenance_classification": "redacted_real_like_fixture",
+      "readiness_status": "READY_FOR_NO_LIVE_REPLAY_ONLY"
+    },
+    {
+      "handoff_id": "handoff_83ce28e947c4",
+      "case_id": "sanitized_redacted_real_like_lab_report",
+      "status": "review_required",
+      "report_only": true,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "live_call_allowed": false,
+      "review_required": true,
+      "outbound_payload_fingerprint": "sha256:b6ab337adfa05a5b",
+      "would_be_request_fingerprint": "sha256:7d04904ee6328e37",
+      "vault_record_fingerprint": "sha256:57b0744ae67e4aec",
+      "provenance_classification": "redacted_real_like_fixture",
+      "readiness_status": "READY_FOR_NO_LIVE_REPLAY_ONLY"
+    },
+    {
+      "handoff_id": "handoff_40ad995aa5e2",
+      "case_id": "sanitized_contact_fields_fixture",
+      "status": "review_required",
+      "report_only": true,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "live_call_allowed": false,
+      "review_required": true,
+      "outbound_payload_fingerprint": "sha256:0a2a5b7833b4083c",
+      "would_be_request_fingerprint": "sha256:fe9df182b9281ef2",
+      "vault_record_fingerprint": "sha256:88961a4a3ce4c6d4",
+      "provenance_classification": "redacted_real_like_fixture",
+      "readiness_status": "READY_FOR_NO_LIVE_REPLAY_ONLY"
+    },
+    {
+      "handoff_id": "handoff_a181bba69613",
+      "case_id": "all_9_pii_classes_sanitized_fixture",
+      "status": "review_required",
+      "report_only": true,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "live_call_allowed": false,
+      "review_required": true,
+      "outbound_payload_fingerprint": "sha256:2229d92106235aa7",
+      "would_be_request_fingerprint": "sha256:3e8efac2962ab1a5",
+      "vault_record_fingerprint": "sha256:a9454cdfcf7bb5c2",
+      "provenance_classification": "redacted_real_like_fixture",
+      "readiness_status": "READY_FOR_NO_LIVE_REPLAY_ONLY"
+    },
+    {
+      "handoff_id": "handoff_24805f31189c",
+      "case_id": "all_future_gates_simulated_pass",
+      "status": "review_required",
+      "report_only": true,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "live_call_allowed": false,
+      "review_required": true,
+      "outbound_payload_fingerprint": "sha256:b31674101818d6b5",
+      "would_be_request_fingerprint": "sha256:da57f338b799c7a6",
+      "vault_record_fingerprint": "sha256:28d8ed0412fa4784",
+      "provenance_classification": "redacted_real_like_fixture",
+      "readiness_status": "READY_FOR_FUTURE_AUTHORIZATION_ONLY"
+    }
+  ]
+}
