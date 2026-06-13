@@ -6,9 +6,9 @@ This is the no-live release snapshot and governance freeze for the completed 15Z
 
 ## Current HEAD / Branch / Remote
 
-- Current HEAD: `c24c085`
+- Current HEAD: `ad60680`
 - Branch: `clinical-knowledge-architecture` via `origin/clinical-knowledge-architecture`
-- Remote HEAD: `c24c085`
+- Remote HEAD: `ad60680`
 
 ## 15Z-A Through 15Z-H Summary
 
