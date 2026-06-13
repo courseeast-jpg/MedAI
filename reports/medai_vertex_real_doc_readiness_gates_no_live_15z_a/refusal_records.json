@@ -1,0 +1,265 @@
+{
+  "refusal_records": [
+    {
+      "case_id": "synthetic_calibration_fixture",
+      "payload_classification": "synthetic_calibration_fixture",
+      "content_fingerprint": "sha256:f3586d7351c5a951",
+      "readiness_status": "BLOCKED_NO_LIVE_DRY_RUN_PENDING_GATES",
+      "blocked": true,
+      "block_reasons": [
+        "synthetic_to_real_adapter_dry_run_required: dry_run_not_proven",
+        "redacted_real_like_fixture_replay_required: replay_not_proven",
+        "operator_review_queue_handoff_required: handoff_not_proven",
+        "real_doc_refusal_path_required: refusal_path_not_proven",
+        "dedicated_future_real_doc_live_gate_required: dedicated_future_gate_absent",
+        "human_authorization_required_for_any_real_live_call: human_authorization_absent",
+        "billing_cost_cap_ack_required: billing_cost_cap_ack_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "redacted_real_like_fixture",
+      "payload_classification": "redacted_real_like_fixture",
+      "content_fingerprint": "sha256:0705738a6032ac42",
+      "readiness_status": "BLOCKED_NO_LIVE_DRY_RUN_PENDING_GATES",
+      "blocked": true,
+      "block_reasons": [
+        "synthetic_to_real_adapter_dry_run_required: dry_run_not_proven",
+        "redacted_real_like_fixture_replay_required: replay_not_proven",
+        "operator_review_queue_handoff_required: handoff_not_proven",
+        "real_doc_refusal_path_required: refusal_path_not_proven",
+        "dedicated_future_real_doc_live_gate_required: dedicated_future_gate_absent",
+        "human_authorization_required_for_any_real_live_call: human_authorization_absent",
+        "billing_cost_cap_ack_required: billing_cost_cap_ack_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "real_private_document_marker",
+      "payload_classification": "real_private_document",
+      "content_fingerprint": "sha256:456d9479586c5126",
+      "readiness_status": "BLOCKED_REAL_DOC_ROUTING_DEFAULT_DENY",
+      "blocked": true,
+      "block_reasons": [
+        "real_doc_external_routing_default_block: non_synthetic_non_redacted_payload_blocked_by_default",
+        "synthetic_to_real_adapter_dry_run_required: dry_run_not_proven",
+        "redacted_real_like_fixture_replay_required: replay_not_proven",
+        "operator_review_queue_handoff_required: handoff_not_proven",
+        "real_doc_refusal_path_required: refusal_path_not_proven",
+        "dedicated_future_real_doc_live_gate_required: dedicated_future_gate_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "unknown_provenance_payload",
+      "payload_classification": "unknown_provenance_payload",
+      "content_fingerprint": "sha256:3db060a67e14fb7f",
+      "readiness_status": "BLOCKED_REAL_DOC_ROUTING_DEFAULT_DENY",
+      "blocked": true,
+      "block_reasons": [
+        "real_doc_external_routing_default_block: non_synthetic_non_redacted_payload_blocked_by_default",
+        "synthetic_to_real_adapter_dry_run_required: dry_run_not_proven",
+        "redacted_real_like_fixture_replay_required: replay_not_proven",
+        "operator_review_queue_handoff_required: handoff_not_proven",
+        "real_doc_refusal_path_required: refusal_path_not_proven",
+        "dedicated_future_real_doc_live_gate_required: dedicated_future_gate_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "payload_with_pii_marker",
+      "payload_classification": "real_private_document",
+      "content_fingerprint": "sha256:5582fe6093fb8af9",
+      "readiness_status": "BLOCKED_REAL_DOC_ROUTING_DEFAULT_DENY",
+      "blocked": true,
+      "block_reasons": [
+        "real_doc_external_routing_default_block: non_synthetic_non_redacted_payload_blocked_by_default",
+        "pii_stripping_proof_required: pii_marker_present_requires_stripping_proof",
+        "synthetic_to_real_adapter_dry_run_required: dry_run_not_proven",
+        "redacted_real_like_fixture_replay_required: replay_not_proven",
+        "operator_review_queue_handoff_required: handoff_not_proven",
+        "real_doc_refusal_path_required: refusal_path_not_proven",
+        "dedicated_future_real_doc_live_gate_required: dedicated_future_gate_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "payload_with_raw_pdf_marker",
+      "payload_classification": "real_private_document",
+      "content_fingerprint": "sha256:cbb02f05c52312dc",
+      "readiness_status": "BLOCKED_REAL_DOC_ROUTING_DEFAULT_DENY",
+      "blocked": true,
+      "block_reasons": [
+        "real_doc_external_routing_default_block: non_synthetic_non_redacted_payload_blocked_by_default",
+        "no_raw_private_payload_in_reports_required: raw_pdf_or_image_payload_blocked",
+        "synthetic_to_real_adapter_dry_run_required: dry_run_not_proven",
+        "redacted_real_like_fixture_replay_required: replay_not_proven",
+        "operator_review_queue_handoff_required: handoff_not_proven",
+        "real_doc_refusal_path_required: refusal_path_not_proven",
+        "dedicated_future_real_doc_live_gate_required: dedicated_future_gate_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "payload_with_ocr_private_marker",
+      "payload_classification": "real_private_document",
+      "content_fingerprint": "sha256:d9aec72b83b91b93",
+      "readiness_status": "BLOCKED_REAL_DOC_ROUTING_DEFAULT_DENY",
+      "blocked": true,
+      "block_reasons": [
+        "real_doc_external_routing_default_block: non_synthetic_non_redacted_payload_blocked_by_default",
+        "pii_vault_isolation_required: ocr_private_payload_blocked",
+        "synthetic_to_real_adapter_dry_run_required: dry_run_not_proven",
+        "redacted_real_like_fixture_replay_required: replay_not_proven",
+        "operator_review_queue_handoff_required: handoff_not_proven",
+        "real_doc_refusal_path_required: refusal_path_not_proven",
+        "dedicated_future_real_doc_live_gate_required: dedicated_future_gate_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "medication_fact_without_safety_gate",
+      "payload_classification": "synthetic_calibration_fixture",
+      "content_fingerprint": "sha256:f6e886ec6c6d6e1a",
+      "readiness_status": "BLOCKED_NO_LIVE_DRY_RUN_PENDING_GATES",
+      "blocked": true,
+      "block_reasons": [
+        "medication_safety_non_bypass_required_if_medication_facts_present: medication_fact_without_safety_gate_blocked"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "active_write_requested",
+      "payload_classification": "synthetic_calibration_fixture",
+      "content_fingerprint": "sha256:be09e4ec48099f1b",
+      "readiness_status": "BLOCKED_NO_LIVE_DRY_RUN_PENDING_GATES",
+      "blocked": true,
+      "block_reasons": [
+        "no_active_mkb_write_required: active_write_requested_blocked"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "auto_accept_requested",
+      "payload_classification": "synthetic_calibration_fixture",
+      "content_fingerprint": "sha256:be09e4ec48099f1b",
+      "readiness_status": "BLOCKED_NO_LIVE_DRY_RUN_PENDING_GATES",
+      "blocked": true,
+      "block_reasons": [
+        "no_auto_accept_required: auto_accept_requested_blocked"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "missing_human_authorization",
+      "payload_classification": "synthetic_calibration_fixture",
+      "content_fingerprint": "sha256:be09e4ec48099f1b",
+      "readiness_status": "BLOCKED_NO_LIVE_DRY_RUN_PENDING_GATES",
+      "blocked": true,
+      "block_reasons": [
+        "human_authorization_required_for_any_real_live_call: human_authorization_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "missing_billing_ack",
+      "payload_classification": "synthetic_calibration_fixture",
+      "content_fingerprint": "sha256:be09e4ec48099f1b",
+      "readiness_status": "BLOCKED_NO_LIVE_DRY_RUN_PENDING_GATES",
+      "blocked": true,
+      "block_reasons": [
+        "billing_cost_cap_ack_required: billing_cost_cap_ack_absent"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    },
+    {
+      "case_id": "all_future_gates_simulated_pass_no_live",
+      "payload_classification": "redacted_real_like_fixture",
+      "content_fingerprint": "sha256:0705738a6032ac42",
+      "readiness_status": "READY_FOR_FUTURE_AUTHORIZATION_ONLY",
+      "blocked": true,
+      "block_reasons": [
+        "live_real_doc_call_not_authorized_in_this_block"
+      ],
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_payload_in_report": false,
+      "sanitized_report_only": true
+    }
+  ]
+}
