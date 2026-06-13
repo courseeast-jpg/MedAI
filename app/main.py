@@ -93,12 +93,29 @@ DOCUMENT_CATEGORY_OPTIONS = [
 ]
 
 TERMINOLOGY_LOOKUP_TAB = "Terminology Lookup"
+VERTEX_DECISION_AUDIT_TAB = "Vertex Decision Audit"
 SPECIALTY_SESSION_KEY = "medai_selected_specialty"
 PERSISTED_UPLOAD_FINGERPRINTS_KEY = "test_launcher_persisted_upload_fingerprints"
 PERSISTED_UPLOAD_GENERATION_KEY = "test_launcher_persisted_upload_generation"
 UPLOAD_WIDGET_VERSION_KEY = "test_launcher_upload_widget_version"
 TERMINOLOGY_LOOKUP_UI_ENV_VAR = "MEDAI_TERMINOLOGY_LOOKUP_UI_ENABLED"
 OPERATOR_FIRST_VISIBLE_TAB_LABELS = ["Run & Review", "MKB Explorer", "Review Queue"]
+ADVANCED_OPERATOR_TAB_LABELS = [
+    "Operator Control Panel",
+    "Validation Batch Audit",
+    "Validation History",
+    "Safety & Governance",
+    "Terminology Admin",
+    VERTEX_DECISION_AUDIT_TAB,
+]
+
+
+def operator_tab_labels(show_advanced_tools: bool) -> list[str]:
+    """Deterministic operator tab label list (additive; testable without Streamlit)."""
+    labels = [RUN_REVIEW_TAB, MKB_EXPLORER_TAB, REVIEW_QUEUE_TAB]
+    if show_advanced_tools:
+        labels.extend(ADVANCED_OPERATOR_TAB_LABELS)
+    return labels
 REVIEW_QUEUE_SOURCE_COMPARISON_DISCLAIMER = (
     "Accept only after comparing with source. This does not clinically interpret the result."
 )
@@ -2912,15 +2929,7 @@ def main() -> None:
         REVIEW_QUEUE_TAB,
     ]
     if show_advanced_tools:
-        tab_labels.extend(
-            [
-                "Operator Control Panel",
-                "Validation Batch Audit",
-                "Validation History",
-                "Safety & Governance",
-                "Terminology Admin",
-            ]
-        )
+        tab_labels.extend(ADVANCED_OPERATOR_TAB_LABELS)
     tabs = st.tabs(tab_labels)
     for label, tab in zip(tab_labels, tabs):
         with tab:
@@ -2960,6 +2969,9 @@ def main() -> None:
                     render_terminology_readiness_panel()
                 except Exception as _exc:
                     st.error(f"Terminology Admin panel unavailable: {_exc}")
+            elif label == VERTEX_DECISION_AUDIT_TAB:
+                st.caption(navigation_subtitle(VERTEX_DECISION_AUDIT_TAB))
+                render_vertex_semantic_review_decision_audit_panel_hook()
             elif label == TERMINOLOGY_LOOKUP_TAB:
                 try:
                     from app.clinical_knowledge_terminology_lookup_viewer import render_terminology_lookup_panel
