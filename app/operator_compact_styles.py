@@ -13,7 +13,7 @@ div[data-testid="stVerticalBlock"] {
     gap: .18rem;
 }
 div[data-testid="stHorizontalBlock"] {
-    gap: .3rem;
+    gap: .22rem;
 }
 div[data-testid="stTabs"] [role="tablist"] {
     margin-bottom: .25rem;
@@ -176,7 +176,7 @@ div[data-testid="stDataFrame"] {
     margin-top: .15rem;
 }
 button[kind="secondary"], button[kind="primary"] {
-    min-height: 2.15rem;
+    min-height: 2.25rem;
 }
 button[kind="primary"] {
     min-height: 3rem;

@@ -1,0 +1,376 @@
+{
+  "task_id": "MEDAI-AI-PACKAGE-QUALITY-RUN-REVIEW-WIRING-15O-C",
+  "cases": [
+    {
+      "entry_point_label": "AI package review preview",
+      "package_id": "ai_pkg_545e9690d709",
+      "package_family": "cytology_pathology_narrative",
+      "package_family_label": "Cytology/pathology narrative package",
+      "source_visible_body": "Synthetic narrative fixture with tests ordered, diagnosis, and recommendation sections.",
+      "source_sections": [
+        {
+          "heading": "Tests Ordered",
+          "source_excerpt": "tests ordered section present",
+          "candidate_fact_count": 1,
+          "evidence_anchor_ids": [
+            "cyto_a1"
+          ]
+        },
+        {
+          "heading": "Diagnosis",
+          "source_excerpt": "diagnosis section present",
+          "candidate_fact_count": 1,
+          "evidence_anchor_ids": [
+            "cyto_a2"
+          ]
+        },
+        {
+          "heading": "Recommendation",
+          "source_excerpt": "recommendation section present",
+          "candidate_fact_count": 1,
+          "evidence_anchor_ids": [
+            "cyto_a3"
+          ]
+        }
+      ],
+      "candidate_facts": [
+        {
+          "label": "Tests Ordered",
+          "value": "source-visible narrative present",
+          "source_section": "Tests Ordered",
+          "evidence_anchor_id": "cyto_a1",
+          "evidence_snippet": "tests ordered section present",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Diagnosis",
+          "value": "source-visible narrative present",
+          "source_section": "Diagnosis",
+          "evidence_anchor_id": "cyto_a2",
+          "evidence_snippet": "diagnosis section present",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Recommendation",
+          "value": "source-visible narrative present",
+          "source_section": "Recommendation",
+          "evidence_anchor_id": "cyto_a3",
+          "evidence_snippet": "recommendation section present",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        }
+      ],
+      "evidence_anchors": [
+        {
+          "anchor_id": "cyto_a1",
+          "source_section": "Tests Ordered",
+          "snippet": "tests ordered section present"
+        },
+        {
+          "anchor_id": "cyto_a2",
+          "source_section": "Diagnosis",
+          "snippet": "diagnosis section present"
+        },
+        {
+          "anchor_id": "cyto_a3",
+          "source_section": "Recommendation",
+          "snippet": "recommendation section present"
+        }
+      ],
+      "unknown_values": [],
+      "uncertainty_flags": [
+        "Tests Ordered: source-visible candidate fact; operator must compare",
+        "Diagnosis: source-visible candidate fact; operator must compare",
+        "Recommendation: source-visible candidate fact; operator must compare"
+      ],
+      "no_live_provider_off_indicator": "no-live/provider-off",
+      "active_written_count_indicator": "active_written_count=0",
+      "auto_accept_indicator": "auto_accept=false",
+      "review_required": true,
+      "auto_accept": false,
+      "active_written_count": 0,
+      "external_api_used": false,
+      "live_call_made": false,
+      "estimated_human_compare_seconds": 28,
+      "under_1_minute_compare_preserved": true,
+      "hallucinated_field_count": 0
+    },
+    {
+      "entry_point_label": "AI package review preview",
+      "package_id": "ai_pkg_8a213d94bc1a",
+      "package_family": "urinalysis_table_like_lab",
+      "package_family_label": "Urinalysis/table-like lab package",
+      "source_visible_body": "Synthetic table fixture with specific gravity, pH, occult blood, and RBC rows.",
+      "source_sections": [
+        {
+          "heading": "Urinalysis Table",
+          "source_excerpt": "table rows grouped under urinalysis table",
+          "candidate_fact_count": 4,
+          "evidence_anchor_ids": [
+            "ua_a1"
+          ]
+        }
+      ],
+      "candidate_facts": [
+        {
+          "label": "Specific Gravity",
+          "value": "1.020",
+          "source_section": "Urinalysis Table",
+          "evidence_anchor_id": "ua_a1",
+          "evidence_snippet": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "pH",
+          "value": "7.5",
+          "source_section": "Urinalysis Table",
+          "evidence_anchor_id": "ua_a1",
+          "evidence_snippet": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Occult Blood",
+          "value": "Trace",
+          "source_section": "Urinalysis Table",
+          "evidence_anchor_id": "ua_a1",
+          "evidence_snippet": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "RBC",
+          "value": "3-10",
+          "source_section": "Urinalysis Table",
+          "evidence_anchor_id": "ua_a1",
+          "evidence_snippet": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        }
+      ],
+      "evidence_anchors": [
+        {
+          "anchor_id": "ua_a1",
+          "source_section": "Urinalysis Table",
+          "snippet": "table rows grouped under urinalysis table"
+        }
+      ],
+      "unknown_values": [],
+      "uncertainty_flags": [
+        "Specific Gravity: source-visible candidate fact; operator must compare",
+        "pH: source-visible candidate fact; operator must compare",
+        "Occult Blood: source-visible candidate fact; operator must compare",
+        "RBC: source-visible candidate fact; operator must compare"
+      ],
+      "no_live_provider_off_indicator": "no-live/provider-off",
+      "active_written_count_indicator": "active_written_count=0",
+      "auto_accept_indicator": "auto_accept=false",
+      "review_required": true,
+      "auto_accept": false,
+      "active_written_count": 0,
+      "external_api_used": false,
+      "live_call_made": false,
+      "estimated_human_compare_seconds": 26,
+      "under_1_minute_compare_preserved": true,
+      "hallucinated_field_count": 0
+    },
+    {
+      "entry_point_label": "AI package review preview",
+      "package_id": "ai_pkg_46903c24680e",
+      "package_family": "portal_result_cards",
+      "package_family_label": "Portal result-card package",
+      "source_visible_body": "Synthetic portal cards fixture with card labels and visible reference text.",
+      "source_sections": [
+        {
+          "heading": "Portal Result Cards",
+          "source_excerpt": "card labels grouped as portal result cards",
+          "candidate_fact_count": 4,
+          "evidence_anchor_ids": [
+            "portal_a1"
+          ]
+        }
+      ],
+      "candidate_facts": [
+        {
+          "label": "Urine Color",
+          "value": "Orange",
+          "source_section": "Portal Result Cards",
+          "evidence_anchor_id": "portal_a1",
+          "evidence_snippet": "card labels grouped as portal result cards",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Appearance",
+          "value": "Clear",
+          "source_section": "Portal Result Cards",
+          "evidence_anchor_id": "portal_a1",
+          "evidence_snippet": "card labels grouped as portal result cards",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Leukocyte Esterase",
+          "value": "Negative",
+          "source_section": "Portal Result Cards",
+          "evidence_anchor_id": "portal_a1",
+          "evidence_snippet": "card labels grouped as portal result cards",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Protein",
+          "value": "Trace",
+          "source_section": "Portal Result Cards",
+          "evidence_anchor_id": "portal_a1",
+          "evidence_snippet": "card labels grouped as portal result cards",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        }
+      ],
+      "evidence_anchors": [
+        {
+          "anchor_id": "portal_a1",
+          "source_section": "Portal Result Cards",
+          "snippet": "card labels grouped as portal result cards"
+        }
+      ],
+      "unknown_values": [],
+      "uncertainty_flags": [
+        "Urine Color: source-visible candidate fact; operator must compare",
+        "Appearance: source-visible candidate fact; operator must compare",
+        "Leukocyte Esterase: source-visible candidate fact; operator must compare",
+        "Protein: source-visible candidate fact; operator must compare"
+      ],
+      "no_live_provider_off_indicator": "no-live/provider-off",
+      "active_written_count_indicator": "active_written_count=0",
+      "auto_accept_indicator": "auto_accept=false",
+      "review_required": true,
+      "auto_accept": false,
+      "active_written_count": 0,
+      "external_api_used": false,
+      "live_call_made": false,
+      "estimated_human_compare_seconds": 26,
+      "under_1_minute_compare_preserved": true,
+      "hallucinated_field_count": 0
+    },
+    {
+      "entry_point_label": "AI package review preview",
+      "package_id": "ai_pkg_f853c87c7d20",
+      "package_family": "mixed_narrative_numeric_result",
+      "package_family_label": "Mixed narrative + numeric result package",
+      "source_visible_body": "Synthetic mixed fixture with a clinical note, visible culture result, unknown collection time, and nitrite result.",
+      "source_sections": [
+        {
+          "heading": "Clinical Note",
+          "source_excerpt": "narrative section present",
+          "candidate_fact_count": 1,
+          "evidence_anchor_ids": [
+            "mixed_a1"
+          ]
+        },
+        {
+          "heading": "Result Summary",
+          "source_excerpt": "numeric/result section present",
+          "candidate_fact_count": 3,
+          "evidence_anchor_ids": [
+            "mixed_a2"
+          ]
+        }
+      ],
+      "candidate_facts": [
+        {
+          "label": "Clinical Note",
+          "value": "source-visible narrative present",
+          "source_section": "Clinical Note",
+          "evidence_anchor_id": "mixed_a1",
+          "evidence_snippet": "narrative section present",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Culture Result",
+          "value": "No growth",
+          "source_section": "Result Summary",
+          "evidence_anchor_id": "mixed_a2",
+          "evidence_snippet": "numeric/result section present",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Collection Time",
+          "value": "Unknown",
+          "source_section": "Result Summary",
+          "evidence_anchor_id": "mixed_a2",
+          "evidence_snippet": "numeric/result section present",
+          "uncertainty": "missing or not visible in source",
+          "unknown_value": true,
+          "row_kind": "observation"
+        },
+        {
+          "label": "Nitrite",
+          "value": "Negative",
+          "source_section": "Result Summary",
+          "evidence_anchor_id": "mixed_a2",
+          "evidence_snippet": "numeric/result section present",
+          "uncertainty": "source-visible candidate fact; operator must compare",
+          "unknown_value": false,
+          "row_kind": "observation"
+        }
+      ],
+      "evidence_anchors": [
+        {
+          "anchor_id": "mixed_a1",
+          "source_section": "Clinical Note",
+          "snippet": "narrative section present"
+        },
+        {
+          "anchor_id": "mixed_a2",
+          "source_section": "Result Summary",
+          "snippet": "numeric/result section present"
+        }
+      ],
+      "unknown_values": [
+        "Collection Time"
+      ],
+      "uncertainty_flags": [
+        "Clinical Note: source-visible candidate fact; operator must compare",
+        "Culture Result: source-visible candidate fact; operator must compare",
+        "Collection Time: missing or not visible in source",
+        "Nitrite: source-visible candidate fact; operator must compare"
+      ],
+      "no_live_provider_off_indicator": "no-live/provider-off",
+      "active_written_count_indicator": "active_written_count=0",
+      "auto_accept_indicator": "auto_accept=false",
+      "review_required": true,
+      "auto_accept": false,
+      "active_written_count": 0,
+      "external_api_used": false,
+      "live_call_made": false,
+      "estimated_human_compare_seconds": 28,
+      "under_1_minute_compare_preserved": true,
+      "hallucinated_field_count": 0
+    }
+  ],
+  "live_call_made": false,
+  "external_api_used": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true
+}

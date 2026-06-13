@@ -1791,6 +1791,14 @@ def render_run_review_tab(sys_components: dict) -> None:
     render_current_run_tab(sys_components, show_title=False)
 
     st.divider()
+    try:
+        from app.ai_package_run_review_preview import render_ai_package_run_review_preview_panel
+
+        render_ai_package_run_review_preview_panel()
+    except Exception as _exc:
+        st.error(f"AI package review preview unavailable: {_exc}")
+
+    st.divider()
     with st.expander("Previous review summary / aggregate review status", expanded=False):
         st.caption("This is historical aggregate review-package information, not the current run result.")
         try:

@@ -1,0 +1,43 @@
+{
+  "task_id": "MEDAI-AI-PACKAGE-QUALITY-RUN-REVIEW-WIRING-15O-C",
+  "baseline_commit_short": "c675fed6d5dd",
+  "report_generation_commit_short": "c675fed6d5dd",
+  "run_review_package_preview_entry_point_added": true,
+  "entry_point_label": "AI package review preview",
+  "package_families_previewed": [
+    "cytology_pathology_narrative",
+    "urinalysis_table_like_lab",
+    "portal_result_cards",
+    "mixed_narrative_numeric_result"
+  ],
+  "package_family_count": 4,
+  "source_visible_body_present_count": 4,
+  "evidence_anchor_present_count": 4,
+  "candidate_facts_separated_count": 4,
+  "unknown_values_explicit_count": 4,
+  "uncertainty_flags_visible_count": 4,
+  "under_1_minute_compare_preserved_count": 4,
+  "hallucinated_field_count": 0,
+  "live_call_made": false,
+  "external_api_used": false,
+  "active_written_count": 0,
+  "auto_accept": false,
+  "review_required": true,
+  "billing_check_pending": true,
+  "all_run_review_preview_invariants_passed": true,
+  "privacy_result": "passed",
+  "tests_run": [
+    "python -m pytest tests/test_medai_ai_package_quality_run_review_wiring_15o_c.py -q",
+    "python -m py_compile scripts/run_medai_ai_package_quality_run_review_wiring_15o_c.py",
+    "python scripts/run_medai_ai_package_quality_run_review_wiring_15o_c.py"
+  ],
+  "files_changed": [
+    "app/ai_package_run_review_preview.py",
+    "app/main.py",
+    "app/operator_compact_styles.py",
+    "scripts/run_medai_ai_package_quality_run_review_wiring_15o_c.py",
+    "tests/test_medai_ai_package_quality_run_review_wiring_15o_c.py",
+    "reports/medai_ai_package_quality_run_review_wiring_15o_c/*"
+  ],
+  "push_status": "pending"
+}
