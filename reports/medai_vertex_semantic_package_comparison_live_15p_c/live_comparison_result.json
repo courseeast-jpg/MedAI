@@ -1,0 +1,79 @@
+{
+  "block": "MEDAI-VERTEX-SEMANTIC-PACKAGE-COMPARISON-LIVE-15P-C",
+  "provider_route": "vertex",
+  "provider_name": "gemini_vertex",
+  "model": "gemini-2.5-flash-lite",
+  "location": "global",
+  "endpoint_host": "aiplatform.googleapis.com",
+  "package_family": "portal_result_cards",
+  "provider_client_kind": "real_rest",
+  "live_call_made": true,
+  "provider_response_received": true,
+  "external_api_used": true,
+  "real_network_call_used": true,
+  "schema_validation_pass": true,
+  "source_visible_body_preserved": true,
+  "evidence_anchor_preserved": true,
+  "candidate_facts_separated": true,
+  "unknown_values_explicit": true,
+  "uncertainty_flags_visible": true,
+  "hallucinated_field_count": 0,
+  "prompt_token_count": 374,
+  "output_token_count": 371,
+  "total_token_count": 745,
+  "posted_body_top_level_keys": [
+    "contents",
+    "generationConfig"
+  ],
+  "posted_body_allowed_top_level_keys_only": true,
+  "sanitized_findings": [
+    {
+      "label": "Urine Color",
+      "value": "Orange",
+      "source_section": "Portal Result Cards",
+      "evidence_text": "card labels grouped as portal result cards",
+      "uncertainty": "source-visible candidate fact",
+      "unknown_value": false,
+      "source_faithful": true
+    },
+    {
+      "label": "Appearance",
+      "value": "Clear",
+      "source_section": "Portal Result Cards",
+      "evidence_text": "card labels grouped as portal result cards",
+      "uncertainty": "source-visible candidate fact",
+      "unknown_value": false,
+      "source_faithful": true
+    },
+    {
+      "label": "Leukocyte Esterase",
+      "value": "Negative",
+      "source_section": "Portal Result Cards",
+      "evidence_text": "card labels grouped as portal result cards",
+      "uncertainty": "source-visible candidate fact",
+      "unknown_value": false,
+      "source_faithful": true
+    },
+    {
+      "label": "Protein",
+      "value": "Trace",
+      "source_section": "Portal Result Cards",
+      "evidence_text": "card labels grouped as portal result cards",
+      "uncertainty": "source-visible candidate fact",
+      "unknown_value": false,
+      "source_faithful": true
+    }
+  ],
+  "validation_errors": [],
+  "review_required": true,
+  "auto_accept": false,
+  "active_written_count": 0,
+  "privacy_result": "passed",
+  "billing_check_pending": true,
+  "status": "PASS",
+  "block_reason": "",
+  "max_output_tokens": 512,
+  "temperature": 0,
+  "single_live_call_only": true,
+  "prior_15p_b_failure_summary": "15P-B failed HTTP 400 request_config_rejected (MedAI metadata keys posted); fixed here by posting only contents+generationConfig."
+}
