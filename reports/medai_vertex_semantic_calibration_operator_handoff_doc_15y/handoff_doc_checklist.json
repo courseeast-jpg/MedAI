@@ -1,0 +1,20 @@
+{
+  "handoff_doc_created": true,
+  "required_sections_present_count": 13,
+  "required_sections_total": 13,
+  "missing_sections": [],
+  "calibration_pass_summary_present": true,
+  "final_metrics_present": true,
+  "category_coverage_present": true,
+  "token_cost_summary_present": true,
+  "evidence_anchor_guardrails_present": true,
+  "bilingual_label_guardrails_present": true,
+  "real_document_boundary_present": true,
+  "future_real_doc_gates_present": true,
+  "active_write_boundary_present": true,
+  "auto_accept_boundary_present": true,
+  "review_bound_present": true,
+  "next_stage_15z_present": true,
+  "evidence_chain_present": true,
+  "troubleshooting_stop_conditions_present": true
+}
