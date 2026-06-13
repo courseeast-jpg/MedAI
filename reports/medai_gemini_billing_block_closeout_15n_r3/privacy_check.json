@@ -1,0 +1,19 @@
+{
+  "privacy_result": "passed",
+  "raw_ocr_text_in_report": false,
+  "real_patient_identifiers_in_report": false,
+  "date_of_birth_value_present": false,
+  "record_identifier_value_present": false,
+  "token_map_in_report": false,
+  "credential_value_in_report": false,
+  "provider_secret_like_value_present": false,
+  "bearer_token_in_report": false,
+  "prompt_body_present": false,
+  "provider_response_body_present": false,
+  "absolute_private_path_in_report": false,
+  "external_api_used_in_closeout": false,
+  "real_network_call_used_in_closeout": false,
+  "gemini_real_call_attempted_in_closeout": false,
+  "active_written_count": 0,
+  "auto_accept": false
+}

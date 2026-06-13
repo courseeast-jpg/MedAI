@@ -1,0 +1,22 @@
+{
+  "overall_status": "BILLING_BLOCKED_CREDIT_DEPLETED",
+  "diagnosis": "The latest controlled Gemini live smoke reached the Gemini SDK call path, but Gemini returned a quota or billing error before any provider response was available for schema validation.",
+  "exact_failure_reason": "prepayment_credits_depleted",
+  "provider_error_category": "quota_or_billing",
+  "provider_error_type": "ResourceExhausted",
+  "provider_error_status_code": "TOO_MANY_REQUESTS",
+  "provider_error_code": "TOO_MANY_REQUESTS",
+  "provider_error_message_sanitized": "429 prepayment credits are depleted; manage project and billing in AI Studio before another live smoke attempt.",
+  "provider_response_received": false,
+  "schema_valid": false,
+  "live_call_attempted_in_source_report": true,
+  "external_api_used_in_source_report": true,
+  "real_network_call_used_in_source_report": true,
+  "external_api_used_in_closeout": false,
+  "real_network_call_used_in_closeout": false,
+  "gemini_real_call_attempted_in_closeout": false,
+  "live_retry_allowed": false,
+  "live_retry_block_reason": "ai_studio_or_gemini_api_prepay_credit_depleted",
+  "credit_only_rule_result": "blocked_until_remaining_credit_restored",
+  "next_safe_action": "Restore or confirm remaining Gemini API credit before any future single live-smoke rerun."
+}

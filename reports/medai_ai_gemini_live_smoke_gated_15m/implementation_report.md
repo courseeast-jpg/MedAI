@@ -1,14 +1,14 @@
 # MEDAI-AI-GEMINI-LIVE-SMOKE-GATED-15M
 
-- Overall status: `BLOCKED_READY_FOR_LIVE_SMOKE`
+- Overall status: `FAIL_LIVE_SMOKE`
 - Privacy result: `passed`
 - Selected provider: `gemini` | Effective: `fake_local`
-- Live call status: `blocked_missing_operator_approval`
-- Live call attempted: `False`
-- Missing live gates: `['MEDAI_ALLOW_REAL_PROVIDER_SMOKE_missing', 'MEDAI_OPERATOR_APPROVED_LIVE_SMOKE_missing', 'gemini_api_key_missing']`
-- External API used: `False`
-- Real network call used: `False`
-- Gemini real call attempted: `False`
+- Live call status: `failed`
+- Live call attempted: `True`
+- Missing live gates: `[]`
+- External API used: `True`
+- Real network call used: `True`
+- Gemini real call attempted: `True`
 - Claude/OpenAI/Ollama real call attempted: `False`
 - Local model call used: `False`
 - Provider-execution subprocess path: `False`
@@ -16,7 +16,7 @@
 - Auto-accept: `False`
 - Review-bound package count: `0`
 - Doctrine phrases present: `True`
-- Flat suite status: `passed` counts `{'passed': 222, 'deselected': 8}` (120.531s)
+- Flat suite status: `passed` counts `{'passed': 222, 'deselected': 8}` (79.657s)
 
 ## Live gate model
 

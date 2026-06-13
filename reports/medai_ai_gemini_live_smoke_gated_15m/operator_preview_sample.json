@@ -1,15 +1,11 @@
 {
   "selected_provider": "gemini",
   "effective_provider": "fake_local",
-  "gemini_live_smoke_status": "blocked_missing_operator_approval",
-  "missing_live_gates": [
-    "MEDAI_ALLOW_REAL_PROVIDER_SMOKE_missing",
-    "MEDAI_OPERATOR_APPROVED_LIVE_SMOKE_missing",
-    "gemini_api_key_missing"
-  ],
-  "credential_present": false,
-  "allow_real_provider_smoke_env_present": false,
-  "operator_approved_live_smoke_env_present": false,
+  "gemini_live_smoke_status": "failed",
+  "missing_live_gates": [],
+  "credential_present": true,
+  "allow_real_provider_smoke_env_present": true,
+  "operator_approved_live_smoke_env_present": true,
   "per_call_budget_cap": 0.05,
   "call_limit": 1,
   "payload_class": "synthetic_redacted_live_smoke",
@@ -17,7 +13,7 @@
   "review_required": true,
   "auto_accept": false,
   "active_written_count": 0,
-  "no_external_call_notice": "No external AI call was made",
+  "no_external_call_notice": "",
   "blocked_notice": "Live smoke blocked until explicit operator approval",
   "one_call_notice": "",
   "review_bound_output_notice": "Live smoke output is review-bound only"
