@@ -1,0 +1,154 @@
+{
+  "fixtures": [
+    {
+      "fixture_id": "cal_portal_v1",
+      "package_family": "portal_result_cards",
+      "category": "portal_result_cards",
+      "source_visible_body": "SYNTHETIC portal result cards. Specific Gravity 1.015. pH 6.0.",
+      "candidate_fact_count": 2,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_portal_v2",
+      "package_family": "portal_result_cards",
+      "category": "portal_result_cards",
+      "source_visible_body": "SYNTHETIC portal result cards. Urine Color Yellow. Appearance Clear.",
+      "candidate_fact_count": 2,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_cyto_v1",
+      "package_family": "cytology_pathology_narrative",
+      "category": "cytology_pathology_narrative",
+      "source_visible_body": "SYNTHETIC narrative. Tests Ordered: panel listed.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_cyto_v2",
+      "package_family": "cytology_pathology_narrative",
+      "category": "cytology_pathology_narrative",
+      "source_visible_body": "SYNTHETIC narrative. Specimen Description: descriptive text present.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_urine_v1",
+      "package_family": "urinalysis_table_like_lab",
+      "category": "urinalysis_table_like_lab",
+      "source_visible_body": "SYNTHETIC urinalysis table. pH 6.5. Protein Negative.",
+      "candidate_fact_count": 2,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_urine_v2",
+      "package_family": "urinalysis_table_like_lab",
+      "category": "urinalysis_table_like_lab",
+      "source_visible_body": "SYNTHETIC urinalysis table. Glucose Negative. Ketones Negative.",
+      "candidate_fact_count": 2,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_mixed_v1",
+      "package_family": "mixed_narrative_numeric_result",
+      "category": "mixed_narrative_numeric_result",
+      "source_visible_body": "SYNTHETIC mixed report. Impression: descriptive text present. Value A 12.",
+      "candidate_fact_count": 2,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 1,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_negation",
+      "package_family": "short_clinical_note_negation",
+      "category": "short_clinical_note_negation",
+      "source_visible_body": "SYNTHETIC note: no fever and no rash reported.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_uncertainty",
+      "package_family": "short_clinical_note_uncertainty",
+      "category": "short_clinical_note_uncertainty",
+      "source_visible_body": "SYNTHETIC note: possible mild finding, uncertain.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_medication",
+      "package_family": "medication_mention_no_ddi",
+      "category": "medication_mention_no_ddi",
+      "source_visible_body": "SYNTHETIC note. Medications: generic agent listed.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_cyrillic",
+      "package_family": "bilingual_cyrillic_snippet",
+      "category": "bilingual_cyrillic_snippet",
+      "source_visible_body": "SYNTHETIC bilingual snippet. \u0410\u043d\u0430\u043b\u0438\u0437 \u043c\u043e\u0447\u0438 pH 6.0.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_sparse",
+      "package_family": "sparse_low_information_result",
+      "category": "sparse_low_information_result",
+      "source_visible_body": "SYNTHETIC sparse result. Result Label present; value not provided.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 1,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_multi_unknown",
+      "package_family": "multi_section_explicit_unknowns",
+      "category": "multi_section_explicit_unknowns",
+      "source_visible_body": "SYNTHETIC multi-section. Section A Value 5. Section B Value not provided.",
+      "candidate_fact_count": 2,
+      "evidence_anchor_count": 2,
+      "unknown_value_count": 1,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_abnormal_numeric",
+      "package_family": "abnormal_numeric_with_units",
+      "category": "abnormal_numeric_with_units",
+      "source_visible_body": "SYNTHETIC abnormal numeric. Marker X 15 mg/dL above range.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    },
+    {
+      "fixture_id": "cal_normal_numeric",
+      "package_family": "normal_numeric_with_units",
+      "category": "normal_numeric_with_units",
+      "source_visible_body": "SYNTHETIC normal numeric. Marker Y 5 mg/dL within range.",
+      "candidate_fact_count": 1,
+      "evidence_anchor_count": 1,
+      "unknown_value_count": 0,
+      "uncertainty_flag_count": 1
+    }
+  ]
+}

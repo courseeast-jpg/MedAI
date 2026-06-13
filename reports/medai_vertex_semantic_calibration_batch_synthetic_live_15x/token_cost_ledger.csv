@@ -1,0 +1,16 @@
+fixture_id,package_family,category,provider_route,model,prompt_token_count,output_token_count,total_token_count,estimated_input_cost_usd,estimated_output_cost_usd,estimated_total_cost_usd,provider_response_received,schema_validation_pass,hallucinated_field_count,privacy_result,status
+cal_portal_v1,portal_result_cards,portal_result_cards,vertex,gemini-2.5-flash-lite,361,211,572,3.61e-05,8.44e-05,0.0001205,True,True,0,passed,PASS
+cal_portal_v2,portal_result_cards,portal_result_cards,vertex,gemini-2.5-flash-lite,335,199,534,3.35e-05,7.96e-05,0.0001131,True,True,0,passed,PASS
+cal_cyto_v1,cytology_pathology_narrative,cytology_pathology_narrative,vertex,gemini-2.5-flash-lite,313,126,439,3.13e-05,5.04e-05,8.17e-05,True,True,0,passed,PASS
+cal_cyto_v2,cytology_pathology_narrative,cytology_pathology_narrative,vertex,gemini-2.5-flash-lite,322,131,453,3.22e-05,5.24e-05,8.46e-05,True,True,0,passed,PASS
+cal_urine_v1,urinalysis_table_like_lab,urinalysis_table_like_lab,vertex,gemini-2.5-flash-lite,344,204,548,3.44e-05,8.16e-05,0.000116,True,True,0,passed,PASS
+cal_urine_v2,urinalysis_table_like_lab,urinalysis_table_like_lab,vertex,gemini-2.5-flash-lite,336,201,537,3.36e-05,8.04e-05,0.000114,True,True,0,passed,PASS
+cal_mixed_v1,mixed_narrative_numeric_result,mixed_narrative_numeric_result,vertex,gemini-2.5-flash-lite,351,207,558,3.51e-05,8.28e-05,0.0001179,True,True,0,passed,PASS
+cal_negation,short_clinical_note_negation,short_clinical_note_negation,vertex,gemini-2.5-flash-lite,313,124,437,3.13e-05,4.96e-05,8.09e-05,True,True,0,passed,PASS
+cal_uncertainty,short_clinical_note_uncertainty,short_clinical_note_uncertainty,vertex,gemini-2.5-flash-lite,308,125,433,3.08e-05,5e-05,8.08e-05,True,True,0,passed,PASS
+cal_medication,medication_mention_no_ddi,medication_mention_no_ddi,vertex,gemini-2.5-flash-lite,315,130,445,3.15e-05,5.2e-05,8.35e-05,True,True,0,passed,PASS
+cal_cyrillic,bilingual_cyrillic_snippet,bilingual_cyrillic_snippet,vertex,gemini-2.5-flash-lite,330,134,464,3.3e-05,5.36e-05,8.66e-05,True,True,0,passed,PASS
+cal_sparse,sparse_low_information_result,sparse_low_information_result,vertex,gemini-2.5-flash-lite,313,124,437,3.13e-05,4.96e-05,8.09e-05,True,True,0,passed,PASS
+cal_multi_unknown,multi_section_explicit_unknowns,multi_section_explicit_unknowns,vertex,gemini-2.5-flash-lite,359,203,562,3.59e-05,8.12e-05,0.0001171,True,True,0,passed,PASS
+cal_abnormal_numeric,abnormal_numeric_with_units,abnormal_numeric_with_units,vertex,gemini-2.5-flash-lite,327,134,461,3.27e-05,5.36e-05,8.63e-05,True,True,0,passed,PASS
+cal_normal_numeric,normal_numeric_with_units,normal_numeric_with_units,vertex,gemini-2.5-flash-lite,323,131,454,3.23e-05,5.24e-05,8.47e-05,True,True,0,passed,PASS

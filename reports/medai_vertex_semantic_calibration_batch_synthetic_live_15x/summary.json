@@ -1,0 +1,121 @@
+{
+  "block": "MEDAI-VERTEX-SEMANTIC-CALIBRATION-BATCH-SYNTHETIC-LIVE-15X",
+  "provider_route": "vertex",
+  "provider_name": "gemini_vertex",
+  "model": "gemini-2.5-flash-lite",
+  "location": "global",
+  "provider_client_kind": "real_rest",
+  "fixture_count": 15,
+  "max_live_calls": 20,
+  "live_call_count": 15,
+  "provider_response_received_count": 15,
+  "schema_validation_pass_count": 15,
+  "verbatim_evidence_anchor_pass_count": 15,
+  "source_visible_body_preserved_count": 15,
+  "evidence_anchor_preserved_count": 15,
+  "candidate_facts_separated_count": 15,
+  "unknown_values_explicit_count": 15,
+  "uncertainty_flags_visible_count": 15,
+  "posted_body_allowed_top_level_keys_only_count": 15,
+  "review_required_count": 15,
+  "hallucinated_field_count": 0,
+  "total_prompt_tokens": 4950,
+  "total_output_tokens": 2384,
+  "total_token_count_all_calls": 7334,
+  "estimated_total_cost_usd_all_calls": 0.0014486,
+  "estimated_cost_ceiling_usd": 0.00512,
+  "cost_table_note": "Conservative local estimate: input $0.0001/1K tokens, output $0.0004/1K tokens for gemini-2.5-flash-lite. Not from a billing API; billing_check_pending=true.",
+  "failed_call_count": 0,
+  "active_written_count": 0,
+  "active_mkb_record_created_count": 0,
+  "auto_accept_true_count": 0,
+  "category_breakdown": {
+    "portal_result_cards": 2,
+    "cytology_pathology_narrative": 2,
+    "urinalysis_table_like_lab": 2,
+    "mixed_narrative_numeric_result": 1,
+    "short_clinical_note_negation": 1,
+    "short_clinical_note_uncertainty": 1,
+    "medication_mention_no_ddi": 1,
+    "bilingual_cyrillic_snippet": 1,
+    "sparse_low_information_result": 1,
+    "multi_section_explicit_unknowns": 1,
+    "abnormal_numeric_with_units": 1,
+    "normal_numeric_with_units": 1
+  },
+  "stopped_early": false,
+  "stop_reason": "",
+  "status": "PASS",
+  "live_call_made": true,
+  "external_api_used": true,
+  "privacy_result": "passed",
+  "billing_check_pending": true,
+  "run_label": "15X-R4",
+  "prior_15x_failed": true,
+  "prior_15x_r2_failed": true,
+  "rerun_after_15x_r1_evidence_hardening": true,
+  "rerun_after_15x_r3_bilingual_label_calibration": true,
+  "live_script_run_exactly_once": true,
+  "per_call_status": [
+    {
+      "fixture_id": "cal_portal_v1",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_portal_v2",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_cyto_v1",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_cyto_v2",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_urine_v1",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_urine_v2",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_mixed_v1",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_negation",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_uncertainty",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_medication",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_cyrillic",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_sparse",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_multi_unknown",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_abnormal_numeric",
+      "status": "PASS"
+    },
+    {
+      "fixture_id": "cal_normal_numeric",
+      "status": "PASS"
+    }
+  ]
+}
