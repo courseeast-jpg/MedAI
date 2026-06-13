@@ -1616,6 +1616,51 @@ def render_gemini_live_smoke_status(status: dict[str, Any]) -> None:
     st.caption(status.get("review_bound_output_notice") or "Live smoke output is review-bound only")
 
 
+def render_vertex_semantic_review_drafts() -> None:
+    """Render the 15Q no-live Vertex semantic review draft panel (replay only)."""
+    try:
+        from app.vertex_semantic_review_surface import build_vertex_semantic_review_drafts
+    except Exception as exc:  # pragma: no cover - defensive import guard
+        st.caption(f"Vertex semantic review drafts unavailable: {exc}")
+        return
+    drafts = build_vertex_semantic_review_drafts()
+    st.markdown("#### Vertex semantic package review drafts")
+    st.caption("Replayed from recorded 15P-C/15P-D reports. No external AI call. Review-bound only; no active writes; no auto-accept.")
+    if not drafts:
+        st.info("No recorded Vertex semantic review drafts available.")
+        return
+    for draft in drafts:
+        st.markdown(f"**{draft.package_family_label}** (`{draft.package_family}`)")
+        st.caption(
+            f"Provider: {draft.provider_route} | Model: {draft.provider_model} | "
+            f"Review required: {draft.review_required} | {draft.auto_accept_indicator} | "
+            f"{draft.active_written_count_indicator} | Hallucinated fields: {draft.hallucinated_field_count}"
+        )
+        st.caption(draft.no_live_replay_indicator)
+        st.markdown("Source visible body:")
+        st.caption(draft.source_visible_body)
+        if draft.vertex_semantic_findings:
+            st.markdown("Vertex semantic findings (review-bound):")
+            st.dataframe(
+                [
+                    {
+                        "label": f.get("label", ""),
+                        "value": f.get("value", ""),
+                        "section": f.get("source_section", ""),
+                        "evidence_text": f.get("evidence_text", ""),
+                        "uncertainty": f.get("uncertainty", ""),
+                        "unknown": f.get("unknown_value", False),
+                    }
+                    for f in draft.vertex_semantic_findings
+                ],
+                hide_index=True,
+                use_container_width=True,
+            )
+        if draft.uncertainty_flags:
+            st.caption("Uncertainty: " + "; ".join(draft.uncertainty_flags))
+        st.caption("Operator controls (no active MKB write): " + " | ".join(draft.action_controls))
+
+
 def render_conflict_tab(sys_components: dict) -> None:
     try:
         from app.conflict_review import render_conflict_review
