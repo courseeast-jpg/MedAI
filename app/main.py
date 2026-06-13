@@ -1661,6 +1661,18 @@ def render_vertex_semantic_review_drafts() -> None:
         st.caption("Operator controls (no active MKB write): " + " | ".join(draft.action_controls))
 
 
+def render_vertex_semantic_review_decision_audit_panel_hook() -> None:
+    """Additive hook: render the 15T read-only Vertex semantic decision audit panel."""
+    try:
+        from app.vertex_semantic_review_decision_audit_panel import (
+            render_vertex_semantic_review_decision_audit_panel,
+        )
+
+        render_vertex_semantic_review_decision_audit_panel()
+    except Exception as exc:  # pragma: no cover - defensive import guard
+        st.caption(f"Vertex semantic review decision audit panel unavailable: {exc}")
+
+
 def render_conflict_tab(sys_components: dict) -> None:
     try:
         from app.conflict_review import render_conflict_review
