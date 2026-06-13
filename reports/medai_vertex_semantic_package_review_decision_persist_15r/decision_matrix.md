@@ -1,0 +1,29 @@
+# 15R Vertex semantic review-decision persistence matrix
+
+| Metric | Value |
+| --- | --- |
+| package_families_loaded | `4` |
+| package_families_with_persisted_decisions | `4` |
+| decision_records_created | `15` |
+| accept_decision_records_created | `13` |
+| reject_decision_records_created | `1` |
+| defer_decision_records_created | `1` |
+| invalid_action_rejected_count | `1` |
+| review_bound_decision_count | `15` |
+| active_mkb_record_created_count | `0` |
+| active_written_count | `0` |
+| auto_accept_true_count | `0` |
+| review_required_true_count | `15` |
+| evidence_anchor_preserved_count | `15` |
+| provider_provenance_preserved_count | `15` |
+| unknown_values_preserved_count | `15` |
+| uncertainty_flags_preserved_count | `15` |
+| hallucinated_field_count | `0` |
+| local_only_decision_count | `15` |
+| audit_reason_present_count | `15` |
+| live_call_made | `False` |
+| external_api_used | `False` |
+| privacy_result | `passed` |
+| billing_check_pending | `True` |
+
+Review-bound draft decisions only; no active MKB writes; no auto-accept; no live call.
