@@ -1,0 +1,144 @@
+{
+  "medication_refusal_records": [
+    {
+      "refusal_id": "med_refusal_34bba1bc4398",
+      "case_id": "medication_mention_candidate_only_no_safety_proof",
+      "refusal_reason_codes": [
+        "medication_safety_proof_required"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_5fcfc1ed2603",
+      "case_id": "medication_fact_active_write_requested",
+      "refusal_reason_codes": [
+        "active_write_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_9f0e93be6d87",
+      "case_id": "medication_fact_auto_accept_requested",
+      "refusal_reason_codes": [
+        "auto_accept_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_db525e4703db",
+      "case_id": "medication_fact_ddi_decision_requested",
+      "refusal_reason_codes": [
+        "medical_decision_logic_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_5cd39611f827",
+      "case_id": "medication_fact_contraindication_decision_requested",
+      "refusal_reason_codes": [
+        "medical_decision_logic_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_7f73d1b6f11e",
+      "case_id": "medication_fact_dosage_advice_requested",
+      "refusal_reason_codes": [
+        "medical_decision_logic_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_6ab7458d8c40",
+      "case_id": "medication_fact_treatment_advice_requested",
+      "refusal_reason_codes": [
+        "medical_decision_logic_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_9f3318b0f730",
+      "case_id": "medication_fact_diagnosis_output_requested",
+      "refusal_reason_codes": [
+        "medical_decision_logic_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_d67b92cdef77",
+      "case_id": "explicit_live_call_requested_even_with_safety_proof",
+      "refusal_reason_codes": [
+        "explicit_live_call_request_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "med_refusal_bd5a420aa390",
+      "case_id": "future_authorization_package_with_medication_without_safety_proof",
+      "refusal_reason_codes": [
+        "medication_safety_proof_required"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "future_review_packages": [
+    {
+      "future_review_package_id": "med_future_review_099a0688d443",
+      "case_id": "medication_mention_candidate_only_with_safety_proof",
+      "status": "READY_FOR_FUTURE_REVIEW_PACKAGE_ONLY",
+      "authorization_context_status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "medication_safety_proof_present": true,
+      "medication_candidate_facts_count": 1,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true
+    },
+    {
+      "future_review_package_id": "med_future_review_f97d2d75303d",
+      "case_id": "medication_with_explicit_dose_candidate_only",
+      "status": "READY_FOR_FUTURE_REVIEW_PACKAGE_ONLY",
+      "authorization_context_status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "medication_safety_proof_present": true,
+      "medication_candidate_facts_count": 1,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true
+    },
+    {
+      "future_review_package_id": "med_future_review_0fa076c88f54",
+      "case_id": "medication_with_frequency_candidate_only",
+      "status": "READY_FOR_FUTURE_REVIEW_PACKAGE_ONLY",
+      "authorization_context_status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "medication_safety_proof_present": true,
+      "medication_candidate_facts_count": 1,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true
+    },
+    {
+      "future_review_package_id": "med_future_review_eff4db10af61",
+      "case_id": "medication_with_uncertainty_candidate_only",
+      "status": "READY_FOR_FUTURE_REVIEW_PACKAGE_ONLY",
+      "authorization_context_status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "medication_safety_proof_present": true,
+      "medication_candidate_facts_count": 1,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true
+    },
+    {
+      "future_review_package_id": "med_future_review_5dc8c6189f47",
+      "case_id": "medication_with_tokenized_evidence_and_pii_vault_reference",
+      "status": "READY_FOR_FUTURE_REVIEW_PACKAGE_ONLY",
+      "authorization_context_status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "medication_safety_proof_present": true,
+      "medication_candidate_facts_count": 1,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true
+    },
+    {
+      "future_review_package_id": "med_future_review_ab2e5cdac982",
+      "case_id": "future_authorization_package_with_medication_with_safety_proof",
+      "status": "READY_FOR_FUTURE_REVIEW_PACKAGE_ONLY",
+      "authorization_context_status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "medication_safety_proof_present": true,
+      "medication_candidate_facts_count": 1,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true
+    }
+  ]
+}
