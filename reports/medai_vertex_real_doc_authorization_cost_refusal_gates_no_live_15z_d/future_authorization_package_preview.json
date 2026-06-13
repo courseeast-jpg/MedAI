@@ -1,0 +1,22 @@
+{
+  "future_authorization_packages": [
+    {
+      "future_package_id": "future_pkg_963ee2462b46",
+      "case_id": "authorization_and_billing_present_with_15z_c_handoff",
+      "status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "authorization_intent_id": "auth_8db5916eb86f",
+      "billing_ack_id": "bill_ba0f5919a3d4",
+      "handoff_record_id": "handoff_ebcc3a76db94",
+      "request_fingerprint": "sha256:571f5d3874b76cf3",
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true
+    }
+  ]
+}

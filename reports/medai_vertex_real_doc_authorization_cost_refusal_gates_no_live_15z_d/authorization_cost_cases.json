@@ -1,0 +1,943 @@
+{
+  "cases": [
+    {
+      "case_id": "missing_human_authorization",
+      "authorization_intent_present": false,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "missing_human_authorization"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": null,
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_77af803ed679",
+        "case_id": "missing_human_authorization",
+        "refusal_reason_codes": [
+          "missing_human_authorization"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "missing_billing_ack",
+      "authorization_intent_present": true,
+      "billing_ack_present": false,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "missing_billing_cost_cap_acknowledgement"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": null,
+      "refusal_record": {
+        "refusal_id": "refusal_6ed8307b0fae",
+        "case_id": "missing_billing_ack",
+        "refusal_reason_codes": [
+          "missing_billing_cost_cap_acknowledgement"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "missing_both_authorization_and_billing",
+      "authorization_intent_present": false,
+      "billing_ack_present": false,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "missing_human_authorization",
+        "missing_billing_cost_cap_acknowledgement"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": null,
+      "billing_ack": null,
+      "refusal_record": {
+        "refusal_id": "refusal_92e7a0d2684f",
+        "case_id": "missing_both_authorization_and_billing",
+        "refusal_reason_codes": [
+          "missing_billing_cost_cap_acknowledgement",
+          "missing_human_authorization"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "valid_no_live_authorization_intent_only",
+      "authorization_intent_present": true,
+      "billing_ack_present": false,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "missing_billing_cost_cap_acknowledgement"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": null,
+      "refusal_record": {
+        "refusal_id": "refusal_536b7df3948f",
+        "case_id": "valid_no_live_authorization_intent_only",
+        "refusal_reason_codes": [
+          "missing_billing_cost_cap_acknowledgement"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "valid_no_live_billing_ack_only",
+      "authorization_intent_present": false,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "missing_human_authorization"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": null,
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_c0ea30caa69b",
+        "case_id": "valid_no_live_billing_ack_only",
+        "refusal_reason_codes": [
+          "missing_human_authorization"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "authorization_and_billing_present_but_no_review_handoff",
+      "authorization_intent_present": false,
+      "billing_ack_present": false,
+      "review_handoff_present": false,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "missing_human_authorization",
+        "missing_billing_cost_cap_acknowledgement",
+        "missing_review_handoff_record"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": null,
+      "billing_ack": null,
+      "refusal_record": {
+        "refusal_id": "refusal_a889c9ec506e",
+        "case_id": "authorization_and_billing_present_but_no_review_handoff",
+        "refusal_reason_codes": [
+          "missing_billing_cost_cap_acknowledgement",
+          "missing_human_authorization",
+          "missing_review_handoff_record"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "authorization_and_billing_present_with_15z_c_handoff",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": true,
+      "readiness_status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+      "blocked": false,
+      "block_reasons": [],
+      "refusal_record_created": false,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": null,
+      "future_package": {
+        "future_package_id": "future_pkg_963ee2462b46",
+        "case_id": "authorization_and_billing_present_with_15z_c_handoff",
+        "status": "READY_FOR_FUTURE_AUTHORIZATION_PACKAGE_ONLY",
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false,
+        "external_api_used": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true
+      }
+    },
+    {
+      "case_id": "real_private_provenance",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "real_private_provenance_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_a3ca553c3308",
+        "case_id": "real_private_provenance",
+        "refusal_reason_codes": [
+          "real_private_provenance_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "unknown_provenance",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "unknown_provenance_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_338d066edbe3",
+        "case_id": "unknown_provenance",
+        "refusal_reason_codes": [
+          "unknown_provenance_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "active_write_requested",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "active_write_requested_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_92f0f3c226f0",
+        "case_id": "active_write_requested",
+        "refusal_reason_codes": [
+          "active_write_requested_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "auto_accept_requested",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "auto_accept_requested_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_de6999fef4a4",
+        "case_id": "auto_accept_requested",
+        "refusal_reason_codes": [
+          "auto_accept_requested_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "medication_fact_without_safety_gate",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "medication_fact_without_safety_gate_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_1285f79b7129",
+        "case_id": "medication_fact_without_safety_gate",
+        "refusal_reason_codes": [
+          "medication_fact_without_safety_gate_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "forbidden_request_metadata",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "forbidden_request_metadata_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_e3fbbc5fa565",
+        "case_id": "forbidden_request_metadata",
+        "refusal_reason_codes": [
+          "forbidden_request_metadata_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "invalid_generation_config",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "invalid_generation_config_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_3e724d91ba91",
+        "case_id": "invalid_generation_config",
+        "refusal_reason_codes": [
+          "invalid_generation_config_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "raw_pii_detected",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "raw_pii_detected_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_21e2dd5df4a7",
+        "case_id": "raw_pii_detected",
+        "refusal_reason_codes": [
+          "raw_pii_detected_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "token_map_leak_detected",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "token_map_leak_detected_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_6ad5996a9989",
+        "case_id": "token_map_leak_detected",
+        "refusal_reason_codes": [
+          "token_map_leak_detected_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    },
+    {
+      "case_id": "explicit_live_call_requested",
+      "authorization_intent_present": true,
+      "billing_ack_present": true,
+      "review_handoff_present": true,
+      "future_package_created": false,
+      "readiness_status": "BLOCKED",
+      "blocked": true,
+      "block_reasons": [
+        "explicit_live_call_request_blocked"
+      ],
+      "refusal_record_created": true,
+      "estimated_cost_ceiling_usd": 0.01,
+      "token_budget_ceiling": 512,
+      "billing_check_pending": true,
+      "no_billing_api_used": true,
+      "live_call_allowed": false,
+      "external_api_used": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false,
+      "authorization_intent": {
+        "authorization_intent_id": "auth_8db5916eb86f",
+        "operator_id": "operator_placeholder_15zd",
+        "timestamp": "NO_LIVE_TIMESTAMP_PLACEHOLDER",
+        "handoff_record_id": "handoff_ebcc3a76db94",
+        "request_fingerprint": "sha256:571f5d3874b76cf3",
+        "review_bound_acknowledged": true,
+        "no_active_write_acknowledged": true,
+        "no_auto_accept_acknowledged": true,
+        "real_doc_live_not_authorized_in_this_block_acknowledged": true,
+        "live_call_allowed": false
+      },
+      "billing_ack": {
+        "billing_ack_id": "bill_ba0f5919a3d4",
+        "estimated_cost_ceiling_usd": 0.01,
+        "token_budget_ceiling": 512,
+        "billing_check_pending": true,
+        "no_billing_api_used": true,
+        "live_call_allowed": false
+      },
+      "refusal_record": {
+        "refusal_id": "refusal_d48f803ed0e6",
+        "case_id": "explicit_live_call_requested",
+        "refusal_reason_codes": [
+          "explicit_live_call_request_blocked"
+        ],
+        "sanitized_report_only": true,
+        "live_call_allowed": false,
+        "active_write_allowed": false,
+        "auto_accept_allowed": false,
+        "review_required": true,
+        "raw_pii_in_report": false,
+        "token_map_in_report": false
+      },
+      "future_package": null
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "refusal_records": [
+    {
+      "refusal_id": "refusal_77af803ed679",
+      "case_id": "missing_human_authorization",
+      "refusal_reason_codes": [
+        "missing_human_authorization"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_6ed8307b0fae",
+      "case_id": "missing_billing_ack",
+      "refusal_reason_codes": [
+        "missing_billing_cost_cap_acknowledgement"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_92e7a0d2684f",
+      "case_id": "missing_both_authorization_and_billing",
+      "refusal_reason_codes": [
+        "missing_billing_cost_cap_acknowledgement",
+        "missing_human_authorization"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_536b7df3948f",
+      "case_id": "valid_no_live_authorization_intent_only",
+      "refusal_reason_codes": [
+        "missing_billing_cost_cap_acknowledgement"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_c0ea30caa69b",
+      "case_id": "valid_no_live_billing_ack_only",
+      "refusal_reason_codes": [
+        "missing_human_authorization"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_a889c9ec506e",
+      "case_id": "authorization_and_billing_present_but_no_review_handoff",
+      "refusal_reason_codes": [
+        "missing_billing_cost_cap_acknowledgement",
+        "missing_human_authorization",
+        "missing_review_handoff_record"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_a3ca553c3308",
+      "case_id": "real_private_provenance",
+      "refusal_reason_codes": [
+        "real_private_provenance_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_338d066edbe3",
+      "case_id": "unknown_provenance",
+      "refusal_reason_codes": [
+        "unknown_provenance_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_92f0f3c226f0",
+      "case_id": "active_write_requested",
+      "refusal_reason_codes": [
+        "active_write_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_de6999fef4a4",
+      "case_id": "auto_accept_requested",
+      "refusal_reason_codes": [
+        "auto_accept_requested_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_1285f79b7129",
+      "case_id": "medication_fact_without_safety_gate",
+      "refusal_reason_codes": [
+        "medication_fact_without_safety_gate_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_e3fbbc5fa565",
+      "case_id": "forbidden_request_metadata",
+      "refusal_reason_codes": [
+        "forbidden_request_metadata_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_3e724d91ba91",
+      "case_id": "invalid_generation_config",
+      "refusal_reason_codes": [
+        "invalid_generation_config_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_21e2dd5df4a7",
+      "case_id": "raw_pii_detected",
+      "refusal_reason_codes": [
+        "raw_pii_detected_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_6ad5996a9989",
+      "case_id": "token_map_leak_detected",
+      "refusal_reason_codes": [
+        "token_map_leak_detected_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    },
+    {
+      "refusal_id": "refusal_d48f803ed0e6",
+      "case_id": "explicit_live_call_requested",
+      "refusal_reason_codes": [
+        "explicit_live_call_request_blocked"
+      ],
+      "sanitized_report_only": true,
+      "live_call_allowed": false,
+      "active_write_allowed": false,
+      "auto_accept_allowed": false,
+      "review_required": true,
+      "raw_pii_in_report": false,
+      "token_map_in_report": false
+    }
+  ]
+}
