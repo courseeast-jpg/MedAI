@@ -1,0 +1,232 @@
+{
+  "block": "MEDAI-VERTEX-SEMANTIC-PACKAGE-COMPARISON-REMAINING-FAMILIES-LIVE-15P-D",
+  "provider_route": "vertex",
+  "provider_name": "gemini_vertex",
+  "model": "gemini-2.5-flash-lite",
+  "location": "global",
+  "endpoint_host": "aiplatform.googleapis.com",
+  "remaining_families": [
+    "cytology_pathology_narrative",
+    "urinalysis_table_like_lab",
+    "mixed_narrative_numeric_result"
+  ],
+  "provider_client_kind": "real_rest",
+  "max_live_calls": 3,
+  "package_families_attempted": 3,
+  "package_families_passed": 3,
+  "live_call_count": 3,
+  "provider_response_received_count": 3,
+  "schema_validation_pass_count": 3,
+  "source_visible_body_preserved_count": 3,
+  "evidence_anchor_preserved_count": 3,
+  "candidate_facts_separated_count": 3,
+  "unknown_values_explicit_count": 3,
+  "uncertainty_flags_visible_count": 3,
+  "posted_body_allowed_top_level_keys_only_count": 3,
+  "hallucinated_field_count": 0,
+  "prompt_token_count_all_calls": 1137,
+  "output_token_count_all_calls": 1037,
+  "total_token_count_all_calls": 2174,
+  "review_required_all": true,
+  "auto_accept_all_false": true,
+  "active_written_count": 0,
+  "external_api_used": true,
+  "privacy_result": "passed",
+  "billing_check_pending": true,
+  "max_output_tokens": 512,
+  "temperature": 0,
+  "per_family_results": [
+    {
+      "package_family": "cytology_pathology_narrative",
+      "package_family_label": "Cytology/pathology narrative package",
+      "posted_body_top_level_keys": [
+        "contents",
+        "generationConfig"
+      ],
+      "posted_body_allowed_top_level_keys_only": true,
+      "live_call_made": true,
+      "external_api_used": true,
+      "provider_response_received": true,
+      "schema_validation_pass": true,
+      "source_visible_body_preserved": true,
+      "evidence_anchor_preserved": true,
+      "candidate_facts_separated": true,
+      "unknown_values_explicit": true,
+      "uncertainty_flags_visible": true,
+      "hallucinated_field_count": 0,
+      "prompt_token_count": 359,
+      "output_token_count": 286,
+      "total_token_count": 645,
+      "review_required": true,
+      "auto_accept": false,
+      "active_written_count": 0,
+      "sanitized_findings": [
+        {
+          "label": "Tests Ordered",
+          "value": "source-visible narrative present",
+          "source_section": "Tests Ordered",
+          "evidence_text": "tests ordered section present",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        },
+        {
+          "label": "Diagnosis",
+          "value": "source-visible narrative present",
+          "source_section": "Diagnosis",
+          "evidence_text": "diagnosis section present",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        },
+        {
+          "label": "Recommendation",
+          "value": "source-visible narrative present",
+          "source_section": "Recommendation",
+          "evidence_text": "recommendation section present",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        }
+      ],
+      "validation_errors": [],
+      "status": "PASS",
+      "block_reason": ""
+    },
+    {
+      "package_family": "urinalysis_table_like_lab",
+      "package_family_label": "Urinalysis/table-like lab package",
+      "posted_body_top_level_keys": [
+        "contents",
+        "generationConfig"
+      ],
+      "posted_body_allowed_top_level_keys_only": true,
+      "live_call_made": true,
+      "external_api_used": true,
+      "provider_response_received": true,
+      "schema_validation_pass": true,
+      "source_visible_body_preserved": true,
+      "evidence_anchor_preserved": true,
+      "candidate_facts_separated": true,
+      "unknown_values_explicit": true,
+      "uncertainty_flags_visible": true,
+      "hallucinated_field_count": 0,
+      "prompt_token_count": 394,
+      "output_token_count": 386,
+      "total_token_count": 780,
+      "review_required": true,
+      "auto_accept": false,
+      "active_written_count": 0,
+      "sanitized_findings": [
+        {
+          "label": "Specific Gravity",
+          "value": "1.020",
+          "source_section": "Urinalysis Table",
+          "evidence_text": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        },
+        {
+          "label": "pH",
+          "value": "7.5",
+          "source_section": "Urinalysis Table",
+          "evidence_text": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        },
+        {
+          "label": "Occult Blood",
+          "value": "Trace",
+          "source_section": "Urinalysis Table",
+          "evidence_text": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        },
+        {
+          "label": "RBC",
+          "value": "3-10",
+          "source_section": "Urinalysis Table",
+          "evidence_text": "table rows grouped under urinalysis table",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        }
+      ],
+      "validation_errors": [],
+      "status": "PASS",
+      "block_reason": ""
+    },
+    {
+      "package_family": "mixed_narrative_numeric_result",
+      "package_family_label": "Mixed narrative + numeric result package",
+      "posted_body_top_level_keys": [
+        "contents",
+        "generationConfig"
+      ],
+      "posted_body_allowed_top_level_keys_only": true,
+      "live_call_made": true,
+      "external_api_used": true,
+      "provider_response_received": true,
+      "schema_validation_pass": true,
+      "source_visible_body_preserved": true,
+      "evidence_anchor_preserved": true,
+      "candidate_facts_separated": true,
+      "unknown_values_explicit": true,
+      "uncertainty_flags_visible": true,
+      "hallucinated_field_count": 0,
+      "prompt_token_count": 384,
+      "output_token_count": 365,
+      "total_token_count": 749,
+      "review_required": true,
+      "auto_accept": false,
+      "active_written_count": 0,
+      "sanitized_findings": [
+        {
+          "label": "Clinical Note",
+          "value": "source-visible narrative present",
+          "source_section": "Clinical Note",
+          "evidence_text": "narrative section present",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        },
+        {
+          "label": "Culture Result",
+          "value": "No growth",
+          "source_section": "Result Summary",
+          "evidence_text": "numeric/result section present",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        },
+        {
+          "label": "Collection Time",
+          "value": "Unknown",
+          "source_section": "Result Summary",
+          "evidence_text": "numeric/result section present",
+          "uncertainty": "missing or not visible in source",
+          "unknown_value": true,
+          "source_faithful": true
+        },
+        {
+          "label": "Nitrite",
+          "value": "Negative",
+          "source_section": "Result Summary",
+          "evidence_text": "numeric/result section present",
+          "uncertainty": "source-visible candidate fact",
+          "unknown_value": false,
+          "source_faithful": true
+        }
+      ],
+      "validation_errors": [],
+      "status": "PASS",
+      "block_reason": ""
+    }
+  ],
+  "status": "PASS",
+  "block_reason": "",
+  "stopped_on_first_failure": false
+}
