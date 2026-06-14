@@ -1,0 +1,10 @@
+{
+  "prior_failure_category": "api_disabled_or_permission",
+  "exact_provider_error_class": "unknown_provider_hard_stop",
+  "exact_provider_status_code_public": "unknown",
+  "exact_provider_error_message_sanitized": "unavailable_from_private_metadata",
+  "quota_or_billing_suspected": false,
+  "api_or_permission_suspected": true,
+  "malformed_request_suspected": false,
+  "provider_trace_available_private": true
+}
