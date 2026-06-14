@@ -36,7 +36,11 @@ import re  # noqa: E402
 
 from execution.jsonl_framing import read_jsonl_lines  # noqa: E402  physical-newline JSONL framing
 from execution.canonical_batch_paths import resolve_canonical_batch  # noqa: E402  robust path resolver
-from execution.strict_json import normalize_one_json_object  # noqa: E402  safe strict-JSON normalizer
+from execution.strict_json import normalize_one_json_object, missing_required_keys  # noqa: E402  strict-JSON helpers
+
+# Core required top-level schema keys every extraction response must include (17C-R2-R7).
+EXPECTED_TOP_LEVEL_FIELDS = ("extracted_labs", "extracted_diagnoses", "extracted_medications",
+                             "needs_review", "source_evidence", "extraction_warnings")
 
 EXPECTED_HEAD = "ab4a00c87d0afd49f867e301c7ed9e069be884a1"
 
@@ -186,9 +190,9 @@ def _validate_schema(text: str) -> tuple[bool, str]:
     obj, reason = normalize_one_json_object(text)
     if obj is None:
         return False, reason
-    expected = ("extracted_labs", "extracted_diagnoses", "extracted_medications",
-                "needs_review", "source_evidence", "extraction_warnings")
-    if not any(k in obj for k in expected):
+    # Require ALL core top-level keys (stricter than before; never accepts incomplete
+    # output). The schema is not weakened and no field is synthesized/inferred.
+    if missing_required_keys(obj, EXPECTED_TOP_LEVEL_FIELDS):
         return False, "missing_expected_schema_fields"
     if _residual_pi(text):
         return False, "raw_pi_in_response"

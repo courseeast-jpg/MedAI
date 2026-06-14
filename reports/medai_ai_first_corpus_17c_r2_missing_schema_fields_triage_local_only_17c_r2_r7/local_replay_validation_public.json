@@ -1,0 +1,17 @@
+{
+  "required_fields_precheck_demo": {
+    "empty_object_missing_count": 6,
+    "partial_object_missing_count": 5,
+    "full_skeleton_missing_count": 0,
+    "validator_rejects_partial": true,
+    "validator_accepts_full_skeleton": true
+  },
+  "local_replay_attempted": true,
+  "local_replay_recovered_failed_response": false,
+  "local_replay_schema_valid_count": 1,
+  "local_replay_schema_failed_count": 1,
+  "schema_weakened": false,
+  "required_fields_made_optional": false,
+  "clinical_values_inferred": false,
+  "missing_required_values_synthesized": false
+}

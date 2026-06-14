@@ -37,6 +37,22 @@ You must:
   `needs_review=true`; do not explain or apologize.
 - The first character of your output must be `{` and the last must be `}`.
 
+## Required Top-Level Keys (17C-R2-R7)
+
+The single JSON object MUST include ALL of these top-level keys, even when empty. Do not
+omit any required key. Use an empty array `[]` for list fields and `null` only where the
+schema permits null; never drop a key.
+
+Required skeleton (include every key):
+`document_id`, `source_hash`, `document_family`, `document_type`, `document_date_tokens`,
+`patient_tokens_seen`, `facility_tokens_seen`, `extracted_labs`, `extracted_diagnoses`,
+`extracted_medications`, `extracted_procedures`, `extracted_imaging`,
+`extracted_pathology`, `extracted_vitals`, `extracted_notes`, `abnormal_flags`,
+`source_evidence`, `extraction_confidence`, `needs_review`, `extraction_warnings`.
+
+- If a section has no findings, output the key with an empty array `[]` (or `null` where
+  the schema allows). Do NOT omit the key and do NOT invent or infer values.
+
 ## Hard Constraints
 
 - Never output raw patient identifiers; only token placeholders may appear.

@@ -1,0 +1,22 @@
+{
+  "prior_failure_stage": "schema",
+  "prior_failure_category": "missing_expected_schema_fields",
+  "failed_request_index": 2,
+  "failed_doc_id_public": "doc_015d3c111db4712d",
+  "failed_response_body_available_in_context": false,
+  "schema_failure_class": "unknown_missing_expected_schema_fields",
+  "missing_required_field_count": 0,
+  "missing_required_field_names": [],
+  "missing_required_field_schema_paths": [],
+  "provider_returned_json_object": true,
+  "response_privacy_clean": false,
+  "response_privacy_evaluated": false,
+  "required_top_level_keys": [
+    "extracted_labs",
+    "extracted_diagnoses",
+    "extracted_medications",
+    "needs_review",
+    "source_evidence",
+    "extraction_warnings"
+  ]
+}

@@ -50,4 +50,13 @@ def normalize_one_json_object(text: str) -> tuple[Any | None, str]:
     return obj, "ok"
 
 
-__all__ = ["normalize_one_json_object"]
+def missing_required_keys(obj: Any, required_keys: "tuple[str, ...] | list[str]") -> list[str]:
+    """Return the required top-level keys absent from a parsed object (skeleton
+    precheck). Reports field NAMES only; never values. Does not weaken the schema and
+    never synthesizes or infers anything — it only reports what is missing."""
+    if not isinstance(obj, dict):
+        return list(required_keys)
+    return [k for k in required_keys if k not in obj]
+
+
+__all__ = ["normalize_one_json_object", "missing_required_keys"]
