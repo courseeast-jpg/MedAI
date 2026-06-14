@@ -1,0 +1,6 @@
+{
+  "total": 478,
+  "suggested_live_batch_size": 25,
+  "suggested_live_batch_count": 20,
+  "suggested_hard_cost_cap_usd": 0.05
+}

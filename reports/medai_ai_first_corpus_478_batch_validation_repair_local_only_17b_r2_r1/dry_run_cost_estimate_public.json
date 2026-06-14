@@ -1,0 +1,10 @@
+{
+  "target_model": "gemini-2.5-flash-lite",
+  "estimated_input_tokens": 422381,
+  "estimated_output_tokens": 382400,
+  "estimated_cost_usd_approximate": 0.146399,
+  "suggested_live_batch_size": 25,
+  "suggested_live_batch_count": 20,
+  "suggested_hard_cost_cap_usd": 0.05,
+  "note": "Approximate local estimate only; no billing API was called."
+}
