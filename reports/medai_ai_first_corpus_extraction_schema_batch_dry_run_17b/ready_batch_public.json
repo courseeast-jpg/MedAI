@@ -1,0 +1,124 @@
+{
+  "block": "MEDAI-AI-FIRST-CORPUS-EXTRACTION-SCHEMA-BATCH-DRY-RUN-17B",
+  "ready_files_from_17a": 12,
+  "blocked_files_excluded": 587,
+  "outbound_requests_built": 8,
+  "documents": [
+    {
+      "document_id": "doc_cd62e194fb35c0cc",
+      "source_hash": "sha256:5724228bb5cc9326",
+      "document_family": "document",
+      "document_type": "word_document",
+      "estimated_input_tokens": 491,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_c751154a85e1fc13",
+      "source_hash": "sha256:2bdd4d35b638c3fc",
+      "document_family": "image",
+      "document_type": "scanned_image",
+      "estimated_input_tokens": 614,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_0e11f5b8f7f7340e",
+      "source_hash": "sha256:4d3d5f689f5f31cf",
+      "document_family": "image",
+      "document_type": "scanned_image",
+      "estimated_input_tokens": 580,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_93302ef9b03118ff",
+      "source_hash": "sha256:3b3d3b0d86944001",
+      "document_family": "document",
+      "document_type": "rich_text",
+      "estimated_input_tokens": 11305,
+      "validation_status": "blocked",
+      "pi_pattern_classes_detected": [
+        "phone"
+      ]
+    },
+    {
+      "document_id": "doc_f801ced270466216",
+      "source_hash": "sha256:60f5f786163bbdd6",
+      "document_family": "document",
+      "document_type": "rich_text",
+      "estimated_input_tokens": 11558,
+      "validation_status": "blocked",
+      "pi_pattern_classes_detected": [
+        "phone"
+      ]
+    },
+    {
+      "document_id": "doc_9da39515979218e3",
+      "source_hash": "sha256:507434c2269c53b9",
+      "document_family": "document",
+      "document_type": "rich_text",
+      "estimated_input_tokens": 12350,
+      "validation_status": "blocked",
+      "pi_pattern_classes_detected": [
+        "phone"
+      ]
+    },
+    {
+      "document_id": "doc_eb1ec9dea962c9a0",
+      "source_hash": "sha256:a5556f62509e1155",
+      "document_family": "document",
+      "document_type": "word_document",
+      "estimated_input_tokens": 879,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_2e98a1e93bd4b3a7",
+      "source_hash": "sha256:87139b362c265678",
+      "document_family": "image",
+      "document_type": "scanned_image",
+      "estimated_input_tokens": 1149,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_4f8257d1f3424f76",
+      "source_hash": "sha256:410bf8e044bfad17",
+      "document_family": "image",
+      "document_type": "scanned_image",
+      "estimated_input_tokens": 402,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_a6f1440e40790c2d",
+      "source_hash": "sha256:b08f1bdfccae2a5d",
+      "document_family": "image",
+      "document_type": "scanned_image",
+      "estimated_input_tokens": 656,
+      "validation_status": "blocked",
+      "pi_pattern_classes_detected": [
+        "phone"
+      ]
+    },
+    {
+      "document_id": "doc_f1e73df9f066187c",
+      "source_hash": "sha256:b869b1de3c29732e",
+      "document_family": "image",
+      "document_type": "scanned_image",
+      "estimated_input_tokens": 455,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_210569f1ba031119",
+      "source_hash": "sha256:c5def607fe452d45",
+      "document_family": "image",
+      "document_type": "scanned_image",
+      "estimated_input_tokens": 440,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "schema_name": "medai_ai_extraction_schema_17b",
+  "schema_version": "17B.1",
+  "dry_run_only": true,
+  "description": "AI-first extraction schema for tokenized clinical documents. Output must be strict JSON. Evidence quotes must be tokenized-text-only. No raw PI permitted.",
+  "fields": {
+    "document_id": {"type": "string", "description": "Hashed document identifier (no raw filename)."},
+    "source_hash": {"type": "string", "description": "Hash of the tokenized source text."},
+    "document_family": {"type": ["string", "null"], "description": "Coarse family classification."},
+    "document_type": {"type": ["string", "null"], "description": "Document type classification."},
+    "document_date_tokens": {"type": "array", "items": {"type": "string"}, "description": "Date token placeholders only."},
+    "patient_tokens_seen": {"type": "array", "items": {"type": "string"}, "description": "Patient token placeholders only."},
+    "facility_tokens_seen": {"type": "array", "items": {"type": "string"}, "description": "Facility token placeholders only."},
+    "extracted_labs": {"type": "array", "items": {"$ref": "#/objects/lab"}},
+    "extracted_diagnoses": {"type": "array", "items": {"$ref": "#/objects/diagnosis"}},
+    "extracted_medications": {"type": "array", "items": {"$ref": "#/objects/medication"}},
+    "extracted_procedures": {"type": "array", "items": {"$ref": "#/objects/procedure"}},
+    "extracted_imaging": {"type": "array", "items": {"$ref": "#/objects/imaging"}},
+    "extracted_pathology": {"type": "array", "items": {"$ref": "#/objects/pathology"}},
+    "extracted_vitals": {"type": "array", "items": {"$ref": "#/objects/vital"}},
+    "extracted_notes": {"type": "array", "items": {"$ref": "#/objects/note"}},
+    "abnormal_flags": {"type": "array", "items": {"type": "string"}},
+    "source_evidence": {"type": "array", "items": {"type": "string"}, "description": "Tokenized evidence quotes only."},
+    "extraction_confidence": {"type": ["number", "null"], "description": "0.0-1.0 model-reported confidence."},
+    "needs_review": {"type": "boolean", "description": "True when uncertain."},
+    "extraction_warnings": {"type": "array", "items": {"type": "string"}}
+  },
+  "objects": {
+    "lab": {
+      "test_name": {"type": ["string", "null"]},
+      "value": {"type": ["string", "null"]},
+      "unit": {"type": ["string", "null"]},
+      "reference_range": {"type": ["string", "null"]},
+      "flag": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "specimen": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    },
+    "medication": {
+      "medication_name": {"type": ["string", "null"]},
+      "dose": {"type": ["string", "null"]},
+      "route": {"type": ["string", "null"]},
+      "frequency": {"type": ["string", "null"]},
+      "status": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    },
+    "diagnosis": {
+      "diagnosis_name": {"type": ["string", "null"]},
+      "status": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    },
+    "procedure": {
+      "procedure_name": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    },
+    "imaging": {
+      "study_name": {"type": ["string", "null"]},
+      "finding": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    },
+    "pathology": {
+      "specimen": {"type": ["string", "null"]},
+      "finding": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    },
+    "vital": {
+      "vital_name": {"type": ["string", "null"]},
+      "value": {"type": ["string", "null"]},
+      "unit": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    },
+    "note": {
+      "note_text_tokenized": {"type": ["string", "null"]},
+      "date_token": {"type": ["string", "null"]},
+      "evidence_quote_tokenized": {"type": "string"}
+    }
+  },
+  "evidence_rules": {
+    "evidence_must_be_tokenized_text_only": true,
+    "no_raw_pi_allowed": true,
+    "set_needs_review_true_when_uncertain": true,
+    "every_extracted_fact_requires_tokenized_evidence": true
+  },
+  "output_rules": {
+    "strict_json_only": true,
+    "use_null_when_missing": true,
+    "preserve_token_placeholders_exactly": true,
+    "do_not_decode_tokens": true,
+    "no_medical_advice": true,
+    "no_medical_decision": true,
+    "review_bound_only": true
+  }
+}
