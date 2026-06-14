@@ -1,0 +1,18 @@
+{
+  "total_files_seen": 615,
+  "total_supported_files": 609,
+  "total_unsupported_files": 6,
+  "total_duplicate_files": 88,
+  "extension_counts": {
+    ".docx": 3,
+    ".jpg": 11,
+    ".mp3": 3,
+    ".msg": 1,
+    ".ogg": 1,
+    ".pdf": 586,
+    ".rtf": 3,
+    ".tif": 5,
+    ".txt": 1,
+    "<none>": 1
+  }
+}
