@@ -1,0 +1,12 @@
+{
+  "sha256_sidecar_verified": true,
+  "sha256_prefix": "sha256:494190bfb95d5856",
+  "sealed_batch_valid": true,
+  "physical_newline_record_count": 478,
+  "parseable_record_count": 478,
+  "unique_doc_ids": 478,
+  "malformed_record_count": 0,
+  "residual_pi_failures": 0,
+  "old_12_added_separately": false,
+  "combined_batch_count": 478
+}

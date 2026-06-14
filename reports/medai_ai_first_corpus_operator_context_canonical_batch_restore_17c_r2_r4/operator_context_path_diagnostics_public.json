@@ -1,0 +1,15 @@
+{
+  "operator_user": "S1",
+  "home_dir": "C:\\Users\\S1",
+  "localappdata_present": true,
+  "canonical_batch_expected_path": "C:\\Users\\S1\\AppData\\Local\\MedAI_Private\\ai_extraction_17B_R2_R1_478_repaired\\outbound_requests_private.jsonl",
+  "canonical_batch_parent_exists": true,
+  "canonical_batch_exists_before": true,
+  "sidecars_exist_before": true,
+  "canonical_batch_restored": false,
+  "sidecars_restored": false,
+  "canonical_batch_exists_after": true,
+  "canonical_batch_is_file_after": true,
+  "canonical_batch_readable_after": true,
+  "canonical_batch_readonly_after": true
+}
