@@ -1,0 +1,23 @@
+{
+  "overall_result": "GATE_PASSED_LIVE_NOT_RUN",
+  "corpus1": {
+    "residual_selected": 337,
+    "attempted": 0,
+    "succeeded_full": 0,
+    "succeeded_minimal_review_bound": 0,
+    "succeeded_total": 0,
+    "failed_for_review_after": 337,
+    "fast_fail_triggered": false
+  },
+  "corpus2": {
+    "recoverable_selected": 2,
+    "attempted": 0,
+    "succeeded": 0,
+    "rtf_signal_excluded": 2
+  },
+  "estimated_cost_before_live_usd": 27.951877,
+  "actual_total_token_count": 0,
+  "actual_cost_public_if_available": "unknown",
+  "same_day_total_cost_after_r18_usd": 3.033334,
+  "schema_failures_improved_vs_r17": false
+}

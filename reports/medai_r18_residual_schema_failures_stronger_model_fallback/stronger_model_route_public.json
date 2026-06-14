@@ -1,0 +1,11 @@
+{
+  "stronger_model": "gemini-2.5-pro",
+  "route_available": true,
+  "route_via": "existing_vertex_adapter_model_override",
+  "grounding_or_search_used": false,
+  "json_mode_used": true,
+  "response_schema_used": false,
+  "reuses_r17_salvage_skeleton_minimal": true,
+  "credential_preflight_passed": true,
+  "block_reason": "none"
+}
