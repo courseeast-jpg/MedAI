@@ -1,12 +1,19 @@
 {
   "block": "MEDAI-AI-FIRST-CORPUS-478-LIVE-BATCH-VERTEX-17C-R2",
-  "execution_result": "BLOCKED",
-  "request_count_loaded": 591,
-  "request_count_sent": 0,
+  "execution_result": "SCHEMA_FAIL",
+  "request_count_loaded": 478,
+  "request_count_sent": 1,
   "request_count_succeeded": 0,
-  "request_count_failed": 0,
-  "chunk_count_started": 0,
+  "request_count_failed": 1,
+  "chunk_count_started": 1,
   "chunk_count_completed": 0,
   "stopped_on_first_failure": true,
-  "documents": []
+  "documents": [
+    {
+      "document_id": "doc_0142f75560ce3531",
+      "chunk": 0,
+      "schema_valid": false,
+      "validation_reason": "truncated_or_invalid_json"
+    }
+  ]
 }

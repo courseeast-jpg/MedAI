@@ -1,0 +1,32 @@
+{
+  "truncated_json_failure_class": "provider_truncated_by_max_tokens",
+  "allowed_classes": [
+    "invalid_control_character",
+    "invalid_escaping",
+    "non_json_safety_or_refusal",
+    "provider_empty_response",
+    "provider_truncated_by_max_tokens",
+    "provider_truncated_mid_json",
+    "response_mime_json_but_invalid_body",
+    "schema_validator_parse_bug",
+    "unknown_truncated_or_invalid_json"
+  ],
+  "provider_finish_category": "MAX_TOKENS",
+  "structural_metadata": {
+    "response_text_length": 3152,
+    "starts_with_object": true,
+    "ends_with_object": false,
+    "brace_balance": 2,
+    "bracket_balance": 3,
+    "candidates_token_count": 2048,
+    "total_token_count": 4147,
+    "max_output_tokens_hint": 2048,
+    "control_char_count": 811,
+    "json_parse_ok": false,
+    "json_parse_error_type": "JSONDecodeError",
+    "json_parse_error_head": "Invalid control character at"
+  },
+  "raw_failed_response_available_private": true,
+  "raw_response_body_in_public_report": false,
+  "note": "finishReason=MAX_TOKENS with candidatesTokenCount at the per-request output ceiling => the model hit the output-token cap and the JSON object was cut off mid-structure (starts_with_object=true, ends_with_object=false, brace_balance>0). The 'invalid control character' parse error is a secondary symptom of the truncated tail, not the root cause."
+}

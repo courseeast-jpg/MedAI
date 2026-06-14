@@ -1,0 +1,12 @@
+{
+  "failed_evidence_preserved": true,
+  "already_preserved_by_runner": true,
+  "evidence_folder_label": "PRIVATE_EVIDENCE_PATH_REDACTED",
+  "run_subfolder_pattern": "run_<timestamp>",
+  "failed_doc_id_public": "doc_0142f75560ce3531",
+  "failed_request_index": 1,
+  "raw_failed_response_available_private": true,
+  "raw_failed_response_committed": false,
+  "raw_failed_response_printed": false,
+  "note": "R8 evidence preservation copied the failed body out of volatile staging before the external writer cleared it; the body remains private and uncommitted."
+}

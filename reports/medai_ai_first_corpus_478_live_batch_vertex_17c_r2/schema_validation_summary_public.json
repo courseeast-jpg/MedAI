@@ -1,6 +1,13 @@
 {
-  "execution_result": "BLOCKED",
+  "execution_result": "SCHEMA_FAIL",
   "schema_valid_count": 0,
-  "schema_invalid_count": 0,
-  "per_document": []
+  "schema_invalid_count": 1,
+  "per_document": [
+    {
+      "document_id": "doc_0142f75560ce3531",
+      "chunk": 0,
+      "schema_valid": false,
+      "validation_reason": "truncated_or_invalid_json"
+    }
+  ]
 }

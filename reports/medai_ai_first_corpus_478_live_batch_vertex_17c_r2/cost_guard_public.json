@@ -1,10 +1,10 @@
 {
   "target_model": "gemini-2.5-flash-lite",
   "hard_cost_cap_per_chunk_usd": 0.05,
-  "hard_cost_cap_total_usd": 0.25,
-  "estimated_total_cost_before_run_usd": 0.0,
-  "estimated_input_tokens": 0,
-  "estimated_output_tokens": 0,
-  "actual_total_token_count": 0,
+  "hard_cost_cap_total_usd": 0.4,
+  "estimated_total_cost_before_run_usd": 0.338017,
+  "estimated_input_tokens": 591115,
+  "estimated_output_tokens": 978944,
+  "actual_total_token_count": 4147,
   "note": "No billing API was called; local estimates and provider-reported tokens only."
 }

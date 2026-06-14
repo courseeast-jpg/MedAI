@@ -1,0 +1,33 @@
+{
+  "public_report_redaction_applied": true,
+  "target_report_dir": "reports/medai_ai_first_corpus_478_live_batch_vertex_17c_r2",
+  "labels_used": [
+    "PRIVATE_STAGING_PATH_REDACTED",
+    "PRIVATE_CHECKPOINT_PATH_REDACTED",
+    "PRIVATE_EVIDENCE_PATH_REDACTED",
+    "PRIVATE_PATH_REDACTED",
+    "SECRET_REDACTED"
+  ],
+  "files_changed": 1,
+  "reports_scanned": 10,
+  "reports_passing_after": 10,
+  "all_reports_pass_after": true,
+  "path_redactions_applied": 3,
+  "secret_redactions_applied": 1,
+  "private_filename_path_leaks_after": 0,
+  "secret_leaks_after": 0,
+  "privacy_checker_passed_after": true,
+  "test_weakened": false,
+  "per_file": [
+    {
+      "file": "summary.json",
+      "path_leaks_before": 3,
+      "secret_leaks_before": 1,
+      "path_redactions_applied": 3,
+      "secret_redactions_applied": 1,
+      "path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "passed_after": true
+    }
+  ]
+}

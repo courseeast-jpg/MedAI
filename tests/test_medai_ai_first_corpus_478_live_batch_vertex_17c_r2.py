@@ -112,11 +112,18 @@ def test_no_provider_call_implies_no_send():
 
 
 def test_private_paths_outside_repo():
+    # 17C-R2-R9: public reports must NOT carry raw private Windows paths. The path fields
+    # are redacted to safe labels (no drive letter, no "MedAI_Private", no backslash);
+    # the real private locations live only in private files outside the repo.
     s = _summary()
+    safe_labels = {"PRIVATE_STAGING_PATH_REDACTED", "PRIVATE_CHECKPOINT_PATH_REDACTED",
+                   "PRIVATE_EVIDENCE_PATH_REDACTED", "PRIVATE_PATH_REDACTED"}
     for key in ("private_request_batch_path", "private_response_staging_path"):
-        p = Path(s[key])
-        assert REPO_ROOT not in p.parents
-        assert "MedAI_Private" in str(p)
+        val = str(s[key])
+        assert val in safe_labels, (key, val)
+        assert "MedAI_Private" not in val
+        assert not re.search(r"[A-Za-z]:\\", val)
+        assert "\\" not in val
 
 
 def test_public_reports_carry_no_phi_or_secret():

@@ -1,9 +1,9 @@
 {
-  "provider_call_made": false,
-  "vertex_live_execution": false,
-  "gemini_call_made": false,
-  "credential_preflight_passed": false,
-  "failure_stage": "preflight",
-  "failure_category": "canonical_batch_integrity_failure_lines_591_parseable_457_unique_457_malformed_134",
-  "execution_result": "BLOCKED"
+  "provider_call_made": true,
+  "vertex_live_execution": true,
+  "gemini_call_made": true,
+  "credential_preflight_passed": true,
+  "failure_stage": "schema",
+  "failure_category": "truncated_or_invalid_json",
+  "execution_result": "SCHEMA_FAIL"
 }

@@ -1,6 +1,6 @@
 # Next stage: 17D MKB staging import gate
 
-- 17C-R2 execution_result: `BLOCKED`
+- 17C-R2 execution_result: `SCHEMA_FAIL`
 - requests succeeded: `0` of `478`
 
 17D MKB staging import is NOT started and requires separate explicit authorization
