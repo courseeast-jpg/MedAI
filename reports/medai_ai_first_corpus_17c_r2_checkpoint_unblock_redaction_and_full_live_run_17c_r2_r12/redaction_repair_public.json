@@ -1,0 +1,92 @@
+{
+  "checkpoint_branch_redaction_applied": true,
+  "path_redactions_applied": 0,
+  "per_file": [
+    {
+      "file": "chunk_status_public.csv",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "cost_guard_public.json",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "implementation_report.md",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "live_batch_status_public.json",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "next_stage_17d_mkb_staging_import_gate.md",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "privacy_gate_matrix.md",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "provider_status_public.json",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "schema_validation_summary_public.json",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "stopped_on_first_failure_public.md",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    },
+    {
+      "file": "summary.json",
+      "passed_after": true,
+      "path_redactions_applied": 0,
+      "private_path_leaks_after": 0,
+      "secret_leaks_after": 0,
+      "secret_redactions_applied": 0
+    }
+  ],
+  "private_path_leaks_after": 0,
+  "public_report_phi_leak_count": 0,
+  "reports_changed": 0,
+  "reports_scanned": 10,
+  "secret_leaks_after": 0,
+  "secret_redactions_applied": 0
+}

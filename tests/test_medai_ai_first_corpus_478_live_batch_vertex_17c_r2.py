@@ -100,7 +100,7 @@ def test_execution_result_branch_consistency():
     else:
         assert s["stopped_on_first_failure"] is True
         assert s["request_count_succeeded"] <= s["request_count_sent"]
-        assert s["failure_stage"] in ("preflight", "credentials", "provider", "parse",
+        assert s["failure_stage"] in ("preflight", "credentials", "checkpoint", "provider", "parse",
                                       "schema", "privacy", "cost", "gate")
 
 

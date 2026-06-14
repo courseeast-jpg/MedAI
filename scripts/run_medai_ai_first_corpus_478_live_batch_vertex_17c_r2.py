@@ -39,6 +39,7 @@ from execution.canonical_batch_paths import resolve_canonical_batch  # noqa: E40
 from execution.strict_json import normalize_one_json_object, missing_required_keys  # noqa: E402  strict-JSON helpers
 from execution import live_checkpoint as lc  # noqa: E402  durable checkpoint + evidence preservation (17C-R2-R8)
 from execution import cost_chunk_planner as planner  # noqa: E402  adaptive cost + chunk planning (17C-R2-R10)
+from execution.public_report_redaction import redact_json_value, redact_report_file  # noqa: E402  public report redaction
 
 # Core required top-level schema keys every extraction response must include (17C-R2-R7).
 EXPECTED_TOP_LEVEL_FIELDS = ("extracted_labs", "extracted_diagnoses", "extracted_medications",
@@ -576,6 +577,9 @@ def _implementation(s):
 
 def _write_public(s, records, chunk_status):
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    s_redacted, _np, _ns = redact_json_value(s)
+    s.clear()
+    s.update(s_redacted)
     pub = _pub_records(records)
     live_status = {"block": s["block"], "execution_result": s["execution_result"],
                    "request_count_loaded": s["request_count_loaded"], "request_count_sent": s["request_count_sent"],
@@ -614,15 +618,20 @@ def _write_public(s, records, chunk_status):
     if leak:
         s["safety_result"] = "blocked"
 
-    (REPORT_DIR / "summary.json").write_text(json.dumps(s, indent=2), encoding="utf-8")
-    (REPORT_DIR / "implementation_report.md").write_text(impl_md, encoding="utf-8")
-    (REPORT_DIR / "live_batch_status_public.json").write_text(json.dumps(live_status, indent=2), encoding="utf-8")
-    (REPORT_DIR / "schema_validation_summary_public.json").write_text(json.dumps(schema_summary, indent=2), encoding="utf-8")
-    (REPORT_DIR / "cost_guard_public.json").write_text(json.dumps(cost_guard, indent=2), encoding="utf-8")
-    (REPORT_DIR / "privacy_gate_matrix.md").write_text(matrix_md, encoding="utf-8")
-    (REPORT_DIR / "stopped_on_first_failure_public.md").write_text(stopped_md, encoding="utf-8")
-    (REPORT_DIR / "provider_status_public.json").write_text(json.dumps(provider_status, indent=2), encoding="utf-8")
-    (REPORT_DIR / "next_stage_17d_mkb_staging_import_gate.md").write_text(next_md, encoding="utf-8")
+    public_outputs = {
+        "summary.json": json.dumps(s, indent=2),
+        "implementation_report.md": impl_md,
+        "live_batch_status_public.json": json.dumps(live_status, indent=2),
+        "schema_validation_summary_public.json": json.dumps(schema_summary, indent=2),
+        "cost_guard_public.json": json.dumps(cost_guard, indent=2),
+        "privacy_gate_matrix.md": matrix_md,
+        "stopped_on_first_failure_public.md": stopped_md,
+        "provider_status_public.json": json.dumps(provider_status, indent=2),
+        "next_stage_17d_mkb_staging_import_gate.md": next_md,
+    }
+    for name, text in public_outputs.items():
+        redacted, _path_count, _secret_count = redact_report_file(text, is_json=name.endswith(".json"))
+        (REPORT_DIR / name).write_text(redacted, encoding="utf-8")
     with (REPORT_DIR / "chunk_status_public.csv").open("w", encoding="utf-8", newline="") as fh:
         w = csv.writer(fh)
         w.writerow(["chunk", "sent", "succeeded"])

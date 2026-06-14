@@ -2,13 +2,13 @@
 
 | Gate | Value |
 | --- | --- |
-| provider_call_made | `True` |
-| gemini_call_made | `True` |
+| provider_call_made | `False` |
+| gemini_call_made | `False` |
 | claude_call_made | `False` |
 | openai_call_made | `False` |
 | billing_api_call_made | `False` |
-| credential_preflight_passed | `True` |
-| live_gate_set_during_run | `True` |
+| credential_preflight_passed | `False` |
+| live_gate_set_during_run | `False` |
 | live_gate_environment_active_after_run | `False` |
 | original_source_files_uploaded | `False` |
 | raw_ai_responses_written_to_repo | `False` |

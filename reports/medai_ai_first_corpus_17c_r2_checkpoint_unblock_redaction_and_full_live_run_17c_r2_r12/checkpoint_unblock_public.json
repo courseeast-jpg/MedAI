@@ -1,0 +1,17 @@
+{
+  "checkpoint_archive_created": false,
+  "checkpoint_archive_file_count": 0,
+  "checkpoint_archive_path_label": "",
+  "checkpoint_block_detected": false,
+  "checkpoint_clean_or_resumable_before_live": true,
+  "checkpoint_inconsistent": false,
+  "checkpoint_resume_reason_before_unblock": "no_checkpoint_start_from_first",
+  "checkpoint_resume_start_index_before_unblock": 0,
+  "checkpoint_unblock_action": "none",
+  "completed_request_count_before_unblock": 0,
+  "failed_category_before_unblock": "",
+  "failed_doc_hash_before_unblock": "",
+  "failed_request_index_before_unblock": null,
+  "failed_request_present_before_unblock": false,
+  "unresolved_failed_doc_after_unblock": false
+}
