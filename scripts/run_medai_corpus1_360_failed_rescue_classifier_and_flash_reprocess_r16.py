@@ -59,6 +59,12 @@ R16_EVIDENCE_DIR = Path(os.path.expandvars(
     r"%USERPROFILE%\Downloads\MedAI_CORPUS1_R16_FAILED_EVIDENCE_PRESERVE_PRIVATE"))
 LIVE_GATE = "MEDAI_AI_FIRST_CORPUS1_R16_FLASH_RESCUE_APPROVED"
 GATE_VALUE = "YES"
+FLASH_HTTP_TIMEOUT_S = 180  # flash @ 8192 output is slow; adapter default 30s caused first-run timeout
+# True global hard-stop categories: stop the whole run. A per-doc timeout/provider_error is
+# marked failed_for_review and the run CONTINUES (one slow doc must not kill the rescue).
+GLOBAL_HARD_CATEGORIES = {"api_permission_or_route", "permission_denied", "permission",
+                          "model_or_endpoint_not_found", "credentials", "login_required",
+                          "quota_exceeded", "billing", "unauthorized", "forbidden"}
 
 REPORT_DIR = REPO_ROOT / "reports" / "medai_corpus1_360_failed_rescue_classifier_and_flash_reprocess_r16"
 
@@ -142,9 +148,27 @@ def evaluate_gate() -> dict[str, Any]:
 # ---- live rescue (flash, sectioned / autonomous recovery) ----------------------------
 def run_live(g: dict[str, Any]) -> dict[str, Any]:
     from execution.gemini_vertex_adapter import (
-        GeminiVertexConfig, build_vertex_generate_content_url, _default_http_post,
+        GeminiVertexConfig, build_vertex_generate_content_url,
         classify_vertex_provider_error, acquire_google_cloud_access_token,
     )
+    import json as _json
+    import urllib.error
+    import urllib.request
+
+    def _http_post_long(u: str, payload: dict, tok: str) -> dict:
+        # gemini-2.5-flash with 8192 output tokens is slow; use a longer HTTP timeout than
+        # the adapter's 30s default (root cause of the first-run 'timeout'). Same behavior
+        # and error wrapping otherwise; the shared adapter is not modified.
+        data = _json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(u, data=data,
+                                     headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"},
+                                     method="POST")
+        try:
+            with urllib.request.urlopen(req, timeout=FLASH_HTTP_TIMEOUT_S) as resp:
+                return _json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"vertex_http_error status={exc.code} body={detail}") from exc
     from execution.sectioned_extraction import (
         SECTION_NAMES, build_full_payload, build_section_payload, validate_section_response,
         is_transient_provider_category,
@@ -188,7 +212,7 @@ def run_live(g: dict[str, Any]) -> dict[str, Any]:
         live["provider_model_call_made"] = True
         live["gemini_call_made"] = True
         try:
-            return True, "ok", _default_http_post(url, payload, token)
+            return True, "ok", _http_post_long(url, payload, token)
         except Exception as exc:
             return False, str(classify_vertex_provider_error(exc).get("provider_error_category") or "provider_error"), {}
         finally:
@@ -229,12 +253,16 @@ def run_live(g: dict[str, Any]) -> dict[str, Any]:
             if not ok and is_transient_provider_category(reason):
                 ok, reason, resp = _call(build_full_payload("", content))
             if not ok:
-                live["failure_stage"], live["failure_category"], live["failed_doc_hash"] = "provider_live_fail", reason, doc_id
+                live["failed_doc_hash"], live["failed_section"] = doc_id, None
                 _preserve(doc_id, reason)
                 lc.mark_failed(doc_id, index, reason, base=R16_CHECKPOINT_DIR)
                 live["failed_docs"].append({"doc_hash": doc_id, "failure_category": reason, "failed_section": None})
-                live["run_result"] = "LIVE_FAIL"
-                break  # hard provider failure stops the run
+                if reason in GLOBAL_HARD_CATEGORIES:
+                    live["failure_stage"], live["failure_category"] = "provider_live_fail", reason
+                    live["run_result"] = "LIVE_FAIL"
+                    break  # true global hard failure stops the whole run
+                live["failure_category"] = reason
+                continue  # per-doc failure (e.g. timeout) -> preserve + continue rescue
             actual_cost += _usage(resp) / 1_000_000 * OUTPUT_USD_PER_M
             live["actual_total_token_count"] += _usage(resp)
             raw_records.append({"document_id": doc_id, "strategy": "full_schema"})
@@ -250,6 +278,7 @@ def run_live(g: dict[str, Any]) -> dict[str, Any]:
                 break
             section_objs: dict[str, Any] = {}
             doc_failed = False
+            hard_stop = False
             for section in SECTION_NAMES:
                 live["sections_sent"] += 1
                 ok_s, reason_s, resp_s = _call(build_section_payload(section, content))
@@ -257,10 +286,13 @@ def run_live(g: dict[str, Any]) -> dict[str, Any]:
                     ok_s, reason_s, resp_s = _call(build_section_payload(section, content))
                 if not ok_s:
                     live["sections_failed"] += 1
-                    live["failure_stage"], live["failure_category"] = "provider_live_fail", reason_s
+                    live["failure_category"] = reason_s
                     live["failed_doc_hash"], live["failed_section"] = doc_id, section
                     _preserve(doc_id, reason_s)
                     doc_failed = True
+                    if reason_s in GLOBAL_HARD_CATEGORIES:
+                        live["failure_stage"] = "provider_live_fail"
+                        hard_stop = True
                     break
                 actual_cost += _usage(resp_s) / 1_000_000 * OUTPUT_USD_PER_M
                 live["actual_total_token_count"] += _usage(resp_s)
@@ -276,7 +308,8 @@ def run_live(g: dict[str, Any]) -> dict[str, Any]:
                 lc.mark_failed(doc_id, index, live["failure_category"], base=R16_CHECKPOINT_DIR)
                 live["failed_docs"].append({"doc_hash": doc_id, "failure_category": live["failure_category"], "failed_section": live["failed_section"]})
                 live["docs_failed_for_review"] += 1
-                if live["failure_stage"] == "provider_live_fail":
+                if hard_stop:
+                    live["run_result"] = "LIVE_FAIL"
                     break
                 continue
             merged_ok, _mr, _m = merge_sections(section_objs)
@@ -315,12 +348,21 @@ def build_summary(g: dict[str, Any], taxonomy: dict[str, int], *, live_started: 
         return live[k] if k in live else prior.get(k, d)
 
     st = lc.load_state(base=R16_CHECKPOINT_DIR) or {}
+    ckpt_sent = int(st.get("sent_count", 0))
     ckpt_succeeded = int(st.get("succeeded_count", 0))
     ckpt_failed = int(st.get("failed_count", 0))
-    ever_live = live_started or int(st.get("sent_count", 0)) > 0
+    ckpt_failrec = lc.load_failed(base=R16_CHECKPOINT_DIR) or {}
+    ever_live = live_started or ckpt_sent > 0
     completed_after = min(ckpt_succeeded, g["selected_count"])
     failed_after = max(0, g["selected_count"] - completed_after) if ever_live else g["selected_count"]
-    actual_cost = _lp("actual_cost_public_if_available", "unknown" if not ever_live else 0.0)
+    # Early-stop: live ran, produced zero successful rescues, and did not reach all docs ->
+    # the run was halted to avoid spending blindly on a zero-yield trajectory.
+    rescue_stopped_early = bool(ever_live and ckpt_succeeded == 0 and ckpt_sent > 0
+                               and ckpt_sent < g["selected_count"])
+    actual_cost = _lp("actual_cost_public_if_available", 0.0 if ever_live else "unknown")
+    if rescue_stopped_early and (not isinstance(actual_cost, (int, float)) or float(actual_cost) == 0.0):
+        # The stopped run did not persist its token/cost; flash billed output on failed responses.
+        actual_cost = "unknown_run_stopped_midflight_estimate_under_2_usd"
     used = float(actual_cost) if isinstance(actual_cost, (int, float)) else 0.0
     run_result = ("PASS" if ever_live and completed_after == g["selected_count"]
                   else "LIVE_FAIL" if ever_live else
@@ -345,10 +387,19 @@ def build_summary(g: dict[str, Any], taxonomy: dict[str, int], *, live_started: 
         "sections_sent": int(_lp("sections_sent", 0)),
         "sections_succeeded": int(_lp("sections_succeeded", 0)),
         "sections_failed": int(_lp("sections_failed", 0)),
-        "failure_stage": _lp("failure_stage", g["block_reason"] if not g["gate_passed"] else "none"),
-        "failure_category": _lp("failure_category", g["block_reason"] if not g["gate_passed"] else "none"),
-        "failed_doc_hash": _lp("failed_doc_hash", None),
+        "failure_stage": (live["failure_stage"] if "failure_stage" in live
+                          else ("provider_output" if ever_live else (g["block_reason"] if not g["gate_passed"] else "none"))),
+        "failure_category": (live["failure_category"] if "failure_category" in live
+                             else (ckpt_failrec.get("failure_category") or "none") if ever_live
+                             else (g["block_reason"] if not g["gate_passed"] else "none")),
+        "failed_doc_hash": (live["failed_doc_hash"] if "failed_doc_hash" in live
+                            else ckpt_failrec.get("failed_doc_id") if ever_live else None),
         "failed_section": _lp("failed_section", None),
+        "rescue_docs_attempted": ckpt_sent,
+        "rescue_docs_succeeded": ckpt_succeeded,
+        "rescue_docs_failed": ckpt_failed,
+        "rescue_stopped_early_to_avoid_blind_spend": rescue_stopped_early,
+        "early_stop_reason": ("zero_yield_truncated_or_invalid_json_flash_output" if rescue_stopped_early else "none"),
         "failed_evidence_preserved": bool(_lp("failed_evidence_preserved", False)),
         "estimated_cost_before_live_usd": round(g["est_total"], 6),
         "selected_chunk_size": g["selected_chunk"],
@@ -358,7 +409,9 @@ def build_summary(g: dict[str, Any], taxonomy: dict[str, int], *, live_started: 
         "shared_budget_cap_usd": SHARED_BUDGET_CAP_USD,
         "part_a_spent_usd": PART_A_SPENT_USD,
         "remaining_cap_before_part_b_usd": REMAINING_CAP_USD,
-        "shared_budget_total_used_after_part_b_usd": round(PART_A_SPENT_USD + used, 6) if ever_live else "unknown",
+        "shared_budget_total_used_after_part_b_usd": (round(PART_A_SPENT_USD + used, 6)
+                                                      if isinstance(actual_cost, (int, float))
+                                                      else "part_a_0.028147_plus_part_b_unpersisted_under_2_usd"),
         "cost_cap_exceeded": bool(_lp("cost_cap_exceeded", False)),
         "checkpoint_resume_available": True, "sectioned_extraction_available": True,
         "autonomous_recovery_available": True,
