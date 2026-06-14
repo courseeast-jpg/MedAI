@@ -1,0 +1,15 @@
+{
+  "block": "MEDAI-REAL-DOC-REVIEWED-PAYLOAD-REPAIR-LOCAL-ONLY-16E-B",
+  "approved_basename": "2.PNG",
+  "repaired_payload_sha256": "sha256:ea88594a2ec9a58e",
+  "used_private_16e_a_artifacts": true,
+  "facility_identifier_tokenized": true,
+  "raw_labcorp_remaining_in_repaired_payload": false,
+  "restored_clinical_terms_count": 10,
+  "facility_tokens_added_count": 1,
+  "remaining_patient_name_token_count": 32,
+  "token_map_in_public_report": false,
+  "raw_identifier_leak_count": 0,
+  "recommendation": "NEEDS_HUMAN_REVIEW",
+  "note": "Counts/booleans only. No raw OCR text, no token map, no payload body is published. Human review of the private repaired payload is required."
+}
