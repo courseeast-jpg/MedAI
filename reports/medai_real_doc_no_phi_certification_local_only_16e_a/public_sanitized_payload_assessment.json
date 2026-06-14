@@ -1,0 +1,33 @@
+{
+  "block": "MEDAI-REAL-DOC-NO-PHI-CERTIFICATION-LOCAL-ONLY-16E-A",
+  "approved_basename": "2.PNG",
+  "approved_file_sha256": "sha256:58e0a83a23573852",
+  "approved_file_size_bytes": 138050,
+  "ocr_available": true,
+  "detection_class_counts": {
+    "patient_name": 42,
+    "dob": 0,
+    "dates": 18,
+    "address": 0,
+    "phone": 0,
+    "email": 0,
+    "mrn": 0,
+    "insurance_id": 0,
+    "account_id": 0,
+    "provider_name": 0,
+    "facility_name": 0,
+    "accession_specimen_id": 0,
+    "filename_path": 0,
+    "embedded_metadata": 0,
+    "ocr_artifacts": 7,
+    "free_text_identifiers": 0,
+    "rare_reidentification_combinations": 0
+  },
+  "detected_total": 60,
+  "residual_candidate_count": 0,
+  "tokenized_preview_safe": false,
+  "raw_identifier_leak_count": 0,
+  "token_map_in_public_report": false,
+  "recommendation": "NEEDS_HUMAN_REVIEW",
+  "note": "Counts only. No raw OCR text, no token map, no identifiers are published. Human review of the private tokenized payload is required before any live send."
+}
