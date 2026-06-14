@@ -53,6 +53,24 @@ Required skeleton (include every key):
 - If a section has no findings, output the key with an empty array `[]` (or `null` where
   the schema allows). Do NOT omit the key and do NOT invent or infer values.
 
+## Compact Output (17C-R2-R10)
+
+The output-token ceiling was raised to 8192 to stop mid-JSON truncation. To stay well
+under it and within cost caps, the response MUST be compact:
+
+- No explanatory text, preamble, reasoning, or commentary — the JSON object only.
+- No duplicate evidence: never repeat the same evidence anchor across fields.
+- No long copied passages: do NOT paste large spans of the document.
+- Evidence anchors must be SHORT — the minimal tokenized snippet that supports the fact
+  (a few tokens), never a full sentence or paragraph.
+- Omit optional verbose notes unless the schema requires them; do not add narrative
+  fields the schema does not define.
+- Use empty arrays `[]` for absent sections (still include every required key).
+- Keep arrays compact: one concise object per finding, no padding or restated context.
+
+These compact rules reduce response size; they do NOT relax the schema. All required
+top-level keys must still be present and strict-JSON rules still apply.
+
 ## Hard Constraints
 
 - Never output raw patient identifiers; only token placeholders may appear.

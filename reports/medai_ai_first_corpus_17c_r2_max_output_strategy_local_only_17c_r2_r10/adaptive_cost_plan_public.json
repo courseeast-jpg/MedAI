@@ -1,0 +1,17 @@
+{
+  "output_token_ceiling": 8192,
+  "estimate_basis": "worst_case_full_output_ceiling_per_request",
+  "request_count": 478,
+  "authorized_hard_cost_cap_total_usd": 0.4,
+  "hard_cost_cap_per_chunk_usd": 0.05,
+  "estimated_total_cost_with_new_output_ceiling_usd": 1.228029,
+  "original_chunk_size": 25,
+  "selected_chunk_size": 17,
+  "adaptive_chunk_size_applied": true,
+  "chunk25_worst_case_usd": 0.070609,
+  "estimated_per_chunk_cost_with_selected_chunk_size_usd": 0.04902,
+  "estimated_total_within_authorized_cap": false,
+  "estimated_chunks_within_per_chunk_cap": true,
+  "total_request_count_unchanged": true,
+  "requires_new_cost_authorization": true
+}

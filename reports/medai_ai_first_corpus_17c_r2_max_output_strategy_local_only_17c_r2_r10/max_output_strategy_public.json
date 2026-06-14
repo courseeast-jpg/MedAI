@@ -1,0 +1,14 @@
+{
+  "previous_max_output_tokens": 2048,
+  "new_max_output_tokens": 8192,
+  "model": "gemini-2.5-flash-lite",
+  "model_supports_new_ceiling": true,
+  "max_output_tokens_raised": true,
+  "reason": "provider_truncated_by_max_tokens at 2048 (R9); raise ceiling to remove truncation",
+  "strict_json_preserved": true,
+  "required_schema_keys_preserved": true,
+  "compact_output_prompt_hardened": true,
+  "schema_weakened": false,
+  "checkpoint_resume_preserved": true,
+  "failed_evidence_preservation_preserved": true
+}

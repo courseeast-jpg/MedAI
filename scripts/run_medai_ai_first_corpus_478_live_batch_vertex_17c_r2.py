@@ -38,6 +38,7 @@ from execution.jsonl_framing import read_jsonl_lines  # noqa: E402  physical-new
 from execution.canonical_batch_paths import resolve_canonical_batch  # noqa: E402  robust path resolver
 from execution.strict_json import normalize_one_json_object, missing_required_keys  # noqa: E402  strict-JSON helpers
 from execution import live_checkpoint as lc  # noqa: E402  durable checkpoint + evidence preservation (17C-R2-R8)
+from execution import cost_chunk_planner as planner  # noqa: E402  adaptive cost + chunk planning (17C-R2-R10)
 
 # Core required top-level schema keys every extraction response must include (17C-R2-R7).
 EXPECTED_TOP_LEVEL_FIELDS = ("extracted_labs", "extracted_diagnoses", "extracted_medications",
@@ -72,10 +73,14 @@ OLD_GATES = ("MEDAI_VERTEX_REAL_DOC_SINGLE_PILOT_LIVE_APPROVED",
 TARGET_MODEL = "gemini-2.5-flash-lite"
 CHUNK_SIZE = 25
 EXPECTED_REQUESTS = 478
-CHUNK_COUNT_PLANNED = math.ceil(EXPECTED_REQUESTS / CHUNK_SIZE)  # 20
+CHUNK_COUNT_PLANNED = math.ceil(EXPECTED_REQUESTS / CHUNK_SIZE)  # 20 (default; adaptive at run time)
 CAP_PER_CHUNK = 0.05
 CAP_TOTAL = 0.40  # authorized total cap (17C-R2-R5; was 0.25)
-MAX_OUTPUT_TOKENS = 2048
+# 17C-R2-R10: raised from 2048 -> 8192 to stop MAX_TOKENS mid-JSON truncation (R9 finding).
+# gemini-2.5-flash-lite supports >= 8192 output tokens; the adapter posts maxOutputTokens
+# verbatim and imposes no lower ceiling.
+MAX_OUTPUT_TOKENS = 8192
+PREVIOUS_MAX_OUTPUT_TOKENS = 2048
 TEMPERATURE = 0
 INPUT_USD_PER_M = 0.075
 OUTPUT_USD_PER_M = 0.30
@@ -112,6 +117,11 @@ def _new_summary() -> dict[str, Any]:
         "authorized_scope": "canonical_478_validated_tokenized_requests_only",
         "target_model": TARGET_MODEL,
         "chunk_size": CHUNK_SIZE,
+        "original_chunk_size": CHUNK_SIZE,
+        "selected_chunk_size": CHUNK_SIZE,
+        "adaptive_chunk_size_applied": False,
+        "max_output_tokens": MAX_OUTPUT_TOKENS,
+        "previous_max_output_tokens": PREVIOUS_MAX_OUTPUT_TOKENS,
         "hard_cost_cap_per_chunk_usd": CAP_PER_CHUNK,
         "hard_cost_cap_total_usd": CAP_TOTAL,
         "estimated_total_cost_before_run_usd": 0.0,
@@ -322,9 +332,25 @@ def run() -> dict[str, Any]:
         stop("cost", f"estimated_total_{est_cost}_exceeds_cap_{CAP_TOTAL}")
         s["execution_result"] = "BLOCKED"
         return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
-    # Per-chunk estimate.
-    for ci in range(CHUNK_COUNT_PLANNED):
-        seg = per_doc_in[ci * CHUNK_SIZE:(ci + 1) * CHUNK_SIZE]
+
+    # ---- Adaptive chunk-size planning (17C-R2-R10) ----
+    # Pick the largest chunk size <= CHUNK_SIZE whose worst-case cost stays within the
+    # per-chunk cap at the new output ceiling. Total request count never changes.
+    selected_chunk_size = planner.select_chunk_size(
+        per_doc_in, MAX_OUTPUT_TOKENS, INPUT_USD_PER_M, OUTPUT_USD_PER_M, CAP_PER_CHUNK, CHUNK_SIZE)
+    s["selected_chunk_size"] = selected_chunk_size
+    s["adaptive_chunk_size_applied"] = 0 < selected_chunk_size < CHUNK_SIZE
+    if selected_chunk_size <= 0:
+        # Even a single request exceeds the per-chunk cap at this output ceiling.
+        stop("cost", f"per_request_cost_exceeds_per_chunk_cap_{CAP_PER_CHUNK}")
+        s["execution_result"] = "BLOCKED"
+        return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
+    active_chunk_size = selected_chunk_size
+    active_chunk_count = math.ceil(EXPECTED_REQUESTS / active_chunk_size)
+    s["chunk_count_planned"] = active_chunk_count
+    # Per-chunk estimate at the selected size.
+    for ci in range(active_chunk_count):
+        seg = per_doc_in[ci * active_chunk_size:(ci + 1) * active_chunk_size]
         c_in = sum(seg)
         c_out = MAX_OUTPUT_TOKENS * len(seg)
         c_cost = round(c_in / 1_000_000 * INPUT_USD_PER_M + c_out / 1_000_000 * OUTPUT_USD_PER_M, 6)
@@ -357,8 +383,8 @@ def run() -> dict[str, Any]:
         return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
 
     try:
-        for ci in range(CHUNK_COUNT_PLANNED):
-            chunk = requests[ci * CHUNK_SIZE:(ci + 1) * CHUNK_SIZE]
+        for ci in range(active_chunk_count):
+            chunk = requests[ci * active_chunk_size:(ci + 1) * active_chunk_size]
             if not chunk:
                 continue
             os.environ[LIVE_GATE] = GATE_VALUE
@@ -371,7 +397,7 @@ def run() -> dict[str, Any]:
             chunk_ok = 0
             try:
                 for within, req in enumerate(chunk):
-                    gidx = ci * CHUNK_SIZE + within  # global request index across the batch
+                    gidx = ci * active_chunk_size + within  # global request index across the batch
                     doc_id = req.get("document_id", "")
                     if doc_id in completed_set:
                         # Already completed on a prior run — never re-send / re-charge.
