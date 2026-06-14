@@ -1,0 +1,24 @@
+{
+  "failed_evidence_preservation_added": true,
+  "preserve_folder": "C:\\Users\\S1\\Downloads\\MedAI_17C_R2_FAILED_EVIDENCE_PRESERVE_PRIVATE",
+  "preserve_folder_outside_repo": true,
+  "run_subfolder_pattern": "run_<timestamp>",
+  "preserved_private_artifacts": [
+    "live_responses_private.jsonl",
+    "parsed_responses_private.jsonl",
+    "schema_validation_private.json",
+    "provider_trace_private.json",
+    "stopped_on_failure_private.json",
+    "checkpoint state copies",
+    "README_PRIVATE_DO_NOT_SHARE.txt"
+  ],
+  "public_fields_only": [
+    "evidence_preserved",
+    "preservation_path",
+    "failed_doc_hash",
+    "failure_category"
+  ],
+  "raw_body_in_public_report": false,
+  "tokenized_payload_in_public_report": false,
+  "committed_to_repo": false
+}

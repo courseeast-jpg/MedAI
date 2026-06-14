@@ -1,0 +1,38 @@
+{
+  "checkpoint_folder_private": "C:\\Users\\S1\\AppData\\Local\\MedAI_Private\\ai_extraction_17C_R2_478_live_checkpoint",
+  "checkpoint_files": [
+    "checkpoint_state_private.json",
+    "checkpoint_completed_doc_ids_private.json",
+    "checkpoint_failed_doc_private.json",
+    "checkpoint_chunk_status_private.jsonl",
+    "checkpoint_provider_trace_private.jsonl",
+    "checkpoint_schema_validation_private.jsonl"
+  ],
+  "records": [
+    "canonical_batch_sha256",
+    "run_id",
+    "model",
+    "cap_total_usd",
+    "cap_per_chunk_usd",
+    "request_count_total",
+    "completed_doc_ids",
+    "failed_doc_id",
+    "request_index",
+    "sent/succeeded/failed_counts",
+    "chunk_index/status",
+    "provider_status_category (public)",
+    "raw/private_body (private files only)"
+  ],
+  "resume_policy": "resume_from_next_unsent_request",
+  "blocks_on": [
+    "canonical_batch_sha256_mismatch",
+    "unresolved_failed_doc",
+    "checkpoint_inconsistent",
+    "checkpoint_state_unreadable"
+  ],
+  "starts_from_first_when": "no_checkpoint_present",
+  "stop_on_first_failure": true,
+  "mkb_write": false,
+  "auto_accept": false,
+  "medical_decision": false
+}

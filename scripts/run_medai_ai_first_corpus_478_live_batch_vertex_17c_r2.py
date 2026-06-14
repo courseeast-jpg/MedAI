@@ -37,6 +37,7 @@ import re  # noqa: E402
 from execution.jsonl_framing import read_jsonl_lines  # noqa: E402  physical-newline JSONL framing
 from execution.canonical_batch_paths import resolve_canonical_batch  # noqa: E402  robust path resolver
 from execution.strict_json import normalize_one_json_object, missing_required_keys  # noqa: E402  strict-JSON helpers
+from execution import live_checkpoint as lc  # noqa: E402  durable checkpoint + evidence preservation (17C-R2-R8)
 
 # Core required top-level schema keys every extraction response must include (17C-R2-R7).
 EXPECTED_TOP_LEVEL_FIELDS = ("extracted_labs", "extracted_diagnoses", "extracted_medications",
@@ -137,6 +138,19 @@ def _new_summary() -> dict[str, Any]:
         "private_request_batch_path": CANON_BATCH_LABEL,
         "private_response_staging_path": PRIVATE_RESP_LABEL,
         "private_outputs_written_outside_repo": False,
+        # --- Durable checkpoint + evidence preservation (17C-R2-R8) ---
+        "run_id": "",
+        "run_timestamp": "",
+        "canonical_batch_sha256": "",
+        "checkpointing_enabled": True,
+        "checkpoint_resume_start_index": 0,
+        "checkpoint_resume_reason": "none",
+        "checkpoint_completed_on_entry": 0,
+        "request_count_skipped_completed": 0,
+        "failed_doc_id": None,
+        "evidence_preserved": False,
+        "evidence_preservation_path": "",
+        "evidence_files_copied": 0,
         "raw_ai_responses_written_to_repo": False,
         "parsed_ai_responses_written_to_repo": False,
         "tokenized_payloads_written_to_repo": False,
@@ -229,6 +243,10 @@ def run() -> dict[str, Any]:
     raw_responses: list[dict[str, Any]] = []
     parsed_responses: list[dict[str, Any]] = []
 
+    import time  # local import: timestamp/run_id only, no provider use
+    s["run_timestamp"] = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+    s["run_id"] = "17c_r2_" + s["run_timestamp"]
+
     def stop(stage: str, cat: str) -> None:
         s["stopped_on_first_failure"] = True
         s["failure_stage"] = stage
@@ -261,6 +279,24 @@ def run() -> dict[str, Any]:
              f"canonical_batch_integrity_failure_lines_{len(lines)}_parseable_{len(requests)}_unique_{len(unique_ids)}_malformed_{malformed}")
         s["execution_result"] = "BLOCKED"
         return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
+
+    # ---- Durable checkpoint resume policy (17C-R2-R8) ----
+    # Resume from the next unsent request; never re-send a completed document. Block on
+    # SHA256 mismatch, an unresolved failed doc, or an inconsistent checkpoint.
+    batch_sha = lc.sha256_file(CANON_BATCH)
+    s["canonical_batch_sha256"] = batch_sha
+    order = [r.get("document_id", "") for r in requests]
+    start_index, ck_blocked, ck_reason, completed_set = lc.decide_resume(
+        batch_sha, order, EXPECTED_REQUESTS)
+    s["checkpoint_resume_start_index"] = start_index
+    s["checkpoint_resume_reason"] = ck_reason
+    s["checkpoint_completed_on_entry"] = len(completed_set)
+    if ck_blocked:
+        stop("checkpoint", ck_reason)
+        s["execution_result"] = "BLOCKED"
+        return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
+    lc.init_checkpoint(s["run_id"], batch_sha, TARGET_MODEL, CAP_TOTAL, CAP_PER_CHUNK,
+                       EXPECTED_REQUESTS)
 
     # Privacy re-validation + cost estimate before any provider call.
     prompt_contract = PROMPT_CONTRACT_PATH.read_text(encoding="utf-8")
@@ -334,8 +370,13 @@ def run() -> dict[str, Any]:
             s["chunk_count_started"] += 1
             chunk_ok = 0
             try:
-                for req in chunk:
+                for within, req in enumerate(chunk):
+                    gidx = ci * CHUNK_SIZE + within  # global request index across the batch
                     doc_id = req.get("document_id", "")
+                    if doc_id in completed_set:
+                        # Already completed on a prior run — never re-send / re-charge.
+                        s["request_count_skipped_completed"] += 1
+                        continue
                     payload = _build_payload(prompt_contract, req.get("tokenized_content", ""))
                     s["request_count_sent"] += 1
                     s["provider_call_made"] = True
@@ -345,8 +386,12 @@ def run() -> dict[str, Any]:
                         response = _default_http_post(url, payload, token)
                     except Exception as exc:
                         err = classify_vertex_provider_error(exc)
+                        cat = err.get("provider_error_category", "provider_error")
                         s["request_count_failed"] += 1
-                        stop("provider", err.get("provider_error_category", "provider_error"))
+                        s["failed_doc_id"] = doc_id
+                        lc.record_provider_trace(cat, gidx)
+                        lc.mark_failed(doc_id, gidx, cat)
+                        stop("provider", cat)
                         s["execution_result"] = "PROVIDER_FAIL"
                         return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
                     raw_responses.append({"document_id": doc_id, "response": response})
@@ -360,6 +405,9 @@ def run() -> dict[str, Any]:
                                            "total_token_count": int(usage.get("totalTokenCount") or 0)})
                     if not valid:
                         s["request_count_failed"] += 1
+                        s["failed_doc_id"] = doc_id
+                        lc.record_provider_trace(reason, gidx)
+                        lc.mark_failed(doc_id, gidx, reason)
                         if reason == "raw_pi_in_response":
                             stop("privacy", "raw_pi_in_response")
                             s["privacy_result"] = "blocked"
@@ -370,10 +418,13 @@ def run() -> dict[str, Any]:
                         return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
                     s["request_count_succeeded"] += 1
                     chunk_ok += 1
+                    lc.record_provider_trace("ok", gidx)
+                    lc.mark_completed(doc_id, gidx)
             finally:
                 os.environ.pop(LIVE_GATE, None)  # clear gate after every chunk
             s["chunk_count_completed"] += 1
             chunk_status.append({"chunk": ci, "sent": len(chunk), "succeeded": chunk_ok})
+            lc.record_chunk_status(ci, len(chunk), chunk_ok, "completed")
         s["execution_result"] = "PASS"
         return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
     finally:
@@ -416,6 +467,17 @@ def _finalize(s, records, chunk_status, raw_responses, parsed):
     except OSError:
         pass
     s["private_outputs_written_outside_repo"] = private_written
+    # Immediately preserve failed-response evidence OUT of the volatile staging area
+    # (the external writer has cleared MedAI_Private staging before). Private copy only.
+    if s.get("failed_doc_id"):
+        ts = s.get("run_timestamp") or "unknown"
+        try:
+            preserved, path, copied = lc.preserve_failed_evidence(ts, staging_dir=PRIVATE_OUT)
+        except OSError:
+            preserved, path, copied = False, "", 0
+        s["evidence_preserved"] = preserved
+        s["evidence_preservation_path"] = lc.EVIDENCE_DIR_LABEL + ("\\run_" + ts if preserved else "")
+        s["evidence_files_copied"] = copied
     return _write_public(s, records, chunk_status)
 
 

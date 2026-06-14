@@ -1,0 +1,20 @@
+{
+  "simulation_isolated_dir_used": true,
+  "provider_call_made": false,
+  "live_gate_set_during_simulation": false,
+  "initial_start_index": 0,
+  "sim_request_1_schema_valid": true,
+  "sim_request_2_schema_valid": false,
+  "sim_request_2_failure_category": "missing_expected_schema_fields",
+  "completed_request_count": 1,
+  "failed_request_count": 1,
+  "resume_next_index_1based": 2,
+  "completed_doc_skipped_on_resume": true,
+  "resends_completed_request": false,
+  "resume_blocked_until_triaged": true,
+  "unblocks_after_triage_resolve": true,
+  "sha256_mismatch_blocks": true,
+  "evidence_preserved": true,
+  "evidence_readme_present": true,
+  "evidence_failed_body_copied": true
+}
