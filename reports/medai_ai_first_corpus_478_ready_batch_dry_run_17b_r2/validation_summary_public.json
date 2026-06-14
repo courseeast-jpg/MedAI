@@ -1,0 +1,13 @@
+{
+  "failed_document_ids_are_hashed": true,
+  "private_values_included": false,
+  "request_validation_failed_count": 42,
+  "request_validation_passed": false,
+  "tokenized_payloads_included": false,
+  "validation_failure_classes": {
+    "accession_specimen": 18,
+    "insurance_account": 15,
+    "mrn": 2,
+    "phone": 15
+  }
+}

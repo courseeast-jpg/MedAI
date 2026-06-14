@@ -1,0 +1,8 @@
+{
+  "billing_api_call_made": false,
+  "estimated_cost_usd": 0.175132,
+  "estimated_input_tokens": 939893,
+  "estimated_output_tokens": 348800,
+  "rough_local_estimate_only": true,
+  "target_model_for_future_live": "gemini-2.5-flash-lite"
+}

@@ -1,0 +1,155 @@
+{
+  "batches": [
+    {
+      "batch_number": 1,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009317,
+      "estimated_input_tokens": 44226,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 2,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009445,
+      "estimated_input_tokens": 45932,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 3,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009322,
+      "estimated_input_tokens": 44299,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 4,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009515,
+      "estimated_input_tokens": 46862,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 5,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009257,
+      "estimated_input_tokens": 43427,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 6,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009539,
+      "estimated_input_tokens": 47186,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 7,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009562,
+      "estimated_input_tokens": 47495,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 8,
+      "document_count": 25,
+      "estimated_cost_usd": 0.00936,
+      "estimated_input_tokens": 44802,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 9,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009742,
+      "estimated_input_tokens": 49888,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 10,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009678,
+      "estimated_input_tokens": 49045,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 11,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009233,
+      "estimated_input_tokens": 43102,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 12,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009542,
+      "estimated_input_tokens": 47223,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 13,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009685,
+      "estimated_input_tokens": 49137,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 14,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009626,
+      "estimated_input_tokens": 48352,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 15,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009633,
+      "estimated_input_tokens": 48445,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 16,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009383,
+      "estimated_input_tokens": 45104,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 17,
+      "document_count": 25,
+      "estimated_cost_usd": 0.009337,
+      "estimated_input_tokens": 44498,
+      "estimated_output_tokens": 20000,
+      "stop_on_first_failure": true
+    },
+    {
+      "batch_number": 18,
+      "document_count": 11,
+      "estimated_cost_usd": 0.004059,
+      "estimated_input_tokens": 18926,
+      "estimated_output_tokens": 8800,
+      "stop_on_first_failure": true
+    }
+  ],
+  "estimated_total_cost_usd": 0.165235,
+  "stop_on_first_failure": true,
+  "suggested_hard_cost_cap_usd": 0.83,
+  "suggested_live_batch_count": 18,
+  "suggested_live_batch_size": 25,
+  "target_model_for_future_live": "gemini-2.5-flash-lite",
+  "vertex_credentials_must_be_fixed_before_live_execution": true
+}

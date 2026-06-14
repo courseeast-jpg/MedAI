@@ -1,0 +1,27 @@
+{
+  "actual_ready_files_loaded": 478,
+  "blocked_extension_counts": {
+    ".docx": 1,
+    ".jpg": 4,
+    ".mp3": 2,
+    ".pdf": 110,
+    ".tif": 4
+  },
+  "blocked_files_excluded": 121,
+  "blocked_reason_counts": {
+    "duplicate": 88,
+    "extraction_unavailable": 31,
+    "unsupported": 2
+  },
+  "expected_ready_files_from_17a_r2": 478,
+  "raw_filenames_included": false,
+  "raw_payloads_included": false,
+  "readiness_source_used": "17A_R2_public_remaining_blockers_plus_private_ready_status",
+  "ready_extension_counts": {
+    ".docx": 2,
+    ".jpg": 6,
+    ".pdf": 466,
+    ".rtf": 3,
+    ".tif": 1
+  }
+}
