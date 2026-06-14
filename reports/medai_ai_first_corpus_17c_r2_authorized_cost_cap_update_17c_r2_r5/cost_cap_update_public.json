@@ -1,0 +1,12 @@
+{
+  "previous_hard_cost_cap_total_usd": 0.25,
+  "authorized_hard_cost_cap_total_usd": 0.4,
+  "hard_cost_cap_per_chunk_usd": 0.05,
+  "chunk_size": 25,
+  "target_model": "gemini-2.5-flash-lite",
+  "latest_estimated_total_cost_usd": 0.325362,
+  "estimated_total_within_new_cap": true,
+  "runner_total_cap_matches_authorized": true,
+  "caps_consistent_in_runner": true,
+  "note": "Local estimate only; no billing API was called."
+}
