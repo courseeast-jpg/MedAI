@@ -1,0 +1,32 @@
+{
+  "failed_for_review_before": 360,
+  "buckets": {
+    "api_permission_or_route": 360,
+    "provider_safety_finish": 0,
+    "provider_max_tokens": 0,
+    "provider_empty_response": 0,
+    "provider_invalid_json": 0,
+    "schema_validation_failed": 0,
+    "section_merge_failed": 0,
+    "content_too_large": 0,
+    "retry_exhausted": 0,
+    "unknown_provider_hard_stop": 0,
+    "evidence_missing": 0,
+    "checkpoint_inconsistent": 0
+  },
+  "taxonomy_buckets": [
+    "api_permission_or_route",
+    "provider_safety_finish",
+    "provider_max_tokens",
+    "provider_empty_response",
+    "provider_invalid_json",
+    "schema_validation_failed",
+    "section_merge_failed",
+    "content_too_large",
+    "retry_exhausted",
+    "unknown_provider_hard_stop",
+    "evidence_missing",
+    "checkpoint_inconsistent"
+  ],
+  "note": "Failed-review file stores doc hashes only; documented run-level cause was provider_live_fail / api_disabled_or_permission, so selected docs map to api_permission_or_route. No raw response text / PHI / private paths."
+}
