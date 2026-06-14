@@ -1,0 +1,13 @@
+{
+  "strategies": [
+    "skip_completed",
+    "compact_full_schema",
+    "sectioned_extraction",
+    "adaptive_section_splitting",
+    "json_salvage_local_only",
+    "schema_skeleton_retry",
+    "transient_provider_retry",
+    "private_review_fallback"
+  ],
+  "continue_to_next_doc_for_non_safety_schema_failures": true
+}

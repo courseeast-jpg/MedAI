@@ -1,0 +1,8 @@
+{
+  "authorized_total_cap_usd": 10.0,
+  "hard_cost_cap_per_chunk_usd": 0.05,
+  "estimated_total_cost_before_run_usd": 1.192071,
+  "actual_total_token_count": 0,
+  "actual_cost_public_if_available": "unknown",
+  "billing_api_call_made": false
+}

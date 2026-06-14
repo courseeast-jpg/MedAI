@@ -1,0 +1,6 @@
+{
+  "merge_requires_all_required_sections": true,
+  "schema_weakened": false,
+  "clinical_values_inferred": false,
+  "missing_required_values_synthesized": false
+}

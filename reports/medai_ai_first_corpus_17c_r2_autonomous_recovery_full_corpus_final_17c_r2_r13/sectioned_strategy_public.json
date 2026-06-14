@@ -1,0 +1,15 @@
+{
+  "sections": [
+    "document_identity_and_metadata",
+    "clinical_findings",
+    "lab_results_and_measurements",
+    "diagnoses_assessments_impressions",
+    "medications_treatments_orders",
+    "procedures_imaging_pathology",
+    "followup_recommendations_and_unknowns"
+  ],
+  "sectioned_extraction_enabled": true,
+  "adaptive_section_splitting_enabled": true,
+  "schema_skeleton_retry_enabled": true,
+  "no_clinical_inference": true
+}

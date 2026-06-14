@@ -1,0 +1,7 @@
+{
+  "checkpoint_document_aware": true,
+  "checkpoint_section_aware": true,
+  "completed_docs_skipped_on_resume": true,
+  "completed_sections_skipped_on_resume": true,
+  "private_checkpoint_path": "PRIVATE_CHECKPOINT_PATH_REDACTED"
+}
