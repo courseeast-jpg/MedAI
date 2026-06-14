@@ -1,0 +1,16 @@
+{
+  "docs_loaded": 478,
+  "completed_ai_packages": 118,
+  "failed_for_review": 360,
+  "unattempted": 0,
+  "completed_plus_failed_equals_loaded": true,
+  "completed_pct_of_loaded": 24.69,
+  "failed_for_review_pct_of_loaded": 75.31,
+  "unattempted_pct_of_loaded": 0.0,
+  "completed_disposition": "ai_extraction_package_built_private_only_not_imported_to_mkb",
+  "failed_for_review_disposition": "preserved_for_human_review_no_retry_no_mkb_import",
+  "failed_for_review_root_cause": "provider_live_fail / api_disabled_or_permission (provider/cloud side, not extraction code)",
+  "mkb_import_started": false,
+  "completed_packages_committed_to_repo": false,
+  "failed_evidence_committed_to_repo": false
+}
