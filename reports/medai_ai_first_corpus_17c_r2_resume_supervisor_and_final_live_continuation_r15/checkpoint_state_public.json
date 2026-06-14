@@ -1,0 +1,11 @@
+{
+  "checkpoint_state": "clean_partial_checkpoint_resumable",
+  "completed_doc_count": 85,
+  "remaining_doc_count": 393,
+  "canonical_sha256_match": true,
+  "unresolved_failed_checkpoint": false,
+  "checkpoint_corruption_detected": false,
+  "first_continuation_doc_id": "doc_0142f75560ce3531",
+  "completed_docs_skipped_on_resume": true,
+  "failed_review_count_private_metadata": 393
+}

@@ -1,0 +1,22 @@
+{
+  "canonical_batch_valid": true,
+  "credential_preflight_passed": true,
+  "project_is_sot_knowledge_ocr": true,
+  "vertex_route_configured": true,
+  "checkpoint_state_resumable": true,
+  "completed_doc_count_preserved": true,
+  "remaining_docs_selected": 393,
+  "selected_live_strategy": "sectioned_autonomous_recovery",
+  "total_cap_usd": 10.0,
+  "per_chunk_cap_usd": 0.05,
+  "estimated_remaining_cost_usd": 0.980092,
+  "cost_caps_passed": true,
+  "mkb_open_write_path_disabled": true,
+  "auto_accept_disabled": true,
+  "medical_decision_disabled": true,
+  "failed_evidence_preservation_available": true,
+  "public_report_redaction_helper_active": true,
+  "private_reports_outside_repo": true,
+  "post_live_reports_can_be_sanitized": true,
+  "preflight_matrix_passed": true
+}

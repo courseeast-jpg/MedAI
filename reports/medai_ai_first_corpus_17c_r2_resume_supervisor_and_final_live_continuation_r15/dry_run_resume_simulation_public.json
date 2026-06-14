@@ -1,0 +1,12 @@
+{
+  "provider_generation_call_made": false,
+  "completed_docs_skipped": 85,
+  "remaining_docs_selected": 393,
+  "first_continuation_doc_id": "doc_0142f75560ce3531",
+  "completed_doc_resent": false,
+  "simulated_provider_failure_preserves_evidence": true,
+  "simulated_success_updates_checkpoint_without_mkb_write": true,
+  "mkb_db_opened": false,
+  "active_mkb_write": false,
+  "simulation_passed": true
+}

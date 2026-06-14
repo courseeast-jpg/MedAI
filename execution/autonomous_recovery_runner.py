@@ -128,6 +128,7 @@ def default_summary() -> dict[str, Any]:
 
 
 def run_autonomous_recovery(*, live: bool = False,
+                            ignore_failed_review_skip: bool = False,
                             http_post: Callable[[str, dict[str, Any], str], dict[str, Any]] | None = None,
                             token_provider: Callable[[], str] | None = None) -> dict[str, Any]:
     import scripts.run_medai_ai_first_corpus_478_live_batch_vertex_17c_r2 as live_base
@@ -156,7 +157,7 @@ def run_autonomous_recovery(*, live: bool = False,
     unblock = r12._checkpoint_action(batch_sha, order)
     redaction = _redact_report_tree(live_base.REPORT_DIR)
     completed_set = set(lc.load_completed())
-    failed_skip = _load_failed_review_doc_ids()
+    failed_skip = set() if ignore_failed_review_skip else _load_failed_review_doc_ids()
     per_doc_tokens = [_approx_tokens(str(req.get("tokenized_content") or "")) for req in requests]
     plan = build_cost_plan(
         per_doc_tokens,
