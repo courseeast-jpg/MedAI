@@ -1,0 +1,76 @@
+{
+  "person_label": "P2",
+  "vault_filled_value_count": 8,
+  "vault_filled_categories": {
+    "PERSON": 3,
+    "DOB": 1,
+    "ADDRESS": 1,
+    "PHONE": 1,
+    "MRN": 1,
+    "INSURANCE_ID": 1
+  },
+  "vault_has_provider_or_facility_coverage": false,
+  "high_confidence_categories": [
+    {
+      "category": "email",
+      "count": 0,
+      "confidence_band": "high",
+      "action": "covered"
+    },
+    {
+      "category": "phone_formatted",
+      "count": 0,
+      "confidence_band": "high",
+      "action": "covered"
+    },
+    {
+      "category": "ssn",
+      "count": 0,
+      "confidence_band": "high",
+      "action": "covered"
+    },
+    {
+      "category": "id_labeled",
+      "count": 0,
+      "confidence_band": "high",
+      "action": "covered"
+    },
+    {
+      "category": "local_path",
+      "count": 0,
+      "confidence_band": "high",
+      "action": "covered"
+    }
+  ],
+  "high_confidence_uncovered_total": 0,
+  "low_confidence_categories": [
+    {
+      "category": "person_like_2cap",
+      "count": 941,
+      "confidence_band": "low_high_false_positive",
+      "action": "possible_gap"
+    },
+    {
+      "category": "provider_facility_cue",
+      "count": 5,
+      "confidence_band": "low",
+      "action": "possible_gap"
+    },
+    {
+      "category": "spelled_date",
+      "count": 2,
+      "confidence_band": "medium",
+      "action": "possible_gap"
+    }
+  ],
+  "clinical_numeric_false_positive_note": {
+    "category": "bare_10_digit_runs",
+    "count": 73307,
+    "confidence_band": "informational",
+    "action": "covered_not_pii_clinical_numerics",
+    "note": "Bare digit runs in lab data are not phone numbers; a naive phone regex over-matches them. Formatted-phone detection is 0."
+  },
+  "manual_review_required": true,
+  "decision": "BLOCKED",
+  "no_pi_values_in_this_report": true
+}
