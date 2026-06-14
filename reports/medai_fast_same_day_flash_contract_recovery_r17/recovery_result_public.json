@@ -1,21 +1,21 @@
 {
-  "overall_result": "GATE_PASSED_LIVE_NOT_RUN",
+  "overall_result": "PASS_PARTIAL",
   "corpus1": {
     "selected": 360,
-    "attempted": 0,
-    "succeeded": 0,
-    "succeeded_full": 0,
-    "succeeded_minimal_review": 0,
+    "attempted": 360,
+    "succeeded": 23,
+    "succeeded_full": 18,
+    "succeeded_minimal_review": 5,
     "fast_fail_triggered": false,
-    "failed_for_review_after": 360
+    "failed_for_review_after": 337
   },
   "corpus2": {
     "selected": 2,
-    "attempted": 0,
+    "attempted": 2,
     "succeeded": 0,
     "excluded_rtf_signal_docs": 2
   },
-  "actual_total_token_count": 0,
-  "actual_cost_public_if_available": "unknown",
-  "schema_failures_improved": false
+  "actual_total_token_count": 1202075,
+  "actual_cost_public_if_available": 3.005187,
+  "schema_failures_improved": true
 }
