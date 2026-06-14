@@ -1,0 +1,260 @@
+{
+  "input_folder_label": "CORPUS2_P2_INPUT_FOLDER_REDACTED",
+  "files_discovered_total": 25,
+  "pdf_files_discovered": 10,
+  "supported_files": 25,
+  "unsupported_files": 0,
+  "duplicate_files": 0,
+  "documents": [
+    {
+      "document_id": "doc_d4b82516f57c1c3a",
+      "basename": "- TESTS.pdf",
+      "document_family": "TESTS",
+      "extension": ".pdf",
+      "size_bytes": 39987603,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "768fcaf788f11690"
+    },
+    {
+      "document_id": "doc_bae64aaf2db51b78",
+      "basename": "ALLERGY.pdf",
+      "document_family": "ALLERGY",
+      "extension": ".pdf",
+      "size_bytes": 2394051,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "c1baecd92bcbacd3"
+    },
+    {
+      "document_id": "doc_52c6ddf97ece10fb",
+      "basename": "CARDIOLOGY.pdf",
+      "document_family": "CARDIOLOGY",
+      "extension": ".pdf",
+      "size_bytes": 4431455,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "b5394dbe3a53eb5a"
+    },
+    {
+      "document_id": "doc_51dfe0004afef2c8",
+      "basename": "DERMATOLOGY.pdf",
+      "document_family": "DERMATOLOGY",
+      "extension": ".pdf",
+      "size_bytes": 3362326,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "03f0a73b5f9911bc"
+    },
+    {
+      "document_id": "doc_749313c1fb37c101",
+      "basename": "GASTROENTOROLOGY.pdf",
+      "document_family": "GASTROENTOROLOGY",
+      "extension": ".pdf",
+      "size_bytes": 5022282,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "eaa861339e46b2d2"
+    },
+    {
+      "document_id": "doc_fdc65a3201faef95",
+      "basename": "NEUROLOGY.pdf",
+      "document_family": "NEUROLOGY",
+      "extension": ".pdf",
+      "size_bytes": 511584216,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "2c0bb3fcc2b4c48a"
+    },
+    {
+      "document_id": "doc_e2bec2b8fe138a18",
+      "basename": "01.jpg",
+      "document_family": "01",
+      "extension": ".jpg",
+      "size_bytes": 1837003,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "90dbe44b5f4d2fb3"
+    },
+    {
+      "document_id": "doc_5052513e0f2ae366",
+      "basename": "02 - 1.jpg",
+      "document_family": "02_1",
+      "extension": ".jpg",
+      "size_bytes": 1448175,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "3005712ba42fdb7a"
+    },
+    {
+      "document_id": "doc_8b083b9103dc2860",
+      "basename": "02 - 2.jpg",
+      "document_family": "02_2",
+      "extension": ".jpg",
+      "size_bytes": 2030900,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "85ea9932fa761c5c"
+    },
+    {
+      "document_id": "doc_8f7ae945d57cf840",
+      "basename": "02-2.rtf",
+      "document_family": "02_2",
+      "extension": ".rtf",
+      "size_bytes": 57364455,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "a5053f0217758bb4"
+    },
+    {
+      "document_id": "doc_587e2768b1220430",
+      "basename": "03.jpg",
+      "document_family": "03",
+      "extension": ".jpg",
+      "size_bytes": 3634448,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "9f34a2dcbd847920"
+    },
+    {
+      "document_id": "doc_8ab6a6eacd51d900",
+      "basename": "03.rtf",
+      "document_family": "03",
+      "extension": ".rtf",
+      "size_bytes": 116094343,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "5baaacb7e5f6c7ba"
+    },
+    {
+      "document_id": "doc_c1811d219d7543e6",
+      "basename": "04.jpg",
+      "document_family": "04",
+      "extension": ".jpg",
+      "size_bytes": 1651553,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "bf2687a798debba7"
+    },
+    {
+      "document_id": "doc_1ffe3c793826c5ce",
+      "basename": "05.jpg",
+      "document_family": "05",
+      "extension": ".jpg",
+      "size_bytes": 483673,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "d1fcc29e07e10e9d"
+    },
+    {
+      "document_id": "doc_88b793412eec33e2",
+      "basename": "06.jpg",
+      "document_family": "06",
+      "extension": ".jpg",
+      "size_bytes": 485044,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "28b4aa13329dddba"
+    },
+    {
+      "document_id": "doc_52d8ca2a16381005",
+      "basename": "Combined_EEG_Full (1).docx",
+      "document_family": "COMBINED_EEG_FULL_1",
+      "extension": ".docx",
+      "size_bytes": 37859,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "84caeaf625ef424d"
+    },
+    {
+      "document_id": "doc_defeb8d82a204732",
+      "basename": "EEG_OnePage_NoSummary.docx",
+      "document_family": "EEG_ONEPAGE_NOSUMMARY",
+      "extension": ".docx",
+      "size_bytes": 27718,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "ecf465302867e6ec"
+    },
+    {
+      "document_id": "doc_3d533b337aabd3f5",
+      "basename": "MEDICAL_FILENAME_REDACTED",
+      "document_family": "MRI_BRAIN_REPORT",
+      "extension": ".docx",
+      "size_bytes": 27412,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "e786b652d7647978"
+    },
+    {
+      "document_id": "doc_3851fca5733daa74",
+      "basename": "2021.04.26.pdf",
+      "document_family": "2021_04_26",
+      "extension": ".pdf",
+      "size_bytes": 2812087,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "b9ddd255be66b324"
+    },
+    {
+      "document_id": "doc_22579d5519e65e0f",
+      "basename": "MEDICAL_FILENAME_REDACTED",
+      "document_family": "EEG_REPORT_2021_04_26",
+      "extension": ".docx",
+      "size_bytes": 37262,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "d01c7d9454076889"
+    },
+    {
+      "document_id": "doc_54b97c2d5d81cd1e",
+      "basename": "MEDICAL_FILENAME_REDACTED",
+      "document_family": "EEG_REPORT_TRANSLATED",
+      "extension": ".docx",
+      "size_bytes": 27686,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "aaf84f1b0d5aaa1e"
+    },
+    {
+      "document_id": "doc_e01432d2e312f8e4",
+      "basename": "MEDICAL_FILENAME_REDACTED",
+      "document_family": "MEDICATIONS_AND_INSTRUCTIONS_2020",
+      "extension": ".docx",
+      "size_bytes": 36924,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "8b13292b3684d711"
+    },
+    {
+      "document_id": "doc_0827f7be952f34cb",
+      "basename": "PHYSICIAN.pdf",
+      "document_family": "PHYSICIAN",
+      "extension": ".pdf",
+      "size_bytes": 34328802,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "f000a37ffb73bd76"
+    },
+    {
+      "document_id": "doc_95f4cd82c4a21686",
+      "basename": "RHEUMATOLOGY.pdf",
+      "document_family": "RHEUMATOLOGY",
+      "extension": ".pdf",
+      "size_bytes": 3175380,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "1112674d9113483b"
+    },
+    {
+      "document_id": "doc_8d809986f170c36f",
+      "basename": "SURGEON.pdf",
+      "document_family": "SURGEON",
+      "extension": ".pdf",
+      "size_bytes": 4549430,
+      "supported": true,
+      "duplicate": false,
+      "source_hash_prefix": "3641d27ffb1fdfaa"
+    }
+  ]
+}

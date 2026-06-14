@@ -1,0 +1,12 @@
+{
+  "private_output_root_label": "CORPUS2_P2_PRIVATE_OUTPUT_ROOT_REDACTED",
+  "tokenized_request_count": 25,
+  "outbound_requests_private_jsonl_created": true,
+  "outbound_requests_sha256_created": true,
+  "outbound_requests_integrity_private_created": true,
+  "doc_id_manifest_private_created": true,
+  "outbound_sha256_grouped": "83716eff-cd891247-4ab5bb7c-a2dcbc3b-69c10337-7b310f02-27e6221f-7f1251e8",
+  "outbound_sha256_prefix16": "83716effcd891247",
+  "integrity_ok": true,
+  "outbound_package_committed_to_repo": false
+}

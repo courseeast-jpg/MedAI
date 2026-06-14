@@ -1,0 +1,186 @@
+{
+  "pi_vault_loaded": true,
+  "private_value_count": 8,
+  "total_residual_pi_pattern_count": 0,
+  "total_vault_value_leak_count": 0,
+  "tokenized_payloads_private_only": true,
+  "token_maps_private_only": true,
+  "per_document": [
+    {
+      "document_id": "doc_d4b82516f57c1c3a",
+      "document_family": "TESTS",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_bae64aaf2db51b78",
+      "document_family": "ALLERGY",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_52c6ddf97ece10fb",
+      "document_family": "CARDIOLOGY",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_51dfe0004afef2c8",
+      "document_family": "DERMATOLOGY",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_749313c1fb37c101",
+      "document_family": "GASTROENTOROLOGY",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_fdc65a3201faef95",
+      "document_family": "NEUROLOGY",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_e2bec2b8fe138a18",
+      "document_family": "01",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_5052513e0f2ae366",
+      "document_family": "02_1",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_8b083b9103dc2860",
+      "document_family": "02_2",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_8f7ae945d57cf840",
+      "document_family": "02_2",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_587e2768b1220430",
+      "document_family": "03",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_8ab6a6eacd51d900",
+      "document_family": "03",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_c1811d219d7543e6",
+      "document_family": "04",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_1ffe3c793826c5ce",
+      "document_family": "05",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_88b793412eec33e2",
+      "document_family": "06",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_52d8ca2a16381005",
+      "document_family": "COMBINED_EEG_FULL_1",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_defeb8d82a204732",
+      "document_family": "EEG_ONEPAGE_NOSUMMARY",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_3d533b337aabd3f5",
+      "document_family": "MRI_BRAIN_REPORT",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_3851fca5733daa74",
+      "document_family": "2021_04_26",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_22579d5519e65e0f",
+      "document_family": "EEG_REPORT_2021_04_26",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_54b97c2d5d81cd1e",
+      "document_family": "EEG_REPORT_TRANSLATED",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_e01432d2e312f8e4",
+      "document_family": "MEDICATIONS_AND_INSTRUCTIONS_2020",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_0827f7be952f34cb",
+      "document_family": "PHYSICIAN",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_95f4cd82c4a21686",
+      "document_family": "RHEUMATOLOGY",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    },
+    {
+      "document_id": "doc_8d809986f170c36f",
+      "document_family": "SURGEON",
+      "status": "ready_for_ai_extraction",
+      "residual_pi_pattern_count": 0,
+      "vault_value_leak_count": 0
+    }
+  ],
+  "all_outbound_payloads_clean": true
+}
