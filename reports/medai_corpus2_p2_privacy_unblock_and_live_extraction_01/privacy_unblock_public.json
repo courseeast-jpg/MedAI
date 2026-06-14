@@ -1,0 +1,14 @@
+{
+  "supplemental_private_vault_created": true,
+  "supplemental_private_value_count": 3,
+  "supplemental_candidate_counts_by_class": {
+    "DATE": 2,
+    "PROVIDER": 2
+  },
+  "vault_value_count_before": 8,
+  "vault_value_count_after": 11,
+  "high_confidence_uncovered_pi_count_after": 0,
+  "provider_facility_raw_leak_count_after": 0,
+  "spelled_date_raw_leak_count_after": 0,
+  "no_candidate_values_in_this_report": true
+}

@@ -1,0 +1,16 @@
+{
+  "failed_for_review_count": 2,
+  "content_too_large_count": 2,
+  "failed_docs": [
+    {
+      "doc_hash": "doc_8ab6a6eacd51d900",
+      "failure_category": "content_too_large",
+      "failed_section": null
+    },
+    {
+      "doc_hash": "doc_8f7ae945d57cf840",
+      "failure_category": "content_too_large",
+      "failed_section": null
+    }
+  ]
+}
