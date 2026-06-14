@@ -34,6 +34,8 @@ from execution.gemini_vertex_adapter import (  # noqa: E402
 
 import re  # noqa: E402
 
+from execution.jsonl_framing import read_jsonl_lines  # noqa: E402  physical-newline JSONL framing
+
 EXPECTED_HEAD = "ab4a00c87d0afd49f867e301c7ed9e069be884a1"
 
 CANON_BATCH = Path(os.path.expandvars(r"%LOCALAPPDATA%\MedAI_Private\ai_extraction_17B_R2_R1_478_repaired\outbound_requests_private.jsonl"))
@@ -240,7 +242,7 @@ def run() -> dict[str, Any]:
         return _finalize(s, public_records, chunk_status, raw_responses, parsed_responses)
 
     # Strict integrity load: exactly 478 well-formed, unique requests.
-    lines = [l for l in CANON_BATCH.read_text(encoding="utf-8", errors="replace").splitlines() if l.strip()]
+    lines = [l for l in read_jsonl_lines(CANON_BATCH) if l.strip()]  # physical-newline framing
     s["request_count_loaded"] = len(lines)
     requests: list[dict[str, Any]] = []
     malformed = 0

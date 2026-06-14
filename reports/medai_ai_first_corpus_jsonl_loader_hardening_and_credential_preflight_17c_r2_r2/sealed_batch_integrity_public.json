@@ -1,0 +1,14 @@
+{
+  "block": "MEDAI-AI-FIRST-CORPUS-JSONL-LOADER-HARDENING-AND-CREDENTIAL-PREFLIGHT-17C-R2-R2",
+  "sha256_sidecar_verified": true,
+  "sha256_prefix": "sha256:494190bfb95d5856",
+  "physical_newline_record_count": 478,
+  "parseable_record_count": 478,
+  "unique_doc_ids": 478,
+  "malformed_record_count": 0,
+  "residual_pi_failures": 0,
+  "sealed_batch_valid": true,
+  "combined_batch_count": 478,
+  "old_12_added_separately": false,
+  "note": "Counts/hashes only; the full SHA256 lives in the private sidecar."
+}

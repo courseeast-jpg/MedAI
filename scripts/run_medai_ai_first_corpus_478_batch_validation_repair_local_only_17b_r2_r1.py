@@ -16,10 +16,15 @@ import json
 import math
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from execution.jsonl_framing import read_jsonl_lines  # noqa: E402  physical-newline JSONL framing
 
 R2_DIR = Path(os.path.expandvars(r"%LOCALAPPDATA%\MedAI_Private\ai_extraction_17B_R2_478_dry_run"))
 R2_VALIDATOR = R2_DIR / "dry_run_validator_private.json"
@@ -194,7 +199,7 @@ def _load_old12_ids() -> tuple[bool, set[str]]:
     if not R1_OUTBOUND.is_file():
         return False, set()
     ids = set()
-    for line in R1_OUTBOUND.read_text(encoding="utf-8").splitlines():
+    for line in read_jsonl_lines(R1_OUTBOUND):
         line = line.strip()
         if not line:
             continue
@@ -220,7 +225,7 @@ def run() -> tuple[dict[str, Any], dict[str, Any], list[str]]:
 
     failed_classes: dict[str, int] = {}
     failed_ids: set[str] = set()
-    for line in R2_FAILED.read_text(encoding="utf-8").splitlines():
+    for line in read_jsonl_lines(R2_FAILED):
         line = line.strip()
         if not line:
             continue
