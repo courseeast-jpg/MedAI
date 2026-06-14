@@ -1,1 +1,1967 @@
-[]
+[
+  {
+    "doc_hash": "doc_0142f75560ce3531",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_015d3c111db4712d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_025b34eebcf36cb6",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_032fab25a2fc8dcf",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_039204b310c7fbf9",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_039c5d929e0e7e59",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_0499d309e9285d29",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_04dd20bb6b96465a",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_04de0b5de86d031f",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_0684a9aeb49e98e2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_0a2a7a9ea2ffb0cd",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_0a9d0bc941d5fdf3",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_0b7940dc37e0ce9b",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_0bb1eba12b71119d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_0ceb5140630e6226",
+    "failure_category": "timeout",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_1063292258e503cd",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_109faad43c42e2fb",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_110faabdca419cec",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_115d84e8df98d92b",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_124565534b75bce8",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_138f99bad27afd00",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_1471a5e95122148a",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_14a0e285bdc36979",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_15614fa50186858b",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_159fee9569d2bdea",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_164396d847d52f93",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_16972b7323cc34ce",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_169ab6f73ecef0b9",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_17ca1c0d14923285",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_18bba0815f2d4d2c",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_192a428a016abbc2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_19cee78f18352892",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_1b6bfa86e1416b32",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_1c4f718ce375582f",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_1cc22c046b4bb745",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_1e6b8296f4adc125",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_1f27d8d3a387d905",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_2098064df6c75fce",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_20ff725e7ca7aeb4",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_21b952fe64857acc",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_21dad6a9d1a2869d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_222eb30976c1c974",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_225761c80d90bbbf",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_228fbc2973dd308e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "procedures_imaging_pathology"
+  },
+  {
+    "doc_hash": "doc_23462ca669f18688",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_23597221cfd70a23",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_24693c9bb3d5c1d1",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_24af7e37bf5578fe",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_25639b0b98dbfb06",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_279eca17e8b108aa",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_27a09b739fea3e23",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_27e099b8c9dffb5f",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_282ae22057925164",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_28c1948588e10296",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_293971ea34c417c5",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_2975a20a8114131d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_297938c16befccfa",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_2afaf95325c8b6bf",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_2d903304c81c9367",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_2d93daed5a26411e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_2e34d61f526989cc",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_2f1125dfffcd6939",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_30288b4b6d34bcd3",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_3202983e5dd19fa2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_332df2d11d1c3a4f",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_33693826ddab2770",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_33ff50dc79f236e8",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_34e44e6ac2b92baa",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_3571b8fd1b8ae9b9",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_35f101efd769dfb1",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_376f2c04ddd59dc8",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_38209fd85673fd96",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_387c652b4ccd3d1c",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_389f0b84e022a687",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_3920967cd4b38360",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_3a881c0880c04b00",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_3b0512d4ba29133c",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_3b7d7d6870e7dce2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_3ec53dad93820118",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_3f406a186e4d1b04",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_404d465b869c20a2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "medications_treatments_orders"
+  },
+  {
+    "doc_hash": "doc_409c0c196f89ee3d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_41823646342a75e7",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4353a7acae2abd43",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_436a9198366427cd",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4492f63c3e71985a",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_44b4096ed026e2ff",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_45312d1872a18574",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_45d970847a4cebdc",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_45f0fcde9d284215",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_462ef37be1e18aeb",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_46727182edcb93e6",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_46cfb15ab63f493c",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_474daaa7480dc0f6",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_47817f1829221a8b",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_480e8b83e9e2a78a",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_483168c197d8769d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_493ad88767c2f96c",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4964d8644fa321d3",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_499dd27c4d54a2e4",
+    "failure_category": "timeout",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_49dbdf78d4b61ae4",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4a057c2a8ea2c57d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_4a2a4135c2d17342",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4c178695e4d4b78d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4c939f6a16899bb3",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4ce2567ca416ba31",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4d1468c639793a64",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_4fafd2635a8beee7",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_4fff688f9c336806",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_50339f7b8d2d779e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_508091aa3df55a44",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_50ff75e58dab67d6",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_5310c14465cf50c1",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_534ed6717d63438f",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_553eac9d164bf9e5",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_55decc874b78bd23",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_5711faf5160d7d87",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_577bee0f05296274",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_578e86b38f9fc9c6",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_5837322b7a11a863",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_5a394ce275bc2b97",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_5bad4139fe3128cb",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_5d0d7c32b434d553",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_5ebc3d296d3a6b5f",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_5ee1a3e3b1b11295",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_5f2bd8b36e97161c",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_5f619dddb7dfa640",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_5f6f08be35b8337a",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_6019eb27784793a3",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_616c5ac7f86de9c7",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_61727afadfd64f11",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_621b764568d2a548",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_6248280c4be49702",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_625f3ed93e1c7106",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_62964ca3ee2cfb3b",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_636daa1f738f0b92",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_63978581f1f79c35",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_647f36bece92c2f2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_6489d6ec6ce55918",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_652aa0dca4ae6fa4",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_6648c56c70f510fd",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_67403fefe0ec3934",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_679570d37430622a",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_6906d07e58afa177",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_693d2dbbf5754c9e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_6aaeff06cedd8bb7",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_6ba2f08146e94bba",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_6c4bb8ea6d0df5b5",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_6d133ed74d4e2c2e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_6f042776c7b1f2dd",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_6fbe64a21d9d420b",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "medications_treatments_orders"
+  },
+  {
+    "doc_hash": "doc_70a1b6913b2de3c2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_70e780c811c81e8f",
+    "failure_category": "timeout",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_71d2ec55e2a93f4d",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_71ec65e68ad87985",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_734e6574e7e00444",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_73c3c06f499acdc2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_748a9c939b52a179",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_74de0f2787744dc4",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_76857930f2a658ac",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_76a6f1495c2ee03e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_76a73d752b2d7fb8",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_77753c0c319fcaaa",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_79690b9a10a4424b",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_798d20a2b564984e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7bb5d39b40ee7f26",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7c285e344d958590",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7ce47083a693f570",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7d007a812d812fbc",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7d22c552d0225023",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7e90b8d2e2e1b48e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7f6983f59e66cca0",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_7fd00a91a3443873",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_8068b376ccfef880",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_809a632c0136c45e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_82126b6863e161f2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_826192ccec8304f6",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "diagnoses_assessments_impressions"
+  },
+  {
+    "doc_hash": "doc_826dc46223ad09a9",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "lab_results_and_measurements"
+  },
+  {
+    "doc_hash": "doc_835e5d1ecaa7352f",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_84272c72e870497e",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_85bcd298c10d5672",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_85cf585dc407e030",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_862ea062762290f2",
+    "failure_category": "truncated_or_invalid_json",
+    "failed_section": "clinical_findings"
+  },
+  {
+    "doc_hash": "doc_867139580ad83e12",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_868592f23aff5be5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_879127e405c828b8",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8886015894373da1",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8887314529f7a7bb",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_895b8dafa4800026",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_897b6fe7cae48827",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8a2dd52123a67eb3",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_8ac4f19a3417fb48",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8b3d6f4566c11d25",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8b9bda904a5deb29",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8bf3ba3870185dec",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8c25cc87caceb70d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8cd4c423a914e9e2",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8cd64495111fbdf4",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8df6316836947e53",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8e06d8ef5dfec0b1",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8e4b8fe8f2f72c40",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8f2f1e3f2900443f",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8f3a582aa9bf371f",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_8f842aabde40843e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_912c11bf88bacece",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_926b0f274e9e6df0",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_93302ef9b03118ff",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9343f639b6c48173",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_935ee8ced7455885",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9410692d915a1166",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_94aedd29c2c61986",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_94db8b7687852d62",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_95500789d4c33c6a",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_957bf858445379c6",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_968862304f77db0e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_96a30d9d9d6fd513",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_96ae84e9b36b546e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_972d066365c59def",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_976f3cf18f58e334",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_97f50596d5c6e1ee",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9a98ab61a4c4087d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9af0dff87c8cc384",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9ba365a99cbb3b5e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_9c231f685a9942fb",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9c706a83b0c1ae24",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9cc4b80fd9d64b0d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9da39515979218e3",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9dcb89bfd1c0e027",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9dcc6bb5aeefd0fe",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9e5f22345439dada",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9eb89281d7bc7580",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9f9c1f4cede74a69",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_9fa0431c5db535d6",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a008fa5faa47184a",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a00d78d033395ab4",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a1a40192479e1640",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a24d6da17c14dd7c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a2dd3760017c73b1",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a36b31eb3beaf4ad",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a37042d795369ad8",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a3c93d015dc87146",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a493e0afa36fd928",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a59c11e0596271b4",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a5a2293b02b5b8c0",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a61f0b50923208a6",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a6b000a3d65b81bf",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a6f1440e40790c2d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "document_identity_and_metadata"
+  },
+  {
+    "doc_hash": "doc_a73ca1d66a399682",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a7ce3c1e0859368b",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a83a8bf01e789819",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a887c686f0d6d9ef",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a985c043662fdf58",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_a98a1fd03812bd8c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_aabbbc91381a6625",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_aae66b165dde44a5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ac2e8a2b47490834",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_acdd6706102adad0",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ade924497d5580ea",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_adf85f961070c743",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ae7c4da4e61c5306",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b01446ba2b744f04",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b03eb64de6fea625",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b1b7113c20b95331",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b2649b7627aa9cf6",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b5b512c95ccc2808",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b5ea23900361a059",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b6c9d14a704321eb",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b70b7911fb016259",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b807cb269829d0ac",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b8b220fd0f75cb7d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b9203894bb1168e8",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_b92e445dc8f6df29",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ba2151143dfe54e9",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ba42e59992c5f008",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ba4cd0d173141919",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ba5506e9d9193fd5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_badd4f6d5980e2a7",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bae3484761db43b9",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_baec0548a5c1d0b8",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bb345cd52bea4ae9",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bb4dfb91dc3299ad",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bdc3ef9b2c94e55e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bde6644c39022853",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bdffc067c898399a",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bedfd53385b6692d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bf15cbb8acc630b3",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_bf2f43b8016cb785",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c0b70aa5e0f57759",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c239e171010f4104",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c252ea1f80ce27d5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c2547a4518bf18b5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c3473805b90c7166",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c391fff188151988",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c4383bb2fe9c1667",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c48606b4263ed368",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c48a0f49e46d124d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c5e314ab6c62fd1c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c60069b7919e56a9",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c71b44fdb4a8aa1e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c72243b867e2b9ee",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c73f0a14d55ba68a",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c751154a85e1fc13",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c9052d0d9764c853",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c9680fa3a16d975e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c9982eb0d9ba2b76",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_c9e0b5624134f514",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ca1150e5f23b9d11",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ca6185e67bbeba41",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_cb86764e6ebed5e9",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_cc27d8055046113a",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_cc36f7135f053e12",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_cc8ef0ad190b7e11",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ccb00c1cf37548bd",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ccf551096d62c112",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_cd62e194fb35c0cc",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ce3bc2810679005b",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_cefc74d257360e7c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d0b1d21ec843de15",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d2a56a89004a4883",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d2c9d56406ca3d71",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d308c0bf29413ebd",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d3238c81af04fbed",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d3e931f86dd890b4",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d3f594879dbeff74",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d4974a7147f394ad",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d50703ae50732787",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d54376dc5832c9fc",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d5d90e8672ad508d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d669c59f40c03522",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d747cbacfbcb1214",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d7908eb0c145c0df",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d7d5388143ecb6ca",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d8391d810b864d47",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_d8b083326bd5d5d2",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_dab211e0a70a2f0c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_daccc3f8760f7933",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_db81ff91300b37f2",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_dba234be57b5e0d7",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_dd5d89c77d3207d5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_de16bfdebdeab8e7",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_de2f7922e607ecd6",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_df08fe6d97a7d4d7",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e009e8c7b92c7b60",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e197ef21aae54ac0",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e28abc9c0997787c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e3a0870cfc588532",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e5c31f253c309afc",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e627aa7e6e9b6dea",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e7bf6beb8638d40d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e856d96a7f6085c6",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_e926a62b9fd16875",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_eadc28a8ad085704",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_eb1ec9dea962c9a0",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ec2a4080983207dc",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ec44f37e8e4851f5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ec764330d75cbaa6",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_eca17b845b393da4",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ed22655c1d9a3eb7",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ed651db79605e1f0",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ee0bcb204a9f0849",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ee82f3349404cb65",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_ef27b9c41b34d8d5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f06a41cd9dd7f46c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f0a0170e6684b817",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f0d69b2abe2526a9",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f1751597d8d1037c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f17b21b538c3607d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f1acab3663d7a46a",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f1bfd803fa83fe85",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f1e73df9f066187c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f1f21a719c38541c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f2834b18f9688a96",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f2c6062355ee812c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f32fac42c1c16d8d",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f338fd0bb1e8a7a3",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f34d90a35fe84a9c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f34f7917177b2eb1",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f46934f89bfb6918",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f47cc56bd8e7820a",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f5715c0002539cfd",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f579f6a8cd981cf3",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f61999d888832c0e",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f647b8fa3710dca5",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f687676e584e529b",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f68f51b7721fb4c7",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f801ced270466216",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f9252d7cd043b890",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_f9e1a4b7a697248c",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_fac248892283dfc8",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_fcbf45cf02add994",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_fd282e101f70f433",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_fd6959c5e31805c3",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  },
+  {
+    "doc_hash": "doc_fe8101d912f39735",
+    "failure_category": "api_disabled_or_permission",
+    "failed_section": "full_schema"
+  }
+]
