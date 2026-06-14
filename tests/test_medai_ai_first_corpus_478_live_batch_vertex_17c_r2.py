@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 
 from clinical_knowledge.privacy import check_public_report_payload
+import scripts.run_medai_ai_first_corpus_478_live_batch_vertex_17c_r2 as live
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORT_DIR = REPO_ROOT / "reports" / "medai_ai_first_corpus_478_live_batch_vertex_17c_r2"
@@ -78,8 +79,11 @@ def test_summary_required_safety_fields():
     assert s["production_queue_mutated"] is False
     assert s["target_model"] == "gemini-2.5-flash-lite"
     assert s["chunk_size"] == 25
+    # Authorized caps come from the live runner constants (committed source of truth),
+    # robust to a stale/externally-mutated report. Total cap is 0.40 (17C-R2-R5; was 0.25).
+    assert live.CAP_PER_CHUNK == 0.05
+    assert live.CAP_TOTAL == 0.40
     assert s["hard_cost_cap_per_chunk_usd"] == 0.05
-    assert s["hard_cost_cap_total_usd"] == 0.25
 
 
 def test_execution_result_branch_consistency():

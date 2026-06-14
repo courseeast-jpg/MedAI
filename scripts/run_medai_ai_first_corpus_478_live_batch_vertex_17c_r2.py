@@ -36,6 +36,7 @@ import re  # noqa: E402
 
 from execution.jsonl_framing import read_jsonl_lines  # noqa: E402  physical-newline JSONL framing
 from execution.canonical_batch_paths import resolve_canonical_batch  # noqa: E402  robust path resolver
+from execution.strict_json import normalize_one_json_object  # noqa: E402  safe strict-JSON normalizer
 
 EXPECTED_HEAD = "ab4a00c87d0afd49f867e301c7ed9e069be884a1"
 
@@ -179,14 +180,12 @@ def _extract_text(response: dict[str, Any]) -> str:
 
 
 def _validate_schema(text: str) -> tuple[bool, str]:
-    if not text.strip():
-        return False, "empty_response"
-    try:
-        obj = json.loads(text)
-    except ValueError:
-        return False, "not_strict_json"
-    if not isinstance(obj, dict):
-        return False, "not_json_object"
+    # Safe normalization: strip ONE surrounding Markdown fence around a single JSON
+    # object; reject prose-wrapped / multiple / truncated responses. Schema is NOT
+    # weakened — full field + privacy checks still apply to the normalized object.
+    obj, reason = normalize_one_json_object(text)
+    if obj is None:
+        return False, reason
     expected = ("extracted_labs", "extracted_diagnoses", "extracted_medications",
                 "needs_review", "source_evidence", "extraction_warnings")
     if not any(k in obj for k in expected):

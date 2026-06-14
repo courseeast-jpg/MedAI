@@ -1,0 +1,18 @@
+{
+  "normalizer_synthetic_replay": {
+    "plain_object_ok": true,
+    "fenced_object_recovered": true,
+    "prose_wrapped_rejected": true,
+    "multiple_objects_rejected": true,
+    "truncated_rejected": true,
+    "empty_rejected": true
+  },
+  "normalizer_synthetic_replay_all_pass": true,
+  "local_replay_attempted": true,
+  "local_replay_recovered_failed_response": false,
+  "local_replay_schema_valid_count": 1,
+  "local_replay_schema_failed_count": 1,
+  "schema_weakened": false,
+  "partial_json_accepted": false,
+  "missing_fields_inferred": false
+}

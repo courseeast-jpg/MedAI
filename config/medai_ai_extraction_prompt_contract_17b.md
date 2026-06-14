@@ -27,6 +27,16 @@ You must:
    fact. Evidence must be copied from the tokenized text only and must contain no raw
    identifiers.
 
+## Strict JSON Output (17C-R2-R6 hardening)
+
+- Return ONLY one valid JSON object. Output nothing else.
+- No Markdown fences (no ``` and no ```json). No language tags.
+- No prose, preamble, explanation, or commentary before or after the JSON.
+- Do not emit multiple JSON objects and no trailing text after the closing brace.
+- If uncertain, use the empty arrays / null values the schema already permits and set
+  `needs_review=true`; do not explain or apologize.
+- The first character of your output must be `{` and the last must be `}`.
+
 ## Hard Constraints
 
 - Never output raw patient identifiers; only token placeholders may appear.
