@@ -1,0 +1,12 @@
+{
+  "network_or_provider_tool_used": false,
+  "openpyxl_available": true,
+  "pdfplumber_available": false,
+  "pillow_available": true,
+  "pymupdf_fitz_available": true,
+  "pypdf_available": false,
+  "pytesseract_available": true,
+  "python_docx_available": true,
+  "striprtf_available": false,
+  "tesseract_binary_available": true
+}

@@ -1,0 +1,36 @@
+{
+  "attempted_by_extension": {
+    ".docx": 1,
+    ".jpg": 3,
+    ".pdf": 489,
+    ".tif": 4
+  },
+  "block": "MEDAI-AI-FIRST-CORPUS-EXTRACTION-UNAVAILABLE-LOCAL-REPAIR-17A-R2",
+  "counts_only": true,
+  "extraction_unavailable_by_extension": {
+    ".docx": 1,
+    ".jpg": 3,
+    ".pdf": 489,
+    ".tif": 4
+  },
+  "extraction_unavailable_by_previous_method": {
+    "image_ocr_unavailable": 4,
+    "pdf_text_extraction_unavailable": 489,
+    "pytesseract": 3,
+    "python_docx": 1
+  },
+  "initial_extraction_unavailable": 497,
+  "newly_ready_by_extension": {
+    ".pdf": 466
+  },
+  "private_values_included": false,
+  "raw_filenames_included": false,
+  "raw_text_included": false,
+  "remaining_extraction_unavailable_by_extension": {
+    ".docx": 1,
+    ".jpg": 3,
+    ".pdf": 23,
+    ".tif": 4
+  },
+  "tokenized_payloads_included": false
+}
