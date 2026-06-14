@@ -9,5 +9,5 @@
 | auto_accept_enabled | `false` |
 | medical_decision_made | `false` |
 | broad_name_guessing_used | `false` |
-| vault_status | `VAULT_REQUIRED` |
-| privacy_result | `vault_required` |
+| vault_status | `ACTIVE` |
+| privacy_result | `passed` |

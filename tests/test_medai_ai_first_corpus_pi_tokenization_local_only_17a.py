@@ -158,5 +158,12 @@ def test_if_vault_active_outputs_are_outside_repo_and_invisible_to_git() -> None
     s = _summary()
     if s["vault_status"] == "ACTIVE":
         assert s["tokenized_corpus_generated"] is True
-        status = subprocess.check_output(["git", "status", "--short", "--", str(mod.TOKENIZED_ROOT)], cwd=REPO_ROOT, text=True)
-        assert status.strip() == ""
+        result = subprocess.run(
+            ["git", "status", "--short", "--", str(mod.TOKENIZED_ROOT)],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert result.returncode != 0
+        assert "outside repository" in result.stderr

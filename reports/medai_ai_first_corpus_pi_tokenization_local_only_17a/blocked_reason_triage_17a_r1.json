@@ -1,0 +1,76 @@
+{
+  "active_mkb_write": false,
+  "auto_accept_enabled": false,
+  "billing_api_call_made": false,
+  "block": "MEDAI-AI-FIRST-CORPUS-TOKENIZATION-RERUN-COMMIT-AND-BLOCKER-TRIAGE-17A-R1",
+  "blocked_by_reason": {
+    "duplicate": 88,
+    "extraction_unavailable": 497,
+    "unsupported": 2
+  },
+  "blocked_extraction_method_counts": {
+    "image_ocr_unavailable": 4,
+    "not_attempted": 90,
+    "pdf_text_extraction_unavailable": 489,
+    "pytesseract": 3,
+    "python_docx": 1
+  },
+  "blocked_files": 587,
+  "blocker_classes": {
+    "duplicate_files": 88,
+    "empty_or_near_empty_extracted_text": 0,
+    "extraction_failed": 0,
+    "extraction_unavailable": 497,
+    "ocr_not_available": 0,
+    "path_or_folder_issues": 0,
+    "residual_pi_pattern_count_gt_0": 0,
+    "unsupported_by_extension_or_type": 2
+  },
+  "extension_counts": {
+    ".docx": 3,
+    ".jpg": 10,
+    ".mp3": 2,
+    ".pdf": 576,
+    ".rtf": 3,
+    ".tif": 5
+  },
+  "extraction_method_counts": {
+    "image_ocr_unavailable": 4,
+    "not_attempted": 90,
+    "pdf_text_extraction_unavailable": 489,
+    "pytesseract": 10,
+    "python_docx": 3,
+    "text_utf-8": 3
+  },
+  "files_tokenized": 12,
+  "live_gate_set": false,
+  "medical_decision_made": false,
+  "mkb_db_opened": false,
+  "notes": [
+    "Most blocked files are public-status PDF rows whose extraction method is pdf_text_extraction_unavailable.",
+    "The triage intentionally includes counts only and no raw filenames, private identifiers, OCR text, token maps, or tokenized corpus payloads.",
+    "Ready subset can proceed to 17B dry-run while extraction/OCR blockers are improved separately."
+  ],
+  "other_blocker_classes": {
+    "duplicate": 88,
+    "unsupported": 2
+  },
+  "private_values_included": false,
+  "provider_call_made": false,
+  "raw_filenames_included": false,
+  "raw_ocr_included": false,
+  "ready_files": 12,
+  "sanitized_counts_only": true,
+  "source_artifacts": [
+    "summary.json",
+    "corpus_inventory_public.json",
+    "ai_extraction_readiness_public.json",
+    "tokenization_status_public.csv"
+  ],
+  "supported_files": 597,
+  "token_maps_included": false,
+  "tokenized_corpus_generated": true,
+  "total_files_seen": 599,
+  "unsupported_files": 2,
+  "vault_status": "ACTIVE"
+}

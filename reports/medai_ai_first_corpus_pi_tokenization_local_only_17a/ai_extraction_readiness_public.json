@@ -1,6 +1,6 @@
 {
-  "total_files_ready_for_ai_extraction": 0,
-  "total_files_blocked_for_ai_extraction": 609,
-  "tokenized_corpus_generated": false,
-  "vault_status": "VAULT_REQUIRED"
+  "total_files_ready_for_ai_extraction": 12,
+  "total_files_blocked_for_ai_extraction": 587,
+  "tokenized_corpus_generated": true,
+  "vault_status": "ACTIVE"
 }
