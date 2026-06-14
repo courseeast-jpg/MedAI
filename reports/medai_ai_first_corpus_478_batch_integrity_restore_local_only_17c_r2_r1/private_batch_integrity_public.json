@@ -1,0 +1,13 @@
+{
+  "block": "MEDAI-AI-FIRST-CORPUS-478-BATCH-INTEGRITY-RESTORE-LOCAL-ONLY-17C-R2-R1",
+  "expected_request_count": 478,
+  "rebuilt_request_count": 478,
+  "parseable_after": 478,
+  "unique_doc_ids_after": 478,
+  "malformed_after": 0,
+  "request_validation_passed_after": true,
+  "residual_pi_failures_after": 0,
+  "sha256_prefix": "sha256:494190bfb95d5856",
+  "file_set_readonly_after_restore": true,
+  "note": "Hashes/counts only; the full SHA256 lives in the private sidecar."
+}
