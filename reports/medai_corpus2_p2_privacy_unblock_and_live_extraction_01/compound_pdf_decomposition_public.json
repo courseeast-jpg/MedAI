@@ -1,0 +1,15 @@
+{
+  "compound_pdf_decomposition_attempted": false,
+  "rtf_or_signal_container_rescue_attempted": false,
+  "content_too_large_parent_docs_before": 2,
+  "excluded_count": 2,
+  "exclusion_reason": "content_too_large_non_sendable_rtf_or_signal_container",
+  "parent_doc_hashes": [
+    "doc_8ab6a6eacd51d900",
+    "doc_8f7ae945d57cf840"
+  ],
+  "oversized_docs_sent_to_provider": false,
+  "child_docs_created": 0,
+  "ocr_or_image_extraction_attempted": false,
+  "no_raw_text_or_images_or_pi_in_this_report": true
+}

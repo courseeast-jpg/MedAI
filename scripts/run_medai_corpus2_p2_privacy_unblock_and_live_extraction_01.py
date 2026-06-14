@@ -32,6 +32,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from clinical_knowledge.privacy import check_public_report_payload  # noqa: E402
 from execution import cost_chunk_planner as planner  # noqa: E402
+from execution import live_checkpoint as lc  # noqa: E402
 from execution.jsonl_framing import read_jsonl_lines  # noqa: E402
 import scripts.run_medai_ai_first_corpus_pi_tokenization_local_only_17a as t17a  # noqa: E402
 import scripts.run_medai_ai_first_corpus2_p2_vault_coverage_review_and_live_extraction_01 as base_p2  # noqa: E402
@@ -204,7 +205,8 @@ def run_unblock() -> dict[str, Any]:
         if approx_tokens > MAX_PAYLOAD_TOKENS:
             # content_too_large: beyond the model input limit -> excluded from the live batch.
             oversize_ids.append(doc_id)
-            manifest[doc_id] = {"document_family": m["document_family"], "status": "content_too_large"}
+            manifest[doc_id] = {"document_family": m["document_family"],
+                                "status": "content_too_large_non_sendable_rtf_container"}
             continue
         new_payloads.append(tokenized)
         content_sha = _sha256_text(tokenized)
@@ -306,13 +308,42 @@ def evaluate_gate(new_payloads: "list[str] | None" = None, oversize_count: int =
 # ---- Summary + reports ---------------------------------------------------------------
 def build_summary(unblock: dict[str, Any], g: dict[str, Any], *, live_started: bool, live: dict | None) -> dict[str, Any]:
     live = live or {}
-    if live_started:
-        run_result = live.get("run_result", "LIVE_FAIL")
+    # Recover live metrics (sections/cost/token) from the prior on-disk summary so a
+    # --local-gate regeneration preserves them without re-calling the provider.
+    prior: dict[str, Any] = {}
+    _psum = REPORT_DIR / "summary.json"
+    if _psum.is_file():
+        try:
+            prior = json.loads(_psum.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            prior = {}
+
+    def _lp(key: str, default: Any) -> Any:
+        if key in live:
+            return live[key]
+        return prior.get(key, default)
+
+    # Source of truth for completion counts is the durable P2 live checkpoint, so the
+    # summary reflects prior live results even when re-run in --local-gate (no provider).
+    st = lc.load_state(base=base_p2.LIVE_CHECKPOINT_DIR) or {}
+    ckpt_sent = int(st.get("sent_count", 0))
+    ckpt_succeeded = int(st.get("succeeded_count", 0))
+    ckpt_failed = int(st.get("failed_count", 0))
+    ever_live = live_started or ckpt_sent > 0
+    sendable = g["request_count"]
+    docs_completed = min(ckpt_succeeded, sendable)
+    docs_failed_live = min(ckpt_failed, max(0, sendable - docs_completed))
+    docs_failed_for_review = docs_failed_live + unblock["oversize_count"]
+    docs_unattempted = max(0, sendable - docs_completed - docs_failed_live)
+    actual_cost = _lp("actual_cost_public_if_available", "unknown")
+    if ever_live and docs_completed == sendable and docs_failed_for_review == unblock["oversize_count"]:
+        run_result = "PASS_SENDABLE"  # all sendable docs completed; only non-sendable excluded
+    elif ever_live:
+        run_result = "LIVE_FAIL"
     elif not g["gate_passed"]:
         run_result = "BLOCKED"
     else:
         run_result = "GATE_PASSED_LIVE_NOT_RUN"
-    actual_cost = live.get("actual_cost_public_if_available", "unknown")
     remaining = "unknown"
     if isinstance(actual_cost, (int, float)):
         remaining = round(SHARED_BUDGET_CAP_USD - float(actual_cost), 6)
@@ -334,31 +365,38 @@ def build_summary(unblock: dict[str, Any], g: dict[str, Any], *, live_started: b
             "provider_facility_raw_leak", "spelled_date_raw_leak", "high_confidence_uncovered_pi"),
         "tokenized_request_count": g["request_count"],
         "content_too_large_excluded_count": unblock["oversize_count"],
+        # --- compound/RTF decomposition addendum: abandoned per correction ---
+        "compound_pdf_decomposition_attempted": False,
+        "rtf_or_signal_container_rescue_attempted": False,
+        "content_too_large_parent_docs_before": unblock["oversize_count"],
+        "oversized_non_sendable_docs_excluded": unblock["oversize_count"],
+        "oversized_docs_sent_to_provider": False,
+        "corpus2_sendable_docs_selected_for_live": g["request_count"],
+        "corpus2_excluded_docs": unblock["oversize_count"],
+        "corpus2_exclusion_reason": "content_too_large_non_sendable_rtf_or_signal_container",
         "live_entry_gate_passed": g["gate_passed"],
         "live_entry_gate_block_reason": g["block_reason"],
-        "live_run_started": live_started,
-        "provider_model_call_made": bool(live.get("provider_model_call_made", False)),
-        "gemini_call_made": bool(live.get("gemini_call_made", False)),
+        "live_run_started": ever_live,
+        "provider_model_call_made": ever_live,
+        "gemini_call_made": ever_live,
         "target_model": TARGET_MODEL,
         "docs_loaded": EXPECTED_REQUESTS,
-        "docs_completed": int(live.get("docs_completed", 0)),
-        "docs_failed_for_review": int(live.get("docs_failed_for_review", 0)) + unblock["oversize_count"],
-        "docs_unattempted": (max(0, EXPECTED_REQUESTS - int(live.get("docs_completed", 0))
-                                 - int(live.get("docs_failed_for_review", 0)) - unblock["oversize_count"])
-                             if live_started else g["request_count"]),
-        "sections_sent": int(live.get("sections_sent", 0)),
-        "sections_succeeded": int(live.get("sections_succeeded", 0)),
-        "sections_failed": int(live.get("sections_failed", 0)),
-        "failure_stage": live.get("failure_stage", g["failure_stage"] if not g["gate_passed"] else "none"),
-        "failure_category": live.get("failure_category", g["block_reason"] if not g["gate_passed"] else "none"),
-        "failed_doc_hash": live.get("failed_doc_hash"),
-        "failed_section": live.get("failed_section"),
-        "failed_evidence_preserved": bool(live.get("failed_evidence_preserved", False)),
+        "docs_completed": docs_completed,
+        "docs_failed_for_review": docs_failed_for_review,
+        "docs_unattempted": docs_unattempted,
+        "sections_sent": int(_lp("sections_sent", 0)),
+        "sections_succeeded": int(_lp("sections_succeeded", 0)),
+        "sections_failed": int(_lp("sections_failed", 0)),
+        "failure_stage": _lp("failure_stage", g["failure_stage"] if not g["gate_passed"] else "none"),
+        "failure_category": _lp("failure_category", g["block_reason"] if not g["gate_passed"] else "none"),
+        "failed_doc_hash": _lp("failed_doc_hash", None),
+        "failed_section": _lp("failed_section", None),
+        "failed_evidence_preserved": bool(_lp("failed_evidence_preserved", False)),
         "estimated_cost_before_live_usd": round(g["est_total"], 6),
         "selected_chunk_size": g["selected_chunk"],
         "estimated_per_chunk_cost_usd": round(g["per_chunk_cost"], 6),
         "credential_preflight_passed": g["credential_preflight_passed"],
-        "actual_total_token_count": int(live.get("actual_total_token_count", 0)),
+        "actual_total_token_count": int(_lp("actual_total_token_count", 0)),
         "actual_cost_public_if_available": actual_cost,
         "shared_budget_cap_usd": SHARED_BUDGET_CAP_USD,
         "shared_budget_remaining_estimate_after_part_a_usd": remaining,
@@ -412,11 +450,28 @@ def write_reports(s: dict[str, Any], g: dict[str, Any], unblock: dict[str, Any],
     (REPORT_DIR / "live_run_public_report.md").write_text("\n".join(run_md), encoding="utf-8")
     failed_docs = list((live or {}).get("failed_docs", []))
     for did in unblock.get("oversize_doc_ids", []):
-        failed_docs.append({"doc_hash": did, "failure_category": "content_too_large", "failed_section": None})
+        failed_docs.append({"doc_hash": did,
+                            "failure_category": "content_too_large_non_sendable_rtf_container",
+                            "failed_section": None})
     (REPORT_DIR / "failed_docs_public.json").write_text(json.dumps({
         "failed_for_review_count": len(failed_docs),
         "content_too_large_count": unblock.get("oversize_count", 0),
         "failed_docs": failed_docs}, indent=2), encoding="utf-8")
+
+    # Decomposition addendum: abandoned per operator correction (these are non-text RTF/
+    # signal containers, not compound PDFs). Public-safe: hashes + counts + reason only.
+    (REPORT_DIR / "compound_pdf_decomposition_public.json").write_text(json.dumps({
+        "compound_pdf_decomposition_attempted": False,
+        "rtf_or_signal_container_rescue_attempted": False,
+        "content_too_large_parent_docs_before": unblock.get("oversize_count", 0),
+        "excluded_count": unblock.get("oversize_count", 0),
+        "exclusion_reason": "content_too_large_non_sendable_rtf_or_signal_container",
+        "parent_doc_hashes": list(unblock.get("oversize_doc_ids", [])),
+        "oversized_docs_sent_to_provider": False,
+        "child_docs_created": 0,
+        "ocr_or_image_extraction_attempted": False,
+        "no_raw_text_or_images_or_pi_in_this_report": True,
+    }, indent=2, ensure_ascii=True), encoding="utf-8")
     keys = ["provider_model_call_made", "gemini_call_made", "mkb_db_opened", "active_mkb_write",
             "auto_accept_enabled", "medical_decision_made", "future_mkb_import_started", "corpus1_touched",
             "private_artifacts_committed", "raw_ai_response_committed", "tokenized_payloads_committed",

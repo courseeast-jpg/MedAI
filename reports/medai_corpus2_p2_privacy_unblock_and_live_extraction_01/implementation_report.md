@@ -7,7 +7,7 @@
 
 ## A2 gate
 - high/provider-facility/spelled-date raw leaks after re-tokenization: `0` / `0` / `0`.
-- live_entry_gate_passed: `True`; run_result: `GATE_PASSED_LIVE_NOT_RUN`.
+- live_entry_gate_passed: `True`; run_result: `LIVE_FAIL`.
 
 ## Boundaries
 No MKB, no auto-accept, no medical decision, shared $50 cap, no Corpus 1 access.
