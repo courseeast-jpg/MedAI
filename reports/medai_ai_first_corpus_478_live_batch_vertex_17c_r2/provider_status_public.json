@@ -1,0 +1,9 @@
+{
+  "provider_call_made": false,
+  "vertex_live_execution": false,
+  "gemini_call_made": false,
+  "credential_preflight_passed": false,
+  "failure_stage": "preflight",
+  "failure_category": "canonical_batch_integrity_failure_lines_591_parseable_457_unique_457_malformed_134",
+  "execution_result": "BLOCKED"
+}
