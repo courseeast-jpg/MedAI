@@ -95,9 +95,11 @@ def test_checkpoint_and_evidence_preserved():
 
 def test_caps_unchanged():
     s = _summary()
+    # R10's own report recorded the cap authorized at R10 time ($0.40); the live runner
+    # constant was later raised to $10.00 in 17C-R2-R11 (per-chunk cap unchanged).
     assert s["authorized_hard_cost_cap_total_usd"] == 0.40
     assert s["hard_cost_cap_per_chunk_usd"] == 0.05
-    assert float(live.CAP_TOTAL) == 0.40
+    assert float(live.CAP_TOTAL) == 10.00
     assert float(live.CAP_PER_CHUNK) == 0.05
 
 

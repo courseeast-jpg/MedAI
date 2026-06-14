@@ -80,9 +80,10 @@ def test_summary_required_safety_fields():
     assert s["target_model"] == "gemini-2.5-flash-lite"
     assert s["chunk_size"] == 25
     # Authorized caps come from the live runner constants (committed source of truth),
-    # robust to a stale/externally-mutated report. Total cap is 0.40 (17C-R2-R5; was 0.25).
+    # robust to a stale/externally-mutated report. Total cap is 10.00 (17C-R2-R11;
+    # was 0.40 in R5, 0.25 pre-R5). Per-chunk cap stays 0.05.
     assert live.CAP_PER_CHUNK == 0.05
-    assert live.CAP_TOTAL == 0.40
+    assert live.CAP_TOTAL == 10.00
     assert s["hard_cost_cap_per_chunk_usd"] == 0.05
 
 

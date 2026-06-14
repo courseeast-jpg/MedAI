@@ -1,0 +1,11 @@
+{
+  "authorized_hard_cost_cap_total_usd": 10.0,
+  "billing_api_call_made": false,
+  "estimated_chunks_within_per_chunk_cap": true,
+  "estimated_per_chunk_cost_with_selected_chunk_size_usd": 0.04902,
+  "estimated_total_cost_with_new_output_ceiling_usd": 1.228029,
+  "estimated_total_within_authorized_cap": true,
+  "hard_cost_cap_per_chunk_usd": 0.05,
+  "previous_authorized_hard_cost_cap_total_usd": 0.4,
+  "requires_new_cost_authorization": false
+}

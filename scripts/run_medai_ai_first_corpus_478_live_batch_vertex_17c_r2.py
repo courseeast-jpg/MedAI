@@ -75,7 +75,10 @@ CHUNK_SIZE = 25
 EXPECTED_REQUESTS = 478
 CHUNK_COUNT_PLANNED = math.ceil(EXPECTED_REQUESTS / CHUNK_SIZE)  # 20 (default; adaptive at run time)
 CAP_PER_CHUNK = 0.05
-CAP_TOTAL = 0.40  # authorized total cap (17C-R2-R5; was 0.25)
+# Authorized total cap raised to $10.00 (17C-R2-R11) for the full 478-request corpus
+# extraction while expiring Google Cloud credit remains; was $0.40 (R5), $0.25 (pre-R5).
+CAP_TOTAL = 10.00
+PREVIOUS_CAP_TOTAL = 0.40
 # 17C-R2-R10: raised from 2048 -> 8192 to stop MAX_TOKENS mid-JSON truncation (R9 finding).
 # gemini-2.5-flash-lite supports >= 8192 output tokens; the adapter posts maxOutputTokens
 # verbatim and imposes no lower ceiling.
