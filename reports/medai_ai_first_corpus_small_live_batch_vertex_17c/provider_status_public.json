@@ -1,0 +1,8 @@
+{
+  "provider_call_made": false,
+  "vertex_live_execution": false,
+  "gemini_call_made": false,
+  "failure_stage": "provider",
+  "failure_category": "auth_or_credentials_unavailable",
+  "execution_result": "PROVIDER_FAIL"
+}

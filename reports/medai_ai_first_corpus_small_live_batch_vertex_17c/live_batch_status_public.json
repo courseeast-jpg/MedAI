@@ -1,0 +1,10 @@
+{
+  "block": "MEDAI-AI-FIRST-CORPUS-SMALL-LIVE-BATCH-VERTEX-17C",
+  "execution_result": "PROVIDER_FAIL",
+  "request_count_loaded": 12,
+  "request_count_sent": 0,
+  "request_count_succeeded": 0,
+  "request_count_failed": 0,
+  "stopped_on_first_failure": true,
+  "documents": []
+}
