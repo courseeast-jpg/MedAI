@@ -35,10 +35,11 @@ from execution.gemini_vertex_adapter import (  # noqa: E402
 import re  # noqa: E402
 
 from execution.jsonl_framing import read_jsonl_lines  # noqa: E402  physical-newline JSONL framing
+from execution.canonical_batch_paths import resolve_canonical_batch  # noqa: E402  robust path resolver
 
 EXPECTED_HEAD = "ab4a00c87d0afd49f867e301c7ed9e069be884a1"
 
-CANON_BATCH = Path(os.path.expandvars(r"%LOCALAPPDATA%\MedAI_Private\ai_extraction_17B_R2_R1_478_repaired\outbound_requests_private.jsonl"))
+CANON_BATCH = resolve_canonical_batch()[0]  # robust resolver (literal -> %LOCALAPPDATA% -> home)
 CANON_BATCH_LABEL = r"C:\Users\S1\AppData\Local\MedAI_Private\ai_extraction_17B_R2_R1_478_repaired\outbound_requests_private.jsonl"
 PRIVATE_OUT = Path(os.path.expandvars(r"%LOCALAPPDATA%\MedAI_Private\ai_extraction_17C_R2_478_live_batch"))
 PRIVATE_RESP_LABEL = r"C:\Users\S1\AppData\Local\MedAI_Private\ai_extraction_17C_R2_478_live_batch\live_responses_private.jsonl"

@@ -1,0 +1,13 @@
+{
+  "canonical_batch_expected_path": "C:\\Users\\S1\\AppData\\Local\\MedAI_Private\\ai_extraction_17B_R2_R1_478_repaired\\outbound_requests_private.jsonl",
+  "canonical_batch_resolved_path": "C:\\Users\\S1\\AppData\\Local\\MedAI_Private\\ai_extraction_17B_R2_R1_478_repaired\\outbound_requests_private.jsonl",
+  "canonical_batch_exists": true,
+  "canonical_batch_is_file": true,
+  "canonical_batch_readable": true,
+  "canonical_batch_readonly": true,
+  "canonical_batch_parent_exists": true,
+  "canonical_batch_missing_reason": "",
+  "integrity_sidecar_exists": true,
+  "sha256_sidecar_exists": true,
+  "doc_id_manifest_exists": true
+}
