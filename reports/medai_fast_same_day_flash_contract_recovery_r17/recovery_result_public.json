@@ -1,0 +1,21 @@
+{
+  "overall_result": "GATE_PASSED_LIVE_NOT_RUN",
+  "corpus1": {
+    "selected": 360,
+    "attempted": 0,
+    "succeeded": 0,
+    "succeeded_full": 0,
+    "succeeded_minimal_review": 0,
+    "fast_fail_triggered": false,
+    "failed_for_review_after": 360
+  },
+  "corpus2": {
+    "selected": 2,
+    "attempted": 0,
+    "succeeded": 0,
+    "excluded_rtf_signal_docs": 2
+  },
+  "actual_total_token_count": 0,
+  "actual_cost_public_if_available": "unknown",
+  "schema_failures_improved": false
+}

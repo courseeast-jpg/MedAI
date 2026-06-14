@@ -1,0 +1,11 @@
+{
+  "json_salvage_enabled": true,
+  "section_name_normalization_enabled": true,
+  "skeleton_retry_enabled": true,
+  "minimal_schema_fallback_enabled": true,
+  "json_mode_used": true,
+  "response_schema_used": false,
+  "model_fallback_used": false,
+  "pro_fallback_skipped_reason": "no_safe_pro_route_implemented",
+  "allowed_sections_count": 7
+}
