@@ -1,0 +1,80 @@
+{
+  "block": "MEDAI-AI-FIRST-CORPUS-17B-PHONE-PATTERN-REPAIR-LOCAL-ONLY-17B-R1",
+  "request_validation_passed": true,
+  "residual_phone_pattern_failures_after_repair": 0,
+  "outbound_requests_built": 12,
+  "per_document": [
+    {
+      "document_id": "doc_cd62e194fb35c0cc",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_c751154a85e1fc13",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_0e11f5b8f7f7340e",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_93302ef9b03118ff",
+      "repaired": true,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_f801ced270466216",
+      "repaired": true,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_9da39515979218e3",
+      "repaired": true,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_eb1ec9dea962c9a0",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_2e98a1e93bd4b3a7",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_4f8257d1f3424f76",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_a6f1440e40790c2d",
+      "repaired": true,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_f1e73df9f066187c",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    },
+    {
+      "document_id": "doc_210569f1ba031119",
+      "repaired": false,
+      "validation_status": "ok",
+      "pi_pattern_classes_detected": []
+    }
+  ]
+}
