@@ -3,10 +3,10 @@
 | Gate | Value |
 | --- | --- |
 | stronger_model_route_available | `True` |
-| stronger_model_used | `False` |
+| stronger_model_used | `True` |
 | grounding_or_search_used | `False` |
-| provider_model_call_made | `False` |
-| gemini_call_made | `False` |
+| provider_model_call_made | `True` |
+| gemini_call_made | `True` |
 | mkb_db_opened | `False` |
 | active_mkb_write | `False` |
 | auto_accept_enabled | `False` |
