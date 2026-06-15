@@ -59,6 +59,8 @@ REPORT_DIR = REPO_ROOT / "reports" / "medai_r18_residual_schema_failures_stronge
 def _corpus1_residual() -> "tuple[list[dict], int]":
     sel, _completed = r17._corpus1_selection()  # 360 failed (118 preserved excluded)
     r17_done = set(lc.load_completed(base=r17.C1_CKPT))
+    if not r17_done:
+        r17_done = r17._archived_completed_ids(360)
     residual = [r for r in sel if str(r.get("document_id") or "") not in r17_done]
     content_before = 118 + len(r17_done)
     return residual, content_before
@@ -67,6 +69,8 @@ def _corpus1_residual() -> "tuple[list[dict], int]":
 def _corpus2_residual() -> list[dict]:
     sel, _c, _t = r17._corpus2_selection()  # 2 recoverable (21 not sent, 2 RTF excluded)
     r17_done = set(lc.load_completed(base=r17.C2_CKPT))
+    if not r17_done:
+        r17_done = r17._archived_completed_ids(2)
     return [r for r in sel if str(r.get("document_id") or "") not in r17_done]
 
 

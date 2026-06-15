@@ -1,0 +1,26 @@
+{
+  "diagnosed_count": 2,
+  "excluded_rtf_signal_containers": 2,
+  "documents": [
+    {
+      "corpus": "corpus2",
+      "doc_hash": "doc_e01432d2e312f8e4",
+      "failed_section": "unknown",
+      "diagnostic_bucket": "evidence_missing_or_checkpoint_inconsistent",
+      "recommended_local_repair": "mark_review_only",
+      "eligible_for_next_live": false,
+      "suggested_model": "flash",
+      "estimated_token_cost_bucket": "unknown"
+    },
+    {
+      "corpus": "corpus2",
+      "doc_hash": "metadata_unavailable_2",
+      "failed_section": "unknown",
+      "diagnostic_bucket": "evidence_missing_or_checkpoint_inconsistent",
+      "recommended_local_repair": "mark_review_only",
+      "eligible_for_next_live": false,
+      "suggested_model": "flash",
+      "estimated_token_cost_bucket": "unknown"
+    }
+  ]
+}

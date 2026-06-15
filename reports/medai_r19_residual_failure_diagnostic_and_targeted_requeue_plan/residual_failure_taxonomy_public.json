@@ -1,0 +1,30 @@
+{
+  "taxonomy_buckets": [
+    "near_empty_tokenized_payload",
+    "pii_over_tokenized_payload",
+    "non_clinical_or_admin_only",
+    "unsupported_signal_or_image_container",
+    "oversized_section",
+    "repeated_hidden_text_layer",
+    "extraction_noise_dominant",
+    "section_boundary_bad",
+    "section_name_mapping_issue",
+    "schema_contract_issue_remaining",
+    "model_refusal_or_safety_like",
+    "evidence_missing_or_checkpoint_inconsistent",
+    "fixable_by_smaller_windowing",
+    "fixable_by_section_split",
+    "fixable_by_retokenization",
+    "not_fixable_live_review_only"
+  ],
+  "bucket_counts": {
+    "non_clinical_or_admin_only": 211,
+    "repeated_hidden_text_layer": 75,
+    "section_boundary_bad": 17,
+    "schema_contract_issue_remaining": 1,
+    "fixable_by_smaller_windowing": 4,
+    "near_empty_tokenized_payload": 5,
+    "not_fixable_live_review_only": 6,
+    "evidence_missing_or_checkpoint_inconsistent": 2
+  }
+}
