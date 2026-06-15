@@ -1,0 +1,15 @@
+{
+  "live_ui_proof_method": "playwright",
+  "mkb_explorer_visible_in_live_ui": true,
+  "mkb_explorer_visible_by_default": true,
+  "mkb_explorer_visible_when_advanced_enabled": true,
+  "r26_all_record_qa_comparator_visible_in_live_ui": true,
+  "extracted_payload_queue_visible_in_live_ui": true,
+  "not_extracted_failure_queue_visible_in_live_ui": true,
+  "all_staging_records_count_visible": 496,
+  "extracted_payload_count_visible": 179,
+  "not_extracted_count_visible": 317,
+  "source_preview_available_count_visible": 331,
+  "source_unavailable_count_visible": 165,
+  "static_code_only_validation": false
+}

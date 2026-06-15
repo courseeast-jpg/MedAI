@@ -1318,6 +1318,10 @@ def render_mkb_tab(sys_components: dict) -> None:
             f"Corpus 1: {qa_counts['corpus1']} | Corpus 2: {qa_counts['corpus2']}. "
             "QA status is local-only and does not promote records."
         )
+        st.caption(
+            f"Extracted Payload QA Queue: {qa_counts['extracted_payload_records']} | "
+            f"Not-Extracted / Failure QA Queue: {qa_counts['not_extracted_records']}"
+        )
         qa_filters = st.multiselect(
             "QA filters",
             comparator["filter_options"],

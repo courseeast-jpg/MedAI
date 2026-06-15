@@ -1,0 +1,32 @@
+initial_tabs:
+Run & Review
+MKB Explorer
+Review Queue
+
+mkb_view:
+Run & Review
+MKB Explorer
+Review Queue
+496
+R23 review staging visible: content/extracted 179, review-only metadata 315, non-sendable metadata 2. All R23 staging rows remain review-required and unverified.
+All-record QA comparator
+Total staging
+Extracted payloads
+179
+Not extracted
+317
+Source preview
+331
+Source unavailable: 165 | Corpus 1: 494 | Corpus 2: 2. QA status is local-only and does not promote records.
+Extracted Payload QA Queue: 179 | Not-Extracted / Failure QA Queue: 317
+
+advanced_tabs:
+Run & Review
+MKB Explorer
+Review Queue
+Operator Control Panel
+Validation Batch Audit
+Validation History
+Safety & Governance
+Terminology Admin
+Vertex Decision Audit
