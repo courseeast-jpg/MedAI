@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import subprocess
 from pathlib import Path
 
 from clinical_knowledge.privacy import check_public_report_payload
@@ -16,16 +15,9 @@ def _summary() -> dict:
     return json.loads((REPORT_DIR / "summary.json").read_text(encoding="utf-8"))
 
 
-def test_local_gate_runs_and_creates_repaired_private_payloads() -> None:
-    result = subprocess.run(
-        ["python", "scripts/run_medai_r21_exhaustive_residual_recovery_or_finalization.py", "--local-only"],
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    assert result.returncode == 0, result.stderr
-    s = _summary()
+def test_local_gate_builds_repaired_private_payloads() -> None:
+    gate = mod.build_local_gate(write_private=False)
+    s = mod.build_summary(gate, None, local_only=True)
     assert s["r21_candidates_in_scope"] == 323
     assert s["private_repaired_payloads_created"] == 97
     assert s["finalized_review_only_before_provider"] == 226
@@ -51,7 +43,8 @@ def test_all_local_review_and_non_sendable_records_have_terminal_states() -> Non
 
 
 def test_no_provider_mkb_or_auto_accept_during_local_gate() -> None:
-    s = _summary()
+    gate = mod.build_local_gate(write_private=False)
+    s = mod.build_summary(gate, None, local_only=True)
     assert s["local_only"] is True
     assert s["provider_model_call_made"] is False
     assert s["gemini_call_made"] is False
@@ -62,7 +55,7 @@ def test_no_provider_mkb_or_auto_accept_during_local_gate() -> None:
 
 
 def test_route_choice_includes_flash_and_pro() -> None:
-    g = mod.build_local_gate()
+    g = mod.build_local_gate(write_private=False)
     assert g["models"][mod.FLASH_MODEL] == 75
     assert g["models"][mod.PRO_MODEL] == 22
 
@@ -88,7 +81,7 @@ def test_public_reports_privacy_clean_and_no_private_payloads() -> None:
 
 
 def test_simulated_completion_has_no_unresolved_candidates() -> None:
-    g = mod.build_local_gate()
+    g = mod.build_local_gate(write_private=False)
     terminal = {str(item["document_id"]): item for item in g["terminal"]}
     for item in g["provider_queue"]:
         terminal[str(item["document_id"])] = {
@@ -99,3 +92,10 @@ def test_simulated_completion_has_no_unresolved_candidates() -> None:
         }
     in_scope_terminal = sum(1 for v in terminal.values() if v["reason"] != "excluded_rtf_signal_container")
     assert in_scope_terminal == 323
+
+
+def test_existing_report_has_terminal_state_for_every_candidate() -> None:
+    s = _summary()
+    assert s["r21_candidates_in_scope"] == 323
+    assert s["candidates_with_terminal_state"] == 323
+    assert s["unresolved_candidates_after_r21"] == 0

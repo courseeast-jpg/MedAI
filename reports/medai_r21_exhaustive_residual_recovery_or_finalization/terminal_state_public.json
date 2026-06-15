@@ -1,13 +1,19 @@
 {
   "terminal_state_counts": {
-    "finalized_review_only_with_reason": 226,
-    "excluded_non_sendable_with_reason": 2
+    "finalized_review_only_with_reason": 237,
+    "excluded_non_sendable_with_reason": 2,
+    "recovered_minimal_review_bound_package": 2,
+    "recovered_full_schema_package": 2,
+    "blocked_by_hard_global_stop": 82
   },
   "reason_counts": {
     "evidence_missing_review_only": 4,
     "non_clinical_or_admin_only_review_only": 211,
     "no_clinical_signal_review_only": 5,
     "schema_unrecoverable_review_only": 6,
-    "excluded_rtf_signal_container": 2
+    "excluded_rtf_signal_container": 2,
+    "provider_recovered": 4,
+    "provider_timeout_review_only": 11,
+    "global_provider_suspected": 82
   }
 }

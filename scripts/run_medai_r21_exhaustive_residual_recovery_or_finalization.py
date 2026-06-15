@@ -194,7 +194,7 @@ def _safe_doc_id(prefix: str, value: str) -> str:
     return "doc_" + hashlib.sha256(f"{prefix}:{value}".encode("utf-8")).hexdigest()[:16]
 
 
-def build_local_gate() -> dict[str, Any]:
+def build_local_gate(*, write_private: bool = True) -> dict[str, Any]:
     targeted = _read_json(R19_TARGETED, {})
     review = _read_json(R19_REVIEW, {})
     targeted_docs = [d for d in targeted.get("documents", []) if d.get("eligible_for_next_live") is True]
@@ -271,21 +271,22 @@ def build_local_gate() -> dict[str, Any]:
     ]
     terminal.extend(excluded)
 
-    PRIVATE_ROOT.mkdir(parents=True, exist_ok=True)
-    with PRIVATE_QUEUE.open("w", encoding="utf-8") as fh:
-        for item in provider_queue:
-            fh.write(json.dumps(item, ensure_ascii=False) + "\n")
-    with PRIVATE_TERMINAL.open("w", encoding="utf-8") as fh:
-        for item in terminal:
-            fh.write(json.dumps(item, ensure_ascii=False) + "\n")
     digest = hashlib.sha256(json.dumps([q["document_id"] for q in provider_queue], sort_keys=True).encode()).hexdigest()
-    PRIVATE_MANIFEST.write_text(json.dumps({
-        "block": BLOCK,
-        "provider_queue_count": len(provider_queue),
-        "terminal_pre_provider_count": len(terminal),
-        "provider_queue_digest": digest,
-        "models": dict(models),
-    }, indent=2, ensure_ascii=True), encoding="utf-8")
+    if write_private:
+        PRIVATE_ROOT.mkdir(parents=True, exist_ok=True)
+        with PRIVATE_QUEUE.open("w", encoding="utf-8") as fh:
+            for item in provider_queue:
+                fh.write(json.dumps(item, ensure_ascii=False) + "\n")
+        with PRIVATE_TERMINAL.open("w", encoding="utf-8") as fh:
+            for item in terminal:
+                fh.write(json.dumps(item, ensure_ascii=False) + "\n")
+        PRIVATE_MANIFEST.write_text(json.dumps({
+            "block": BLOCK,
+            "provider_queue_count": len(provider_queue),
+            "terminal_pre_provider_count": len(terminal),
+            "provider_queue_digest": digest,
+            "models": dict(models),
+        }, indent=2, ensure_ascii=True), encoding="utf-8")
 
     completed_c1 = r17._archived_completed_ids(360) | r17._archived_completed_ids(337)
     selected_ids = {q["document_id"] for q in provider_queue}
@@ -363,7 +364,7 @@ def _preserve(run_ts: str, doc_id: str, category: str, live: dict[str, Any]) -> 
 
 def run_live(g: dict[str, Any]) -> dict[str, Any]:
     live: dict[str, Any] = {"provider_model_call_made": False, "gemini_call_made": False,
-                            "actual_total_token_count": 0, "models_used": set(),
+                            "actual_total_token_count": 0, "sections_sent": 0, "models_used": set(),
                             "failed_evidence_preserved": False}
     terminal = _load_terminal()
     if not g["gate_passed"]:

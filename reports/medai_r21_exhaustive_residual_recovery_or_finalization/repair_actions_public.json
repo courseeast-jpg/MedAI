@@ -10,6 +10,6 @@
     "gemini-2.5-flash": 75,
     "gemini-2.5-pro": 22
   },
-  "timeout_repairs_applied": 0,
-  "timeouts_retried_with_smaller_window": 0
+  "timeout_repairs_applied": 11,
+  "timeouts_retried_with_smaller_window": 11
 }

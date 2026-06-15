@@ -1,8 +1,11 @@
 {
-  "candidate_count_public": 228,
+  "candidate_count_public": 325,
   "terminal_state_counts": {
-    "finalized_review_only_with_reason": 226,
-    "excluded_non_sendable_with_reason": 2
+    "finalized_review_only_with_reason": 237,
+    "excluded_non_sendable_with_reason": 2,
+    "recovered_minimal_review_bound_package": 2,
+    "recovered_full_schema_package": 2,
+    "blocked_by_hard_global_stop": 82
   },
-  "provider_attempted_count": 0
+  "provider_attempted_count": 15
 }
