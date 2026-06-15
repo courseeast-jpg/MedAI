@@ -1,0 +1,17 @@
+{
+  "repair_counts": {
+    "drop_nonclinical_noise": 75,
+    "section_split": 18,
+    "smaller_windowing": 4
+  },
+  "strategy_counts": {
+    "drop_nonclinical_noise": 75,
+    "section_split_strategy": 18,
+    "smaller_windowing_strategy": 4
+  },
+  "models_planned": {
+    "gemini-2.5-flash": 92,
+    "gemini-2.5-pro": 5
+  },
+  "local_repairs_applied": true
+}

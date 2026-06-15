@@ -1,0 +1,7 @@
+# MEDAI-R20-TARGETED-FIXABLE-RESIDUAL-LIVE-REQUEUE - implementation report
+
+- Targeted selected: `97` from R19.
+- Review-only selected: `0`.
+- Local repair counts: smaller `4`, section `18`, retokenize `0`, noise-drop `75`.
+- Live: started `False`, attempted `0`, full `0`, minimal-review `0`, failed-after `97`.
+- Privacy/safety: `passed` / `passed`.
