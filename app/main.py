@@ -3080,13 +3080,7 @@ def main() -> None:
     if show_advanced_tools:
         st.sidebar.caption("Advanced tools include validation history, audit pages, safety governance, and terminology administration.")
 
-    tab_labels = [
-        RUN_REVIEW_TAB,
-        MKB_EXPLORER_TAB,
-        REVIEW_QUEUE_TAB,
-    ]
-    if show_advanced_tools:
-        tab_labels.extend(ADVANCED_OPERATOR_TAB_LABELS)
+    tab_labels = operator_tab_labels(show_advanced_tools)
     tabs = st.tabs(tab_labels)
     for label, tab in zip(tab_labels, tabs):
         with tab:

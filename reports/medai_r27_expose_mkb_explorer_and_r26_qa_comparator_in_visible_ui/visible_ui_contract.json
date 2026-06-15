@@ -1,0 +1,8 @@
+{
+  "mkb_explorer_tab_visible": true,
+  "mkb_explorer_visible_by_default": true,
+  "mkb_explorer_visible_when_advanced_enabled": true,
+  "r26_all_record_qa_comparator_visible": true,
+  "extracted_payload_queue_visible": true,
+  "not_extracted_failure_queue_visible": true
+}
