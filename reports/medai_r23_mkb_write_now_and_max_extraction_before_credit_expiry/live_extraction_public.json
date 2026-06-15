@@ -1,7 +1,7 @@
 {
-  "additional_extraction_started": false,
-  "provider_attempted": 0,
+  "additional_extraction_started": true,
+  "provider_attempted": 16,
   "provider_succeeded_full_schema": 0,
-  "provider_succeeded_minimal_review_bound": 0,
-  "new_content_packages_recovered_r23": 0
+  "provider_succeeded_minimal_review_bound": 16,
+  "new_content_packages_recovered_r23": 16
 }

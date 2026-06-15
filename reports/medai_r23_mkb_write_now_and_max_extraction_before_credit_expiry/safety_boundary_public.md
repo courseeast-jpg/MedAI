@@ -3,7 +3,7 @@
 | Gate | Value |
 | --- | --- |
 | user_authorized_mkb_write_now | `True` |
-| mkb_db_opened_for_write | `False` |
+| mkb_db_opened_for_write | `True` |
 | mkb_write_scope | `unverified_review_required_only` |
 | active_verified_mkb_records_written | `0` |
 | auto_accept_enabled | `False` |

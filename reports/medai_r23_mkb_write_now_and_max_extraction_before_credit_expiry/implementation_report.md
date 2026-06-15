@@ -1,7 +1,7 @@
 # MEDAI-R23-MKB-WRITE-NOW-AND-MAX-EXTRACTION-BEFORE-CREDIT-EXPIRY - implementation report
 
 - Write plan records: `480`.
-- Existing content packages written: `0`.
-- Review metadata written: `0`.
-- Non-sendable metadata written: `0`.
-- Provider attempted: `0`; recovered `0`.
+- Existing content packages written: `163`.
+- Review metadata written: `315`.
+- Non-sendable metadata written: `2`.
+- Provider attempted: `16`; recovered `16`.

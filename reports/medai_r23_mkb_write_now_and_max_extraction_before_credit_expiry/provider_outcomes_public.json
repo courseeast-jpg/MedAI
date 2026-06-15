@@ -1,6 +1,8 @@
 {
-  "provider_model_call_made": false,
-  "models_used": [],
+  "provider_model_call_made": true,
+  "models_used": [
+    "gemini-2.5-pro"
+  ],
   "actual_total_token_count": 0,
   "actual_cost_public_if_available": "unknown",
   "credit_or_billing_error": false
