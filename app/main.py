@@ -1135,16 +1135,30 @@ def render_operator_result_panel(result) -> None:
 def render_mkb_tab(sys_components: dict) -> None:
     st.subheader(MKB_EXPLORER_TAB)
     if sys_components.get("sql") is None:
-        st.warning("MKB Explorer unavailable because SQLite is not initialized.")
-        return
+        base_model = build_mkb_explorer_model(None, limit=1, include_local_review_staging=True)
+        if not base_model["available"]:
+            st.warning("MKB Explorer unavailable because SQLite is not initialized.")
+            return
+        st.warning("Active MKB SQLite is unavailable; showing review-required local staging records only.")
+    else:
+        base_model = build_mkb_explorer_model(sys_components["sql"], limit=1)
 
-    base_model = build_mkb_explorer_model(sys_components["sql"], limit=1)
     base_counts = base_model["counts"]
-    count_cols = st.columns(4)
+    count_cols = st.columns(5)
     count_cols[0].metric("Total", base_counts["total"])
     count_cols[1].metric("Active", base_counts["active"])
     count_cols[2].metric("Quarantined / review-bound", base_counts["review_bound"])
     count_cols[3].metric("Superseded / rejected", base_counts["superseded"])
+    count_cols[4].metric("R23 staging", base_counts.get("r23_imported", 0))
+    if base_counts.get("r23_imported", 0):
+        package_counts = base_counts.get("r23_package_type_counts", {})
+        st.caption(
+            "R23 review staging visible: "
+            f"content/extracted {package_counts.get('full_schema', 0) + package_counts.get('minimal_review_bound', 0)}, "
+            f"review-only metadata {package_counts.get('review_only_finalized', 0)}, "
+            f"non-sendable metadata {package_counts.get('non_sendable_excluded', 0)}. "
+            "All R23 staging rows remain review-required and unverified."
+        )
     st.caption("Active records are separated from quarantined / review-bound records. Review-bound records are emphasized by default when present.")
 
     specialty_filter, tier_filter, fact_type_filter = st.columns(3)
@@ -1175,19 +1189,22 @@ def render_mkb_tab(sys_components: dict) -> None:
     )
 
     model = build_mkb_explorer_model(
-        sys_components["sql"],
+        sys_components.get("sql"),
         specialty_filter=specialty,
         tier_filter=tier,
         fact_type_filter=fact_type,
+        include_local_review_staging=True if sys_components.get("sql") is None else None,
     )
     try:
         from app.source_extraction_packages import build_source_extraction_packages
 
-        package_model = build_source_extraction_packages(
-            sys_components["sql"],
-            tier_filter="review_bound" if tier in {"all", "review_bound", "quarantined"} else tier,
-            limit=100,
-        )
+        package_model = {"packages_created": 0}
+        if sys_components.get("sql") is not None:
+            package_model = build_source_extraction_packages(
+                sys_components["sql"],
+                tier_filter="review_bound" if tier in {"all", "review_bound", "quarantined"} else tier,
+                limit=100,
+            )
         if package_model["packages_created"]:
             st.markdown("#### Source Packages")
             st.caption(

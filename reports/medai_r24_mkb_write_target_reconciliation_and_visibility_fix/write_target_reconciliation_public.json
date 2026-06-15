@@ -1,0 +1,10 @@
+{
+  "r23_reported_records_written": 496,
+  "r23_durable_records_found": 496,
+  "r23_write_target_classification": "sqlite_db",
+  "r23_write_target_table": "mkb_review_staging_records",
+  "data_mkb_db_valid_sqlite": false,
+  "app_mkb_reader_target_matches_r23_target": true,
+  "records_inserted_or_made_visible": 496,
+  "idempotency_verified": true
+}

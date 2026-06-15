@@ -1,0 +1,12 @@
+{
+  "active_verified": 0,
+  "review_required_staging": 496,
+  "r23_imported_count": 496,
+  "package_type_counts": {
+    "full_schema": 161,
+    "minimal_review_bound": 18,
+    "non_sendable_excluded": 2,
+    "review_only_finalized": 315
+  },
+  "all_visible_records_review_required": true
+}
