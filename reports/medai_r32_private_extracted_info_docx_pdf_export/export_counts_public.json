@@ -1,0 +1,10 @@
+{
+  "total_staging_records": 496,
+  "extracted_payload_records_exported": 179,
+  "usable_payload_records": 179,
+  "empty_extraction_shell_records": 0,
+  "not_extracted_records_indexed": 317,
+  "docx_created": true,
+  "pdf_created": false,
+  "private_export_committed": false
+}
