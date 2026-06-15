@@ -20,6 +20,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
 from app.lab_document_metadata import reason_label_for_validation, review_reason_for_result
+from app.mkb_all_records_qa_comparator import (
+    QA_STATUSES,
+    build_all_records_qa_comparator,
+    get_comparator_record_detail,
+    save_qa_status,
+)
 from app.mkb_explorer_model import build_mkb_explorer_model
 from app.mkb_staging_payload_reader import build_staging_quality_view, get_staging_detail
 from app.operator_compact_styles import COMPACT_OPERATOR_CSS
@@ -1299,6 +1305,98 @@ def render_mkb_tab(sys_components: dict) -> None:
                 st.dataframe(detail["extracted_items"], hide_index=True, use_container_width=True)
             else:
                 st.info("No structured payload is available for this staging row; review the terminal reason and local source evidence status.")
+        st.markdown("#### All-record QA comparator")
+        comparator = build_all_records_qa_comparator()
+        qa_counts = comparator["counts"]
+        qa_cols = st.columns(4)
+        qa_cols[0].metric("Total staging", qa_counts["total_staging_records"])
+        qa_cols[1].metric("Extracted payloads", qa_counts["extracted_payload_records"])
+        qa_cols[2].metric("Not extracted", qa_counts["not_extracted_records"])
+        qa_cols[3].metric("Source preview", qa_counts["source_preview_available"])
+        st.caption(
+            f"Source unavailable: {qa_counts['source_unavailable']} | "
+            f"Corpus 1: {qa_counts['corpus1']} | Corpus 2: {qa_counts['corpus2']}. "
+            "QA status is local-only and does not promote records."
+        )
+        qa_filters = st.multiselect(
+            "QA filters",
+            comparator["filter_options"],
+            default=["All"],
+            key="mkb_all_records_qa_filters",
+        )
+        comparator = build_all_records_qa_comparator(filters=qa_filters or ["All"])
+        queue_mode = st.radio(
+            "QA queue",
+            ["Extracted Payload QA Queue", "Not-Extracted / Failure QA Queue"],
+            horizontal=True,
+            key="mkb_all_records_qa_queue_mode",
+        )
+        queue_rows = (
+            comparator["extracted_queue"]
+            if queue_mode == "Extracted Payload QA Queue"
+            else comparator["not_extracted_queue"]
+        )
+        if queue_rows:
+            selected_qa = st.selectbox(
+                "Open detail",
+                [row["record_id"] for row in queue_rows],
+                format_func=lambda value: next(
+                    (
+                        f"{row['record_id_short']} | {row['corpus_id']} | {row['package_type']} | {row['document_state']}"
+                        for row in queue_rows
+                        if row["record_id"] == value
+                    ),
+                    str(value),
+                ),
+                key="mkb_all_records_qa_selected",
+            )
+            qa_detail = get_comparator_record_detail(str(selected_qa), include_private_preview=False)
+            row_meta = qa_detail.get("qa_row", {})
+            st.caption(
+                f"Record {qa_detail['record_id']} | {qa_detail['corpus_id']} | "
+                f"{qa_detail['package_type']} | {qa_detail['source_phase']}"
+            )
+            st.json(
+                {
+                    "review_status": qa_detail["review_status"],
+                    "quality_metrics": qa_detail["quality_metrics"],
+                    "source_resolution": {
+                        "resolution": row_meta.get("source_resolution"),
+                        "preview_available": row_meta.get("source_preview_available"),
+                        "source_unavailable": row_meta.get("source_unavailable"),
+                        "source_unavailable_reason": row_meta.get("source_unavailable_reason"),
+                        "evidence_type": row_meta.get("evidence_type"),
+                    },
+                    "terminal_reason": qa_detail["terminal_reason"],
+                    "future_review_route": row_meta.get("future_review_route"),
+                    "controls": {
+                        "active_verified_promotion_allowed": False,
+                        "auto_accept_allowed": False,
+                        "medical_decision_allowed": False,
+                    },
+                }
+            )
+            if qa_detail["payload_available"]:
+                st.markdown("##### Extracted sections")
+                st.dataframe(qa_detail["extracted_sections"], hide_index=True, use_container_width=True)
+                st.markdown("##### Extracted items / facts")
+                st.dataframe(qa_detail["extracted_items"], hide_index=True, use_container_width=True)
+            else:
+                st.info("No extracted payload exists for this staging row. Use terminal reason and source status for manual QA.")
+            status = st.selectbox(
+                "Local QA status",
+                sorted(QA_STATUSES),
+                index=sorted(QA_STATUSES).index(row_meta.get("qa_status", "not_reviewed"))
+                if row_meta.get("qa_status", "not_reviewed") in QA_STATUSES
+                else 0,
+                key="mkb_all_records_qa_status",
+            )
+            note = st.text_input("Local QA note", key="mkb_all_records_qa_note")
+            if st.button("Save local QA status", key="mkb_all_records_qa_save"):
+                result = save_qa_status(str(selected_qa), status, qa_note=note)
+                st.success(f"Saved local QA status: {result['qa_status']}")
+        else:
+            st.info("No QA records match the current filters.")
 
 
 def render_review_queue_tab(sys_components: dict) -> None:

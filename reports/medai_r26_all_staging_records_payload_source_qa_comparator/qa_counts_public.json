@@ -1,0 +1,10 @@
+{
+  "all_staging_records_indexed": 496,
+  "extracted_payload_records_indexed": 179,
+  "not_extracted_records_indexed": 317,
+  "source_evidence_refs_available": 496,
+  "source_preview_available_count": 331,
+  "source_unavailable_count": 165,
+  "private_all_records_export_created": true,
+  "private_all_records_export_count": 496
+}
