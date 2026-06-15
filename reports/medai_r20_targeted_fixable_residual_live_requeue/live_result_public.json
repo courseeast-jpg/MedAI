@@ -1,13 +1,16 @@
 {
-  "overall_result": "GATE_PASSED_LIVE_NOT_RUN",
-  "live_run_started": false,
-  "targeted_attempted": 0,
+  "overall_result": "LIVE_FAIL",
+  "live_failure_category": "provider_fail:timeout",
+  "live_run_started": true,
+  "targeted_attempted": 1,
   "targeted_succeeded_full_schema": 0,
   "targeted_succeeded_minimal_review_bound": 0,
   "targeted_failed_after": 97,
   "fast_fail_triggered": false,
-  "models_used": [],
+  "models_used": [
+    "gemini-2.5-flash"
+  ],
   "actual_total_token_count": 0,
-  "actual_cost_public_if_available": "unknown",
-  "same_day_total_cost_after_r20_usd": "unknown"
+  "actual_cost_public_if_available": 0.0,
+  "same_day_total_cost_after_r20_usd": 4.970064
 }

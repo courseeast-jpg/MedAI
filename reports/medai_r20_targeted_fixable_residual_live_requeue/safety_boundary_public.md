@@ -3,8 +3,8 @@
 | Gate | Value |
 | --- | --- |
 | targeted_only | `True` |
-| provider_model_call_made | `False` |
-| gemini_call_made | `False` |
+| provider_model_call_made | `True` |
+| gemini_call_made | `True` |
 | mkb_db_opened | `False` |
 | active_mkb_write | `False` |
 | auto_accept_enabled | `False` |
