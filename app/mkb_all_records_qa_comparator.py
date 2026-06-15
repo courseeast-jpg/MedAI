@@ -370,11 +370,181 @@ def create_private_all_records_export(*, db_path: Path | None = None) -> dict[st
     return {"created": True, "count": len(records)}
 
 
+_TOKEN_RE = __import__("re").compile(r"\[[A-Z_]+_\d+\]")
+
+
+def _item_to_text(item: Any) -> str:
+    """Render one extracted item/fact as a compact readable line (no JSON braces)."""
+    if isinstance(item, dict):
+        parts = []
+        for key, value in item.items():
+            if value in (None, "", [], {}):
+                continue
+            if isinstance(value, (list, dict)):
+                value = json.dumps(value, ensure_ascii=False)
+            parts.append(f"{key}: {value}")
+        return " · ".join(parts) if parts else ""
+    if isinstance(item, (list, tuple)):
+        return " · ".join(_item_to_text(part) for part in item if part not in (None, ""))
+    return str(item).strip()
+
+
+def _section_name(section: Any, fallback: str) -> str:
+    if isinstance(section, dict):
+        return str(section.get("section") or section.get("name") or fallback)
+    return fallback
+
+
+def _section_items(section: Any) -> list[Any]:
+    if isinstance(section, dict):
+        items = section.get("items")
+        if isinstance(items, list):
+            return items
+    return []
+
+
+def build_readable_markdown(structured_payload: Any, sections: Any, items: Any) -> tuple[str, int, int, int]:
+    """Build operator-readable markdown from a staging payload. Returns
+    (markdown, sections_rendered, items_rendered, nonplaceholder_char_count)."""
+    lines: list[str] = []
+    sections_rendered = 0
+    items_rendered = 0
+    section_list = sections if isinstance(sections, list) else []
+    for idx, section in enumerate(section_list):
+        name = _section_name(section, f"section_{idx + 1}")
+        sec_items = _section_items(section)
+        rendered = [text for text in (_item_to_text(it) for it in sec_items) if text]
+        lines.append(f"**{name}**")
+        if rendered:
+            lines.extend(f"- {text}" for text in rendered)
+            items_rendered += len(rendered)
+        else:
+            lines.append("- (no items in this section; review-bound)")
+        sections_rendered += 1
+        lines.append("")
+    flat_items = items if isinstance(items, list) else []
+    flat_rendered = [text for text in (_item_to_text(it) for it in flat_items) if text]
+    if flat_rendered:
+        lines.append("**Extracted facts**")
+        lines.extend(f"- {text}" for text in flat_rendered)
+        items_rendered += len(flat_rendered)
+        lines.append("")
+    if not section_list and not flat_rendered and isinstance(structured_payload, dict) and structured_payload:
+        # Minimal/review-bound packages: render the structured payload keys readably.
+        for key, value in structured_payload.items():
+            if isinstance(value, (list, dict)):
+                value = json.dumps(value, ensure_ascii=False)
+            lines.append(f"- {key}: {value}")
+    markdown = "\n".join(lines).strip()
+    stripped = _TOKEN_RE.sub("", markdown)
+    nonplaceholder = sum(1 for ch in stripped if not ch.isspace() and ch not in "-*#`>")
+    return markdown, sections_rendered, items_rendered, nonplaceholder
+
+
+def _not_extracted_explanation(detail: dict[str, Any], row: dict[str, Any]) -> str:
+    reason = str(detail.get("terminal_reason") or "unknown")
+    package_type = str(detail.get("package_type") or "")
+    if package_type == "non_sendable_excluded":
+        return ("Source is a non-sendable container (e.g. RTF/signal container). It was never "
+                f"sent for extraction. Terminal reason: {reason}.")
+    if row.get("source_unavailable"):
+        return (f"No extracted payload. Terminal reason: {reason}. "
+                f"{row.get('source_unavailable_reason') or 'source preview unavailable'}.")
+    return (f"No extracted payload. Terminal reason: {reason}. Source evidence resolution: "
+            f"{row.get('source_resolution') or 'unknown'}.")
+
+
+def readable_record_view(record_id: str, *, include_private_preview: bool = False) -> dict[str, Any]:
+    """Operator-readable detail for one staging record: readable extracted content,
+    sections, items/facts, source-evidence availability, and QA status. Raw clinical text
+    is returned ONLY for local UI use; callers must not serialize it to public artifacts.
+    `proof_metrics` carries content-free counts/booleans safe for proof evidence."""
+    detail = get_comparator_record_detail(record_id, include_private_preview=include_private_preview)
+    if not detail.get("available"):
+        return {"available": False, "record_id": record_id}
+    row = detail.get("qa_row") or {}
+    sections = detail.get("extracted_sections") or []
+    items = detail.get("extracted_items") or []
+    payload = detail.get("structured_payload") or {}
+    is_extracted = bool(detail.get("payload_available"))
+    markdown, sec_n, item_n, nonplaceholder = build_readable_markdown(payload, sections, items)
+    source = dict(detail.get("source_evidence") or {})
+    quality = dict(detail.get("quality_metrics") or {})
+    warnings = []
+    if isinstance(payload, dict):
+        raw_warn = payload.get("warnings") or payload.get("extraction_warnings")
+        if isinstance(raw_warn, list):
+            warnings = [str(w) for w in raw_warn]
+    source_visible = bool(source) or bool(row.get("source_resolution"))
+    return {
+        "available": True,
+        "record_id": detail["record_id"],
+        "safe_doc_id": detail["safe_doc_id"],
+        "corpus_id": detail["corpus_id"],
+        "package_type": detail["package_type"],
+        "is_extracted": is_extracted,
+        "headings": [
+            "Extracted content",
+            "Extracted sections",
+            "Extracted items / facts",
+            "Source evidence / original preview",
+            "QA decision",
+        ],
+        "extracted_content_markdown": markdown,
+        "sections_readable": [
+            {"section": _section_name(s, f"section_{i + 1}"),
+             "item_count": len(_section_items(s))}
+            for i, s in enumerate(sections)
+        ],
+        "items_readable": [text for text in (_item_to_text(it) for it in items) if text],
+        "warnings": warnings,
+        "quality_metrics": quality,
+        "source_evidence": {
+            "preview_available": bool(source.get("preview_available")),
+            "evidence_type": source.get("evidence_type", "unavailable"),
+            "page_count": source.get("page_count"),
+            "source_resolution": row.get("source_resolution"),
+            "source_unavailable": bool(row.get("source_unavailable")),
+        },
+        "terminal_reason": detail.get("terminal_reason"),
+        "failure_bucket": row.get("failure_bucket") or detail.get("terminal_reason"),
+        "not_extracted_explanation": "" if is_extracted else _not_extracted_explanation(detail, row),
+        "qa_status": row.get("qa_status", "not_reviewed"),
+        "proof_metrics": {
+            "content_heading_present": True,
+            "is_extracted": is_extracted,
+            "sections_rendered": sec_n,
+            "items_rendered": item_n,
+            "nonplaceholder_chars": nonplaceholder,
+            "readable_present": bool(markdown),
+            "source_evidence_visible": source_visible,
+            "terminal_reason_present": bool(detail.get("terminal_reason")),
+        },
+        "active_verified_promotion_allowed": False,
+        "auto_accept_allowed": False,
+        "medical_decision_allowed": False,
+    }
+
+
+def representative_proof_records(*, db_path: Path | None = None) -> dict[str, str | None]:
+    """Pick one representative record per type for the live-UI readable-render proof."""
+    model = build_all_records_qa_comparator(db_path=db_path)
+    full_schema = next((r["record_id"] for r in model["extracted_queue"]
+                        if r["package_type"] == "full_schema"), None)
+    minimal = next((r["record_id"] for r in model["extracted_queue"]
+                    if r["package_type"] == "minimal_review_bound"), None)
+    not_extracted = next((r["record_id"] for r in model["not_extracted_queue"]), None)
+    return {"full_schema": full_schema, "minimal_review": minimal, "not_extracted": not_extracted}
+
+
 __all__ = [
     "QA_DECISION_TABLE",
     "QA_STATUSES",
     "build_all_records_qa_comparator",
+    "build_readable_markdown",
     "create_private_all_records_export",
     "get_comparator_record_detail",
+    "readable_record_view",
+    "representative_proof_records",
     "save_qa_status",
 ]

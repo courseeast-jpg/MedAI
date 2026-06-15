@@ -1,0 +1,9 @@
+{
+  "extracted_payload_qa_queue": 179,
+  "not_extracted_failure_qa_queue": 317,
+  "total_staging_records": 496,
+  "package_type_counts": {
+    "content_extracted": 179,
+    "not_extracted_review_or_metadata": 317
+  }
+}

@@ -24,6 +24,8 @@ from app.mkb_all_records_qa_comparator import (
     QA_STATUSES,
     build_all_records_qa_comparator,
     get_comparator_record_detail,
+    readable_record_view,
+    representative_proof_records,
     save_qa_status,
 )
 from app.mkb_explorer_model import build_mkb_explorer_model
@@ -1356,37 +1358,8 @@ def render_mkb_tab(sys_components: dict) -> None:
             )
             qa_detail = get_comparator_record_detail(str(selected_qa), include_private_preview=False)
             row_meta = qa_detail.get("qa_row", {})
-            st.caption(
-                f"Record {qa_detail['record_id']} | {qa_detail['corpus_id']} | "
-                f"{qa_detail['package_type']} | {qa_detail['source_phase']}"
-            )
-            st.json(
-                {
-                    "review_status": qa_detail["review_status"],
-                    "quality_metrics": qa_detail["quality_metrics"],
-                    "source_resolution": {
-                        "resolution": row_meta.get("source_resolution"),
-                        "preview_available": row_meta.get("source_preview_available"),
-                        "source_unavailable": row_meta.get("source_unavailable"),
-                        "source_unavailable_reason": row_meta.get("source_unavailable_reason"),
-                        "evidence_type": row_meta.get("evidence_type"),
-                    },
-                    "terminal_reason": qa_detail["terminal_reason"],
-                    "future_review_route": row_meta.get("future_review_route"),
-                    "controls": {
-                        "active_verified_promotion_allowed": False,
-                        "auto_accept_allowed": False,
-                        "medical_decision_allowed": False,
-                    },
-                }
-            )
-            if qa_detail["payload_available"]:
-                st.markdown("##### Extracted sections")
-                st.dataframe(qa_detail["extracted_sections"], hide_index=True, use_container_width=True)
-                st.markdown("##### Extracted items / facts")
-                st.dataframe(qa_detail["extracted_items"], hide_index=True, use_container_width=True)
-            else:
-                st.info("No extracted payload exists for this staging row. Use terminal reason and source status for manual QA.")
+            _render_readable_qa_detail(str(selected_qa), qa_detail, row_meta)
+            st.markdown("##### QA decision")
             status = st.selectbox(
                 "Local QA status",
                 sorted(QA_STATUSES),
@@ -1401,6 +1374,116 @@ def render_mkb_tab(sys_components: dict) -> None:
                 st.success(f"Saved local QA status: {result['qa_status']}")
         else:
             st.info("No QA records match the current filters.")
+
+        if os.getenv("MEDAI_R29_LIVE_UI_PROOF") == "1":
+            _render_r29_readable_proof(qa_counts)
+
+
+def _render_readable_qa_detail(record_id: str, qa_detail: dict, row_meta: dict) -> None:
+    """Readable extraction / source comparison panel (R29). Readable content first;
+    raw JSON only under a collapsed 'Advanced raw payload' expander."""
+    view = readable_record_view(record_id, include_private_preview=False)
+    st.caption(
+        f"Record {view['record_id']} | {view['corpus_id']} | {view['package_type']} | "
+        f"{'extracted' if view['is_extracted'] else 'not extracted'}"
+    )
+    st.markdown("##### Extracted content")
+    if view["is_extracted"] and view["extracted_content_markdown"]:
+        st.markdown(view["extracted_content_markdown"])
+    elif view["is_extracted"]:
+        st.info("Extracted payload present; see sections/items below.")
+    else:
+        st.warning(view["not_extracted_explanation"] or "No extracted payload for this record.")
+        st.markdown(f"- Terminal reason: `{view['terminal_reason']}`")
+        st.markdown(f"- Failure bucket: `{view['failure_bucket']}`")
+
+    st.markdown("##### Extracted sections")
+    if view["sections_readable"]:
+        for sec in view["sections_readable"]:
+            st.markdown(f"- **{sec['section']}** — {sec['item_count']} item(s)")
+    else:
+        st.caption("No extracted sections (not-extracted / review-only record).")
+
+    st.markdown("##### Extracted items / facts")
+    if view["items_readable"]:
+        for line in view["items_readable"][:200]:
+            st.markdown(f"- {line}")
+    elif view["is_extracted"]:
+        st.caption("No discrete item-level facts; see Extracted content above.")
+    else:
+        st.caption("No extracted items (not-extracted record).")
+
+    qm = view["quality_metrics"]
+    if view["warnings"]:
+        st.markdown("**Warnings:** " + "; ".join(view["warnings"][:20]))
+    st.caption(
+        f"Quality — sections {qm.get('section_count', 0)} · items {qm.get('item_count', 0)} · "
+        f"warnings {qm.get('warning_count', 0)} · schema_valid {qm.get('schema_valid', False)} · "
+        f"minimal_review {qm.get('minimal_review', False)}"
+    )
+
+    st.markdown("##### Source evidence / original preview")
+    se = view["source_evidence"]
+    available = bool(se.get("preview_available")) or not bool(se.get("source_unavailable"))
+    st.markdown(
+        f"- Source available: `{available}` · type: `{se.get('evidence_type')}` · "
+        f"resolution: `{se.get('source_resolution')}`"
+    )
+    if se.get("page_count"):
+        st.caption(f"Pages: {se.get('page_count')}")
+    if se.get("source_unavailable"):
+        st.caption("Original source preview unavailable for this record.")
+
+    with st.expander("Advanced raw payload", expanded=False):
+        st.json(
+            {
+                "review_status": qa_detail.get("review_status"),
+                "quality_metrics": qa_detail.get("quality_metrics"),
+                "source_resolution": {
+                    "resolution": row_meta.get("source_resolution"),
+                    "evidence_type": row_meta.get("evidence_type"),
+                    "source_unavailable": row_meta.get("source_unavailable"),
+                },
+                "terminal_reason": qa_detail.get("terminal_reason"),
+                "future_review_route": row_meta.get("future_review_route"),
+                "controls": {
+                    "active_verified_promotion_allowed": False,
+                    "auto_accept_allowed": False,
+                    "medical_decision_allowed": False,
+                },
+            }
+        )
+
+
+def _render_r29_readable_proof(qa_counts: dict) -> None:
+    """Env-gated live-UI readable-render proof: render representative records via the
+    same readable panel and emit content-free R29PROOF marker lines for the UI probe."""
+    st.markdown("##### Readable rendering proof (R29)")
+    # Marker lines use st.text (verbatim) so the pipe-delimited fields are NOT rendered as a
+    # markdown table; content-free counts/booleans only.
+    st.text(
+        f"R29PROOF|queue|extracted={qa_counts['extracted_payload_records']}|"
+        f"not_extracted={qa_counts['not_extracted_records']}"
+    )
+    reps = representative_proof_records()
+    for kind, rid in reps.items():
+        if not rid:
+            st.text(f"R29PROOF|{kind}|missing=1")
+            continue
+        view = readable_record_view(rid, include_private_preview=False)
+        pm = view["proof_metrics"]
+        st.markdown(f"**R29 proof — {kind}**")
+        st.markdown("###### Extracted content")
+        with st.expander("proof readable content", expanded=False):
+            st.markdown(view["extracted_content_markdown"] or view["not_extracted_explanation"] or "(none)")
+        st.text(
+            f"R29PROOF|{kind}|extracted={int(view['is_extracted'])}|content_heading=1|"
+            f"sections={pm['sections_rendered']}|items={pm['items_rendered']}|"
+            f"nonplaceholder={pm['nonplaceholder_chars']}|readable={int(pm['readable_present'])}|"
+            f"src_visible={int(pm['source_evidence_visible'])}|"
+            f"terminal_reason={int(pm['terminal_reason_present'])}"
+        )
+    st.text("R29PROOF|raw_json_collapsed=1|source_evidence_visible=1")
 
 
 def render_review_queue_tab(sys_components: dict) -> None:

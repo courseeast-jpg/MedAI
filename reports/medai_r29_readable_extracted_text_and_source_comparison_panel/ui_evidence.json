@@ -1,0 +1,71 @@
+{
+  "block": "MEDAI-R29-READABLE-EXTRACTED-TEXT-AND-SOURCE-COMPARISON-PANEL",
+  "ui_proof_method": "playwright_streamlit",
+  "ui_proof_ran": true,
+  "error": "",
+  "url_probed": "http://127.0.0.1:8529",
+  "queue_counts": {
+    "extracted": 179,
+    "not_extracted": 317
+  },
+  "headings_present": {
+    "Extracted content": true,
+    "Extracted sections": true,
+    "Extracted items / facts": true,
+    "Source evidence / original preview": true,
+    "QA decision": true,
+    "Advanced raw payload": true
+  },
+  "proof_markers": {
+    "queue": {
+      "extracted": "179",
+      "not_extracted": "317"
+    },
+    "full_schema": {
+      "extracted": "1",
+      "content_heading": "1",
+      "sections": "7",
+      "items": "1",
+      "nonplaceholder": "460",
+      "readable": "1",
+      "src_visible": "1",
+      "terminal_reason": "1"
+    },
+    "minimal_review": {
+      "extracted": "1",
+      "content_heading": "1",
+      "sections": "7",
+      "items": "1",
+      "nonplaceholder": "470",
+      "readable": "1",
+      "src_visible": "1",
+      "terminal_reason": "1"
+    },
+    "not_extracted": {
+      "extracted": "0",
+      "content_heading": "1",
+      "sections": "0",
+      "items": "0",
+      "nonplaceholder": "0",
+      "readable": "0",
+      "src_visible": "1",
+      "terminal_reason": "1"
+    },
+    "raw_json_collapsed=1": {
+      "source_evidence_visible": "1"
+    }
+  },
+  "checks": {
+    "extracted_queue_count_179": true,
+    "not_extracted_queue_count_317": true,
+    "extracted_content_heading_present": true,
+    "full_schema_content_heading": true,
+    "full_schema_nonplaceholder_sections_items": true,
+    "minimal_review_readable": true,
+    "not_extracted_terminal_reason": true,
+    "source_evidence_visible": true,
+    "raw_json_not_only_detail": true
+  },
+  "screenshot_file": "screenshot_proof.png",
+  "rendered_text_file": "rendered_ui_text_probe.txt"
+}
