@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.config import ACTIVE_CONNECTORS, ANTHROPIC_API_KEY, CHROMA_PATH, DB_PATH, ENABLE_ENRICHMENT
 from app.lab_document_metadata import reason_label_for_validation, review_reason_for_result
 from app.mkb_explorer_model import build_mkb_explorer_model
+from app.mkb_staging_payload_reader import build_staging_quality_view, get_staging_detail
 from app.operator_compact_styles import COMPACT_OPERATOR_CSS
 from app.operator_ui_model import (
     ADVANCED_TABS,
@@ -1257,6 +1258,47 @@ def render_mkb_tab(sys_components: dict) -> None:
         hide_index=True,
         use_container_width=True,
     )
+    staging_rows = [row for row in model["rows"] if row.get("source_scope") == "local_review_staging"]
+    if staging_rows:
+        st.markdown("#### Review staging detail")
+        selected = st.selectbox(
+            "Review-required staging record",
+            [row["record_id_full"] for row in staging_rows],
+            format_func=lambda value: next(
+                (
+                    f"{row['record_id']} | {row['fact_type']} | {row['status']}"
+                    for row in staging_rows
+                    if row["record_id_full"] == value
+                ),
+                str(value),
+            ),
+            key="mkb_staging_detail_record",
+        )
+        detail = get_staging_detail(str(selected))
+        quality = build_staging_quality_view(str(selected))
+        if detail.get("available"):
+            st.caption(
+                f"Corpus: {detail['corpus_id']} | Package: {detail['package_type']} | "
+                f"State: {detail['document_state']} | Reason: {detail['terminal_reason']}"
+            )
+            st.json(
+                {
+                    "review_status": detail["review_status"],
+                    "quality_metrics": quality.get("quality_metrics", {}),
+                    "source_evidence": detail["source_evidence"],
+                    "controls": {
+                        "active_verified_promotion_allowed": False,
+                        "auto_accept_allowed": False,
+                        "medical_decision_allowed": False,
+                    },
+                }
+            )
+            if detail["payload_available"]:
+                st.markdown("##### Extracted payload")
+                st.dataframe(detail["extracted_sections"], hide_index=True, use_container_width=True)
+                st.dataframe(detail["extracted_items"], hide_index=True, use_container_width=True)
+            else:
+                st.info("No structured payload is available for this staging row; review the terminal reason and local source evidence status.")
 
 
 def render_review_queue_tab(sys_components: dict) -> None:

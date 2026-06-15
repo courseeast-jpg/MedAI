@@ -1,0 +1,16 @@
+{
+  "corpus1": {
+    "total_docs": 494,
+    "payload_available": 179,
+    "source_preview_available": 311,
+    "review_only_reason": 4,
+    "non_sendable_excluded": 0
+  },
+  "corpus2": {
+    "total_docs": 2,
+    "payload_available": 0,
+    "source_preview_available": 0,
+    "review_only_reason": 0,
+    "non_sendable_excluded": 2
+  }
+}
