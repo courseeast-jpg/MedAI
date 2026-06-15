@@ -1,0 +1,32 @@
+{
+  "block": "MEDAI-R30-FIX-R29-READABLE-VIEW-IMPORT-AND-PROVE-OPERATOR-RUNTIME",
+  "operator_command": "python -m streamlit run app/main.py --server.port 8561",
+  "operator_streamlit_url": "http://localhost:8561",
+  "ui_proof_ran": true,
+  "error": "",
+  "import_smoke": {
+    "readable_record_view": true,
+    "tail": "IMPORT_OK",
+    "app_main": true,
+    "app_tail": "2026-06-15 13:22:37.228 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode."
+  },
+  "runtime_checks": {
+    "headings_visible": {
+      "Extracted content": true,
+      "Extracted sections": true,
+      "Extracted items / facts": true,
+      "Source evidence / original preview": true,
+      "QA decision": true
+    },
+    "all_headings_visible": true,
+    "mkb_explorer_visible": true,
+    "comparator_visible": true,
+    "extracted_queue_visible": true,
+    "not_extracted_queue_visible": true,
+    "extracted_count_visible": true,
+    "not_extracted_count_visible": true,
+    "import_error_present": false
+  },
+  "screenshot_file": "screenshot_proof.png",
+  "rendered_text_file": "rendered_ui_text_probe.txt"
+}

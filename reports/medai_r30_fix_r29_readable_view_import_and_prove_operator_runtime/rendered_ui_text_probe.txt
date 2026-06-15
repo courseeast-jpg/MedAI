@@ -1,0 +1,18 @@
+MKB Explorer
+496
+R23 review staging visible: content/extracted 179, review-only metadata 315, non-sendable metadata 2. All R23 staging rows remain review-required and unverified.
+All-record QA comparator
+Total staging
+Extracted payloads
+179
+Not extracted
+317
+Source preview
+Extracted Payload QA Queue: 179 | Not-Extracted / Failure QA Queue: 317
+Extracted Payload QA Queue
+Not-Extracted / Failure QA Queue
+Extracted content
+Extracted sections
+Extracted items / facts
+Source evidence / original preview
+QA decision
