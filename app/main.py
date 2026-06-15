@@ -1143,6 +1143,15 @@ def render_operator_result_panel(result) -> None:
 
 def render_mkb_tab(sys_components: dict) -> None:
     st.subheader(MKB_EXPLORER_TAB)
+    # R31 operator-zero default: the readable All-record QA comparator is the first, obvious
+    # workflow. The legacy staging metadata table and raw-JSON "Review staging detail" are
+    # moved below it into a collapsed Advanced/legacy expander.
+    _render_qa_comparator_section()
+    with st.expander("Advanced / legacy MKB staging table and raw detail", expanded=False):
+        _render_legacy_mkb_section(sys_components)
+
+
+def _render_legacy_mkb_section(sys_components: dict) -> None:
     if sys_components.get("sql") is None:
         base_model = build_mkb_explorer_model(None, limit=1, include_local_review_staging=True)
         if not base_model["available"]:
@@ -1307,76 +1316,118 @@ def render_mkb_tab(sys_components: dict) -> None:
                 st.dataframe(detail["extracted_items"], hide_index=True, use_container_width=True)
             else:
                 st.info("No structured payload is available for this staging row; review the terminal reason and local source evidence status.")
-        st.markdown("#### All-record QA comparator")
-        comparator = build_all_records_qa_comparator()
-        qa_counts = comparator["counts"]
-        qa_cols = st.columns(4)
-        qa_cols[0].metric("Total staging", qa_counts["total_staging_records"])
-        qa_cols[1].metric("Extracted payloads", qa_counts["extracted_payload_records"])
-        qa_cols[2].metric("Not extracted", qa_counts["not_extracted_records"])
-        qa_cols[3].metric("Source preview", qa_counts["source_preview_available"])
-        st.caption(
-            f"Source unavailable: {qa_counts['source_unavailable']} | "
-            f"Corpus 1: {qa_counts['corpus1']} | Corpus 2: {qa_counts['corpus2']}. "
-            "QA status is local-only and does not promote records."
-        )
-        st.caption(
-            f"Extracted Payload QA Queue: {qa_counts['extracted_payload_records']} | "
-            f"Not-Extracted / Failure QA Queue: {qa_counts['not_extracted_records']}"
-        )
-        qa_filters = st.multiselect(
-            "QA filters",
-            comparator["filter_options"],
-            default=["All"],
-            key="mkb_all_records_qa_filters",
-        )
-        comparator = build_all_records_qa_comparator(filters=qa_filters or ["All"])
-        queue_mode = st.radio(
-            "QA queue",
-            ["Extracted Payload QA Queue", "Not-Extracted / Failure QA Queue"],
-            horizontal=True,
-            key="mkb_all_records_qa_queue_mode",
-        )
-        queue_rows = (
-            comparator["extracted_queue"]
-            if queue_mode == "Extracted Payload QA Queue"
-            else comparator["not_extracted_queue"]
-        )
-        if queue_rows:
-            selected_qa = st.selectbox(
-                "Open detail",
-                [row["record_id"] for row in queue_rows],
-                format_func=lambda value: next(
-                    (
-                        f"{row['record_id_short']} | {row['corpus_id']} | {row['package_type']} | {row['document_state']}"
-                        for row in queue_rows
-                        if row["record_id"] == value
-                    ),
-                    str(value),
+def _render_qa_comparator_section() -> None:
+    st.markdown("#### All-record QA comparator")
+    comparator = build_all_records_qa_comparator()
+    qa_counts = comparator["counts"]
+    qa_cols = st.columns(4)
+    qa_cols[0].metric("Total staging", qa_counts["total_staging_records"])
+    qa_cols[1].metric("Extracted payloads", qa_counts["extracted_payload_records"])
+    qa_cols[2].metric("Not extracted", qa_counts["not_extracted_records"])
+    qa_cols[3].metric("Source preview", qa_counts["source_preview_available"])
+    st.caption(
+        f"Source unavailable: {qa_counts['source_unavailable']} | "
+        f"Corpus 1: {qa_counts['corpus1']} | Corpus 2: {qa_counts['corpus2']}. "
+        "QA status is local-only and does not promote records."
+    )
+    st.caption(
+        f"Extracted Payload QA Queue: {qa_counts['extracted_payload_records']} | "
+        f"Not-Extracted / Failure QA Queue: {qa_counts['not_extracted_records']}"
+    )
+    qa_filters = st.multiselect(
+        "QA filters",
+        comparator["filter_options"],
+        default=["All"],
+        key="mkb_all_records_qa_filters",
+    )
+    comparator = build_all_records_qa_comparator(filters=qa_filters or ["All"])
+    queue_mode = st.radio(
+        "QA queue",
+        ["Extracted Payload QA Queue", "Not-Extracted / Failure QA Queue"],
+        horizontal=True,
+        key="mkb_all_records_qa_queue_mode",
+    )
+    queue_rows = (
+        comparator["extracted_queue"]
+        if queue_mode == "Extracted Payload QA Queue"
+        else comparator["not_extracted_queue"]
+    )
+    if queue_rows:
+        selected_qa = st.selectbox(
+            "Open detail",
+            [row["record_id"] for row in queue_rows],
+            format_func=lambda value: next(
+                (
+                    f"{row['record_id_short']} | {row['corpus_id']} | {row['package_type']} | {row['document_state']}"
+                    for row in queue_rows
+                    if row["record_id"] == value
                 ),
-                key="mkb_all_records_qa_selected",
-            )
-            qa_detail = get_comparator_record_detail(str(selected_qa), include_private_preview=False)
-            row_meta = qa_detail.get("qa_row", {})
-            _render_readable_qa_detail(str(selected_qa), qa_detail, row_meta)
-            st.markdown("##### QA decision")
-            status = st.selectbox(
-                "Local QA status",
-                sorted(QA_STATUSES),
-                index=sorted(QA_STATUSES).index(row_meta.get("qa_status", "not_reviewed"))
-                if row_meta.get("qa_status", "not_reviewed") in QA_STATUSES
-                else 0,
-                key="mkb_all_records_qa_status",
-            )
-            note = st.text_input("Local QA note", key="mkb_all_records_qa_note")
-            if st.button("Save local QA status", key="mkb_all_records_qa_save"):
-                result = save_qa_status(str(selected_qa), status, qa_note=note)
-                st.success(f"Saved local QA status: {result['qa_status']}")
-        else:
-            st.info("No QA records match the current filters.")
+                str(value),
+            ),
+            key="mkb_all_records_qa_selected",
+        )
+        qa_detail = get_comparator_record_detail(str(selected_qa), include_private_preview=False)
+        row_meta = qa_detail.get("qa_row", {})
+        _render_readable_qa_detail(str(selected_qa), qa_detail, row_meta)
+        st.markdown("##### QA decision")
+        status = st.selectbox(
+            "Local QA status",
+            sorted(QA_STATUSES),
+            index=sorted(QA_STATUSES).index(row_meta.get("qa_status", "not_reviewed"))
+            if row_meta.get("qa_status", "not_reviewed") in QA_STATUSES
+            else 0,
+            key="mkb_all_records_qa_status",
+        )
+        note = st.text_input("Local QA note", key="mkb_all_records_qa_note")
+        if st.button("Save local QA status", key="mkb_all_records_qa_save"):
+            result = save_qa_status(str(selected_qa), status, qa_note=note)
+            st.success(f"Saved local QA status: {result['qa_status']}")
+    else:
+        st.info("No QA records match the current filters.")
 
-        if os.getenv("MEDAI_R29_LIVE_UI_PROOF") == "1":
-            _render_r29_readable_proof(qa_counts)
+    if os.getenv("MEDAI_R29_LIVE_UI_PROOF") == "1":
+        _render_r29_readable_proof(qa_counts)
+    if os.getenv("MEDAI_R31_LIVE_UI_PROOF") == "1":
+        _render_r31_operator_proof(qa_counts)
+
+
+def _render_r31_operator_proof(qa_counts: dict) -> None:
+    """Env-gated operator-zero proof: render representative records via the readable panel,
+    exercise the local QA-status save+persist for an extracted and a not-extracted record,
+    and emit content-free R31PROOF marker lines for the live UI probe."""
+    from app.mkb_all_records_qa_comparator import (
+        get_comparator_record_detail,
+        readable_record_view,
+        representative_proof_records,
+        save_qa_status,
+    )
+    st.markdown("##### Operator-zero readable proof (R31)")
+    reps = representative_proof_records()
+    st.text(f"R31PROOF|queue|extracted={qa_counts['extracted_payload_records']}|"
+            f"not_extracted={qa_counts['not_extracted_records']}")
+    for kind, rid in reps.items():
+        if not rid:
+            st.text(f"R31PROOF|{kind}|missing=1")
+            continue
+        view = readable_record_view(rid, include_private_preview=False)
+        pm = view["proof_metrics"]
+        st.markdown(f"**R31 proof — {kind}**")
+        with st.expander("proof readable content", expanded=False):
+            st.markdown(view["extracted_content_markdown"] or view["not_extracted_explanation"] or "(none)")
+        st.text(f"R31PROOF|{kind}|extracted={int(view['is_extracted'])}|sections={pm['sections_rendered']}|"
+                f"items={pm['items_rendered']}|nonplaceholder={pm['nonplaceholder_chars']}|"
+                f"readable={int(pm['readable_present'])}|terminal_reason={int(pm['terminal_reason_present'])}|"
+                f"src_visible={int(pm['source_evidence_visible'])}")
+    # Local QA-status save + persistence proof (safe, non-promoting statuses only).
+    ext_status = nx_status = "none"
+    if reps["full_schema"]:
+        save_qa_status(reps["full_schema"], "needs_manual_review", qa_note="r31_operator_zero_proof")
+        ext_status = (get_comparator_record_detail(reps["full_schema"]).get("qa_row", {}) or {}).get("qa_status", "none")
+    if reps["not_extracted"]:
+        save_qa_status(reps["not_extracted"], "not_extracted_reviewed", qa_note="r31_operator_zero_proof")
+        nx_status = (get_comparator_record_detail(reps["not_extracted"]).get("qa_row", {}) or {}).get("qa_status", "none")
+    st.text(f"R31PROOF|qa_save|extracted_status={ext_status}|not_extracted_status={nx_status}|"
+            "active_mkb_write=0|verified=0|auto_accept=0")
 
 
 def _render_readable_qa_detail(record_id: str, qa_detail: dict, row_meta: dict) -> None:

@@ -1,0 +1,74 @@
+{
+  "block": "MEDAI-R31-OPERATOR-ZERO-READABLE-QA-UX-ACCEPTANCE-AND-CLEANUP",
+  "operator_streamlit_url": "http://localhost:8561",
+  "ui_proof_ran": true,
+  "stale_streamlit_processes_killed": 0,
+  "checks": {
+    "mkb_explorer_visible": true,
+    "all_record_qa_comparator_first_section": true,
+    "legacy_table_above_comparator": false,
+    "review_staging_detail_above_comparator": false,
+    "advanced_raw_payload_collapsed": true,
+    "extracted_payload_count_visible": true,
+    "not_extracted_count_visible": true,
+    "readable_extracted_content_visible": true,
+    "readable_extracted_sections_visible": true,
+    "readable_extracted_items_visible": true,
+    "source_evidence_panel_visible": true,
+    "qa_decision_panel_visible": true,
+    "sample_full_schema_non_placeholder_visible": true,
+    "sample_minimal_review_readable_visible": true,
+    "sample_not_extracted_terminal_reason_visible": true,
+    "qa_status_save_for_extracted_verified_live": true,
+    "qa_status_save_for_not_extracted_verified_live": true
+  },
+  "proof_markers": {
+    "queue": {
+      "extracted": "179",
+      "not_extracted": "317"
+    },
+    "full_schema": {
+      "extracted": "1",
+      "sections": "7",
+      "items": "1",
+      "nonplaceholder": "460",
+      "readable": "1",
+      "terminal_reason": "1",
+      "src_visible": "1"
+    },
+    "minimal_review": {
+      "extracted": "1",
+      "sections": "7",
+      "items": "1",
+      "nonplaceholder": "470",
+      "readable": "1",
+      "terminal_reason": "1",
+      "src_visible": "1"
+    },
+    "not_extracted": {
+      "extracted": "0",
+      "sections": "0",
+      "items": "0",
+      "nonplaceholder": "0",
+      "readable": "0",
+      "terminal_reason": "1",
+      "src_visible": "1"
+    },
+    "qa_save": {
+      "extracted_status": "needs_manual_review",
+      "not_extracted_status": "not_extracted_reviewed",
+      "active_mkb_write": "0",
+      "verified": "0",
+      "auto_accept": "0"
+    }
+  },
+  "headings_present": {
+    "Extracted content": true,
+    "Extracted sections": true,
+    "Extracted items / facts": true,
+    "Source evidence / original preview": true,
+    "QA decision": true,
+    "Advanced raw payload": true
+  },
+  "import_error_present": false
+}

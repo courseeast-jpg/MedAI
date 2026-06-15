@@ -1,0 +1,23 @@
+All-record QA comparator
+Total staging
+496
+Extracted payloads
+179
+Not extracted
+317
+Extracted Payload QA Queue: 179 | Not-Extracted / Failure QA Queue: 317
+Extracted Payload QA Queue
+Not-Extracted / Failure QA Queue
+Extracted content
+Extracted sections
+Extracted items / facts
+Source evidence / original preview
+Advanced raw payload
+QA decision
+Operator-zero readable proof (R31)
+R31PROOF|queue|extracted=179|not_extracted=317
+R31PROOF|full_schema|extracted=1|sections=7|items=1|nonplaceholder=460|readable=1|terminal_reason=1|src_visible=1
+R31PROOF|minimal_review|extracted=1|sections=7|items=1|nonplaceholder=470|readable=1|terminal_reason=1|src_visible=1
+R31PROOF|not_extracted|extracted=0|sections=0|items=0|nonplaceholder=0|readable=0|terminal_reason=1|src_visible=1
+R31PROOF|qa_save|extracted_status=needs_manual_review|not_extracted_status=not_extracted_reviewed|active_mkb_write=0|verified=0|auto_accept=0
+Advanced / legacy MKB staging table and raw detail
