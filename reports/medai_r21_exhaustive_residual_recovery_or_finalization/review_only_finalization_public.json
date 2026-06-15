@@ -1,0 +1,12 @@
+{
+  "finalized_review_only_before_provider": 226,
+  "finalized_review_only_after_provider": 6,
+  "excluded_non_sendable_finalized": 2,
+  "reason_counts": {
+    "evidence_missing_review_only": 4,
+    "non_clinical_or_admin_only_review_only": 211,
+    "no_clinical_signal_review_only": 5,
+    "schema_unrecoverable_review_only": 6,
+    "excluded_rtf_signal_container": 2
+  }
+}

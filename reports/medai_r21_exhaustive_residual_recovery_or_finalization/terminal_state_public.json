@@ -1,0 +1,13 @@
+{
+  "terminal_state_counts": {
+    "finalized_review_only_with_reason": 226,
+    "excluded_non_sendable_with_reason": 2
+  },
+  "reason_counts": {
+    "evidence_missing_review_only": 4,
+    "non_clinical_or_admin_only_review_only": 211,
+    "no_clinical_signal_review_only": 5,
+    "schema_unrecoverable_review_only": 6,
+    "excluded_rtf_signal_container": 2
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "repair_counts": {
+    "hidden_text_dedup_repairs_applied": 75,
+    "nonclinical_noise_repairs_applied": 75,
+    "section_boundary_repairs_applied": 18,
+    "schema_repairs_applied": 22,
+    "oversized_request_repairs_applied": 4
+  },
+  "models_planned": {
+    "gemini-2.5-flash": 75,
+    "gemini-2.5-pro": 22
+  },
+  "timeout_repairs_applied": 0,
+  "timeouts_retried_with_smaller_window": 0
+}
