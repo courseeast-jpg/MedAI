@@ -1,0 +1,30 @@
+{
+  "records": [
+    {
+      "corpus_id": "corpus1",
+      "document_id": "doc_2afaf95325c8b6bf",
+      "source_phase": "R21",
+      "terminal_state": "recovered_minimal_review_bound_package",
+      "package_type": "minimal_review_bound",
+      "review_priority": "high",
+      "reason_code": "minimal_review_bound",
+      "evidence_anchor_count": 0,
+      "section_count": 7,
+      "warnings_count": 1,
+      "allowed_next_action": "request_manual_operator_review"
+    },
+    {
+      "corpus_id": "corpus1",
+      "document_id": "doc_4492f63c3e71985a",
+      "source_phase": "R21",
+      "terminal_state": "recovered_minimal_review_bound_package",
+      "package_type": "minimal_review_bound",
+      "review_priority": "high",
+      "reason_code": "minimal_review_bound",
+      "evidence_anchor_count": 0,
+      "section_count": 7,
+      "warnings_count": 1,
+      "allowed_next_action": "request_manual_operator_review"
+    }
+  ]
+}

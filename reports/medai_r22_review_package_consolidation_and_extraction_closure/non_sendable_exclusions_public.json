@@ -1,0 +1,30 @@
+{
+  "records": [
+    {
+      "corpus_id": "corpus2",
+      "document_id": "doc_corpus2_rtf_signal_container_1",
+      "source_phase": "Corpus2",
+      "terminal_state": "excluded_non_sendable_with_reason",
+      "package_type": "non_sendable_excluded",
+      "review_priority": "low",
+      "reason_code": "excluded_rtf_signal_container",
+      "evidence_anchor_count": 0,
+      "section_count": 0,
+      "warnings_count": 0,
+      "allowed_next_action": "exclude_from_medical_extraction"
+    },
+    {
+      "corpus_id": "corpus2",
+      "document_id": "doc_corpus2_rtf_signal_container_2",
+      "source_phase": "Corpus2",
+      "terminal_state": "excluded_non_sendable_with_reason",
+      "package_type": "non_sendable_excluded",
+      "review_priority": "low",
+      "reason_code": "excluded_rtf_signal_container",
+      "evidence_anchor_count": 0,
+      "section_count": 0,
+      "warnings_count": 0,
+      "allowed_next_action": "exclude_from_medical_extraction"
+    }
+  ]
+}

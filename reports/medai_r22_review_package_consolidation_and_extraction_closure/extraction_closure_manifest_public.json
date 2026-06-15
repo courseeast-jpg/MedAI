@@ -1,0 +1,21 @@
+{
+  "block": "MEDAI-R22-REVIEW-PACKAGE-CONSOLIDATION-AND-EXTRACTION-CLOSURE",
+  "package_counts": {
+    "full_schema": 161,
+    "minimal_review_bound": 2,
+    "review_only_finalized": 315,
+    "non_sendable_excluded": 2
+  },
+  "priority_counts": {
+    "normal": 161,
+    "high": 101,
+    "low": 218
+  },
+  "action_counts": {
+    "request_manual_operator_review": 262,
+    "keep_review_only": 216,
+    "exclude_from_medical_extraction": 2
+  },
+  "live_extraction_stopped": true,
+  "not_ready_for_mkb_import": true
+}
