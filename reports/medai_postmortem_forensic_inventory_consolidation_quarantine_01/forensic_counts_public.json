@@ -1,0 +1,20 @@
+{
+  "medai_locations_found": 1566,
+  "repos_worktrees_found": 5,
+  "r32_extracted_shell_total": 179,
+  "r32_real_clinical_extraction_count": 0,
+  "r32_buckets": {
+    "real_clinical_extraction": 0,
+    "metadata_shell": 0,
+    "empty_section_shell": 0,
+    "wrapper_only": 179,
+    "minimal_review_real_content": 0,
+    "not_extracted": 317,
+    "private_uncertain_hold": 0
+  },
+  "cleanup_candidates": 398,
+  "quarantined_count": 0,
+  "quarantined_total_bytes": 0,
+  "permanent_deletions": 0,
+  "provider_model_call_made": false
+}
